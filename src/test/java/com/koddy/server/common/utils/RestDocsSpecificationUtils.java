@@ -14,6 +14,7 @@ import org.springframework.restdocs.snippet.Snippet;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.cookie;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.header;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -103,7 +104,7 @@ public class RestDocsSpecificationUtils {
 
     private static Snippet getCookieWithRefreshToken() {
         return requestCookies(
-                cookie("refresh_token", "Refresh Token")
+                cookie(COOKIE_REFRESH_TOKEN, "Refresh Token")
         );
     }
 
