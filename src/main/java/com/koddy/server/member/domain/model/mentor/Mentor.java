@@ -44,6 +44,9 @@ public class Mentor extends Member {
 
     public Mentor(final Email email, final Password password) {
         super(email, password, List.of(MENTOR));
+        this.universityProfile = new UniversityProfile(EMPTY, EMPTY, 0);
+        this.meetingUrl = EMPTY;
+        this.introduction = EMPTY;
     }
 
     public void complete(

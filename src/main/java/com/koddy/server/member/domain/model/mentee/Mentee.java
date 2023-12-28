@@ -26,6 +26,7 @@ public class Mentee extends Member {
 
     public Mentee(final Email email, final Password password) {
         super(email, password, List.of(MENTEE));
+        this.interest = new Interest(EMPTY, EMPTY);
     }
 
     public void complete(

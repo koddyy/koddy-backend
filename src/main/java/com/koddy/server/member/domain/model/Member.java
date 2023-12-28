@@ -31,7 +31,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Table(name = "member")
 public abstract class Member extends BaseEntity<Member> {
-    private static final String EMPTY = "EMPTY";
+    protected static final String EMPTY = "EMPTY";
 
     @Embedded
     protected Email email;
@@ -104,6 +104,12 @@ public abstract class Member extends BaseEntity<Member> {
                         .map(it -> new AvailableLanguage(this, it))
                         .toList()
         );
+    }
+
+    public List<Language> getLanguages() {
+        return availableLanguages.stream()
+                .map(AvailableLanguage::getLanguage)
+                .toList();
     }
 
     public List<RoleType> getRoleTypes() {
