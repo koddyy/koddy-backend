@@ -8,6 +8,8 @@ on:
       - opened
       - synchronize
 
+permissions: write-all
+
 jobs:
   build-and-test:
     name: Build & Test
