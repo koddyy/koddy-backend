@@ -17,6 +17,7 @@ public enum MemberExceptionCode implements KoddyExceptionCode {
     AVAILABLE_LANGUAGE_MUST_BE_EXISTS(BAD_REQUEST, "MEMBER_004", "구사 언어는 하나 이상 존재해야 합니다."),
     PERIOD_MUST_EXISTS(BAD_REQUEST, "MEMBER_005", "커피챗 시작/종료 시간을 선택해주세요."),
     START_END_MUST_BE_ALIGN(BAD_REQUEST, "MEMBER_006", "시작 시간이 종료 시간 이후가 될 수 없습니다."),
+    SCHEDULE_MUST_BE_EXISTS(BAD_REQUEST, "MEMBER_007", "커피챗 시간대를 선택해주세요."),
     ;
 
     private final HttpStatus status;
