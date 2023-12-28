@@ -1,5 +1,5 @@
 ## 📄 Summary
 
-> Issue #{이슈 번호}
+> Close #{이슈 번호}
 
 - 
