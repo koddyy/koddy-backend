@@ -1,4 +1,4 @@
-rootProject.name = "koddy-server"
+rootProject.name = "koddy-backend"
 
 pluginManagement {
     val springBootVersion: String by settings
