@@ -34,6 +34,13 @@ spring:
     baseline-version: 1
     locations: classpath:db/migration
 
+cors:
+  allowed-origin-patterns: http://localhost:3000
+
+encrypt:
+  secret-key: 2da7acad220ffe59e6943c826ec1fcf879a4339521ff5837fa92aab485e94bcb # 테스트용 Secret Key
+  salt: 45b24edcbc33a9d7b9d53b3c23ae70bae6f9d95e28132db3f35b920d0e466cde # 테스트용 Salt (Even Hex Number)
+
 springdoc:
   swagger-ui:
     path: /swagger
