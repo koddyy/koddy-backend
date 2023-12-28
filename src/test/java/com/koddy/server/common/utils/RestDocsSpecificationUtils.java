@@ -110,7 +110,6 @@ public class RestDocsSpecificationUtils {
 
     private static Snippet getExceptionResponseFields() {
         return responseFields(
-                fieldWithPath("status").description("HTTP 상태 코드"),
                 fieldWithPath("errorCode").description("커스텀 예외 코드"),
                 fieldWithPath("message").description("예외 메시지")
         );

@@ -1,0 +1,17 @@
+= Koddy API 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+
+== 토큰 재발급 API (RefreshToken)
+
+=== HTTP Request
+
+include::{snippets}/TokenReissueApi/Success/http-request.adoc[]
+
+=== HTTP Response
+
+include::{snippets}/TokenReissueApi/Failure/http-response.adoc[]
+include::{snippets}/TokenReissueApi/Success/http-response.adoc[]
