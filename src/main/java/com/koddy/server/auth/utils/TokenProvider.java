@@ -7,6 +7,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
@@ -41,47 +42,57 @@ public class TokenProvider {
     }
 
     public String createAccessToken(final Long memberId, final List<RoleType> roles) {
+        // Payload
+        final Claims claims = Jwts.claims();
+        claims.put("id", memberId);
+        claims.put("roles", roles);
+
+        // Expires At
         final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
         final ZonedDateTime tokenValidity = now.plusSeconds(accessTokenValidityInSeconds);
 
         return Jwts.builder()
-                .claim("id", memberId)
-                .claim("roles", roles)
-                .issuedAt(Date.from(now.toInstant()))
-                .expiration(Date.from(tokenValidity.toInstant()))
-                .signWith(secretKey, Jwts.SIG.HS256)
+                .setClaims(claims)
+                .setIssuedAt(Date.from(now.toInstant()))
+                .setExpiration(Date.from(tokenValidity.toInstant()))
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public String createRefreshToken(final Long memberId) {
+        // Payload
+        final Claims claims = Jwts.claims();
+        claims.put("id", memberId);
+
+        // Expires At
         final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
         final ZonedDateTime tokenValidity = now.plusSeconds(refreshTokenValidityInSeconds);
 
         return Jwts.builder()
-                .claim("id", memberId)
-                .issuedAt(Date.from(now.toInstant()))
-                .expiration(Date.from(tokenValidity.toInstant()))
-                .signWith(secretKey, Jwts.SIG.HS256)
+                .setClaims(claims)
+                .setIssuedAt(Date.from(now.toInstant()))
+                .setExpiration(Date.from(tokenValidity.toInstant()))
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public Long getId(final String token) {
         return getClaims(token)
-                .getPayload()
+                .getBody()
                 .get("id", Long.class);
     }
 
     @SuppressWarnings("unchecked")
     public List<RoleType> getRoles(final String token) {
         return getClaims(token)
-                .getPayload()
+                .getBody()
                 .get("roles", List.class);
     }
 
     public void validateToken(final String token) {
         try {
             final Jws<Claims> claims = getClaims(token);
-            final Date expiredDate = claims.getPayload().getExpiration();
+            final Date expiredDate = claims.getBody().getExpiration();
             final Date now = new Date();
 
             if (expiredDate.before(now)) {
@@ -97,9 +108,9 @@ public class TokenProvider {
     }
 
     private Jws<Claims> getClaims(final String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
                 .build()
-                .parseSignedClaims(token);
+                .parseClaimsJws(token);
     }
 }
