@@ -41,6 +41,11 @@ encrypt:
   secret-key: 2da7acad220ffe59e6943c826ec1fcf879a4339521ff5837fa92aab485e94bcb # 테스트용 Secret Key
   salt: 45b24edcbc33a9d7b9d53b3c23ae70bae6f9d95e28132db3f35b920d0e466cde # 테스트용 Salt (Even Hex Number)
 
+jwt:
+  secret-key: 2da7acad220ffe59e6943c826ec1fcf879a4339521ff5837fa92aab485e94bcb # 테스트용 Secret Key
+  access-token-validity-seconds: 7200
+  refresh-token-validity-seconds: 1209600
+
 slack:
   webhook:
     url: ${SLACK_WEBHOOK_URL:slack-webhook-url}
