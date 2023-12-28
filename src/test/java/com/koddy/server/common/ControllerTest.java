@@ -2,6 +2,7 @@ package com.koddy.server.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.koddy.server.global.base.KoddyExceptionCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +16,7 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -31,6 +33,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @Tag("Controller")
 @WebMvcTest
@@ -262,5 +265,23 @@ public abstract class ControllerTest {
         } catch (final JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected ResultMatcher[] getResultMatchersViaExceptionCode(final KoddyExceptionCode code) {
+        return new ResultMatcher[]{
+                jsonPath("$.errorCode").exists(),
+                jsonPath("$.errorCode").value(code.getErrorCode()),
+                jsonPath("$.message").exists(),
+                jsonPath("$.message").value(code.getMessage())
+        };
+    }
+
+    protected ResultMatcher[] getResultMatchersViaExceptionCode(final KoddyExceptionCode code, final String message) {
+        return new ResultMatcher[]{
+                jsonPath("$.errorCode").exists(),
+                jsonPath("$.errorCode").value(code.getErrorCode()),
+                jsonPath("$.message").exists(),
+                jsonPath("$.message").value(message)
+        };
     }
 }
