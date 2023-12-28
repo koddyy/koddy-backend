@@ -1,5 +1,6 @@
 package com.koddy.server.member.domain.model;
 
+import com.koddy.server.common.ParallelTest;
 import com.koddy.server.global.encrypt.Encryptor;
 import com.koddy.server.member.exception.MemberException;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("Member -> 도메인 [Password VO] 테스트")
-class PasswordTest {
+class PasswordTest extends ParallelTest {
     public final Encryptor encryptor = getEncryptor();
 
     @Nested

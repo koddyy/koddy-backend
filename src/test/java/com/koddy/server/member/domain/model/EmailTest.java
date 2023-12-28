@@ -1,5 +1,6 @@
 package com.koddy.server.member.domain.model;
 
+import com.koddy.server.common.ParallelTest;
 import com.koddy.server.member.exception.MemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @DisplayName("Member -> 도메인 [Email VO] 테스트")
-class EmailTest {
+class EmailTest extends ParallelTest {
     @Nested
     @DisplayName("Email 생성")
     class Construct {

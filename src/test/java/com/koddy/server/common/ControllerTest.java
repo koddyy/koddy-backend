@@ -2,13 +2,20 @@ package com.koddy.server.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.koddy.server.auth.exception.AuthException;
+import com.koddy.server.auth.utils.TokenProvider;
+import com.koddy.server.common.config.TestWebBeanConfiguration;
 import com.koddy.server.global.base.KoddyExceptionCode;
+import com.koddy.server.global.exception.alert.SlackAlertManager;
+import com.koddy.server.member.domain.model.RoleType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -27,8 +34,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN;
 import static com.koddy.server.common.utils.TokenUtils.applyAccessToken;
 import static com.koddy.server.common.utils.TokenUtils.applyRefreshToken;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
@@ -38,6 +50,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("Controller")
 @WebMvcTest
 @ExtendWith(RestDocumentationExtension.class)
+@Import(TestWebBeanConfiguration.class)
 @AutoConfigureRestDocs
 public abstract class ControllerTest {
     // common & external
@@ -47,6 +60,12 @@ public abstract class ControllerTest {
     // common & internal
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private TokenProvider tokenProvider;
+
+    @MockBean
+    private SlackAlertManager slackAlertManager;
 
     @BeforeEach
     void setUp(final WebApplicationContext context, final RestDocumentationContextProvider provider) {
@@ -283,5 +302,25 @@ public abstract class ControllerTest {
                 jsonPath("$.message").exists(),
                 jsonPath("$.message").value(message)
         };
+    }
+
+    protected void mockingToken(final boolean isValid, final Long payloadId, final List<RoleType> roles) {
+        if (isValid) {
+            doNothing()
+                    .when(tokenProvider)
+                    .validateToken(anyString());
+        } else {
+            doThrow(new AuthException(INVALID_TOKEN))
+                    .when(tokenProvider)
+                    .validateToken(anyString());
+        }
+        given(tokenProvider.getId(anyString())).willReturn(payloadId);
+        given(tokenProvider.getRoles(anyString())).willReturn(roles);
+    }
+
+    protected void mockingTokenWithInvalidException() {
+        doThrow(new AuthException(INVALID_TOKEN))
+                .when(tokenProvider)
+                .validateToken(anyString());
     }
 }

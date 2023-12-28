@@ -1,5 +1,6 @@
 package com.koddy.server.member.domain.model.mentee;
 
+import com.koddy.server.common.ParallelTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("Member/Mentee -> 도메인 [Mentee] 테스트")
-class MenteeTest {
+class MenteeTest extends ParallelTest {
     private static final String EMPTY = "EMPTY";
 
     @Test

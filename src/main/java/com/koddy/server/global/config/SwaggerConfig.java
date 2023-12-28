@@ -1,5 +1,7 @@
 package com.koddy.server.global.config;
 
+import com.koddy.server.global.annotation.Auth;
+import com.koddy.server.global.annotation.ExtractToken;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -8,6 +10,7 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
+import org.springdoc.core.utils.SpringDocUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,10 +32,23 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
                 @Server(
                         url = "http://localhost:8080",
                         description = "Local Server"
+                ),
+                @Server(
+                        url = "https://dev:8080",
+                        description = "Dev Server"
                 )
         }
 )
 public class SwaggerConfig {
+    static {
+        SpringDocUtils
+                .getConfig()
+                .addAnnotationsToIgnore(
+                        Auth.class,
+                        ExtractToken.class
+                );
+    }
+
     @Bean
     public GroupedOpenApi studyWithMeApi() {
         return GroupedOpenApi.builder()

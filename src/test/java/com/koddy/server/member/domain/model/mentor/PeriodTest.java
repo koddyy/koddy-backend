@@ -1,5 +1,6 @@
 package com.koddy.server.member.domain.model.mentor;
 
+import com.koddy.server.common.ParallelTest;
 import com.koddy.server.member.exception.MemberException;
 import com.koddy.server.member.exception.MemberExceptionCode;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @DisplayName("Member/Mentor -> 도메인 [Period VO] 테스트")
-class PeriodTest {
+class PeriodTest extends ParallelTest {
     @Nested
     @DisplayName("Period 생성")
     class Construct {
