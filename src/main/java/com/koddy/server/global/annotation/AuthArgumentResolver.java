@@ -13,7 +13,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import static com.koddy.server.auth.domain.model.Authenticated.SESSION_KEY;
-import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION;
+import static com.koddy.server.auth.exception.AuthExceptionCode.AUTH_REQUIRED;
 import static com.koddy.server.auth.utils.RequestTokenExtractor.extractAccessToken;
 
 @RequiredArgsConstructor
@@ -50,7 +50,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
     private String getAccessToken(final HttpServletRequest request) {
         final String accessToken = extractAccessToken(request)
-                .orElseThrow(() -> new AuthException(INVALID_PERMISSION));
+                .orElseThrow(() -> new AuthException(AUTH_REQUIRED));
         tokenProvider.validateToken(accessToken);
         return accessToken;
     }
@@ -67,7 +67,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
     private void validateSessionPayload(final HttpSession session) {
         if (session == null || session.getAttribute(SESSION_KEY) == null) {
-            throw new AuthException(INVALID_PERMISSION);
+            throw new AuthException(AUTH_REQUIRED);
         }
     }
 }

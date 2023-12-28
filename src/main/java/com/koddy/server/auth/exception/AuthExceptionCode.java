@@ -11,8 +11,9 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 @Getter
 @RequiredArgsConstructor
 public enum AuthExceptionCode implements KoddyExceptionCode {
-    INVALID_TOKEN(UNAUTHORIZED, "AUTH_001", "토큰이 유효하지 않습니다."),
-    INVALID_PERMISSION(FORBIDDEN, "AUTH_002", "권한이 없습니다."),
+    AUTH_REQUIRED(UNAUTHORIZED, "AUTH_001", "인증이 필요합니다."),
+    INVALID_TOKEN(UNAUTHORIZED, "AUTH_002", "토큰이 유효하지 않습니다."),
+    INVALID_PERMISSION(FORBIDDEN, "AUTH_003", "권한이 없습니다."),
     ;
 
     private final HttpStatus status;
