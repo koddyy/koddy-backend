@@ -1,6 +1,6 @@
 package com.koddy.server.member.application.usecase;
 
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UseCaseTest;
 import com.koddy.server.global.encrypt.Encryptor;
 import com.koddy.server.member.application.usecase.command.SimpleSignUpCommand;
 import com.koddy.server.member.domain.model.mentee.Mentee;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("Member -> SimpleSignUpUseCase 테스트")
-class SimpleSignUpUseCaseTest extends ParallelTest {
+class SimpleSignUpUseCaseTest extends UseCaseTest {
     private final Encryptor encryptor = getEncryptor();
     private final MemberRepository memberRepository = mock(MemberRepository.class);
     private final SimpleSignUpUseCase sut = new SimpleSignUpUseCase(encryptor, memberRepository);

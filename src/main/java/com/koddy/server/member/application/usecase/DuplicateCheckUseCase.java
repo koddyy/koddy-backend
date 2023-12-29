@@ -9,8 +9,7 @@ import lombok.RequiredArgsConstructor;
 public class DuplicateCheckUseCase {
     private final MemberRepository memberRepository;
 
-    public boolean checkEmail(final String email) {
-        // TODO
-        return true;
+    public boolean isEmailUsable(final String email) {
+        return !memberRepository.existsByEmailValue(email);
     }
 }

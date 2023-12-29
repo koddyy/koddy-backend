@@ -29,4 +29,6 @@ public interface MemberRepository extends JpaRepository<Member<?>, Long> {
         return findByIdWithRoles(id)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
+
+    boolean existsByEmailValue(final String value);
 }
