@@ -30,7 +30,7 @@ import static lombok.AccessLevel.PROTECTED;
 @DiscriminatorColumn(name = "type")
 @Entity
 @Table(name = "member")
-public abstract class Member extends BaseEntity<Member> {
+public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     protected static final String EMPTY = "EMPTY";
 
     @Embedded

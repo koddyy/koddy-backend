@@ -60,7 +60,7 @@ class TokenReissueApiControllerTest extends ControllerTest {
         @DisplayName("사용자 소유의 RefreshToken을 통해서 AccessToken과 RefreshToken을 재발급받는다")
         void success() throws Exception {
             // given
-            final Member member = MENTOR_1.toDomain().apply(1L);
+            final Member<?> member = MENTOR_1.toDomain().apply(1L);
             mockingToken(true, member.getId(), member.getRoleTypes());
             given(reissueTokenUseCase.invoke(any())).willReturn(new AuthToken(ACCESS_TOKEN, REFRESH_TOKEN));
 

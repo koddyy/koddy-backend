@@ -24,7 +24,7 @@ class TokenManagerTest extends UseCaseTest {
     private final TokenRepository tokenRepository = mock(TokenRepository.class);
     private final TokenManager sut = new TokenManager(tokenRepository);
 
-    private final Member member = MENTOR_1.toDomain().apply(1L);
+    private final Member<?> member = MENTOR_1.toDomain().apply(1L);
     private final String previousToken = "previous";
     private final String newToken = "new";
 

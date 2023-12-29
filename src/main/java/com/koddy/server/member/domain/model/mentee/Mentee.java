@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "mentee")
-public class Mentee extends Member {
+public class Mentee extends Member<Mentee> {
     @Embedded
     private Interest interest;
 

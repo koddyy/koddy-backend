@@ -25,7 +25,7 @@ public class TokenIssuerTest extends ParallelTest {
     private final TokenManager tokenManager = mock(TokenManager.class);
     private final TokenIssuer sut = new TokenIssuer(memberRepository, tokenProvider, tokenManager);
 
-    private final Member member = MENTOR_1.toDomain().apply(1L);
+    private final Member<?> member = MENTOR_1.toDomain().apply(1L);
 
     @Test
     @DisplayName("AuthToken[Access + Refresh]을 제공한다")

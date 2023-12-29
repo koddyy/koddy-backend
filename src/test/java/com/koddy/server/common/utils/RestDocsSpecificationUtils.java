@@ -98,13 +98,13 @@ public class RestDocsSpecificationUtils {
 
     private static Snippet getHeaderWithAccessToken() {
         return requestHeaders(
-                header(AUTHORIZATION, "Access Token")
+                header(AUTHORIZATION, "Access Token", true)
         );
     }
 
     private static Snippet getCookieWithRefreshToken() {
         return requestCookies(
-                cookie(COOKIE_REFRESH_TOKEN, "Refresh Token")
+                cookie(COOKIE_REFRESH_TOKEN, "Refresh Token", true)
         );
     }
 
@@ -129,8 +129,18 @@ public class RestDocsSpecificationUtils {
             return headerWithName(name).description(description);
         }
 
+        public static HeaderDescriptor header(final String name, final String description, final boolean mustRequired) {
+            final HeaderDescriptor result = headerWithName(name).description(description);
+            return mustRequired ? result : result.optional();
+        }
+
         public static HeaderDescriptor header(final String name, final String description, final String constraint) {
             return headerWithName(name).description(description).attributes(constraint(constraint));
+        }
+
+        public static HeaderDescriptor header(final String name, final String description, final String constraint, final boolean mustRequired) {
+            final HeaderDescriptor result = headerWithName(name).description(description).attributes(constraint(constraint));
+            return mustRequired ? result : result.optional();
         }
 
         /**
@@ -142,8 +152,18 @@ public class RestDocsSpecificationUtils {
             return cookieWithName(name).description(description);
         }
 
+        public static CookieDescriptor cookie(final String name, final String description, final boolean mustRequired) {
+            final CookieDescriptor result = cookieWithName(name).description(description);
+            return mustRequired ? result : result.optional();
+        }
+
         public static CookieDescriptor cookie(final String name, final String description, final String constraint) {
             return cookieWithName(name).description(description).attributes(constraint(constraint));
+        }
+
+        public static CookieDescriptor cookie(final String name, final String description, final String constraint, final boolean mustRequired) {
+            final CookieDescriptor result = cookieWithName(name).description(description).attributes(constraint(constraint));
+            return mustRequired ? result : result.optional();
         }
 
         /**
@@ -153,8 +173,18 @@ public class RestDocsSpecificationUtils {
             return parameterWithName(name).description(description);
         }
 
+        public static ParameterDescriptor path(final String name, final String description, final boolean mustRequired) {
+            final ParameterDescriptor result = parameterWithName(name).description(description);
+            return mustRequired ? result : result.optional();
+        }
+
         public static ParameterDescriptor path(final String name, final String description, final String constraint) {
             return parameterWithName(name).description(description).attributes(constraint(constraint));
+        }
+
+        public static ParameterDescriptor path(final String name, final String description, final String constraint, final boolean mustRequired) {
+            final ParameterDescriptor result = parameterWithName(name).description(description).attributes(constraint(constraint));
+            return mustRequired ? result : result.optional();
         }
 
         /**
@@ -164,8 +194,18 @@ public class RestDocsSpecificationUtils {
             return parameterWithName(name).description(description);
         }
 
+        public static ParameterDescriptor query(final String name, final String description, final boolean mustRequired) {
+            final ParameterDescriptor result = parameterWithName(name).description(description);
+            return mustRequired ? result : result.optional();
+        }
+
         public static ParameterDescriptor query(final String name, final String description, final String constraint) {
             return parameterWithName(name).description(description).attributes(constraint(constraint));
+        }
+
+        public static ParameterDescriptor query(final String name, final String description, final String constraint, final boolean mustRequired) {
+            final ParameterDescriptor result = parameterWithName(name).description(description).attributes(constraint(constraint));
+            return mustRequired ? result : result.optional();
         }
 
         /**
@@ -175,8 +215,18 @@ public class RestDocsSpecificationUtils {
             return partWithName(name).description(description);
         }
 
+        public static RequestPartDescriptor file(final String name, final String description, final boolean mustRequired) {
+            final RequestPartDescriptor result = partWithName(name).description(description);
+            return mustRequired ? result : result.optional();
+        }
+
         public static RequestPartDescriptor file(final String name, final String description, final String constraint) {
             return partWithName(name).description(description).attributes(constraint(constraint));
+        }
+
+        public static RequestPartDescriptor file(final String name, final String description, final String constraint, final boolean mustRequired) {
+            final RequestPartDescriptor result = partWithName(name).description(description).attributes(constraint(constraint));
+            return mustRequired ? result : result.optional();
         }
 
         /**
@@ -188,8 +238,18 @@ public class RestDocsSpecificationUtils {
             return fieldWithPath(name).description(description);
         }
 
+        public static FieldDescriptor body(final String name, final String description, final boolean mustRequired) {
+            final FieldDescriptor result = fieldWithPath(name).description(description);
+            return mustRequired ? result : result.optional();
+        }
+
         public static FieldDescriptor body(final String name, final String description, final String constraint) {
             return fieldWithPath(name).description(description).attributes(constraint(constraint));
+        }
+
+        public static FieldDescriptor body(final String name, final String description, final String constraint, final boolean mustRequired) {
+            final FieldDescriptor result = fieldWithPath(name).description(description).attributes(constraint(constraint));
+            return mustRequired ? result : result.optional();
         }
 
         private static Attributes.Attribute constraint(final String value) {

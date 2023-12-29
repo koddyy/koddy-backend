@@ -28,7 +28,7 @@ class ReissueTokenUseCaseTest extends UseCaseTest {
     private final TokenIssuer tokenIssuer = mock(TokenIssuer.class);
     private final ReissueTokenUseCase sut = new ReissueTokenUseCase(tokenProvider, tokenIssuer);
 
-    private final Member member = MENTOR_1.toDomain().apply(1L);
+    private final Member<?> member = MENTOR_1.toDomain().apply(1L);
     private final ReissueTokenCommand command = new ReissueTokenCommand(REFRESH_TOKEN);
 
     @Test
