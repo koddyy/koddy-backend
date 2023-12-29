@@ -40,6 +40,13 @@ spring:
       port: 6379
       password: koddy
 
+  cloud:
+    aws:
+      region:
+        static: ap-northeast-2
+      s3:
+        bucket: ${S3_BUCKET:s3-bucket}
+
   thymeleaf:
     cache: false
 
