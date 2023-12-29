@@ -13,7 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.body;
-import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createResponseSnippets;
+import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createHttpSpecSnippets;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.failureDocs;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocs;
 import static com.koddy.server.global.exception.GlobalExceptionCode.VALIDATION_ERROR;
@@ -52,7 +52,7 @@ class SignUpApiControllerTest extends ControllerTest {
             // then
             mockMvc.perform(requestBuilder)
                     .andExpect(status().isOk())
-                    .andDo(successDocs("MemberApi/EmailDuplicateCheck", createResponseSnippets(
+                    .andDo(successDocs("MemberApi/EmailDuplicateCheck", createHttpSpecSnippets(
                             requestFields(
                                     body("value", "중복 체크를 진행할 이메일", true)
                             ),
@@ -131,7 +131,7 @@ class SignUpApiControllerTest extends ControllerTest {
             // then
             mockMvc.perform(requestBuilder)
                     .andExpect(status().isOk())
-                    .andDo(successDocs("MemberApi/SignUp/Success", createResponseSnippets(
+                    .andDo(successDocs("MemberApi/SignUp/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("email", "이메일", true),
                                     body("checked", "이메일 중복 체크 결과", true),

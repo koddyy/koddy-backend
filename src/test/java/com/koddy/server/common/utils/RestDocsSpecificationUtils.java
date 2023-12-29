@@ -115,7 +115,7 @@ public class RestDocsSpecificationUtils {
         );
     }
 
-    public static Snippet[] createResponseSnippets(final Snippet... snippets) {
+    public static Snippet[] createHttpSpecSnippets(final Snippet... snippets) {
         return Arrays.stream(snippets).toArray(Snippet[]::new);
     }
 
