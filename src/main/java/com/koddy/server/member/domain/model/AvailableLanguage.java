@@ -31,9 +31,9 @@ public class AvailableLanguage {
 
     @ManyToOne(fetch = LAZY, optional = false)
     @JoinColumn(name = "member_id", referencedColumnName = "id", nullable = false)
-    private Member member;
+    private Member<?> member;
 
-    public AvailableLanguage(final Member member, final Language language) {
+    public AvailableLanguage(final Member<?> member, final Language language) {
         this.member = member;
         this.language = language;
     }

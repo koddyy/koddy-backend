@@ -32,9 +32,9 @@ public class Role {
 
     @ManyToOne(fetch = LAZY, optional = false)
     @JoinColumn(name = "member_id", referencedColumnName = "id", nullable = false)
-    private Member member;
+    private Member<?> member;
 
-    public Role(final Member member, final RoleType roleType) {
+    public Role(final Member<?> member, final RoleType roleType) {
         this.member = member;
         this.roleType = roleType;
     }
