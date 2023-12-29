@@ -2,7 +2,7 @@ package com.koddy.server.auth.domain.service;
 
 import com.koddy.server.auth.domain.model.AuthToken;
 import com.koddy.server.auth.utils.TokenProvider;
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.ServiceTest;
 import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("Auth -> TokenIssuer 테스트")
-public class TokenIssuerTest extends ParallelTest {
+public class TokenIssuerTest extends ServiceTest {
     private final MemberRepository memberRepository = mock(MemberRepository.class);
     private final TokenProvider tokenProvider = mock(TokenProvider.class);
     private final TokenManager tokenManager = mock(TokenManager.class);
