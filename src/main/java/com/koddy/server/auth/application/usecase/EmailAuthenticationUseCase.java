@@ -1,6 +1,6 @@
 package com.koddy.server.auth.application.usecase;
 
-import com.koddy.server.auth.application.adapter.AuthenticationProcessor;
+import com.koddy.server.auth.application.adapter.MailAuthenticationProcessor;
 import com.koddy.server.auth.application.usecase.command.ConfirmAuthCodeCommand;
 import com.koddy.server.auth.application.usecase.command.SendAuthCodeCommand;
 import com.koddy.server.auth.domain.model.code.AuthKey;
@@ -14,14 +14,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EmailAuthenticationUseCase {
     private final MemberRepository memberRepository;
-    private final AuthenticationProcessor authenticationProcessor;
+    private final MailAuthenticationProcessor mailAuthenticationProcessor;
     private final EmailSender emailSender;
 
     public void sendAuthCode(final SendAuthCodeCommand command) {
         final Member<?> member = memberRepository.getByEmail(command.email());
 
         final String key = generateAuthKey(member.getEmail().getValue());
-        final String authCode = authenticationProcessor.storeAuthCode(key);
+        final String authCode = mailAuthenticationProcessor.storeAuthCode(key);
         emailSender.sendEmailAuthMail(member.getEmail().getValue(), authCode);
     }
 
@@ -32,8 +32,8 @@ public class EmailAuthenticationUseCase {
 
     private void verifyAuthCode(final Member<?> member, final String authCode) {
         final String key = generateAuthKey(member.getEmail().getValue());
-        authenticationProcessor.verifyAuthCode(key, authCode);
-        authenticationProcessor.deleteAuthCode(key); // 인증 성공 후 바로 제거 (재활용 X)
+        mailAuthenticationProcessor.verifyAuthCode(key, authCode);
+        mailAuthenticationProcessor.deleteAuthCode(key); // 인증 성공 후 바로 제거 (재활용 X)
     }
 
     private String generateAuthKey(final String email) {

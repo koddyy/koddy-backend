@@ -1,6 +1,6 @@
 package com.koddy.server.auth.infrastructure;
 
-import com.koddy.server.auth.application.adapter.AuthenticationProcessor;
+import com.koddy.server.auth.application.adapter.MailAuthenticationProcessor;
 import com.koddy.server.auth.domain.model.code.AuthCodeGenerator;
 import com.koddy.server.auth.exception.AuthException;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,12 +12,12 @@ import java.util.concurrent.TimeUnit;
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_AUTH_CODE;
 
 @Component
-public class RedisAuthenticationProcessor implements AuthenticationProcessor {
+public class RedisMailAuthenticationProcessor implements MailAuthenticationProcessor {
     private final AuthCodeGenerator authCodeGenerator;
     private final StringRedisTemplate stringRedisTemplate;
     private final long authTtl;
 
-    public RedisAuthenticationProcessor(
+    public RedisMailAuthenticationProcessor(
             final AuthCodeGenerator authCodeGenerator,
             final StringRedisTemplate stringRedisTemplate,
             @Value("${mail.auth.ttl}") final long authTtl

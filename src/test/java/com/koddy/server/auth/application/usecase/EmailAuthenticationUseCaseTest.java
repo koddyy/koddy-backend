@@ -1,6 +1,6 @@
 package com.koddy.server.auth.application.usecase;
 
-import com.koddy.server.auth.application.adapter.AuthenticationProcessor;
+import com.koddy.server.auth.application.adapter.MailAuthenticationProcessor;
 import com.koddy.server.auth.application.usecase.command.ConfirmAuthCodeCommand;
 import com.koddy.server.auth.application.usecase.command.SendAuthCodeCommand;
 import com.koddy.server.auth.domain.model.code.AuthKey;
@@ -27,11 +27,11 @@ import static org.mockito.Mockito.verify;
 @DisplayName("Auth -> EmailAuthenticationUseCase 테스트")
 class EmailAuthenticationUseCaseTest extends UseCaseTest {
     private final MemberRepository memberRepository = mock(MemberRepository.class);
-    private final AuthenticationProcessor authenticationProcessor = mock(AuthenticationProcessor.class);
+    private final MailAuthenticationProcessor mailAuthenticationProcessor = mock(MailAuthenticationProcessor.class);
     private final EmailSender emailSender = mock(EmailSender.class);
     private final EmailAuthenticationUseCase sut = new EmailAuthenticationUseCase(
             memberRepository,
-            authenticationProcessor,
+            mailAuthenticationProcessor,
             emailSender
     );
 
@@ -51,7 +51,7 @@ class EmailAuthenticationUseCaseTest extends UseCaseTest {
 
             final String key = AuthKey.EMAIL.generateAuthKey(email);
             final String authCode = "Koddy";
-            given(authenticationProcessor.storeAuthCode(key)).willReturn(authCode);
+            given(mailAuthenticationProcessor.storeAuthCode(key)).willReturn(authCode);
 
             // when
             sut.sendAuthCode(command);
@@ -59,7 +59,7 @@ class EmailAuthenticationUseCaseTest extends UseCaseTest {
             // then
             assertAll(
                     () -> verify(memberRepository, times(1)).getByEmail(command.email()),
-                    () -> verify(authenticationProcessor, times(1)).storeAuthCode(key),
+                    () -> verify(mailAuthenticationProcessor, times(1)).storeAuthCode(key),
                     () -> verify(emailSender, times(1)).sendEmailAuthMail(email, authCode)
             );
         }
@@ -79,7 +79,7 @@ class EmailAuthenticationUseCaseTest extends UseCaseTest {
             // given
             given(memberRepository.getByEmail(command.email())).willReturn(member);
             doThrow(new AuthException(INVALID_AUTH_CODE))
-                    .when(authenticationProcessor)
+                    .when(mailAuthenticationProcessor)
                     .verifyAuthCode(key, command.authCode());
 
             // when - then
@@ -89,8 +89,8 @@ class EmailAuthenticationUseCaseTest extends UseCaseTest {
 
             assertAll(
                     () -> verify(memberRepository, times(1)).getByEmail(command.email()),
-                    () -> verify(authenticationProcessor, times(1)).verifyAuthCode(key, command.authCode()),
-                    () -> verify(authenticationProcessor, times(0)).deleteAuthCode(key)
+                    () -> verify(mailAuthenticationProcessor, times(1)).verifyAuthCode(key, command.authCode()),
+                    () -> verify(mailAuthenticationProcessor, times(0)).deleteAuthCode(key)
             );
         }
 
@@ -100,7 +100,7 @@ class EmailAuthenticationUseCaseTest extends UseCaseTest {
             // given
             given(memberRepository.getByEmail(command.email())).willReturn(member);
             doNothing()
-                    .when(authenticationProcessor)
+                    .when(mailAuthenticationProcessor)
                     .verifyAuthCode(key, command.authCode());
 
             // when
@@ -109,8 +109,8 @@ class EmailAuthenticationUseCaseTest extends UseCaseTest {
             // then
             assertAll(
                     () -> verify(memberRepository, times(1)).getByEmail(command.email()),
-                    () -> verify(authenticationProcessor, times(1)).verifyAuthCode(key, command.authCode()),
-                    () -> verify(authenticationProcessor, times(1)).deleteAuthCode(key)
+                    () -> verify(mailAuthenticationProcessor, times(1)).verifyAuthCode(key, command.authCode()),
+                    () -> verify(mailAuthenticationProcessor, times(1)).deleteAuthCode(key)
             );
         }
     }

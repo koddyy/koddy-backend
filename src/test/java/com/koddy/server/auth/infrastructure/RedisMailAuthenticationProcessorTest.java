@@ -22,11 +22,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@Import(RedisAuthenticationProcessor.class)
-@DisplayName("Auth -> RedisAuthenticationProcessor 테스트")
-class RedisAuthenticationProcessorTest extends RedisTest {
+@Import(RedisMailAuthenticationProcessor.class)
+@DisplayName("Auth -> RedisMailAuthenticationProcessor 테스트")
+class RedisMailAuthenticationProcessorTest extends RedisTest {
     @Autowired
-    private RedisAuthenticationProcessor sut;
+    private RedisMailAuthenticationProcessor sut;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
