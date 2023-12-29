@@ -20,7 +20,7 @@ class TokenProviderTest extends ParallelTest {
     private final TokenProvider invalidProvider = new TokenProvider(SECRET_KEY, 0L, 0L);
     private final TokenProvider validProvider = new TokenProvider(SECRET_KEY, 7200L, 7200L);
 
-    private final Member member = MENTOR_1.toDomain().apply(1L);
+    private final Member<?> member = MENTOR_1.toDomain().apply(1L);
 
     @Test
     @DisplayName("AccessToken과 RefreshToken을 발급한다")
