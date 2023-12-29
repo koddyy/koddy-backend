@@ -1,6 +1,6 @@
 package com.koddy.server.auth.application.usecase.command;
 
-public record VerifyAuthCodeCommand(
+public record ConfirmAuthCodeCommand(
         String email,
         String authCode
 ) {
