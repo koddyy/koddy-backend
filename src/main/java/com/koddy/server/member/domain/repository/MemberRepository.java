@@ -17,6 +17,7 @@ public interface MemberRepository extends JpaRepository<Member<?>, Long> {
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
+    // @Query
     @Query("""
             SELECT m
             FROM Member m
@@ -30,5 +31,13 @@ public interface MemberRepository extends JpaRepository<Member<?>, Long> {
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
+    // Query Method
     boolean existsByEmailValue(final String value);
+
+    Optional<Member> findByEmailValue(final String email);
+
+    default Member getByEmail(final String email) {
+        return findByEmailValue(email)
+                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+    }
 }

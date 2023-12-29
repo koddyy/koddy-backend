@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.Extension;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+@SuppressWarnings("rawtypes")
 @Testcontainers
 @FlywayTestExtension
 public class MySqlTestContainersExtension implements Extension {
