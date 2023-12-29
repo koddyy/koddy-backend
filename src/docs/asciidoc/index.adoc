@@ -3,7 +3,25 @@
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
-:toclevels: 2
+:toclevels: 3
+
+== 사용자 API
+
+=== 간편 회원가입
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/SignUp/Success/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/SignUp/Failure/Case1/http-response.adoc[]
+include::{snippets}/MemberApi/SignUp/Failure/Case2/http-response.adoc[]
+include::{snippets}/MemberApi/SignUp/Failure/Case3/http-response.adoc[]
+include::{snippets}/MemberApi/SignUp/Failure/Case4/http-response.adoc[]
+include::{snippets}/MemberApi/SignUp/Failure/Case5/http-response.adoc[]
+include::{snippets}/MemberApi/SignUp/Success/http-response.adoc[]
+include::{snippets}/MemberApi/SignUp/Success/response-fields.adoc[]
 
 == 토큰 재발급 API (RefreshToken)
 
