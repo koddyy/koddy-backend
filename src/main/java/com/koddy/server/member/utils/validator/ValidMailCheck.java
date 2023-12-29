@@ -1,4 +1,4 @@
-package com.koddy.server.member.utils;
+package com.koddy.server.member.utils.validator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
