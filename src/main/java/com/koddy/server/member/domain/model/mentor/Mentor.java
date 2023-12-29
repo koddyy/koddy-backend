@@ -28,7 +28,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "mentor")
-public class Mentor extends Member {
+public class Mentor extends Member<Mentor> {
     @Embedded
     private UniversityProfile universityProfile;
 
