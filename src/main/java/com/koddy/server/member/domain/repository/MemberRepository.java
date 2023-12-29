@@ -10,7 +10,8 @@ import java.util.Optional;
 
 import static com.koddy.server.member.exception.MemberExceptionCode.MEMBER_NOT_FOUND;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+@SuppressWarnings("rawtypes")
+public interface MemberRepository extends JpaRepository<Member<?>, Long> {
     default Member getById(final Long id) {
         return findById(id)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
@@ -28,4 +29,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
         return findByIdWithRoles(id)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
+
+    boolean existsByEmailValue(final String value);
 }

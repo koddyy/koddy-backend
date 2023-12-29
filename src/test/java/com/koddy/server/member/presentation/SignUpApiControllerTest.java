@@ -1,7 +1,9 @@
 package com.koddy.server.member.presentation;
 
 import com.koddy.server.common.ControllerTest;
+import com.koddy.server.member.application.usecase.DuplicateCheckUseCase;
 import com.koddy.server.member.application.usecase.SimpleSignUpUseCase;
+import com.koddy.server.member.presentation.dto.request.EmailDuplicateCheckRequest;
 import com.koddy.server.member.presentation.dto.request.SignUpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,6 +19,7 @@ import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDo
 import static com.koddy.server.global.exception.GlobalExceptionCode.VALIDATION_ERROR;
 import static com.koddy.server.member.domain.model.MemberType.MENTOR;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -26,7 +29,39 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Member -> SignUpApiController 테스트")
 class SignUpApiControllerTest extends ControllerTest {
     @MockBean
+    private DuplicateCheckUseCase duplicateCheckUseCase;
+
+    @MockBean
     private SimpleSignUpUseCase simpleSignUpUseCase;
+
+    @Nested
+    @DisplayName("이메일 중복 체크 API [POST /api/members/duplicate/email]")
+    class EmailDuplicateCheck {
+        private static final String BASE_URL = "/api/members/duplicate/email";
+
+        @Test
+        @DisplayName("이메일 중복 체크를 진행한다")
+        void success() throws Exception {
+            // given
+            final EmailDuplicateCheckRequest request = new EmailDuplicateCheckRequest("sjiwon4491@gmail.com");
+            given(duplicateCheckUseCase.isEmailUsable(anyString())).willReturn(true);
+
+            // when
+            final RequestBuilder requestBuilder = post(BASE_URL, request);
+
+            // then
+            mockMvc.perform(requestBuilder)
+                    .andExpect(status().isOk())
+                    .andDo(successDocs("MemberApi/EmailDuplicateCheck", createResponseSnippets(
+                            requestFields(
+                                    body("value", "중복 체크를 진행할 이메일", true)
+                            ),
+                            responseFields(
+                                    body("result", "사용 가능 여부")
+                            )
+                    )));
+        }
+    }
 
     @Nested
     @DisplayName("간편 회원가입 API [POST /api/members]")
@@ -99,9 +134,9 @@ class SignUpApiControllerTest extends ControllerTest {
                     .andDo(successDocs("MemberApi/SignUp/Success", createResponseSnippets(
                             requestFields(
                                     body("email", "이메일", true),
-                                    body("checked", "이메일", true),
-                                    body("password", "이메일", true),
-                                    body("type", "이메일", true)
+                                    body("checked", "이메일 중복 체크 결과", true),
+                                    body("password", "비밀번호", true),
+                                    body("type", "사용자 타입", "MENTOR / MENTEE", true)
                             ),
                             responseFields(
                                     body("id", "사용자 ID(PK)")

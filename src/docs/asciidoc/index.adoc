@@ -7,11 +7,24 @@
 
 == 사용자 API
 
+=== 이메일 중복 체크
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/EmailDuplicateCheck/http-request.adoc[]
+include::{snippets}/MemberApi/EmailDuplicateCheck/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/EmailDuplicateCheck/http-response.adoc[]
+include::{snippets}/MemberApi/EmailDuplicateCheck/response-fields.adoc[]
+
 === 간편 회원가입
 
 ==== HTTP Request
 
 include::{snippets}/MemberApi/SignUp/Success/http-request.adoc[]
+include::{snippets}/MemberApi/SignUp/Success/request-fields.adoc[]
 
 ==== HTTP Response
 
@@ -28,6 +41,7 @@ include::{snippets}/MemberApi/SignUp/Success/response-fields.adoc[]
 === HTTP Request
 
 include::{snippets}/TokenReissueApi/Success/http-request.adoc[]
+include::{snippets}/TokenReissueApi/Success/request-cookies.adoc[]
 
 === HTTP Response
 

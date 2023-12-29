@@ -24,7 +24,7 @@ class TokenRepositoryTest extends RepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    private Member member;
+    private Member<?> member;
 
     @BeforeEach
     void setUp() {
