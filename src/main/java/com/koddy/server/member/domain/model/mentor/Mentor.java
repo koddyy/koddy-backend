@@ -99,8 +99,8 @@ public class Mentor extends Member<Mentor> {
         this.introduction = introduction;
     }
 
-    public void updatePassword(final String updatePassword, final Encryptor encryptor) {
-        super.updatePassword(updatePassword, encryptor);
+    public void updatePassword(final String currentPassword, final String updatePassword, final Encryptor encryptor) {
+        super.updatePassword(currentPassword, updatePassword, encryptor);
     }
 
     public void updateSchedules(final List<Schedule> schedules) {

@@ -117,8 +117,8 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         applyLanguages(languages);
     }
 
-    protected void updatePassword(final String updatePassword, final Encryptor encryptor) {
-        this.password = this.password.update(updatePassword, encryptor);
+    protected void updatePassword(final String currentPassword, final String updatePassword, final Encryptor encryptor) {
+        this.password = this.password.update(currentPassword, updatePassword, encryptor);
     }
 
     public boolean isAuthenticated() {
