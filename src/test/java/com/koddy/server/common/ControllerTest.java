@@ -178,6 +178,7 @@ public abstract class ControllerTest {
         return MockMvcRequestBuilders
                 .post(url)
                 .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION, applyAccessToken())
                 .content(toBody(data));
     }
 

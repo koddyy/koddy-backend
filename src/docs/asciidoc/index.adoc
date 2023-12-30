@@ -58,6 +58,32 @@ include::{snippets}/MemberApi/EmailAuth/Confirm/request-fields.adoc[]
 
 include::{snippets}/MemberApi/EmailAuth/Confirm/http-response.adoc[]
 
+== 사용자 부가정보 기입 API (AccessToken)
+
+=== 멘토 부가정보 기입
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/Complete/Mentor/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Complete/Mentor/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/Complete/Mentor/Failure/http-response.adoc[]
+include::{snippets}/MemberApi/Complete/Mentor/Success/http-response.adoc[]
+
+=== 멘티 부가정보 기입
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/Complete/Mentee/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Complete/Mentee/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/Complete/Mentee/Failure/http-response.adoc[]
+include::{snippets}/MemberApi/Complete/Mentee/Success/http-response.adoc[]
+
 == 파일 관련 API
 
 === 파일 업로드
