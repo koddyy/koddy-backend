@@ -2,14 +2,12 @@ package com.koddy.server.member.presentation.dto.request;
 
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Nationality;
-import com.koddy.server.member.domain.model.mentor.Day;
 import com.koddy.server.member.domain.model.mentor.Period;
 import com.koddy.server.member.domain.model.mentor.Schedule;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalTime;
 import java.util.List;
 
 public record CompleteMentorRequest(
@@ -40,18 +38,11 @@ public record CompleteMentorRequest(
         String introduction,
 
         @NotEmpty(message = "멘토링 스케줄은 하루 이상 선택해야 합니다.")
-        List<ScheduleRequest> schedules
+        List<MentorScheduleRequest> schedules
 ) {
-    public record ScheduleRequest(
-            Day day,
-            LocalTime startTime,
-            LocalTime endTime
-    ) {
-    }
-
     public List<Schedule> toSchedules() {
         return schedules.stream()
-                .map(it -> new Schedule(it.day, Period.of(it.startTime, it.endTime)))
+                .map(it -> new Schedule(it.day(), Period.of(it.startTime(), it.endTime())))
                 .toList();
     }
 }
