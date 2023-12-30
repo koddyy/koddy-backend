@@ -5,6 +5,18 @@
 :toc: left
 :toclevels: 3
 
+== 토큰 재발급 API (RefreshToken)
+
+=== HTTP Request
+
+include::{snippets}/TokenReissueApi/Success/http-request.adoc[]
+include::{snippets}/TokenReissueApi/Success/request-cookies.adoc[]
+
+=== HTTP Response
+
+include::{snippets}/TokenReissueApi/Failure/http-response.adoc[]
+include::{snippets}/TokenReissueApi/Success/http-response.adoc[]
+
 == 이메일 중복 체크 API
 
 === HTTP Request
@@ -110,14 +122,42 @@ include::{snippets}/FileApi/GetPresignedUrl/query-parameters.adoc[]
 include::{snippets}/FileApi/GetPresignedUrl/http-response.adoc[]
 include::{snippets}/FileApi/GetPresignedUrl/response-fields.adoc[]
 
-== 토큰 재발급 API (RefreshToken)
+== 멘토 정보 수정 API (AccessToken)
 
-=== HTTP Request
+=== 기본 정보
+[.line-through]##
+==== HTTP Request
 
-include::{snippets}/TokenReissueApi/Success/http-request.adoc[]
-include::{snippets}/TokenReissueApi/Success/request-cookies.adoc[]
+include::{snippets}/MemberApi/Update/Mentor/BasicInfo/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Update/Mentor/BasicInfo/Success/request-fields.adoc[]
 
-=== HTTP Response
+==== HTTP Response
 
-include::{snippets}/TokenReissueApi/Failure/http-response.adoc[]
-include::{snippets}/TokenReissueApi/Success/http-response.adoc[]
+include::{snippets}/MemberApi/Update/Mentor/BasicInfo/Failure/http-response.adoc[]
+include::{snippets}/MemberApi/Update/Mentor/BasicInfo/Success/http-response.adoc[]
+
+=== 비밀번호
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/Update/Mentor/Password/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Update/Mentor/Password/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/Update/Mentor/Password/Failure/http-response.adoc[]
+include::{snippets}/MemberApi/Update/Mentor/Password/Success/http-response.adoc[]
+
+=== 스케줄
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/Update/Mentor/Schedule/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Update/Mentor/Schedule/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/Update/Mentor/Schedule/Failure/http-response.adoc[]
+include::{snippets}/MemberApi/Update/Mentor/Schedule/Success/http-response.adoc[]
+
+
