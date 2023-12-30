@@ -25,6 +25,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -34,6 +35,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN;
 import static com.koddy.server.common.utils.TokenUtils.applyAccessToken;
@@ -60,7 +62,7 @@ public abstract class ControllerTest {
 
     // common & internal
     @Autowired
-    private ObjectMapper objectMapper;
+    protected ObjectMapper objectMapper;
 
     @MockBean
     private TokenProvider tokenProvider;
@@ -89,6 +91,32 @@ public abstract class ControllerTest {
     protected RequestBuilder get(final String url, final List<Object> uriVariables) {
         return RestDocumentationRequestBuilders
                 .get(url, uriVariables);
+    }
+
+    @SafeVarargs
+    protected final RequestBuilder get(final String url, final Map<String, String>... params) {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(url);
+
+        for (final Map<String, String> param : params) {
+            for (final String key : param.keySet()) {
+                requestBuilder = requestBuilder.param(key, param.get(key));
+            }
+        }
+
+        return requestBuilder;
+    }
+
+    @SafeVarargs
+    protected final RequestBuilder get(final String url, final List<Object> uriVariables, final Map<String, String>... params) {
+        MockHttpServletRequestBuilder requestBuilder = RestDocumentationRequestBuilders.get(url, uriVariables);
+
+        for (final Map<String, String> param : params) {
+            for (final String key : param.keySet()) {
+                requestBuilder = requestBuilder.param(key, param.get(key));
+            }
+        }
+
+        return requestBuilder;
     }
 
     protected RequestBuilder getWithAccessToken(final String url) {
@@ -176,10 +204,9 @@ public abstract class ControllerTest {
     /**
      * POST + multipart/form-data
      */
-    protected RequestBuilder multipart(
+    protected final RequestBuilder multipart(
             final String url,
-            final List<MultipartFile> files,
-            final MultiValueMap<String, String> params
+            final List<MultipartFile> files
     ) {
         MockMultipartHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.multipart(url);
 
@@ -187,28 +214,15 @@ public abstract class ControllerTest {
             requestBuilder = requestBuilder.file((MockMultipartFile) file);
         }
 
-        return requestBuilder.queryParams(params);
+        return requestBuilder;
     }
 
-    protected RequestBuilder multipart(
-            final String url,
-            final List<Object> uriVariables,
-            final List<MultipartFile> files,
-            final MultiValueMap<String, String> params
-    ) {
-        MockMultipartHttpServletRequestBuilder requestBuilder = RestDocumentationRequestBuilders.multipart(url, uriVariables);
-
-        for (final MultipartFile file : files) {
-            requestBuilder = requestBuilder.file((MockMultipartFile) file);
-        }
-
-        return requestBuilder.queryParams(params);
-    }
-
-    protected RequestBuilder multipartWithAccessToken(
+    @SafeVarargs
+    protected final RequestBuilder multipart(
             final String url,
             final List<MultipartFile> files,
-            final MultiValueMap<String, String> params
+            final Map<String, String> params,
+            final MultiValueMap<String, String>... multiParams
     ) {
         MockMultipartHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.multipart(url);
 
@@ -216,16 +230,24 @@ public abstract class ControllerTest {
             requestBuilder = requestBuilder.file((MockMultipartFile) file);
         }
 
-        return requestBuilder
-                .header(AUTHORIZATION, applyAccessToken())
-                .queryParams(params);
+        for (final String key : params.keySet()) {
+            requestBuilder = (MockMultipartHttpServletRequestBuilder) requestBuilder.queryParam(key, params.get(key));
+        }
+
+        for (final MultiValueMap<String, String> multiParam : multiParams) {
+            requestBuilder = (MockMultipartHttpServletRequestBuilder) requestBuilder.queryParams(multiParam);
+        }
+
+        return requestBuilder;
     }
 
-    protected RequestBuilder multipartWithAccessToken(
+    @SafeVarargs
+    protected final RequestBuilder multipart(
             final String url,
             final List<Object> uriVariables,
             final List<MultipartFile> files,
-            final MultiValueMap<String, String> params
+            final Map<String, String> params,
+            final MultiValueMap<String, String>... multiParams
     ) {
         MockMultipartHttpServletRequestBuilder requestBuilder = RestDocumentationRequestBuilders.multipart(url, uriVariables);
 
@@ -233,9 +255,64 @@ public abstract class ControllerTest {
             requestBuilder = requestBuilder.file((MockMultipartFile) file);
         }
 
-        return requestBuilder
-                .header(AUTHORIZATION, applyAccessToken())
-                .queryParams(params);
+        for (final String key : params.keySet()) {
+            requestBuilder = (MockMultipartHttpServletRequestBuilder) requestBuilder.queryParam(key, params.get(key));
+        }
+
+        for (final MultiValueMap<String, String> multiParam : multiParams) {
+            requestBuilder = (MockMultipartHttpServletRequestBuilder) requestBuilder.queryParams(multiParam);
+        }
+
+        return requestBuilder;
+    }
+
+    @SafeVarargs
+    protected final RequestBuilder multipartWithAccessToken(
+            final String url,
+            final List<MultipartFile> files,
+            final Map<String, String> params,
+            final MultiValueMap<String, String>... multiParams
+    ) {
+        MockMultipartHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.multipart(url);
+
+        for (final MultipartFile file : files) {
+            requestBuilder = requestBuilder.file((MockMultipartFile) file);
+        }
+
+        for (final String key : params.keySet()) {
+            requestBuilder = (MockMultipartHttpServletRequestBuilder) requestBuilder.queryParam(key, params.get(key));
+        }
+
+        for (final MultiValueMap<String, String> multiParam : multiParams) {
+            requestBuilder = (MockMultipartHttpServletRequestBuilder) requestBuilder.queryParams(multiParam);
+        }
+
+        return requestBuilder.header(AUTHORIZATION, applyAccessToken());
+    }
+
+    @SafeVarargs
+    protected final RequestBuilder multipartWithAccessToken(
+            final String url,
+            final List<Object> uriVariables,
+            final List<MultipartFile> files,
+            final Map<String, String> params,
+            final MultiValueMap<String, String>... multiParams
+    ) {
+        MockMultipartHttpServletRequestBuilder requestBuilder = RestDocumentationRequestBuilders.multipart(url, uriVariables);
+
+        for (final MultipartFile file : files) {
+            requestBuilder = requestBuilder.file((MockMultipartFile) file);
+        }
+
+        for (final String key : params.keySet()) {
+            requestBuilder = (MockMultipartHttpServletRequestBuilder) requestBuilder.queryParam(key, params.get(key));
+        }
+
+        for (final MultiValueMap<String, String> multiParam : multiParams) {
+            requestBuilder = (MockMultipartHttpServletRequestBuilder) requestBuilder.queryParams(multiParam);
+        }
+
+        return requestBuilder.header(AUTHORIZATION, applyAccessToken());
     }
 
     /**
