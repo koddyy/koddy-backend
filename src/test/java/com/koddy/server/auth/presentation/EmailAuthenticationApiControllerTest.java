@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import java.util.UUID;
 
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.body;
-import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createResponseSnippets;
+import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createHttpSpecSnippets;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocs;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -47,7 +47,7 @@ class EmailAuthenticationApiControllerTest extends ControllerTest {
             // then
             mockMvc.perform(requestBuilder)
                     .andExpect(status().isNoContent())
-                    .andDo(successDocs("MemberApi/EmailAuth/Send", createResponseSnippets(
+                    .andDo(successDocs("MemberApi/EmailAuth/Send", createHttpSpecSnippets(
                             requestFields(
                                     body("email", "인증 대상 이메일", true)
                             )
@@ -76,7 +76,7 @@ class EmailAuthenticationApiControllerTest extends ControllerTest {
             // then
             mockMvc.perform(requestBuilder)
                     .andExpect(status().isNoContent())
-                    .andDo(successDocs("MemberApi/EmailAuth/Confirm", createResponseSnippets(
+                    .andDo(successDocs("MemberApi/EmailAuth/Confirm", createHttpSpecSnippets(
                             requestFields(
                                     body("email", "인증 대상 이메일", true),
                                     body("authCode", "인증번호", true)

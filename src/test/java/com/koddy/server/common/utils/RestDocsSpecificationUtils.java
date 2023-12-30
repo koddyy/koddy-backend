@@ -59,32 +59,36 @@ public class RestDocsSpecificationUtils {
         );
     }
 
-    public static RestDocumentationResultHandler failureDocs(final String identifier) {
+    public static RestDocumentationResultHandler failureDocs(final String identifier, final Snippet... snippets) {
         return document(
                 identifier,
                 getDocumentRequest(),
                 getDocumentResponse(),
-                getExceptionResponseFields()
+                Stream.concat(Arrays.stream(new Snippet[]{getExceptionResponseFields()}), Arrays.stream(snippets)).toArray(Snippet[]::new)
         );
     }
 
-    public static RestDocumentationResultHandler failureDocsWithAccessToken(final String identifier) {
+    public static RestDocumentationResultHandler failureDocsWithAccessToken(final String identifier, final Snippet... snippets) {
         return document(
                 identifier,
                 getDocumentRequest(),
                 getDocumentResponse(),
-                getHeaderWithAccessToken(),
-                getExceptionResponseFields()
+                Stream.concat(
+                        Arrays.stream(new Snippet[]{getHeaderWithAccessToken(), getExceptionResponseFields()}),
+                        Arrays.stream(snippets)
+                ).toArray(Snippet[]::new)
         );
     }
 
-    public static RestDocumentationResultHandler failureDocsWithRefreshToken(final String identifier) {
+    public static RestDocumentationResultHandler failureDocsWithRefreshToken(final String identifier, final Snippet... snippets) {
         return document(
                 identifier,
                 getDocumentRequest(),
                 getDocumentResponse(),
-                getCookieWithRefreshToken(),
-                getExceptionResponseFields()
+                Stream.concat(
+                        Arrays.stream(new Snippet[]{getCookieWithRefreshToken(), getExceptionResponseFields()}),
+                        Arrays.stream(snippets)
+                ).toArray(Snippet[]::new)
         );
     }
 
@@ -115,7 +119,7 @@ public class RestDocsSpecificationUtils {
         );
     }
 
-    public static Snippet[] createResponseSnippets(final Snippet... snippets) {
+    public static Snippet[] createHttpSpecSnippets(final Snippet... snippets) {
         return Arrays.stream(snippets).toArray(Snippet[]::new);
     }
 

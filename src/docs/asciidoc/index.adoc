@@ -58,6 +58,58 @@ include::{snippets}/MemberApi/EmailAuth/Confirm/request-fields.adoc[]
 
 include::{snippets}/MemberApi/EmailAuth/Confirm/http-response.adoc[]
 
+== 사용자 부가정보 기입 API (AccessToken)
+
+=== 멘토 부가정보 기입
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/Complete/Mentor/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Complete/Mentor/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/Complete/Mentor/Failure/http-response.adoc[]
+include::{snippets}/MemberApi/Complete/Mentor/Success/http-response.adoc[]
+
+=== 멘티 부가정보 기입
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/Complete/Mentee/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Complete/Mentee/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/Complete/Mentee/Failure/http-response.adoc[]
+include::{snippets}/MemberApi/Complete/Mentee/Success/http-response.adoc[]
+
+== 파일 관련 API
+
+=== 파일 업로드
+
+==== HTTP Request
+
+include::{snippets}/FileApi/Upload/curl-request.adoc[]
+include::{snippets}/FileApi/Upload/request-parts.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/FileApi/Upload/http-response.adoc[]
+include::{snippets}/FileApi/Upload/response-fields.adoc[]
+
+=== PresignedUrl 응답
+
+==== HTTP Request
+
+include::{snippets}/FileApi/GetPresignedUrl/http-request.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/FileApi/GetPresignedUrl/http-response.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/response-fields.adoc[]
+
 == 토큰 재발급 API (RefreshToken)
 
 === HTTP Request

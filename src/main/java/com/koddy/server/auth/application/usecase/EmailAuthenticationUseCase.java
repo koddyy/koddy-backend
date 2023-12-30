@@ -27,12 +27,9 @@ public class EmailAuthenticationUseCase {
 
     public void confirmAuthCode(final ConfirmAuthCodeCommand command) {
         final Member<?> member = memberRepository.getByEmail(command.email());
-        verifyAuthCode(member, command.authCode());
-    }
 
-    private void verifyAuthCode(final Member<?> member, final String authCode) {
         final String key = generateAuthKey(member.getEmail().getValue());
-        mailAuthenticationProcessor.verifyAuthCode(key, authCode);
+        mailAuthenticationProcessor.verifyAuthCode(key, command.authCode());
         mailAuthenticationProcessor.deleteAuthCode(key); // 인증 성공 후 바로 제거 (재활용 X)
     }
 

@@ -16,7 +16,7 @@ import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOK
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.cookie;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.header;
-import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createResponseSnippets;
+import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createHttpSpecSnippets;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.failureDocsWithRefreshToken;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocsWithRefreshToken;
 import static com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN;
@@ -69,8 +69,8 @@ class TokenReissueApiControllerTest extends ControllerTest {
 
             // then
             mockMvc.perform(requestBuilder)
-                    .andExpectAll(status().isNoContent())
-                    .andDo(successDocsWithRefreshToken("TokenReissueApi/Success", createResponseSnippets(
+                    .andExpect(status().isNoContent())
+                    .andDo(successDocsWithRefreshToken("TokenReissueApi/Success", createHttpSpecSnippets(
                             responseHeaders(
                                     header(AUTHORIZATION, "Access Token"),
                                     header(SET_COOKIE, "Set Refresh Token")

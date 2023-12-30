@@ -16,6 +16,16 @@ spring:
       port: 6379
       password:
 
+  cloud:
+    aws:
+      region:
+        static: ap-northeast-2
+      credentials:
+        access-key: access-key
+        secret-key: secret-key
+      s3:
+        bucket: s3-bucket
+
   thymeleaf:
     cache: false
 
