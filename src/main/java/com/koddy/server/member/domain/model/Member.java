@@ -90,14 +90,14 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     ) {
         this.name = name;
         this.nationality = nationality;
-        this.profileImageUrl = checkProfileImageUrl(profileImageUrl);
-        this.introduction = introduction;
+        this.profileImageUrl = checkEmptyValue(profileImageUrl);
+        this.introduction = checkEmptyValue(introduction);
         applyLanguages(languages);
     }
 
-    private static String checkProfileImageUrl(final String profileImageUrl) {
-        if (StringUtils.hasText(profileImageUrl)) {
-            return profileImageUrl;
+    private static String checkEmptyValue(final String value) {
+        if (StringUtils.hasText(value)) {
+            return value;
         }
         return EMPTY;
     }
@@ -122,8 +122,8 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
             final List<Language> languages
     ) {
         this.name = name;
-        this.profileImageUrl = checkProfileImageUrl(profileImageUrl);
-        this.introduction = introduction;
+        this.profileImageUrl = checkEmptyValue(profileImageUrl);
+        this.introduction = checkEmptyValue(introduction);
         applyLanguages(languages);
     }
 
