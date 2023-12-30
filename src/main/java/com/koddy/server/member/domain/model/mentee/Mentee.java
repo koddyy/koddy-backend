@@ -33,10 +33,11 @@ public class Mentee extends Member<Mentee> {
             final String name,
             final Nationality nationality,
             final String profileImageUrl,
+            final String introduction,
             final List<Language> languages,
             final Interest interest
     ) {
-        super.complete(name, nationality, profileImageUrl, languages);
+        super.complete(name, nationality, profileImageUrl, introduction, languages);
         this.interest = interest;
     }
 }

@@ -8,11 +8,11 @@ public record UpdateMentorBasicInfoCommand(
         Long mentorId,
         String name,
         String profileImageUrl,
+        String introduction,
         List<Language> languages,
         String school,
         String major,
         int grade,
-        String meetingUrl,
-        String introduction
+        String meetingUrl
 ) {
 }

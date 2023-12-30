@@ -11,6 +11,7 @@ public record UpdateMenteeBasicInfoCommand(
         String name,
         Nationality nationality,
         String profileUploadUrl,
+        String introduction,
         List<Language> languages,
         Interest interest
 ) {

@@ -23,10 +23,10 @@ public class CompleteInformationUseCase {
                 command.name(),
                 command.nationality(),
                 command.profileUploadUrl(),
+                command.introduction(),
                 command.languages(),
                 command.universityProfile(),
                 command.meetingUrl(),
-                command.introduction(),
                 command.schedules()
         );
     }
@@ -38,6 +38,7 @@ public class CompleteInformationUseCase {
                 command.name(),
                 command.nationality(),
                 command.profileUploadUrl(),
+                command.introduction(),
                 command.languages(),
                 command.interest()
         );

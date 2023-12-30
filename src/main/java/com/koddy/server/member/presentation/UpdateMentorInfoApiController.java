@@ -38,12 +38,12 @@ public class UpdateMentorInfoApiController {
                 authenticated.id(),
                 request.name(),
                 request.profileUploadUrl(),
+                request.introduction(),
                 request.languages(),
                 request.school(),
                 request.major(),
                 request.grade(),
-                request.meetingUrl(),
-                request.introduction()
+                request.meetingUrl()
         ));
         return ResponseEntity.noContent().build();
     }

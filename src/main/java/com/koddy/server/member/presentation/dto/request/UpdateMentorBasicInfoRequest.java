@@ -17,6 +17,9 @@ public record UpdateMentorBasicInfoRequest(
 
         String profileUploadUrl,
 
+        @NotBlank(message = "자기소개는 필수입니다.")
+        String introduction,
+
         @NotEmpty(message = "사용 가능한 언어는 하나 이상 선택해야 합니다.")
         List<Language> languages,
 
@@ -30,9 +33,6 @@ public record UpdateMentorBasicInfoRequest(
         Integer grade,
 
         @NotBlank(message = "커피챗 링크는 필수입니다.")
-        String meetingUrl,
-
-        @NotBlank(message = "자기소개는 필수입니다.")
-        String introduction
+        String meetingUrl
 ) {
 }

@@ -37,13 +37,13 @@ class MentorTest extends ParallelTest {
                     () -> assertThat(mentor.getName()).isEqualTo(EMPTY),
                     () -> assertThat(mentor.getNationality()).isEqualTo(ANONYMOUS),
                     () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(EMPTY),
+                    () -> assertThat(mentor.getIntroduction()).isEqualTo(EMPTY),
                     () -> assertThat(mentor.getAvailableLanguages()).isEmpty(),
                     () -> assertThat(mentor.getRoleTypes()).containsExactlyInAnyOrder(MENTOR),
                     () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(EMPTY),
                     () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(EMPTY),
                     () -> assertThat(mentor.getUniversityProfile().getGrade()).isEqualTo(0),
                     () -> assertThat(mentor.getMeetingUrl()).isEqualTo(EMPTY),
-                    () -> assertThat(mentor.getIntroduction()).isEqualTo(EMPTY),
                     () -> assertThat(mentor.getChatTimes()).isEmpty()
             );
 
@@ -52,10 +52,10 @@ class MentorTest extends ParallelTest {
                     MENTOR_1.getName(),
                     MENTOR_1.getNationality(),
                     MENTOR_1.getProfileImageUrl(),
+                    MENTOR_1.getIntroduction(),
                     MENTOR_1.getLanguages(),
                     MENTOR_1.getUniversityProfile(),
                     MENTOR_1.getMeetingUrl(),
-                    MENTOR_1.getIntroduction(),
                     MENTOR_1.getSchedules()
             );
             assertAll(
@@ -64,13 +64,13 @@ class MentorTest extends ParallelTest {
                     () -> assertThat(mentor.getName()).isEqualTo(MENTOR_1.getName()),
                     () -> assertThat(mentor.getNationality()).isEqualTo(MENTOR_1.getNationality()),
                     () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(MENTOR_1.getProfileImageUrl()),
+                    () -> assertThat(mentor.getIntroduction()).isEqualTo(MENTOR_1.getIntroduction()),
                     () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTOR_1.getLanguages()),
                     () -> assertThat(mentor.getRoleTypes()).containsExactlyInAnyOrder(MENTOR),
                     () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(MENTOR_1.getUniversityProfile().getSchool()),
                     () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(MENTOR_1.getUniversityProfile().getMajor()),
                     () -> assertThat(mentor.getUniversityProfile().getGrade()).isEqualTo(MENTOR_1.getUniversityProfile().getGrade()),
                     () -> assertThat(mentor.getMeetingUrl()).isEqualTo(MENTOR_1.getMeetingUrl()),
-                    () -> assertThat(mentor.getIntroduction()).isEqualTo(MENTOR_1.getIntroduction()),
                     () -> assertThat(mentor.getChatTimes())
                             .map(ChatTime::getSchedule)
                             .containsExactlyInAnyOrderElementsOf(MENTOR_1.getSchedules())
@@ -91,25 +91,25 @@ class MentorTest extends ParallelTest {
             mentor.updateBasicInfo(
                     MENTOR_2.getName(),
                     MENTOR_2.getProfileImageUrl(),
+                    MENTOR_2.getIntroduction(),
                     MENTOR_2.getLanguages(),
                     MENTOR_2.getUniversityProfile().getSchool(),
                     MENTOR_2.getUniversityProfile().getMajor(),
                     MENTOR_2.getUniversityProfile().getGrade(),
-                    MENTOR_2.getMeetingUrl(),
-                    MENTOR_2.getIntroduction()
+                    MENTOR_2.getMeetingUrl()
             );
 
             // then
             assertAll(
                     () -> assertThat(mentor.getName()).isEqualTo(MENTOR_2.getName()),
                     () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(MENTOR_2.getProfileImageUrl()),
+                    () -> assertThat(mentor.getIntroduction()).isEqualTo(MENTOR_2.getIntroduction()),
                     () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTOR_2.getLanguages()),
                     () -> assertThat(mentor.getRoleTypes()).containsExactlyInAnyOrder(MENTOR),
                     () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(MENTOR_2.getUniversityProfile().getSchool()),
                     () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(MENTOR_2.getUniversityProfile().getMajor()),
                     () -> assertThat(mentor.getUniversityProfile().getGrade()).isEqualTo(MENTOR_2.getUniversityProfile().getGrade()),
-                    () -> assertThat(mentor.getMeetingUrl()).isEqualTo(MENTOR_2.getMeetingUrl()),
-                    () -> assertThat(mentor.getIntroduction()).isEqualTo(MENTOR_2.getIntroduction())
+                    () -> assertThat(mentor.getMeetingUrl()).isEqualTo(MENTOR_2.getMeetingUrl())
             );
         }
     }

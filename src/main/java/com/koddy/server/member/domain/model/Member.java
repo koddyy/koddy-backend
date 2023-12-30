@@ -9,6 +9,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Inheritance;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -51,6 +52,10 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     @Column(name = "profile_image_url", nullable = false)
     protected String profileImageUrl;
 
+    @Lob
+    @Column(name = "introduction", nullable = false, columnDefinition = "TEXT")
+    protected String introduction;
+
     @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     protected final List<AvailableLanguage> availableLanguages = new ArrayList<>();
 
@@ -63,6 +68,7 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         this.name = EMPTY;
         this.nationality = ANONYMOUS;
         this.profileImageUrl = EMPTY;
+        this.introduction = EMPTY;
         applyRoles(roleTypes);
     }
 
@@ -79,11 +85,13 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
             final String name,
             final Nationality nationality,
             final String profileImageUrl,
+            final String introduction,
             final List<Language> languages
     ) {
         this.name = name;
         this.nationality = nationality;
         this.profileImageUrl = checkProfileImageUrl(profileImageUrl);
+        this.introduction = introduction;
         applyLanguages(languages);
     }
 
@@ -110,10 +118,12 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     protected void updateBasicInfo(
             final String name,
             final String profileImageUrl,
+            final String introduction,
             final List<Language> languages
     ) {
         this.name = name;
         this.profileImageUrl = checkProfileImageUrl(profileImageUrl);
+        this.introduction = introduction;
         applyLanguages(languages);
     }
 

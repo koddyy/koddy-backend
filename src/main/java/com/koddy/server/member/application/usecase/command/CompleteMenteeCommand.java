@@ -11,6 +11,7 @@ public record CompleteMenteeCommand(
         String name,
         Nationality nationality,
         String profileUploadUrl,
+        String introduction,
         List<Language> languages,
         Interest interest
 ) {

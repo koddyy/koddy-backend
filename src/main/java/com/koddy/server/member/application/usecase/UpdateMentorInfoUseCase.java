@@ -22,12 +22,12 @@ public class UpdateMentorInfoUseCase {
         mentor.updateBasicInfo(
                 command.name(),
                 command.profileImageUrl(),
+                command.introduction(),
                 command.languages(),
                 command.school(),
                 command.major(),
                 command.grade(),
-                command.meetingUrl(),
-                command.introduction()
+                command.meetingUrl()
         );
     }
 

@@ -12,10 +12,10 @@ public record CompleteMentorCommand(
         String name,
         Nationality nationality,
         String profileUploadUrl,
+        String introduction,
         List<Language> languages,
         UniversityProfile universityProfile,
         String meetingUrl,
-        String introduction,
         List<Schedule> schedules
 ) {
 }
