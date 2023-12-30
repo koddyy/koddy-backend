@@ -43,7 +43,7 @@ class FileConverterTest extends ParallelTest {
             // then
             assertAll(
                     () -> assertThat(result.fileName()).isEqualTo("cat.png"),
-                    () -> assertThat(result.contenType()).isEqualTo("image/png"),
+                    () -> assertThat(result.contentType()).isEqualTo("image/png"),
                     () -> assertThat(result.extension()).isEqualTo(PNG)
             );
         }

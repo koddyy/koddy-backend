@@ -5,7 +5,7 @@ import com.koddy.server.file.domain.model.PresignedUrlDetails;
 import com.koddy.server.file.domain.model.RawFileData;
 
 public interface FileManager {
-    PresignedUrlDetails getPresignedUrl(final PresignedFileData file);
+    PresignedUrlDetails createPresignedUrl(final PresignedFileData file);
 
     String upload(final RawFileData file);
 }

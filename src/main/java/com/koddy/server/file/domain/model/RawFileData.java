@@ -4,7 +4,7 @@ import java.io.InputStream;
 
 public record RawFileData(
         String fileName,
-        String contenType,
+        String contentType,
         FileExtension extension,
         InputStream content
 ) {

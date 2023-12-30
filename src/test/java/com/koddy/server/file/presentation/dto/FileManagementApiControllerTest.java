@@ -69,7 +69,10 @@ class FileManagementApiControllerTest extends ControllerTest {
         @DisplayName("Presigned Url을 얻는다")
         void success() throws Exception {
             // given
-            given(fileManager.getPresignedUrl(any())).willReturn(new PresignedUrlDetails("https://presigned-url", "cat.png"));
+            given(fileManager.createPresignedUrl(any())).willReturn(new PresignedUrlDetails(
+                    "https://storage-url/path/fileName.png?X-xxx=xxx",
+                    "https://storage-url/path/fileName.png"
+            ));
 
             // when
             final RequestBuilder requestBuilder = get(BASE_URL, Map.of("fileName", "cat.png"));
@@ -82,8 +85,8 @@ class FileManagementApiControllerTest extends ControllerTest {
                                     query("fileName", "파일명", "파일 확장자 = JPG, JPEG, PNG", true)
                             ),
                             responseFields(
-                                    body("preSignedUrl", "Presigned Url"),
-                                    body("uploadFileName", "스토리지에 저장되는 파일명")
+                                    body("preSignedUrl", "Presigned Url", "PUT 요청으로 이미지 업로드 (URL + File)"),
+                                    body("uploadFileUrl", "스토리지 저장 URL", "스토리지 이미지 업로드 후 서버로 전송할 URL")
                             )
                     )));
         }
