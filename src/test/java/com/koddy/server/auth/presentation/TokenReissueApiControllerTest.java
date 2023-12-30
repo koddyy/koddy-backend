@@ -69,7 +69,7 @@ class TokenReissueApiControllerTest extends ControllerTest {
 
             // then
             mockMvc.perform(requestBuilder)
-                    .andExpectAll(status().isNoContent())
+                    .andExpect(status().isNoContent())
                     .andDo(successDocsWithRefreshToken("TokenReissueApi/Success", createHttpSpecSnippets(
                             responseHeaders(
                                     header(AUTHORIZATION, "Access Token"),
