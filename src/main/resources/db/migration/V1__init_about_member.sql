@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS member
     name              VARCHAR(100) NOT NULL,
     nationality       VARCHAR(50)  NOT NULL,
     profile_image_url VARCHAR(250) NOT NULL,
+    introduction      TEXT         NOT NULL,
     type              VARCHAR(31)  NOT NULL,
     created_at        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     last_modified_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -23,12 +24,11 @@ CREATE TABLE IF NOT EXISTS mentee
 
 CREATE TABLE IF NOT EXISTS mentor
 (
-    id           BIGINT PRIMARY KEY,
-    school       VARCHAR(100) NOT NULL,
-    major        VARCHAR(100) NOT NULL,
-    grade        INT          NOT NULL,
-    meeting_url  VARCHAR(250) NOT NULL,
-    introduction TEXT         NOT NULL
+    id          BIGINT PRIMARY KEY,
+    school      VARCHAR(100) NOT NULL,
+    major       VARCHAR(100) NOT NULL,
+    grade       INT          NOT NULL,
+    meeting_url VARCHAR(250) NOT NULL
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 

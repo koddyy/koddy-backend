@@ -39,10 +39,10 @@ class CompleteInformationUseCaseTest extends UseCaseTest {
                 MENTOR_1.getName(),
                 MENTOR_1.getNationality(),
                 MENTOR_1.getProfileImageUrl(),
+                MENTOR_1.getIntroduction(),
                 MENTOR_1.getLanguages(),
                 MENTOR_1.getUniversityProfile(),
                 MENTOR_1.getMeetingUrl(),
-                MENTOR_1.getIntroduction(),
                 MENTOR_1.getSchedules()
         );
         given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
@@ -53,13 +53,13 @@ class CompleteInformationUseCaseTest extends UseCaseTest {
                 () -> assertThat(mentor.getName()).isEqualTo(EMPTY),
                 () -> assertThat(mentor.getNationality()).isEqualTo(ANONYMOUS),
                 () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(EMPTY),
+                () -> assertThat(mentor.getIntroduction()).isEqualTo(EMPTY),
                 () -> assertThat(mentor.getAvailableLanguages()).isEmpty(),
                 () -> assertThat(mentor.getRoleTypes()).containsExactlyInAnyOrder(MENTOR),
                 () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(EMPTY),
                 () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(EMPTY),
                 () -> assertThat(mentor.getUniversityProfile().getGrade()).isEqualTo(0),
                 () -> assertThat(mentor.getMeetingUrl()).isEqualTo(EMPTY),
-                () -> assertThat(mentor.getIntroduction()).isEqualTo(EMPTY),
                 () -> assertThat(mentor.getChatTimes()).isEmpty()
         );
 
@@ -73,14 +73,14 @@ class CompleteInformationUseCaseTest extends UseCaseTest {
                 () -> assertThat(mentor.getPassword()).isNotNull(),
                 () -> assertThat(mentor.getName()).isEqualTo(command.name()),
                 () -> assertThat(mentor.getNationality()).isEqualTo(command.nationality()),
-                () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(command.profileUploadUrl()),
+                () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(command.profileImageUrl()),
+                () -> assertThat(mentor.getIntroduction()).isEqualTo(command.introduction()),
                 () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(command.languages()),
                 () -> assertThat(mentor.getRoleTypes()).containsExactlyInAnyOrder(MENTOR),
                 () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(command.universityProfile().getSchool()),
                 () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(command.universityProfile().getMajor()),
                 () -> assertThat(mentor.getUniversityProfile().getGrade()).isEqualTo(command.universityProfile().getGrade()),
                 () -> assertThat(mentor.getMeetingUrl()).isEqualTo(command.meetingUrl()),
-                () -> assertThat(mentor.getIntroduction()).isEqualTo(command.introduction()),
                 () -> assertThat(mentor.getChatTimes()).hasSize(command.schedules().size())
         );
     }
@@ -95,6 +95,7 @@ class CompleteInformationUseCaseTest extends UseCaseTest {
                 MENTEE_1.getName(),
                 MENTEE_1.getNationality(),
                 MENTEE_1.getProfileImageUrl(),
+                MENTEE_1.getIntroduction(),
                 MENTEE_1.getLanguages(),
                 MENTEE_1.getInterest()
         );
@@ -106,6 +107,7 @@ class CompleteInformationUseCaseTest extends UseCaseTest {
                 () -> assertThat(mentee.getName()).isEqualTo(EMPTY),
                 () -> assertThat(mentee.getNationality()).isEqualTo(ANONYMOUS),
                 () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(EMPTY),
+                () -> assertThat(mentee.getIntroduction()).isEqualTo(EMPTY),
                 () -> assertThat(mentee.getAvailableLanguages()).isEmpty(),
                 () -> assertThat(mentee.getRoleTypes()).containsExactlyInAnyOrder(MENTEE),
                 () -> assertThat(mentee.getInterest().getSchool()).isEqualTo(EMPTY),
@@ -122,7 +124,8 @@ class CompleteInformationUseCaseTest extends UseCaseTest {
                 () -> assertThat(mentee.getPassword()).isNotNull(),
                 () -> assertThat(mentee.getName()).isEqualTo(command.name()),
                 () -> assertThat(mentee.getNationality()).isEqualTo(command.nationality()),
-                () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(command.profileUploadUrl()),
+                () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(command.profileImageUrl()),
+                () -> assertThat(mentee.getIntroduction()).isEqualTo(command.introduction()),
                 () -> assertThat(mentee.getLanguages()).containsExactlyInAnyOrderElementsOf(command.languages()),
                 () -> assertThat(mentee.getRoleTypes()).containsExactlyInAnyOrder(MENTEE),
                 () -> assertThat(mentee.getInterest().getSchool()).isEqualTo(command.interest().getSchool()),

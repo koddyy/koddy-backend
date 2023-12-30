@@ -37,13 +37,14 @@ class UpdateMentorInfoUseCaseTest extends UseCaseTest {
         final UpdateMentorBasicInfoCommand command = new UpdateMentorBasicInfoCommand(
                 mentor.getId(),
                 MENTOR_2.getName(),
+                MENTOR_2.getNationality(),
                 MENTOR_2.getProfileImageUrl(),
+                MENTOR_2.getIntroduction(),
                 MENTOR_2.getLanguages(),
                 MENTOR_2.getUniversityProfile().getSchool(),
                 MENTOR_2.getUniversityProfile().getMajor(),
                 MENTOR_2.getUniversityProfile().getGrade(),
-                MENTOR_2.getMeetingUrl(),
-                MENTOR_2.getIntroduction()
+                MENTOR_2.getMeetingUrl()
         );
         given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
 
@@ -54,14 +55,15 @@ class UpdateMentorInfoUseCaseTest extends UseCaseTest {
         assertAll(
                 () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
                 () -> assertThat(mentor.getName()).isEqualTo(command.name()),
+                () -> assertThat(mentor.getNationality()).isEqualTo(command.nationality()),
                 () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(command.profileImageUrl()),
+                () -> assertThat(mentor.getIntroduction()).isEqualTo(command.introduction()),
                 () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(command.languages()),
                 () -> assertThat(mentor.getRoleTypes()).containsExactlyInAnyOrder(MENTOR),
                 () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(command.school()),
                 () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(command.major()),
                 () -> assertThat(mentor.getUniversityProfile().getGrade()).isEqualTo(command.grade()),
-                () -> assertThat(mentor.getMeetingUrl()).isEqualTo(command.meetingUrl()),
-                () -> assertThat(mentor.getIntroduction()).isEqualTo(command.introduction())
+                () -> assertThat(mentor.getMeetingUrl()).isEqualTo(command.meetingUrl())
         );
     }
 

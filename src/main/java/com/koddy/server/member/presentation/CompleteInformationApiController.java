@@ -39,11 +39,11 @@ public class CompleteInformationApiController {
                 authenticated.id(),
                 request.name(),
                 request.nationality(),
-                request.profileUploadUrl(),
+                request.profileImageUrl(),
+                request.introduction(),
                 request.languages(),
                 new UniversityProfile(request.school(), request.major(), request.grade()),
                 request.meetingUrl(),
-                request.introduction(),
                 request.toSchedules()
         ));
         return ResponseEntity.noContent().build();
@@ -60,7 +60,8 @@ public class CompleteInformationApiController {
                 authenticated.id(),
                 request.name(),
                 request.nationality(),
-                request.profileUploadUrl(),
+                request.profileImageUrl(),
+                request.introduction(),
                 request.languages(),
                 new Interest(request.interestSchool(), request.interestMajor())
         ));

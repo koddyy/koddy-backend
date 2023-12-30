@@ -10,7 +10,8 @@ public record CompleteMenteeCommand(
         Long menteeId,
         String name,
         Nationality nationality,
-        String profileUploadUrl,
+        String profileImageUrl,
+        String introduction,
         List<Language> languages,
         Interest interest
 ) {

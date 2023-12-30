@@ -1,5 +1,6 @@
 package com.koddy.server.member.domain.model.mentee;
 
+import com.koddy.server.global.encrypt.Encryptor;
 import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Member;
@@ -33,10 +34,28 @@ public class Mentee extends Member<Mentee> {
             final String name,
             final Nationality nationality,
             final String profileImageUrl,
+            final String introduction,
             final List<Language> languages,
             final Interest interest
     ) {
-        super.complete(name, nationality, profileImageUrl, languages);
+        super.complete(name, nationality, profileImageUrl, introduction, languages);
         this.interest = interest;
+    }
+
+    public void updateBasicInfo(
+            final String name,
+            final Nationality nationality,
+            final String profileImageUrl,
+            final String introduction,
+            final List<Language> languages,
+            final String interestSchool,
+            final String interestMajor
+    ) {
+        super.updateBasicInfo(name, nationality, profileImageUrl, introduction, languages);
+        this.interest = this.interest.update(interestSchool, interestMajor);
+    }
+
+    public void updatePassword(final String currentPassword, final String updatePassword, final Encryptor encryptor) {
+        super.updatePassword(currentPassword, updatePassword, encryptor);
     }
 }

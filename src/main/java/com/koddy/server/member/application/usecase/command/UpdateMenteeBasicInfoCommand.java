@@ -5,16 +5,14 @@ import com.koddy.server.member.domain.model.Nationality;
 
 import java.util.List;
 
-public record UpdateMentorBasicInfoCommand(
-        Long mentorId,
+public record UpdateMenteeBasicInfoCommand(
+        Long menteeId,
         String name,
         Nationality nationality,
         String profileImageUrl,
         String introduction,
         List<Language> languages,
-        String school,
-        String major,
-        int grade,
-        String meetingUrl
+        String interestSchool,
+        String interestMajor
 ) {
 }

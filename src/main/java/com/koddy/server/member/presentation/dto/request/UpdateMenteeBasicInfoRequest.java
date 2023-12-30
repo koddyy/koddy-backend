@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record UpdateMentorBasicInfoRequest(
+public record UpdateMenteeBasicInfoRequest(
         @NotBlank(message = "이름은 필수입니다.")
         String name,
 
@@ -22,16 +22,10 @@ public record UpdateMentorBasicInfoRequest(
         @NotEmpty(message = "사용 가능한 언어는 하나 이상 선택해야 합니다.")
         List<Language> languages,
 
-        @NotBlank(message = "학교 정보는 필수입니다.")
-        String school,
+        @NotBlank(message = "관심있는 학교 정보는 필수입니다.")
+        String interestSchool,
 
-        @NotBlank(message = "전공 정보는 필수입니다.")
-        String major,
-
-        @NotNull(message = "학년 정보는 필수입니다.")
-        Integer grade,
-
-        @NotBlank(message = "커피챗 링크는 필수입니다.")
-        String meetingUrl
+        @NotBlank(message = "관심있는 전공 정보는 필수입니다.")
+        String interestMajor
 ) {
 }

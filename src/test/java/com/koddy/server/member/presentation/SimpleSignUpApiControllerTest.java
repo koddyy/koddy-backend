@@ -4,7 +4,7 @@ import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.DuplicateCheckUseCase;
 import com.koddy.server.member.application.usecase.SimpleSignUpUseCase;
 import com.koddy.server.member.presentation.dto.request.EmailDuplicateCheckRequest;
-import com.koddy.server.member.presentation.dto.request.SignUpRequest;
+import com.koddy.server.member.presentation.dto.request.SimpleSignUpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -25,9 +25,9 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(SignUpApiController.class)
-@DisplayName("Member -> SignUpApiController 테스트")
-class SignUpApiControllerTest extends ControllerTest {
+@WebMvcTest(SimpleSignUpApiController.class)
+@DisplayName("Member -> SimpleSignUpApiController 테스트")
+class SimpleSignUpApiControllerTest extends ControllerTest {
     @MockBean
     private DuplicateCheckUseCase duplicateCheckUseCase;
 
@@ -72,10 +72,10 @@ class SignUpApiControllerTest extends ControllerTest {
         @DisplayName("회원가입 정보가 누락되면 진행할 수 없다")
         void throwExceptionByInsufficientInfo() throws Exception {
             // given
-            final SignUpRequest request1 = new SignUpRequest("", true, "Helloworld123!@#", MENTOR);
-            final SignUpRequest request2 = new SignUpRequest("sjiwon4491@gmail.com", null, "Helloworld123!@#", MENTOR);
-            final SignUpRequest request3 = new SignUpRequest("sjiwon4491@gmail.com", true, "", MENTOR);
-            final SignUpRequest request4 = new SignUpRequest("sjiwon4491@gmail.com", true, "Helloworld123!@#", null);
+            final SimpleSignUpRequest request1 = new SimpleSignUpRequest("", true, "Helloworld123!@#", MENTOR);
+            final SimpleSignUpRequest request2 = new SimpleSignUpRequest("sjiwon4491@gmail.com", null, "Helloworld123!@#", MENTOR);
+            final SimpleSignUpRequest request3 = new SimpleSignUpRequest("sjiwon4491@gmail.com", true, "", MENTOR);
+            final SimpleSignUpRequest request4 = new SimpleSignUpRequest("sjiwon4491@gmail.com", true, "Helloworld123!@#", null);
 
             // when
             final RequestBuilder requestBuilder1 = post(BASE_URL, request1);
@@ -106,7 +106,7 @@ class SignUpApiControllerTest extends ControllerTest {
         @DisplayName("이메일 중복 확인을 진행하지 않았으면 회원가입이 불가능하다")
         void throwExceptionByEmailNotChecked() throws Exception {
             // given
-            final SignUpRequest request = new SignUpRequest("sjiwon4491@gmail.com", false, "Helloworld123!@#", MENTOR);
+            final SimpleSignUpRequest request = new SimpleSignUpRequest("sjiwon4491@gmail.com", false, "Helloworld123!@#", MENTOR);
 
             // when
             final RequestBuilder requestBuilder = post(BASE_URL, request);
@@ -122,7 +122,7 @@ class SignUpApiControllerTest extends ControllerTest {
         @DisplayName("간편 회원가입을 진행한다")
         void success() throws Exception {
             // given
-            final SignUpRequest request = new SignUpRequest("sjiwon4491@gmail.com", true, "Helloworld123!@#", MENTOR);
+            final SimpleSignUpRequest request = new SimpleSignUpRequest("sjiwon4491@gmail.com", true, "Helloworld123!@#", MENTOR);
             given(simpleSignUpUseCase.invoke(any())).willReturn(1L);
 
             // when

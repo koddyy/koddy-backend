@@ -51,12 +51,12 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                 MENTOR_1.getName(),
                 MENTOR_1.getNationality(),
                 MENTOR_1.getProfileImageUrl(),
+                MENTOR_1.getIntroduction(),
                 MENTOR_1.getLanguages(),
                 MENTOR_1.getUniversityProfile().getSchool(),
                 MENTOR_1.getUniversityProfile().getMajor(),
                 MENTOR_1.getUniversityProfile().getGrade(),
-                MENTOR_1.getMeetingUrl(),
-                MENTOR_1.getIntroduction()
+                MENTOR_1.getMeetingUrl()
         );
 
         @Test
@@ -79,13 +79,13 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("name", "이름", true),
                                     body("nationality", "국적", "KOREA\nUSA\nJAPAN\nCHINA\nVIETNAM\nOTHERS", true),
-                                    body("profileUploadUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 EMPTY", true),
+                                    body("profileImageUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null", false),
+                                    body("introduction", "멘토 자기소개", "없으면 null", false),
                                     body("languages", "사용 가능한 언어", "KOREAN\nENGLISH\nCHINESE\nJAPANESE\nVIETNAMESE", true),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
                                     body("grade", "학년", true),
-                                    body("meetingUrl", "커피챗 링크", true),
-                                    body("introduction", "멘토 자기소개", true)
+                                    body("meetingUrl", "커피챗 링크", true)
                             )
                     )));
         }
@@ -109,13 +109,13 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("name", "이름", true),
                                     body("nationality", "국적", "KOREA\nUSA\nJAPAN\nCHINA\nVIETNAM\nOTHERS", true),
-                                    body("profileUploadUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 EMPTY", true),
+                                    body("profileImageUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null", false),
+                                    body("introduction", "멘토 자기소개", "없으면 null", false),
                                     body("languages", "사용 가능한 언어", "KOREAN\nENGLISH\nCHINESE\nJAPANESE\nVIETNAMESE", true),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
                                     body("grade", "학년", true),
-                                    body("meetingUrl", "커피챗 링크", true),
-                                    body("introduction", "멘토 자기소개", true)
+                                    body("meetingUrl", "커피챗 링크", true)
                             )
                     )));
         }

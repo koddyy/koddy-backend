@@ -22,11 +22,11 @@ public class CompleteInformationUseCase {
         mentor.complete(
                 command.name(),
                 command.nationality(),
-                command.profileUploadUrl(),
+                command.profileImageUrl(),
+                command.introduction(),
                 command.languages(),
                 command.universityProfile(),
                 command.meetingUrl(),
-                command.introduction(),
                 command.schedules()
         );
     }
@@ -37,7 +37,8 @@ public class CompleteInformationUseCase {
         mentee.complete(
                 command.name(),
                 command.nationality(),
-                command.profileUploadUrl(),
+                command.profileImageUrl(),
+                command.introduction(),
                 command.languages(),
                 command.interest()
         );

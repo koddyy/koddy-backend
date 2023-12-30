@@ -5,7 +5,7 @@ import com.koddy.server.member.utils.validator.ValidMailCheck;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record SignUpRequest(
+public record SimpleSignUpRequest(
         @NotBlank(message = "이메일은 필수입니다.")
         String email,
 

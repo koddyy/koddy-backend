@@ -43,12 +43,12 @@ class CompleteInformationApiControllerTest extends ControllerTest {
                 MENTOR_1.getName(),
                 MENTOR_1.getNationality(),
                 MENTOR_1.getProfileImageUrl(),
+                MENTOR_1.getIntroduction(),
                 MENTOR_1.getLanguages(),
                 MENTOR_1.getUniversityProfile().getSchool(),
                 MENTOR_1.getUniversityProfile().getMajor(),
                 MENTOR_1.getUniversityProfile().getGrade(),
                 MENTOR_1.getMeetingUrl(),
-                MENTOR_1.getIntroduction(),
                 MENTOR_1.getSchedules()
                         .stream()
                         .map(it -> new MentorScheduleRequest(it.getDay(), it.getPeriod().getStartTime(), it.getPeriod().getEndTime()))
@@ -72,13 +72,13 @@ class CompleteInformationApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("name", "이름", true),
                                     body("nationality", "국적", "KOREA\nUSA\nJAPAN\nCHINA\nVIETNAM\nOTHERS", true),
-                                    body("profileUploadUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null)", false),
+                                    body("profileImageUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null)", false),
+                                    body("introduction", "멘토 자기소개", "없으면 null", false),
                                     body("languages", "사용 가능한 언어", "KOREAN\nENGLISH\nCHINESE\nJAPANESE\nVIETNAMESE", true),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
                                     body("grade", "학년", true),
                                     body("meetingUrl", "커피챗 링크", true),
-                                    body("introduction", "멘토 자기소개", true),
                                     body("schedules", "멘토링 스케줄", true),
                                     body("schedules[].day", "날짜", "MONDAY\nTUESDAY\nWEDNESDAY\nTHURSDAY\nFRIDAY\nSATURDAY\nSUNDAY", true),
                                     body("schedules[].startTime", "시작 시간", true),
@@ -106,13 +106,13 @@ class CompleteInformationApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("name", "이름", true),
                                     body("nationality", "국적", "KOREA\nUSA\nJAPAN\nCHINA\nVIETNAM\nOTHERS", true),
-                                    body("profileUploadUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null)", false),
+                                    body("profileImageUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null)", false),
+                                    body("introduction", "멘토 자기소개", "없으면 null", false),
                                     body("languages", "사용 가능한 언어", "KOREAN\nENGLISH\nCHINESE\nJAPANESE\nVIETNAMESE", true),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
                                     body("grade", "학년", true),
                                     body("meetingUrl", "커피챗 링크", true),
-                                    body("introduction", "멘토 자기소개", true),
                                     body("schedules", "멘토링 스케줄", true),
                                     body("schedules", "멘토링 스케줄", true),
                                     body("schedules[].day", "날짜", "MONDAY\nTUESDAY\nWEDNESDAY\nTHURSDAY\nFRIDAY\nSATURDAY\nSUNDAY", true),
@@ -131,6 +131,7 @@ class CompleteInformationApiControllerTest extends ControllerTest {
                 MENTEE_1.getName(),
                 MENTEE_1.getNationality(),
                 MENTEE_1.getProfileImageUrl(),
+                MENTEE_1.getIntroduction(),
                 MENTEE_1.getLanguages(),
                 MENTEE_1.getInterest().getSchool(),
                 MENTEE_1.getInterest().getMajor()
@@ -153,7 +154,8 @@ class CompleteInformationApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("name", "이름", true),
                                     body("nationality", "국적", "KOREA\nUSA\nJAPAN\nCHINA\nVIETNAM\nOTHERS", true),
-                                    body("profileUploadUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null)", false),
+                                    body("profileImageUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null)", false),
+                                    body("introduction", "멘티 자기소개", false),
                                     body("languages", "사용 가능한 언어", "KOREAN\nENGLISH\nCHINESE\nJAPANESE\nVIETNAMESE", true),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)
@@ -180,7 +182,8 @@ class CompleteInformationApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("name", "이름", true),
                                     body("nationality", "국적", "KOREA\nUSA\nJAPAN\nCHINA\nVIETNAM\nOTHERS", true),
-                                    body("profileUploadUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null)", false),
+                                    body("profileImageUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null)", false),
+                                    body("introduction", "멘티 자기소개", false),
                                     body("languages", "사용 가능한 언어", "KOREAN\nENGLISH\nCHINESE\nJAPANESE\nVIETNAMESE", true),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)

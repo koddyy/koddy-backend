@@ -125,7 +125,7 @@ include::{snippets}/FileApi/GetPresignedUrl/response-fields.adoc[]
 == 멘토 정보 수정 API (AccessToken)
 
 === 기본 정보
-[.line-through]##
+
 ==== HTTP Request
 
 include::{snippets}/MemberApi/Update/Mentor/BasicInfo/Success/http-request.adoc[]
@@ -160,4 +160,28 @@ include::{snippets}/MemberApi/Update/Mentor/Schedule/Success/request-fields.adoc
 include::{snippets}/MemberApi/Update/Mentor/Schedule/Failure/http-response.adoc[]
 include::{snippets}/MemberApi/Update/Mentor/Schedule/Success/http-response.adoc[]
 
+== 멘티 정보 수정 API (AccessToken)
 
+=== 기본 정보
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Failure/http-response.adoc[]
+include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/http-response.adoc[]
+
+=== 비밀번호
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/Update/Mentee/Password/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Update/Mentee/Password/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/Update/Mentee/Password/Failure/http-response.adoc[]
+include::{snippets}/MemberApi/Update/Mentee/Password/Success/http-response.adoc[]

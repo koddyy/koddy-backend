@@ -37,13 +37,14 @@ public class UpdateMentorInfoApiController {
         updateMentorInfoUseCase.updateBasicInfo(new UpdateMentorBasicInfoCommand(
                 authenticated.id(),
                 request.name(),
-                request.profileUploadUrl(),
+                request.nationality(),
+                request.profileImageUrl(),
+                request.introduction(),
                 request.languages(),
                 request.school(),
                 request.major(),
                 request.grade(),
-                request.meetingUrl(),
-                request.introduction()
+                request.meetingUrl()
         ));
         return ResponseEntity.noContent().build();
     }

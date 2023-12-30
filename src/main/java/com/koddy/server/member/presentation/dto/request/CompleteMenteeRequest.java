@@ -15,7 +15,9 @@ public record CompleteMenteeRequest(
         @NotNull(message = "국적은 필수입니다.")
         Nationality nationality,
 
-        String profileUploadUrl,
+        String profileImageUrl,
+
+        String introduction,
 
         @NotEmpty(message = "사용 가능한 언어는 하나 이상 선택해야 합니다.")
         List<Language> languages,
