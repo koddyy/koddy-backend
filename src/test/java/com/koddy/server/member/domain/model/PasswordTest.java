@@ -10,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static com.koddy.server.common.utils.EncryptorFactory.getEncryptor;
+import static com.koddy.server.member.exception.MemberExceptionCode.CURRENT_PASSWORD_IS_NOT_MATCH;
 import static com.koddy.server.member.exception.MemberExceptionCode.INVALID_PASSWORD_PATTERN;
 import static com.koddy.server.member.exception.MemberExceptionCode.PASSWORD_SAME_AS_BEFORE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,15 +51,29 @@ class PasswordTest extends ParallelTest {
     @Nested
     @DisplayName("Password 수정")
     class Update {
+        private final String oldValue = "abcABC123!@#";
+        private final String newValue = oldValue + "diff";
+
+        @Test
+        @DisplayName("기존 비밀번호 확인 시 일치하지 않으면 수정할 수 없다")
+        void throwExceptionByCurrentPasswordIsNotMatch() {
+            // given
+            final Password password = Password.encrypt(oldValue, encryptor);
+
+            // when - then
+            assertThatThrownBy(() -> password.update(oldValue + "diff", newValue, encryptor))
+                    .isInstanceOf(MemberException.class)
+                    .hasMessage(CURRENT_PASSWORD_IS_NOT_MATCH.getMessage());
+        }
+
         @Test
         @DisplayName("이전과 동일한 Password로 수정하려고 하면 예외가 발생한다")
         void throwExceptionByPasswordSameAsBefore() {
             // given
-            final String oldValue = "abcABC123!@#";
             final Password password = Password.encrypt(oldValue, encryptor);
 
             // when - then
-            assertThatThrownBy(() -> password.update(oldValue, encryptor))
+            assertThatThrownBy(() -> password.update(oldValue, oldValue, encryptor))
                     .isInstanceOf(MemberException.class)
                     .hasMessage(PASSWORD_SAME_AS_BEFORE.getMessage());
         }
@@ -67,12 +82,10 @@ class PasswordTest extends ParallelTest {
         @DisplayName("Password를 수정한다")
         void success() {
             // given
-            final String oldValue = "abcABC123!@#";
             final Password oldPassword = Password.encrypt(oldValue, encryptor);
 
             // when
-            final String newValue = "abcABC123!@#123";
-            final Password newPassword = oldPassword.update(newValue, encryptor);
+            final Password newPassword = oldPassword.update(oldValue, newValue, encryptor);
 
             // then
             assertAll(

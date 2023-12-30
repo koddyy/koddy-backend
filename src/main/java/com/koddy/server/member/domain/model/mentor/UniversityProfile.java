@@ -25,4 +25,8 @@ public class UniversityProfile {
         this.major = major;
         this.grade = grade;
     }
+
+    public UniversityProfile update(final String school, final String major, final int grade) {
+        return new UniversityProfile(school, major, grade);
+    }
 }

@@ -6,6 +6,7 @@ import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.dto.request.CompleteMenteeRequest;
 import com.koddy.server.member.presentation.dto.request.CompleteMentorRequest;
+import com.koddy.server.member.presentation.dto.request.MentorScheduleRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -50,7 +51,7 @@ class CompleteInformationApiControllerTest extends ControllerTest {
                 MENTOR_1.getIntroduction(),
                 MENTOR_1.getSchedules()
                         .stream()
-                        .map(it -> new CompleteMentorRequest.ScheduleRequest(it.getDay(), it.getPeriod().getStartTime(), it.getPeriod().getEndTime()))
+                        .map(it -> new MentorScheduleRequest(it.getDay(), it.getPeriod().getStartTime(), it.getPeriod().getEndTime()))
                         .toList()
         );
 

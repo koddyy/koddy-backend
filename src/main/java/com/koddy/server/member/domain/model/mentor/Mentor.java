@@ -1,5 +1,6 @@
 package com.koddy.server.member.domain.model.mentor;
 
+import com.koddy.server.global.encrypt.Encryptor;
 import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Member;
@@ -80,5 +81,29 @@ public class Mentor extends Member<Mentor> {
         if (schedules.isEmpty()) {
             throw new MemberException(SCHEDULE_MUST_BE_EXISTS);
         }
+    }
+
+    public void updateBasicInfo(
+            final String name,
+            final String profileImageUrl,
+            final List<Language> languages,
+            final String school,
+            final String major,
+            final int grade,
+            final String meetingUrl,
+            final String introduction
+    ) {
+        super.updateBasicInfo(name, profileImageUrl, languages);
+        this.universityProfile = this.universityProfile.update(school, major, grade);
+        this.meetingUrl = meetingUrl;
+        this.introduction = introduction;
+    }
+
+    public void updatePassword(final String currentPassword, final String updatePassword, final Encryptor encryptor) {
+        super.updatePassword(currentPassword, updatePassword, encryptor);
+    }
+
+    public void updateSchedules(final List<Schedule> schedules) {
+        applySchedules(schedules);
     }
 }

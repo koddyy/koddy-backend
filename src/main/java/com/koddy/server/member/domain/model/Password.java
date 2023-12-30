@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.regex.Pattern;
 
+import static com.koddy.server.member.exception.MemberExceptionCode.CURRENT_PASSWORD_IS_NOT_MATCH;
 import static com.koddy.server.member.exception.MemberExceptionCode.INVALID_PASSWORD_PATTERN;
 import static com.koddy.server.member.exception.MemberExceptionCode.PASSWORD_SAME_AS_BEFORE;
 import static lombok.AccessLevel.PROTECTED;
@@ -34,12 +35,6 @@ public class Password {
         return new Password(encryptor.hashEncrypt(value));
     }
 
-    public Password update(final String value, final Encryptor encryptor) {
-        validatePasswordPattern(value);
-        validatePasswordSameAsBefore(value, encryptor);
-        return new Password(encryptor.hashEncrypt(value));
-    }
-
     private static void validatePasswordPattern(final String value) {
         if (isInvalidPattern(value)) {
             throw new MemberException(INVALID_PASSWORD_PATTERN);
@@ -50,8 +45,21 @@ public class Password {
         return !pattern.matcher(value).matches();
     }
 
-    private void validatePasswordSameAsBefore(final String value, final Encryptor encryptor) {
-        if (encryptor.isHashMatch(value, this.value)) {
+    public Password update(final String currentPassword, final String updatePassword, final Encryptor encryptor) {
+        validateCurrentPasswordIsNotMatch(currentPassword, encryptor);
+        validatePasswordPattern(updatePassword);
+        validatePasswordSameAsBefore(updatePassword, encryptor);
+        return new Password(encryptor.hashEncrypt(updatePassword));
+    }
+
+    private void validateCurrentPasswordIsNotMatch(final String currentPassword, final Encryptor encryptor) {
+        if (!encryptor.isHashMatch(currentPassword, this.value)) {
+            throw new MemberException(CURRENT_PASSWORD_IS_NOT_MATCH);
+        }
+    }
+
+    private void validatePasswordSameAsBefore(final String updatePassword, final Encryptor encryptor) {
+        if (encryptor.isHashMatch(updatePassword, this.value)) {
             throw new MemberException(PASSWORD_SAME_AS_BEFORE);
         }
     }

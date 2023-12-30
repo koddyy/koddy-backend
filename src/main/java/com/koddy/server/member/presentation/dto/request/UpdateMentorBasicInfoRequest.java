@@ -2,15 +2,13 @@ package com.koddy.server.member.presentation.dto.request;
 
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Nationality;
-import com.koddy.server.member.domain.model.mentor.Period;
-import com.koddy.server.member.domain.model.mentor.Schedule;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record CompleteMentorRequest(
+public record UpdateMentorBasicInfoRequest(
         @NotBlank(message = "이름은 필수입니다.")
         String name,
 
@@ -35,14 +33,6 @@ public record CompleteMentorRequest(
         String meetingUrl,
 
         @NotBlank(message = "자기소개는 필수입니다.")
-        String introduction,
-
-        @NotEmpty(message = "멘토링 스케줄은 하루 이상 선택해야 합니다.")
-        List<MentorScheduleRequest> schedules
+        String introduction
 ) {
-    public List<Schedule> toSchedules() {
-        return schedules.stream()
-                .map(it -> new Schedule(it.day(), Period.of(it.startTime(), it.endTime())))
-                .toList();
-    }
 }

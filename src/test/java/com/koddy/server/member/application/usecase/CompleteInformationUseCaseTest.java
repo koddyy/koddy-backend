@@ -20,6 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @DisplayName("Member -> CompleteInformationUseCase 테스트")
 class CompleteInformationUseCaseTest extends UseCaseTest {
@@ -66,6 +68,7 @@ class CompleteInformationUseCaseTest extends UseCaseTest {
 
         // then
         assertAll(
+                () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
                 () -> assertThat(mentor.getEmail().getValue()).isEqualTo(MENTOR_1.getEmail().getValue()),
                 () -> assertThat(mentor.getPassword()).isNotNull(),
                 () -> assertThat(mentor.getName()).isEqualTo(command.name()),
@@ -114,6 +117,7 @@ class CompleteInformationUseCaseTest extends UseCaseTest {
 
         // then
         assertAll(
+                () -> verify(menteeRepository, times(1)).getById(command.menteeId()),
                 () -> assertThat(mentee.getEmail().getValue()).isEqualTo(MENTEE_1.getEmail().getValue()),
                 () -> assertThat(mentee.getPassword()).isNotNull(),
                 () -> assertThat(mentee.getName()).isEqualTo(command.name()),
