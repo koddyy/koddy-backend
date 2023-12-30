@@ -90,6 +90,7 @@ class MentorTest extends ParallelTest {
             // when
             mentor.updateBasicInfo(
                     MENTOR_2.getName(),
+                    MENTOR_2.getNationality(),
                     MENTOR_2.getProfileImageUrl(),
                     MENTOR_2.getIntroduction(),
                     MENTOR_2.getLanguages(),
@@ -102,6 +103,7 @@ class MentorTest extends ParallelTest {
             // then
             assertAll(
                     () -> assertThat(mentor.getName()).isEqualTo(MENTOR_2.getName()),
+                    () -> assertThat(mentor.getNationality()).isEqualTo(MENTOR_2.getNationality()),
                     () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(MENTOR_2.getProfileImageUrl()),
                     () -> assertThat(mentor.getIntroduction()).isEqualTo(MENTOR_2.getIntroduction()),
                     () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTOR_2.getLanguages()),

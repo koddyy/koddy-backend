@@ -117,11 +117,13 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
 
     protected void updateBasicInfo(
             final String name,
+            final Nationality nationality,
             final String profileImageUrl,
             final String introduction,
             final List<Language> languages
     ) {
         this.name = name;
+        this.nationality = nationality;
         this.profileImageUrl = checkEmptyValue(profileImageUrl);
         this.introduction = checkEmptyValue(introduction);
         applyLanguages(languages);

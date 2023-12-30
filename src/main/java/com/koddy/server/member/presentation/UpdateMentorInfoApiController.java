@@ -37,6 +37,7 @@ public class UpdateMentorInfoApiController {
         updateMentorInfoUseCase.updateBasicInfo(new UpdateMentorBasicInfoCommand(
                 authenticated.id(),
                 request.name(),
+                request.nationality(),
                 request.profileUploadUrl(),
                 request.introduction(),
                 request.languages(),

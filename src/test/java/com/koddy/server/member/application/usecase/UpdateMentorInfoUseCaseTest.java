@@ -37,6 +37,7 @@ class UpdateMentorInfoUseCaseTest extends UseCaseTest {
         final UpdateMentorBasicInfoCommand command = new UpdateMentorBasicInfoCommand(
                 mentor.getId(),
                 MENTOR_2.getName(),
+                MENTOR_2.getNationality(),
                 MENTOR_2.getProfileImageUrl(),
                 MENTOR_2.getIntroduction(),
                 MENTOR_2.getLanguages(),
@@ -54,6 +55,7 @@ class UpdateMentorInfoUseCaseTest extends UseCaseTest {
         assertAll(
                 () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
                 () -> assertThat(mentor.getName()).isEqualTo(command.name()),
+                () -> assertThat(mentor.getNationality()).isEqualTo(command.nationality()),
                 () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(command.profileImageUrl()),
                 () -> assertThat(mentor.getIntroduction()).isEqualTo(command.introduction()),
                 () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(command.languages()),

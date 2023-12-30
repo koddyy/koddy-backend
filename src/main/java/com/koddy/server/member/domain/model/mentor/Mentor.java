@@ -78,6 +78,7 @@ public class Mentor extends Member<Mentor> {
 
     public void updateBasicInfo(
             final String name,
+            final Nationality nationality,
             final String profileImageUrl,
             final String introduction,
             final List<Language> languages,
@@ -86,7 +87,7 @@ public class Mentor extends Member<Mentor> {
             final int grade,
             final String meetingUrl
     ) {
-        super.updateBasicInfo(name, profileImageUrl, introduction, languages);
+        super.updateBasicInfo(name, nationality, profileImageUrl, introduction, languages);
         this.universityProfile = this.universityProfile.update(school, major, grade);
         this.meetingUrl = meetingUrl;
     }

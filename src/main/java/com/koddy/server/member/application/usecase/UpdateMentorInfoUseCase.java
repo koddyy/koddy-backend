@@ -21,6 +21,7 @@ public class UpdateMentorInfoUseCase {
         final Mentor mentor = mentorRepository.getById(command.mentorId());
         mentor.updateBasicInfo(
                 command.name(),
+                command.nationality(),
                 command.profileImageUrl(),
                 command.introduction(),
                 command.languages(),
