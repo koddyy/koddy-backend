@@ -1,7 +1,6 @@
 package com.koddy.server.member.application.usecase.command;
 
 import com.koddy.server.member.domain.model.Language;
-import com.koddy.server.member.domain.model.mentor.UniversityProfile;
 
 import java.util.List;
 
@@ -10,7 +9,9 @@ public record UpdateMentorBasicInfoCommand(
         String name,
         String profileImageUrl,
         List<Language> languages,
-        UniversityProfile universityProfile,
+        String school,
+        String major,
+        int grade,
         String meetingUrl,
         String introduction
 ) {

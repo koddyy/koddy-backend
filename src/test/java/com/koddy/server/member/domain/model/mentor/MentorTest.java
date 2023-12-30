@@ -1,10 +1,16 @@
 package com.koddy.server.member.domain.model.mentor;
 
 import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.fixture.ScheduleFixture;
+import com.koddy.server.member.domain.model.Password;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
+import static com.koddy.server.common.fixture.MentorFixture.MENTOR_2;
+import static com.koddy.server.common.utils.EncryptorFactory.getEncryptor;
 import static com.koddy.server.member.domain.model.Member.EMPTY;
 import static com.koddy.server.member.domain.model.Nationality.ANONYMOUS;
 import static com.koddy.server.member.domain.model.RoleType.MENTOR;
@@ -58,7 +64,76 @@ class MentorTest extends ParallelTest {
                 () -> assertThat(mentor.getUniversityProfile().getGrade()).isEqualTo(MENTOR_1.getUniversityProfile().getGrade()),
                 () -> assertThat(mentor.getMeetingUrl()).isEqualTo(MENTOR_1.getMeetingUrl()),
                 () -> assertThat(mentor.getIntroduction()).isEqualTo(MENTOR_1.getIntroduction()),
-                () -> assertThat(mentor.getChatTimes()).hasSize(MENTOR_1.getSchedules().size())
+                () -> assertThat(mentor.getChatTimes())
+                        .map(ChatTime::getSchedule)
+                        .containsExactlyInAnyOrderElementsOf(MENTOR_1.getSchedules())
+        );
+    }
+
+    @Test
+    @DisplayName("Mentor 기본 정보를 수정한다")
+    void updateBasicInfo() {
+        // given
+        final Mentor mentor = MENTOR_1.toDomain().apply(1L);
+
+        // when
+        mentor.updateBasicInfo(
+                MENTOR_2.getName(),
+                MENTOR_2.getProfileImageUrl(),
+                MENTOR_2.getLanguages(),
+                MENTOR_2.getUniversityProfile().getSchool(),
+                MENTOR_2.getUniversityProfile().getMajor(),
+                MENTOR_2.getUniversityProfile().getGrade(),
+                MENTOR_2.getMeetingUrl(),
+                MENTOR_2.getIntroduction()
+        );
+
+        // then
+        assertAll(
+                () -> assertThat(mentor.getName()).isEqualTo(MENTOR_2.getName()),
+                () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(MENTOR_2.getProfileImageUrl()),
+                () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTOR_2.getLanguages()),
+                () -> assertThat(mentor.getRoleTypes()).containsExactlyInAnyOrder(MENTOR),
+                () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(MENTOR_2.getUniversityProfile().getSchool()),
+                () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(MENTOR_2.getUniversityProfile().getMajor()),
+                () -> assertThat(mentor.getUniversityProfile().getGrade()).isEqualTo(MENTOR_2.getUniversityProfile().getGrade()),
+                () -> assertThat(mentor.getMeetingUrl()).isEqualTo(MENTOR_2.getMeetingUrl()),
+                () -> assertThat(mentor.getIntroduction()).isEqualTo(MENTOR_2.getIntroduction())
+        );
+    }
+
+    @Test
+    @DisplayName("Mentor 비밀번호를 수정한다")
+    void updatePassword() {
+        // given
+        final Mentor mentor = MENTOR_1.toDomain().apply(1L);
+        final Password previous = mentor.getPassword();
+
+        // when
+        mentor.updatePassword("MentorUpdate123!@#", getEncryptor());
+
+        // then
+        assertAll(
+                () -> assertThat(getEncryptor().isHashMatch("MentorUpdate123!@#", previous.getValue())).isFalse(),
+                () -> assertThat(getEncryptor().isHashMatch("MentorUpdate123!@#", mentor.getPassword().getValue())).isTrue()
+        );
+    }
+
+    @Test
+    @DisplayName("Mentor 스케줄을 수정한다")
+    void updateSchedules() {
+        // given
+        final Mentor mentor = MENTOR_1.toDomain().apply(1L);
+
+        // when
+        final List<Schedule> update = ScheduleFixture.allDays();
+        mentor.updateSchedules(update);
+
+        // then
+        assertAll(
+                () -> assertThat(mentor.getChatTimes())
+                        .map(ChatTime::getSchedule)
+                        .containsExactlyInAnyOrderElementsOf(update)
         );
     }
 }

@@ -1,6 +1,7 @@
 package com.koddy.server.member.domain.model;
 
 import com.koddy.server.global.base.BaseEntity;
+import com.koddy.server.global.encrypt.Encryptor;
 import com.koddy.server.member.exception.MemberException;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
@@ -74,14 +75,6 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         );
     }
 
-    public boolean isAuthenticated() {
-        return email.isAuthenticated();
-    }
-
-    public void authenticate() {
-        email.activate();
-    }
-
     protected void complete(
             final String name,
             final Nationality nationality,
@@ -112,6 +105,28 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
                         .map(it -> new AvailableLanguage(this, it))
                         .toList()
         );
+    }
+
+    protected void updateBasicInfo(
+            final String name,
+            final String profileImageUrl,
+            final List<Language> languages
+    ) {
+        this.name = name;
+        this.profileImageUrl = checkProfileImageUrl(profileImageUrl);
+        applyLanguages(languages);
+    }
+
+    protected void updatePassword(final String updatePassword, final Encryptor encryptor) {
+        this.password = this.password.update(updatePassword, encryptor);
+    }
+
+    public boolean isAuthenticated() {
+        return email.isAuthenticated();
+    }
+
+    public void authenticate() {
+        email.activate();
     }
 
     public List<Language> getLanguages() {
