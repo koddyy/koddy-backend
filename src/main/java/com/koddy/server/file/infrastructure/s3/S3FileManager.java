@@ -1,7 +1,9 @@
 package com.koddy.server.file.infrastructure.s3;
 
-import com.koddy.server.file.application.adapter.FileUploader;
+import com.koddy.server.file.application.adapter.FileManager;
 import com.koddy.server.file.domain.model.FileExtension;
+import com.koddy.server.file.domain.model.PresignedFileData;
+import com.koddy.server.file.domain.model.PresignedUrlDetails;
 import com.koddy.server.file.domain.model.RawFileData;
 import com.koddy.server.file.exception.FileException;
 import io.awspring.cloud.s3.ObjectMetadata;
@@ -13,6 +15,7 @@ import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
 import java.util.UUID;
 
 import static com.koddy.server.file.exception.FileExceptionCode.UPLOAD_FAILURE;
@@ -20,18 +23,34 @@ import static com.koddy.server.file.infrastructure.BucketMetadata.MEMBER_PROFILE
 
 @Slf4j
 @Component
-public class S3FileUploader implements FileUploader {
+public class S3FileManager implements FileManager {
     private static final String EMPTY = "EMPTY";
 
     private final S3Template s3Template;
     private final String bucket;
 
-    public S3FileUploader(
+    public S3FileManager(
             final S3Template s3Template,
             @Value("${spring.cloud.aws.s3.bucket}") final String bucket
     ) {
         this.s3Template = s3Template;
         this.bucket = bucket;
+    }
+
+    @Override
+    public PresignedUrlDetails getPresignedUrl(final PresignedFileData file) {
+        final String uploadFileName = createUploadFileName(file);
+        final String preSignedUrl = createPresignedUrl(createBucketKey(uploadFileName));
+        return new PresignedUrlDetails(preSignedUrl, uploadFileName);
+    }
+
+    private String createUploadFileName(final PresignedFileData file) {
+        final FileExtension extension = FileExtension.getExtensionViaFimeName(file.fileName());
+        return UUID.randomUUID() + extension.getValue();
+    }
+
+    private String createPresignedUrl(final String bucketKey) {
+        return s3Template.createSignedPutURL(bucket, bucketKey, Duration.ofMinutes(5)).toString();
     }
 
     @Override
@@ -48,19 +67,18 @@ public class S3FileUploader implements FileUploader {
                     .contentType(file.contenType())
                     .acl(ObjectCannedACL.PUBLIC_READ)
                     .build();
-            final String uploadFileName = createFileNameByType(file.extension());
 
-            return s3Template.upload(bucket, uploadFileName, inputStream, objectMetadata)
+            final String uploadFileName = UUID.randomUUID() + file.extension().getValue();
+            return s3Template.upload(bucket, createBucketKey(uploadFileName), inputStream, objectMetadata)
                     .getURL()
                     .toString();
         } catch (final IOException e) {
-            log.error("Failure File Upload... ", e);
+            log.error("File Upload Failure... ", e);
             throw new FileException(UPLOAD_FAILURE);
         }
     }
 
-    private String createFileNameByType(final FileExtension fileExtension) {
-        final String uploadFileName = UUID.randomUUID() + fileExtension.getValue();
+    private String createBucketKey(final String uploadFileName) {
         return String.format(MEMBER_PROFILE, uploadFileName);
     }
 }
