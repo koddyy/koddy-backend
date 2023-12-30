@@ -12,6 +12,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Table(name = "member")
 public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
-    protected static final String EMPTY = "EMPTY";
+    public static final String EMPTY = "EMPTY";
 
     @Embedded
     protected Email email;
@@ -89,8 +90,15 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     ) {
         this.name = name;
         this.nationality = nationality;
-        this.profileImageUrl = profileImageUrl;
+        this.profileImageUrl = checkProfileImageUrl(profileImageUrl);
         applyLanguages(languages);
+    }
+
+    private static String checkProfileImageUrl(final String profileImageUrl) {
+        if (StringUtils.hasText(profileImageUrl)) {
+            return profileImageUrl;
+        }
+        return EMPTY;
     }
 
     private void applyLanguages(final List<Language> languages) {

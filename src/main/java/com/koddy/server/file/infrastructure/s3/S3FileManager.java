@@ -20,12 +20,11 @@ import java.util.UUID;
 
 import static com.koddy.server.file.exception.FileExceptionCode.UPLOAD_FAILURE;
 import static com.koddy.server.file.infrastructure.BucketMetadata.MEMBER_PROFILE;
+import static com.koddy.server.member.domain.model.Member.EMPTY;
 
 @Slf4j
 @Component
 public class S3FileManager implements FileManager {
-    private static final String EMPTY = "EMPTY";
-
     private final S3Template s3Template;
     private final String bucket;
 

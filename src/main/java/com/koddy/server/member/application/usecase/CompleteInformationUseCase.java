@@ -1,25 +1,45 @@
 package com.koddy.server.member.application.usecase;
 
-import com.koddy.server.file.application.adapter.FileUploader;
+import com.koddy.server.global.annotation.KoddyWritableTransactional;
 import com.koddy.server.global.annotation.UseCase;
 import com.koddy.server.member.application.usecase.command.CompleteMenteeCommand;
 import com.koddy.server.member.application.usecase.command.CompleteMentorCommand;
-import com.koddy.server.member.domain.service.CompleteMemberProcessor;
+import com.koddy.server.member.domain.model.mentee.Mentee;
+import com.koddy.server.member.domain.model.mentor.Mentor;
+import com.koddy.server.member.domain.repository.MenteeRepository;
+import com.koddy.server.member.domain.repository.MentorRepository;
 import lombok.RequiredArgsConstructor;
 
 @UseCase
 @RequiredArgsConstructor
 public class CompleteInformationUseCase {
-    private final FileUploader fileUploader;
-    private final CompleteMemberProcessor completeMemberProcessor;
+    private final MentorRepository mentorRepository;
+    private final MenteeRepository menteeRepository;
 
+    @KoddyWritableTransactional
     public void completeMentor(final CompleteMentorCommand command) {
-        final String profileImageUrl = fileUploader.upload(command.profile());
-        completeMemberProcessor.completeMentor(command, profileImageUrl);
+        final Mentor mentor = mentorRepository.getById(command.mentorId());
+        mentor.complete(
+                command.name(),
+                command.nationality(),
+                command.profileUploadUrl(),
+                command.languages(),
+                command.universityProfile(),
+                command.meetingUrl(),
+                command.introduction(),
+                command.schedules()
+        );
     }
 
+    @KoddyWritableTransactional
     public void completeMentee(final CompleteMenteeCommand command) {
-        final String profileImageUrl = fileUploader.upload(command.profile());
-        completeMemberProcessor.completeMentee(command, profileImageUrl);
+        final Mentee mentee = menteeRepository.getById(command.menteeId());
+        mentee.complete(
+                command.name(),
+                command.nationality(),
+                command.profileUploadUrl(),
+                command.languages(),
+                command.interest()
+        );
     }
 }

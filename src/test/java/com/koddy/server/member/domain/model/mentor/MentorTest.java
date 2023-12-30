@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
+import static com.koddy.server.member.domain.model.Member.EMPTY;
 import static com.koddy.server.member.domain.model.Nationality.ANONYMOUS;
 import static com.koddy.server.member.domain.model.RoleType.MENTOR;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,8 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("Member/Mentor -> 도메인 [Mentor] 테스트")
 class MentorTest extends ParallelTest {
-    private static final String EMPTY = "EMPTY";
-
     @Test
     @DisplayName("Mentor를 생성한다")
     void construct() {

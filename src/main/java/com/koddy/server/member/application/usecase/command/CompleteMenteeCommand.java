@@ -1,6 +1,5 @@
 package com.koddy.server.member.application.usecase.command;
 
-import com.koddy.server.file.domain.model.RawFileData;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Nationality;
 import com.koddy.server.member.domain.model.mentee.Interest;
@@ -11,7 +10,7 @@ public record CompleteMenteeCommand(
         Long menteeId,
         String name,
         Nationality nationality,
-        RawFileData profile,
+        String profileUploadUrl,
         List<Language> languages,
         Interest interest
 ) {

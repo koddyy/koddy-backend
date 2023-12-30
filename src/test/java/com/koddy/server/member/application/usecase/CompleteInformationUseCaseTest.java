@@ -1,7 +1,6 @@
-package com.koddy.server.member.domain.service;
+package com.koddy.server.member.application.usecase;
 
-import com.koddy.server.common.ServiceTest;
-import com.koddy.server.file.utils.converter.FileConverter;
+import com.koddy.server.common.UseCaseTest;
 import com.koddy.server.member.application.usecase.command.CompleteMenteeCommand;
 import com.koddy.server.member.application.usecase.command.CompleteMentorCommand;
 import com.koddy.server.member.domain.model.mentee.Mentee;
@@ -13,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
-import static com.koddy.server.common.utils.FileMockingUtils.createFile;
+import static com.koddy.server.member.domain.model.Member.EMPTY;
 import static com.koddy.server.member.domain.model.Nationality.ANONYMOUS;
 import static com.koddy.server.member.domain.model.RoleType.MENTEE;
 import static com.koddy.server.member.domain.model.RoleType.MENTOR;
@@ -22,13 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-@DisplayName("Member -> CompleteMemberProcessor 테스트")
-class CompleteMemberProcessorTest extends ServiceTest {
+@DisplayName("Member -> CompleteInformationUseCase 테스트")
+class CompleteInformationUseCaseTest extends UseCaseTest {
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final MenteeRepository menteeRepository = mock(MenteeRepository.class);
-    private final CompleteMemberProcessor sut = new CompleteMemberProcessor(mentorRepository, menteeRepository);
-
-    private static final String EMPTY = "EMPTY";
+    private final CompleteInformationUseCase sut = new CompleteInformationUseCase(mentorRepository, menteeRepository);
 
     @Test
     @DisplayName("Mentor 부가 정보를 기입한다")
@@ -39,7 +36,7 @@ class CompleteMemberProcessorTest extends ServiceTest {
                 mentor.getId(),
                 MENTOR_1.getName(),
                 MENTOR_1.getNationality(),
-                FileConverter.convertFile(createFile("cat.png", "image/png")),
+                MENTOR_1.getProfileImageUrl(),
                 MENTOR_1.getLanguages(),
                 MENTOR_1.getUniversityProfile(),
                 MENTOR_1.getMeetingUrl(),
@@ -65,7 +62,7 @@ class CompleteMemberProcessorTest extends ServiceTest {
         );
 
         // when
-        sut.completeMentor(command, "mentor-profile-url");
+        sut.completeMentor(command);
 
         // then
         assertAll(
@@ -73,7 +70,7 @@ class CompleteMemberProcessorTest extends ServiceTest {
                 () -> assertThat(mentor.getPassword()).isNotNull(),
                 () -> assertThat(mentor.getName()).isEqualTo(command.name()),
                 () -> assertThat(mentor.getNationality()).isEqualTo(command.nationality()),
-                () -> assertThat(mentor.getProfileImageUrl()).isEqualTo("mentor-profile-url"),
+                () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(command.profileUploadUrl()),
                 () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(command.languages()),
                 () -> assertThat(mentor.getRoleTypes()).containsExactlyInAnyOrder(MENTOR),
                 () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(command.universityProfile().getSchool()),
@@ -94,7 +91,7 @@ class CompleteMemberProcessorTest extends ServiceTest {
                 mentee.getId(),
                 MENTEE_1.getName(),
                 MENTEE_1.getNationality(),
-                FileConverter.convertFile(createFile("cat.png", "image/png")),
+                MENTEE_1.getProfileImageUrl(),
                 MENTEE_1.getLanguages(),
                 MENTEE_1.getInterest()
         );
@@ -113,7 +110,7 @@ class CompleteMemberProcessorTest extends ServiceTest {
         );
 
         // when
-        sut.completeMentee(command, "mentee-profile-url");
+        sut.completeMentee(command);
 
         // then
         assertAll(
@@ -121,7 +118,7 @@ class CompleteMemberProcessorTest extends ServiceTest {
                 () -> assertThat(mentee.getPassword()).isNotNull(),
                 () -> assertThat(mentee.getName()).isEqualTo(command.name()),
                 () -> assertThat(mentee.getNationality()).isEqualTo(command.nationality()),
-                () -> assertThat(mentee.getProfileImageUrl()).isEqualTo("mentee-profile-url"),
+                () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(command.profileUploadUrl()),
                 () -> assertThat(mentee.getLanguages()).containsExactlyInAnyOrderElementsOf(command.languages()),
                 () -> assertThat(mentee.getRoleTypes()).containsExactlyInAnyOrder(MENTEE),
                 () -> assertThat(mentee.getInterest().getSchool()).isEqualTo(command.interest().getSchool()),
