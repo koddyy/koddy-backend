@@ -11,7 +11,7 @@ public record CompleteMentorCommand(
         Long mentorId,
         String name,
         Nationality nationality,
-        String profileUploadUrl,
+        String profileImageUrl,
         String introduction,
         List<Language> languages,
         UniversityProfile universityProfile,

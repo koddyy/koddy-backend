@@ -38,7 +38,7 @@ public class UpdateMentorInfoApiController {
                 authenticated.id(),
                 request.name(),
                 request.nationality(),
-                request.profileUploadUrl(),
+                request.profileImageUrl(),
                 request.introduction(),
                 request.languages(),
                 request.school(),

@@ -21,4 +21,8 @@ public class Interest {
         this.school = school;
         this.major = major;
     }
+
+    public Interest update(final String interestSchool, final String interestMajor) {
+        return new Interest(interestSchool, interestMajor);
+    }
 }
