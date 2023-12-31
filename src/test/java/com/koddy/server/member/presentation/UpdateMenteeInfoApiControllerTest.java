@@ -6,7 +6,7 @@ import com.koddy.server.member.application.usecase.UpdateMenteeInfoUseCase;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.dto.request.UpdateMenteeBasicInfoRequest;
-import com.koddy.server.member.presentation.dto.request.UpdateMentorPasswordRequest;
+import com.koddy.server.member.presentation.dto.request.UpdateMenteePasswordRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -112,7 +112,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
     @DisplayName("멘티 비밀번호 수정 API [PATCH /api/mentees/me/password] - Required AccessToken")
     class UpdatePassword {
         private static final String BASE_URL = "/api/mentees/me/password";
-        private final UpdateMentorPasswordRequest request = new UpdateMentorPasswordRequest(
+        private final UpdateMenteePasswordRequest request = new UpdateMenteePasswordRequest(
                 "current",
                 "update"
         );
