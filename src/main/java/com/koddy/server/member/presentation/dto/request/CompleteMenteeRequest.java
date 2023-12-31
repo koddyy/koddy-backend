@@ -5,9 +5,11 @@ import com.koddy.server.member.domain.model.Nationality;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
 import java.util.List;
 
+@Builder
 public record CompleteMenteeRequest(
         @NotBlank(message = "이름은 필수입니다.")
         String name,
