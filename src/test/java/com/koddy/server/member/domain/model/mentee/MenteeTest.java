@@ -2,6 +2,8 @@ package com.koddy.server.member.domain.model.mentee;
 
 import com.koddy.server.common.ParallelTest;
 import com.koddy.server.global.encrypt.Encryptor;
+import com.koddy.server.member.domain.model.Email;
+import com.koddy.server.member.domain.model.Password;
 import com.koddy.server.member.exception.MemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_2;
 import static com.koddy.server.common.utils.EncryptorFactory.getEncryptor;
+import static com.koddy.server.member.domain.model.EmailStatus.INACTIVE;
 import static com.koddy.server.member.domain.model.Member.EMPTY;
 import static com.koddy.server.member.domain.model.Nationality.ANONYMOUS;
 import static com.koddy.server.member.domain.model.RoleType.MENTEE;
@@ -27,9 +30,14 @@ class MenteeTest extends ParallelTest {
         @DisplayName("Mentee를 생성한다")
         void success() {
             /* 초기 Mentee */
-            final Mentee mentee = new Mentee(MENTEE_1.getEmail(), MENTEE_1.getPassword());
+            final Mentee mentee = new Mentee(
+                    Email.init("sjiwon4491@gmail.com"),
+                    Password.encrypt("Koddy123!@#", getEncryptor())
+            );
             assertAll(
-                    () -> assertThat(mentee.getEmail().getValue()).isEqualTo(MENTEE_1.getEmail().getValue()),
+                    () -> assertThat(mentee.getEmail().getValue()).isEqualTo("sjiwon4491@gmail.com"),
+                    () -> assertThat(mentee.getEmail().getStatus()).isEqualTo(INACTIVE),
+                    () -> assertThat(mentee.isAuthenticated()).isFalse(),
                     () -> assertThat(mentee.getPassword()).isNotNull(),
                     () -> assertThat(mentee.getName()).isEqualTo(EMPTY),
                     () -> assertThat(mentee.getNationality()).isEqualTo(ANONYMOUS),
@@ -51,7 +59,7 @@ class MenteeTest extends ParallelTest {
                     MENTEE_1.getInterest()
             );
             assertAll(
-                    () -> assertThat(mentee.getEmail().getValue()).isEqualTo(MENTEE_1.getEmail().getValue()),
+                    () -> assertThat(mentee.getEmail().getValue()).isEqualTo("sjiwon4491@gmail.com"),
                     () -> assertThat(mentee.getPassword()).isNotNull(),
                     () -> assertThat(mentee.getName()).isEqualTo(MENTEE_1.getName()),
                     () -> assertThat(mentee.getNationality()).isEqualTo(MENTEE_1.getNationality()),

@@ -38,11 +38,7 @@ include::{snippets}/MemberApi/SignUp/Success/request-fields.adoc[]
 
 === HTTP Response
 
-include::{snippets}/MemberApi/SignUp/Failure/Case1/http-response.adoc[]
-include::{snippets}/MemberApi/SignUp/Failure/Case2/http-response.adoc[]
-include::{snippets}/MemberApi/SignUp/Failure/Case3/http-response.adoc[]
-include::{snippets}/MemberApi/SignUp/Failure/Case4/http-response.adoc[]
-include::{snippets}/MemberApi/SignUp/Failure/Case5/http-response.adoc[]
+include::{snippets}/MemberApi/SignUp/Failure/http-response.adoc[]
 include::{snippets}/MemberApi/SignUp/Success/http-response.adoc[]
 include::{snippets}/MemberApi/SignUp/Success/response-fields.adoc[]
 
@@ -53,7 +49,6 @@ include::{snippets}/MemberApi/SignUp/Success/response-fields.adoc[]
 ==== HTTP Request
 
 include::{snippets}/MemberApi/EmailAuth/Send/http-request.adoc[]
-include::{snippets}/MemberApi/EmailAuth/Send/request-fields.adoc[]
 
 ==== HTTP Response
 
@@ -81,7 +76,8 @@ include::{snippets}/MemberApi/Complete/Mentor/Success/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/MemberApi/Complete/Mentor/Failure/http-response.adoc[]
+include::{snippets}/MemberApi/Complete/Mentor/Failure/Case1/http-response.adoc[]
+include::{snippets}/MemberApi/Complete/Mentor/Failure/Case2/http-response.adoc[]
 include::{snippets}/MemberApi/Complete/Mentor/Success/http-response.adoc[]
 
 === 멘티 부가정보 기입
@@ -93,7 +89,8 @@ include::{snippets}/MemberApi/Complete/Mentee/Success/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/MemberApi/Complete/Mentee/Failure/http-response.adoc[]
+include::{snippets}/MemberApi/Complete/Mentee/Failure/Case1/http-response.adoc[]
+include::{snippets}/MemberApi/Complete/Mentee/Failure/Case2/http-response.adoc[]
 include::{snippets}/MemberApi/Complete/Mentee/Success/http-response.adoc[]
 
 == 파일 관련 API

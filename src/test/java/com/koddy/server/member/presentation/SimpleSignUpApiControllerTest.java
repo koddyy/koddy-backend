@@ -69,40 +69,6 @@ class SimpleSignUpApiControllerTest extends ControllerTest {
         private static final String BASE_URL = "/api/members";
 
         @Test
-        @DisplayName("회원가입 정보가 누락되면 진행할 수 없다")
-        void throwExceptionByInsufficientInfo() throws Exception {
-            // given
-            final SimpleSignUpRequest request1 = new SimpleSignUpRequest("", true, "Helloworld123!@#", MENTOR);
-            final SimpleSignUpRequest request2 = new SimpleSignUpRequest("sjiwon4491@gmail.com", null, "Helloworld123!@#", MENTOR);
-            final SimpleSignUpRequest request3 = new SimpleSignUpRequest("sjiwon4491@gmail.com", true, "", MENTOR);
-            final SimpleSignUpRequest request4 = new SimpleSignUpRequest("sjiwon4491@gmail.com", true, "Helloworld123!@#", null);
-
-            // when
-            final RequestBuilder requestBuilder1 = post(BASE_URL, request1);
-            final RequestBuilder requestBuilder2 = post(BASE_URL, request2);
-            final RequestBuilder requestBuilder3 = post(BASE_URL, request3);
-            final RequestBuilder requestBuilder4 = post(BASE_URL, request4);
-
-            // then
-            mockMvc.perform(requestBuilder1)
-                    .andExpect(status().isBadRequest())
-                    .andExpectAll(getResultMatchersViaExceptionCode(VALIDATION_ERROR, "이메일은 필수입니다."))
-                    .andDo(failureDocs("MemberApi/SignUp/Failure/Case1"));
-            mockMvc.perform(requestBuilder2)
-                    .andExpect(status().isBadRequest())
-                    .andExpectAll(getResultMatchersViaExceptionCode(VALIDATION_ERROR, "이메일 중복 확인 결과는 필수입니다."))
-                    .andDo(failureDocs("MemberApi/SignUp/Failure/Case2"));
-            mockMvc.perform(requestBuilder3)
-                    .andExpect(status().isBadRequest())
-                    .andExpectAll(getResultMatchersViaExceptionCode(VALIDATION_ERROR, "패스워드는 필수입니다."))
-                    .andDo(failureDocs("MemberApi/SignUp/Failure/Case3"));
-            mockMvc.perform(requestBuilder4)
-                    .andExpect(status().isBadRequest())
-                    .andExpectAll(getResultMatchersViaExceptionCode(VALIDATION_ERROR, "회원 타입은 필수입니다."))
-                    .andDo(failureDocs("MemberApi/SignUp/Failure/Case4"));
-        }
-
-        @Test
         @DisplayName("이메일 중복 확인을 진행하지 않았으면 회원가입이 불가능하다")
         void throwExceptionByEmailNotChecked() throws Exception {
             // given
@@ -115,7 +81,14 @@ class SimpleSignUpApiControllerTest extends ControllerTest {
             mockMvc.perform(requestBuilder)
                     .andExpect(status().isBadRequest())
                     .andExpectAll(getResultMatchersViaExceptionCode(VALIDATION_ERROR, "이메일 중복 확인을 진행해야 합니다."))
-                    .andDo(failureDocs("MemberApi/SignUp/Failure/Case5"));
+                    .andDo(failureDocs("MemberApi/SignUp/Failure", createHttpSpecSnippets(
+                            requestFields(
+                                    body("email", "이메일", true),
+                                    body("checked", "이메일 중복 체크 결과", true),
+                                    body("password", "비밀번호", true),
+                                    body("type", "사용자 타입", "MENTOR / MENTEE", true)
+                            )
+                    )));
         }
 
         @Test

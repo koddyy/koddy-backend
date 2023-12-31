@@ -1,7 +1,7 @@
 package com.koddy.server.auth.application.usecase.command;
 
 public record ConfirmAuthCodeCommand(
-        String email,
+        Long memberId,
         String authCode
 ) {
 }

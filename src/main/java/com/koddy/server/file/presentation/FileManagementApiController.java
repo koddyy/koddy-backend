@@ -1,4 +1,4 @@
-package com.koddy.server.file.presentation.dto;
+package com.koddy.server.file.presentation;
 
 import com.koddy.server.file.application.adapter.FileManager;
 import com.koddy.server.file.domain.model.PresignedFileData;

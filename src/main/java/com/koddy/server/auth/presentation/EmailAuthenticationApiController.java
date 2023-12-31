@@ -3,8 +3,9 @@ package com.koddy.server.auth.presentation;
 import com.koddy.server.auth.application.usecase.EmailAuthenticationUseCase;
 import com.koddy.server.auth.application.usecase.command.ConfirmAuthCodeCommand;
 import com.koddy.server.auth.application.usecase.command.SendAuthCodeCommand;
+import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.auth.presentation.dto.request.ConfirmAuthCodeRequest;
-import com.koddy.server.auth.presentation.dto.request.SendAuthCodeRequest;
+import com.koddy.server.global.annotation.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -25,18 +26,22 @@ public class EmailAuthenticationApiController {
     @Operation(summary = "인증번호 발송 Endpoint")
     @PostMapping
     public ResponseEntity<Void> sendAuthCode(
-            @RequestBody @Valid final SendAuthCodeRequest request
+            @Auth final Authenticated authenticated
     ) {
-        emailAuthenticationUseCase.sendAuthCode(new SendAuthCodeCommand(request.email()));
+        emailAuthenticationUseCase.sendAuthCode(new SendAuthCodeCommand(authenticated.id()));
         return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "인증번호 확인 Endpoint")
     @PostMapping("/confirm")
     public ResponseEntity<Void> confirmAuthCode(
+            @Auth final Authenticated authenticated,
             @RequestBody @Valid final ConfirmAuthCodeRequest request
     ) {
-        emailAuthenticationUseCase.confirmAuthCode(new ConfirmAuthCodeCommand(request.email(), request.authCode()));
+        emailAuthenticationUseCase.confirmAuthCode(new ConfirmAuthCodeCommand(
+                authenticated.id(),
+                request.authCode()
+        ));
         return ResponseEntity.noContent().build();
     }
 }

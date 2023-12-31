@@ -111,6 +111,7 @@ public enum MenteeFixture {
     public Mentee toDomain() {
         final Mentee mentee = new Mentee(email, password);
         mentee.complete(name, nationality, profileImageUrl, introduction, languages, interest);
+        mentee.authenticate();
         return mentee;
     }
 }

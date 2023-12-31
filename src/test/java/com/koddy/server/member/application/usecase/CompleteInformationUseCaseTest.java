@@ -3,6 +3,8 @@ package com.koddy.server.member.application.usecase;
 import com.koddy.server.common.UseCaseTest;
 import com.koddy.server.member.application.usecase.command.CompleteMenteeCommand;
 import com.koddy.server.member.application.usecase.command.CompleteMentorCommand;
+import com.koddy.server.member.domain.model.Email;
+import com.koddy.server.member.domain.model.Password;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MenteeRepository;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
+import static com.koddy.server.common.utils.EncryptorFactory.getEncryptor;
 import static com.koddy.server.member.domain.model.Member.EMPTY;
 import static com.koddy.server.member.domain.model.Nationality.ANONYMOUS;
 import static com.koddy.server.member.domain.model.RoleType.MENTEE;
@@ -33,7 +36,10 @@ class CompleteInformationUseCaseTest extends UseCaseTest {
     @DisplayName("Mentor 부가 정보를 기입한다")
     void completeMentor() {
         // given
-        final Mentor mentor = new Mentor(MENTOR_1.getEmail(), MENTOR_1.getPassword()).apply(1L);
+        final Mentor mentor = new Mentor(
+                Email.init("sjiwon4491@gmail.com"),
+                Password.encrypt("Koddy123!@#", getEncryptor())
+        ).apply(1L);
         final CompleteMentorCommand command = new CompleteMentorCommand(
                 mentor.getId(),
                 MENTOR_1.getName(),
@@ -48,7 +54,7 @@ class CompleteInformationUseCaseTest extends UseCaseTest {
         given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
 
         assertAll(
-                () -> assertThat(mentor.getEmail().getValue()).isEqualTo(MENTOR_1.getEmail().getValue()),
+                () -> assertThat(mentor.getEmail().getValue()).isEqualTo("sjiwon4491@gmail.com"),
                 () -> assertThat(mentor.getPassword()).isNotNull(),
                 () -> assertThat(mentor.getName()).isEqualTo(EMPTY),
                 () -> assertThat(mentor.getNationality()).isEqualTo(ANONYMOUS),
@@ -69,7 +75,7 @@ class CompleteInformationUseCaseTest extends UseCaseTest {
         // then
         assertAll(
                 () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
-                () -> assertThat(mentor.getEmail().getValue()).isEqualTo(MENTOR_1.getEmail().getValue()),
+                () -> assertThat(mentor.getEmail().getValue()).isEqualTo("sjiwon4491@gmail.com"),
                 () -> assertThat(mentor.getPassword()).isNotNull(),
                 () -> assertThat(mentor.getName()).isEqualTo(command.name()),
                 () -> assertThat(mentor.getNationality()).isEqualTo(command.nationality()),
@@ -89,7 +95,10 @@ class CompleteInformationUseCaseTest extends UseCaseTest {
     @DisplayName("Mentee 부가 정보를 기입한다")
     void completeMentee() {
         // given
-        final Mentee mentee = new Mentee(MENTEE_1.getEmail(), MENTEE_1.getPassword()).apply(1L);
+        final Mentee mentee = new Mentee(
+                Email.init("sjiwon4491@gmail.com"),
+                Password.encrypt("Koddy123!@#", getEncryptor())
+        ).apply(1L);
         final CompleteMenteeCommand command = new CompleteMenteeCommand(
                 mentee.getId(),
                 MENTEE_1.getName(),
@@ -102,7 +111,7 @@ class CompleteInformationUseCaseTest extends UseCaseTest {
         given(menteeRepository.getById(command.menteeId())).willReturn(mentee);
 
         assertAll(
-                () -> assertThat(mentee.getEmail().getValue()).isEqualTo(MENTEE_1.getEmail().getValue()),
+                () -> assertThat(mentee.getEmail().getValue()).isEqualTo("sjiwon4491@gmail.com"),
                 () -> assertThat(mentee.getPassword()).isNotNull(),
                 () -> assertThat(mentee.getName()).isEqualTo(EMPTY),
                 () -> assertThat(mentee.getNationality()).isEqualTo(ANONYMOUS),
@@ -120,7 +129,7 @@ class CompleteInformationUseCaseTest extends UseCaseTest {
         // then
         assertAll(
                 () -> verify(menteeRepository, times(1)).getById(command.menteeId()),
-                () -> assertThat(mentee.getEmail().getValue()).isEqualTo(MENTEE_1.getEmail().getValue()),
+                () -> assertThat(mentee.getEmail().getValue()).isEqualTo("sjiwon4491@gmail.com"),
                 () -> assertThat(mentee.getPassword()).isNotNull(),
                 () -> assertThat(mentee.getName()).isEqualTo(command.name()),
                 () -> assertThat(mentee.getNationality()).isEqualTo(command.nationality()),

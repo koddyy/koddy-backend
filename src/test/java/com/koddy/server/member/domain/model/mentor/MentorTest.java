@@ -3,6 +3,8 @@ package com.koddy.server.member.domain.model.mentor;
 import com.koddy.server.common.ParallelTest;
 import com.koddy.server.common.fixture.ScheduleFixture;
 import com.koddy.server.global.encrypt.Encryptor;
+import com.koddy.server.member.domain.model.Email;
+import com.koddy.server.member.domain.model.Password;
 import com.koddy.server.member.exception.MemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,6 +15,7 @@ import java.util.List;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_2;
 import static com.koddy.server.common.utils.EncryptorFactory.getEncryptor;
+import static com.koddy.server.member.domain.model.EmailStatus.INACTIVE;
 import static com.koddy.server.member.domain.model.Member.EMPTY;
 import static com.koddy.server.member.domain.model.Nationality.ANONYMOUS;
 import static com.koddy.server.member.domain.model.RoleType.MENTOR;
@@ -30,9 +33,11 @@ class MentorTest extends ParallelTest {
         @DisplayName("Mentor를 생성한다")
         void success() {
             /* 초기 Mentor */
-            final Mentor mentor = new Mentor(MENTOR_1.getEmail(), MENTOR_1.getPassword());
+            final Mentor mentor = new Mentor(Email.init("sjiwon4491@gmail.com"), Password.encrypt("Koddy123!@#", getEncryptor()));
             assertAll(
-                    () -> assertThat(mentor.getEmail().getValue()).isEqualTo(MENTOR_1.getEmail().getValue()),
+                    () -> assertThat(mentor.getEmail().getValue()).isEqualTo("sjiwon4491@gmail.com"),
+                    () -> assertThat(mentor.getEmail().getStatus()).isEqualTo(INACTIVE),
+                    () -> assertThat(mentor.isAuthenticated()).isFalse(),
                     () -> assertThat(mentor.getPassword()).isNotNull(),
                     () -> assertThat(mentor.getName()).isEqualTo(EMPTY),
                     () -> assertThat(mentor.getNationality()).isEqualTo(ANONYMOUS),
@@ -59,7 +64,7 @@ class MentorTest extends ParallelTest {
                     MENTOR_1.getSchedules()
             );
             assertAll(
-                    () -> assertThat(mentor.getEmail().getValue()).isEqualTo(MENTOR_1.getEmail().getValue()),
+                    () -> assertThat(mentor.getEmail().getValue()).isEqualTo("sjiwon4491@gmail.com"),
                     () -> assertThat(mentor.getPassword()).isNotNull(),
                     () -> assertThat(mentor.getName()).isEqualTo(MENTOR_1.getName()),
                     () -> assertThat(mentor.getNationality()).isEqualTo(MENTOR_1.getNationality()),

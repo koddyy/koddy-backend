@@ -4,13 +4,19 @@ import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Nationality;
 import com.koddy.server.member.domain.model.mentor.Period;
 import com.koddy.server.member.domain.model.mentor.Schedule;
+import com.koddy.server.member.utils.validator.ValidMailAuthenticated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
 import java.util.List;
 
+@Builder
 public record CompleteMentorRequest(
+        @ValidMailAuthenticated
+        Boolean authenticated,
+
         @NotBlank(message = "이름은 필수입니다.")
         String name,
 
