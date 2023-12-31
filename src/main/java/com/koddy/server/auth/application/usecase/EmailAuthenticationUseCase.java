@@ -19,7 +19,7 @@ public class EmailAuthenticationUseCase {
     private final EmailSender emailSender;
 
     public void sendAuthCode(final SendAuthCodeCommand command) {
-        final Member<?> member = memberRepository.getByEmail(command.email());
+        final Member<?> member = memberRepository.getById(command.memberId());
 
         final String key = generateAuthKey(member.getEmail().getValue());
         final String authCode = mailAuthenticationProcessor.storeAuthCode(key);
@@ -28,7 +28,7 @@ public class EmailAuthenticationUseCase {
 
     @KoddyWritableTransactional
     public void confirmAuthCode(final ConfirmAuthCodeCommand command) {
-        final Member<?> member = memberRepository.getByEmail(command.email());
+        final Member<?> member = memberRepository.getById(command.memberId());
 
         final String key = generateAuthKey(member.getEmail().getValue());
         mailAuthenticationProcessor.verifyAuthCode(key, command.authCode());

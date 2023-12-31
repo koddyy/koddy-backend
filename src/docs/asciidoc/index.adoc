@@ -53,7 +53,6 @@ include::{snippets}/MemberApi/SignUp/Success/response-fields.adoc[]
 ==== HTTP Request
 
 include::{snippets}/MemberApi/EmailAuth/Send/http-request.adoc[]
-include::{snippets}/MemberApi/EmailAuth/Send/request-fields.adoc[]
 
 ==== HTTP Response
 

@@ -120,12 +120,14 @@ public enum MentorFixture {
     public Mentor toDomain() {
         final Mentor mentor = new Mentor(email, password);
         mentor.complete(name, nationality, profileImageUrl, introduction, languages, universityProfile, meetingUrl, schedules);
+        mentor.authenticate();
         return mentor;
     }
 
     public Mentor toDomain(final List<Schedule> schedules) {
         final Mentor mentor = new Mentor(email, password);
         mentor.complete(name, nationality, profileImageUrl, introduction, languages, universityProfile, meetingUrl, schedules);
+        mentor.authenticate();
         return mentor;
     }
 }
