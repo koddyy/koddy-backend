@@ -35,7 +35,7 @@ class PeriodTest extends ParallelTest {
 
             assertThatThrownBy(() -> Period.of(startDate, endDate))
                     .isInstanceOf(MemberException.class)
-                    .hasMessage(MemberExceptionCode.START_END_MUST_BE_ALIGN.getMessage());
+                    .hasMessage(MemberExceptionCode.START_END_MUST_ALIGN.getMessage());
         }
 
         @Test

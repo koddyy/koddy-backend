@@ -1,6 +1,6 @@
 package com.koddy.server.member.presentation.dto.response;
 
-public record SimpleSignUpResponse(
+public record SignUpResponse(
         Long id
 ) {
 }

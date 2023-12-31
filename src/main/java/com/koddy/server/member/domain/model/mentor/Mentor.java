@@ -1,12 +1,8 @@
 package com.koddy.server.member.domain.model.mentor;
 
-import com.koddy.server.global.encrypt.Encryptor;
 import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Member;
-import com.koddy.server.member.domain.model.Nationality;
-import com.koddy.server.member.domain.model.Password;
-import com.koddy.server.member.exception.MemberException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -14,12 +10,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import static com.koddy.server.member.domain.model.Nationality.KOREA;
 import static com.koddy.server.member.domain.model.RoleType.MENTOR;
-import static com.koddy.server.member.exception.MemberExceptionCode.SCHEDULE_MUST_BE_EXISTS;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static lombok.AccessLevel.PROTECTED;
@@ -38,15 +36,9 @@ public class Mentor extends Member<Mentor> {
     @OneToMany(mappedBy = "mentor", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private final List<ChatTime> chatTimes = new ArrayList<>();
 
-    public Mentor(final Email email, final Password password) {
-        super(email, password, List.of(MENTOR));
-        this.universityProfile = new UniversityProfile(EMPTY, EMPTY, 0);
-        this.meetingUrl = EMPTY;
-    }
-
-    public void complete(
+    public Mentor(
+            final Email email,
             final String name,
-            final Nationality nationality,
             final String profileImageUrl,
             final String introduction,
             final List<Language> languages,
@@ -54,31 +46,25 @@ public class Mentor extends Member<Mentor> {
             final String meetingUrl,
             final List<Schedule> schedules
     ) {
-        super.complete(name, nationality, profileImageUrl, introduction, languages);
+        super(email, name, profileImageUrl, KOREA, introduction, languages, List.of(MENTOR));
         this.universityProfile = universityProfile;
-        this.meetingUrl = meetingUrl;
+        this.meetingUrl = checkEmptyValue(meetingUrl);
         applySchedules(schedules);
     }
 
     private void applySchedules(final List<Schedule> schedules) {
-        validateScheduleCount(schedules);
         this.chatTimes.clear();
-        this.chatTimes.addAll(
-                schedules.stream()
-                        .map(it -> new ChatTime(this, it))
-                        .toList()
-        );
-    }
-
-    private void validateScheduleCount(final List<Schedule> schedules) {
-        if (schedules.isEmpty()) {
-            throw new MemberException(SCHEDULE_MUST_BE_EXISTS);
+        if (!CollectionUtils.isEmpty(schedules)) {
+            this.chatTimes.addAll(
+                    schedules.stream()
+                            .map(it -> new ChatTime(this, it))
+                            .toList()
+            );
         }
     }
 
     public void updateBasicInfo(
             final String name,
-            final Nationality nationality,
             final String profileImageUrl,
             final String introduction,
             final List<Language> languages,
@@ -87,16 +73,18 @@ public class Mentor extends Member<Mentor> {
             final int grade,
             final String meetingUrl
     ) {
-        super.updateBasicInfo(name, nationality, profileImageUrl, introduction, languages);
+        super.updateBasicInfo(name, KOREA, profileImageUrl, introduction, languages);
         this.universityProfile = this.universityProfile.update(school, major, grade);
         this.meetingUrl = meetingUrl;
     }
 
-    public void updatePassword(final String currentPassword, final String updatePassword, final Encryptor encryptor) {
-        super.updatePassword(currentPassword, updatePassword, encryptor);
-    }
-
     public void updateSchedules(final List<Schedule> schedules) {
         applySchedules(schedules);
+    }
+
+    @Override
+    public boolean isProfileComplete() {
+        return !Objects.equals(this.meetingUrl, EMPTY)
+                && !this.chatTimes.isEmpty();
     }
 }

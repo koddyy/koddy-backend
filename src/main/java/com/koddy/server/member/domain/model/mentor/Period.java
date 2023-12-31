@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalTime;
 
 import static com.koddy.server.member.exception.MemberExceptionCode.PERIOD_MUST_EXISTS;
-import static com.koddy.server.member.exception.MemberExceptionCode.START_END_MUST_BE_ALIGN;
+import static com.koddy.server.member.exception.MemberExceptionCode.START_END_MUST_ALIGN;
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
@@ -41,7 +41,7 @@ public class Period {
 
     private static void validateStartIsBeforeEnd(final LocalTime startTime, final LocalTime endTime) {
         if (startTime.isAfter(endTime)) {
-            throw new MemberException(START_END_MUST_BE_ALIGN);
+            throw new MemberException(START_END_MUST_ALIGN);
         }
     }
 

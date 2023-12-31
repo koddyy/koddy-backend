@@ -34,12 +34,6 @@ spring:
     baseline-version: 1
     locations: classpath:db/migration
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      password: koddy
-
   cloud:
     aws:
       region:
@@ -47,36 +41,8 @@ spring:
       s3:
         bucket: ${S3_BUCKET:s3-bucket}
 
-  thymeleaf:
-    cache: false
-
-  mail:
-    default-encoding: UTF-8
-    host: smtp.gmail.com
-    port: 587
-    username: ${GOOGLE_EMAIL:google-email}
-    password: ${GOOGLE_APP_PASSWORD:google-app-password}
-    properties:
-      mail:
-        mime:
-          charset: UTF-8
-        transport:
-          protocol: smtp
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-
-mail:
-  auth:
-    ttl: 600 # 초 단위 (기본 10분)
-
 cors:
   allowed-origin-patterns: http://localhost:3000
-
-encrypt:
-  secret-key: 2da7acad220ffe59e6943c826ec1fcf879a4339521ff5837fa92aab485e94bcb # 테스트용 Secret Key
-  salt: 45b24edcbc33a9d7b9d53b3c23ae70bae6f9d95e28132db3f35b920d0e466cde # 테스트용 Salt (Even Hex Number)
 
 jwt:
   secret-key: 2da7acad220ffe59e6943c826ec1fcf879a4339521ff5837fa92aab485e94bcb # 테스트용 Secret Key

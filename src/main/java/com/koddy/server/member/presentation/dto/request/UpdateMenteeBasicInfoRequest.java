@@ -19,6 +19,7 @@ public record UpdateMenteeBasicInfoRequest(
 
         String profileImageUrl,
 
+        @NotBlank(message = "자기소개는 필수입니다.")
         String introduction,
 
         @NotEmpty(message = "사용 가능한 언어는 하나 이상 선택해야 합니다.")
