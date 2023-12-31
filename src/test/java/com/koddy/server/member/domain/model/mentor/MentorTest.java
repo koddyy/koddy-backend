@@ -44,7 +44,8 @@ class MentorTest extends ParallelTest {
                     () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(EMPTY),
                     () -> assertThat(mentor.getUniversityProfile().getGrade()).isEqualTo(0),
                     () -> assertThat(mentor.getMeetingUrl()).isEqualTo(EMPTY),
-                    () -> assertThat(mentor.getChatTimes()).isEmpty()
+                    () -> assertThat(mentor.getChatTimes()).isEmpty(),
+                    () -> assertThat(mentor.isAuthenticated()).isFalse()
             );
 
             /* complete Mentor */

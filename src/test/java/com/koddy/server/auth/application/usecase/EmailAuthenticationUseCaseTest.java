@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_AUTH_CODE;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
@@ -60,7 +61,8 @@ class EmailAuthenticationUseCaseTest extends UseCaseTest {
             assertAll(
                     () -> verify(memberRepository, times(1)).getByEmail(command.email()),
                     () -> verify(mailAuthenticationProcessor, times(1)).storeAuthCode(key),
-                    () -> verify(emailSender, times(1)).sendEmailAuthMail(email, authCode)
+                    () -> verify(emailSender, times(1)).sendEmailAuthMail(email, authCode),
+                    () -> assertThat(member.isAuthenticated()).isFalse()
             );
         }
     }
@@ -110,7 +112,8 @@ class EmailAuthenticationUseCaseTest extends UseCaseTest {
             assertAll(
                     () -> verify(memberRepository, times(1)).getByEmail(command.email()),
                     () -> verify(mailAuthenticationProcessor, times(1)).verifyAuthCode(key, command.authCode()),
-                    () -> verify(mailAuthenticationProcessor, times(1)).deleteAuthCode(key)
+                    () -> verify(mailAuthenticationProcessor, times(1)).deleteAuthCode(key),
+                    () -> assertThat(member.isAuthenticated()).isTrue()
             );
         }
     }

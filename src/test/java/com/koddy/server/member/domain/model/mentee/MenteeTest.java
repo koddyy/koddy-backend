@@ -38,7 +38,8 @@ class MenteeTest extends ParallelTest {
                     () -> assertThat(mentee.getAvailableLanguages()).isEmpty(),
                     () -> assertThat(mentee.getRoleTypes()).containsExactlyInAnyOrder(MENTEE),
                     () -> assertThat(mentee.getInterest().getSchool()).isEqualTo(EMPTY),
-                    () -> assertThat(mentee.getInterest().getMajor()).isEqualTo(EMPTY)
+                    () -> assertThat(mentee.getInterest().getMajor()).isEqualTo(EMPTY),
+                    () -> assertThat(mentee.isAuthenticated()).isFalse()
             );
 
             /* complete Mentee */
