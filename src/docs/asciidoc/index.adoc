@@ -5,6 +5,32 @@
 :toc: left
 :toclevels: 3
 
+== 토큰 재발급 API (RefreshToken)
+
+=== HTTP Request
+
+include::{snippets}/TokenReissueApi/Success/http-request.adoc[]
+include::{snippets}/TokenReissueApi/Success/request-cookies.adoc[]
+
+=== HTTP Response
+
+include::{snippets}/TokenReissueApi/Failure/http-response.adoc[]
+include::{snippets}/TokenReissueApi/Success/http-response.adoc[]
+
+== 파일 관련 API
+
+=== PresignedUrl 응답
+
+==== HTTP Request
+
+include::{snippets}/FileApi/GetPresignedUrl/http-request.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/FileApi/GetPresignedUrl/http-response.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/response-fields.adoc[]
+
 == OAuth 인증/로그아웃 API
 
 === OAuth Link 얻기
@@ -12,6 +38,7 @@
 ==== HTTP Request
 
 include::{snippets}/OAuthApi/Access/Success/http-request.adoc[]
+include::{snippets}/OAuthApi/Access/Success/path-parameters.adoc[]
 include::{snippets}/OAuthApi/Access/Success/query-parameters.adoc[]
 
 ==== HTTP Response
@@ -50,43 +77,29 @@ include::{snippets}/OAuthApi/Logout/http-request.adoc[]
 
 include::{snippets}/OAuthApi/Logout/http-response.adoc[]
 
-== 토큰 재발급 API (RefreshToken)
+== 회원가입 API
 
-=== HTTP Request
-
-include::{snippets}/TokenReissueApi/Success/http-request.adoc[]
-include::{snippets}/TokenReissueApi/Success/request-cookies.adoc[]
-
-=== HTTP Response
-
-include::{snippets}/TokenReissueApi/Failure/http-response.adoc[]
-include::{snippets}/TokenReissueApi/Success/http-response.adoc[]
-
-== 파일 관련 API
-
-=== 파일 업로드
+=== 멘토 회원가입
 
 ==== HTTP Request
 
-include::{snippets}/FileApi/Upload/curl-request.adoc[]
-include::{snippets}/FileApi/Upload/request-parts.adoc[]
+include::{snippets}/MemberApi/SignUp/Mentor/http-request.adoc[]
+include::{snippets}/MemberApi/SignUp/Mentor/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/FileApi/Upload/http-response.adoc[]
-include::{snippets}/FileApi/Upload/response-fields.adoc[]
+include::{snippets}/MemberApi/SignUp/Mentor/http-response.adoc[]
 
-=== PresignedUrl 응답
+=== 멘티 회원가입
 
 ==== HTTP Request
 
-include::{snippets}/FileApi/GetPresignedUrl/http-request.adoc[]
-include::{snippets}/FileApi/GetPresignedUrl/query-parameters.adoc[]
+include::{snippets}/MemberApi/SignUp/Mentee/http-request.adoc[]
+include::{snippets}/MemberApi/SignUp/Mentee/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/FileApi/GetPresignedUrl/http-response.adoc[]
-include::{snippets}/FileApi/GetPresignedUrl/response-fields.adoc[]
+include::{snippets}/MemberApi/SignUp/Mentee/http-response.adoc[]
 
 == 멘토 정보 수정 API (AccessToken)
 

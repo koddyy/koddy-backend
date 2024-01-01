@@ -25,8 +25,8 @@ import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFa
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createHttpSpecSnippets;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.failureDocsWithAccessToken;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocsWithAccessToken;
-import static com.koddy.server.member.domain.model.mentor.Day.MONDAY;
-import static com.koddy.server.member.domain.model.mentor.Day.WEDNESDAY;
+import static com.koddy.server.member.domain.model.mentor.Day.MON;
+import static com.koddy.server.member.domain.model.mentor.Day.WED;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -76,9 +76,9 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                     .andDo(failureDocsWithAccessToken("MemberApi/Update/Mentor/BasicInfo/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
-                                    body("profileImageUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null", false),
-                                    body("introduction", "멘토 자기소개", "없으면 null", true),
-                                    body("languages", "사용 가능한 언어", "KOREAN\nENGLISH\nCHINESE\nJAPANESE\nVIETNAMESE", true),
+                                    body("profileImageUrl", "프로필 이미지 URL", true),
+                                    body("introduction", "멘토 자기소개", true),
+                                    body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
                                     body("grade", "학년", true),
@@ -105,9 +105,9 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                     .andDo(successDocsWithAccessToken("MemberApi/Update/Mentor/BasicInfo/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
-                                    body("profileImageUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null", false),
-                                    body("introduction", "멘토 자기소개", "없으면 null", true),
-                                    body("languages", "사용 가능한 언어", "KOREAN\nENGLISH\nCHINESE\nJAPANESE\nVIETNAMESE", true),
+                                    body("profileImageUrl", "프로필 이미지 URL", true),
+                                    body("introduction", "멘토 자기소개", true),
+                                    body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
                                     body("grade", "학년", true),
@@ -122,8 +122,8 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
     class UpdateSchedule {
         private static final String BASE_URL = "/api/mentors/me/schedules";
         private final UpdateMentorScheduleRequest request = new UpdateMentorScheduleRequest(List.of(
-                new MentorScheduleRequest(MONDAY, LocalTime.of(9, 0), LocalTime.of(17, 0)),
-                new MentorScheduleRequest(WEDNESDAY, LocalTime.of(13, 0), LocalTime.of(20, 0))
+                new MentorScheduleRequest(MON, LocalTime.of(9, 0), LocalTime.of(17, 0)),
+                new MentorScheduleRequest(WED, LocalTime.of(13, 0), LocalTime.of(20, 0))
         ));
 
         @Test
@@ -144,10 +144,10 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                     .andExpectAll(getResultMatchersViaExceptionCode(INVALID_PERMISSION))
                     .andDo(failureDocsWithAccessToken("MemberApi/Update/Mentor/Schedule/Failure", createHttpSpecSnippets(
                             requestFields(
-                                    body("schedules", "멘토링 스케줄", true),
-                                    body("schedules[].day", "날짜", "MONDAY\nTUESDAY\nWEDNESDAY\nTHURSDAY\nFRIDAY\nSATURDAY\nSUNDAY", true),
-                                    body("schedules[].startTime", "시작 시간", true),
-                                    body("schedules[].endTime", "종료 시간", true)
+                                    body("schedules", "멘토링 스케줄", false),
+                                    body("schedules[].day", "날짜", "MON TUE WED THU FRI SAT SUN", false),
+                                    body("schedules[].startTime", "시작 시간", false),
+                                    body("schedules[].endTime", "종료 시간", false)
                             )
                     )));
         }
@@ -169,10 +169,10 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                     .andExpect(status().isNoContent())
                     .andDo(successDocsWithAccessToken("MemberApi/Update/Mentor/Schedule/Success", createHttpSpecSnippets(
                             requestFields(
-                                    body("schedules", "멘토링 스케줄", true),
-                                    body("schedules[].day", "날짜", "MONDAY\nTUESDAY\nWEDNESDAY\nTHURSDAY\nFRIDAY\nSATURDAY\nSUNDAY", true),
-                                    body("schedules[].startTime", "시작 시간", true),
-                                    body("schedules[].endTime", "종료 시간", true)
+                                    body("schedules", "멘토링 스케줄", false),
+                                    body("schedules[].day", "날짜", "MON TUE WED THU FRI SAT SUN", false),
+                                    body("schedules[].startTime", "시작 시간", false),
+                                    body("schedules[].endTime", "종료 시간", false)
                             )
                     )));
         }

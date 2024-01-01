@@ -9,7 +9,6 @@ import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.auth.exception.OAuthUserNotFoundException;
 import com.koddy.server.auth.infrastructure.oauth.google.response.GoogleUserResponse;
 import com.koddy.server.auth.presentation.dto.request.OAuthLoginRequest;
-import com.koddy.server.auth.utils.TokenResponseWriter;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
@@ -22,12 +21,15 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import java.util.Map;
 
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_OAUTH_PROVIDER;
+import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.OAuthUtils.AUTHORIZATION_CODE;
 import static com.koddy.server.common.utils.OAuthUtils.GOOGLE_PROVIDER;
 import static com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI;
 import static com.koddy.server.common.utils.OAuthUtils.STATE;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.body;
+import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.cookie;
+import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.header;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.path;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.query;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createHttpSpecSnippets;
@@ -36,7 +38,11 @@ import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDo
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocsWithAccessToken;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -52,9 +58,6 @@ class OAuthApiControllerTest extends ControllerTest {
 
     @MockBean
     private OAuthLoginUseCase oAuthLoginUseCase;
-
-    @MockBean
-    private TokenResponseWriter tokenResponseWriter;
 
     @MockBean
     private LogoutUseCase logoutUseCase;
@@ -155,7 +158,7 @@ class OAuthApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("authorizationCode", "Authorization Code", true),
                                     body("redirectUri", "Redirect Uri", "Authorization Code 요청 시 redirectUri와 반드시 동일한 값", true),
-                                    body("state", "State 값", "Authorization Code 요청 시 state와 반드시 동일한 값", true)
+                                    body("state", "State 값", "Authorization Code Redirect 응답 시 QueryParam으로 넘어오는 State 값", true)
                             ),
                             responseFields(
                                     body("name", "회원가입 진행 시 이름 정보 기본값"),
@@ -193,7 +196,13 @@ class OAuthApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("authorizationCode", "Authorization Code", true),
                                     body("redirectUri", "Redirect Uri", "Authorization Code 요청 시 redirectUri와 반드시 동일한 값", true),
-                                    body("state", "State 값", "Authorization Code 요청 시 state와 반드시 동일한 값", true)
+                                    body("state", "State 값", "Authorization Code Redirect 응답 시 QueryParam으로 넘어오는 State 값", true)
+                            ),
+                            responseHeaders(
+                                    header(AUTHORIZATION, "Access Token")
+                            ),
+                            responseCookies(
+                                    cookie(COOKIE_REFRESH_TOKEN, "Refresh Token")
                             ),
                             responseFields(
                                     body("id", "사용자 ID(PK)"),
@@ -215,6 +224,9 @@ class OAuthApiControllerTest extends ControllerTest {
         void success() throws Exception {
             // given
             mockingToken(true, member.getId(), member.getRoleTypes());
+            doNothing()
+                    .when(logoutUseCase)
+                    .invoke(any());
 
             // when
             final RequestBuilder requestBuilder = postWithAccessToken(BASE_URL);

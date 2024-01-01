@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Language {
-    KOREAN("한국어", "KR"),
-    ENGLISH("영어", "EN"),
-    CHINESE("중국어", "CN"),
-    JAPANESE("일본어", "JP"),
-    VIETNAMESE("베트남어", "VN"),
+    KR("한국어", "KR"),
+    EN("영어", "EN"),
+    CN("중국어", "CN"),
+    JP("일본어", "JP"),
+    VN("베트남어", "VN"),
     ;
 
     private final String value;
