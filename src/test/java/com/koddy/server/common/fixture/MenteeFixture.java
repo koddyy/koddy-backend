@@ -1,17 +1,22 @@
 package com.koddy.server.common.fixture;
 
+import com.koddy.server.auth.domain.model.AuthMember;
+import com.koddy.server.auth.domain.model.AuthToken;
+import com.koddy.server.auth.infrastructure.oauth.google.response.GoogleUserResponse;
 import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Nationality;
-import com.koddy.server.member.domain.model.Password;
 import com.koddy.server.member.domain.model.mentee.Interest;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
-import static com.koddy.server.common.utils.EncryptorFactory.getEncryptor;
+import static com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN;
+import static com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN;
 import static com.koddy.server.member.domain.model.Language.CHINESE;
 import static com.koddy.server.member.domain.model.Language.ENGLISH;
 import static com.koddy.server.member.domain.model.Language.JAPANESE;
@@ -27,91 +32,87 @@ import static com.koddy.server.member.domain.model.Nationality.VIETNAM;
 @RequiredArgsConstructor
 public enum MenteeFixture {
     MENTEE_1(
-            Email.init("mentee1@gmail.com"),
-            Password.encrypt("Koddy123!@#", getEncryptor()),
-            "멘티1", USA, "s3/Mentee1.png", "Hello World~",
-            List.of(KOREAN, ENGLISH),
+            Email.from("mentee1@gmail.com"), "멘티1", "s3/Mentee1.png",
+            USA, "Hello World~", List.of(KOREAN, ENGLISH),
             new Interest("경기대학교", "컴퓨터공학부")
     ),
     MENTEE_2(
-            Email.init("mentee2@gmail.com"),
-            Password.encrypt("Koddy123!@#", getEncryptor()),
-            "멘티2", CHINA, "s3/Mentee2.png", "Hello World~",
-            List.of(KOREAN, ENGLISH, CHINESE),
+            Email.from("mentee2@gmail.com"), "멘티2", "s3/Mentee2.png",
+            CHINA, "Hello World~", List.of(KOREAN, ENGLISH, CHINESE),
             new Interest("서울대학교", "컴퓨터공학부")
     ),
     MENTEE_3(
-            Email.init("mentee3@gmail.com"),
-            Password.encrypt("Koddy123!@#", getEncryptor()),
-            "멘티3", JAPAN, "s3/Mentee3.png", "Hello World~",
-            List.of(KOREAN, ENGLISH, JAPANESE),
+            Email.from("mentee3@gmail.com"), "멘티3", "s3/Mentee3.png",
+            JAPAN, "Hello World~", List.of(KOREAN, ENGLISH, JAPANESE),
             new Interest("연세대학교", "컴퓨터공학부")
     ),
     MENTEE_4(
-            Email.init("mentee4@gmail.com"),
-            Password.encrypt("Koddy123!@#", getEncryptor()),
-            "멘티4", VIETNAM, "s3/Mentee4.png", "Hello World~",
-            List.of(KOREAN, ENGLISH, CHINESE, VIETNAMESE),
+            Email.from("mentee4@gmail.com"), "멘티4", "s3/Mentee4.png",
+            VIETNAM, "Hello World~", List.of(KOREAN, ENGLISH, CHINESE, VIETNAMESE),
             new Interest("고려대학교", "컴퓨터공학부")
     ),
     MENTEE_5(
-            Email.init("mentee5@gmail.com"),
-            Password.encrypt("Koddy123!@#", getEncryptor()),
-            "멘티5", OTHERS, "s3/Mentee5.png", "Hello World~",
-            List.of(KOREAN, ENGLISH, CHINESE, JAPANESE, VIETNAMESE),
+            Email.from("mentee5@gmail.com"), "멘티5", "s3/Mentee5.png",
+            OTHERS, "Hello World~", List.of(KOREAN, ENGLISH, CHINESE, JAPANESE, VIETNAMESE),
             new Interest("한양대학교", "컴퓨터공학부")
     ),
 
     MENTEE_6(
-            Email.init("mentee6@gmail.com"),
-            Password.encrypt("Koddy123!@#", getEncryptor()),
-            "멘티6", USA, "s3/Mentee6.png", "Hello World~",
-            List.of(KOREAN, ENGLISH),
+            Email.from("mentee6@gmail.com"), "멘티6", "s3/Mentee6.png",
+            USA, "Hello World~", List.of(KOREAN, ENGLISH),
             new Interest("경기대학교", "컴퓨터공학부")
     ),
     MENTEE_7(
-            Email.init("mentee7@gmail.com"),
-            Password.encrypt("Koddy123!@#", getEncryptor()),
-            "멘티7", CHINA, "s3/Mentee7.png", "Hello World~",
-            List.of(KOREAN, ENGLISH, CHINESE),
+            Email.from("mentee7@gmail.com"), "멘티7", "s3/Mentee7.png",
+            CHINA, "Hello World~", List.of(KOREAN, ENGLISH, CHINESE),
             new Interest("서울대학교", "컴퓨터공학부")
     ),
     MENTEE_8(
-            Email.init("mentee8@gmail.com"),
-            Password.encrypt("Koddy123!@#", getEncryptor()),
-            "멘티8", JAPAN, "s3/Mentee8.png", "Hello World~",
-            List.of(KOREAN, ENGLISH, JAPANESE),
+            Email.from("mentee8@gmail.com"), "멘티8", "s3/Mentee8.png",
+            JAPAN, "Hello World~", List.of(KOREAN, ENGLISH, JAPANESE),
             new Interest("연세대학교", "컴퓨터공학부")
     ),
     MENTEE_9(
-            Email.init("mentee9@gmail.com"),
-            Password.encrypt("Koddy123!@#", getEncryptor()),
-            "멘티9", VIETNAM, "s3/Mentee9.png", "Hello World~",
-            List.of(KOREAN, ENGLISH, CHINESE, VIETNAMESE),
+            Email.from("mentee9@gmail.com"), "멘티9", "s3/Mentee9.png",
+            VIETNAM, "Hello World~", List.of(KOREAN, ENGLISH, CHINESE, VIETNAMESE),
             new Interest("고려대학교", "컴퓨터공학부")
     ),
     MENTEE_10(
-            Email.init("mentee10@gmail.com"),
-            Password.encrypt("Koddy123!@#", getEncryptor()),
-            "멘티10", OTHERS, "s3/Mentee10.png", "Hello World~",
-            List.of(KOREAN, ENGLISH, CHINESE, JAPANESE, VIETNAMESE),
+            Email.from("mentee10@gmail.com"), "멘티10", "s3/Mentee10.png",
+            OTHERS, "Hello World~", List.of(KOREAN, ENGLISH, CHINESE, JAPANESE, VIETNAMESE),
             new Interest("한양대학교", "컴퓨터공학부")
     ),
     ;
 
     private final Email email;
-    private final Password password;
     private final String name;
-    private final Nationality nationality;
     private final String profileImageUrl;
+    private final Nationality nationality;
     private final String introduction;
     private final List<Language> languages;
     private final Interest interest;
 
     public Mentee toDomain() {
-        final Mentee mentee = new Mentee(email, password);
-        mentee.complete(name, nationality, profileImageUrl, introduction, languages, interest);
-        mentee.authenticate();
-        return mentee;
+        return new Mentee(email, name, profileImageUrl, nationality, introduction, languages, interest);
+    }
+
+    public GoogleUserResponse toGoogleUserResponse() {
+        return new GoogleUserResponse(
+                UUID.randomUUID().toString(),
+                this.name,
+                this.name,
+                this.name,
+                this.profileImageUrl,
+                this.email.getValue(),
+                true,
+                "kr"
+        );
+    }
+
+    public AuthMember toAuthMember() {
+        return new AuthMember(
+                new AuthMember.MemberInfo(toDomain().apply(1L, LocalDateTime.now())),
+                new AuthToken(ACCESS_TOKEN, REFRESH_TOKEN)
+        );
     }
 }

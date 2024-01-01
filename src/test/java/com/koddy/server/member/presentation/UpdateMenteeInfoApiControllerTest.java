@@ -6,7 +6,6 @@ import com.koddy.server.member.application.usecase.UpdateMenteeInfoUseCase;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.dto.request.UpdateMenteeBasicInfoRequest;
-import com.koddy.server.member.presentation.dto.request.UpdateMenteePasswordRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -103,63 +102,6 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                                     body("languages", "사용 가능한 언어", "KOREAN\nENGLISH\nCHINESE\nJAPANESE\nVIETNAMESE", true),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)
-                            )
-                    )));
-        }
-    }
-
-    @Nested
-    @DisplayName("멘티 비밀번호 수정 API [PATCH /api/mentees/me/password] - Required AccessToken")
-    class UpdatePassword {
-        private static final String BASE_URL = "/api/mentees/me/password";
-        private final UpdateMenteePasswordRequest request = new UpdateMenteePasswordRequest(
-                "current",
-                "update"
-        );
-
-        @Test
-        @DisplayName("멘티가 아니면 권한이 없다")
-        void throwExceptionByInvalidPermission() throws Exception {
-            // given
-            mockingToken(true, mentor.getId(), mentor.getRoleTypes());
-            doThrow(new AuthException(INVALID_PERMISSION))
-                    .when(updateMenteeInfoUseCase)
-                    .updatePassword(any());
-
-            // when
-            final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isForbidden())
-                    .andExpectAll(getResultMatchersViaExceptionCode(INVALID_PERMISSION))
-                    .andDo(failureDocsWithAccessToken("MemberApi/Update/Mentee/Password/Failure", createHttpSpecSnippets(
-                            requestFields(
-                                    body("currentPassword", "기존 비밀번호", true),
-                                    body("updatePassword", "변경할 비밀번호", true)
-                            )
-                    )));
-        }
-
-        @Test
-        @DisplayName("멘티 비밀번호를 수정한다")
-        void success() throws Exception {
-            // given
-            mockingToken(true, mentee.getId(), mentee.getRoleTypes());
-            doNothing()
-                    .when(updateMenteeInfoUseCase)
-                    .updatePassword(any());
-
-            // when
-            final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isNoContent())
-                    .andDo(successDocsWithAccessToken("MemberApi/Update/Mentee/Password/Success", createHttpSpecSnippets(
-                            requestFields(
-                                    body("currentPassword", "기존 비밀번호", true),
-                                    body("updatePassword", "변경할 비밀번호", true)
                             )
                     )));
         }

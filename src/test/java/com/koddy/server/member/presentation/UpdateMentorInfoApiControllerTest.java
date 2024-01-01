@@ -7,7 +7,6 @@ import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.dto.request.MentorScheduleRequest;
 import com.koddy.server.member.presentation.dto.request.UpdateMentorBasicInfoRequest;
-import com.koddy.server.member.presentation.dto.request.UpdateMentorPasswordRequest;
 import com.koddy.server.member.presentation.dto.request.UpdateMentorScheduleRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -49,7 +48,6 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
         private static final String BASE_URL = "/api/mentors/me/basic-info";
         private final UpdateMentorBasicInfoRequest request = new UpdateMentorBasicInfoRequest(
                 MENTOR_1.getName(),
-                MENTOR_1.getNationality(),
                 MENTOR_1.getProfileImageUrl(),
                 MENTOR_1.getIntroduction(),
                 MENTOR_1.getLanguages(),
@@ -78,14 +76,13 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                     .andDo(failureDocsWithAccessToken("MemberApi/Update/Mentor/BasicInfo/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
-                                    body("nationality", "국적", "KOREA\nUSA\nJAPAN\nCHINA\nVIETNAM\nOTHERS", true),
                                     body("profileImageUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null", false),
-                                    body("introduction", "멘토 자기소개", "없으면 null", false),
+                                    body("introduction", "멘토 자기소개", "없으면 null", true),
                                     body("languages", "사용 가능한 언어", "KOREAN\nENGLISH\nCHINESE\nJAPANESE\nVIETNAMESE", true),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
                                     body("grade", "학년", true),
-                                    body("meetingUrl", "커피챗 링크", true)
+                                    body("meetingUrl", "커피챗 링크", false)
                             )
                     )));
         }
@@ -108,71 +105,13 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                     .andDo(successDocsWithAccessToken("MemberApi/Update/Mentor/BasicInfo/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
-                                    body("nationality", "국적", "KOREA\nUSA\nJAPAN\nCHINA\nVIETNAM\nOTHERS", true),
                                     body("profileImageUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null", false),
-                                    body("introduction", "멘토 자기소개", "없으면 null", false),
+                                    body("introduction", "멘토 자기소개", "없으면 null", true),
                                     body("languages", "사용 가능한 언어", "KOREAN\nENGLISH\nCHINESE\nJAPANESE\nVIETNAMESE", true),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
                                     body("grade", "학년", true),
-                                    body("meetingUrl", "커피챗 링크", true)
-                            )
-                    )));
-        }
-    }
-
-    @Nested
-    @DisplayName("멘토 비밀번호 수정 API [PATCH /api/mentors/me/password] - Required AccessToken")
-    class UpdatePassword {
-        private static final String BASE_URL = "/api/mentors/me/password";
-        private final UpdateMentorPasswordRequest request = new UpdateMentorPasswordRequest(
-                "current",
-                "update"
-        );
-
-        @Test
-        @DisplayName("멘토가 아니면 권한이 없다")
-        void throwExceptionByInvalidPermission() throws Exception {
-            // given
-            mockingToken(true, mentee.getId(), mentee.getRoleTypes());
-            doThrow(new AuthException(INVALID_PERMISSION))
-                    .when(updateMentorInfoUseCase)
-                    .updatePassword(any());
-
-            // when
-            final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isForbidden())
-                    .andExpectAll(getResultMatchersViaExceptionCode(INVALID_PERMISSION))
-                    .andDo(failureDocsWithAccessToken("MemberApi/Update/Mentor/Password/Failure", createHttpSpecSnippets(
-                            requestFields(
-                                    body("currentPassword", "기존 비밀번호", true),
-                                    body("updatePassword", "변경할 비밀번호", true)
-                            )
-                    )));
-        }
-
-        @Test
-        @DisplayName("멘토 비밀번호를 수정한다")
-        void success() throws Exception {
-            // given
-            mockingToken(true, mentor.getId(), mentor.getRoleTypes());
-            doNothing()
-                    .when(updateMentorInfoUseCase)
-                    .updatePassword(any());
-
-            // when
-            final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isNoContent())
-                    .andDo(successDocsWithAccessToken("MemberApi/Update/Mentor/Password/Success", createHttpSpecSnippets(
-                            requestFields(
-                                    body("currentPassword", "기존 비밀번호", true),
-                                    body("updatePassword", "변경할 비밀번호", true)
+                                    body("meetingUrl", "커피챗 링크", false)
                             )
                     )));
         }

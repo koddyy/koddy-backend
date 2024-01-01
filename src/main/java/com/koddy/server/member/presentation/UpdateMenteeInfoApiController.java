@@ -5,9 +5,7 @@ import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.aop.OnlyMentee;
 import com.koddy.server.member.application.usecase.UpdateMenteeInfoUseCase;
 import com.koddy.server.member.application.usecase.command.UpdateMenteeBasicInfoCommand;
-import com.koddy.server.member.application.usecase.command.UpdateMenteePasswordCommand;
 import com.koddy.server.member.presentation.dto.request.UpdateMenteeBasicInfoRequest;
-import com.koddy.server.member.presentation.dto.request.UpdateMenteePasswordRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -41,20 +39,6 @@ public class UpdateMenteeInfoApiController {
                 request.languages(),
                 request.interestSchool(),
                 request.interestMajor()
-        ));
-        return ResponseEntity.noContent().build();
-    }
-
-    @Operation(summary = "멘티 비밀번호 수정 Endpoint")
-    @PatchMapping("/password")
-    public ResponseEntity<Void> updatePassword(
-            @Auth final Authenticated authenticated,
-            @RequestBody @Valid final UpdateMenteePasswordRequest request
-    ) {
-        updateMenteeInfoUseCase.updatePassword(new UpdateMenteePasswordCommand(
-                authenticated.id(),
-                request.currentPassword(),
-                request.updatePassword()
         ));
         return ResponseEntity.noContent().build();
     }

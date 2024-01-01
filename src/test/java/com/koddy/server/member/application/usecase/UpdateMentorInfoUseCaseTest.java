@@ -2,9 +2,7 @@ package com.koddy.server.member.application.usecase;
 
 import com.koddy.server.common.UseCaseTest;
 import com.koddy.server.common.fixture.ScheduleFixture;
-import com.koddy.server.global.encrypt.Encryptor;
 import com.koddy.server.member.application.usecase.command.UpdateMentorBasicInfoCommand;
-import com.koddy.server.member.application.usecase.command.UpdateMentorPasswordCommand;
 import com.koddy.server.member.application.usecase.command.UpdateMentorScheduleCommand;
 import com.koddy.server.member.domain.model.mentor.ChatTime;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -14,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_2;
-import static com.koddy.server.common.utils.EncryptorFactory.getEncryptor;
+import static com.koddy.server.member.domain.model.Nationality.KOREA;
 import static com.koddy.server.member.domain.model.RoleType.MENTOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -26,8 +24,7 @@ import static org.mockito.Mockito.verify;
 @DisplayName("Member -> UpdateMentorInfoUseCase 테스트")
 class UpdateMentorInfoUseCaseTest extends UseCaseTest {
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
-    private final Encryptor encryptor = getEncryptor();
-    private final UpdateMentorInfoUseCase sut = new UpdateMentorInfoUseCase(mentorRepository, encryptor);
+    private final UpdateMentorInfoUseCase sut = new UpdateMentorInfoUseCase(mentorRepository);
 
     @Test
     @DisplayName("Mentor 기본 정보를 수정한다")
@@ -37,7 +34,6 @@ class UpdateMentorInfoUseCaseTest extends UseCaseTest {
         final UpdateMentorBasicInfoCommand command = new UpdateMentorBasicInfoCommand(
                 mentor.getId(),
                 MENTOR_2.getName(),
-                MENTOR_2.getNationality(),
                 MENTOR_2.getProfileImageUrl(),
                 MENTOR_2.getIntroduction(),
                 MENTOR_2.getLanguages(),
@@ -55,7 +51,7 @@ class UpdateMentorInfoUseCaseTest extends UseCaseTest {
         assertAll(
                 () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
                 () -> assertThat(mentor.getName()).isEqualTo(command.name()),
-                () -> assertThat(mentor.getNationality()).isEqualTo(command.nationality()),
+                () -> assertThat(mentor.getNationality()).isEqualTo(KOREA),
                 () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(command.profileImageUrl()),
                 () -> assertThat(mentor.getIntroduction()).isEqualTo(command.introduction()),
                 () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(command.languages()),
@@ -64,28 +60,6 @@ class UpdateMentorInfoUseCaseTest extends UseCaseTest {
                 () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(command.major()),
                 () -> assertThat(mentor.getUniversityProfile().getGrade()).isEqualTo(command.grade()),
                 () -> assertThat(mentor.getMeetingUrl()).isEqualTo(command.meetingUrl())
-        );
-    }
-
-    @Test
-    @DisplayName("Mentor 비밀번호를 수정한다")
-    void updatePassword() {
-        // given
-        final Mentor mentor = MENTOR_1.toDomain().apply(1L);
-        final UpdateMentorPasswordCommand command = new UpdateMentorPasswordCommand(
-                mentor.getId(),
-                "Koddy123!@#",
-                "Koddy123!@#update"
-        );
-        given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
-
-        // when
-        sut.updatePassword(command);
-
-        // then
-        assertAll(
-                () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
-                () -> assertThat(getEncryptor().isHashMatch(command.updatePassword(), mentor.getPassword().getValue())).isTrue()
         );
     }
 

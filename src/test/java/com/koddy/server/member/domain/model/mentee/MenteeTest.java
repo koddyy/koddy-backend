@@ -1,24 +1,14 @@
 package com.koddy.server.member.domain.model.mentee;
 
 import com.koddy.server.common.ParallelTest;
-import com.koddy.server.global.encrypt.Encryptor;
-import com.koddy.server.member.domain.model.Email;
-import com.koddy.server.member.domain.model.Password;
-import com.koddy.server.member.exception.MemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_2;
-import static com.koddy.server.common.utils.EncryptorFactory.getEncryptor;
-import static com.koddy.server.member.domain.model.EmailStatus.INACTIVE;
-import static com.koddy.server.member.domain.model.Member.EMPTY;
-import static com.koddy.server.member.domain.model.Nationality.ANONYMOUS;
 import static com.koddy.server.member.domain.model.RoleType.MENTEE;
-import static com.koddy.server.member.exception.MemberExceptionCode.CURRENT_PASSWORD_IS_NOT_MATCH;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("Member/Mentee -> 도메인 [Mentee] 테스트")
@@ -29,38 +19,10 @@ class MenteeTest extends ParallelTest {
         @Test
         @DisplayName("Mentee를 생성한다")
         void success() {
-            /* 초기 Mentee */
-            final Mentee mentee = new Mentee(
-                    Email.init("sjiwon4491@gmail.com"),
-                    Password.encrypt("Koddy123!@#", getEncryptor())
-            );
-            assertAll(
-                    () -> assertThat(mentee.getEmail().getValue()).isEqualTo("sjiwon4491@gmail.com"),
-                    () -> assertThat(mentee.getEmail().getStatus()).isEqualTo(INACTIVE),
-                    () -> assertThat(mentee.isAuthenticated()).isFalse(),
-                    () -> assertThat(mentee.getPassword()).isNotNull(),
-                    () -> assertThat(mentee.getName()).isEqualTo(EMPTY),
-                    () -> assertThat(mentee.getNationality()).isEqualTo(ANONYMOUS),
-                    () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(EMPTY),
-                    () -> assertThat(mentee.getIntroduction()).isEqualTo(EMPTY),
-                    () -> assertThat(mentee.getAvailableLanguages()).isEmpty(),
-                    () -> assertThat(mentee.getRoleTypes()).containsExactlyInAnyOrder(MENTEE),
-                    () -> assertThat(mentee.getInterest().getSchool()).isEqualTo(EMPTY),
-                    () -> assertThat(mentee.getInterest().getMajor()).isEqualTo(EMPTY)
-            );
+            final Mentee mentee = MENTEE_1.toDomain();
 
-            /* complete Mentee */
-            mentee.complete(
-                    MENTEE_1.getName(),
-                    MENTEE_1.getNationality(),
-                    MENTEE_1.getProfileImageUrl(),
-                    MENTEE_1.getIntroduction(),
-                    MENTEE_1.getLanguages(),
-                    MENTEE_1.getInterest()
-            );
             assertAll(
-                    () -> assertThat(mentee.getEmail().getValue()).isEqualTo("sjiwon4491@gmail.com"),
-                    () -> assertThat(mentee.getPassword()).isNotNull(),
+                    () -> assertThat(mentee.getEmail().getValue()).isEqualTo(MENTEE_1.getEmail().getValue()),
                     () -> assertThat(mentee.getName()).isEqualTo(MENTEE_1.getName()),
                     () -> assertThat(mentee.getNationality()).isEqualTo(MENTEE_1.getNationality()),
                     () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(MENTEE_1.getProfileImageUrl()),
@@ -71,6 +33,13 @@ class MenteeTest extends ParallelTest {
                     () -> assertThat(mentee.getInterest().getMajor()).isEqualTo(MENTEE_1.getInterest().getMajor())
             );
         }
+    }
+
+    @Test
+    @DisplayName("Mentee 프로필이 완성되었는지 확인한다 (커피챗 링크, 스케줄)")
+    void isProfileComplete() {
+        final Mentee mentee = MENTEE_1.toDomain();
+        assertThat(mentee.isProfileComplete()).isTrue();
     }
 
     @Nested
@@ -103,42 +72,6 @@ class MenteeTest extends ParallelTest {
                     () -> assertThat(mentee.getRoleTypes()).containsExactlyInAnyOrder(MENTEE),
                     () -> assertThat(mentee.getInterest().getSchool()).isEqualTo(MENTEE_2.getInterest().getSchool()),
                     () -> assertThat(mentee.getInterest().getMajor()).isEqualTo(MENTEE_2.getInterest().getMajor())
-            );
-        }
-    }
-
-    @Nested
-    @DisplayName("Mentee 비밀번호 수정")
-    class UpdatePassword {
-        private final Encryptor encryptor = getEncryptor();
-        private final String currentPassword = "Koddy123!@#";
-        private final String updatePassword = "MenteeUpdate123!@#";
-
-        @Test
-        @DisplayName("기존 비밀번호 확인 시 일치하지 않으면 수정할 수 없다")
-        void throwExceptionByCurrentPasswordIsNotMatch() {
-            // given
-            final Mentee mentee = MENTEE_1.toDomain().apply(1L);
-
-            // when - then
-            assertThatThrownBy(() -> mentee.updatePassword(currentPassword + "diff", updatePassword, encryptor))
-                    .isInstanceOf(MemberException.class)
-                    .hasMessage(CURRENT_PASSWORD_IS_NOT_MATCH.getMessage());
-        }
-
-        @Test
-        @DisplayName("Mentee 비밀번호를 수정한다")
-        void success() {
-            // given
-            final Mentee mentee = MENTEE_1.toDomain().apply(1L);
-
-            // when
-            mentee.updatePassword(currentPassword, updatePassword, getEncryptor());
-
-            // then
-            assertAll(
-                    () -> assertThat(encryptor.isHashMatch(currentPassword, mentee.getPassword().getValue())).isFalse(),
-                    () -> assertThat(encryptor.isHashMatch(updatePassword, mentee.getPassword().getValue())).isTrue()
             );
         }
     }

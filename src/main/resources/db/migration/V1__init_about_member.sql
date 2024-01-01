@@ -2,11 +2,9 @@ CREATE TABLE IF NOT EXISTS member
 (
     id                BIGINT AUTO_INCREMENT PRIMARY KEY,
     email             VARCHAR(200) NOT NULL UNIQUE,
-    email_status      VARCHAR(20)  NOT NULL,
-    password          VARCHAR(200) NOT NULL,
     name              VARCHAR(100) NOT NULL,
-    nationality       VARCHAR(50)  NOT NULL,
     profile_image_url VARCHAR(250) NOT NULL,
+    nationality       VARCHAR(50)  NOT NULL,
     introduction      TEXT         NOT NULL,
     type              VARCHAR(31)  NOT NULL,
     created_at        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
