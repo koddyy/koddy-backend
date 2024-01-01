@@ -68,10 +68,10 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                     .andDo(failureDocsWithAccessToken("MemberApi/Update/Mentee/BasicInfo/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
-                                    body("nationality", "국적", "KOREA\nUSA\nJAPAN\nCHINA\nVIETNAM\nOTHERS", true),
-                                    body("profileImageUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null", false),
-                                    body("introduction", "멘티 자기소개", "없으면 null", false),
-                                    body("languages", "사용 가능한 언어", "KOREAN\nENGLISH\nCHINESE\nJAPANESE\nVIETNAMESE", true),
+                                    body("nationality", "국적", "KOREA USA JAPAN CHINA VIETNAM OTHERS", true),
+                                    body("profileImageUrl", "프로필 이미지 URL", true),
+                                    body("introduction", "멘티 자기소개", true),
+                                    body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)
                             )
@@ -96,10 +96,10 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                     .andDo(successDocsWithAccessToken("MemberApi/Update/Mentee/BasicInfo/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
-                                    body("nationality", "국적", "KOREA\nUSA\nJAPAN\nCHINA\nVIETNAM\nOTHERS", true),
-                                    body("profileImageUrl", "프로필 이미지 URL", "Presigned Url로 업로드한 프로필 이미지 URL\n->기본 이미지 설정이면 null", false),
-                                    body("introduction", "멘티 자기소개", "없으면 null", false),
-                                    body("languages", "사용 가능한 언어", "KOREAN\nENGLISH\nCHINESE\nJAPANESE\nVIETNAMESE", true),
+                                    body("nationality", "국적", "KOREA USA JAPAN CHINA VIETNAM OTHERS", true),
+                                    body("profileImageUrl", "프로필 이미지 URL", true),
+                                    body("introduction", "멘티 자기소개", true),
+                                    body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)
                             )

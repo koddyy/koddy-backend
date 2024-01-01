@@ -9,24 +9,24 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalTime;
 import java.util.List;
 
-import static com.koddy.server.member.domain.model.mentor.Day.FRIDAY;
-import static com.koddy.server.member.domain.model.mentor.Day.MONDAY;
-import static com.koddy.server.member.domain.model.mentor.Day.SATURDAY;
-import static com.koddy.server.member.domain.model.mentor.Day.SUNDAY;
-import static com.koddy.server.member.domain.model.mentor.Day.THURSDAY;
-import static com.koddy.server.member.domain.model.mentor.Day.TUESDAY;
-import static com.koddy.server.member.domain.model.mentor.Day.WEDNESDAY;
+import static com.koddy.server.member.domain.model.mentor.Day.FRI;
+import static com.koddy.server.member.domain.model.mentor.Day.MON;
+import static com.koddy.server.member.domain.model.mentor.Day.SAT;
+import static com.koddy.server.member.domain.model.mentor.Day.SUN;
+import static com.koddy.server.member.domain.model.mentor.Day.THU;
+import static com.koddy.server.member.domain.model.mentor.Day.TUE;
+import static com.koddy.server.member.domain.model.mentor.Day.WED;
 
 @Getter
 @RequiredArgsConstructor
 public enum ScheduleFixture {
-    MON_09_17(MONDAY, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
-    TUE_09_17(TUESDAY, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
-    WED_09_17(WEDNESDAY, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
-    THU_09_17(THURSDAY, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
-    FRI_09_17(FRIDAY, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
-    SAT_09_17(SATURDAY, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
-    SUN_09_17(SUNDAY, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
+    MON_09_17(MON, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
+    TUE_09_17(TUE, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
+    WED_09_17(WED, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
+    THU_09_17(THU, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
+    FRI_09_17(FRI, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
+    SAT_09_17(SAT, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
+    SUN_09_17(SUN, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
     ;
 
     private final Day day;

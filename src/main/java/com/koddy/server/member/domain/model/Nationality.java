@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Nationality {
-    ANONYMOUS("Anonymous", "Anonumous"),
     KOREA("한국", "Korea"),
     USA("미국", "USA"),
     JAPAN("일본", "Japen"),
