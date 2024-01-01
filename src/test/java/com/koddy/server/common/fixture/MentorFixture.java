@@ -1,5 +1,7 @@
 package com.koddy.server.common.fixture;
 
+import com.koddy.server.auth.domain.model.AuthMember;
+import com.koddy.server.auth.domain.model.AuthToken;
 import com.koddy.server.auth.infrastructure.oauth.google.response.GoogleUserResponse;
 import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
@@ -9,9 +11,12 @@ import com.koddy.server.member.domain.model.mentor.UniversityProfile;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN;
+import static com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN;
 import static com.koddy.server.member.domain.model.Language.CHINESE;
 import static com.koddy.server.member.domain.model.Language.ENGLISH;
 import static com.koddy.server.member.domain.model.Language.JAPANESE;
@@ -111,6 +116,13 @@ public enum MentorFixture {
                 this.email.getValue(),
                 true,
                 "kr"
+        );
+    }
+
+    public AuthMember toAuthMember() {
+        return new AuthMember(
+                new AuthMember.MemberInfo(toDomain().apply(1L, LocalDateTime.now())),
+                new AuthToken(ACCESS_TOKEN, REFRESH_TOKEN)
         );
     }
 }

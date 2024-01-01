@@ -80,6 +80,12 @@ public abstract class ControllerTest {
                 .build();
     }
 
+    public record PathWithVariables(
+            String url,
+            Object... variables
+    ) {
+    }
+
     /**
      * GET
      */
@@ -88,9 +94,9 @@ public abstract class ControllerTest {
                 .get(url);
     }
 
-    protected RequestBuilder get(final String url, final List<Object> uriVariables) {
+    protected RequestBuilder get(final PathWithVariables path) {
         return RestDocumentationRequestBuilders
-                .get(url, uriVariables);
+                .get(path.url, path.variables);
     }
 
     @SafeVarargs
@@ -107,8 +113,8 @@ public abstract class ControllerTest {
     }
 
     @SafeVarargs
-    protected final RequestBuilder get(final String url, final List<Object> uriVariables, final Map<String, String>... params) {
-        MockHttpServletRequestBuilder requestBuilder = RestDocumentationRequestBuilders.get(url, uriVariables);
+    protected final RequestBuilder get(final PathWithVariables path, final Map<String, String>... params) {
+        MockHttpServletRequestBuilder requestBuilder = RestDocumentationRequestBuilders.get(path.url, path.variables);
 
         for (final Map<String, String> param : params) {
             for (final String key : param.keySet()) {
@@ -125,9 +131,9 @@ public abstract class ControllerTest {
                 .header(AUTHORIZATION, applyAccessToken());
     }
 
-    protected RequestBuilder getWithAccessToken(final String url, final List<Object> uriVariables) {
+    protected RequestBuilder getWithAccessToken(final PathWithVariables path) {
         return RestDocumentationRequestBuilders
-                .get(url, uriVariables)
+                .get(path.url, path.variables)
                 .header(AUTHORIZATION, applyAccessToken());
     }
 
@@ -140,9 +146,9 @@ public abstract class ControllerTest {
                 .contentType(APPLICATION_JSON);
     }
 
-    protected RequestBuilder post(final String url, final List<Object> uriVariables) {
+    protected RequestBuilder post(final PathWithVariables path) {
         return RestDocumentationRequestBuilders
-                .post(url, uriVariables)
+                .post(path.url, path.variables)
                 .contentType(APPLICATION_JSON);
     }
 
@@ -153,9 +159,9 @@ public abstract class ControllerTest {
                 .content(toBody(data));
     }
 
-    protected RequestBuilder post(final String url, final List<Object> uriVariables, final Object data) {
+    protected RequestBuilder post(final PathWithVariables path, final Object data) {
         return RestDocumentationRequestBuilders
-                .post(url, uriVariables)
+                .post(path.url, path.variables)
                 .contentType(APPLICATION_JSON)
                 .content(toBody(data));
     }
@@ -167,9 +173,9 @@ public abstract class ControllerTest {
                 .header(AUTHORIZATION, applyAccessToken());
     }
 
-    protected RequestBuilder postWithAccessToken(final String url, final List<Object> uriVariables) {
+    protected RequestBuilder postWithAccessToken(final PathWithVariables path) {
         return RestDocumentationRequestBuilders
-                .post(url, uriVariables)
+                .post(path.url, path.variables)
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, applyAccessToken());
     }
@@ -182,9 +188,9 @@ public abstract class ControllerTest {
                 .content(toBody(data));
     }
 
-    protected RequestBuilder postWithAccessToken(final String url, final List<Object> uriVariables, final Object data) {
+    protected RequestBuilder postWithAccessToken(final PathWithVariables path, final Object data) {
         return RestDocumentationRequestBuilders
-                .post(url, uriVariables)
+                .post(path.url, path.variables)
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, applyAccessToken())
                 .content(toBody(data));
@@ -196,9 +202,9 @@ public abstract class ControllerTest {
                 .cookie(applyRefreshToken());
     }
 
-    protected RequestBuilder postWithRefreshToken(final String url, final List<Object> uriVariables) {
+    protected RequestBuilder postWithRefreshToken(final PathWithVariables path) {
         return RestDocumentationRequestBuilders
-                .post(url, uriVariables)
+                .post(path.url, path.variables)
                 .cookie(applyRefreshToken());
     }
 
@@ -326,9 +332,9 @@ public abstract class ControllerTest {
                 .content(toBody(data));
     }
 
-    protected RequestBuilder patch(final String url, final List<Object> uriVariables, final Object data) {
+    protected RequestBuilder patch(final PathWithVariables path, final Object data) {
         return RestDocumentationRequestBuilders
-                .patch(url, uriVariables)
+                .patch(path.url, path.variables)
                 .contentType(APPLICATION_JSON)
                 .content(toBody(data));
     }
@@ -341,9 +347,9 @@ public abstract class ControllerTest {
                 .content(toBody(data));
     }
 
-    protected RequestBuilder patchWithAccessToken(final String url, final List<Object> uriVariables, final Object data) {
+    protected RequestBuilder patchWithAccessToken(final PathWithVariables path, final Object data) {
         return RestDocumentationRequestBuilders
-                .patch(url, uriVariables)
+                .patch(path.url, path.variables)
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, applyAccessToken())
                 .content(toBody(data));
@@ -352,9 +358,9 @@ public abstract class ControllerTest {
     /**
      * DELETE
      */
-    protected RequestBuilder deleteWithAccessToken(final String url, final List<Object> uriVariables) {
+    protected RequestBuilder deleteWithAccessToken(final PathWithVariables path) {
         return RestDocumentationRequestBuilders
-                .delete(url, uriVariables)
+                .delete(path.url, path.variables)
                 .header(AUTHORIZATION, applyAccessToken());
     }
 
