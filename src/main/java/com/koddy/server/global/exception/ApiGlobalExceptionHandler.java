@@ -2,6 +2,8 @@ package com.koddy.server.global.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.koddy.server.auth.domain.model.oauth.OAuthUserResponse;
+import com.koddy.server.auth.exception.OAuthUserNotFoundException;
 import com.koddy.server.global.base.KoddyException;
 import com.koddy.server.global.base.KoddyExceptionCode;
 import com.koddy.server.global.exception.alert.SlackAlertManager;
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.koddy.server.global.log.RequestMetadataExtractor.getRequestUriWithQueryString;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Slf4j
 @RestControllerAdvice
@@ -38,6 +41,14 @@ public class ApiGlobalExceptionHandler {
     @ExceptionHandler(KoddyException.class)
     public ResponseEntity<ExceptionResponse> handleKoddyException(final KoddyException exception) {
         return createExceptionResponse(exception.getCode());
+    }
+
+    @ExceptionHandler(OAuthUserNotFoundException.class)
+    public ResponseEntity<OAuthExceptionResponse> handleOAuthUserNotFoundException(final OAuthUserNotFoundException e) {
+        final OAuthUserResponse response = e.getResponse();
+        return ResponseEntity
+                .status(NOT_FOUND)
+                .body(new OAuthExceptionResponse(response));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
