@@ -41,6 +41,31 @@ spring:
       s3:
         bucket: ${S3_BUCKET:s3-bucket}
 
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 30MB
+
+oauth2:
+  google:
+    grant-type: authorization_code
+    client-id: ${OAUTH_GOOGLE_CLIENT_ID}
+    client-secret: ${OAUTH_GOOGLE_CLIENT_SECRET}
+    redirect-uri: ${OAUTH_GOOGLE_REDIRECT_URI}
+    scope: openid, profile, email
+    auth-url: https://accounts.google.com/o/oauth2/v2/auth
+    token-url: https://www.googleapis.com/oauth2/v4/token
+    user-info-url: https://www.googleapis.com/oauth2/v3/userinfo
+  kakao:
+    grant-type: authorization_code
+    client-id: ${OAUTH_KAKAO_CLIENT_ID}
+    client-secret: ${OAUTH_KAKAO_CLIENT_SECRET}
+    redirect-uri: ${OAUTH_KAKAO_REDIRECT_URI}
+    scope: profile_nickname, profile_image, account_email
+    auth-url: https://kauth.kakao.com/oauth/authorize
+    token-url: https://kauth.kakao.com/oauth/token
+    user-info-url: https://kapi.kakao.com/v2/user/me
+
 cors:
   allowed-origin-patterns: http://localhost:3000
 
