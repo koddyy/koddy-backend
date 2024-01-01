@@ -38,6 +38,7 @@ include::{snippets}/FileApi/GetPresignedUrl/response-fields.adoc[]
 ==== HTTP Request
 
 include::{snippets}/OAuthApi/Access/Success/http-request.adoc[]
+include::{snippets}/OAuthApi/Access/Success/path-parameters.adoc[]
 include::{snippets}/OAuthApi/Access/Success/query-parameters.adoc[]
 
 ==== HTTP Response

@@ -158,7 +158,7 @@ class OAuthApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("authorizationCode", "Authorization Code", true),
                                     body("redirectUri", "Redirect Uri", "Authorization Code 요청 시 redirectUri와 반드시 동일한 값", true),
-                                    body("state", "State 값", "Authorization Code 요청 시 state와 반드시 동일한 값", true)
+                                    body("state", "State 값", "Authorization Code Redirect 응답 시 QueryParam으로 넘어오는 State 값", true)
                             ),
                             responseFields(
                                     body("name", "회원가입 진행 시 이름 정보 기본값"),
@@ -196,7 +196,7 @@ class OAuthApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("authorizationCode", "Authorization Code", true),
                                     body("redirectUri", "Redirect Uri", "Authorization Code 요청 시 redirectUri와 반드시 동일한 값", true),
-                                    body("state", "State 값", "Authorization Code 요청 시 state와 반드시 동일한 값", true)
+                                    body("state", "State 값", "Authorization Code Redirect 응답 시 QueryParam으로 넘어오는 State 값", true)
                             ),
                             responseHeaders(
                                     header(AUTHORIZATION, "Access Token")
