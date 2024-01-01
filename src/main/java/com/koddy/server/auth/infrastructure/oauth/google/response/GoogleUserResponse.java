@@ -16,11 +16,6 @@ public record GoogleUserResponse(
         String locale
 ) implements OAuthUserResponse {
     @Override
-    public String socialId() {
-        return sub;
-    }
-
-    @Override
     public String profileImageUrl() {
         return picture;
     }

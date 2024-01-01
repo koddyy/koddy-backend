@@ -47,11 +47,6 @@ public record KakaoUserResponse(
     }
 
     @Override
-    public String socialId() {
-        return id;
-    }
-
-    @Override
     public String name() {
         return kakaoAccount.profile.nickname;
     }

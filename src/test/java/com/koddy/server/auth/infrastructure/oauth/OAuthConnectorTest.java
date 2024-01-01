@@ -136,7 +136,6 @@ class OAuthConnectorTest {
 
             // then
             assertAll(
-                    () -> assertThat(result.socialId()).isNotNull(),
                     () -> assertThat(result.name()).isEqualTo(MENTOR_1.getName()),
                     () -> assertThat(result.email()).isEqualTo(MENTOR_1.getEmail().getValue()),
                     () -> assertThat(result.profileImageUrl()).isEqualTo(MENTOR_1.getProfileImageUrl())

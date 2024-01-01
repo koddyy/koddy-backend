@@ -131,4 +131,8 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     }
 
     protected abstract boolean isProfileComplete();
+
+    public enum MemberType {
+        MENTOR, MENTEE
+    }
 }
