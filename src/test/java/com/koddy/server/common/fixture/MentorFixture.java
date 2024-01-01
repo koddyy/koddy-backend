@@ -1,5 +1,6 @@
 package com.koddy.server.common.fixture;
 
+import com.koddy.server.auth.infrastructure.oauth.google.response.GoogleUserResponse;
 import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.koddy.server.member.domain.model.Language.CHINESE;
 import static com.koddy.server.member.domain.model.Language.ENGLISH;
@@ -97,5 +99,18 @@ public enum MentorFixture {
 
     public Mentor toDomain(final List<Schedule> schedules) {
         return new Mentor(email, name, profileImageUrl, introduction, languages, universityProfile, meetingUrl, schedules);
+    }
+
+    public GoogleUserResponse toGoogleUserResponse() {
+        return new GoogleUserResponse(
+                UUID.randomUUID().toString(),
+                this.name,
+                this.name,
+                this.name,
+                this.profileImageUrl,
+                this.email.getValue(),
+                true,
+                "kr"
+        );
     }
 }

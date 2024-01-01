@@ -1,5 +1,6 @@
 package com.koddy.server.common.fixture;
 
+import com.koddy.server.auth.infrastructure.oauth.google.response.GoogleUserResponse;
 import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Nationality;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.koddy.server.member.domain.model.Language.CHINESE;
 import static com.koddy.server.member.domain.model.Language.ENGLISH;
@@ -87,5 +89,18 @@ public enum MenteeFixture {
 
     public Mentee toDomain() {
         return new Mentee(email, name, profileImageUrl, nationality, introduction, languages, interest);
+    }
+
+    public GoogleUserResponse toGoogleUserResponse() {
+        return new GoogleUserResponse(
+                UUID.randomUUID().toString(),
+                this.name,
+                this.name,
+                this.name,
+                this.profileImageUrl,
+                this.email.getValue(),
+                true,
+                "kr"
+        );
     }
 }
