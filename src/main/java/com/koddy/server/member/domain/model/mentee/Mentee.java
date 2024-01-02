@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -51,6 +52,6 @@ public class Mentee extends Member<Mentee> {
 
     @Override
     public boolean isProfileComplete() {
-        return true;
+        return StringUtils.hasText(introduction);
     }
 }

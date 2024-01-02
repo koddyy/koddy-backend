@@ -17,16 +17,16 @@ public class UniversityProfile {
     @Column(name = "major", nullable = false)
     private String major;
 
-    @Column(name = "grade", nullable = false)
-    private int grade;
+    @Column(name = "entered_in", nullable = false)
+    private int enteredIn;
 
-    public UniversityProfile(final String school, final String major, final int grade) {
+    public UniversityProfile(final String school, final String major, final int enteredIn) {
         this.school = school;
         this.major = major;
-        this.grade = grade;
+        this.enteredIn = enteredIn;
     }
 
-    public UniversityProfile update(final String school, final String major, final int grade) {
-        return new UniversityProfile(school, major, grade);
+    public UniversityProfile update(final String school, final String major, final int enteredIn) {
+        return new UniversityProfile(school, major, enteredIn);
     }
 }
