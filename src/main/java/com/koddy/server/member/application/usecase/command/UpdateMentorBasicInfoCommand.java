@@ -12,7 +12,6 @@ public record UpdateMentorBasicInfoCommand(
         List<Language> languages,
         String school,
         String major,
-        int grade,
-        String meetingUrl
+        int enteredIn
 ) {
 }

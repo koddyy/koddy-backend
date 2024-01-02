@@ -48,8 +48,7 @@ class SignUpApiControllerTest extends ControllerTest {
                     MENTOR_1.getLanguages(),
                     MENTOR_1.getUniversityProfile().getSchool(),
                     MENTOR_1.getUniversityProfile().getMajor(),
-                    MENTOR_1.getUniversityProfile().getGrade(),
-                    MENTOR_1.getMeetingUrl(),
+                    MENTOR_1.getUniversityProfile().getEnteredIn(),
                     MENTOR_1.getSchedules()
                             .stream()
                             .map(it -> new MentorScheduleRequest(it.getDay(), it.getPeriod().getStartTime(), it.getPeriod().getEndTime()))
@@ -71,12 +70,11 @@ class SignUpApiControllerTest extends ControllerTest {
                                     body("email", "이메일", true),
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
-                                    body("introduction", "자기소개", true),
+                                    body("introduction", "자기소개", false),
                                     body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
-                                    body("grade", "학년", true),
-                                    body("meetingUrl", "커피챗 링크", false),
+                                    body("enteredIn", "학번", true),
                                     body("schedules", "멘토링 스케줄", false),
                                     body("schedules[].day", "날짜", "MON TUE WED THU FRI SAT SUN", false),
                                     body("schedules[].startTime", "시작 시간", false),
@@ -126,7 +124,7 @@ class SignUpApiControllerTest extends ControllerTest {
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("nationality", "국적", "KOREA USA JAPAN CHINA VIETNAM OTHERS", true),
-                                    body("introduction", "자기소개", true),
+                                    body("introduction", "자기소개", false),
                                     body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)

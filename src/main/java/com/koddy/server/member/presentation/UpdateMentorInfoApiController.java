@@ -40,8 +40,7 @@ public class UpdateMentorInfoApiController {
                 request.languages(),
                 request.school(),
                 request.major(),
-                request.grade(),
-                request.meetingUrl()
+                request.enteredIn()
         ));
         return ResponseEntity.noContent().build();
     }

@@ -53,8 +53,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                 MENTOR_1.getLanguages(),
                 MENTOR_1.getUniversityProfile().getSchool(),
                 MENTOR_1.getUniversityProfile().getMajor(),
-                MENTOR_1.getUniversityProfile().getGrade(),
-                MENTOR_1.getMeetingUrl()
+                MENTOR_1.getUniversityProfile().getEnteredIn()
         );
 
         @Test
@@ -77,12 +76,11 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
-                                    body("introduction", "멘토 자기소개", true),
+                                    body("introduction", "멘토 자기소개", false),
                                     body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
-                                    body("grade", "학년", true),
-                                    body("meetingUrl", "커피챗 링크", false)
+                                    body("enteredIn", "학번", true)
                             )
                     )));
         }
@@ -106,12 +104,11 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
-                                    body("introduction", "멘토 자기소개", true),
+                                    body("introduction", "멘토 자기소개", false),
                                     body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
-                                    body("grade", "학년", true),
-                                    body("meetingUrl", "커피챗 링크", false)
+                                    body("enteredIn", "학번", true)
                             )
                     )));
         }

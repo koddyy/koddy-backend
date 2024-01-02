@@ -70,7 +70,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                                     body("name", "이름", true),
                                     body("nationality", "국적", "KOREA USA JAPAN CHINA VIETNAM OTHERS", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
-                                    body("introduction", "멘티 자기소개", true),
+                                    body("introduction", "멘티 자기소개", false),
                                     body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)
@@ -98,7 +98,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                                     body("name", "이름", true),
                                     body("nationality", "국적", "KOREA USA JAPAN CHINA VIETNAM OTHERS", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
-                                    body("introduction", "멘티 자기소개", true),
+                                    body("introduction", "멘티 자기소개", false),
                                     body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)

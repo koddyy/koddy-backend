@@ -23,7 +23,6 @@ public class SignUpUsecase {
                 command.introduction(),
                 command.languages(),
                 command.universityProfile(),
-                command.meetingUrl(),
                 command.schedules()
         )).getId();
     }
