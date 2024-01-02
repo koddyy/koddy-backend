@@ -11,7 +11,6 @@ import com.koddy.server.member.domain.model.mentee.Mentee;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -111,7 +110,7 @@ public enum MenteeFixture {
 
     public AuthMember toAuthMember() {
         return new AuthMember(
-                new AuthMember.MemberInfo(toDomain().apply(1L, LocalDateTime.now())),
+                new AuthMember.MemberInfo(toDomain().apply(1L)),
                 new AuthToken(ACCESS_TOKEN, REFRESH_TOKEN)
         );
     }
