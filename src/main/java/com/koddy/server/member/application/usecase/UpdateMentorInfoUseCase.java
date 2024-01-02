@@ -23,8 +23,7 @@ public class UpdateMentorInfoUseCase {
                 command.languages(),
                 command.school(),
                 command.major(),
-                command.grade(),
-                command.meetingUrl()
+                command.enteredIn()
         );
     }
 

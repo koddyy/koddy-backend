@@ -13,7 +13,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,7 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     protected Nationality nationality;
 
     @Lob
-    @Column(name = "introduction", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "introduction", columnDefinition = "TEXT")
     protected String introduction;
 
     @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
@@ -97,13 +96,6 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         );
     }
 
-    protected String checkEmptyValue(final String value) {
-        if (StringUtils.hasText(value)) {
-            return value;
-        }
-        return EMPTY;
-    }
-
     protected void updateBasicInfo(
             final String name,
             final Nationality nationality,
@@ -113,8 +105,8 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     ) {
         this.name = name;
         this.nationality = nationality;
-        this.profileImageUrl = checkEmptyValue(profileImageUrl);
-        this.introduction = checkEmptyValue(introduction);
+        this.profileImageUrl = profileImageUrl;
+        this.introduction = introduction;
         applyLanguages(languages);
     }
 

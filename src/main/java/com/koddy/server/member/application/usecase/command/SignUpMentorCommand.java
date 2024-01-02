@@ -14,7 +14,6 @@ public record SignUpMentorCommand(
         String introduction,
         List<Language> languages,
         UniversityProfile universityProfile,
-        String meetingUrl,
         List<Schedule> schedules
 ) {
 }

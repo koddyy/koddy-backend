@@ -36,10 +36,21 @@ class MenteeTest extends ParallelTest {
     }
 
     @Test
-    @DisplayName("Mentee 프로필이 완성되었는지 확인한다 (커피챗 링크, 스케줄)")
+    @DisplayName("Mentee 프로필이 완성되었는지 확인한다 (자기소개)")
     void isProfileComplete() {
-        final Mentee mentee = MENTEE_1.toDomain();
-        assertThat(mentee.isProfileComplete()).isTrue();
+        final Mentee menteeA = MENTEE_1.toDomain();
+        assertThat(menteeA.isProfileComplete()).isTrue();
+
+        final Mentee menteeB = new Mentee(
+                MENTEE_2.getEmail(),
+                MENTEE_2.getName(),
+                MENTEE_2.getProfileImageUrl(),
+                MENTEE_2.getNationality(),
+                null,
+                MENTEE_2.getLanguages(),
+                MENTEE_2.getInterest()
+        );
+        assertThat(menteeB.isProfileComplete()).isFalse();
     }
 
     @Nested

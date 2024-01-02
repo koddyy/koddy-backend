@@ -39,8 +39,7 @@ class UpdateMentorInfoUseCaseTest extends UseCaseTest {
                 MENTOR_2.getLanguages(),
                 MENTOR_2.getUniversityProfile().getSchool(),
                 MENTOR_2.getUniversityProfile().getMajor(),
-                MENTOR_2.getUniversityProfile().getGrade(),
-                MENTOR_2.getMeetingUrl()
+                MENTOR_2.getUniversityProfile().getEnteredIn()
         );
         given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
 
@@ -58,8 +57,7 @@ class UpdateMentorInfoUseCaseTest extends UseCaseTest {
                 () -> assertThat(mentor.getRoleTypes()).containsExactlyInAnyOrder(MENTOR),
                 () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(command.school()),
                 () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(command.major()),
-                () -> assertThat(mentor.getUniversityProfile().getGrade()).isEqualTo(command.grade()),
-                () -> assertThat(mentor.getMeetingUrl()).isEqualTo(command.meetingUrl())
+                () -> assertThat(mentor.getUniversityProfile().getEnteredIn()).isEqualTo(command.enteredIn())
         );
     }
 

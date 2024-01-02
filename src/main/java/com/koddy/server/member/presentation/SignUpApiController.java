@@ -37,8 +37,7 @@ public class SignUpApiController {
                 request.profileImageUrl(),
                 request.introduction(),
                 request.languages(),
-                new UniversityProfile(request.school(), request.major(), request.grade()),
-                request.meetingUrl(),
+                new UniversityProfile(request.school(), request.major(), request.enteredIn()),
                 request.toSchedules()
         ));
         return ResponseEntity.ok(new SignUpResponse(memberId));

@@ -21,7 +21,6 @@ public record SignUpMentorRequest(
         @NotBlank(message = "프로필 이미지 URL은 필수입니다.")
         String profileImageUrl,
 
-        @NotBlank(message = "자기소개는 필수입니다.")
         String introduction,
 
         @NotEmpty(message = "사용 가능한 언어는 하나 이상 선택해주세요.")
@@ -33,10 +32,8 @@ public record SignUpMentorRequest(
         @NotBlank(message = "전공은 필수입니다.")
         String major,
 
-        @NotNull(message = "학년은 필수입니다.")
-        Integer grade,
-
-        String meetingUrl,
+        @NotNull(message = "학번은 필수입니다.")
+        Integer enteredIn,
 
         List<MentorScheduleRequest> schedules
 ) {
