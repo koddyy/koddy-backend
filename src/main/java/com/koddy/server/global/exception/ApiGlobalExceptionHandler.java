@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -113,15 +112,6 @@ public class ApiGlobalExceptionHandler {
     ) {
         log.warn("handleRequestDataException: ", exception);
         return createExceptionResponse(GlobalExceptionCode.VALIDATION_ERROR);
-    }
-
-    /**
-     * 존재하지 않는 Endpoint에 대한 처리
-     */
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleNoHandlerFoundException(final NoHandlerFoundException exception) {
-        log.warn("handleNoHandlerFoundException: ", exception);
-        return createExceptionResponse(GlobalExceptionCode.NOT_SUPPORTED_URI_ERROR);
     }
 
     /**

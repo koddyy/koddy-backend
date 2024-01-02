@@ -1,0 +1,3 @@
+[submodule "koddy-secret"]
+	path = koddy-secret
+	url = https://github.com/koddyy/koddy-backend-secret
