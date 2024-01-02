@@ -90,6 +90,7 @@ dependencies {
     testImplementation("org.flywaydb.flyway-test-extensions:flyway-spring-test:${property("flywayTestExtensionVersion")}")
 }
 
+// QueryDsl QClass
 val queryDslTypeDir: String = "src/main/generated"
 
 tasks.withType<JavaCompile>().configureEach {
@@ -110,6 +111,7 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+// build REST Docs
 val asciidoctorExt: Configuration by configurations.creating
 dependencies {
     asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
@@ -144,6 +146,22 @@ tasks {
     }
 }
 
+// Copy Submodule
+tasks.register<Copy>("copySecret") {
+    from("./koddy-secret")
+    include("application*.yml")
+    into("./src/main/resources")
+}
+
+tasks.named("processResources") {
+    dependsOn("copySecret")
+}
+
+tasks.named<JavaCompile>("compileJava") {
+    inputs.files(tasks.named("processResources"))
+}
+
+// jar & bootJar
 tasks.named<Jar>("jar") {
     enabled = false
 }
