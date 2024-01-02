@@ -56,18 +56,18 @@ spring:
 oauth2:
   google:
     grant-type: authorization_code
-    client-id: ${OAUTH_GOOGLE_CLIENT_ID}
-    client-secret: ${OAUTH_GOOGLE_CLIENT_SECRET}
-    redirect-uri: ${OAUTH_GOOGLE_REDIRECT_URI}
+    client-id: ${OAUTH_GOOGLE_CLIENT_ID:google-cliend-id}
+    client-secret: ${OAUTH_GOOGLE_CLIENT_SECRET:google-client-secret}
+    redirect-uri: ${OAUTH_GOOGLE_REDIRECT_URI:google-client-redirect-uri}
     scope: openid, profile, email
     auth-url: https://accounts.google.com/o/oauth2/v2/auth
     token-url: https://www.googleapis.com/oauth2/v4/token
     user-info-url: https://www.googleapis.com/oauth2/v3/userinfo
   kakao:
     grant-type: authorization_code
-    client-id: ${OAUTH_KAKAO_CLIENT_ID}
-    client-secret: ${OAUTH_KAKAO_CLIENT_SECRET}
-    redirect-uri: ${OAUTH_KAKAO_REDIRECT_URI}
+    client-id: ${OAUTH_KAKAO_CLIENT_ID:kakao-client-id}
+    client-secret: ${OAUTH_KAKAO_CLIENT_SECRET:kakao-client-secret}
+    redirect-uri: ${OAUTH_KAKAO_REDIRECT_URI:kakao-redirect-uri}
     scope: profile_nickname, profile_image, account_email
     auth-url: https://kauth.kakao.com/oauth/authorize
     token-url: https://kauth.kakao.com/oauth/token
@@ -86,11 +86,16 @@ slack:
     url: ${SLACK_WEBHOOK_URL:slack-webhook-url}
 
 springdoc:
+  server:
+    url: http://localhost:8080
   swagger-ui:
-    path: /swagger
-    display-request-duration: true
+    path: /api/swagger
     operations-sorter: alpha
     tags-sorter: alpha
+    disable-swagger-default-url: true
+    display-request-duration: true
+  api-docs:
+    path: /api-docs
 
 decorator:
   datasource:
