@@ -9,7 +9,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -21,21 +21,21 @@ public abstract class BaseEntity<T> {
     private Long id;
 
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     @Column(name = "last_modified_at")
-    private LocalDateTime lastModifiedAt;
+    private ZonedDateTime lastModifiedAt;
 
     @PrePersist
     void prePersist() {
-        final LocalDateTime now = LocalDateTime.now();
+        final ZonedDateTime now = ZonedDateTime.now();
         createdAt = now;
         lastModifiedAt = now;
     }
 
     @PreUpdate
     void preUpdate() {
-        lastModifiedAt = LocalDateTime.now();
+        lastModifiedAt = ZonedDateTime.now();
     }
 
     @SuppressWarnings("unchecked")
@@ -47,7 +47,7 @@ public abstract class BaseEntity<T> {
 
     @SuppressWarnings("unchecked")
     @VisibleForTesting
-    public T apply(final long id, final LocalDateTime now) {
+    public T apply(final long id, final ZonedDateTime now) {
         this.id = id;
         this.createdAt = now;
         this.lastModifiedAt = now;
