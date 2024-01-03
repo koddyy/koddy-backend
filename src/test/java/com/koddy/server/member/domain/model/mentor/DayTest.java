@@ -1,13 +1,14 @@
 package com.koddy.server.member.domain.model.mentor;
 
+import com.koddy.server.common.ParallelTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Member/Mentor -> 도메인 [Day VO] 테스트")
-class DayTest {
+@DisplayName("Member/Mentor -> 도메인 [Day] 테스트")
+class DayTest extends ParallelTest {
     @ParameterizedTest
     @CsvSource(
             value = {

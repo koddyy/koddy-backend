@@ -11,7 +11,7 @@ import static com.koddy.server.member.exception.MemberExceptionCode.INVALID_EMAI
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@DisplayName("Member -> 도메인 [Email VO] 테스트")
+@DisplayName("Member -> 도메인 [Email] 테스트")
 class EmailTest extends ParallelTest {
     @Nested
     @DisplayName("Email 생성")
