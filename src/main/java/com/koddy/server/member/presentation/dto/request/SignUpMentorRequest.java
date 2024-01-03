@@ -1,6 +1,6 @@
 package com.koddy.server.member.presentation.dto.request;
 
-import com.koddy.server.member.domain.model.Language;
+import com.koddy.server.member.domain.model.mentor.Day;
 import com.koddy.server.member.domain.model.mentor.Period;
 import com.koddy.server.member.domain.model.mentor.Schedule;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +24,7 @@ public record SignUpMentorRequest(
         String introduction,
 
         @NotEmpty(message = "사용 가능한 언어는 하나 이상 선택해주세요.")
-        List<Language> languages,
+        List<String> languages,
 
         @NotBlank(message = "학교는 필수입니다.")
         String school,
@@ -42,7 +42,7 @@ public record SignUpMentorRequest(
             return List.of();
         }
         return schedules.stream()
-                .map(it -> new Schedule(it.day(), Period.of(it.startTime(), it.endTime())))
+                .map(it -> new Schedule(Day.from(it.day()), Period.of(it.startTime(), it.endTime())))
                 .toList();
     }
 }

@@ -3,6 +3,7 @@ package com.koddy.server.member.presentation;
 import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.UpdateMentorInfoUseCase;
+import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.dto.request.MentorScheduleRequest;
@@ -50,7 +51,10 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                 MENTOR_1.getName(),
                 MENTOR_1.getProfileImageUrl(),
                 MENTOR_1.getIntroduction(),
-                MENTOR_1.getLanguages(),
+                MENTOR_1.getLanguages()
+                        .stream()
+                        .map(Language::getCode)
+                        .toList(),
                 MENTOR_1.getUniversityProfile().getSchool(),
                 MENTOR_1.getUniversityProfile().getMajor(),
                 MENTOR_1.getUniversityProfile().getEnteredIn()
@@ -119,8 +123,8 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
     class UpdateSchedule {
         private static final String BASE_URL = "/api/mentors/me/schedules";
         private final UpdateMentorScheduleRequest request = new UpdateMentorScheduleRequest(List.of(
-                new MentorScheduleRequest(MON, LocalTime.of(9, 0), LocalTime.of(17, 0)),
-                new MentorScheduleRequest(WED, LocalTime.of(13, 0), LocalTime.of(20, 0))
+                new MentorScheduleRequest(MON.getKor(), LocalTime.of(9, 0), LocalTime.of(17, 0)),
+                new MentorScheduleRequest(WED.getKor(), LocalTime.of(13, 0), LocalTime.of(20, 0))
         ));
 
         @Test
@@ -142,7 +146,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                     .andDo(failureDocsWithAccessToken("MemberApi/Update/Mentor/Schedule/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("schedules", "멘토링 스케줄", false),
-                                    body("schedules[].day", "날짜", "MON TUE WED THU FRI SAT SUN", false),
+                                    body("schedules[].day", "날짜", "월 화 수 목 금 토 일", false),
                                     body("schedules[].startTime", "시작 시간", false),
                                     body("schedules[].endTime", "종료 시간", false)
                             )
@@ -167,7 +171,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                     .andDo(successDocsWithAccessToken("MemberApi/Update/Mentor/Schedule/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("schedules", "멘토링 스케줄", false),
-                                    body("schedules[].day", "날짜", "MON TUE WED THU FRI SAT SUN", false),
+                                    body("schedules[].day", "날짜", "월 화 수 목 금 토 일", false),
                                     body("schedules[].startTime", "시작 시간", false),
                                     body("schedules[].endTime", "종료 시간", false)
                             )

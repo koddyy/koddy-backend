@@ -3,6 +3,7 @@ package com.koddy.server.member.presentation;
 import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.UpdateMenteeInfoUseCase;
+import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.dto.request.UpdateMenteeBasicInfoRequest;
@@ -41,10 +42,13 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
         private static final String BASE_URL = "/api/mentees/me/basic-info";
         private final UpdateMenteeBasicInfoRequest request = new UpdateMenteeBasicInfoRequest(
                 MENTEE_1.getName(),
-                MENTEE_1.getNationality(),
+                MENTEE_1.getNationality().getKor(),
                 MENTEE_1.getProfileImageUrl(),
                 MENTEE_1.getIntroduction(),
-                MENTEE_1.getLanguages(),
+                MENTEE_1.getLanguages()
+                        .stream()
+                        .map(Language::getCode)
+                        .toList(),
                 MENTEE_1.getInterest().getSchool(),
                 MENTEE_1.getInterest().getMajor()
         );
@@ -68,7 +72,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                     .andDo(failureDocsWithAccessToken("MemberApi/Update/Mentee/BasicInfo/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
-                                    body("nationality", "국적", "KOREA USA JAPAN CHINA VIETNAM OTHERS", true),
+                                    body("nationality", "국적", "한국 미국 일본 중국 베트남 Others", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘티 자기소개", false),
                                     body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
@@ -96,7 +100,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                     .andDo(successDocsWithAccessToken("MemberApi/Update/Mentee/BasicInfo/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
-                                    body("nationality", "국적", "KOREA USA JAPAN CHINA VIETNAM OTHERS", true),
+                                    body("nationality", "국적", "한국 미국 일본 중국 베트남 Others", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘티 자기소개", false),
                                     body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
