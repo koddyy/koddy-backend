@@ -3,6 +3,8 @@ package com.koddy.server.member.domain.model.mentor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+
 @Getter
 @RequiredArgsConstructor
 public enum Day {
@@ -16,4 +18,16 @@ public enum Day {
 
     private final String kor;
     private final String eng;
+
+    public static Day of(final int year, final int month, final int day) {
+        return switch (LocalDate.of(year, month, day).getDayOfWeek()) {
+            case MONDAY -> MON;
+            case TUESDAY -> TUE;
+            case WEDNESDAY -> WED;
+            case THURSDAY -> THU;
+            case FRIDAY -> FRI;
+            case SATURDAY -> SAT;
+            case SUNDAY -> SUN;
+        };
+    }
 }
