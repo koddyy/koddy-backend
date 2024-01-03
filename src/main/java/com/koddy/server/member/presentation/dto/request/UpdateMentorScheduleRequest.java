@@ -1,5 +1,6 @@
 package com.koddy.server.member.presentation.dto.request;
 
+import com.koddy.server.member.domain.model.mentor.Day;
 import com.koddy.server.member.domain.model.mentor.Period;
 import com.koddy.server.member.domain.model.mentor.Schedule;
 import lombok.Builder;
@@ -15,7 +16,7 @@ public record UpdateMentorScheduleRequest(
             return List.of();
         }
         return schedules.stream()
-                .map(it -> new Schedule(it.day(), Period.of(it.startTime(), it.endTime())))
+                .map(it -> new Schedule(Day.from(it.day()), Period.of(it.startTime(), it.endTime())))
                 .toList();
     }
 }

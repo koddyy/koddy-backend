@@ -2,6 +2,7 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.SignUpUsecase;
+import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.presentation.dto.request.MentorScheduleRequest;
 import com.koddy.server.member.presentation.dto.request.SignUpMenteeRequest;
 import com.koddy.server.member.presentation.dto.request.SignUpMentorRequest;
@@ -45,13 +46,16 @@ class SignUpApiControllerTest extends ControllerTest {
                     MENTOR_1.getName(),
                     MENTOR_1.getProfileImageUrl(),
                     MENTOR_1.getIntroduction(),
-                    MENTOR_1.getLanguages(),
+                    MENTOR_1.getLanguages()
+                            .stream()
+                            .map(Language::getCode)
+                            .toList(),
                     MENTOR_1.getUniversityProfile().getSchool(),
                     MENTOR_1.getUniversityProfile().getMajor(),
                     MENTOR_1.getUniversityProfile().getEnteredIn(),
                     MENTOR_1.getSchedules()
                             .stream()
-                            .map(it -> new MentorScheduleRequest(it.getDay(), it.getPeriod().getStartTime(), it.getPeriod().getEndTime()))
+                            .map(it -> new MentorScheduleRequest(it.getDay().getKor(), it.getPeriod().getStartTime(), it.getPeriod().getEndTime()))
                             .toList()
             );
 
@@ -76,7 +80,7 @@ class SignUpApiControllerTest extends ControllerTest {
                                     body("major", "전공", true),
                                     body("enteredIn", "학번", true),
                                     body("schedules", "멘토링 스케줄", false),
-                                    body("schedules[].day", "날짜", "MON TUE WED THU FRI SAT SUN", false),
+                                    body("schedules[].day", "날짜", "월 화 수 목 금 토 일", false),
                                     body("schedules[].startTime", "시작 시간", false),
                                     body("schedules[].endTime", "종료 시간", false)
                             ),
@@ -101,9 +105,12 @@ class SignUpApiControllerTest extends ControllerTest {
                     MENTEE_1.getEmail().getValue(),
                     MENTEE_1.getName(),
                     MENTEE_1.getProfileImageUrl(),
-                    MENTEE_1.getNationality(),
+                    MENTEE_1.getNationality().getKor(),
                     MENTEE_1.getIntroduction(),
-                    MENTEE_1.getLanguages(),
+                    MENTEE_1.getLanguages()
+                            .stream()
+                            .map(Language::getCode)
+                            .toList(),
                     MENTEE_1.getInterest().getSchool(),
                     MENTEE_1.getInterest().getMajor()
             );
@@ -123,7 +130,7 @@ class SignUpApiControllerTest extends ControllerTest {
                                     body("email", "이메일", true),
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
-                                    body("nationality", "국적", "KOREA USA JAPAN CHINA VIETNAM OTHERS", true),
+                                    body("nationality", "국적", "한국 미국 일본 중국 베트남 Others", true),
                                     body("introduction", "자기소개", false),
                                     body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
                                     body("interestSchool", "관심있는 학교", true),
