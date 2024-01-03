@@ -18,6 +18,9 @@ public enum MemberExceptionCode implements KoddyExceptionCode {
     MEMBER_NOT_FOUND(NOT_FOUND, "MEMBER_005", "사용자 정보가 존재하지 않습니다."),
     MENTOR_NOT_FOUND(NOT_FOUND, "MEMBER_006", "멘토 정보가 존재하지 않습니다."),
     MENTEE_NOT_FOUND(NOT_FOUND, "MEMBER_007", "멘티 정보가 존재하지 않습니다."),
+    INVALID_NATIONALITY(BAD_REQUEST, "MEMBER_008", "유효하지 않은 국적입니다."),
+    INVALID_LANGUAGE(BAD_REQUEST, "MEMBER_009", "유효하지 않은 언어입니다."),
+    INVALID_DAY(BAD_REQUEST, "MEMBER_010", "유효하지 않은 날짜입니다."),
     ;
 
     private final HttpStatus status;
