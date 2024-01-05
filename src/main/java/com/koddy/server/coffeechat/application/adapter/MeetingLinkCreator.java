@@ -9,6 +9,8 @@ public interface MeetingLinkCreator {
 
     ZoomMeetingLinkResponse create(final String accessToken, final ZoomMeetingLinkRequest meetingLinkRequest);
 
+    void delete(final String accessToken, final String meetingId);
+
     String LINK_REQUEST_CONTENT_TYPE = "application/json";
 
     String BEARER_TOKEN_TYPE = "Bearer";

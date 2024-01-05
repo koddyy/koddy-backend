@@ -14,7 +14,8 @@ public record ZoomOAuthProperties(
         Other other
 ) {
     public record Other(
-            String createMeetingUrl
+            String createMeetingUrl,
+            String deleteMeetingUrl
     ) {
     }
 }
