@@ -40,7 +40,7 @@ public class OAuthApiController {
 
     @Operation(summary = "Provider별 OAuth 인증을 위한 URL을 받는 EndPoint")
     @GetMapping(value = "/access/{provider}", params = {"redirectUri"})
-    public ResponseWrapper<String> queryOAuthLink(
+    public ResponseEntity<ResponseWrapper<String>> queryOAuthLink(
             @PathVariable final String provider,
             @RequestParam final String redirectUri
     ) {
@@ -48,7 +48,7 @@ public class OAuthApiController {
                 OAuthProvider.from(provider),
                 redirectUri
         ));
-        return ResponseWrapper.from(oAuthLink);
+        return ResponseEntity.ok(ResponseWrapper.from(oAuthLink));
     }
 
     @Operation(summary = "Authorization Code를 통해서 Provider별 인증을 위한 EndPoint")

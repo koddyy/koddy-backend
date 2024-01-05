@@ -1,11 +1,11 @@
-package com.koddy.server.auth.infrastructure.oauth.kakao;
+package com.koddy.server.auth.infrastructure.oauth.zoom;
 
 import com.koddy.server.auth.application.adapter.OAuthConnector;
 import com.koddy.server.auth.domain.model.oauth.OAuthProvider;
 import com.koddy.server.auth.domain.model.oauth.OAuthTokenResponse;
 import com.koddy.server.auth.domain.model.oauth.OAuthUserResponse;
-import com.koddy.server.auth.infrastructure.oauth.kakao.response.KakaoTokenResponse;
-import com.koddy.server.auth.infrastructure.oauth.kakao.response.KakaoUserResponse;
+import com.koddy.server.auth.infrastructure.oauth.zoom.response.ZoomTokenResponse;
+import com.koddy.server.auth.infrastructure.oauth.zoom.response.ZoomUserResponse;
 import com.koddy.server.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +18,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import static com.koddy.server.auth.domain.model.oauth.OAuthProvider.KAKAO;
+import java.util.Base64;
+
+import static com.koddy.server.auth.domain.model.oauth.OAuthProvider.ZOOM;
 import static com.koddy.server.global.exception.GlobalExceptionCode.UNEXPECTED_SERVER_ERROR;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpMethod.GET;
@@ -27,13 +30,13 @@ import static org.springframework.http.HttpMethod.GET;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KakaoOAuthConnector implements OAuthConnector {
-    private final KakaoOAuthProperties properties;
+public class ZoomOAuthConnector implements OAuthConnector {
+    private final ZoomOAuthProperties properties;
     private final RestTemplate restTemplate;
 
     @Override
     public boolean isSupported(final OAuthProvider provider) {
-        return provider == KAKAO;
+        return provider == ZOOM;
     }
 
     @Override
@@ -42,13 +45,20 @@ public class KakaoOAuthConnector implements OAuthConnector {
         final MultiValueMap<String, String> params = applyTokenRequestParams(code, redirectUri, state);
 
         final HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-        return fetchKakaoToken(request).getBody();
+        return fetchZoomToken(request).getBody();
     }
 
     private HttpHeaders createTokenRequestHeader() {
         final HttpHeaders headers = new HttpHeaders();
         headers.set(CONTENT_TYPE, OAUTH_CONTENT_TYPE);
+        headers.set(AUTHORIZATION, String.join(" ", "Basic", getEncodedClientProperties()));
         return headers;
+    }
+
+    private String getEncodedClientProperties() {
+        final String value = String.join(":", properties.clientId(), properties.clientSecret());
+        final byte[] encode = Base64.getEncoder().encode(value.getBytes());
+        return new String(encode, UTF_8);
     }
 
     private MultiValueMap<String, String> applyTokenRequestParams(
@@ -61,14 +71,12 @@ public class KakaoOAuthConnector implements OAuthConnector {
         params.add("code", code);
         params.add("redirect_uri", redirectUri);
         params.add("state", state);
-        params.add("client_id", properties.clientId());
-        params.add("client_secret", properties.clientSecret());
         return params;
     }
 
-    private ResponseEntity<KakaoTokenResponse> fetchKakaoToken(final HttpEntity<MultiValueMap<String, String>> request) {
+    private ResponseEntity<ZoomTokenResponse> fetchZoomToken(final HttpEntity<MultiValueMap<String, String>> request) {
         try {
-            return restTemplate.postForEntity(properties.tokenUrl(), request, KakaoTokenResponse.class);
+            return restTemplate.postForEntity(properties.tokenUrl(), request, ZoomTokenResponse.class);
         } catch (final RestClientException e) {
             log.error("OAuth Error... ", e);
             throw new GlobalException(UNEXPECTED_SERVER_ERROR);
@@ -79,7 +87,7 @@ public class KakaoOAuthConnector implements OAuthConnector {
     public OAuthUserResponse fetchUserInfo(final String accessToken) {
         final HttpHeaders headers = createUserInfoRequestHeader(accessToken);
         final HttpEntity<Void> request = new HttpEntity<>(headers);
-        return fetchKakaoUserInfo(request).getBody();
+        return fetchZoomUserInfo(request).getBody();
     }
 
     private HttpHeaders createUserInfoRequestHeader(final String accessToken) {
@@ -89,9 +97,9 @@ public class KakaoOAuthConnector implements OAuthConnector {
         return headers;
     }
 
-    private ResponseEntity<KakaoUserResponse> fetchKakaoUserInfo(final HttpEntity<Void> request) {
+    private ResponseEntity<ZoomUserResponse> fetchZoomUserInfo(final HttpEntity<Void> request) {
         try {
-            return restTemplate.exchange(properties.userInfoUrl(), GET, request, KakaoUserResponse.class);
+            return restTemplate.exchange(properties.userInfoUrl(), GET, request, ZoomUserResponse.class);
         } catch (final RestClientException e) {
             log.error("OAuth Error... ", e);
             throw new GlobalException(UNEXPECTED_SERVER_ERROR);

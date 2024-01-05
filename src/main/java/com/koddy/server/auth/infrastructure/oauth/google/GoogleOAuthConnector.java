@@ -47,7 +47,7 @@ public class GoogleOAuthConnector implements OAuthConnector {
 
     private HttpHeaders createTokenRequestHeader() {
         final HttpHeaders headers = new HttpHeaders();
-        headers.set(CONTENT_TYPE, CONTENT_TYPE_VALUE);
+        headers.set(CONTENT_TYPE, OAUTH_CONTENT_TYPE);
         return headers;
     }
 
@@ -84,7 +84,7 @@ public class GoogleOAuthConnector implements OAuthConnector {
 
     private HttpHeaders createUserInfoRequestHeader(final String accessToken) {
         final HttpHeaders headers = new HttpHeaders();
-        headers.set(AUTHORIZATION, String.join(" ", TOKEN_TYPE, accessToken));
+        headers.set(AUTHORIZATION, String.join(" ", BEARER_TOKEN_TYPE, accessToken));
         return headers;
     }
 

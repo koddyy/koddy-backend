@@ -13,6 +13,7 @@ import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_OAUTH_PR
 public enum OAuthProvider {
     GOOGLE("google"),
     KAKAO("kakao"),
+    ZOOM("zoom"),
     ;
 
     private final String provider;
