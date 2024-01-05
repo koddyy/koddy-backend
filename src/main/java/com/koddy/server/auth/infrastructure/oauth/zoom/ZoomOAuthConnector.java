@@ -42,7 +42,7 @@ public class ZoomOAuthConnector implements OAuthConnector {
     @Override
     public OAuthTokenResponse fetchToken(final String code, final String redirectUri, final String state) {
         final HttpHeaders headers = createTokenRequestHeader();
-        final MultiValueMap<String, String> params = applyTokenRequestParams(code, redirectUri, state);
+        final MultiValueMap<String, String> params = createTokenRequestParams(code, redirectUri, state);
 
         final HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
         return fetchZoomToken(request).getBody();
@@ -61,7 +61,7 @@ public class ZoomOAuthConnector implements OAuthConnector {
         return new String(encode, UTF_8);
     }
 
-    private MultiValueMap<String, String> applyTokenRequestParams(
+    private MultiValueMap<String, String> createTokenRequestParams(
             final String code,
             final String redirectUri,
             final String state
