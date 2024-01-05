@@ -25,7 +25,7 @@ oauth2:
     grant-type: authorization_code
     client-id: client_id
     client-secret: client_secret
-    redirect-uri: http://localhost:3000/login
+    redirect-uri: http://localhost:3000/login/google
     scope: openid, profile, email
     auth-url: https://accounts.google.com/o/oauth2/v2/auth
     token-url: https://www.googleapis.com/oauth2/v4/token
@@ -34,11 +34,21 @@ oauth2:
     grant-type: authorization_code
     client-id: client_id
     client-secret: client_secret
-    redirect-uri: http://localhost:3000/login
+    redirect-uri: http://localhost:3000/login/kakao
     scope: profile_nickname, profile_image, account_email
     auth-url: https://kauth.kakao.com/oauth/authorize
     token-url: https://kauth.kakao.com/oauth/token
     user-info-url: https://kapi.kakao.com/v2/user/me
+  zoom:
+    grant-type: authorization_code
+    client-id: client_id
+    client-secret: client_secret
+    redirect-uri: http://localhost:3000/login/zoom
+    auth-url: https://zoom.us/oauth/authorize
+    token-url: https://zoom.us/oauth/token
+    user-info-url: https://api.zoom.us/v2/users/me
+    other:
+      create-meeting-url: https://api.zoom.us/v2/users/me/meetings
 
 cors:
   allowed-origin-patterns: http://localhost:3000

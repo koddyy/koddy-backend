@@ -103,8 +103,8 @@ class OAuthUriGeneratorTest {
 
         assertAll(
                 () -> assertThat(queryParams.getFirst("response_type")).isEqualTo("code"),
-                () -> assertThat(queryParams.getFirst("client_id")).isEqualTo(kakaoOAuthProperties.clientId()),
-                () -> assertThat(queryParams.getFirst("redirect_uri")).isEqualTo(kakaoOAuthProperties.redirectUri()),
+                () -> assertThat(queryParams.getFirst("client_id")).isEqualTo(zoomOAuthProperties.clientId()),
+                () -> assertThat(queryParams.getFirst("redirect_uri")).isEqualTo(zoomOAuthProperties.redirectUri()),
                 () -> assertThat(queryParams.getFirst("state")).isNotNull()
         );
     }
