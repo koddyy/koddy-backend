@@ -4,8 +4,9 @@ import com.koddy.server.auth.application.adapter.OAuthConnector;
 import com.koddy.server.auth.domain.model.oauth.OAuthProvider;
 import com.koddy.server.auth.domain.model.oauth.OAuthTokenResponse;
 import com.koddy.server.auth.exception.AuthException;
-import com.koddy.server.coffeechat.application.adapter.MeetingLinkCreator;
+import com.koddy.server.coffeechat.application.adapter.MeetingLinkManager;
 import com.koddy.server.coffeechat.application.usecase.command.CreateMeetingLinkCommand;
+import com.koddy.server.coffeechat.application.usecase.command.DeleteMeetingLinkCommand;
 import com.koddy.server.coffeechat.domain.model.link.MeetingLinkProvider;
 import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkRequest;
@@ -20,17 +21,17 @@ import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.INVA
 
 @UseCase
 @RequiredArgsConstructor
-public class CreateMeetingLinkUseCase {
+public class ManageMeetingLinkUseCase {
     private final List<OAuthConnector> oAuthConnectors;
-    private final List<MeetingLinkCreator> meetingLinkCreators;
+    private final List<MeetingLinkManager> meetingLinkManagers;
 
     /**
      * 추후 Google Meet Creator 연동하면서 MeetingLinkCreator Request/Response 스펙 재정의 (Interface)
      */
-    public ZoomMeetingLinkResponse invoke(final CreateMeetingLinkCommand command) {
+    public ZoomMeetingLinkResponse create(final CreateMeetingLinkCommand command) {
         final OAuthTokenResponse oAuthToken = getOAuthToken(command);
-        final MeetingLinkCreator meetingLinkCreator = getMeetingLinkCreatorByProvider(command.linkProvider());
-        return meetingLinkCreator.create(oAuthToken.accessToken(), createRequest(command));
+        final MeetingLinkManager meetingLinkManager = getMeetingLinkCreatorByProvider(command.linkProvider());
+        return meetingLinkManager.create(oAuthToken.accessToken(), createRequest(command));
     }
 
     private OAuthTokenResponse getOAuthToken(final CreateMeetingLinkCommand command) {
@@ -45,14 +46,19 @@ public class CreateMeetingLinkUseCase {
                 .orElseThrow(() -> new AuthException(INVALID_OAUTH_PROVIDER));
     }
 
-    private MeetingLinkCreator getMeetingLinkCreatorByProvider(final MeetingLinkProvider provider) {
-        return meetingLinkCreators.stream()
-                .filter(meetingLinkCreator -> meetingLinkCreator.isSupported(provider))
+    private MeetingLinkManager getMeetingLinkCreatorByProvider(final MeetingLinkProvider provider) {
+        return meetingLinkManagers.stream()
+                .filter(meetingLinkManager -> meetingLinkManager.isSupported(provider))
                 .findFirst()
                 .orElseThrow(() -> new CoffeeChatException(INVALID_MEETING_LINK_PROVIDER));
     }
 
     private ZoomMeetingLinkRequest createRequest(final CreateMeetingLinkCommand command) {
         return new ZoomMeetingLinkRequest(command.topic(), command.start(), command.end());
+    }
+
+    public void delete(final DeleteMeetingLinkCommand command) {
+        final MeetingLinkManager meetingLinkManager = getMeetingLinkCreatorByProvider(command.linkProvider());
+        meetingLinkManager.delete(command.meetingId());
     }
 }

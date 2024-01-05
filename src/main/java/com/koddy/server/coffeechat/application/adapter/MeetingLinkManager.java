@@ -4,12 +4,12 @@ import com.koddy.server.coffeechat.domain.model.link.MeetingLinkProvider;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkRequest;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkResponse;
 
-public interface MeetingLinkCreator {
+public interface MeetingLinkManager {
     boolean isSupported(final MeetingLinkProvider provider);
 
     ZoomMeetingLinkResponse create(final String accessToken, final ZoomMeetingLinkRequest meetingLinkRequest);
 
-    void delete(final String accessToken, final String meetingId);
+    void delete(final String meetingId);
 
     String LINK_REQUEST_CONTENT_TYPE = "application/json";
 
