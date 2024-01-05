@@ -84,7 +84,7 @@ class OAuthApiControllerTest extends ControllerTest {
                     .andExpectAll(getResultMatchersViaExceptionCode(AuthExceptionCode.INVALID_OAUTH_PROVIDER))
                     .andDo(failureDocs("OAuthApi/Access/Failure", createHttpSpecSnippets(
                             pathParameters(
-                                    path("provider", "OAuth Provider", "google / kakao", true)
+                                    path("provider", "OAuth Provider", "google / kakao / zoom", true)
                             ),
                             queryParameters(
                                     query("redirectUri", "Authorization Code와 함께 redirect될 URI", true)
@@ -110,7 +110,7 @@ class OAuthApiControllerTest extends ControllerTest {
                     )
                     .andDo(successDocs("OAuthApi/Access/Success", createHttpSpecSnippets(
                             pathParameters(
-                                    path("provider", "OAuth Provider", "google / kakao", true)
+                                    path("provider", "OAuth Provider", "google / kakao / zoom", true)
                             ),
                             queryParameters(
                                     query("redirectUri", "Authorization Code와 함께 redirect될 URI", true)
@@ -156,7 +156,7 @@ class OAuthApiControllerTest extends ControllerTest {
                                     path("provider", "OAuth Provider", "google / kakao", true)
                             ),
                             requestFields(
-                                    body("authorizationCode", "Authorization Code", true),
+                                    body("authorizationCode", "Authorization Code", "Authorization Code Redirect 응답 시 QueryParam으로 넘어오는 Code 값", true),
                                     body("redirectUri", "Redirect Uri", "Authorization Code 요청 시 redirectUri와 반드시 동일한 값", true),
                                     body("state", "State 값", "Authorization Code Redirect 응답 시 QueryParam으로 넘어오는 State 값", true)
                             ),
@@ -194,7 +194,7 @@ class OAuthApiControllerTest extends ControllerTest {
                                     path("provider", "OAuth Provider", "google / kakao", true)
                             ),
                             requestFields(
-                                    body("authorizationCode", "Authorization Code", true),
+                                    body("authorizationCode", "Authorization Code", "Authorization Code Redirect 응답 시 QueryParam으로 넘어오는 Code 값", true),
                                     body("redirectUri", "Redirect Uri", "Authorization Code 요청 시 redirectUri와 반드시 동일한 값", true),
                                     body("state", "State 값", "Authorization Code Redirect 응답 시 QueryParam으로 넘어오는 State 값", true)
                             ),

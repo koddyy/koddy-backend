@@ -140,3 +140,18 @@ include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/request-fields.ado
 
 include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Failure/http-response.adoc[]
 include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/http-response.adoc[]
+
+== 커피챗 링크 자동 생성 API (AccessToken)
+
+=== 링크 생성
+
+==== HTTP Request
+
+include::{snippets}/CoffeeChatApi/MeetingLink/Create/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/MeetingLink/Create/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/CoffeeChatApi/MeetingLink/Create/Failure/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/MeetingLink/Create/Success/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/MeetingLink/Create/Success/response-fields.adoc[]
