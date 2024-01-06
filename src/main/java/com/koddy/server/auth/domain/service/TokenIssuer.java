@@ -16,7 +16,7 @@ public class TokenIssuer {
 
     public AuthToken provideAuthorityToken(final Long memberId) {
         final Member<?> member = memberRepository.getByIdWithRoles(memberId);
-        final String accessToken = tokenProvider.createAccessToken(memberId, member.getRoleTypes());
+        final String accessToken = tokenProvider.createAccessToken(memberId, member.getAuthorities());
         final String refreshToken = tokenProvider.createRefreshToken(memberId);
         tokenManager.synchronizeRefreshToken(memberId, refreshToken);
 
@@ -25,7 +25,7 @@ public class TokenIssuer {
 
     public AuthToken reissueAuthorityToken(final Long memberId) {
         final Member<?> member = memberRepository.getByIdWithRoles(memberId);
-        final String newAccessToken = tokenProvider.createAccessToken(memberId, member.getRoleTypes());
+        final String newAccessToken = tokenProvider.createAccessToken(memberId, member.getAuthorities());
         final String newRefreshToken = tokenProvider.createRefreshToken(memberId);
         tokenManager.updateRefreshToken(memberId, newRefreshToken);
 

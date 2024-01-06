@@ -49,7 +49,7 @@ class UpdateMenteeInfoUseCaseTest {
                 () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(command.profileImageUrl()),
                 () -> assertThat(mentee.getIntroduction()).isEqualTo(command.introduction()),
                 () -> assertThat(mentee.getLanguages()).containsExactlyInAnyOrderElementsOf(command.languages()),
-                () -> assertThat(mentee.getRoleTypes()).containsExactlyInAnyOrder(MENTEE),
+                () -> assertThat(mentee.getAuthorities()).containsExactlyInAnyOrder(MENTEE.getAuthority()),
                 () -> assertThat(mentee.getInterest().getSchool()).isEqualTo(command.interestSchool()),
                 () -> assertThat(mentee.getInterest().getMajor()).isEqualTo(command.interestMajor())
         );

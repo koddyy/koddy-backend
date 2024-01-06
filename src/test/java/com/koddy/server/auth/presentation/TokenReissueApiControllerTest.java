@@ -61,7 +61,7 @@ class TokenReissueApiControllerTest extends ControllerTest {
         void success() throws Exception {
             // given
             final Member<?> member = MENTOR_1.toDomain().apply(1L);
-            mockingToken(true, member.getId(), member.getRoleTypes());
+            mockingToken(true, member.getId(), member.getAuthorities());
             given(reissueTokenUseCase.invoke(any())).willReturn(new AuthToken(ACCESS_TOKEN, REFRESH_TOKEN));
 
             // when

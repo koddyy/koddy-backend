@@ -8,7 +8,6 @@ import com.koddy.server.common.config.TestAopConfiguration;
 import com.koddy.server.common.config.TestWebBeanConfiguration;
 import com.koddy.server.global.base.KoddyExceptionCode;
 import com.koddy.server.global.exception.alert.SlackAlertManager;
-import com.koddy.server.member.domain.model.RoleType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -390,7 +389,7 @@ public abstract class ControllerTest {
         };
     }
 
-    protected void mockingToken(final boolean isValid, final Long payloadId, final List<RoleType> roles) {
+    protected void mockingToken(final boolean isValid, final Long payloadId, final List<String> authorities) {
         if (isValid) {
             doNothing()
                     .when(tokenProvider)
@@ -401,7 +400,7 @@ public abstract class ControllerTest {
                     .validateToken(anyString());
         }
         given(tokenProvider.getId(anyString())).willReturn(payloadId);
-        given(tokenProvider.getRoles(anyString())).willReturn(roles);
+        given(tokenProvider.getAuthorities(anyString())).willReturn(authorities);
     }
 
     protected void mockingTokenWithInvalidException() {

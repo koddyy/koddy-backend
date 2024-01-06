@@ -28,7 +28,7 @@ class MenteeTest extends ParallelTest {
                     () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(MENTEE_1.getProfileImageUrl()),
                     () -> assertThat(mentee.getIntroduction()).isEqualTo(MENTEE_1.getIntroduction()),
                     () -> assertThat(mentee.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTEE_1.getLanguages()),
-                    () -> assertThat(mentee.getRoleTypes()).containsExactlyInAnyOrder(MENTEE),
+                    () -> assertThat(mentee.getAuthorities()).containsExactlyInAnyOrder(MENTEE.getAuthority()),
                     () -> assertThat(mentee.getInterest().getSchool()).isEqualTo(MENTEE_1.getInterest().getSchool()),
                     () -> assertThat(mentee.getInterest().getMajor()).isEqualTo(MENTEE_1.getInterest().getMajor())
             );
@@ -80,7 +80,7 @@ class MenteeTest extends ParallelTest {
                     () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(MENTEE_2.getProfileImageUrl()),
                     () -> assertThat(mentee.getIntroduction()).isEqualTo(MENTEE_2.getIntroduction()),
                     () -> assertThat(mentee.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTEE_2.getLanguages()),
-                    () -> assertThat(mentee.getRoleTypes()).containsExactlyInAnyOrder(MENTEE),
+                    () -> assertThat(mentee.getAuthorities()).containsExactlyInAnyOrder(MENTEE.getAuthority()),
                     () -> assertThat(mentee.getInterest().getSchool()).isEqualTo(MENTEE_2.getInterest().getSchool()),
                     () -> assertThat(mentee.getInterest().getMajor()).isEqualTo(MENTEE_2.getInterest().getMajor())
             );

@@ -41,7 +41,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     private Authenticated getTokenPayload(final NativeWebRequest webRequest) {
         final HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         final String accessToken = getAccessToken(request);
-        return new Authenticated(accessToken, tokenProvider.getId(accessToken), tokenProvider.getRoles(accessToken));
+        return new Authenticated(accessToken, tokenProvider.getId(accessToken), tokenProvider.getAuthorities(accessToken));
     }
 
     private String getAccessToken(final HttpServletRequest request) {

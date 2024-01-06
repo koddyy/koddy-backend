@@ -26,7 +26,7 @@ class TokenProviderTest extends ParallelTest {
     @DisplayName("AccessToken과 RefreshToken을 발급한다")
     void createToken() {
         // when
-        final String accessToken = validProvider.createAccessToken(member.getId(), member.getRoleTypes());
+        final String accessToken = validProvider.createAccessToken(member.getId(), member.getAuthorities());
         final String refreshToken = validProvider.createRefreshToken(member.getId());
 
         // then
@@ -40,7 +40,7 @@ class TokenProviderTest extends ParallelTest {
     @DisplayName("Token의 Payload를 추출한다")
     void extractPayload() {
         // when
-        final String accessToken = validProvider.createAccessToken(member.getId(), member.getRoleTypes());
+        final String accessToken = validProvider.createAccessToken(member.getId(), member.getAuthorities());
 
         // then
         assertThat(validProvider.getId(accessToken)).isEqualTo(member.getId());
@@ -50,8 +50,8 @@ class TokenProviderTest extends ParallelTest {
     @DisplayName("Token 만료에 대한 유효성을 검증한다")
     void validateToken1() {
         // when
-        final String validToken = validProvider.createAccessToken(member.getId(), member.getRoleTypes());
-        final String invalidToken = invalidProvider.createAccessToken(member.getId(), member.getRoleTypes());
+        final String validToken = validProvider.createAccessToken(member.getId(), member.getAuthorities());
+        final String invalidToken = invalidProvider.createAccessToken(member.getId(), member.getAuthorities());
 
         // then
         assertDoesNotThrow(() -> validProvider.validateToken(validToken));
@@ -64,7 +64,7 @@ class TokenProviderTest extends ParallelTest {
     @DisplayName("Token 조작에 대한 유효성을 검증한다")
     void validateToken2() {
         // when
-        final String forgedToken = validProvider.createAccessToken(member.getId(), member.getRoleTypes()) + "hacked";
+        final String forgedToken = validProvider.createAccessToken(member.getId(), member.getAuthorities()) + "hacked";
 
         // then
         assertThatThrownBy(() -> validProvider.validateToken(forgedToken))
