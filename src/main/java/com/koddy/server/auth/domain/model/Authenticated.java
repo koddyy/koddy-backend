@@ -5,6 +5,7 @@ import com.koddy.server.member.domain.model.RoleType;
 import java.util.List;
 
 public record Authenticated(
+        String accessToken,
         Long id,
         List<RoleType> roles
 ) {

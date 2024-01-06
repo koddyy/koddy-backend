@@ -32,11 +32,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
             final NativeWebRequest webRequest,
             final WebDataBinderFactory binderFactory
     ) {
-        // 토큰 버전
         return getTokenPayload(webRequest);
-
-        // 세션 버전
-//        return getSessionPayload(webRequest);
     }
 
     /**
@@ -45,7 +41,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     private Authenticated getTokenPayload(final NativeWebRequest webRequest) {
         final HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         final String accessToken = getAccessToken(request);
-        return new Authenticated(tokenProvider.getId(accessToken), tokenProvider.getRoles(accessToken));
+        return new Authenticated(accessToken, tokenProvider.getId(accessToken), tokenProvider.getRoles(accessToken));
     }
 
     private String getAccessToken(final HttpServletRequest request) {
