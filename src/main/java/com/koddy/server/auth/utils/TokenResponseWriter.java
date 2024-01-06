@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.boot.web.server.Cookie.SameSite.STRICT;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
 
@@ -33,7 +32,6 @@ public class TokenResponseWriter {
     private void applyRefreshToken(final HttpServletResponse response, final String refreshToken) {
         final ResponseCookie cookie = ResponseCookie.from(COOKIE_REFRESH_TOKEN, refreshToken)
                 .maxAge(refreshTokenCookieAge)
-                .sameSite(STRICT.attributeValue())
                 .secure(true)
                 .httpOnly(true)
                 .path("/")
