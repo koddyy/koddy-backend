@@ -20,6 +20,17 @@ services:
     networks:
       - koddy-network
 
+  redis: # redis-cli
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - "./redis_data/data:/data"
+    networks:
+      - koddy-network
+    command: redis-server --requirepass koddy --port 6379
+
 networks:
   koddy-network:
     external: true

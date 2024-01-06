@@ -45,6 +45,9 @@ dependencies {
     annotationProcessor("jakarta.annotation:jakarta.annotation-api")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
 
+    // Redis
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
     // Cloud Infra
     implementation("io.awspring.cloud:spring-cloud-aws-starter:${property("awspringVersion")}")
     implementation("io.awspring.cloud:spring-cloud-aws-starter-s3:${property("awspringVersion")}")
