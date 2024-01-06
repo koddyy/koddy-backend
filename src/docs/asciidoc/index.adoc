@@ -101,7 +101,7 @@ include::{snippets}/MemberApi/SignUp/Mentee/request-fields.adoc[]
 
 include::{snippets}/MemberApi/SignUp/Mentee/http-response.adoc[]
 
-== 멘토 정보 수정 API (AccessToken)
+== 멘토 정보 수정 API (AccessToken + OnlyMentor)
 
 === 기본 정보
 
@@ -112,7 +112,6 @@ include::{snippets}/MemberApi/Update/Mentor/BasicInfo/Success/request-fields.ado
 
 ==== HTTP Response
 
-include::{snippets}/MemberApi/Update/Mentor/BasicInfo/Failure/http-response.adoc[]
 include::{snippets}/MemberApi/Update/Mentor/BasicInfo/Success/http-response.adoc[]
 
 === 스케줄
@@ -124,10 +123,9 @@ include::{snippets}/MemberApi/Update/Mentor/Schedule/Success/request-fields.adoc
 
 ==== HTTP Response
 
-include::{snippets}/MemberApi/Update/Mentor/Schedule/Failure/http-response.adoc[]
 include::{snippets}/MemberApi/Update/Mentor/Schedule/Success/http-response.adoc[]
 
-== 멘티 정보 수정 API (AccessToken)
+== 멘티 정보 수정 API (AccessToken + OnlyMentee)
 
 === 기본 정보
 
@@ -138,20 +136,32 @@ include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/request-fields.ado
 
 ==== HTTP Response
 
-include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Failure/http-response.adoc[]
 include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/http-response.adoc[]
 
-== 커피챗 링크 자동 생성 API (AccessToken)
+== 커피챗 링크 생성/삭제 API (AccessToken + OnlyMentor)
+
+> OAuth 인증 후 진행되는 흐름
 
 === 링크 생성
 
 ==== HTTP Request
 
 include::{snippets}/CoffeeChatApi/MeetingLink/Create/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/MeetingLink/Create/Success/path-parameters.adoc[]
 include::{snippets}/CoffeeChatApi/MeetingLink/Create/Success/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/CoffeeChatApi/MeetingLink/Create/Failure/http-response.adoc[]
 include::{snippets}/CoffeeChatApi/MeetingLink/Create/Success/http-response.adoc[]
 include::{snippets}/CoffeeChatApi/MeetingLink/Create/Success/response-fields.adoc[]
+
+=== 링크 삭제
+
+==== HTTP Request
+
+include::{snippets}/CoffeeChatApi/MeetingLink/Delete/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/MeetingLink/Delete/Success/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/CoffeeChatApi/MeetingLink/Delete/Success/http-response.adoc[]
