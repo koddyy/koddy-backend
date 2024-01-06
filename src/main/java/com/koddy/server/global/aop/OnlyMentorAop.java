@@ -20,6 +20,6 @@ public class OnlyMentorAop {
     }
 
     private boolean isNotMentor(final Authenticated authenticated) {
-        return !authenticated.roles().contains(MENTOR);
+        return !authenticated.authorities().contains(MENTOR.getAuthority());
     }
 }

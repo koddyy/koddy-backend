@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/mentees/me")
 @RequiredArgsConstructor
-@OnlyMentee
 public class UpdateMenteeInfoApiController {
     private final UpdateMenteeInfoUseCase updateMenteeInfoUseCase;
 
     @Operation(summary = "멘티 기본정보 수정 Endpoint")
     @PatchMapping("/basic-info")
+    @OnlyMentee
     public ResponseEntity<Void> updateBasicInfo(
             @Auth final Authenticated authenticated,
             @RequestBody @Valid final UpdateMenteeBasicInfoRequest request

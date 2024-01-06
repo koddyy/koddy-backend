@@ -54,7 +54,7 @@ class UpdateMentorInfoUseCaseTest extends UseCaseTest {
                 () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(command.profileImageUrl()),
                 () -> assertThat(mentor.getIntroduction()).isEqualTo(command.introduction()),
                 () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(command.languages()),
-                () -> assertThat(mentor.getRoleTypes()).containsExactlyInAnyOrder(MENTOR),
+                () -> assertThat(mentor.getAuthorities()).containsExactlyInAnyOrder(MENTOR.getAuthority()),
                 () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(command.school()),
                 () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(command.major()),
                 () -> assertThat(mentor.getUniversityProfile().getEnteredIn()).isEqualTo(command.enteredIn())

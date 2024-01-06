@@ -1,6 +1,5 @@
 package com.koddy.server.member.presentation;
 
-import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.UpdateMentorInfoUseCase;
 import com.koddy.server.member.domain.model.Language;
@@ -30,7 +29,6 @@ import static com.koddy.server.member.domain.model.mentor.Day.MON;
 import static com.koddy.server.member.domain.model.mentor.Day.WED;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -64,10 +62,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() throws Exception {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRoleTypes());
-            doThrow(new AuthException(INVALID_PERMISSION))
-                    .when(updateMentorInfoUseCase)
-                    .updateBasicInfo(any());
+            mockingToken(true, mentee.getId(), mentee.getAuthorities());
 
             // when
             final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
@@ -93,7 +88,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
         @DisplayName("멘토 기본정보를 수정한다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRoleTypes());
+            mockingToken(true, mentor.getId(), mentor.getAuthorities());
             doNothing()
                     .when(updateMentorInfoUseCase)
                     .updateBasicInfo(any());
@@ -131,10 +126,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() throws Exception {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRoleTypes());
-            doThrow(new AuthException(INVALID_PERMISSION))
-                    .when(updateMentorInfoUseCase)
-                    .updateSchedule(any());
+            mockingToken(true, mentee.getId(), mentee.getAuthorities());
 
             // when
             final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
@@ -147,8 +139,8 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("schedules", "멘토링 스케줄", false),
                                     body("schedules[].day", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].startTime", "시작 시간", false),
-                                    body("schedules[].endTime", "종료 시간", false)
+                                    body("schedules[].startTime", "시작 시간", "KST", false),
+                                    body("schedules[].endTime", "종료 시간", "KST", false)
                             )
                     )));
         }
@@ -157,7 +149,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
         @DisplayName("멘토 스케줄을 수정한다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRoleTypes());
+            mockingToken(true, mentor.getId(), mentor.getAuthorities());
             doNothing()
                     .when(updateMentorInfoUseCase)
                     .updateSchedule(any());
@@ -172,8 +164,8 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("schedules", "멘토링 스케줄", false),
                                     body("schedules[].day", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].startTime", "시작 시간", false),
-                                    body("schedules[].endTime", "종료 시간", false)
+                                    body("schedules[].startTime", "시작 시간", "KST", false),
+                                    body("schedules[].endTime", "종료 시간", "KST", false)
                             )
                     )));
         }

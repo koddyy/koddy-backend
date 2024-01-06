@@ -116,9 +116,10 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
                 .toList();
     }
 
-    public List<RoleType> getRoleTypes() {
+    public List<String> getAuthorities() {
         return roles.stream()
                 .map(Role::getRoleType)
+                .map(RoleType::getAuthority)
                 .toList();
     }
 

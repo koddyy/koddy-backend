@@ -1,7 +1,6 @@
 package com.koddy.server.auth.utils;
 
 import com.koddy.server.auth.exception.AuthException;
-import com.koddy.server.member.domain.model.RoleType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -41,11 +40,11 @@ public class TokenProvider {
         this.refreshTokenValidityInSeconds = refreshTokenValidityInSeconds;
     }
 
-    public String createAccessToken(final Long memberId, final List<RoleType> roles) {
+    public String createAccessToken(final Long memberId, final List<String> authorities) {
         // Payload
         final Claims claims = Jwts.claims();
         claims.put("id", memberId);
-        claims.put("roles", roles);
+        claims.put("authorities", authorities);
 
         // Expires At
         final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
@@ -83,10 +82,10 @@ public class TokenProvider {
     }
 
     @SuppressWarnings("unchecked")
-    public List<RoleType> getRoles(final String token) {
+    public List<String> getAuthorities(final String token) {
         return getClaims(token)
                 .getBody()
-                .get("roles", List.class);
+                .get("authorities", List.class);
     }
 
     public void validateToken(final String token) {

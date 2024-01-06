@@ -11,7 +11,7 @@ public interface OAuthConnector {
 
     OAuthUserResponse fetchUserInfo(final String accessToken);
 
-    String CONTENT_TYPE_VALUE = "application/x-www-form-urlencoded; charset=utf-8;";
+    String OAUTH_CONTENT_TYPE = "application/x-www-form-urlencoded; charset=utf-8;";
 
-    String TOKEN_TYPE = "Bearer";
+    String BEARER_TOKEN_TYPE = "Bearer";
 }

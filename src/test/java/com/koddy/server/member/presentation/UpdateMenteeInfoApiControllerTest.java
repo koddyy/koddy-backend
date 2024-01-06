@@ -1,6 +1,5 @@
 package com.koddy.server.member.presentation;
 
-import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.UpdateMenteeInfoUseCase;
 import com.koddy.server.member.domain.model.Language;
@@ -23,7 +22,6 @@ import static com.koddy.server.common.utils.RestDocsSpecificationUtils.failureDo
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocsWithAccessToken;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -57,10 +55,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
         @DisplayName("멘티가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRoleTypes());
-            doThrow(new AuthException(INVALID_PERMISSION))
-                    .when(updateMenteeInfoUseCase)
-                    .updateBasicInfo(any());
+            mockingToken(true, mentor.getId(), mentor.getAuthorities());
 
             // when
             final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
@@ -86,7 +81,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
         @DisplayName("멘티 기본정보를 수정한다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRoleTypes());
+            mockingToken(true, mentee.getId(), mentee.getAuthorities());
             doNothing()
                     .when(updateMenteeInfoUseCase)
                     .updateBasicInfo(any());

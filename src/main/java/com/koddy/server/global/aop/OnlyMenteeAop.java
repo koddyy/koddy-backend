@@ -20,6 +20,6 @@ public class OnlyMenteeAop {
     }
 
     private boolean isNotMentee(final Authenticated authenticated) {
-        return !authenticated.roles().contains(MENTEE);
+        return !authenticated.authorities().contains(MENTEE.getAuthority());
     }
 }

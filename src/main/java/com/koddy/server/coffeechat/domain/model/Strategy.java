@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Lob;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import static jakarta.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PROTECTED;
@@ -32,10 +33,16 @@ public class Strategy {
         return new Strategy(type, encryptor.symmetricEncrypt(value));
     }
 
+    @Getter
+    @RequiredArgsConstructor
     public enum Type {
-        LINK,
-        KAKAO_ID,
-        LINK_ID,
-        WECHAT_ID
+        ZOOM_LINK("줌 링크"),
+        GOOGLE_MEET_LINK("구글 미트 링크"),
+        KAKAO_ID("카카오톡 ID"),
+        LINK_ID("라인 ID"),
+        WECHAT_ID("위챗 ID"),
+        ;
+
+        private final String value;
     }
 }

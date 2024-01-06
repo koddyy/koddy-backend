@@ -32,7 +32,7 @@ public class TokenIssuerTest extends ServiceTest {
     void provideAuthorityToken() {
         // given
         given(memberRepository.getByIdWithRoles(member.getId())).willReturn(member);
-        given(tokenProvider.createAccessToken(member.getId(), member.getRoleTypes())).willReturn(ACCESS_TOKEN);
+        given(tokenProvider.createAccessToken(member.getId(), member.getAuthorities())).willReturn(ACCESS_TOKEN);
         given(tokenProvider.createRefreshToken(member.getId())).willReturn(REFRESH_TOKEN);
 
         // when
@@ -41,7 +41,7 @@ public class TokenIssuerTest extends ServiceTest {
         // then
         assertAll(
                 () -> verify(memberRepository, times(1)).getByIdWithRoles(member.getId()),
-                () -> verify(tokenProvider, times(1)).createAccessToken(member.getId(), member.getRoleTypes()),
+                () -> verify(tokenProvider, times(1)).createAccessToken(member.getId(), member.getAuthorities()),
                 () -> verify(tokenProvider, times(1)).createRefreshToken(member.getId()),
                 () -> verify(tokenManager, times(1)).synchronizeRefreshToken(member.getId(), REFRESH_TOKEN),
                 () -> assertThat(authToken.accessToken()).isEqualTo(ACCESS_TOKEN),
@@ -54,7 +54,7 @@ public class TokenIssuerTest extends ServiceTest {
     void reissueAuthorityToken() {
         // given
         given(memberRepository.getByIdWithRoles(member.getId())).willReturn(member);
-        given(tokenProvider.createAccessToken(member.getId(), member.getRoleTypes())).willReturn(ACCESS_TOKEN);
+        given(tokenProvider.createAccessToken(member.getId(), member.getAuthorities())).willReturn(ACCESS_TOKEN);
         given(tokenProvider.createRefreshToken(member.getId())).willReturn(REFRESH_TOKEN);
 
         // when
@@ -63,7 +63,7 @@ public class TokenIssuerTest extends ServiceTest {
         // then
         assertAll(
                 () -> verify(memberRepository, times(1)).getByIdWithRoles(member.getId()),
-                () -> verify(tokenProvider, times(1)).createAccessToken(member.getId(), member.getRoleTypes()),
+                () -> verify(tokenProvider, times(1)).createAccessToken(member.getId(), member.getAuthorities()),
                 () -> verify(tokenProvider, times(1)).createRefreshToken(member.getId()),
                 () -> verify(tokenManager, times(1)).updateRefreshToken(member.getId(), REFRESH_TOKEN),
                 () -> assertThat(authToken.accessToken()).isEqualTo(ACCESS_TOKEN),
