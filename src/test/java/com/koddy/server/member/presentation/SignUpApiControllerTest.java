@@ -81,8 +81,8 @@ class SignUpApiControllerTest extends ControllerTest {
                                     body("enteredIn", "학번", true),
                                     body("schedules", "멘토링 스케줄", false),
                                     body("schedules[].day", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].startTime", "시작 시간", false),
-                                    body("schedules[].endTime", "종료 시간", false)
+                                    body("schedules[].startTime", "시작 시간", "KST", false),
+                                    body("schedules[].endTime", "종료 시간", "KST", false)
                             ),
                             responseFields(
                                     body("id", "사용자 ID(PK)")

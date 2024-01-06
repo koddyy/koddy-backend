@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/mentors/me")
 @RequiredArgsConstructor
-@OnlyMentor
 public class UpdateMentorInfoApiController {
     private final UpdateMentorInfoUseCase updateMentorInfoUseCase;
 
     @Operation(summary = "멘토 기본정보 수정 Endpoint")
     @PatchMapping("/basic-info")
+    @OnlyMentor
     public ResponseEntity<Void> updateBasicInfo(
             @Auth final Authenticated authenticated,
             @RequestBody @Valid final UpdateMentorBasicInfoRequest request
@@ -48,6 +48,7 @@ public class UpdateMentorInfoApiController {
 
     @Operation(summary = "멘토 스케줄 수정 Endpoint")
     @PatchMapping("/schedules")
+    @OnlyMentor
     public ResponseEntity<Void> updateSchedule(
             @Auth final Authenticated authenticated,
             @RequestBody @Valid final UpdateMentorScheduleRequest request
