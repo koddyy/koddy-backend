@@ -157,6 +157,13 @@ include::{snippets}/CoffeeChatApi/MeetingLink/Create/Success/response-fields.ado
 
 === 링크 삭제
 
+> 미팅 ID - Zoom OAuthToken Cache Hit Rate를 고려해서 생성 후 10분 안에 자동 삭제 가능, 10분 이후부터는 수동 삭제
+
+- Code -> COFFEE_CHAT_002
+- Message -> "존재하지 않거나 자동 삭제가 불가능한 미팅입니다."
+
+> Or 자동 삭제 기능 미제공 (Only 수동 삭제)
+
 ==== HTTP Request
 
 include::{snippets}/CoffeeChatApi/MeetingLink/Delete/Success/http-request.adoc[]

@@ -38,6 +38,7 @@ public class CreateMeetingLinkApiController {
             @RequestBody final CreateMeetingLinkRequest request
     ) {
         final ZoomMeetingLinkResponse result = manageMeetingLinkUseCase.create(new CreateMeetingLinkCommand(
+                authenticated.id(),
                 OAuthProvider.from(provider),
                 MeetingLinkProvider.from(provider),
                 request.authorizationCode(),

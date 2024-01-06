@@ -7,6 +7,7 @@ import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkRequest;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkResponse;
 import com.koddy.server.global.exception.GlobalException;
+import com.koddy.server.global.utils.DefaultRedisStringOperator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -16,8 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.time.Duration;
 
 import static com.koddy.server.coffeechat.domain.model.link.MeetingLinkProvider.ZOOM;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.ANONYMOUS_MEETING_LINK;
@@ -31,12 +31,14 @@ import static org.springframework.http.HttpMethod.DELETE;
 @RequiredArgsConstructor
 public class ZoomMeetingLinkManager implements MeetingLinkManager {
     /**
-     * Key: MeetingId, Value = AccessToken
+     * Key = User Create Meeting ID <br>
+     * Value = User OAuth Access Token
      */
-    private static final Map<String, String> tokenCache = new ConcurrentHashMap<>();
+    private static final String USER_OAUTH_TOKEN_FROM_CREATE_MEETING = "USER_OAUTH_TOKEN:CREATE_MEETING:%s";
 
     private final ZoomOAuthProperties properties;
     private final RestTemplate restTemplate;
+    private final DefaultRedisStringOperator redisOperator;
 
     @Override
     public boolean isSupported(final MeetingLinkProvider provider) {
@@ -49,7 +51,8 @@ public class ZoomMeetingLinkManager implements MeetingLinkManager {
         final HttpEntity<ZoomMeetingLinkRequest> request = new HttpEntity<>(meetingLinkRequest, headers);
 
         final ZoomMeetingLinkResponse response = fetchMeetingLinkInfo(request).getBody();
-        tokenCache.put(response.id(), accessToken);
+        final String cacheKey = createCacheKey(response.id());
+        redisOperator.save(cacheKey, accessToken, Duration.ofMinutes(10));
         return response;
     }
 
@@ -69,13 +72,19 @@ public class ZoomMeetingLinkManager implements MeetingLinkManager {
         }
     }
 
+    private String createCacheKey(final String suffix) {
+        return String.format(USER_OAUTH_TOKEN_FROM_CREATE_MEETING, suffix);
+    }
+
     @Override
     public void delete(final String meetingId) {
-        if (!tokenCache.containsKey(meetingId)) {
+        final String cacheKey = createCacheKey(meetingId);
+        if (!redisOperator.contains(cacheKey)) {
             throw new CoffeeChatException(ANONYMOUS_MEETING_LINK);
         }
 
-        final HttpHeaders headers = createMeetingLinkRequestHeader(tokenCache.get(meetingId));
+        final String oAuthAccessToken = redisOperator.get(cacheKey);
+        final HttpHeaders headers = createMeetingLinkRequestHeader(oAuthAccessToken);
         final HttpEntity<Void> request = new HttpEntity<>(headers);
         deleteMeetingLink(request, meetingId);
     }
@@ -83,7 +92,7 @@ public class ZoomMeetingLinkManager implements MeetingLinkManager {
     private void deleteMeetingLink(final HttpEntity<Void> request, final String meetingId) {
         try {
             restTemplate.exchange(properties.other().deleteMeetingUrl(), DELETE, request, Void.class, meetingId);
-            tokenCache.remove(meetingId);
+            redisOperator.delete(createCacheKey(meetingId));
         } catch (final RestClientException e) {
             log.error("OAuth Error... ", e);
             throw new GlobalException(UNEXPECTED_SERVER_ERROR);

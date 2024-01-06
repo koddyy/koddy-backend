@@ -12,7 +12,7 @@ import static org.springframework.http.HttpStatus.CONFLICT;
 @RequiredArgsConstructor
 public enum CoffeeChatExceptionCode implements KoddyExceptionCode {
     INVALID_MEETING_LINK_PROVIDER(BAD_REQUEST, "COFFEE_CHAT_001", "제공하지 않는 Meeting Link Provider입니다."),
-    ANONYMOUS_MEETING_LINK(CONFLICT, "COFFEE_CHAT_002", "존재하지 않는 미팅입니다."),
+    ANONYMOUS_MEETING_LINK(CONFLICT, "COFFEE_CHAT_002", "존재하지 않거나 자동 삭제가 불가능한 미팅입니다."),
     ;
 
     private final HttpStatus status;
