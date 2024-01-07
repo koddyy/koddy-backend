@@ -2,9 +2,9 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.UpdateMenteeInfoUseCase;
-import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
+import com.koddy.server.member.presentation.dto.request.LanguageRequest;
 import com.koddy.server.member.presentation.dto.request.UpdateMenteeBasicInfoRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -45,7 +45,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                 MENTEE_1.getIntroduction(),
                 MENTEE_1.getLanguages()
                         .stream()
-                        .map(Language::getCode)
+                        .map(it -> new LanguageRequest(it.getCategory().getCode(), it.getType().getValue()))
                         .toList(),
                 MENTEE_1.getInterest().getSchool(),
                 MENTEE_1.getInterest().getMajor()
@@ -70,6 +70,9 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                                     body("nationality", "국적", "한국 미국 일본 중국 베트남 Others", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘티 자기소개", false),
+                                    body("languages", "사용 가능한 언어", true),
+                                    body("languages[].category", "언어 종류", "[국가코드 기반] KR EN CH JP VN", true),
+                                    body("languages[].type", "언어 타입", "메인 언어 (1개) / 서브 언어 (0..N개)", true),
                                     body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)
@@ -98,7 +101,9 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                                     body("nationality", "국적", "한국 미국 일본 중국 베트남 Others", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘티 자기소개", false),
-                                    body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
+                                    body("languages", "사용 가능한 언어", true),
+                                    body("languages[].category", "언어 종류", "[국가코드 기반] KR EN CH JP VN", true),
+                                    body("languages[].type", "언어 타입", "메인 언어 (1개) / 서브 언어 (0..N개)", true),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)
                             )

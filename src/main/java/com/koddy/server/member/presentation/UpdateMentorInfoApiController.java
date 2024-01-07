@@ -6,7 +6,6 @@ import com.koddy.server.global.aop.OnlyMentor;
 import com.koddy.server.member.application.usecase.UpdateMentorInfoUseCase;
 import com.koddy.server.member.application.usecase.command.UpdateMentorBasicInfoCommand;
 import com.koddy.server.member.application.usecase.command.UpdateMentorScheduleCommand;
-import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.presentation.dto.request.UpdateMentorBasicInfoRequest;
 import com.koddy.server.member.presentation.dto.request.UpdateMentorScheduleRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,7 +37,7 @@ public class UpdateMentorInfoApiController {
                 request.name(),
                 request.profileImageUrl(),
                 request.introduction(),
-                Language.of(request.languages()),
+                request.toLanguages(),
                 request.school(),
                 request.major(),
                 request.enteredIn()

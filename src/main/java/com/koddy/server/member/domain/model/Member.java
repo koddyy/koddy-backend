@@ -13,11 +13,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.koddy.server.member.exception.MemberExceptionCode.AVAILABLE_LANGUAGE_MUST_EXISTS;
+import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.EnumType.STRING;
@@ -75,9 +77,8 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     }
 
     private void applyLanguages(final List<Language> languages) {
-        if (languages.isEmpty()) {
-            throw new MemberException(AVAILABLE_LANGUAGE_MUST_EXISTS);
-        }
+        validateEmpty(languages);
+        validateMainLanguageIsOnlyOne(languages);
 
         this.availableLanguages.clear();
         this.availableLanguages.addAll(
@@ -85,6 +86,22 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
                         .map(it -> new AvailableLanguage(this, it))
                         .toList()
         );
+    }
+
+    private void validateEmpty(final List<Language> languages) {
+        if (CollectionUtils.isEmpty(languages)) {
+            throw new MemberException(AVAILABLE_LANGUAGE_MUST_EXISTS);
+        }
+    }
+
+    private void validateMainLanguageIsOnlyOne(final List<Language> languages) {
+        final long mainLanguageCount = languages.stream()
+                .filter(it -> it.getType() == Language.Type.MAIN)
+                .count();
+
+        if (mainLanguageCount != 1) {
+            throw new MemberException(MAIN_LANGUAGE_MUST_BE_ONLY_ONE);
+        }
     }
 
     private void applyRoles(final List<RoleType> roleTypes) {

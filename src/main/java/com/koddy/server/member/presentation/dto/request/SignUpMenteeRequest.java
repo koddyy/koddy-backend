@@ -1,5 +1,6 @@
 package com.koddy.server.member.presentation.dto.request;
 
+import com.koddy.server.member.domain.model.Language;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
@@ -23,7 +24,7 @@ public record SignUpMenteeRequest(
         String introduction,
 
         @NotEmpty(message = "사용 가능한 언어는 하나 이상 선택해주세요.")
-        List<String> languages,
+        List<LanguageRequest> languages,
 
         @NotBlank(message = "관심있는 학교는 필수입니다.")
         String interestSchool,
@@ -31,4 +32,9 @@ public record SignUpMenteeRequest(
         @NotBlank(message = "관심있는 전공은 필수입니다.")
         String interestMajor
 ) {
+    public List<Language> toLanguages() {
+        return languages.stream()
+                .map(LanguageRequest::toLanguage)
+                .toList();
+    }
 }

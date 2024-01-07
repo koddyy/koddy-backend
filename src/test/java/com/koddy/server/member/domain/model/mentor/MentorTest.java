@@ -1,7 +1,10 @@
 package com.koddy.server.member.domain.model.mentor;
 
 import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.fixture.LanguageFixture;
 import com.koddy.server.common.fixture.ScheduleFixture;
+import com.koddy.server.member.domain.model.Language;
+import com.koddy.server.member.exception.MemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,7 +15,9 @@ import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_2;
 import static com.koddy.server.member.domain.model.Nationality.KOREA;
 import static com.koddy.server.member.domain.model.RoleType.MENTOR;
+import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("Member/Mentor -> 도메인 [Mentor] 테스트")
@@ -21,22 +26,46 @@ class MentorTest extends ParallelTest {
     @DisplayName("Mentor 생성")
     class Construct {
         @Test
+        @DisplayName("사용 가능한 메인 언어가 1개가 아니면(0 or N) 정책에 의거해서 Mentor를 생성할 수 없다")
+        void throwExceptionByMainLanguageIsNotOne() {
+            // given
+            final List<Language> languages = List.of(
+                    LanguageFixture.KR_MAIN.toLanguage(),
+                    LanguageFixture.EN_MAIN.toLanguage(),
+                    LanguageFixture.JP_SUB.toLanguage()
+            );
+
+            // when - then
+            assertThatThrownBy(() -> new Mentor(
+                    MENTOR_1.getEmail(),
+                    MENTOR_1.name(),
+                    MENTOR_1.getProfileImageUrl(),
+                    MENTOR_1.getIntroduction(),
+                    languages,
+                    MENTOR_1.getUniversityProfile(),
+                    MENTOR_1.getSchedules()
+            ))
+                    .isInstanceOf(MemberException.class)
+                    .hasMessage(MAIN_LANGUAGE_MUST_BE_ONLY_ONE.getMessage());
+        }
+
+        @Test
         @DisplayName("Mentor를 생성한다")
         void success() {
-            final Mentor mentorA = MENTOR_1.toDomain();
+            final Mentor mentor = MENTOR_1.toDomain();
 
             assertAll(
-                    () -> assertThat(mentorA.getEmail().getValue()).isEqualTo(MENTOR_1.getEmail().getValue()),
-                    () -> assertThat(mentorA.getName()).isEqualTo(MENTOR_1.getName()),
-                    () -> assertThat(mentorA.getNationality()).isEqualTo(KOREA),
-                    () -> assertThat(mentorA.getProfileImageUrl()).isEqualTo(MENTOR_1.getProfileImageUrl()),
-                    () -> assertThat(mentorA.getIntroduction()).isEqualTo(MENTOR_1.getIntroduction()),
-                    () -> assertThat(mentorA.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTOR_1.getLanguages()),
-                    () -> assertThat(mentorA.getAuthorities()).containsExactlyInAnyOrder(MENTOR.getAuthority()),
-                    () -> assertThat(mentorA.getUniversityProfile().getSchool()).isEqualTo(MENTOR_1.getUniversityProfile().getSchool()),
-                    () -> assertThat(mentorA.getUniversityProfile().getMajor()).isEqualTo(MENTOR_1.getUniversityProfile().getMajor()),
-                    () -> assertThat(mentorA.getUniversityProfile().getEnteredIn()).isEqualTo(MENTOR_1.getUniversityProfile().getEnteredIn()),
-                    () -> assertThat(mentorA.getChatTimes())
+                    () -> assertThat(mentor.getEmail().getValue()).isEqualTo(MENTOR_1.getEmail().getValue()),
+                    () -> assertThat(mentor.getName()).isEqualTo(MENTOR_1.getName()),
+                    () -> assertThat(mentor.getNationality()).isEqualTo(KOREA),
+                    () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(MENTOR_1.getProfileImageUrl()),
+                    () -> assertThat(mentor.getIntroduction()).isEqualTo(MENTOR_1.getIntroduction()),
+                    () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTOR_1.getLanguages()),
+                    () -> assertThat(mentor.getAuthorities()).containsExactlyInAnyOrder(MENTOR.getAuthority()),
+                    () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(MENTOR_1.getUniversityProfile().getSchool()),
+                    () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(MENTOR_1.getUniversityProfile().getMajor()),
+                    () -> assertThat(mentor.getUniversityProfile().getEnteredIn()).isEqualTo(MENTOR_1.getUniversityProfile().getEnteredIn()),
+                    () -> assertThat(mentor.getChatTimes())
                             .map(ChatTime::getSchedule)
                             .containsExactlyInAnyOrderElementsOf(MENTOR_1.getSchedules())
             );
