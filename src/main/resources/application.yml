@@ -97,7 +97,10 @@ oauth2:
       delete-meeting-url: https://api.zoom.us/v2/meetings/{meetingId}
 
 cors:
-  allowed-origin-patterns: http://localhost:3000
+  allowed-origin-patterns:
+    - http://localhost:3000
+    - http://koddy.vercel.app
+    - https://koddy.vercel.app
 
 encrypt:
   secret-key: 26f01335335d279cc9fbfa1cb2b73819111460fa21905f689763946b6bf4beee
