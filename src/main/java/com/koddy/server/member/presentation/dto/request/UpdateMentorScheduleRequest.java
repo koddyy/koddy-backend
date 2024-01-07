@@ -4,6 +4,7 @@ import com.koddy.server.member.domain.model.mentor.Day;
 import com.koddy.server.member.domain.model.mentor.Period;
 import com.koddy.server.member.domain.model.mentor.Schedule;
 import lombok.Builder;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public record UpdateMentorScheduleRequest(
         List<MentorScheduleRequest> schedules
 ) {
     public List<Schedule> toSchedules() {
-        if (schedules.isEmpty()) {
+        if (CollectionUtils.isEmpty(schedules)) {
             return List.of();
         }
         return schedules.stream()
