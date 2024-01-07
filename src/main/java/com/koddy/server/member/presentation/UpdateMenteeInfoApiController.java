@@ -5,7 +5,6 @@ import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.aop.OnlyMentee;
 import com.koddy.server.member.application.usecase.UpdateMenteeInfoUseCase;
 import com.koddy.server.member.application.usecase.command.UpdateMenteeBasicInfoCommand;
-import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Nationality;
 import com.koddy.server.member.presentation.dto.request.UpdateMenteeBasicInfoRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,7 +37,7 @@ public class UpdateMenteeInfoApiController {
                 Nationality.from(request.nationality()),
                 request.profileImageUrl(),
                 request.introduction(),
-                Language.of(request.languages()),
+                request.toLanguages(),
                 request.interestSchool(),
                 request.interestMajor()
         ));

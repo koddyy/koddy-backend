@@ -2,9 +2,9 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.UpdateMentorInfoUseCase;
-import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
+import com.koddy.server.member.presentation.dto.request.LanguageRequest;
 import com.koddy.server.member.presentation.dto.request.MentorScheduleRequest;
 import com.koddy.server.member.presentation.dto.request.UpdateMentorBasicInfoRequest;
 import com.koddy.server.member.presentation.dto.request.UpdateMentorScheduleRequest;
@@ -50,7 +50,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                 MENTOR_1.getIntroduction(),
                 MENTOR_1.getLanguages()
                         .stream()
-                        .map(Language::getCode)
+                        .map(it -> new LanguageRequest(it.getCategory().getCode(), it.getType().getValue()))
                         .toList(),
                 MENTOR_1.getUniversityProfile().getSchool(),
                 MENTOR_1.getUniversityProfile().getMajor(),
@@ -75,7 +75,9 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘토 자기소개", false),
-                                    body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
+                                    body("languages", "사용 가능한 언어", true),
+                                    body("languages[].category", "언어 종류", "[국가코드 기반] KR EN CH JP VN", true),
+                                    body("languages[].type", "언어 타입", "메인 언어 (1개) / 서브 언어 (0..N개)", true),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
                                     body("enteredIn", "학번", true)
@@ -103,7 +105,9 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘토 자기소개", false),
-                                    body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
+                                    body("languages", "사용 가능한 언어", true),
+                                    body("languages[].category", "언어 종류", "[국가코드 기반] KR EN CH JP VN", true),
+                                    body("languages[].type", "언어 타입", "메인 언어 (1개) / 서브 언어 (0..N개)", true),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
                                     body("enteredIn", "학번", true)

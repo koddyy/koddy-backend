@@ -4,7 +4,6 @@ import com.koddy.server.member.application.usecase.SignUpUsecase;
 import com.koddy.server.member.application.usecase.command.SignUpMenteeCommand;
 import com.koddy.server.member.application.usecase.command.SignUpMentorCommand;
 import com.koddy.server.member.domain.model.Email;
-import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Nationality;
 import com.koddy.server.member.domain.model.mentee.Interest;
 import com.koddy.server.member.domain.model.mentor.UniversityProfile;
@@ -38,7 +37,7 @@ public class SignUpApiController {
                 request.name(),
                 request.profileImageUrl(),
                 request.introduction(),
-                Language.of(request.languages()),
+                request.toLanguages(),
                 new UniversityProfile(request.school(), request.major(), request.enteredIn()),
                 request.toSchedules()
         ));
@@ -56,7 +55,7 @@ public class SignUpApiController {
                 request.profileImageUrl(),
                 Nationality.from(request.nationality()),
                 request.introduction(),
-                Language.of(request.languages()),
+                request.toLanguages(),
                 new Interest(request.interestSchool(), request.interestMajor())
         ));
         return ResponseEntity.ok(new SignUpResponse(memberId));

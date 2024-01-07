@@ -1,14 +1,21 @@
 package com.koddy.server.member.domain.model.mentee;
 
 import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.fixture.LanguageFixture;
+import com.koddy.server.member.domain.model.Language;
+import com.koddy.server.member.exception.MemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_2;
 import static com.koddy.server.member.domain.model.RoleType.MENTEE;
+import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("Member/Mentee -> 도메인 [Mentee] 테스트")
@@ -16,6 +23,30 @@ class MenteeTest extends ParallelTest {
     @Nested
     @DisplayName("Mentee 생성")
     class Construct {
+        @Test
+        @DisplayName("사용 가능한 메인 언어가 1개가 아니면(0 or N) 정책에 의거해서 Mentee를 생성할 수 없다")
+        void throwExceptionByMainLanguageIsNotOne() {
+            // given
+            final List<Language> languages = List.of(
+                    LanguageFixture.KR_MAIN.toLanguage(),
+                    LanguageFixture.EN_MAIN.toLanguage(),
+                    LanguageFixture.JP_SUB.toLanguage()
+            );
+
+            // when - then
+            assertThatThrownBy(() -> new Mentee(
+                    MENTEE_1.getEmail(),
+                    MENTEE_1.name(),
+                    MENTEE_1.getProfileImageUrl(),
+                    MENTEE_1.getNationality(),
+                    MENTEE_1.getIntroduction(),
+                    languages,
+                    MENTEE_1.getInterest()
+            ))
+                    .isInstanceOf(MemberException.class)
+                    .hasMessage(MAIN_LANGUAGE_MUST_BE_ONLY_ONE.getMessage());
+        }
+
         @Test
         @DisplayName("Mentee를 생성한다")
         void success() {
