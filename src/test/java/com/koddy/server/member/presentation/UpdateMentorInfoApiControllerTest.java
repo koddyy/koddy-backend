@@ -25,8 +25,8 @@ import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFa
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createHttpSpecSnippets;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.failureDocsWithAccessToken;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocsWithAccessToken;
-import static com.koddy.server.member.domain.model.mentor.Day.MON;
-import static com.koddy.server.member.domain.model.mentor.Day.WED;
+import static com.koddy.server.member.domain.model.mentor.DayOfWeek.MON;
+import static com.koddy.server.member.domain.model.mentor.DayOfWeek.WED;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;

@@ -55,7 +55,7 @@ class SignUpApiControllerTest extends ControllerTest {
                     MENTOR_1.getUniversityProfile().getEnteredIn(),
                     MENTOR_1.getSchedules()
                             .stream()
-                            .map(it -> new MentorScheduleRequest(it.getDay().getKor(), it.getPeriod().getStartTime(), it.getPeriod().getEndTime()))
+                            .map(it -> new MentorScheduleRequest(it.getDayOfWeek().getKor(), it.getPeriod().getStartTime(), it.getPeriod().getEndTime()))
                             .toList()
             );
 

@@ -15,14 +15,14 @@ import static lombok.AccessLevel.PROTECTED;
 @Embeddable
 public class Schedule {
     @Enumerated(STRING)
-    @Column(name = "day", nullable = false, columnDefinition = "VARCHAR(20)")
-    private Day day;
+    @Column(name = "day_of_week", nullable = false, columnDefinition = "VARCHAR(20)")
+    private DayOfWeek dayOfWeek;
 
     @Embedded
     private Period period;
 
-    public Schedule(final Day day, final Period period) {
-        this.day = day;
+    public Schedule(final DayOfWeek dayOfWeek, final Period period) {
+        this.dayOfWeek = dayOfWeek;
         this.period = period;
     }
 }
