@@ -15,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.RequestBuilder;
 
-import java.time.LocalTime;
 import java.util.List;
 
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION;
@@ -25,8 +24,8 @@ import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFa
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createHttpSpecSnippets;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.failureDocsWithAccessToken;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocsWithAccessToken;
-import static com.koddy.server.member.domain.model.mentor.Day.MON;
-import static com.koddy.server.member.domain.model.mentor.Day.WED;
+import static com.koddy.server.member.domain.model.mentor.DayOfWeek.MON;
+import static com.koddy.server.member.domain.model.mentor.DayOfWeek.WED;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -118,8 +117,8 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
     class UpdateSchedule {
         private static final String BASE_URL = "/api/mentors/me/schedules";
         private final UpdateMentorScheduleRequest request = new UpdateMentorScheduleRequest(List.of(
-                new MentorScheduleRequest(MON.getKor(), LocalTime.of(9, 0), LocalTime.of(17, 0)),
-                new MentorScheduleRequest(WED.getKor(), LocalTime.of(13, 0), LocalTime.of(20, 0))
+                new MentorScheduleRequest(MON.getKor(), new MentorScheduleRequest.Start(9, 0), new MentorScheduleRequest.End(17, 0)),
+                new MentorScheduleRequest(WED.getKor(), new MentorScheduleRequest.Start(13, 0), new MentorScheduleRequest.End(20, 0))
         ));
 
         @Test
@@ -139,8 +138,10 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("schedules", "멘토링 스케줄", false),
                                     body("schedules[].day", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].startTime", "시작 시간", "KST", false),
-                                    body("schedules[].endTime", "종료 시간", "KST", false)
+                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST", false),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST", false),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST", false),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST", false)
                             )
                     )));
         }
@@ -164,8 +165,10 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("schedules", "멘토링 스케줄", false),
                                     body("schedules[].day", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].startTime", "시작 시간", "KST", false),
-                                    body("schedules[].endTime", "종료 시간", "KST", false)
+                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST", false),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST", false),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST", false),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST", false)
                             )
                     )));
         }

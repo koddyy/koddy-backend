@@ -55,7 +55,17 @@ class SignUpApiControllerTest extends ControllerTest {
                     MENTOR_1.getUniversityProfile().getEnteredIn(),
                     MENTOR_1.getSchedules()
                             .stream()
-                            .map(it -> new MentorScheduleRequest(it.getDay().getKor(), it.getPeriod().getStartTime(), it.getPeriod().getEndTime()))
+                            .map(it -> new MentorScheduleRequest(
+                                    it.getDayOfWeek().getKor(),
+                                    new MentorScheduleRequest.Start(
+                                            it.getPeriod().getStartTime().getHour(),
+                                            it.getPeriod().getStartTime().getMinute()
+                                    ),
+                                    new MentorScheduleRequest.End(
+                                            it.getPeriod().getEndTime().getHour(),
+                                            it.getPeriod().getEndTime().getMinute()
+                                    )
+                            ))
                             .toList()
             );
 
@@ -81,8 +91,10 @@ class SignUpApiControllerTest extends ControllerTest {
                                     body("enteredIn", "학번", true),
                                     body("schedules", "멘토링 스케줄", false),
                                     body("schedules[].day", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].startTime", "시작 시간", "KST", false),
-                                    body("schedules[].endTime", "종료 시간", "KST", false)
+                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST", false),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST", false),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST", false),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST", false)
                             ),
                             responseFields(
                                     body("id", "사용자 ID(PK)")

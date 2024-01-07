@@ -1,6 +1,6 @@
 package com.koddy.server.common.fixture;
 
-import com.koddy.server.member.domain.model.mentor.Day;
+import com.koddy.server.member.domain.model.mentor.DayOfWeek;
 import com.koddy.server.member.domain.model.mentor.Period;
 import com.koddy.server.member.domain.model.mentor.Schedule;
 import lombok.Getter;
@@ -9,13 +9,13 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalTime;
 import java.util.List;
 
-import static com.koddy.server.member.domain.model.mentor.Day.FRI;
-import static com.koddy.server.member.domain.model.mentor.Day.MON;
-import static com.koddy.server.member.domain.model.mentor.Day.SAT;
-import static com.koddy.server.member.domain.model.mentor.Day.SUN;
-import static com.koddy.server.member.domain.model.mentor.Day.THU;
-import static com.koddy.server.member.domain.model.mentor.Day.TUE;
-import static com.koddy.server.member.domain.model.mentor.Day.WED;
+import static com.koddy.server.member.domain.model.mentor.DayOfWeek.FRI;
+import static com.koddy.server.member.domain.model.mentor.DayOfWeek.MON;
+import static com.koddy.server.member.domain.model.mentor.DayOfWeek.SAT;
+import static com.koddy.server.member.domain.model.mentor.DayOfWeek.SUN;
+import static com.koddy.server.member.domain.model.mentor.DayOfWeek.THU;
+import static com.koddy.server.member.domain.model.mentor.DayOfWeek.TUE;
+import static com.koddy.server.member.domain.model.mentor.DayOfWeek.WED;
 
 @Getter
 @RequiredArgsConstructor
@@ -29,11 +29,11 @@ public enum ScheduleFixture {
     SUN_09_17(SUN, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
     ;
 
-    private final Day day;
+    private final DayOfWeek dayOfWeek;
     private final Period period;
 
     public Schedule toDomain() {
-        return new Schedule(day, period);
+        return new Schedule(dayOfWeek, period);
     }
 
     public static List<Schedule> 월_수_금() {

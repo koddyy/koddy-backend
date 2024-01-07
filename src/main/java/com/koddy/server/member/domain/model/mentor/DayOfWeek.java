@@ -12,7 +12,7 @@ import static com.koddy.server.member.exception.MemberExceptionCode.INVALID_DAY;
 
 @Getter
 @RequiredArgsConstructor
-public enum Day {
+public enum DayOfWeek {
     MON("월", "MON"),
     TUE("화", "TUE"),
     WED("수", "WED"),
@@ -24,20 +24,20 @@ public enum Day {
     private final String kor;
     private final String eng;
 
-    public static Day from(final String kor) {
+    public static DayOfWeek from(final String kor) {
         return Arrays.stream(values())
                 .filter(it -> it.kor.equals(kor))
                 .findFirst()
                 .orElseThrow(() -> new MemberException(INVALID_DAY));
     }
 
-    public static List<Day> of(final List<String> kors) {
+    public static List<DayOfWeek> of(final List<String> kors) {
         return kors.stream()
-                .map(Day::from)
+                .map(DayOfWeek::from)
                 .toList();
     }
 
-    public static Day of(final int year, final int month, final int day) {
+    public static DayOfWeek of(final int year, final int month, final int day) {
         return switch (LocalDate.of(year, month, day).getDayOfWeek()) {
             case MONDAY -> MON;
             case TUESDAY -> TUE;
