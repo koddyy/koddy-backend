@@ -56,7 +56,11 @@ public class SlackAlertManager {
                 .title(requestTime + " 발생 에러 로그")
                 .fields(List.of(
                         generateSlackField(TITLE_REQUEST_IP, getClientIP(request)),
-                        generateSlackField(TITLE_REQUEST_URL, getRequestUriWithQueryString(request)),
+                        generateSlackField(TITLE_REQUEST_URL, String.format(
+                                "[%s] %s",
+                                request.getMethod(),
+                                getRequestUriWithQueryString(request)
+                        )),
                         generateSlackField(TITLE_ERROR_MESSAGE, e.toString())
                 ))
                 .build();
