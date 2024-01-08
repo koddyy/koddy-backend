@@ -105,7 +105,7 @@ public enum MenteeFixture {
 
     public AuthMember toAuthMember() {
         return new AuthMember(
-                new AuthMember.MemberInfo(toDomain().apply(1L)),
+                this.toDomain().apply(1L),
                 new AuthToken(ACCESS_TOKEN, REFRESH_TOKEN)
         );
     }

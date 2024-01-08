@@ -2,7 +2,7 @@ package com.koddy.server.member.presentation.dto.request;
 
 import com.koddy.server.member.domain.model.mentor.DayOfWeek;
 import com.koddy.server.member.domain.model.mentor.Period;
-import com.koddy.server.member.domain.model.mentor.Schedule;
+import com.koddy.server.member.domain.model.mentor.Timeline;
 import lombok.Builder;
 
 import java.time.LocalTime;
@@ -25,8 +25,8 @@ public record MentorScheduleRequest(
     ) {
     }
 
-    public Schedule toSchedule() {
-        return new Schedule(
+    public Timeline toSchedule() {
+        return new Timeline(
                 DayOfWeek.from(day),
                 Period.of(
                         LocalTime.of(start.hour, start.minute),

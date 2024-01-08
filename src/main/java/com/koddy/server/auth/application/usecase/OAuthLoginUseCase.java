@@ -30,17 +30,12 @@ public class OAuthLoginUseCase {
         final OAuthUserResponse oAuthUser = getOAuthUser(command);
         final Member<?> member = getMemberByOAuthEmail(oAuthUser);
         final AuthToken authToken = tokenIssuer.provideAuthorityToken(member.getId());
-
-        return new AuthMember(
-                new AuthMember.MemberInfo(member),
-                authToken
-        );
+        return new AuthMember(member, authToken);
     }
 
     private OAuthUserResponse getOAuthUser(final OAuthLoginCommand command) {
         final OAuthConnector oAuthConnector = getOAuthConnectorByProvider(command.provider());
         final OAuthTokenResponse oAuthToken = oAuthConnector.fetchToken(command.code(), command.redirectUrl(), command.state());
-
         return oAuthConnector.fetchUserInfo(oAuthToken.accessToken());
     }
 

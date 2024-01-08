@@ -2,7 +2,7 @@ package com.koddy.server.common.fixture;
 
 import com.koddy.server.member.domain.model.mentor.DayOfWeek;
 import com.koddy.server.member.domain.model.mentor.Period;
-import com.koddy.server.member.domain.model.mentor.Schedule;
+import com.koddy.server.member.domain.model.mentor.Timeline;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +19,7 @@ import static com.koddy.server.member.domain.model.mentor.DayOfWeek.WED;
 
 @Getter
 @RequiredArgsConstructor
-public enum ScheduleFixture {
+public enum TimelineFixture {
     MON_09_17(MON, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
     TUE_09_17(TUE, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
     WED_09_17(WED, Period.of(LocalTime.of(9, 0), LocalTime.of(17, 0))),
@@ -32,11 +32,11 @@ public enum ScheduleFixture {
     private final DayOfWeek dayOfWeek;
     private final Period period;
 
-    public Schedule toDomain() {
-        return new Schedule(dayOfWeek, period);
+    public Timeline toDomain() {
+        return new Timeline(dayOfWeek, period);
     }
 
-    public static List<Schedule> 월_수_금() {
+    public static List<Timeline> 월_수_금() {
         return List.of(
                 MON_09_17.toDomain(),
                 WED_09_17.toDomain(),
@@ -44,7 +44,7 @@ public enum ScheduleFixture {
         );
     }
 
-    public static List<Schedule> 화_목_토() {
+    public static List<Timeline> 화_목_토() {
         return List.of(
                 TUE_09_17.toDomain(),
                 THU_09_17.toDomain(),
@@ -52,7 +52,7 @@ public enum ScheduleFixture {
         );
     }
 
-    public static List<Schedule> 월_화_수_목_금() {
+    public static List<Timeline> 월_화_수_목_금() {
         return List.of(
                 MON_09_17.toDomain(),
                 TUE_09_17.toDomain(),
@@ -62,14 +62,14 @@ public enum ScheduleFixture {
         );
     }
 
-    public static List<Schedule> 주말() {
+    public static List<Timeline> 주말() {
         return List.of(
                 SAT_09_17.toDomain(),
                 SUN_09_17.toDomain()
         );
     }
 
-    public static List<Schedule> allDays() {
+    public static List<Timeline> allDays() {
         return List.of(
                 MON_09_17.toDomain(),
                 TUE_09_17.toDomain(),

@@ -138,6 +138,30 @@ include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/request-fields.ado
 
 include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/http-response.adoc[]
 
+== 사용자 마이페이지(Private) 프로필 조회 API (AccessToken)
+
+=== 멘토 정보
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/PrivateProfile/Mix/Mentor/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/PrivateProfile/Mix/Mentor/http-response.adoc[]
+include::{snippets}/MemberApi/PrivateProfile/Mix/Mentor/response-fields.adoc[]
+
+=== 멘티 정보
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/PrivateProfile/Mix/Mentee/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/PrivateProfile/Mix/Mentee/http-response.adoc[]
+include::{snippets}/MemberApi/PrivateProfile/Mix/Mentee/response-fields.adoc[]
+
 == 커피챗 링크 생성/삭제 API (AccessToken + OnlyMentor)
 
 > OAuth 인증 후 진행되는 흐름

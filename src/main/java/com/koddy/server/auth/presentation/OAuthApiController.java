@@ -67,9 +67,9 @@ public class OAuthApiController {
         tokenResponseWriter.applyToken(response, authMember.token());
 
         return ResponseEntity.ok(new LoginResponse(
-                authMember.member().id(),
-                authMember.member().name(),
-                authMember.member().profileImageUrl()
+                authMember.id(),
+                authMember.name(),
+                authMember.profileImageUrl()
         ));
     }
 

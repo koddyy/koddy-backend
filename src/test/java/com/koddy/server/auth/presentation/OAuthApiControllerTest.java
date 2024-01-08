@@ -183,11 +183,11 @@ class OAuthApiControllerTest extends ControllerTest {
                     .andExpectAll(
                             status().isOk(),
                             jsonPath("$.id").exists(),
-                            jsonPath("$.id").value(loginResponse.member().id()),
+                            jsonPath("$.id").value(loginResponse.id()),
                             jsonPath("$.name").exists(),
-                            jsonPath("$.name").value(loginResponse.member().name()),
+                            jsonPath("$.name").value(loginResponse.name()),
                             jsonPath("$.profileImageUrl").exists(),
-                            jsonPath("$.profileImageUrl").value(loginResponse.member().profileImageUrl())
+                            jsonPath("$.profileImageUrl").value(loginResponse.profileImageUrl())
                     )
                     .andDo(successDocs("OAuthApi/Login/Success", createHttpSpecSnippets(
                             pathParameters(

@@ -1,6 +1,6 @@
 package com.koddy.server.member.presentation.dto.request;
 
-import com.koddy.server.member.domain.model.mentor.Schedule;
+import com.koddy.server.member.domain.model.mentor.Timeline;
 import lombok.Builder;
 import org.springframework.util.CollectionUtils;
 
@@ -10,7 +10,7 @@ import java.util.List;
 public record UpdateMentorScheduleRequest(
         List<MentorScheduleRequest> schedules
 ) {
-    public List<Schedule> toSchedules() {
+    public List<Timeline> toSchedules() {
         if (CollectionUtils.isEmpty(schedules)) {
             return List.of();
         }

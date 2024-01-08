@@ -53,7 +53,7 @@ class SignUpApiControllerTest extends ControllerTest {
                     MENTOR_1.getUniversityProfile().getSchool(),
                     MENTOR_1.getUniversityProfile().getMajor(),
                     MENTOR_1.getUniversityProfile().getEnteredIn(),
-                    MENTOR_1.getSchedules()
+                    MENTOR_1.getTimelines()
                             .stream()
                             .map(it -> new MentorScheduleRequest(
                                     it.getDayOfWeek().getKor(),
