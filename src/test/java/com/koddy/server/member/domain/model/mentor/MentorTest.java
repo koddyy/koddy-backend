@@ -30,9 +30,9 @@ class MentorTest extends ParallelTest {
         void throwExceptionByMainLanguageIsNotOne() {
             // given
             final List<Language> languages = List.of(
-                    LanguageFixture.KR_MAIN.toLanguage(),
-                    LanguageFixture.EN_MAIN.toLanguage(),
-                    LanguageFixture.JP_SUB.toLanguage()
+                    LanguageFixture.KR_MAIN.toDomain(),
+                    LanguageFixture.EN_MAIN.toDomain(),
+                    LanguageFixture.JP_SUB.toDomain()
             );
 
             // when - then

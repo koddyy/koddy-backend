@@ -4,6 +4,8 @@ import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
 import com.koddy.server.global.annotation.UseCase;
 import com.koddy.server.member.application.usecase.query.response.MenteeProfile;
 import com.koddy.server.member.application.usecase.query.response.MentorProfile;
+import com.koddy.server.member.domain.model.mentee.Mentee;
+import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MenteeRepository;
 import com.koddy.server.member.domain.repository.MentorRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +18,12 @@ public class GetMemberPrivateProfileUseCase {
     private final MenteeRepository menteeRepository;
 
     public MentorProfile getMentorProfile(final Long mentorId) {
-        return null;
+        final Mentor mentor = mentorRepository.getProfile(mentorId);
+        return new MentorProfile(mentor);
     }
 
     public MenteeProfile getMenteeProfile(final Long menteeId) {
-        return null;
+        final Mentee mentee = menteeRepository.getProfile(menteeId);
+        return new MenteeProfile(mentee);
     }
 }

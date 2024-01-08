@@ -28,36 +28,36 @@ public enum LanguageFixture {
     private final Language.Category category;
     private final Language.Type type;
 
-    public Language toLanguage() {
+    public Language toDomain() {
         return new Language(category, type);
     }
 
     public static List<Language> 메인_한국어_서브_일본어_중국어() {
         return List.of(
-                KR_MAIN.toLanguage(),
-                JP_SUB.toLanguage(),
-                CN_SUB.toLanguage()
+                KR_MAIN.toDomain(),
+                JP_SUB.toDomain(),
+                CN_SUB.toDomain()
         );
     }
 
     public static List<Language> 메인_한국어_서브_영어() {
         return List.of(
-                KR_MAIN.toLanguage(),
-                EN_SUB.toLanguage()
+                KR_MAIN.toDomain(),
+                EN_SUB.toDomain()
         );
     }
 
     public static List<Language> 메인_영어_서브_한국어() {
         return List.of(
-                EN_MAIN.toLanguage(),
-                KR_SUB.toLanguage()
+                EN_MAIN.toDomain(),
+                KR_SUB.toDomain()
         );
     }
 
     public static List<Language> 메인_영어_서브_일본어() {
         return List.of(
-                EN_MAIN.toLanguage(),
-                JP_SUB.toLanguage()
+                EN_MAIN.toDomain(),
+                JP_SUB.toDomain()
         );
     }
 }
