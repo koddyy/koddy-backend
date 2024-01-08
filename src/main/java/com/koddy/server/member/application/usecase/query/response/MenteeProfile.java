@@ -11,8 +11,9 @@ public record MenteeProfile(
         String nationality,
         String introduction,
         LanguageResponse languages,
-        InterestResponse interest
-) {
+        InterestResponse interest,
+        String role
+) implements MemberProfile {
     public record InterestResponse(
             String school,
             String major
@@ -31,7 +32,8 @@ public record MenteeProfile(
                 mentee.getNationality().getKor(),
                 mentee.getIntroduction(),
                 new LanguageResponse(mentee.getLanguages()),
-                new InterestResponse(mentee.getInterest())
+                new InterestResponse(mentee.getInterest()),
+                "mentee"
         );
     }
 }

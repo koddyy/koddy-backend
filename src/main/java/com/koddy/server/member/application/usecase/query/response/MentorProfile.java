@@ -15,8 +15,9 @@ public record MentorProfile(
         String introduction,
         LanguageResponse languages,
         UniversityResponse university,
-        List<ScheduleResponse> schedules
-) {
+        List<ScheduleResponse> schedules,
+        String role
+) implements MemberProfile {
     public record UniversityResponse(
             String school,
             String major,
@@ -66,7 +67,8 @@ public record MentorProfile(
                 mentor.getSchedules()
                         .stream()
                         .map(it -> new ScheduleResponse(it.getTimeline()))
-                        .toList()
+                        .toList(),
+                "mentor"
         );
     }
 }

@@ -5,6 +5,7 @@ import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.aop.OnlyMentee;
 import com.koddy.server.global.aop.OnlyMentor;
 import com.koddy.server.member.application.usecase.GetMemberPrivateProfileUseCase;
+import com.koddy.server.member.application.usecase.query.response.MemberProfile;
 import com.koddy.server.member.application.usecase.query.response.MenteeProfile;
 import com.koddy.server.member.application.usecase.query.response.MentorProfile;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +23,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberPrivateProflieApiController {
     private final GetMemberPrivateProfileUseCase getMemberPrivateProfileUseCase;
 
-    @Operation(summary = "멘토 마이페이지 프로필 조회 Endpoint")
+    @Operation(summary = "마이페이지 프로필 조회 Endpoint (@Auth Authorities에 따른 분기)")
+    @GetMapping("/members/me")
+    public ResponseEntity<MemberProfile> getProfile(
+            @Auth final Authenticated authenticated
+    ) {
+        final MemberProfile response = authenticated.isMentor()
+                ? getMemberPrivateProfileUseCase.getMentorProfile(authenticated.id())
+                : getMemberPrivateProfileUseCase.getMenteeProfile(authenticated.id());
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "멘토 마이페이지 프로필 조회 Endpoint - Deprecated by requirements")
     @GetMapping("/mentors/me")
     @OnlyMentor
     public ResponseEntity<MentorProfile> getMentorProfile(
@@ -32,7 +44,7 @@ public class MemberPrivateProflieApiController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "멘티 마이페이지 프로필 조회 Endpoint")
+    @Operation(summary = "멘티 마이페이지 프로필 조회 Endpoint - Deprecated by requirements")
     @GetMapping("/mentees/me")
     @OnlyMentee
     public ResponseEntity<MenteeProfile> getMenteeProfile(

@@ -35,6 +35,83 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
     private final Mentee mentee = MENTEE_1.toDomain().apply(2L);
 
     @Nested
+    @DisplayName("사용자 프로필 조회 API [GET /api/members/me]")
+    class GetProfile {
+        private static final String BASE_URL = "/api/members/me";
+
+        @Test
+        @DisplayName("멘토 프로필을 조회한다")
+        void getMentorProfile() throws Exception {
+            // given
+            mockingToken(true, mentor.getId(), mentor.getAuthorities());
+            given(getMemberPrivateProfileUseCase.getMentorProfile(any())).willReturn(new MentorProfile(mentor));
+
+            // when
+            final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);
+
+            // then
+            mockMvc.perform(requestBuilder)
+                    .andExpect(status().isOk())
+                    .andDo(successDocsWithAccessToken("MemberApi/PrivateProfile/Mix/Mentor", createHttpSpecSnippets(
+                            responseFields(
+                                    body("id", "ID(PK)"),
+                                    body("email", "이메일"),
+                                    body("name", "이름"),
+                                    body("profileImageUrl", "프로필 이미지 URL"),
+                                    body("nationality", "국적"),
+                                    body("introduction", "자기 소개"),
+                                    body("languages", "사용 가능한 언어"),
+                                    body("languages.mainLanguage", "메인 언어 (1개)"),
+                                    body("languages.subLanguages[]", "서브 언어 (0..N개)"),
+                                    body("university", "대학 정보"),
+                                    body("university.school", "학교"),
+                                    body("university.major", "전공"),
+                                    body("university.enteredIn", "학번"),
+                                    body("schedules", "스케줄"),
+                                    body("schedules[].day", "날짜", "월 화 수 목 금 토 일"),
+                                    body("schedules[].start.hour", "시작 시간 (Hour)"),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)"),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)"),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)"),
+                                    body("role", "역할 (멘토/멘티)")
+                            )
+                    )));
+        }
+
+        @Test
+        @DisplayName("멘티 프로필을 조회한다")
+        void getMenteeProfile() throws Exception {
+            // given
+            mockingToken(true, mentee.getId(), mentee.getAuthorities());
+            given(getMemberPrivateProfileUseCase.getMenteeProfile(any())).willReturn(new MenteeProfile(mentee));
+
+            // when
+            final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);
+
+            // then
+            mockMvc.perform(requestBuilder)
+                    .andExpect(status().isOk())
+                    .andDo(successDocsWithAccessToken("MemberApi/PrivateProfile/Mix/Mentee", createHttpSpecSnippets(
+                            responseFields(
+                                    body("id", "ID(PK)"),
+                                    body("email", "이메일"),
+                                    body("name", "이름"),
+                                    body("profileImageUrl", "프로필 이미지 URL"),
+                                    body("nationality", "국적"),
+                                    body("introduction", "자기 소개"),
+                                    body("languages", "사용 가능한 언어"),
+                                    body("languages.mainLanguage", "메인 언어 (1개)"),
+                                    body("languages.subLanguages[]", "서브 언어 (0..N개)"),
+                                    body("interest", "관심있는 대학 정보"),
+                                    body("interest.school", "학교"),
+                                    body("interest.major", "전공"),
+                                    body("role", "역할 (멘토/멘티)")
+                            )
+                    )));
+        }
+    }
+
+    @Nested
     @DisplayName("멘토 프로필 조회 API [GET /api/mentors/me]")
     class GetMentorProfile {
         private static final String BASE_URL = "/api/mentors/me";
@@ -88,7 +165,8 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
                                     body("schedules[].start.hour", "시작 시간 (Hour)"),
                                     body("schedules[].start.minute", "시작 시간 (Minute)"),
                                     body("schedules[].end.hour", "종료 시간 (Hour)"),
-                                    body("schedules[].end.minute", "종료 시간 (Minute)")
+                                    body("schedules[].end.minute", "종료 시간 (Minute)"),
+                                    body("role", "역할 (멘토/멘티)")
                             )
                     )));
         }
@@ -141,7 +219,8 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
                                     body("languages.subLanguages[]", "서브 언어 (0..N개)"),
                                     body("interest", "관심있는 대학 정보"),
                                     body("interest.school", "학교"),
-                                    body("interest.major", "전공")
+                                    body("interest.major", "전공"),
+                                    body("role", "역할 (멘토/멘티)")
                             )
                     )));
         }
