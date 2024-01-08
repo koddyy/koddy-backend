@@ -1,11 +1,9 @@
 package com.koddy.server.member.application.usecase.query.response;
 
 import com.koddy.server.member.domain.model.mentor.Mentor;
-import com.koddy.server.member.domain.model.mentor.Schedule;
 import com.koddy.server.member.domain.model.mentor.Timeline;
 import com.koddy.server.member.domain.model.mentor.UniversityProfile;
 
-import java.time.LocalTime;
 import java.util.List;
 
 public record MentorProfile(
@@ -31,14 +29,26 @@ public record MentorProfile(
 
     public record ScheduleResponse(
             String day,
-            LocalTime start,
-            LocalTime end
+            Start start,
+            End end
     ) {
+        public record Start(
+                int hour,
+                int minute
+        ) {
+        }
+
+        public record End(
+                int hour,
+                int minute
+        ) {
+        }
+
         public ScheduleResponse(final Timeline timeline) {
             this(
                     timeline.getDayOfWeek().getKor(),
-                    timeline.getPeriod().getStartTime(),
-                    timeline.getPeriod().getEndTime()
+                    new Start(timeline.getPeriod().getStartTime().getHour(), timeline.getPeriod().getStartTime().getMinute()),
+                    new End(timeline.getPeriod().getEndTime().getHour(), timeline.getPeriod().getEndTime().getMinute())
             );
         }
     }
@@ -55,8 +65,7 @@ public record MentorProfile(
                 new UniversityResponse(mentor.getUniversityProfile()),
                 mentor.getSchedules()
                         .stream()
-                        .map(Schedule::getTimeline)
-                        .map(ScheduleResponse::new)
+                        .map(it -> new ScheduleResponse(it.getTimeline()))
                         .toList()
         );
     }

@@ -12,16 +12,17 @@ import lombok.RequiredArgsConstructor;
 
 @UseCase
 @RequiredArgsConstructor
-@KoddyReadOnlyTransactional
 public class GetMemberPrivateProfileUseCase {
     private final MentorRepository mentorRepository;
     private final MenteeRepository menteeRepository;
 
+    @KoddyReadOnlyTransactional
     public MentorProfile getMentorProfile(final Long mentorId) {
         final Mentor mentor = mentorRepository.getProfile(mentorId);
         return new MentorProfile(mentor);
     }
 
+    @KoddyReadOnlyTransactional
     public MenteeProfile getMenteeProfile(final Long menteeId) {
         final Mentee mentee = menteeRepository.getProfile(menteeId);
         return new MenteeProfile(mentee);

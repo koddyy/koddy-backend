@@ -71,8 +71,14 @@ class GetMemberPrivateProfileUseCaseTest extends UseCaseTest {
                                 timelines.stream()
                                         .map(it -> new MentorProfile.ScheduleResponse(
                                                 it.getDayOfWeek().getKor(),
-                                                it.getPeriod().getStartTime(),
-                                                it.getPeriod().getEndTime()
+                                                new MentorProfile.ScheduleResponse.Start(
+                                                        it.getPeriod().getStartTime().getHour(),
+                                                        it.getPeriod().getStartTime().getMinute()
+                                                ),
+                                                new MentorProfile.ScheduleResponse.End(
+                                                        it.getPeriod().getEndTime().getHour(),
+                                                        it.getPeriod().getEndTime().getMinute()
+                                                )
                                         ))
                                         .toList()
                         )
