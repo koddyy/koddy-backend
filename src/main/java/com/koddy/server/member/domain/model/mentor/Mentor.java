@@ -30,7 +30,7 @@ public class Mentor extends Member<Mentor> {
     private UniversityProfile universityProfile;
 
     @OneToMany(mappedBy = "mentor", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
-    private final List<ChatTime> chatTimes = new ArrayList<>();
+    private final List<Schedule> schedules = new ArrayList<>();
 
     public Mentor(
             final Email email,
@@ -39,19 +39,19 @@ public class Mentor extends Member<Mentor> {
             final String introduction,
             final List<Language> languages,
             final UniversityProfile universityProfile,
-            final List<Schedule> schedules
+            final List<Timeline> timelines
     ) {
         super(email, name, profileImageUrl, KOREA, introduction, languages, List.of(MENTOR));
         this.universityProfile = universityProfile;
-        applySchedules(schedules);
+        applySchedules(timelines);
     }
 
-    private void applySchedules(final List<Schedule> schedules) {
-        this.chatTimes.clear();
-        if (!CollectionUtils.isEmpty(schedules)) {
-            this.chatTimes.addAll(
-                    schedules.stream()
-                            .map(it -> new ChatTime(this, it))
+    private void applySchedules(final List<Timeline> timelines) {
+        this.schedules.clear();
+        if (!CollectionUtils.isEmpty(timelines)) {
+            this.schedules.addAll(
+                    timelines.stream()
+                            .map(it -> new Schedule(this, it))
                             .toList()
             );
         }
@@ -70,12 +70,12 @@ public class Mentor extends Member<Mentor> {
         this.universityProfile = this.universityProfile.update(school, major, enteredIn);
     }
 
-    public void updateSchedules(final List<Schedule> schedules) {
-        applySchedules(schedules);
+    public void updateSchedules(final List<Timeline> timelines) {
+        applySchedules(timelines);
     }
 
     @Override
     public boolean isProfileComplete() {
-        return StringUtils.hasText(introduction) && !this.chatTimes.isEmpty();
+        return StringUtils.hasText(introduction) && !this.schedules.isEmpty();
     }
 }

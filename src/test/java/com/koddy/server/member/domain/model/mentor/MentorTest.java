@@ -2,7 +2,7 @@ package com.koddy.server.member.domain.model.mentor;
 
 import com.koddy.server.common.ParallelTest;
 import com.koddy.server.common.fixture.LanguageFixture;
-import com.koddy.server.common.fixture.ScheduleFixture;
+import com.koddy.server.common.fixture.TimelineFixture;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.exception.MemberException;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +43,7 @@ class MentorTest extends ParallelTest {
                     MENTOR_1.getIntroduction(),
                     languages,
                     MENTOR_1.getUniversityProfile(),
-                    MENTOR_1.getSchedules()
+                    MENTOR_1.getTimelines()
             ))
                     .isInstanceOf(MemberException.class)
                     .hasMessage(MAIN_LANGUAGE_MUST_BE_ONLY_ONE.getMessage());
@@ -65,9 +65,9 @@ class MentorTest extends ParallelTest {
                     () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(MENTOR_1.getUniversityProfile().getSchool()),
                     () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(MENTOR_1.getUniversityProfile().getMajor()),
                     () -> assertThat(mentor.getUniversityProfile().getEnteredIn()).isEqualTo(MENTOR_1.getUniversityProfile().getEnteredIn()),
-                    () -> assertThat(mentor.getChatTimes())
-                            .map(ChatTime::getSchedule)
-                            .containsExactlyInAnyOrderElementsOf(MENTOR_1.getSchedules())
+                    () -> assertThat(mentor.getSchedules())
+                            .map(Schedule::getTimeline)
+                            .containsExactlyInAnyOrderElementsOf(MENTOR_1.getTimelines())
             );
         }
     }
@@ -85,7 +85,7 @@ class MentorTest extends ParallelTest {
                 null,
                 MENTOR_2.getLanguages(),
                 MENTOR_2.getUniversityProfile(),
-                ScheduleFixture.allDays()
+                TimelineFixture.allDays()
         );
         assertThat(mentorB.isProfileComplete()).isFalse();
 
@@ -131,9 +131,9 @@ class MentorTest extends ParallelTest {
                     () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(MENTOR_2.getUniversityProfile().getSchool()),
                     () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(MENTOR_2.getUniversityProfile().getMajor()),
                     () -> assertThat(mentor.getUniversityProfile().getEnteredIn()).isEqualTo(MENTOR_2.getUniversityProfile().getEnteredIn()),
-                    () -> assertThat(mentor.getChatTimes())
-                            .map(ChatTime::getSchedule)
-                            .containsExactlyInAnyOrderElementsOf(MENTOR_1.getSchedules())
+                    () -> assertThat(mentor.getSchedules())
+                            .map(Schedule::getTimeline)
+                            .containsExactlyInAnyOrderElementsOf(MENTOR_1.getTimelines())
             );
         }
     }
@@ -148,15 +148,13 @@ class MentorTest extends ParallelTest {
             final Mentor mentor = MENTOR_1.toDomain().apply(1L);
 
             // when
-            final List<Schedule> update = ScheduleFixture.allDays();
+            final List<Timeline> update = TimelineFixture.allDays();
             mentor.updateSchedules(update);
 
             // then
-            assertAll(
-                    () -> assertThat(mentor.getChatTimes())
-                            .map(ChatTime::getSchedule)
-                            .containsExactlyInAnyOrderElementsOf(update)
-            );
+            assertThat(mentor.getSchedules())
+                    .map(Schedule::getTimeline)
+                    .containsExactlyInAnyOrderElementsOf(update);
         }
     }
 }

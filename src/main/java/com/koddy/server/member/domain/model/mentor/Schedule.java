@@ -1,28 +1,31 @@
 package com.koddy.server.member.domain.model.mentor;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
+import com.koddy.server.global.base.BaseEntity;
 import jakarta.persistence.Embedded;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@Embeddable
-public class Schedule {
-    @Enumerated(STRING)
-    @Column(name = "day_of_week", nullable = false, columnDefinition = "VARCHAR(20)")
-    private DayOfWeek dayOfWeek;
-
+@Entity
+@Table(name = "mentor_schedule")
+public class Schedule extends BaseEntity<Schedule> {
     @Embedded
-    private Period period;
+    private Timeline timeline;
 
-    public Schedule(final DayOfWeek dayOfWeek, final Period period) {
-        this.dayOfWeek = dayOfWeek;
-        this.period = period;
+    @ManyToOne(fetch = LAZY, optional = false)
+    @JoinColumn(name = "mentor_id", referencedColumnName = "id", nullable = false)
+    private Mentor mentor;
+
+    public Schedule(final Mentor mentor, final Timeline timeline) {
+        this.mentor = mentor;
+        this.timeline = timeline;
     }
 }

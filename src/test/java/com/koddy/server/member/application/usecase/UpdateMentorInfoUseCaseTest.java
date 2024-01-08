@@ -1,11 +1,11 @@
 package com.koddy.server.member.application.usecase;
 
 import com.koddy.server.common.UseCaseTest;
-import com.koddy.server.common.fixture.ScheduleFixture;
+import com.koddy.server.common.fixture.TimelineFixture;
 import com.koddy.server.member.application.usecase.command.UpdateMentorBasicInfoCommand;
 import com.koddy.server.member.application.usecase.command.UpdateMentorScheduleCommand;
-import com.koddy.server.member.domain.model.mentor.ChatTime;
 import com.koddy.server.member.domain.model.mentor.Mentor;
+import com.koddy.server.member.domain.model.mentor.Schedule;
 import com.koddy.server.member.domain.repository.MentorRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -68,7 +68,7 @@ class UpdateMentorInfoUseCaseTest extends UseCaseTest {
         final Mentor mentor = MENTOR_1.toDomain().apply(1L);
         final UpdateMentorScheduleCommand command = new UpdateMentorScheduleCommand(
                 mentor.getId(),
-                ScheduleFixture.allDays()
+                TimelineFixture.allDays()
         );
         given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
 
@@ -78,9 +78,9 @@ class UpdateMentorInfoUseCaseTest extends UseCaseTest {
         // then
         assertAll(
                 () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
-                () -> assertThat(mentor.getChatTimes())
-                        .map(ChatTime::getSchedule)
-                        .containsExactlyInAnyOrderElementsOf(command.schedules())
+                () -> assertThat(mentor.getSchedules())
+                        .map(Schedule::getTimeline)
+                        .containsExactlyInAnyOrderElementsOf(command.timelines())
         );
     }
 }

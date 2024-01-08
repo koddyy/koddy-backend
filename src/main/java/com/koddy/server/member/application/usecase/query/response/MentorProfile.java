@@ -1,8 +1,8 @@
 package com.koddy.server.member.application.usecase.query.response;
 
-import com.koddy.server.member.domain.model.mentor.ChatTime;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.model.mentor.Schedule;
+import com.koddy.server.member.domain.model.mentor.Timeline;
 import com.koddy.server.member.domain.model.mentor.UniversityProfile;
 
 import java.time.LocalTime;
@@ -34,11 +34,11 @@ public record MentorProfile(
             LocalTime start,
             LocalTime end
     ) {
-        public ScheduleResponse(final Schedule schedule) {
+        public ScheduleResponse(final Timeline timeline) {
             this(
-                    schedule.getDayOfWeek().getKor(),
-                    schedule.getPeriod().getStartTime(),
-                    schedule.getPeriod().getEndTime()
+                    timeline.getDayOfWeek().getKor(),
+                    timeline.getPeriod().getStartTime(),
+                    timeline.getPeriod().getEndTime()
             );
         }
     }
@@ -53,9 +53,9 @@ public record MentorProfile(
                 mentor.getIntroduction(),
                 new LanguageResponse(mentor.getLanguages()),
                 new UniversityResponse(mentor.getUniversityProfile()),
-                mentor.getChatTimes()
+                mentor.getSchedules()
                         .stream()
-                        .map(ChatTime::getSchedule)
+                        .map(Schedule::getTimeline)
                         .map(ScheduleResponse::new)
                         .toList()
         );
