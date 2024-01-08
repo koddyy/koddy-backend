@@ -25,9 +25,9 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(SignUpApiController.class)
-@DisplayName("Member -> SignUpApiController 테스트")
-class SignUpApiControllerTest extends ControllerTest {
+@WebMvcTest(ManageAccountApiController.class)
+@DisplayName("Member -> ManageAccountApiController 테스트")
+class ManageAccountApiControllerTest extends ControllerTest {
     @MockBean
     private SignUpUsecase signUpUsecase;
 

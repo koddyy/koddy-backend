@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "사용자 회원가입 API")
+@Tag(name = "사용자 계정 관리 (회원가입/탈퇴) API")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class SignUpApiController {
+public class ManageAccountApiController {
     private final SignUpUsecase signUpUsecase;
 
     @Operation(summary = "멘토 회원가입 Endpoint")
