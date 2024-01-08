@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @Entity
-@Table(name = "available_language")
+@Table(name = "member_language")
 public class AvailableLanguage {
     @Id
     @GeneratedValue(strategy = IDENTITY)
