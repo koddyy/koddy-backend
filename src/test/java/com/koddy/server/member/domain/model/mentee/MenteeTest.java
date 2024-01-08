@@ -58,6 +58,7 @@ class MenteeTest extends ParallelTest {
                     () -> assertThat(mentee.getNationality()).isEqualTo(MENTEE_1.getNationality()),
                     () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(MENTEE_1.getProfileImageUrl()),
                     () -> assertThat(mentee.getIntroduction()).isEqualTo(MENTEE_1.getIntroduction()),
+                    () -> assertThat(mentee.isActive()).isTrue(),
                     () -> assertThat(mentee.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTEE_1.getLanguages()),
                     () -> assertThat(mentee.getAuthorities()).containsExactlyInAnyOrder(MENTEE.getAuthority()),
                     () -> assertThat(mentee.getInterest().getSchool()).isEqualTo(MENTEE_1.getInterest().getSchool()),

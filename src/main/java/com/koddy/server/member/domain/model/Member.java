@@ -18,6 +18,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.koddy.server.member.domain.model.MemberStatus.ACTIVE;
 import static com.koddy.server.member.exception.MemberExceptionCode.AVAILABLE_LANGUAGE_MUST_EXISTS;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static jakarta.persistence.CascadeType.PERSIST;
@@ -52,6 +53,10 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     @Column(name = "introduction", columnDefinition = "TEXT")
     protected String introduction;
 
+    @Enumerated(STRING)
+    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(20)")
+    protected MemberStatus status;
+
     @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     protected final List<AvailableLanguage> availableLanguages = new ArrayList<>();
 
@@ -72,6 +77,7 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         this.profileImageUrl = profileImageUrl;
         this.nationality = nationality;
         this.introduction = introduction;
+        this.status = ACTIVE;
         applyLanguages(languages);
         applyRoles(roles);
     }
@@ -125,6 +131,10 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         this.profileImageUrl = profileImageUrl;
         this.introduction = introduction;
         applyLanguages(languages);
+    }
+
+    public boolean isActive() {
+        return status == ACTIVE;
     }
 
     public List<Language> getLanguages() {

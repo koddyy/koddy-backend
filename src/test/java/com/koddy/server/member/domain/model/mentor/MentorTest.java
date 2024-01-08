@@ -60,6 +60,7 @@ class MentorTest extends ParallelTest {
                     () -> assertThat(mentor.getNationality()).isEqualTo(KOREA),
                     () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(MENTOR_1.getProfileImageUrl()),
                     () -> assertThat(mentor.getIntroduction()).isEqualTo(MENTOR_1.getIntroduction()),
+                    () -> assertThat(mentor.isActive()).isTrue(),
                     () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTOR_1.getLanguages()),
                     () -> assertThat(mentor.getAuthorities()).containsExactlyInAnyOrder(MENTOR.getAuthority()),
                     () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(MENTOR_1.getUniversityProfile().getSchool()),
