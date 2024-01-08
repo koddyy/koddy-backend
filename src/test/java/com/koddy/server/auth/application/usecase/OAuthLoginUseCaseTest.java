@@ -98,9 +98,9 @@ class OAuthLoginUseCaseTest extends UseCaseTest {
                     () -> verify(googleOAuthConnector, times(1)).fetchUserInfo(googleTokenResponse.accessToken()),
                     () -> verify(memberRepository, times(1)).findByEmailValue(googleUserResponse.email()),
                     () -> verify(tokenIssuer, times(1)).provideAuthorityToken(member.getId()),
-                    () -> assertThat(response.member().id()).isEqualTo(member.getId()),
-                    () -> assertThat(response.member().name()).isEqualTo(member.getName()),
-                    () -> assertThat(response.member().profileImageUrl()).isEqualTo(member.getProfileImageUrl()),
+                    () -> assertThat(response.id()).isEqualTo(member.getId()),
+                    () -> assertThat(response.name()).isEqualTo(member.getName()),
+                    () -> assertThat(response.profileImageUrl()).isEqualTo(member.getProfileImageUrl()),
                     () -> assertThat(response.token().accessToken()).isEqualTo(authToken.accessToken()),
                     () -> assertThat(response.token().refreshToken()).isEqualTo(authToken.refreshToken())
             );
