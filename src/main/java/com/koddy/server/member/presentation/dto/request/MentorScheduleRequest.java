@@ -5,13 +5,16 @@ import com.koddy.server.member.domain.model.mentor.Period;
 import com.koddy.server.member.domain.model.mentor.Timeline;
 import lombok.Builder;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Builder
 public record MentorScheduleRequest(
-        String day,
-        Start start,
-        End end
+        LocalDate startDate,
+        LocalDate endDate,
+        String dayOfWeek,
+        Start startTime,
+        End endTime
 ) {
     public record Start(
             int hour,
@@ -27,10 +30,11 @@ public record MentorScheduleRequest(
 
     public Timeline toSchedule() {
         return new Timeline(
-                DayOfWeek.from(day),
+                startDate, endDate,
+                DayOfWeek.from(dayOfWeek),
                 Period.of(
-                        LocalTime.of(start.hour, start.minute),
-                        LocalTime.of(end.hour, end.minute)
+                        LocalTime.of(startTime.hour, startTime.minute),
+                        LocalTime.of(endTime.hour, endTime.minute)
                 )
         );
     }
