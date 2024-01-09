@@ -47,6 +47,8 @@ class CompleteAccountApiControllerTest extends ControllerTest {
                     TimelineFixture.월_수_금()
                             .stream()
                             .map(it -> new MentorScheduleRequest(
+                                    it.getStartDate(),
+                                    it.getEndDate(),
                                     it.getDayOfWeek().getKor(),
                                     new MentorScheduleRequest.Start(
                                             it.getPeriod().getStartTime().getHour(),
@@ -70,11 +72,13 @@ class CompleteAccountApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("introduction", "자기소개", false),
                                     body("schedules", "멘토링 스케줄", false),
-                                    body("schedules[].day", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST", false),
-                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST", false),
-                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST", false),
-                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST", false)
+                                    body("schedules[].startDate", "시작 날짜", "KST", false),
+                                    body("schedules[].endDate", "종료 날짜", "KST", false),
+                                    body("schedules[].dayOfWeek", "날짜", "월 화 수 목 금 토 일", false),
+                                    body("schedules[].startTime.hour", "시작 시간 (Hour)", "KST", false),
+                                    body("schedules[].startTime.minute", "시작 시간 (Minute)", "KST", false),
+                                    body("schedules[].endTime.hour", "종료 시간 (Hour)", "KST", false),
+                                    body("schedules[].endTime.minute", "종료 시간 (Minute)", "KST", false)
                             )
                     )));
         }

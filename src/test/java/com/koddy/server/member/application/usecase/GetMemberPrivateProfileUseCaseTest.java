@@ -101,6 +101,8 @@ class GetMemberPrivateProfileUseCaseTest extends UseCaseTest {
                             .isEqualTo(
                                     timelines.stream()
                                             .map(it -> new MentorProfile.ScheduleResponse(
+                                                    it.getStartDate(),
+                                                    it.getEndDate(),
                                                     it.getDayOfWeek().getKor(),
                                                     new MentorProfile.ScheduleResponse.Start(
                                                             it.getPeriod().getStartTime().getHour(),
