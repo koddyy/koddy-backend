@@ -48,6 +48,9 @@ dependencies {
     // Redis
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
+    // Mail
+    implementation("org.springframework.boot:spring-boot-starter-mail")
+
     // Cloud Infra
     implementation("io.awspring.cloud:spring-cloud-aws-starter:${property("awspringVersion")}")
     implementation("io.awspring.cloud:spring-cloud-aws-starter-s3:${property("awspringVersion")}")
