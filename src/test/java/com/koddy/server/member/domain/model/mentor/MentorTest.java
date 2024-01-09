@@ -4,6 +4,7 @@ import com.koddy.server.common.ParallelTest;
 import com.koddy.server.common.fixture.LanguageFixture;
 import com.koddy.server.common.fixture.TimelineFixture;
 import com.koddy.server.member.domain.model.Language;
+import com.koddy.server.member.domain.model.Role;
 import com.koddy.server.member.exception.MemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,7 +15,6 @@ import java.util.List;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_2;
 import static com.koddy.server.member.domain.model.Nationality.KOREA;
-import static com.koddy.server.member.domain.model.RoleType.MENTOR;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -62,7 +62,7 @@ class MentorTest extends ParallelTest {
                     () -> assertThat(mentor.getIntroduction()).isEqualTo(MENTOR_1.getIntroduction()),
                     () -> assertThat(mentor.isActive()).isTrue(),
                     () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTOR_1.getLanguages()),
-                    () -> assertThat(mentor.getAuthorities()).containsExactlyInAnyOrder(MENTOR.getAuthority()),
+                    () -> assertThat(mentor.getAuthorities()).containsExactlyInAnyOrder(Role.Type.MENTOR.getAuthority()),
                     () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(MENTOR_1.getUniversityProfile().getSchool()),
                     () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(MENTOR_1.getUniversityProfile().getMajor()),
                     () -> assertThat(mentor.getUniversityProfile().getEnteredIn()).isEqualTo(MENTOR_1.getUniversityProfile().getEnteredIn()),
@@ -128,7 +128,7 @@ class MentorTest extends ParallelTest {
                     () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(MENTOR_2.getProfileImageUrl()),
                     () -> assertThat(mentor.getIntroduction()).isEqualTo(MENTOR_2.getIntroduction()),
                     () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTOR_2.getLanguages()),
-                    () -> assertThat(mentor.getAuthorities()).containsExactlyInAnyOrder(MENTOR.getAuthority()),
+                    () -> assertThat(mentor.getAuthorities()).containsExactlyInAnyOrder(Role.Type.MENTOR.getAuthority()),
                     () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(MENTOR_2.getUniversityProfile().getSchool()),
                     () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(MENTOR_2.getUniversityProfile().getMajor()),
                     () -> assertThat(mentor.getUniversityProfile().getEnteredIn()).isEqualTo(MENTOR_2.getUniversityProfile().getEnteredIn()),

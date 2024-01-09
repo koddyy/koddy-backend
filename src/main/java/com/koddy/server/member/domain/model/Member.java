@@ -71,7 +71,7 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
             final Nationality nationality,
             final String introduction,
             final List<Language> languages,
-            final List<RoleType> roles
+            final List<Role.Type> roles
     ) {
         this.email = email;
         this.name = name;
@@ -111,7 +111,7 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         }
     }
 
-    private void applyRoles(final List<RoleType> roleTypes) {
+    private void applyRoles(final List<Role.Type> roleTypes) {
         this.roles.clear();
         this.roles.addAll(
                 roleTypes.stream()
@@ -146,8 +146,8 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
 
     public List<String> getAuthorities() {
         return roles.stream()
-                .map(Role::getRoleType)
-                .map(RoleType::getAuthority)
+                .map(Role::getType)
+                .map(Role.Type::getAuthority)
                 .toList();
     }
 

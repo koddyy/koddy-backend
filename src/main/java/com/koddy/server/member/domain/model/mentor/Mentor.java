@@ -3,6 +3,7 @@ package com.koddy.server.member.domain.model.mentor;
 import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Member;
+import com.koddy.server.member.domain.model.Role;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.koddy.server.member.domain.model.Nationality.KOREA;
-import static com.koddy.server.member.domain.model.RoleType.MENTOR;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static lombok.AccessLevel.PROTECTED;
@@ -43,7 +43,7 @@ public class Mentor extends Member<Mentor> {
             final UniversityProfile universityProfile,
             final List<Timeline> timelines
     ) {
-        super(email, name, profileImageUrl, KOREA, introduction, languages, List.of(MENTOR));
+        super(email, name, profileImageUrl, KOREA, introduction, languages, List.of(Role.Type.MENTOR));
         this.universityProfile = universityProfile;
         applySchedules(timelines);
     }
