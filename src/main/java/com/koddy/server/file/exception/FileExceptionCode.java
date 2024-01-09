@@ -11,8 +11,9 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @Getter
 @RequiredArgsConstructor
 public enum FileExceptionCode implements KoddyExceptionCode {
-    INVALID_FILE_EXTENSION(BAD_REQUEST, "UPLOAD_001", "파일 확장자는 [JPG, JPEG, PNG]만 가능합니다"),
-    UPLOAD_FAILURE(INTERNAL_SERVER_ERROR, "UPLOAD_002", "서버 내부 오류로 인해 파일 업로드에 실패했습니다."),
+    INVALID_FILE_EXTENSION(BAD_REQUEST, "FILE_001", "파일 확장자는 [JPG, JPEG, PNG]만 가능합니다"),
+    UPLOAD_FAILURE(INTERNAL_SERVER_ERROR, "FILE_002", "서버 내부 오류로 인해 파일 업로드에 실패했습니다."),
+    FILE_NOT_UPLOADED(BAD_REQUEST, "FILE_003", "파일이 업로드되지 않았습니다."),
     ;
 
     private final HttpStatus status;

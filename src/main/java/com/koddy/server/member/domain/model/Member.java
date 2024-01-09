@@ -34,8 +34,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Table(name = "member")
 public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
-    public static final String EMPTY = "EMPTY";
-
     @Embedded
     protected Email email;
 
