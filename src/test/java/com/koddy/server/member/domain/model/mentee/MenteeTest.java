@@ -13,6 +13,7 @@ import java.util.List;
 
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_2;
+import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_3;
 import static com.koddy.server.member.domain.model.ProfileComplete.NO;
 import static com.koddy.server.member.domain.model.ProfileComplete.YES;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
@@ -73,14 +74,14 @@ class MenteeTest extends ParallelTest {
     @Test
     @DisplayName("Mentee 프로필이 완성되었는지 확인한다 (자기소개)")
     void isProfileComplete() {
-        /* memberA 완성 */
+        /* menteeA 완성 */
         final Mentee menteeA = MENTEE_1.toDomain();
         assertAll(
                 () -> assertThat(menteeA.isProfileComplete()).isTrue(),
                 () -> assertThat(menteeA.getProfileComplete()).isEqualTo(YES)
         );
 
-        /* memberB 1차 회원가입 */
+        /* menteeB 1차 회원가입 */
         final Mentee menteeB = new Mentee(
                 MENTEE_2.getEmail(),
                 MENTEE_2.getName(),
@@ -94,11 +95,25 @@ class MenteeTest extends ParallelTest {
                 () -> assertThat(menteeB.getProfileComplete()).isEqualTo(NO)
         );
 
-        /* memberB 프로필 완성 */
+        /* menteeB 프로필 완성 */
         menteeB.completeInfo(MENTEE_2.getIntroduction());
         assertAll(
                 () -> assertThat(menteeB.isProfileComplete()).isTrue(),
                 () -> assertThat(menteeB.getProfileComplete()).isEqualTo(YES)
+        );
+
+        /* menteeC 완성 */
+        final Mentee menteeC = MENTEE_3.toDomain();
+        assertAll(
+                () -> assertThat(menteeC.isProfileComplete()).isTrue(),
+                () -> assertThat(menteeC.getProfileComplete()).isEqualTo(YES)
+        );
+
+        /* menteeC 미완성 진행 */
+        menteeC.completeInfo(null);
+        assertAll(
+                () -> assertThat(menteeC.isProfileComplete()).isFalse(),
+                () -> assertThat(menteeC.getProfileComplete()).isEqualTo(NO)
         );
     }
 
