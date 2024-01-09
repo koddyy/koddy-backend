@@ -20,7 +20,7 @@ public class Email {
      */
     private static final Pattern pattern = Pattern.compile("^[a-zA-Z0-9._%+-]+@(gmail\\.com|kakao\\.com)$");
 
-    @Column(name = "email", nullable = false, unique = true, updatable = false)
+    @Column(name = "email", unique = true)
     private String value;
 
     private Email(final String value) {

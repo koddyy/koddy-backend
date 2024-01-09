@@ -1,0 +1,2 @@
+ALTER TABLE member
+    MODIFY COLUMN email VARCHAR(200) NULL;
