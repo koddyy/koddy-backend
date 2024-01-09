@@ -56,10 +56,6 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(20)")
     protected MemberStatus status;
 
-    @Enumerated(STRING)
-    @Column(name = "status", nullable = false, insertable = false, updatable = false, columnDefinition = "VARCHAR(31)")
-    protected MemberType type;
-
     @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     protected final List<AvailableLanguage> availableLanguages = new ArrayList<>();
 

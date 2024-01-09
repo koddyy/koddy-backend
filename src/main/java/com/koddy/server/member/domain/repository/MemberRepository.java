@@ -31,6 +31,20 @@ public interface MemberRepository extends JpaRepository<Member<?>, Long> {
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
+    @Query(
+            value = """
+                    SELECT type
+                    FROM member
+                    WHERE id = :id
+                    """,
+            nativeQuery = true
+    )
+    String getType(@Param("id") long id);
+
+    default boolean isMentorType(final long id) {
+        return Member.MemberType.Value.MENTOR.equals(getType(id));
+    }
+
     // Query Method
     boolean existsByEmailValue(final String value);
 

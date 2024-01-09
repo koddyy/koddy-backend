@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
+import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -16,6 +17,26 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class MemberRepositoryTest extends RepositoryTest {
     @Autowired
     private MemberRepository sut;
+
+    @Test
+    @DisplayName("사용자 Type(Mentor, Mentee)를 조회한다")
+    void getType() {
+        // given
+        final Member<?> memberA = sut.save(MENTOR_1.toDomain());
+        final Member<?> memberB = sut.save(MENTEE_1.toDomain());
+
+        // when
+        final String typeA = sut.getType(memberA.getId());
+        final String typeB = sut.getType(memberB.getId());
+
+        // then
+        assertAll(
+                () -> assertThat(typeA).isEqualTo(Member.MemberType.Value.MENTOR),
+                () -> assertThat(sut.isMentorType(memberA.getId())).isTrue(),
+                () -> assertThat(typeB).isEqualTo(Member.MemberType.Value.MENTEE),
+                () -> assertThat(sut.isMentorType(memberB.getId())).isFalse()
+        );
+    }
 
     @Test
     @DisplayName("이메일 기반 사용자를 조회한다")
