@@ -17,7 +17,6 @@ public class DeleteMemberUseCase {
     private final MentorDeleter mentorDeleter;
     private final MenteeDeleter menteeDeleter;
 
-    // TODO JPA 상속 구조 개선 후 다시 진행
     public void invoke(final DeleteMemberCommand command) {
         validateMemberExists(command.memberId());
 

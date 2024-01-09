@@ -51,7 +51,7 @@ public interface MemberRepository extends JpaRepository<Member<?>, Long> {
     @Modifying
     @Query("""
             UPDATE Member m
-            SET m.status = 'INACTIVE', m.email = null
+            SET m.status = 'INACTIVE', m.email.value = null
             WHERE m.id = :id
             """)
     void deleteMember(@Param("id") final long id);

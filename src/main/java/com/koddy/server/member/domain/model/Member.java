@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import org.springframework.util.CollectionUtils;
 
@@ -35,6 +36,7 @@ import static lombok.AccessLevel.PROTECTED;
 @DiscriminatorColumn(name = "type")
 @Entity
 @Table(name = "member")
+@SQLDelete(sql = "UPDATE member SET status = 'INACTIVE', email = null WHERE id = ?")
 @SQLRestriction("status = 'ACTIVE'")
 public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     @Embedded
