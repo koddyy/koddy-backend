@@ -31,7 +31,7 @@ include::{snippets}/FileApi/GetPresignedUrl/query-parameters.adoc[]
 include::{snippets}/FileApi/GetPresignedUrl/http-response.adoc[]
 include::{snippets}/FileApi/GetPresignedUrl/response-fields.adoc[]
 
-== OAuth 인증/로그아웃 API
+== OAuth 로그인/로그아웃 API
 
 === OAuth Link 얻기
 
@@ -47,7 +47,7 @@ include::{snippets}/OAuthApi/Access/Failure/http-response.adoc[]
 include::{snippets}/OAuthApi/Access/Success/http-response.adoc[]
 include::{snippets}/OAuthApi/Access/Success/response-fields.adoc[]
 
-=== OAuth 인증
+=== OAuth 로그인
 
 ==== HTTP Request
 
@@ -77,9 +77,9 @@ include::{snippets}/OAuthApi/Logout/http-request.adoc[]
 
 include::{snippets}/OAuthApi/Logout/http-response.adoc[]
 
-== 회원가입 API
+== 회원가입 + 로그인 API
 
-=== 멘토 회원가입
+=== 멘토 회원가입 + 로그인
 
 ==== HTTP Request
 
@@ -89,8 +89,9 @@ include::{snippets}/MemberApi/SignUp/Mentor/request-fields.adoc[]
 ==== HTTP Response
 
 include::{snippets}/MemberApi/SignUp/Mentor/http-response.adoc[]
+include::{snippets}/MemberApi/SignUp/Mentor/response-fields.adoc[]
 
-=== 멘티 회원가입
+=== 멘티 회원가입 + 로그인
 
 ==== HTTP Request
 
@@ -100,6 +101,7 @@ include::{snippets}/MemberApi/SignUp/Mentee/request-fields.adoc[]
 ==== HTTP Response
 
 include::{snippets}/MemberApi/SignUp/Mentee/http-response.adoc[]
+include::{snippets}/MemberApi/SignUp/Mentee/response-fields.adoc[]
 
 == 멘토 정보 수정 API (AccessToken + OnlyMentor)
 

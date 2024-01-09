@@ -1,5 +1,6 @@
 package com.koddy.server.member.presentation;
 
+import com.koddy.server.auth.domain.model.AuthMember;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.DeleteMemberUseCase;
 import com.koddy.server.member.application.usecase.SignUpUsecase;
@@ -14,15 +15,21 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.RequestBuilder;
 
+import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.body;
+import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.cookie;
+import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.header;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createHttpSpecSnippets;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocs;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocsWithAccessToken;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -38,22 +45,27 @@ class ManageAccountApiControllerTest extends ControllerTest {
     private DeleteMemberUseCase deleteMemberUseCase;
 
     @Nested
-    @DisplayName("멘토 회원가입 API [POST /api/mentors]")
+    @DisplayName("멘토 회원가입 + 로그인 API [POST /api/mentors]")
     class SignUpMentor {
         private static final String BASE_URL = "/api/mentors";
 
         @Test
-        @DisplayName("멘토 회원가입을 진행한다")
+        @DisplayName("멘토 회원가입 + 로그인을 진행한다")
         void success() throws Exception {
             // given
-            given(signUpUsecase.signUpMentor(any())).willReturn(1L);
+            final AuthMember loginResponse = MENTOR_1.toAuthMember();
+            given(signUpUsecase.signUpMentor(any())).willReturn(loginResponse);
+
             final SignUpMentorRequest request = new SignUpMentorRequest(
                     MENTOR_1.getEmail().getValue(),
                     MENTOR_1.getName(),
                     MENTOR_1.getProfileImageUrl(),
                     MENTOR_1.getLanguages()
                             .stream()
-                            .map(it -> new LanguageRequest(it.getCategory().getCode(), it.getType().getValue()))
+                            .map(it -> new LanguageRequest(
+                                    it.getCategory().getCode(),
+                                    it.getType().getValue()
+                            ))
                             .toList(),
                     MENTOR_1.getUniversityProfile().getSchool(),
                     MENTOR_1.getUniversityProfile().getMajor(),
@@ -82,23 +94,33 @@ class ManageAccountApiControllerTest extends ControllerTest {
                                     body("major", "전공", true),
                                     body("enteredIn", "학번", true)
                             ),
+                            responseHeaders(
+                                    header(AUTHORIZATION, "Access Token")
+                            ),
+                            responseCookies(
+                                    cookie(COOKIE_REFRESH_TOKEN, "Refresh Token")
+                            ),
                             responseFields(
-                                    body("id", "사용자 ID(PK)")
+                                    body("id", "사용자 ID(PK)"),
+                                    body("name", "사용자 이름"),
+                                    body("profileImageUrl", "사용자 프로필 이미지")
                             )
                     )));
         }
     }
 
     @Nested
-    @DisplayName("멘티 회원가입 API [POST /api/mentees]")
+    @DisplayName("멘티 회원가입 + 로그인 API [POST /api/mentees]")
     class SignUpMentee {
         private static final String BASE_URL = "/api/mentees";
 
         @Test
-        @DisplayName("멘티 회원가입을 진행한다")
+        @DisplayName("멘티 회원가입 + 로그인을 진행한다")
         void success() throws Exception {
             // given
-            given(signUpUsecase.signUpMentee(any())).willReturn(1L);
+            final AuthMember loginResponse = MENTEE_1.toAuthMember();
+            given(signUpUsecase.signUpMentee(any())).willReturn(loginResponse);
+
             final SignUpMenteeRequest request = new SignUpMenteeRequest(
                     MENTEE_1.getEmail().getValue(),
                     MENTEE_1.getName(),
@@ -106,7 +128,10 @@ class ManageAccountApiControllerTest extends ControllerTest {
                     MENTEE_1.getNationality().getKor(),
                     MENTEE_1.getLanguages()
                             .stream()
-                            .map(it -> new LanguageRequest(it.getCategory().getCode(), it.getType().getValue()))
+                            .map(it -> new LanguageRequest(
+                                    it.getCategory().getCode(),
+                                    it.getType().getValue()
+                            ))
                             .toList(),
                     MENTEE_1.getInterest().getSchool(),
                     MENTEE_1.getInterest().getMajor()
@@ -134,8 +159,16 @@ class ManageAccountApiControllerTest extends ControllerTest {
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)
                             ),
+                            responseHeaders(
+                                    header(AUTHORIZATION, "Access Token")
+                            ),
+                            responseCookies(
+                                    cookie(COOKIE_REFRESH_TOKEN, "Refresh Token")
+                            ),
                             responseFields(
-                                    body("id", "사용자 ID(PK)")
+                                    body("id", "사용자 ID(PK)"),
+                                    body("name", "사용자 이름"),
+                                    body("profileImageUrl", "사용자 프로필 이미지")
                             )
                     )));
         }
