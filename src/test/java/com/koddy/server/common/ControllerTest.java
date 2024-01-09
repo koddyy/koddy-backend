@@ -357,6 +357,12 @@ public abstract class ControllerTest {
     /**
      * DELETE
      */
+    protected RequestBuilder deleteWithAccessToken(final String url) {
+        return RestDocumentationRequestBuilders
+                .delete(url)
+                .header(AUTHORIZATION, applyAccessToken());
+    }
+
     protected RequestBuilder deleteWithAccessToken(final PathWithVariables path) {
         return RestDocumentationRequestBuilders
                 .delete(path.url, path.variables)
