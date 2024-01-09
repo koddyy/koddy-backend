@@ -38,15 +38,7 @@ class GetMemberPrivateProfileUseCaseTest extends UseCaseTest {
         // given
         final List<Language> languages = List.of(KR_MAIN.toDomain());
         final List<Timeline> timelines = List.of(MON_09_17.toDomain(), THU_09_17.toDomain());
-        final Mentor mentor = new Mentor(
-                MENTOR_1.getEmail(),
-                MENTOR_1.getName(),
-                MENTOR_1.getProfileImageUrl(),
-                MENTOR_1.getIntroduction(),
-                languages,
-                MENTOR_1.getUniversityProfile(),
-                timelines
-        ).apply(1L);
+        final Mentor mentor = MENTOR_1.toDomainWithLanguagesAndTimelines(languages, timelines).apply(1L);
         given(mentorRepository.getProfile(mentor.getId())).willReturn(mentor);
 
         // when
@@ -90,15 +82,7 @@ class GetMemberPrivateProfileUseCaseTest extends UseCaseTest {
     void getMenteeProfile() {
         // given
         final List<Language> languages = List.of(KR_MAIN.toDomain(), EN_SUB.toDomain(), JP_SUB.toDomain());
-        final Mentee mentee = new Mentee(
-                MENTEE_1.getEmail(),
-                MENTEE_1.getName(),
-                MENTEE_1.getProfileImageUrl(),
-                MENTEE_1.getNationality(),
-                MENTEE_1.getIntroduction(),
-                languages,
-                MENTEE_1.getInterest()
-        ).apply(1L);
+        final Mentee mentee = MENTEE_1.toDomainWithLanguages(languages).apply(1L);
         given(menteeRepository.getProfile(mentee.getId())).willReturn(mentee);
 
         // when

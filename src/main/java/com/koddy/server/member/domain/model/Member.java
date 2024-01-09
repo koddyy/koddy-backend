@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.koddy.server.member.domain.model.MemberStatus.ACTIVE;
+import static com.koddy.server.member.domain.model.ProfileComplete.NO;
+import static com.koddy.server.member.domain.model.ProfileComplete.YES;
 import static com.koddy.server.member.exception.MemberExceptionCode.AVAILABLE_LANGUAGE_MUST_EXISTS;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static jakarta.persistence.CascadeType.PERSIST;
@@ -60,6 +62,10 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(20)")
     protected MemberStatus status;
 
+    @Enumerated(STRING)
+    @Column(name = "profile_complete", nullable = false, columnDefinition = "VARCHAR(20)")
+    protected ProfileComplete profileComplete;
+
     @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     protected final List<AvailableLanguage> availableLanguages = new ArrayList<>();
 
@@ -71,7 +77,6 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
             final String name,
             final String profileImageUrl,
             final Nationality nationality,
-            final String introduction,
             final List<Language> languages,
             final List<Role.Type> roles
     ) {
@@ -79,8 +84,8 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         this.name = name;
         this.profileImageUrl = profileImageUrl;
         this.nationality = nationality;
-        this.introduction = introduction;
         this.status = ACTIVE;
+        this.profileComplete = NO;
         applyLanguages(languages);
         applyRoles(roles);
     }
@@ -120,6 +125,14 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
                         .map(it -> new Role(this, it))
                         .toList()
         );
+    }
+
+    protected void completeInfo(final String introduction) {
+        this.introduction = introduction;
+    }
+
+    protected void checkProfileCompleted() {
+        profileComplete = isProfileComplete() ? YES : NO;
     }
 
     protected void updateBasicInfo(

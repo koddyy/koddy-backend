@@ -87,7 +87,15 @@ public enum MenteeFixture {
     private final Interest interest;
 
     public Mentee toDomain() {
-        return new Mentee(email, name, profileImageUrl, nationality, introduction, languages, interest);
+        final Mentee mentee = new Mentee(email, name, profileImageUrl, nationality, languages, interest);
+        mentee.completeInfo(introduction);
+        return mentee;
+    }
+
+    public Mentee toDomainWithLanguages(final List<Language> languages) {
+        final Mentee mentee = new Mentee(email, name, profileImageUrl, nationality, languages, interest);
+        mentee.completeInfo(introduction);
+        return mentee;
     }
 
     public GoogleUserResponse toGoogleUserResponse() {

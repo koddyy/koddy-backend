@@ -1,12 +1,10 @@
 package com.koddy.server.member.presentation.dto.request;
 
 import com.koddy.server.member.domain.model.Language;
-import com.koddy.server.member.domain.model.mentor.Timeline;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -21,8 +19,6 @@ public record SignUpMentorRequest(
         @NotBlank(message = "프로필 이미지 URL은 필수입니다.")
         String profileImageUrl,
 
-        String introduction,
-
         @NotEmpty(message = "사용 가능한 언어는 하나 이상 선택해주세요.")
         List<LanguageRequest> languages,
 
@@ -33,22 +29,11 @@ public record SignUpMentorRequest(
         String major,
 
         @NotNull(message = "학번은 필수입니다.")
-        Integer enteredIn,
-
-        List<MentorScheduleRequest> schedules
+        Integer enteredIn
 ) {
     public List<Language> toLanguages() {
         return languages.stream()
                 .map(LanguageRequest::toLanguage)
-                .toList();
-    }
-
-    public List<Timeline> toSchedules() {
-        if (CollectionUtils.isEmpty(schedules)) {
-            return List.of();
-        }
-        return schedules.stream()
-                .map(MentorScheduleRequest::toSchedule)
                 .toList();
     }
 }

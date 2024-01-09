@@ -20,10 +20,8 @@ public class SignUpUsecase {
                 command.email(),
                 command.name(),
                 command.profileImageUrl(),
-                command.introduction(),
                 command.languages(),
-                command.universityProfile(),
-                command.timelines()
+                command.universityProfile()
         )).getId();
     }
 
@@ -33,7 +31,6 @@ public class SignUpUsecase {
                 command.name(),
                 command.profileImageUrl(),
                 command.nationality(),
-                command.introduction(),
                 command.languages(),
                 command.interest()
         )).getId();

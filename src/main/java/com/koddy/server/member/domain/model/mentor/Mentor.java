@@ -38,25 +38,17 @@ public class Mentor extends Member<Mentor> {
             final Email email,
             final String name,
             final String profileImageUrl,
-            final String introduction,
             final List<Language> languages,
-            final UniversityProfile universityProfile,
-            final List<Timeline> timelines
+            final UniversityProfile universityProfile
     ) {
-        super(email, name, profileImageUrl, KOREA, introduction, languages, List.of(Role.Type.MENTOR));
+        super(email, name, profileImageUrl, KOREA, languages, List.of(Role.Type.MENTOR));
         this.universityProfile = universityProfile;
-        applySchedules(timelines);
     }
 
-    private void applySchedules(final List<Timeline> timelines) {
-        this.schedules.clear();
-        if (!CollectionUtils.isEmpty(timelines)) {
-            this.schedules.addAll(
-                    timelines.stream()
-                            .map(it -> new Schedule(this, it))
-                            .toList()
-            );
-        }
+    public void completeInfo(final String introduction, final List<Timeline> timelines) {
+        super.completeInfo(introduction);
+        applySchedules(timelines);
+        super.checkProfileCompleted();
     }
 
     public void updateBasicInfo(
@@ -70,14 +62,27 @@ public class Mentor extends Member<Mentor> {
     ) {
         super.updateBasicInfo(name, KOREA, profileImageUrl, introduction, languages);
         this.universityProfile = this.universityProfile.update(school, major, enteredIn);
+        super.checkProfileCompleted();
     }
 
     public void updateSchedules(final List<Timeline> timelines) {
         applySchedules(timelines);
+        super.checkProfileCompleted();
+    }
+
+    private void applySchedules(final List<Timeline> timelines) {
+        this.schedules.clear();
+        if (!CollectionUtils.isEmpty(timelines)) {
+            this.schedules.addAll(
+                    timelines.stream()
+                            .map(it -> new Schedule(this, it))
+                            .toList()
+            );
+        }
     }
 
     @Override
     public boolean isProfileComplete() {
-        return StringUtils.hasText(introduction) && !this.schedules.isEmpty();
+        return StringUtils.hasText(introduction) && !CollectionUtils.isEmpty(schedules);
     }
 }

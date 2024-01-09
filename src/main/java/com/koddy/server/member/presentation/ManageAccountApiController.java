@@ -42,10 +42,8 @@ public class ManageAccountApiController {
                 Email.from(request.email()),
                 request.name(),
                 request.profileImageUrl(),
-                request.introduction(),
                 request.toLanguages(),
-                new UniversityProfile(request.school(), request.major(), request.enteredIn()),
-                request.toSchedules()
+                new UniversityProfile(request.school(), request.major(), request.enteredIn())
         ));
         return ResponseEntity.ok(new SignUpResponse(memberId));
     }
@@ -60,7 +58,6 @@ public class ManageAccountApiController {
                 request.name(),
                 request.profileImageUrl(),
                 Nationality.from(request.nationality()),
-                request.introduction(),
                 request.toLanguages(),
                 new Interest(request.interestSchool(), request.interestMajor())
         ));

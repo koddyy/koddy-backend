@@ -13,6 +13,8 @@ import java.util.List;
 
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_2;
+import static com.koddy.server.member.domain.model.ProfileComplete.NO;
+import static com.koddy.server.member.domain.model.ProfileComplete.YES;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -39,7 +41,6 @@ class MenteeTest extends ParallelTest {
                     MENTEE_1.name(),
                     MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getNationality(),
-                    MENTEE_1.getIntroduction(),
                     languages,
                     MENTEE_1.getInterest()
             ))
@@ -62,7 +63,9 @@ class MenteeTest extends ParallelTest {
                     () -> assertThat(mentee.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTEE_1.getLanguages()),
                     () -> assertThat(mentee.getAuthorities()).containsExactlyInAnyOrder(Role.Type.MENTEE.getAuthority()),
                     () -> assertThat(mentee.getInterest().getSchool()).isEqualTo(MENTEE_1.getInterest().getSchool()),
-                    () -> assertThat(mentee.getInterest().getMajor()).isEqualTo(MENTEE_1.getInterest().getMajor())
+                    () -> assertThat(mentee.getInterest().getMajor()).isEqualTo(MENTEE_1.getInterest().getMajor()),
+                    () -> assertThat(mentee.isProfileComplete()).isTrue(),
+                    () -> assertThat(mentee.getProfileComplete()).isEqualTo(YES)
             );
         }
     }
@@ -70,19 +73,33 @@ class MenteeTest extends ParallelTest {
     @Test
     @DisplayName("Mentee 프로필이 완성되었는지 확인한다 (자기소개)")
     void isProfileComplete() {
+        /* memberA 완성 */
         final Mentee menteeA = MENTEE_1.toDomain();
-        assertThat(menteeA.isProfileComplete()).isTrue();
+        assertAll(
+                () -> assertThat(menteeA.isProfileComplete()).isTrue(),
+                () -> assertThat(menteeA.getProfileComplete()).isEqualTo(YES)
+        );
 
+        /* memberB 1차 회원가입 */
         final Mentee menteeB = new Mentee(
                 MENTEE_2.getEmail(),
                 MENTEE_2.getName(),
                 MENTEE_2.getProfileImageUrl(),
                 MENTEE_2.getNationality(),
-                null,
                 MENTEE_2.getLanguages(),
                 MENTEE_2.getInterest()
         );
-        assertThat(menteeB.isProfileComplete()).isFalse();
+        assertAll(
+                () -> assertThat(menteeB.isProfileComplete()).isFalse(),
+                () -> assertThat(menteeB.getProfileComplete()).isEqualTo(NO)
+        );
+
+        /* memberB 프로필 완성 */
+        menteeB.completeInfo(MENTEE_2.getIntroduction());
+        assertAll(
+                () -> assertThat(menteeB.isProfileComplete()).isTrue(),
+                () -> assertThat(menteeB.getProfileComplete()).isEqualTo(YES)
+        );
     }
 
     @Nested

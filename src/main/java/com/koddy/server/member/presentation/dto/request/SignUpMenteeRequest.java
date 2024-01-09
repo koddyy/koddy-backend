@@ -21,8 +21,6 @@ public record SignUpMenteeRequest(
         @NotBlank(message = "국적은 필수입니다.")
         String nationality,
 
-        String introduction,
-
         @NotEmpty(message = "사용 가능한 언어는 하나 이상 선택해주세요.")
         List<LanguageRequest> languages,
 

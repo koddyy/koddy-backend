@@ -5,7 +5,6 @@ import com.koddy.server.member.application.usecase.DeleteMemberUseCase;
 import com.koddy.server.member.application.usecase.SignUpUsecase;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.dto.request.LanguageRequest;
-import com.koddy.server.member.presentation.dto.request.MentorScheduleRequest;
 import com.koddy.server.member.presentation.dto.request.SignUpMenteeRequest;
 import com.koddy.server.member.presentation.dto.request.SignUpMentorRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -52,28 +51,13 @@ class ManageAccountApiControllerTest extends ControllerTest {
                     MENTOR_1.getEmail().getValue(),
                     MENTOR_1.getName(),
                     MENTOR_1.getProfileImageUrl(),
-                    MENTOR_1.getIntroduction(),
                     MENTOR_1.getLanguages()
                             .stream()
                             .map(it -> new LanguageRequest(it.getCategory().getCode(), it.getType().getValue()))
                             .toList(),
                     MENTOR_1.getUniversityProfile().getSchool(),
                     MENTOR_1.getUniversityProfile().getMajor(),
-                    MENTOR_1.getUniversityProfile().getEnteredIn(),
-                    MENTOR_1.getTimelines()
-                            .stream()
-                            .map(it -> new MentorScheduleRequest(
-                                    it.getDayOfWeek().getKor(),
-                                    new MentorScheduleRequest.Start(
-                                            it.getPeriod().getStartTime().getHour(),
-                                            it.getPeriod().getStartTime().getMinute()
-                                    ),
-                                    new MentorScheduleRequest.End(
-                                            it.getPeriod().getEndTime().getHour(),
-                                            it.getPeriod().getEndTime().getMinute()
-                                    )
-                            ))
-                            .toList()
+                    MENTOR_1.getUniversityProfile().getEnteredIn()
             );
 
             // when
@@ -91,19 +75,12 @@ class ManageAccountApiControllerTest extends ControllerTest {
                                     body("email", "이메일", true),
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
-                                    body("introduction", "자기소개", false),
                                     body("languages", "사용 가능한 언어", true),
                                     body("languages[].category", "언어 종류", "[국가코드 기반] KR EN CH JP VN", true),
                                     body("languages[].type", "언어 타입", "메인 언어 (1개) / 서브 언어 (0..N개)", true),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
-                                    body("enteredIn", "학번", true),
-                                    body("schedules", "멘토링 스케줄", false),
-                                    body("schedules[].day", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST", false),
-                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST", false),
-                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST", false),
-                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST", false)
+                                    body("enteredIn", "학번", true)
                             ),
                             responseFields(
                                     body("id", "사용자 ID(PK)")
@@ -127,7 +104,6 @@ class ManageAccountApiControllerTest extends ControllerTest {
                     MENTEE_1.getName(),
                     MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getNationality().getKor(),
-                    MENTEE_1.getIntroduction(),
                     MENTEE_1.getLanguages()
                             .stream()
                             .map(it -> new LanguageRequest(it.getCategory().getCode(), it.getType().getValue()))
@@ -152,7 +128,6 @@ class ManageAccountApiControllerTest extends ControllerTest {
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("nationality", "국적", "한국 미국 일본 중국 베트남 Others", true),
-                                    body("introduction", "자기소개", false),
                                     body("languages", "사용 가능한 언어", true),
                                     body("languages[].category", "언어 종류", "[국가코드 기반] KR EN CH JP VN", true),
                                     body("languages[].type", "언어 타입", "메인 언어 (1개) / 서브 언어 (0..N개)", true),
