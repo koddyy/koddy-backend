@@ -1,8 +1,10 @@
 package com.koddy.server.member.domain.repository;
 
+import com.koddy.server.global.annotation.KoddyWritableTransactional;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.exception.MemberException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -22,10 +24,15 @@ public interface MenteeRepository extends JpaRepository<Mentee, Long> {
             JOIN FETCH m.availableLanguages
             WHERE m.id = :id
             """)
-    Optional<Mentee> findProfile(@Param("id") final Long id);
+    Optional<Mentee> findProfile(@Param("id") final long id);
 
-    default Mentee getProfile(final Long id) {
+    default Mentee getProfile(final long id) {
         return findProfile(id)
                 .orElseThrow(() -> new MemberException(MENTEE_NOT_FOUND));
     }
+
+    @KoddyWritableTransactional
+    @Modifying
+    @Query("DELETE FROM Mentee m WHERE m.id = :id")
+    void deleteMentee(@Param("id") final long id);
 }

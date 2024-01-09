@@ -13,11 +13,15 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.koddy.server.member.domain.model.MemberStatus.ACTIVE;
 import static com.koddy.server.member.exception.MemberExceptionCode.AVAILABLE_LANGUAGE_MUST_EXISTS;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static jakarta.persistence.CascadeType.PERSIST;
@@ -32,9 +36,9 @@ import static lombok.AccessLevel.PROTECTED;
 @DiscriminatorColumn(name = "type")
 @Entity
 @Table(name = "member")
+@SQLDelete(sql = "UPDATE member SET status = 'INACTIVE', email = null WHERE id = ?")
+@SQLRestriction("status = 'ACTIVE'")
 public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
-    public static final String EMPTY = "EMPTY";
-
     @Embedded
     protected Email email;
 
@@ -52,6 +56,10 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     @Column(name = "introduction", columnDefinition = "TEXT")
     protected String introduction;
 
+    @Enumerated(STRING)
+    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(20)")
+    protected MemberStatus status;
+
     @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     protected final List<AvailableLanguage> availableLanguages = new ArrayList<>();
 
@@ -65,13 +73,14 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
             final Nationality nationality,
             final String introduction,
             final List<Language> languages,
-            final List<RoleType> roles
+            final List<Role.Type> roles
     ) {
         this.email = email;
         this.name = name;
         this.profileImageUrl = profileImageUrl;
         this.nationality = nationality;
         this.introduction = introduction;
+        this.status = ACTIVE;
         applyLanguages(languages);
         applyRoles(roles);
     }
@@ -104,7 +113,7 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         }
     }
 
-    private void applyRoles(final List<RoleType> roleTypes) {
+    private void applyRoles(final List<Role.Type> roleTypes) {
         this.roles.clear();
         this.roles.addAll(
                 roleTypes.stream()
@@ -127,6 +136,10 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         applyLanguages(languages);
     }
 
+    public boolean isActive() {
+        return status == ACTIVE;
+    }
+
     public List<Language> getLanguages() {
         return availableLanguages.stream()
                 .map(AvailableLanguage::getLanguage)
@@ -135,14 +148,23 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
 
     public List<String> getAuthorities() {
         return roles.stream()
-                .map(Role::getRoleType)
-                .map(RoleType::getAuthority)
+                .map(Role::getType)
+                .map(Role.Type::getAuthority)
                 .toList();
     }
 
     protected abstract boolean isProfileComplete();
 
+    @Getter
+    @RequiredArgsConstructor
     public enum MemberType {
-        MENTOR, MENTEE
+        MENTOR("MENTOR"), MENTEE("MENTEE");
+
+        private final String value;
+
+        public static class Value {
+            public static final String MENTOR = "MENTOR";
+            public static final String MENTEE = "MENTEE";
+        }
     }
 }

@@ -6,7 +6,7 @@ import com.koddy.server.member.domain.model.Nationality;
 import java.util.List;
 
 public record UpdateMenteeBasicInfoCommand(
-        Long menteeId,
+        long menteeId,
         String name,
         Nationality nationality,
         String profileImageUrl,

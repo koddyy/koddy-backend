@@ -20,9 +20,9 @@ import java.net.URL;
 import java.time.Duration;
 import java.util.UUID;
 
+import static com.koddy.server.file.exception.FileExceptionCode.FILE_NOT_UPLOADED;
 import static com.koddy.server.file.exception.FileExceptionCode.UPLOAD_FAILURE;
 import static com.koddy.server.file.infrastructure.BucketPath.MEMBER_PROFILE;
-import static com.koddy.server.member.domain.model.Member.EMPTY;
 
 @Slf4j
 @Component
@@ -68,7 +68,7 @@ public class S3FileManager implements FileManager {
     @Override
     public String upload(final RawFileData file) {
         if (file == null) {
-            return EMPTY;
+            throw new FileException(FILE_NOT_UPLOADED);
         }
         return sendFileToStorage(file);
     }

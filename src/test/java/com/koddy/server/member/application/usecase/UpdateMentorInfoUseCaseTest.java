@@ -4,6 +4,7 @@ import com.koddy.server.common.UseCaseTest;
 import com.koddy.server.common.fixture.TimelineFixture;
 import com.koddy.server.member.application.usecase.command.UpdateMentorBasicInfoCommand;
 import com.koddy.server.member.application.usecase.command.UpdateMentorScheduleCommand;
+import com.koddy.server.member.domain.model.Role;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.model.mentor.Schedule;
 import com.koddy.server.member.domain.repository.MentorRepository;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_2;
 import static com.koddy.server.member.domain.model.Nationality.KOREA;
-import static com.koddy.server.member.domain.model.RoleType.MENTOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
@@ -54,7 +54,7 @@ class UpdateMentorInfoUseCaseTest extends UseCaseTest {
                 () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(command.profileImageUrl()),
                 () -> assertThat(mentor.getIntroduction()).isEqualTo(command.introduction()),
                 () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(command.languages()),
-                () -> assertThat(mentor.getAuthorities()).containsExactlyInAnyOrder(MENTOR.getAuthority()),
+                () -> assertThat(mentor.getAuthorities()).containsExactlyInAnyOrder(Role.Type.MENTOR.getAuthority()),
                 () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(command.school()),
                 () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(command.major()),
                 () -> assertThat(mentor.getUniversityProfile().getEnteredIn()).isEqualTo(command.enteredIn())

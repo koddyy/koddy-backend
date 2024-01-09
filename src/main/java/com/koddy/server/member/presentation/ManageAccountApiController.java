@@ -1,6 +1,10 @@
 package com.koddy.server.member.presentation;
 
+import com.koddy.server.auth.domain.model.Authenticated;
+import com.koddy.server.global.annotation.Auth;
+import com.koddy.server.member.application.usecase.DeleteMemberUseCase;
 import com.koddy.server.member.application.usecase.SignUpUsecase;
+import com.koddy.server.member.application.usecase.command.DeleteMemberCommand;
 import com.koddy.server.member.application.usecase.command.SignUpMenteeCommand;
 import com.koddy.server.member.application.usecase.command.SignUpMentorCommand;
 import com.koddy.server.member.domain.model.Email;
@@ -15,17 +19,19 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "사용자 회원가입 API")
+@Tag(name = "사용자 계정 관리 (회원가입/탈퇴) API")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class SignUpApiController {
+public class ManageAccountApiController {
     private final SignUpUsecase signUpUsecase;
+    private final DeleteMemberUseCase deleteMemberUseCase;
 
     @Operation(summary = "멘토 회원가입 Endpoint")
     @PostMapping("/mentors")
@@ -59,5 +65,14 @@ public class SignUpApiController {
                 new Interest(request.interestSchool(), request.interestMajor())
         ));
         return ResponseEntity.ok(new SignUpResponse(memberId));
+    }
+
+    @Operation(summary = "사용자 탈퇴 Endpoint")
+    @DeleteMapping("/members")
+    public ResponseEntity<Void> delete(
+            @Auth final Authenticated authenticated
+    ) {
+        deleteMemberUseCase.invoke(new DeleteMemberCommand(authenticated.id()));
+        return ResponseEntity.noContent().build();
     }
 }

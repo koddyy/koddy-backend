@@ -4,6 +4,8 @@ import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.model.Nationality;
+import com.koddy.server.member.domain.model.Role;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -13,13 +15,13 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.koddy.server.member.domain.model.RoleType.MENTEE;
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "mentee")
+@DiscriminatorValue(value = Member.MemberType.Value.MENTEE)
 public class Mentee extends Member<Mentee> {
     @Embedded
     private Interest interest;
@@ -33,7 +35,7 @@ public class Mentee extends Member<Mentee> {
             final List<Language> languages,
             final Interest interest
     ) {
-        super(email, name, profileImageUrl, nationality, introduction, languages, List.of(MENTEE));
+        super(email, name, profileImageUrl, nationality, introduction, languages, List.of(Role.Type.MENTEE));
         this.interest = interest;
     }
 

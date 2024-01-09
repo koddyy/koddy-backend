@@ -1,6 +1,7 @@
 package com.koddy.server.member.application.usecase;
 
 import com.koddy.server.member.application.usecase.command.UpdateMenteeBasicInfoCommand;
+import com.koddy.server.member.domain.model.Role;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.repository.MenteeRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -8,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_2;
-import static com.koddy.server.member.domain.model.RoleType.MENTEE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
@@ -49,7 +49,7 @@ class UpdateMenteeInfoUseCaseTest {
                 () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(command.profileImageUrl()),
                 () -> assertThat(mentee.getIntroduction()).isEqualTo(command.introduction()),
                 () -> assertThat(mentee.getLanguages()).containsExactlyInAnyOrderElementsOf(command.languages()),
-                () -> assertThat(mentee.getAuthorities()).containsExactlyInAnyOrder(MENTEE.getAuthority()),
+                () -> assertThat(mentee.getAuthorities()).containsExactlyInAnyOrder(Role.Type.MENTEE.getAuthority()),
                 () -> assertThat(mentee.getInterest().getSchool()).isEqualTo(command.interestSchool()),
                 () -> assertThat(mentee.getInterest().getMajor()).isEqualTo(command.interestMajor())
         );

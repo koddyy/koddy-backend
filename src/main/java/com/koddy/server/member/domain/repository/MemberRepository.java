@@ -1,8 +1,10 @@
 package com.koddy.server.member.domain.repository;
 
+import com.koddy.server.global.annotation.KoddyWritableTransactional;
 import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.exception.MemberException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -12,7 +14,7 @@ import static com.koddy.server.member.exception.MemberExceptionCode.MEMBER_NOT_F
 
 @SuppressWarnings("rawtypes")
 public interface MemberRepository extends JpaRepository<Member<?>, Long> {
-    default Member getById(final Long id) {
+    default Member getById(final long id) {
         return findById(id)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
@@ -24,14 +26,39 @@ public interface MemberRepository extends JpaRepository<Member<?>, Long> {
             JOIN FETCH m.roles
             WHERE m.id = :id
             """)
-    Optional<Member> findByIdWithRoles(@Param("id") final Long id);
+    Optional<Member> findByIdWithRoles(@Param("id") final long id);
 
-    default Member getByIdWithRoles(final Long id) {
+    default Member getByIdWithRoles(final long id) {
         return findByIdWithRoles(id)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
+    @Query(
+            value = """
+                    SELECT type
+                    FROM member
+                    WHERE id = :id
+                    """,
+            nativeQuery = true
+    )
+    String getType(@Param("id") long id);
+
+    default boolean isMentor(final long id) {
+        return Member.MemberType.Value.MENTOR.equals(getType(id));
+    }
+
+    @KoddyWritableTransactional
+    @Modifying
+    @Query("""
+            UPDATE Member m
+            SET m.status = 'INACTIVE', m.email.value = null
+            WHERE m.id = :id
+            """)
+    void deleteMember(@Param("id") final long id);
+
     // Query Method
+    boolean existsById(final long id);
+
     boolean existsByEmailValue(final String value);
 
     Optional<Member> findByEmailValue(final String email);

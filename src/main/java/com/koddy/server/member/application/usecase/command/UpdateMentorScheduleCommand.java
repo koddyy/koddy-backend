@@ -5,7 +5,7 @@ import com.koddy.server.member.domain.model.mentor.Timeline;
 import java.util.List;
 
 public record UpdateMentorScheduleCommand(
-        Long mentorId,
+        long mentorId,
         List<Timeline> timelines
 ) {
 }

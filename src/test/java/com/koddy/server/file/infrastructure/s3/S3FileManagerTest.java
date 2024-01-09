@@ -3,6 +3,7 @@ package com.koddy.server.file.infrastructure.s3;
 import com.koddy.server.common.ParallelTest;
 import com.koddy.server.file.domain.model.PresignedFileData;
 import com.koddy.server.file.domain.model.PresignedUrlDetails;
+import com.koddy.server.file.exception.FileException;
 import com.koddy.server.file.utils.converter.FileConverter;
 import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.S3Resource;
@@ -16,7 +17,9 @@ import java.io.InputStream;
 import java.net.URL;
 
 import static com.koddy.server.common.utils.FileMockingUtils.createFile;
+import static com.koddy.server.file.exception.FileExceptionCode.FILE_NOT_UPLOADED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -57,16 +60,13 @@ class S3FileManagerTest extends ParallelTest {
     @DisplayName("파일 업로드")
     class Upload {
         @Test
-        @DisplayName("Client가 파일을 전송하지 않았으면 EMPTY URL을 반환한다")
+        @DisplayName("Client가 파일을 전송하지 않았으면 예외가 발생한다")
         void returnEmptyUrlWhenFileIsNullOrEmpty() {
-            // when
-            final String uploadUrl = sut.upload(null);
+            assertThatThrownBy(() -> sut.upload(null))
+                    .isInstanceOf(FileException.class)
+                    .hasMessage(FILE_NOT_UPLOADED.getMessage());
 
-            // then
-            assertAll(
-                    () -> verify(s3Template, times(0)).upload(any(String.class), any(String.class), any(InputStream.class), any(ObjectMetadata.class)),
-                    () -> assertThat(uploadUrl).isEqualTo("EMPTY")
-            );
+            verify(s3Template, times(0)).upload(any(String.class), any(String.class), any(InputStream.class), any(ObjectMetadata.class));
         }
 
         @Test

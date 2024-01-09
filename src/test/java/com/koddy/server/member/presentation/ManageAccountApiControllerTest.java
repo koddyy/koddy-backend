@@ -1,7 +1,9 @@
 package com.koddy.server.member.presentation;
 
 import com.koddy.server.common.ControllerTest;
+import com.koddy.server.member.application.usecase.DeleteMemberUseCase;
 import com.koddy.server.member.application.usecase.SignUpUsecase;
+import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.dto.request.LanguageRequest;
 import com.koddy.server.member.presentation.dto.request.MentorScheduleRequest;
 import com.koddy.server.member.presentation.dto.request.SignUpMenteeRequest;
@@ -18,18 +20,23 @@ import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.body;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createHttpSpecSnippets;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocs;
+import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocsWithAccessToken;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(SignUpApiController.class)
-@DisplayName("Member -> SignUpApiController 테스트")
-class SignUpApiControllerTest extends ControllerTest {
+@WebMvcTest(ManageAccountApiController.class)
+@DisplayName("Member -> ManageAccountApiController 테스트")
+class ManageAccountApiControllerTest extends ControllerTest {
     @MockBean
     private SignUpUsecase signUpUsecase;
+
+    @MockBean
+    private DeleteMemberUseCase deleteMemberUseCase;
 
     @Nested
     @DisplayName("멘토 회원가입 API [POST /api/mentors]")
@@ -156,6 +163,31 @@ class SignUpApiControllerTest extends ControllerTest {
                                     body("id", "사용자 ID(PK)")
                             )
                     )));
+        }
+    }
+
+    @Nested
+    @DisplayName("사용자 탈퇴 API [DELETE /api/members]")
+    class DeleteMember {
+        private static final String BASE_URL = "/api/members";
+        private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
+
+        @Test
+        @DisplayName("서비스를 탙퇴한다")
+        void success() throws Exception {
+            // given
+            mockingToken(true, mentor.getId(), mentor.getAuthorities());
+            doNothing()
+                    .when(deleteMemberUseCase)
+                    .invoke(any());
+
+            // when
+            final RequestBuilder requestBuilder = deleteWithAccessToken(BASE_URL);
+
+            // then
+            mockMvc.perform(requestBuilder)
+                    .andExpect(status().isNoContent())
+                    .andDo(successDocsWithAccessToken("MemberApi/Delete"));
         }
     }
 }
