@@ -12,7 +12,6 @@ public record SignUpMenteeCommand(
         String name,
         String profileImageUrl,
         Nationality nationality,
-        String introduction,
         List<Language> languages,
         Interest interest
 ) {

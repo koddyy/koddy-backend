@@ -14,7 +14,10 @@ import java.util.List;
 
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_2;
+import static com.koddy.server.common.fixture.MentorFixture.MENTOR_3;
 import static com.koddy.server.member.domain.model.Nationality.KOREA;
+import static com.koddy.server.member.domain.model.ProfileComplete.NO;
+import static com.koddy.server.member.domain.model.ProfileComplete.YES;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -40,10 +43,8 @@ class MentorTest extends ParallelTest {
                     MENTOR_1.getEmail(),
                     MENTOR_1.name(),
                     MENTOR_1.getProfileImageUrl(),
-                    MENTOR_1.getIntroduction(),
                     languages,
-                    MENTOR_1.getUniversityProfile(),
-                    MENTOR_1.getTimelines()
+                    MENTOR_1.getUniversityProfile()
             ))
                     .isInstanceOf(MemberException.class)
                     .hasMessage(MAIN_LANGUAGE_MUST_BE_ONLY_ONE.getMessage());
@@ -68,7 +69,9 @@ class MentorTest extends ParallelTest {
                     () -> assertThat(mentor.getUniversityProfile().getEnteredIn()).isEqualTo(MENTOR_1.getUniversityProfile().getEnteredIn()),
                     () -> assertThat(mentor.getSchedules())
                             .map(Schedule::getTimeline)
-                            .containsExactlyInAnyOrderElementsOf(MENTOR_1.getTimelines())
+                            .containsExactlyInAnyOrderElementsOf(MENTOR_1.getTimelines()),
+                    () -> assertThat(mentor.isProfileComplete()).isTrue(),
+                    () -> assertThat(mentor.getProfileComplete()).isEqualTo(YES)
             );
         }
     }
@@ -76,30 +79,46 @@ class MentorTest extends ParallelTest {
     @Test
     @DisplayName("Mentor 프로필이 완성되었는지 확인한다 (자기소개, 스케줄)")
     void isProfileComplete() {
+        /* mentorA 완성 */
         final Mentor mentorA = MENTOR_1.toDomain();
-        assertThat(mentorA.isProfileComplete()).isTrue();
+        assertAll(
+                () -> assertThat(mentorA.isProfileComplete()).isTrue(),
+                () -> assertThat(mentorA.getProfileComplete()).isEqualTo(YES)
+        );
 
+        /* mentorB 1차 회원가입 */
         final Mentor mentorB = new Mentor(
                 MENTOR_2.getEmail(),
                 MENTOR_2.getName(),
                 MENTOR_2.getProfileImageUrl(),
-                null,
                 MENTOR_2.getLanguages(),
-                MENTOR_2.getUniversityProfile(),
-                TimelineFixture.allDays()
+                MENTOR_2.getUniversityProfile()
         );
-        assertThat(mentorB.isProfileComplete()).isFalse();
+        assertAll(
+                () -> assertThat(mentorB.isProfileComplete()).isFalse(),
+                () -> assertThat(mentorB.getProfileComplete()).isEqualTo(NO)
+        );
 
-        final Mentor mentorC = new Mentor(
-                MENTOR_2.getEmail(),
-                MENTOR_2.getName(),
-                MENTOR_2.getProfileImageUrl(),
-                MENTOR_2.getIntroduction(),
-                MENTOR_2.getLanguages(),
-                MENTOR_2.getUniversityProfile(),
-                List.of()
+        /* mentorB 프로필 완성 */
+        mentorB.completeInfo(MENTOR_2.getIntroduction(), TimelineFixture.allDays());
+        assertAll(
+                () -> assertThat(mentorB.isProfileComplete()).isTrue(),
+                () -> assertThat(mentorB.getProfileComplete()).isEqualTo(YES)
         );
-        assertThat(mentorC.isProfileComplete()).isFalse();
+
+        /* mentorC 완성 */
+        final Mentor mentorC = MENTOR_3.toDomain();
+        assertAll(
+                () -> assertThat(mentorC.isProfileComplete()).isTrue(),
+                () -> assertThat(mentorC.getProfileComplete()).isEqualTo(YES)
+        );
+
+        /* mentorC 미완성 진행 */
+        mentorC.completeInfo(null, List.of());
+        assertAll(
+                () -> assertThat(mentorC.isProfileComplete()).isFalse(),
+                () -> assertThat(mentorC.getProfileComplete()).isEqualTo(NO)
+        );
     }
 
     @Nested

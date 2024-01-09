@@ -31,12 +31,16 @@ public class Mentee extends Member<Mentee> {
             final String name,
             final String profileImageUrl,
             final Nationality nationality,
-            final String introduction,
             final List<Language> languages,
             final Interest interest
     ) {
-        super(email, name, profileImageUrl, nationality, introduction, languages, List.of(Role.Type.MENTEE));
+        super(email, name, profileImageUrl, nationality, languages, List.of(Role.Type.MENTEE));
         this.interest = interest;
+    }
+
+    public void completeInfo(final String introduction) {
+        super.completeInfo(introduction);
+        super.checkProfileCompleted();
     }
 
     public void updateBasicInfo(
@@ -50,6 +54,7 @@ public class Mentee extends Member<Mentee> {
     ) {
         super.updateBasicInfo(name, nationality, profileImageUrl, introduction, languages);
         this.interest = this.interest.update(interestSchool, interestMajor);
+        checkProfileCompleted();
     }
 
     @Override

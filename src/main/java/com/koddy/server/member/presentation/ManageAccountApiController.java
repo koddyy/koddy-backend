@@ -1,6 +1,9 @@
 package com.koddy.server.member.presentation;
 
+import com.koddy.server.auth.domain.model.AuthMember;
 import com.koddy.server.auth.domain.model.Authenticated;
+import com.koddy.server.auth.presentation.dto.response.LoginResponse;
+import com.koddy.server.auth.utils.TokenResponseWriter;
 import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.member.application.usecase.DeleteMemberUseCase;
 import com.koddy.server.member.application.usecase.SignUpUsecase;
@@ -13,9 +16,9 @@ import com.koddy.server.member.domain.model.mentee.Interest;
 import com.koddy.server.member.domain.model.mentor.UniversityProfile;
 import com.koddy.server.member.presentation.dto.request.SignUpMenteeRequest;
 import com.koddy.server.member.presentation.dto.request.SignUpMentorRequest;
-import com.koddy.server.member.presentation.dto.response.SignUpResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,46 +28,56 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "사용자 계정 관리 (회원가입/탈퇴) API")
+@Tag(name = "사용자 계정 관리 (회원가입 + 로그인/탈퇴) API")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class ManageAccountApiController {
     private final SignUpUsecase signUpUsecase;
+    private final TokenResponseWriter tokenResponseWriter;
     private final DeleteMemberUseCase deleteMemberUseCase;
 
-    @Operation(summary = "멘토 회원가입 Endpoint")
+    @Operation(summary = "멘토 회원가입 + 로그인 Endpoint")
     @PostMapping("/mentors")
-    public ResponseEntity<SignUpResponse> signUpMentor(
-            @RequestBody @Valid final SignUpMentorRequest request
+    public ResponseEntity<LoginResponse> signUpMentor(
+            @RequestBody @Valid final SignUpMentorRequest request,
+            final HttpServletResponse response
     ) {
-        final Long memberId = signUpUsecase.signUpMentor(new SignUpMentorCommand(
+        final AuthMember authMember = signUpUsecase.signUpMentor(new SignUpMentorCommand(
                 Email.from(request.email()),
                 request.name(),
                 request.profileImageUrl(),
-                request.introduction(),
                 request.toLanguages(),
-                new UniversityProfile(request.school(), request.major(), request.enteredIn()),
-                request.toSchedules()
+                new UniversityProfile(request.school(), request.major(), request.enteredIn())
         ));
-        return ResponseEntity.ok(new SignUpResponse(memberId));
+        tokenResponseWriter.applyToken(response, authMember.token());
+        return ResponseEntity.ok(new LoginResponse(
+                authMember.id(),
+                authMember.name(),
+                authMember.profileImageUrl()
+        ));
     }
 
-    @Operation(summary = "멘티 회원가입 Endpoint")
+    @Operation(summary = "멘티 회원가입 + 로그인 Endpoint")
     @PostMapping("/mentees")
-    public ResponseEntity<SignUpResponse> signUpMentee(
-            @RequestBody @Valid final SignUpMenteeRequest request
+    public ResponseEntity<LoginResponse> signUpMentee(
+            @RequestBody @Valid final SignUpMenteeRequest request,
+            final HttpServletResponse response
     ) {
-        final Long memberId = signUpUsecase.signUpMentee(new SignUpMenteeCommand(
+        final AuthMember authMember = signUpUsecase.signUpMentee(new SignUpMenteeCommand(
                 Email.from(request.email()),
                 request.name(),
                 request.profileImageUrl(),
                 Nationality.from(request.nationality()),
-                request.introduction(),
                 request.toLanguages(),
                 new Interest(request.interestSchool(), request.interestMajor())
         ));
-        return ResponseEntity.ok(new SignUpResponse(memberId));
+        tokenResponseWriter.applyToken(response, authMember.token());
+        return ResponseEntity.ok(new LoginResponse(
+                authMember.id(),
+                authMember.name(),
+                authMember.profileImageUrl()
+        ));
     }
 
     @Operation(summary = "사용자 탈퇴 Endpoint")

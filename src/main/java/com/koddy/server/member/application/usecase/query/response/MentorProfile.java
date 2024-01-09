@@ -6,6 +6,8 @@ import com.koddy.server.member.domain.model.mentor.UniversityProfile;
 
 import java.util.List;
 
+import static com.koddy.server.member.domain.model.ProfileComplete.YES;
+
 public record MentorProfile(
         Long id,
         String email,
@@ -16,7 +18,8 @@ public record MentorProfile(
         LanguageResponse languages,
         UniversityResponse university,
         List<ScheduleResponse> schedules,
-        String role
+        String role,
+        boolean profileComplete
 ) implements MemberProfile {
     public record UniversityResponse(
             String school,
@@ -68,7 +71,8 @@ public record MentorProfile(
                         .stream()
                         .map(it -> new ScheduleResponse(it.getTimeline()))
                         .toList(),
-                "mentor"
+                "mentor",
+                mentor.getProfileComplete() == YES
         );
     }
 }

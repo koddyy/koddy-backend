@@ -92,11 +92,27 @@ public enum MentorFixture {
     private final List<Timeline> timelines;
 
     public Mentor toDomain() {
-        return new Mentor(email, name, profileImageUrl, introduction, languages, universityProfile, timelines);
+        final Mentor mentor = new Mentor(email, name, profileImageUrl, languages, universityProfile);
+        mentor.completeInfo(introduction, timelines);
+        return mentor;
     }
 
-    public Mentor toDomain(final List<Timeline> timelines) {
-        return new Mentor(email, name, profileImageUrl, introduction, languages, universityProfile, timelines);
+    public Mentor toDomainWithLanguages(final List<Language> languages) {
+        final Mentor mentor = new Mentor(email, name, profileImageUrl, languages, universityProfile);
+        mentor.completeInfo(introduction, timelines);
+        return mentor;
+    }
+
+    public Mentor toDomainWithTimelines(final List<Timeline> timelines) {
+        final Mentor mentor = new Mentor(email, name, profileImageUrl, languages, universityProfile);
+        mentor.completeInfo(introduction, timelines);
+        return mentor;
+    }
+
+    public Mentor toDomainWithLanguagesAndTimelines(final List<Language> languages, final List<Timeline> timelines) {
+        final Mentor mentor = new Mentor(email, name, profileImageUrl, languages, universityProfile);
+        mentor.completeInfo(introduction, timelines);
+        return mentor;
     }
 
     public GoogleUserResponse toGoogleUserResponse() {
