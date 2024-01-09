@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
+import static com.koddy.server.member.domain.model.MemberStatus.ACTIVE;
 import static com.koddy.server.member.domain.model.MemberStatus.INACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -37,6 +38,20 @@ class MenteeDeleterTest extends IntegrateTest {
     void execute() {
         // given
         final Member<?> mentee = memberRepository.save(MENTEE_1.toDomain());
+        assertAll(
+                () -> assertThat(getToken(mentee.getId())).hasSize(0),
+                () -> assertThat(getRole(mentee.getId())).hasSize(1),
+                () -> assertThat(getLanguage(mentee.getId())).hasSize(MENTEE_1.getLanguages().size()),
+                () -> assertThat(getMentee(mentee.getId())).hasSize(1),
+                () -> {
+                    final Member<?> findMember = getMemberByJpql(mentee.getId()).orElseThrow();
+                    assertAll(
+                            () -> assertThat(findMember).isNotNull(),
+                            () -> assertThat(findMember.getEmail().getValue()).isEqualTo(MENTEE_1.getEmail().getValue()),
+                            () -> assertThat(findMember.getStatus()).isEqualTo(ACTIVE)
+                    );
+                }
+        );
 
         // when
         sut.execute(mentee.getId());
@@ -115,10 +130,10 @@ class MenteeDeleterTest extends IntegrateTest {
         return (Member<?>) em.createNativeQuery(
                         """
                                 SELECT *
-                                FROM member
-                                LEFT JOIN mentor m ON member.id = m.id
-                                LEFT JOIN mentee m2 ON member.id = m2.id
-                                WHERE member.id = :id
+                                FROM member m
+                                LEFT JOIN mentor tor ON m.id = tor.id
+                                LEFT JOIN mentee tee ON m.id = tee.id
+                                WHERE m.id = :id
                                 """,
                         Member.class
                 ).setParameter("id", id)

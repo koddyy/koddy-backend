@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
+import static com.koddy.server.member.domain.model.MemberStatus.ACTIVE;
 import static com.koddy.server.member.domain.model.MemberStatus.INACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -38,6 +39,21 @@ class MentorDeleterTest extends IntegrateTest {
     void execute() {
         // given
         final Member<?> mentor = memberRepository.save(MENTOR_1.toDomain());
+        assertAll(
+                () -> assertThat(getToken(mentor.getId())).hasSize(0),
+                () -> assertThat(getRole(mentor.getId())).hasSize(1),
+                () -> assertThat(getLanguage(mentor.getId())).hasSize(MENTOR_1.getLanguages().size()),
+                () -> assertThat(getSchedule(mentor.getId())).hasSize(MENTOR_1.getTimelines().size()),
+                () -> assertThat(getMentor(mentor.getId())).hasSize(1),
+                () -> {
+                    final Member<?> findMember = getMemberByJpql(mentor.getId()).orElseThrow();
+                    assertAll(
+                            () -> assertThat(findMember).isNotNull(),
+                            () -> assertThat(findMember.getEmail().getValue()).isEqualTo(MENTOR_1.getEmail().getValue()),
+                            () -> assertThat(findMember.getStatus()).isEqualTo(ACTIVE)
+                    );
+                }
+        );
 
         // when
         sut.execute(mentor.getId());
@@ -129,10 +145,10 @@ class MentorDeleterTest extends IntegrateTest {
         return (Member<?>) em.createNativeQuery(
                         """
                                 SELECT *
-                                FROM member
-                                LEFT JOIN mentor m on member.id = m.id
-                                LEFT JOIN mentee m2 on member.id = m2.id
-                                WHERE member.id = :id
+                                FROM member m
+                                LEFT JOIN mentor tor ON m.id = tor.id
+                                LEFT JOIN mentee tee ON m.id = tee.id
+                                WHERE m.id = :id
                                 """,
                         Member.class
                 ).setParameter("id", id)
