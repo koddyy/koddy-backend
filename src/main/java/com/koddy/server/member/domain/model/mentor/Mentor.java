@@ -3,6 +3,7 @@ package com.koddy.server.member.domain.model.mentor;
 import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Member;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -25,6 +26,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "mentor")
+@DiscriminatorValue(value = Member.MemberType.Value.MENTOR)
 public class Mentor extends Member<Mentor> {
     @Embedded
     private UniversityProfile universityProfile;

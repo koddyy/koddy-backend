@@ -13,6 +13,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -54,6 +55,10 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     @Enumerated(STRING)
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(20)")
     protected MemberStatus status;
+
+    @Enumerated(STRING)
+    @Column(name = "status", nullable = false, insertable = false, updatable = false, columnDefinition = "VARCHAR(31)")
+    protected MemberType type;
 
     @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     protected final List<AvailableLanguage> availableLanguages = new ArrayList<>();
@@ -150,7 +155,16 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
 
     protected abstract boolean isProfileComplete();
 
+    @Getter
+    @RequiredArgsConstructor
     public enum MemberType {
-        MENTOR, MENTEE
+        MENTOR("MENTOR"), MENTEE("MENTEE");
+
+        private final String value;
+
+        public static class Value {
+            public static final String MENTOR = "MENTOR";
+            public static final String MENTEE = "MENTEE";
+        }
     }
 }

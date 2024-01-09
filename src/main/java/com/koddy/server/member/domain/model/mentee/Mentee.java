@@ -4,6 +4,7 @@ import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.model.Nationality;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -20,6 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "mentee")
+@DiscriminatorValue(value = Member.MemberType.Value.MENTEE)
 public class Mentee extends Member<Mentee> {
     @Embedded
     private Interest interest;
