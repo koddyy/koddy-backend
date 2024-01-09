@@ -5,7 +5,7 @@ import com.koddy.server.member.domain.model.Language;
 import java.util.List;
 
 public record UpdateMentorBasicInfoCommand(
-        Long mentorId,
+        long mentorId,
         String name,
         String profileImageUrl,
         String introduction,
