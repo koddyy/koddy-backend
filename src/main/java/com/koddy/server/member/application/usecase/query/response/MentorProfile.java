@@ -4,6 +4,7 @@ import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.model.mentor.Timeline;
 import com.koddy.server.member.domain.model.mentor.UniversityProfile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.koddy.server.member.domain.model.ProfileComplete.YES;
@@ -32,9 +33,11 @@ public record MentorProfile(
     }
 
     public record ScheduleResponse(
-            String day,
-            Start start,
-            End end
+            LocalDate startDate,
+            LocalDate endDate,
+            String dayOfWeek,
+            Start startTime,
+            End endTime
     ) {
         public record Start(
                 int hour,
@@ -50,6 +53,8 @@ public record MentorProfile(
 
         public ScheduleResponse(final Timeline timeline) {
             this(
+                    timeline.getStartDate(),
+                    timeline.getEndDate(),
                     timeline.getDayOfWeek().getKor(),
                     new Start(timeline.getPeriod().getStartTime().getHour(), timeline.getPeriod().getStartTime().getMinute()),
                     new End(timeline.getPeriod().getEndTime().getHour(), timeline.getPeriod().getEndTime().getMinute())
