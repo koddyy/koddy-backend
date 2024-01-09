@@ -73,7 +73,8 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
                                     body("schedules[].start.minute", "시작 시간 (Minute)"),
                                     body("schedules[].end.hour", "종료 시간 (Hour)"),
                                     body("schedules[].end.minute", "종료 시간 (Minute)"),
-                                    body("role", "역할 (멘토/멘티)")
+                                    body("role", "역할 (멘토/멘티)"),
+                                    body("profileComplete", "프로필 완성 여부 (자기소개, 스케줄)")
                             )
                     )));
         }
@@ -105,7 +106,8 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
                                     body("interest", "관심있는 대학 정보"),
                                     body("interest.school", "학교"),
                                     body("interest.major", "전공"),
-                                    body("role", "역할 (멘토/멘티)")
+                                    body("role", "역할 (멘토/멘티)"),
+                                    body("profileComplete", "프로필 완성 여부 (자기소개)")
                             )
                     )));
         }
@@ -166,7 +168,8 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
                                     body("schedules[].start.minute", "시작 시간 (Minute)"),
                                     body("schedules[].end.hour", "종료 시간 (Hour)"),
                                     body("schedules[].end.minute", "종료 시간 (Minute)"),
-                                    body("role", "역할 (멘토/멘티)")
+                                    body("role", "역할 (멘토/멘티)"),
+                                    body("profileComplete", "프로필 완성 여부 (자기소개, 스케줄)")
                             )
                     )));
         }
@@ -220,7 +223,8 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
                                     body("interest", "관심있는 대학 정보"),
                                     body("interest.school", "학교"),
                                     body("interest.major", "전공"),
-                                    body("role", "역할 (멘토/멘티)")
+                                    body("role", "역할 (멘토/멘티)"),
+                                    body("profileComplete", "프로필 완성 여부 (자기소개)")
                             )
                     )));
         }

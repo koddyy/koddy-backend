@@ -3,6 +3,8 @@ package com.koddy.server.member.application.usecase.query.response;
 import com.koddy.server.member.domain.model.mentee.Interest;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 
+import static com.koddy.server.member.domain.model.ProfileComplete.YES;
+
 public record MenteeProfile(
         Long id,
         String email,
@@ -12,7 +14,8 @@ public record MenteeProfile(
         String introduction,
         LanguageResponse languages,
         InterestResponse interest,
-        String role
+        String role,
+        boolean profileComplete
 ) implements MemberProfile {
     public record InterestResponse(
             String school,
@@ -33,7 +36,8 @@ public record MenteeProfile(
                 mentee.getIntroduction(),
                 new LanguageResponse(mentee.getLanguages()),
                 new InterestResponse(mentee.getInterest()),
-                "mentee"
+                "mentee",
+                mentee.getProfileComplete() == YES
         );
     }
 }
