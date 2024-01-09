@@ -16,7 +16,7 @@ public enum AuthExceptionCode implements KoddyExceptionCode {
     INVALID_TOKEN(UNAUTHORIZED, "AUTH_002", "토큰이 유효하지 않습니다."),
     INVALID_PERMISSION(FORBIDDEN, "AUTH_003", "권한이 없습니다."),
     INVALID_OAUTH_PROVIDER(BAD_REQUEST, "AUTH_004", "제공하지 않는 OAuth Provider입니다."),
-    ;
+    INVALID_AUTH_CODE(BAD_REQUEST, "AUTH_005", "인증번호가 일치하지 않습니다.");
 
     private final HttpStatus status;
     private final String errorCode;

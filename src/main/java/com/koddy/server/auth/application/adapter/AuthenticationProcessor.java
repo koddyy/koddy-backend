@@ -1,6 +1,6 @@
 package com.koddy.server.auth.application.adapter;
 
-public interface MailAuthenticationProcessor {
+public interface AuthenticationProcessor {
     String storeAuthCode(final String key);
 
     void verifyAuthCode(final String key, final String value);
