@@ -18,6 +18,8 @@ import static com.koddy.server.common.fixture.MentorFixture.MENTOR_3;
 import static com.koddy.server.member.domain.model.Nationality.KOREA;
 import static com.koddy.server.member.domain.model.ProfileComplete.NO;
 import static com.koddy.server.member.domain.model.ProfileComplete.YES;
+import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.ATTEMPT;
+import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.COMPLETE;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -175,6 +177,58 @@ class MentorTest extends ParallelTest {
             assertThat(mentor.getSchedules())
                     .map(Schedule::getTimeline)
                     .containsExactlyInAnyOrderElementsOf(update);
+        }
+    }
+
+    @Nested
+    @DisplayName("멘토 학교 인증")
+    class UniversityAuthentication {
+        @Test
+        @DisplayName("학교 메일로 인증을 진행한다")
+        void authWithMail() {
+            // given
+            final Mentor mentor = MENTOR_1.toDomain().apply(1L);
+            final String schoolMail = "sjiwon@kyonggi.ac.kr";
+
+            /* 인증 시도 */
+            mentor.authWithMail(schoolMail);
+            assertAll(
+                    () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isEqualTo(schoolMail),
+                    () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
+                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(ATTEMPT)
+            );
+
+            /* 인증 완료 */
+            mentor.authComplete();
+            assertAll(
+                    () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isEqualTo(schoolMail),
+                    () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
+                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(COMPLETE)
+            );
+        }
+
+        @Test
+        @DisplayName("증명 자료로 인증을 진행한다")
+        void authWithProofData() {
+            // given
+            final Mentor mentor = MENTOR_1.toDomain().apply(1L);
+            final String proofDataUploadUrl = "upload-url";
+
+            /* 인증 시도 */
+            mentor.authWithProofData(proofDataUploadUrl);
+            assertAll(
+                    () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isNull(),
+                    () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isEqualTo(proofDataUploadUrl),
+                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(ATTEMPT)
+            );
+
+            /* 인증 완료 */
+            mentor.authComplete();
+            assertAll(
+                    () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isNull(),
+                    () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isEqualTo(proofDataUploadUrl),
+                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(COMPLETE)
+            );
         }
     }
 }
