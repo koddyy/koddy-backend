@@ -22,9 +22,9 @@ public interface MentorRepository extends JpaRepository<Mentor, Long> {
             JOIN FETCH m.schedules
             WHERE m.id = :id
             """)
-    Optional<Mentor> findProfile(@Param("id") final Long id);
+    Optional<Mentor> findProfile(@Param("id") final long id);
 
-    default Mentor getProfile(final Long id) {
+    default Mentor getProfile(final long id) {
         return findProfile(id)
                 .orElseThrow(() -> new MemberException(MENTOR_NOT_FOUND));
     }

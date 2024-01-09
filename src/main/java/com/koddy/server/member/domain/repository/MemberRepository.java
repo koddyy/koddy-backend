@@ -12,7 +12,7 @@ import static com.koddy.server.member.exception.MemberExceptionCode.MEMBER_NOT_F
 
 @SuppressWarnings("rawtypes")
 public interface MemberRepository extends JpaRepository<Member<?>, Long> {
-    default Member getById(final Long id) {
+    default Member getById(final long id) {
         return findById(id)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
@@ -24,9 +24,9 @@ public interface MemberRepository extends JpaRepository<Member<?>, Long> {
             JOIN FETCH m.roles
             WHERE m.id = :id
             """)
-    Optional<Member> findByIdWithRoles(@Param("id") final Long id);
+    Optional<Member> findByIdWithRoles(@Param("id") final long id);
 
-    default Member getByIdWithRoles(final Long id) {
+    default Member getByIdWithRoles(final long id) {
         return findByIdWithRoles(id)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }

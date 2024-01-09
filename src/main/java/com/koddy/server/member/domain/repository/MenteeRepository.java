@@ -22,9 +22,9 @@ public interface MenteeRepository extends JpaRepository<Mentee, Long> {
             JOIN FETCH m.availableLanguages
             WHERE m.id = :id
             """)
-    Optional<Mentee> findProfile(@Param("id") final Long id);
+    Optional<Mentee> findProfile(@Param("id") final long id);
 
-    default Mentee getProfile(final Long id) {
+    default Mentee getProfile(final long id) {
         return findProfile(id)
                 .orElseThrow(() -> new MemberException(MENTEE_NOT_FOUND));
     }
