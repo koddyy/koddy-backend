@@ -43,7 +43,7 @@ class DeleteMemberUseCaseTest extends UseCaseTest {
 
         assertAll(
                 () -> verify(memberRepository, times(1)).existsById(command.memberId()),
-                () -> verify(memberRepository, times(0)).isMentorType(command.memberId()),
+                () -> verify(memberRepository, times(0)).isMentor(command.memberId()),
                 () -> verify(mentorDeleter, times(0)).execute(command.memberId()),
                 () -> verify(menteeDeleter, times(0)).execute(command.memberId())
         );
@@ -54,7 +54,7 @@ class DeleteMemberUseCaseTest extends UseCaseTest {
     void deleteMentor() {
         // given
         given(memberRepository.existsById(command.memberId())).willReturn(true);
-        given(memberRepository.isMentorType(command.memberId())).willReturn(true);
+        given(memberRepository.isMentor(command.memberId())).willReturn(true);
 
         // when
         sut.invoke(command);
@@ -62,7 +62,7 @@ class DeleteMemberUseCaseTest extends UseCaseTest {
         // then
         assertAll(
                 () -> verify(memberRepository, times(1)).existsById(command.memberId()),
-                () -> verify(memberRepository, times(1)).isMentorType(command.memberId()),
+                () -> verify(memberRepository, times(1)).isMentor(command.memberId()),
                 () -> verify(mentorDeleter, times(1)).execute(command.memberId()),
                 () -> verify(menteeDeleter, times(0)).execute(command.memberId())
         );
@@ -73,7 +73,7 @@ class DeleteMemberUseCaseTest extends UseCaseTest {
     void deleteMentee() {
         // given
         given(memberRepository.existsById(command.memberId())).willReturn(true);
-        given(memberRepository.isMentorType(command.memberId())).willReturn(false);
+        given(memberRepository.isMentor(command.memberId())).willReturn(false);
 
         // when
         sut.invoke(command);
@@ -81,7 +81,7 @@ class DeleteMemberUseCaseTest extends UseCaseTest {
         // then
         assertAll(
                 () -> verify(memberRepository, times(1)).existsById(command.memberId()),
-                () -> verify(memberRepository, times(1)).isMentorType(command.memberId()),
+                () -> verify(memberRepository, times(1)).isMentor(command.memberId()),
                 () -> verify(mentorDeleter, times(0)).execute(command.memberId()),
                 () -> verify(menteeDeleter, times(1)).execute(command.memberId())
         );

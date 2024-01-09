@@ -43,7 +43,7 @@ public interface MemberRepository extends JpaRepository<Member<?>, Long> {
     )
     String getType(@Param("id") long id);
 
-    default boolean isMentorType(final long id) {
+    default boolean isMentor(final long id) {
         return Member.MemberType.Value.MENTOR.equals(getType(id));
     }
 

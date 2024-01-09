@@ -20,7 +20,7 @@ public class DeleteMemberUseCase {
     public void invoke(final DeleteMemberCommand command) {
         validateMemberExists(command.memberId());
 
-        if (memberRepository.isMentorType(command.memberId())) {
+        if (memberRepository.isMentor(command.memberId())) {
             mentorDeleter.execute(command.memberId());
         } else {
             menteeDeleter.execute(command.memberId());

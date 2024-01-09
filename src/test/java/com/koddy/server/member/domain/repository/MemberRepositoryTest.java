@@ -25,8 +25,8 @@ class MemberRepositoryTest extends RepositoryTest {
     private EntityManager em;
 
     @Test
-    @DisplayName("사용자 Type(Mentor, Mentee)를 조회한다")
-    void getType() {
+    @DisplayName("사용자 Type(Mentor, Mentee)를 조회한다 + Mentor인지 확인한다")
+    void getType_isMentor() {
         // given
         final Member<?> memberA = sut.save(MENTOR_1.toDomain());
         final Member<?> memberB = sut.save(MENTEE_1.toDomain());
@@ -38,9 +38,9 @@ class MemberRepositoryTest extends RepositoryTest {
         // then
         assertAll(
                 () -> assertThat(typeA).isEqualTo(Member.MemberType.Value.MENTOR),
-                () -> assertThat(sut.isMentorType(memberA.getId())).isTrue(),
+                () -> assertThat(sut.isMentor(memberA.getId())).isTrue(),
                 () -> assertThat(typeB).isEqualTo(Member.MemberType.Value.MENTEE),
-                () -> assertThat(sut.isMentorType(memberB.getId())).isFalse()
+                () -> assertThat(sut.isMentor(memberB.getId())).isFalse()
         );
     }
 
