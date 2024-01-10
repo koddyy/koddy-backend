@@ -8,6 +8,9 @@ import com.koddy.server.member.presentation.dto.request.LanguageRequest;
 import com.koddy.server.member.presentation.dto.request.MentorScheduleRequest;
 import com.koddy.server.member.presentation.dto.request.SignUpMenteeRequest;
 import com.koddy.server.member.presentation.dto.request.SignUpMentorRequest;
+import com.koddy.server.member.presentation.dto.request.UpdateMenteeBasicInfoRequest;
+import com.koddy.server.member.presentation.dto.request.UpdateMentorBasicInfoRequest;
+import com.koddy.server.member.presentation.dto.request.UpdateMentorScheduleRequest;
 import io.restassured.response.ValidatableResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -116,6 +119,87 @@ public class MemberAcceptanceStep {
                 .getPath();
 
         final CompleteMenteeProfileRequest request = new CompleteMenteeProfileRequest(fixture.getIntroduction());
+
+        return patchRequest(accessToken, request, uri);
+    }
+
+    public static ValidatableResponse 멘토_기본_정보를_수정한다(final MentorFixture fixture, final String accessToken) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/mentors/me/basic-info")
+                .build()
+                .toUri()
+                .getPath();
+
+        final UpdateMentorBasicInfoRequest request = new UpdateMentorBasicInfoRequest(
+                fixture.getName(),
+                fixture.getProfileImageUrl(),
+                fixture.getIntroduction(),
+                fixture.getLanguages()
+                        .stream()
+                        .map(it -> new LanguageRequest(
+                                it.getCategory().getCode(),
+                                it.getType().getValue()
+                        ))
+                        .toList(),
+                fixture.getUniversityProfile().getSchool(),
+                fixture.getUniversityProfile().getMajor(),
+                fixture.getUniversityProfile().getEnteredIn()
+        );
+
+        return patchRequest(accessToken, request, uri);
+    }
+
+    public static ValidatableResponse 멘토_스케줄_정보를_수정한다(final MentorFixture fixture, final String accessToken) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/mentors/me/schedules")
+                .build()
+                .toUri()
+                .getPath();
+
+        final UpdateMentorScheduleRequest request = new UpdateMentorScheduleRequest(
+                fixture.getTimelines()
+                        .stream()
+                        .map(it -> new MentorScheduleRequest(
+                                it.getStartDate(),
+                                it.getEndDate(),
+                                it.getDayOfWeek().getKor(),
+                                new MentorScheduleRequest.Start(
+                                        it.getPeriod().getStartTime().getHour(),
+                                        it.getPeriod().getStartTime().getMinute()
+                                ),
+                                new MentorScheduleRequest.End(
+                                        it.getPeriod().getEndTime().getHour(),
+                                        it.getPeriod().getEndTime().getMinute()
+                                )
+                        ))
+                        .toList()
+        );
+
+        return patchRequest(accessToken, request, uri);
+    }
+
+    public static ValidatableResponse 멘티_기본_정보를_수정한다(final MenteeFixture fixture, final String accessToken) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/mentees/me/basic-info")
+                .build()
+                .toUri()
+                .getPath();
+
+        final UpdateMenteeBasicInfoRequest request = new UpdateMenteeBasicInfoRequest(
+                fixture.getName(),
+                fixture.getNationality().getKor(),
+                fixture.getProfileImageUrl(),
+                fixture.getIntroduction(),
+                fixture.getLanguages()
+                        .stream()
+                        .map(it -> new LanguageRequest(
+                                it.getCategory().getCode(),
+                                it.getType().getValue()
+                        ))
+                        .toList(),
+                fixture.getInterest().getSchool(),
+                fixture.getInterest().getMajor()
+        );
 
         return patchRequest(accessToken, request, uri);
     }
