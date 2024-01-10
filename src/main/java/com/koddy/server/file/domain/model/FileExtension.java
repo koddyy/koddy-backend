@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static com.koddy.server.file.exception.FileExceptionCode.INVALID_FILE_EXTENSION;
 
@@ -24,9 +25,18 @@ public enum FileExtension {
 
     public static FileExtension getExtensionViaFimeName(final String fileName) {
         return Arrays.stream(values())
-                .filter(extension -> extension.value.equals(extractFileExtension(fileName)))
+                .filter(it -> it.value.equals(extractFileExtension(fileName)))
                 .findFirst()
                 .orElseThrow(() -> new FileException(INVALID_FILE_EXTENSION));
+    }
+
+    public static boolean isImage(final String fileName) {
+        return Stream.of(JPG, JPEG, PNG)
+                .anyMatch(it -> it.value.equals(extractFileExtension(fileName)));
+    }
+
+    public static boolean isPdf(final String fileName) {
+        return PDF.value.equals(extractFileExtension(fileName));
     }
 
     private static String extractFileExtension(final String fileName) {
