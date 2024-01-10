@@ -21,7 +21,7 @@ public interface MentorRepository extends JpaRepository<Mentor, Long> {
     @Query("""
             SELECT m
             FROM Mentor m
-            JOIN FETCH m.schedules
+            JOIN FETCH m.availableLanguages
             WHERE m.id = :id
             """)
     Optional<Mentor> findProfile(@Param("id") final long id);
