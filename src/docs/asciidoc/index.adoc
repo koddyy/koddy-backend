@@ -164,6 +164,43 @@ include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/request-fields.ado
 
 include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/http-response.adoc[]
 
+== 멘토 학교 인증 API (AccessToken + OnlyMentor)
+
+=== 메일 인증 시도
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Failure/Case2/http-response.adoc[]
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Success/http-response.adoc[]
+
+=== 메일 인증번호 확인
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Confirm/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Confirm/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Confirm/Failure/Case2/http-response.adoc[]
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Confirm/Success/http-response.adoc[]
+
+=== 증명자료 인증 시도
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/Mentor/UnivAuth/ProofData/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Mentor/UnivAuth/ProofData/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/Mentor/UnivAuth/ProofData/Success/http-response.adoc[]
+
 == 사용자 탈퇴 (AccessToken)
 
 === HTTP Request
