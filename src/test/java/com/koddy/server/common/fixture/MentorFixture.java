@@ -1,5 +1,6 @@
 package com.koddy.server.common.fixture;
 
+import com.koddy.server.acceptance.member.MemberAcceptanceStep;
 import com.koddy.server.auth.domain.model.AuthMember;
 import com.koddy.server.auth.domain.model.AuthToken;
 import com.koddy.server.auth.infrastructure.oauth.google.response.GoogleUserResponse;
@@ -14,8 +15,10 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.UUID;
 
+import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
 import static com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN;
 import static com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Getter
 @RequiredArgsConstructor
@@ -133,5 +136,25 @@ public enum MentorFixture {
                 this.toDomain().apply(1L),
                 new AuthToken(ACCESS_TOKEN, REFRESH_TOKEN)
         );
+    }
+
+    public long 회원가입_로그인_후_PK를_추출한다() {
+        return MemberAcceptanceStep.멘토_회원가입_후_로그인을_진행한다(this)
+                .extract()
+                .jsonPath()
+                .getLong("id");
+    }
+
+    public String 회원가입_로그인_후_AccessToken을_추출한다() {
+        return MemberAcceptanceStep.멘토_회원가입_후_로그인을_진행한다(this)
+                .extract()
+                .header(AUTHORIZATION)
+                .split(" ")[1];
+    }
+
+    public String 회원가입_로그인_후_RefreshToken을_추출한다() {
+        return MemberAcceptanceStep.멘토_회원가입_후_로그인을_진행한다(this)
+                .extract()
+                .cookie(COOKIE_REFRESH_TOKEN);
     }
 }
