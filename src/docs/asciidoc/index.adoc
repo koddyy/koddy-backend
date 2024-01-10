@@ -21,15 +21,31 @@ include::{snippets}/TokenReissueApi/Success/http-response.adoc[]
 
 === PresignedUrl 응답
 
-==== HTTP Request
+==== 이미지 파일
 
-include::{snippets}/FileApi/GetPresignedUrl/http-request.adoc[]
-include::{snippets}/FileApi/GetPresignedUrl/query-parameters.adoc[]
+===== HTTP Request
 
-==== HTTP Response
+include::{snippets}/FileApi/GetPresignedUrl/Image/Success/http-request.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/Image/Success/query-parameters.adoc[]
 
-include::{snippets}/FileApi/GetPresignedUrl/http-response.adoc[]
-include::{snippets}/FileApi/GetPresignedUrl/response-fields.adoc[]
+===== HTTP Response
+
+include::{snippets}/FileApi/GetPresignedUrl/Image/Failure/http-response.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/Image/Success/http-response.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/Image/Success/response-fields.adoc[]
+
+==== PDF 파일
+
+===== HTTP Request
+
+include::{snippets}/FileApi/GetPresignedUrl/Pdf/Success/http-request.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/Pdf/Success/query-parameters.adoc[]
+
+===== HTTP Response
+
+include::{snippets}/FileApi/GetPresignedUrl/Pdf/Failure/http-response.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/Pdf/Success/http-response.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/Pdf/Success/response-fields.adoc[]
 
 == OAuth 로그인/로그아웃 API
 
