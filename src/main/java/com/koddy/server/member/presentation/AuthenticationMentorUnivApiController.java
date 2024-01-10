@@ -2,6 +2,7 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.global.annotation.Auth;
+import com.koddy.server.global.aop.DailyMailAuthLimit;
 import com.koddy.server.global.aop.OnlyMentor;
 import com.koddy.server.global.utils.UniversityInfo;
 import com.koddy.server.member.application.usecase.AuthenticationMentorUnivUseCase;
@@ -31,6 +32,7 @@ public class AuthenticationMentorUnivApiController {
     @Operation(summary = "메일 인증 시도 Endpoint")
     @PostMapping("/mail")
     @OnlyMentor
+    @DailyMailAuthLimit
     public ResponseEntity<Void> authWithMail(
             @Auth final Authenticated authenticated,
             @RequestBody @Valid final AuthenticationWithMailRequest request
