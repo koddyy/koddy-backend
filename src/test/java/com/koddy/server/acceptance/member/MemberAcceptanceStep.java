@@ -15,6 +15,7 @@ import io.restassured.response.ValidatableResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import static com.koddy.server.acceptance.CommonRequestFixture.deleteRequest;
+import static com.koddy.server.acceptance.CommonRequestFixture.getRequest;
 import static com.koddy.server.acceptance.CommonRequestFixture.patchRequest;
 import static com.koddy.server.acceptance.CommonRequestFixture.postRequest;
 
@@ -202,5 +203,25 @@ public class MemberAcceptanceStep {
         );
 
         return patchRequest(accessToken, request, uri);
+    }
+
+    public static ValidatableResponse 멘토_프로필을_조회한다(final String accessToken) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/mentors/me")
+                .build()
+                .toUri()
+                .getPath();
+
+        return getRequest(accessToken, uri);
+    }
+
+    public static ValidatableResponse 멘티_프로필을_조회한다(final String accessToken) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/mentees/me")
+                .build()
+                .toUri()
+                .getPath();
+
+        return getRequest(accessToken, uri);
     }
 }

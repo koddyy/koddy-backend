@@ -1,9 +1,11 @@
 package com.koddy.server.acceptance.member;
 
 import com.koddy.server.common.AcceptanceTest;
+import com.koddy.server.common.config.DatabaseCleanerEachCallbackExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_프로필을_완성시킨다;
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘티_프로필을_완성시킨다;
@@ -11,6 +13,7 @@ import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
+@ExtendWith(DatabaseCleanerEachCallbackExtension.class)
 @DisplayName("[Acceptance Test] 사용자 프로필 완성")
 public class CompleteAccountAcceptanceTest extends AcceptanceTest {
     @Nested

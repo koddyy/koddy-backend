@@ -1,9 +1,11 @@
 package com.koddy.server.acceptance.member;
 
 import com.koddy.server.common.AcceptanceTest;
+import com.koddy.server.common.config.DatabaseCleanerEachCallbackExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_회원가입_후_로그인을_진행한다;
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘티_회원가입_후_로그인을_진행한다;
@@ -17,6 +19,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
+@ExtendWith(DatabaseCleanerEachCallbackExtension.class)
 @DisplayName("[Acceptance Test] 사용자 계정 관리")
 public class ManageAccountAcceptanceTest extends AcceptanceTest {
     @Nested

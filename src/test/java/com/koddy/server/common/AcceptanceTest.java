@@ -7,7 +7,6 @@ import com.koddy.server.auth.infrastructure.oauth.kakao.KakaoOAuthUriGenerator;
 import com.koddy.server.auth.infrastructure.oauth.zoom.ZoomOAuthConnector;
 import com.koddy.server.auth.infrastructure.oauth.zoom.ZoomOAuthUriGenerator;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.ZoomMeetingLinkManager;
-import com.koddy.server.common.config.DatabaseCleanerEachCallbackExtension;
 import com.koddy.server.common.config.ExternalApiConfiguration;
 import com.koddy.server.common.config.MySqlTestContainersExtension;
 import com.koddy.server.common.config.RedisTestContainersExtension;
@@ -23,7 +22,6 @@ import org.springframework.context.annotation.Import;
 @Tag("Acceptance")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith({
-        DatabaseCleanerEachCallbackExtension.class,
         MySqlTestContainersExtension.class,
         RedisTestContainersExtension.class
 })
