@@ -17,7 +17,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
-@DisplayName("[Acceptance Test] 사용자 계정 관리 기능")
+@DisplayName("[Acceptance Test] 사용자 계정 관리")
 public class ManageAccountAcceptanceTest extends AcceptanceTest {
     @Nested
     @DisplayName("회원가입 + 로그인 API")
