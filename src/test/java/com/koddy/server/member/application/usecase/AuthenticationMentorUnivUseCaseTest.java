@@ -18,7 +18,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_AUTH_CODE;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.ATTEMPT;
-import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.COMPLETE;
+import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.SUCCESS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -140,7 +140,7 @@ class AuthenticationMentorUnivUseCaseTest extends UseCaseTest {
                     () -> verify(authenticationProcessor, times(1)).deleteAuthCode(getAuthKey(schoolMail)),
                     () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isEqualTo(schoolMail),
                     () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
-                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(COMPLETE)
+                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(SUCCESS)
             );
         }
     }

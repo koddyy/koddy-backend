@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.ATTEMPT;
-import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.COMPLETE;
+import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.SUCCESS;
 import static jakarta.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -44,6 +44,6 @@ public class UniversityAuthentication {
     }
 
     public void complete() {
-        status = COMPLETE;
+        status = SUCCESS;
     }
 }

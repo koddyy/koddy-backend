@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.ATTEMPT;
-import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.COMPLETE;
+import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.SUCCESS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -29,7 +29,7 @@ class UniversityAuthenticationTest extends ParallelTest {
         assertAll(
                 () -> assertThat(attemptMail.getSchoolMail()).isEqualTo(schoolMail),
                 () -> assertThat(attemptMail.getProofDataUploadUrl()).isNull(),
-                () -> assertThat(attemptMail.getStatus()).isEqualTo(COMPLETE)
+                () -> assertThat(attemptMail.getStatus()).isEqualTo(SUCCESS)
         );
     }
 
@@ -51,7 +51,7 @@ class UniversityAuthenticationTest extends ParallelTest {
         assertAll(
                 () -> assertThat(attemptProofData.getSchoolMail()).isNull(),
                 () -> assertThat(attemptProofData.getProofDataUploadUrl()).isEqualTo(proofDataUploadUrl),
-                () -> assertThat(attemptProofData.getStatus()).isEqualTo(COMPLETE)
+                () -> assertThat(attemptProofData.getStatus()).isEqualTo(SUCCESS)
         );
     }
 }

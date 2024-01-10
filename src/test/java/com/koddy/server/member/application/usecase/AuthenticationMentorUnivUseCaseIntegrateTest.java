@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Bean;
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_AUTH_CODE;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.ATTEMPT;
-import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.COMPLETE;
+import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.SUCCESS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -143,7 +143,7 @@ class AuthenticationMentorUnivUseCaseIntegrateTest extends IntegrateTest {
             assertAll(
                     () -> assertThat(findMentor.getUniversityAuthentication().getSchoolMail()).isEqualTo(schoolMail),
                     () -> assertThat(findMentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
-                    () -> assertThat(findMentor.getUniversityAuthentication().getStatus()).isEqualTo(COMPLETE),
+                    () -> assertThat(findMentor.getUniversityAuthentication().getStatus()).isEqualTo(SUCCESS),
                     () -> {
                         final String authKey = getAuthKey(command.schoolMail());
                         assertThat(redisOperator.get(authKey)).isNull(); // 인증성공하면 바로 제거

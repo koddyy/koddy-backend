@@ -19,7 +19,7 @@ import static com.koddy.server.member.domain.model.Nationality.KOREA;
 import static com.koddy.server.member.domain.model.ProfileComplete.NO;
 import static com.koddy.server.member.domain.model.ProfileComplete.YES;
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.ATTEMPT;
-import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.COMPLETE;
+import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.SUCCESS;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -203,7 +203,7 @@ class MentorTest extends ParallelTest {
             assertAll(
                     () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isEqualTo(schoolMail),
                     () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
-                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(COMPLETE)
+                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(SUCCESS)
             );
         }
 
@@ -227,7 +227,7 @@ class MentorTest extends ParallelTest {
             assertAll(
                     () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isNull(),
                     () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isEqualTo(proofDataUploadUrl),
-                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(COMPLETE)
+                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(SUCCESS)
             );
         }
     }
