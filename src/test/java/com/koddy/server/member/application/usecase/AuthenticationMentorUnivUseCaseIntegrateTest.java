@@ -9,6 +9,7 @@ import com.koddy.server.global.redis.RedisOperator;
 import com.koddy.server.mail.application.adapter.EmailSender;
 import com.koddy.server.member.application.usecase.command.AuthenticationConfirmWithMailCommand;
 import com.koddy.server.member.application.usecase.command.AuthenticationWithMailCommand;
+import com.koddy.server.member.application.usecase.command.AuthenticationWithProofDataCommand;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MentorRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -147,6 +148,29 @@ class AuthenticationMentorUnivUseCaseIntegrateTest extends IntegrateTest {
                         final String authKey = getAuthKey(command.schoolMail());
                         assertThat(redisOperator.get(authKey)).isNull(); // 인증성공하면 바로 제거
                     }
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("학교 증명자료 인증 시도")
+    class AuthWithProofData {
+        @Test
+        @DisplayName("증명자료로 멘토 인증을 시도한다")
+        void success() {
+            // given
+            final Mentor mentor = mentorRepository.save(MENTOR_1.toDomain());
+            final AuthenticationWithProofDataCommand command = new AuthenticationWithProofDataCommand(mentor.getId(), "proof-url");
+
+            // when
+            sut.authWithProofData(command);
+
+            // then
+            final Mentor findMentor = mentorRepository.getById(mentor.getId());
+            assertAll(
+                    () -> assertThat(findMentor.getUniversityAuthentication().getSchoolMail()).isNull(),
+                    () -> assertThat(findMentor.getUniversityAuthentication().getProofDataUploadUrl()).isEqualTo(command.proofDataUploadUrl()),
+                    () -> assertThat(findMentor.getUniversityAuthentication().getStatus()).isEqualTo(ATTEMPT)
             );
         }
     }

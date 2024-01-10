@@ -42,7 +42,9 @@ public class AuthenticationMentorUnivUseCase {
         return authKeyGenerator.get("MENTOR-MAIL-AUTH:%s", email);
     }
 
+    @KoddyWritableTransactional
     public void authWithProofData(final AuthenticationWithProofDataCommand command) {
-
+        final Mentor mentor = mentorRepository.getById(command.mentorId());
+        mentor.authWithProofData(command.proofDataUploadUrl());
     }
 }

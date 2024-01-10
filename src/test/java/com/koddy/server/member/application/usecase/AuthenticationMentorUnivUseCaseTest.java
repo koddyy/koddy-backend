@@ -6,6 +6,7 @@ import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.common.UseCaseTest;
 import com.koddy.server.member.application.usecase.command.AuthenticationConfirmWithMailCommand;
 import com.koddy.server.member.application.usecase.command.AuthenticationWithMailCommand;
+import com.koddy.server.member.application.usecase.command.AuthenticationWithProofDataCommand;
 import com.koddy.server.member.domain.event.MailAuthenticatedEvent;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MentorRepository;
@@ -140,6 +141,31 @@ class AuthenticationMentorUnivUseCaseTest extends UseCaseTest {
                     () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isEqualTo(schoolMail),
                     () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
                     () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(COMPLETE)
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("학교 증명자료 인증 시도")
+    class AuthWithProofData {
+        private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
+        private final AuthenticationWithProofDataCommand command = new AuthenticationWithProofDataCommand(mentor.getId(), "proof-url");
+
+        @Test
+        @DisplayName("증명자료로 멘토 인증을 시도한다")
+        void success() {
+            // given
+            given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
+
+            // when
+            sut.authWithProofData(command);
+
+            // then
+            assertAll(
+                    () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
+                    () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isNull(),
+                    () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isEqualTo(command.proofDataUploadUrl()),
+                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(ATTEMPT)
             );
         }
     }
