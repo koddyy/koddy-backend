@@ -11,9 +11,13 @@ import static com.koddy.server.file.exception.FileExceptionCode.INVALID_FILE_EXT
 @Getter
 @RequiredArgsConstructor
 public enum FileExtension {
+    // 프로필 사진
     JPG(".jpg"),
     JPEG(".jpeg"),
     PNG(".png"),
+
+    // 멘토 학교 증명자료
+    PDF(".pdf"),
     ;
 
     private final String value;

@@ -5,15 +5,9 @@ import com.koddy.server.file.exception.FileException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.stream.Stream;
-
-import static com.koddy.server.file.domain.model.FileExtension.JPEG;
-import static com.koddy.server.file.domain.model.FileExtension.JPG;
-import static com.koddy.server.file.domain.model.FileExtension.PNG;
 import static com.koddy.server.file.exception.FileExceptionCode.INVALID_FILE_EXTENSION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -33,18 +27,18 @@ class FileExtensionTest extends ParallelTest {
         }
 
         @ParameterizedTest
-        @MethodSource("validExtension")
+        @CsvSource(
+                value = {
+                        "hello.jpg:JPG",
+                        "hello.jpeg:JPEG",
+                        "hello.png:PNG",
+                        "hello.pdf:PDF"
+                },
+                delimiter = ':'
+        )
         @DisplayName("파일 확장자에 대한 FileExtension을 얻는다")
         void success(final String fileName, final FileExtension extension) {
             assertThat(FileExtension.getExtensionViaFimeName(fileName)).isEqualTo(extension);
-        }
-
-        private static Stream<Arguments> validExtension() {
-            return Stream.of(
-                    Arguments.of("hello.jpg", JPG),
-                    Arguments.of("hello.jpeg", JPEG),
-                    Arguments.of("hello.png", PNG)
-            );
         }
     }
 }

@@ -209,7 +209,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
                     .andExpectAll(getResultMatchersViaExceptionCode(INVALID_PERMISSION))
                     .andDo(failureDocsWithAccessToken("MemberApi/Mentor/UnivAuth/ProofData/Failure", createHttpSpecSnippets(
                             requestFields(
-                                    body("proofDataUploadUrl", "Presigned로 업로드한 증명 자료 URL", true)
+                                    body("proofDataUploadUrl", "Presigned로 업로드한 증명 자료 URL", "하나만 업로드", true)
                             )
                     )));
         }
@@ -231,7 +231,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
                     .andExpect(status().isNoContent())
                     .andDo(successDocsWithAccessToken("MemberApi/Mentor/UnivAuth/ProofData/Success", createHttpSpecSnippets(
                             requestFields(
-                                    body("proofDataUploadUrl", "Presigned로 업로드한 증명 자료 URL", true)
+                                    body("proofDataUploadUrl", "Presigned로 업로드한 증명 자료 URL", "PDF 파일 + 하나만 업로드", true)
                             )
                     )));
         }
