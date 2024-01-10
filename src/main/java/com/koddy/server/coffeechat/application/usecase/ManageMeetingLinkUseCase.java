@@ -11,7 +11,7 @@ import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkRequest;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkResponse;
 import com.koddy.server.global.annotation.UseCase;
-import com.koddy.server.global.utils.DefaultRedisStringOperator;
+import com.koddy.server.global.redis.RedisOperator;
 import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;
@@ -31,7 +31,7 @@ public class ManageMeetingLinkUseCase {
 
     private final List<OAuthConnector> oAuthConnectors;
     private final List<MeetingLinkManager> meetingLinkManagers;
-    private final DefaultRedisStringOperator redisOperator;
+    private final RedisOperator<String, String> redisOperator;
 
     /**
      * 추후 Google Meet Creator 연동하면서 MeetingLinkCreator Request/Response 스펙 재정의 (Interface)

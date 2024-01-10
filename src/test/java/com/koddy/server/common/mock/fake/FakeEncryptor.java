@@ -1,4 +1,4 @@
-package com.koddy.server.common.mock;
+package com.koddy.server.common.mock.fake;
 
 import com.koddy.server.global.encrypt.Encryptor;
 

@@ -19,6 +19,7 @@ public enum GlobalExceptionCode implements KoddyExceptionCode {
     VALIDATION_ERROR(BAD_REQUEST, "GLOBAL_003", "잘못된 요청입니다."),
     UNSUPPORTED_MEDIA_TYPE_ERROR(UNSUPPORTED_MEDIA_TYPE, "GLOBAL_004", "잘못된 요청입니다."),
     UNEXPECTED_SERVER_ERROR(INTERNAL_SERVER_ERROR, "GLOBAL_005", "내부 서버 오류입니다."),
+    NOT_PROVIDED_UNIV_DOMAIN(BAD_REQUEST, "GLOBAL_006", "파악할 수 없는 대학교 도메인입니다.\nKoddy 고객센터에 문의해주세요."),
     ;
 
     private final HttpStatus status;

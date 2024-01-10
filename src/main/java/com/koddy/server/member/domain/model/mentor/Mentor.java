@@ -31,6 +31,9 @@ public class Mentor extends Member<Mentor> {
     @Embedded
     private UniversityProfile universityProfile;
 
+    @Embedded
+    private UniversityAuthentication universityAuthentication;
+
     @OneToMany(mappedBy = "mentor", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private final List<Schedule> schedules = new ArrayList<>();
 
@@ -79,6 +82,18 @@ public class Mentor extends Member<Mentor> {
                             .toList()
             );
         }
+    }
+
+    public void authWithMail(final String schoolMail) {
+        universityAuthentication = UniversityAuthentication.attemptMail(schoolMail);
+    }
+
+    public void authWithProofData(final String proofDataUploadUrl) {
+        universityAuthentication = UniversityAuthentication.attemptProofData(proofDataUploadUrl);
+    }
+
+    public void authComplete() {
+        universityAuthentication.complete();
     }
 
     @Override

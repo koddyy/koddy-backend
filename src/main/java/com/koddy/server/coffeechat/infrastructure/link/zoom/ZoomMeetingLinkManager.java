@@ -7,7 +7,7 @@ import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkRequest;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkResponse;
 import com.koddy.server.global.exception.GlobalException;
-import com.koddy.server.global.utils.DefaultRedisStringOperator;
+import com.koddy.server.global.redis.RedisOperator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -38,7 +38,7 @@ public class ZoomMeetingLinkManager implements MeetingLinkManager {
 
     private final ZoomOAuthProperties properties;
     private final RestTemplate restTemplate;
-    private final DefaultRedisStringOperator redisOperator;
+    private final RedisOperator<String, String> redisOperator;
 
     @Override
     public boolean isSupported(final MeetingLinkProvider provider) {

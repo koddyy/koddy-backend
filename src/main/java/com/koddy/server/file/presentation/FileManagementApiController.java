@@ -3,7 +3,8 @@ package com.koddy.server.file.presentation;
 import com.koddy.server.file.application.adapter.FileManager;
 import com.koddy.server.file.domain.model.PresignedFileData;
 import com.koddy.server.file.domain.model.PresignedUrlDetails;
-import com.koddy.server.file.presentation.dto.request.GetPresignedUrlRequest;
+import com.koddy.server.file.presentation.dto.request.GetImagePresignedUrlRequest;
+import com.koddy.server.file.presentation.dto.request.GetPdfPresignedUrlRequest;
 import com.koddy.server.file.utils.converter.FileConverter;
 import com.koddy.server.global.dto.ResponseWrapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,10 +38,19 @@ public class FileManagementApiController {
         return ResponseEntity.ok(ResponseWrapper.from(uploadUrl));
     }
 
-    @Operation(summary = "Presigned Url 응답 Endpoint")
-    @GetMapping("/presigned")
-    public ResponseEntity<PresignedUrlDetails> getPresignedUrl(
-            @ModelAttribute @Valid final GetPresignedUrlRequest request
+    @Operation(summary = "이미지 업로드에 대한 Presigned Url 응답 Endpoint")
+    @GetMapping("/presigned/image")
+    public ResponseEntity<PresignedUrlDetails> getImagePresignedUrl(
+            @ModelAttribute @Valid final GetImagePresignedUrlRequest request
+    ) {
+        final PresignedUrlDetails presignedUrl = fileManager.createPresignedUrl(new PresignedFileData(request.fileName()));
+        return ResponseEntity.ok(presignedUrl);
+    }
+
+    @Operation(summary = "PDF 파일 업로드에 대한 Presigned Url 응답 Endpoint")
+    @GetMapping("/presigned/pdf")
+    public ResponseEntity<PresignedUrlDetails> getPdfPresignedUrl(
+            @ModelAttribute @Valid final GetPdfPresignedUrlRequest request
     ) {
         final PresignedUrlDetails presignedUrl = fileManager.createPresignedUrl(new PresignedFileData(request.fileName()));
         return ResponseEntity.ok(presignedUrl);

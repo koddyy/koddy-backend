@@ -1,6 +1,6 @@
 package com.koddy.server.common.utils;
 
-import com.koddy.server.common.mock.FakeEncryptor;
+import com.koddy.server.common.mock.fake.FakeEncryptor;
 import com.koddy.server.global.encrypt.Encryptor;
 
 import java.security.SecureRandom;
