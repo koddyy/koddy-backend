@@ -1,8 +1,10 @@
 package com.koddy.server.member.application.usecase;
 
+import com.koddy.server.auth.application.adapter.AuthenticationProcessor;
 import com.koddy.server.auth.domain.model.code.AuthKeyGenerator;
+import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.common.UseCaseTest;
-import com.koddy.server.common.mock.stub.StubAuthenticationProcessor;
+import com.koddy.server.member.application.usecase.command.AuthenticationConfirmWithMailCommand;
 import com.koddy.server.member.application.usecase.command.AuthenticationWithMailCommand;
 import com.koddy.server.member.domain.event.MailAuthenticatedEvent;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -12,14 +14,17 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationEventPublisher;
 
-import java.util.Map;
-
+import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_AUTH_CODE;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.ATTEMPT;
+import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.COMPLETE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -31,7 +36,7 @@ class AuthenticationMentorUnivUseCaseTest extends UseCaseTest {
 
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final AuthKeyGenerator authKeyGenerator = (prefix, suffix) -> String.format(AUTH_KEY_PREFIX, suffix);
-    private final StubAuthenticationProcessor authenticationProcessor = new StubAuthenticationProcessor(() -> AUTH_CODE);
+    private final AuthenticationProcessor authenticationProcessor = mock(AuthenticationProcessor.class);
     private final ApplicationEventPublisher eventPublisher = mock(ApplicationEventPublisher.class);
     private final AuthenticationMentorUnivUseCase sut = new AuthenticationMentorUnivUseCase(
             mentorRepository,
@@ -40,16 +45,15 @@ class AuthenticationMentorUnivUseCaseTest extends UseCaseTest {
             eventPublisher
     );
 
-    private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
-
     @Nested
-    @DisplayName("학교 메일 인증")
+    @DisplayName("학교 메일 인증 시도")
     class AuthWithMail {
+        private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
         private final String schoolMail = "sjiwon@kyonggi.ac.kr";
         private final AuthenticationWithMailCommand command = new AuthenticationWithMailCommand(mentor.getId(), schoolMail);
 
         @Test
-        @DisplayName("학교 메일로 멘토 인증을 진행한다")
+        @DisplayName("학교 메일로 멘토 인증을 시도한다")
         void success() {
             // given
             given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
@@ -60,16 +64,87 @@ class AuthenticationMentorUnivUseCaseTest extends UseCaseTest {
             // then
             assertAll(
                     () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
+                    () -> verify(authenticationProcessor, times(1)).storeAuthCode(getAuthKey(schoolMail)),
                     () -> verify(eventPublisher, times(1)).publishEvent(any(MailAuthenticatedEvent.class)),
-                    () -> {
-                        final Map<String, String> cache = authenticationProcessor.getCache();
-                        final String key = String.format(AUTH_KEY_PREFIX, command.schoolMail());
-                        assertThat(cache.get(key)).isEqualTo(AUTH_CODE);
-                    },
                     () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isEqualTo(schoolMail),
                     () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
                     () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(ATTEMPT)
             );
         }
+    }
+
+    @Nested
+    @DisplayName("학교 메일 인증 확인")
+    class ConfirmMailAuthCode {
+        @Test
+        @DisplayName("인증번호가 일치하지 않음에 따라 인증에 실패한다")
+        void throwExceptionByInvalidAuthCode() {
+            // given
+            final Mentor mentor = MENTOR_1.toDomain().apply(1L);
+            final String schoolMail = "sjiwon@kyonggi.ac.kr";
+            mentor.authWithMail(schoolMail);
+
+            final AuthenticationConfirmWithMailCommand command = new AuthenticationConfirmWithMailCommand(
+                    mentor.getId(),
+                    schoolMail,
+                    AUTH_CODE + "diff"
+            );
+
+            given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
+            doThrow(new AuthException(INVALID_AUTH_CODE))
+                    .when(authenticationProcessor)
+                    .verifyAuthCode(getAuthKey(schoolMail), command.authCode());
+
+            // when - then
+            assertThatThrownBy(() -> sut.confirmMailAuthCode(command))
+                    .isInstanceOf(AuthException.class)
+                    .hasMessage(INVALID_AUTH_CODE.getMessage());
+
+            assertAll(
+                    () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
+                    () -> verify(authenticationProcessor, times(1)).verifyAuthCode(getAuthKey(schoolMail), command.authCode()),
+                    () -> verify(authenticationProcessor, times(0)).deleteAuthCode(getAuthKey(schoolMail)),
+                    () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isEqualTo(schoolMail),
+                    () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
+                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(ATTEMPT)
+            );
+        }
+
+        @Test
+        @DisplayName("인증번호가 일치하고 그에 따라서 학교 메일 인증에 성공한다")
+        void success() {
+            // given
+            final Mentor mentor = MENTOR_1.toDomain().apply(1L);
+            final String schoolMail = "sjiwon@kyonggi.ac.kr";
+            mentor.authWithMail(schoolMail);
+
+            final AuthenticationConfirmWithMailCommand command = new AuthenticationConfirmWithMailCommand(
+                    mentor.getId(),
+                    schoolMail,
+                    AUTH_CODE
+            );
+
+            given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
+            doNothing()
+                    .when(authenticationProcessor)
+                    .verifyAuthCode(getAuthKey(schoolMail), command.authCode());
+
+            // when
+            sut.confirmMailAuthCode(command);
+
+            // then
+            assertAll(
+                    () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
+                    () -> verify(authenticationProcessor, times(1)).verifyAuthCode(getAuthKey(schoolMail), command.authCode()),
+                    () -> verify(authenticationProcessor, times(1)).deleteAuthCode(getAuthKey(schoolMail)),
+                    () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isEqualTo(schoolMail),
+                    () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
+                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(COMPLETE)
+            );
+        }
+    }
+
+    private String getAuthKey(final String schoolMail) {
+        return String.format(AUTH_KEY_PREFIX, schoolMail);
     }
 }

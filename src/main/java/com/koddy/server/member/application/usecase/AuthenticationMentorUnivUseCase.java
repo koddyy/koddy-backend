@@ -29,8 +29,13 @@ public class AuthenticationMentorUnivUseCase {
         mentor.authWithMail(command.schoolMail());
     }
 
+    @KoddyWritableTransactional
     public void confirmMailAuthCode(final AuthenticationConfirmWithMailCommand command) {
-
+        final Mentor mentor = mentorRepository.getById(command.mentorId());
+        final String authKey = createAuthKey(command.schoolMail());
+        authenticationProcessor.verifyAuthCode(authKey, command.authCode());
+        authenticationProcessor.deleteAuthCode(authKey);
+        mentor.authComplete();
     }
 
     private String createAuthKey(final String email) {
