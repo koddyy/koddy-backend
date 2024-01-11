@@ -136,6 +136,19 @@ public abstract class ControllerTest {
                 .header(AUTHORIZATION, applyAccessToken());
     }
 
+    @SafeVarargs
+    protected final RequestBuilder getWithAccessToken(final String url, final Map<String, String>... params) {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(url);
+
+        for (final Map<String, String> param : params) {
+            for (final String key : param.keySet()) {
+                requestBuilder = requestBuilder.param(key, param.get(key));
+            }
+        }
+
+        return requestBuilder.header(AUTHORIZATION, applyAccessToken());
+    }
+
     /**
      * POST + application/json
      */
@@ -270,6 +283,19 @@ public abstract class ControllerTest {
         }
 
         return requestBuilder;
+    }
+
+    protected final RequestBuilder multipartWithAccessToken(
+            final String url,
+            final List<MultipartFile> files
+    ) {
+        MockMultipartHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.multipart(url);
+
+        for (final MultipartFile file : files) {
+            requestBuilder = requestBuilder.file((MockMultipartFile) file);
+        }
+
+        return requestBuilder.header(AUTHORIZATION, applyAccessToken());
     }
 
     @SafeVarargs

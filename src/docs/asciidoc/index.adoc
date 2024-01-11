@@ -17,7 +17,7 @@ include::{snippets}/TokenReissueApi/Success/request-cookies.adoc[]
 include::{snippets}/TokenReissueApi/Failure/http-response.adoc[]
 include::{snippets}/TokenReissueApi/Success/http-response.adoc[]
 
-== 파일 관련 API
+== 파일 관련 API (AccessToken)
 
 === PresignedUrl 응답
 
