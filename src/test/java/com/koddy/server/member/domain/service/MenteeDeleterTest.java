@@ -4,7 +4,6 @@ import com.koddy.server.auth.domain.model.Token;
 import com.koddy.server.common.IntegrateTest;
 import com.koddy.server.member.domain.model.AvailableLanguage;
 import com.koddy.server.member.domain.model.Member;
-import com.koddy.server.member.domain.model.Role;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
@@ -40,7 +39,6 @@ class MenteeDeleterTest extends IntegrateTest {
         final Member<?> mentee = memberRepository.save(MENTEE_1.toDomain());
         assertAll(
                 () -> assertThat(getToken(mentee.getId())).hasSize(0),
-                () -> assertThat(getRole(mentee.getId())).hasSize(1),
                 () -> assertThat(getLanguage(mentee.getId())).hasSize(MENTEE_1.getLanguages().size()),
                 () -> assertThat(getMentee(mentee.getId())).hasSize(1),
                 () -> {
@@ -59,7 +57,6 @@ class MenteeDeleterTest extends IntegrateTest {
         // then
         assertAll(
                 () -> assertThat(getToken(mentee.getId())).hasSize(0),
-                () -> assertThat(getRole(mentee.getId())).hasSize(0),
                 () -> assertThat(getLanguage(mentee.getId())).hasSize(0),
                 () -> assertThat(getMentee(mentee.getId())).hasSize(0),
                 () -> assertThat(getMemberByJpql(mentee.getId())).isEmpty(),
@@ -82,18 +79,6 @@ class MenteeDeleterTest extends IntegrateTest {
                                 WHERE t.memberId = :id
                                 """,
                         Token.class
-                ).setParameter("id", id)
-                .getResultList();
-    }
-
-    private List<Role> getRole(final long id) {
-        return em.createQuery(
-                        """
-                                SELECT r
-                                FROM Role r
-                                WHERE r.member.id = :id
-                                """,
-                        Role.class
                 ).setParameter("id", id)
                 .getResultList();
     }

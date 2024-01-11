@@ -4,7 +4,6 @@ import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.model.Nationality;
-import com.koddy.server.member.domain.model.Role;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -15,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+import static com.koddy.server.member.domain.model.Role.MENTEE;
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
@@ -34,7 +34,7 @@ public class Mentee extends Member<Mentee> {
             final List<Language> languages,
             final Interest interest
     ) {
-        super(email, name, profileImageUrl, nationality, languages, List.of(Role.Type.MENTEE));
+        super(email, name, profileImageUrl, nationality, MENTEE, languages);
         this.interest = interest;
     }
 

@@ -1,7 +1,7 @@
 package com.koddy.server.auth.presentation.dto.response;
 
 public record LoginResponse(
-        Long id,
+        long id,
         String name,
         String profileImageUrl
 ) {

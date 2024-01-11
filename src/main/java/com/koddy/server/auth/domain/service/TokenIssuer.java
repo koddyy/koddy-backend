@@ -14,29 +14,29 @@ public class TokenIssuer {
     private final TokenProvider tokenProvider;
     private final TokenManager tokenManager;
 
-    public AuthToken provideAuthorityToken(final Long memberId) {
-        final Member<?> member = memberRepository.getByIdWithRoles(memberId);
-        final String accessToken = tokenProvider.createAccessToken(memberId, member.getAuthorities());
+    public AuthToken provideAuthorityToken(final long memberId) {
+        final Member<?> member = memberRepository.getById(memberId);
+        final String accessToken = tokenProvider.createAccessToken(memberId, member.getAuthority());
         final String refreshToken = tokenProvider.createRefreshToken(memberId);
         tokenManager.synchronizeRefreshToken(memberId, refreshToken);
 
         return new AuthToken(accessToken, refreshToken);
     }
 
-    public AuthToken reissueAuthorityToken(final Long memberId) {
-        final Member<?> member = memberRepository.getByIdWithRoles(memberId);
-        final String newAccessToken = tokenProvider.createAccessToken(memberId, member.getAuthorities());
+    public AuthToken reissueAuthorityToken(final long memberId) {
+        final Member<?> member = memberRepository.getById(memberId);
+        final String newAccessToken = tokenProvider.createAccessToken(memberId, member.getAuthority());
         final String newRefreshToken = tokenProvider.createRefreshToken(memberId);
         tokenManager.updateRefreshToken(memberId, newRefreshToken);
 
         return new AuthToken(newAccessToken, newRefreshToken);
     }
 
-    public boolean isMemberRefreshToken(final Long memberId, final String refreshToken) {
+    public boolean isMemberRefreshToken(final long memberId, final String refreshToken) {
         return tokenManager.isMemberRefreshToken(memberId, refreshToken);
     }
 
-    public void deleteRefreshToken(final Long memberId) {
+    public void deleteRefreshToken(final long memberId) {
         tokenManager.deleteRefreshToken(memberId);
     }
 }

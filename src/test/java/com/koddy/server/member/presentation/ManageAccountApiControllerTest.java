@@ -184,7 +184,7 @@ class ManageAccountApiControllerTest extends ControllerTest {
         @DisplayName("서비스를 탙퇴한다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getAuthorities());
+            mockingToken(true, mentor.getId(), mentor.getRole());
             doNothing()
                     .when(deleteMemberUseCase)
                     .invoke(any());

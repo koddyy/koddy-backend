@@ -17,13 +17,13 @@ public class GetMemberPrivateProfileUseCase {
     private final MenteeRepository menteeRepository;
 
     @KoddyReadOnlyTransactional
-    public MentorProfile getMentorProfile(final Long mentorId) {
+    public MentorProfile getMentorProfile(final long mentorId) {
         final Mentor mentor = mentorRepository.getProfile(mentorId);
         return new MentorProfile(mentor);
     }
 
     @KoddyReadOnlyTransactional
-    public MenteeProfile getMenteeProfile(final Long menteeId) {
+    public MenteeProfile getMenteeProfile(final long menteeId) {
         final Mentee mentee = menteeRepository.getProfile(menteeId);
         return new MenteeProfile(mentee);
     }

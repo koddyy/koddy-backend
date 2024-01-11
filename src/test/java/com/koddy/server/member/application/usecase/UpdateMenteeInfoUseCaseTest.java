@@ -1,7 +1,6 @@
 package com.koddy.server.member.application.usecase;
 
 import com.koddy.server.member.application.usecase.command.UpdateMenteeBasicInfoCommand;
-import com.koddy.server.member.domain.model.Role;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.repository.MenteeRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -49,7 +48,6 @@ class UpdateMenteeInfoUseCaseTest {
                 () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(command.profileImageUrl()),
                 () -> assertThat(mentee.getIntroduction()).isEqualTo(command.introduction()),
                 () -> assertThat(mentee.getLanguages()).containsExactlyInAnyOrderElementsOf(command.languages()),
-                () -> assertThat(mentee.getAuthorities()).containsExactlyInAnyOrder(Role.Type.MENTEE.getAuthority()),
                 () -> assertThat(mentee.getInterest().getSchool()).isEqualTo(command.interestSchool()),
                 () -> assertThat(mentee.getInterest().getMajor()).isEqualTo(command.interestMajor())
         );

@@ -4,7 +4,6 @@ import com.koddy.server.auth.domain.repository.TokenRepository;
 import com.koddy.server.global.annotation.KoddyWritableTransactional;
 import com.koddy.server.member.domain.repository.AvailableLanguageRepository;
 import com.koddy.server.member.domain.repository.MemberRepository;
-import com.koddy.server.member.domain.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +11,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MenteeDeleter {
     private final TokenRepository tokenRepository;
-    private final RoleRepository roleRepository;
     private final AvailableLanguageRepository availableLanguageRepository;
     private final MemberRepository memberRepository;
 
     @KoddyWritableTransactional
     public void execute(final long menteeId) {
         tokenRepository.deleteRefreshToken(menteeId);
-        roleRepository.deleteMemberRole(menteeId);
         availableLanguageRepository.deleteMemberLanguage(menteeId);
         memberRepository.deleteMember(menteeId);
     }

@@ -223,7 +223,7 @@ class OAuthApiControllerTest extends ControllerTest {
         @DisplayName("로그아웃을 진행한다")
         void success() throws Exception {
             // given
-            mockingToken(true, member.getId(), member.getAuthorities());
+            mockingToken(true, member.getId(), member.getRole());
             doNothing()
                     .when(logoutUseCase)
                     .invoke(any());

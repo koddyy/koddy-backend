@@ -59,7 +59,7 @@ class ManageMeetingLinkApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() throws Exception {
             // given
-            mockingToken(true, mentee.getId(), mentee.getAuthorities());
+            mockingToken(true, mentee.getId(), mentee.getRole());
 
             // when
             final RequestBuilder requestBuilder = postWithAccessToken(new PathWithVariables(BASE_URL, "zoom"), request);
@@ -86,7 +86,7 @@ class ManageMeetingLinkApiControllerTest extends ControllerTest {
         @DisplayName("커피챗 링크를 생성한다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getAuthorities());
+            mockingToken(true, mentor.getId(), mentor.getRole());
             given(manageMeetingLinkUseCase.create(any())).willReturn(new ZoomMeetingLinkResponse(
                     "88141392261",
                     "sjiwon4491@gmail.com",
@@ -133,7 +133,7 @@ class ManageMeetingLinkApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() throws Exception {
             // given
-            mockingToken(true, mentee.getId(), mentee.getAuthorities());
+            mockingToken(true, mentee.getId(), mentee.getRole());
 
             // when
             final RequestBuilder requestBuilder = deleteWithAccessToken(new PathWithVariables(BASE_URL, "zoom", "88141392261"));
@@ -153,7 +153,7 @@ class ManageMeetingLinkApiControllerTest extends ControllerTest {
         @DisplayName("생성한 커피챗 링크를 삭제한다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getAuthorities());
+            mockingToken(true, mentor.getId(), mentor.getRole());
             doNothing()
                     .when(manageMeetingLinkUseCase)
                     .delete(any());

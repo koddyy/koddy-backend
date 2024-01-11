@@ -24,9 +24,9 @@ public interface MentorRepository extends JpaRepository<Mentor, Long> {
             JOIN FETCH m.availableLanguages
             WHERE m.id = :id
             """)
-    Optional<Mentor> findProfile(@Param("id") final long id);
+    Optional<Mentor> findProfile(@Param("id") final Long id);
 
-    default Mentor getProfile(final long id) {
+    default Mentor getProfile(final Long id) {
         return findProfile(id)
                 .orElseThrow(() -> new MemberException(MENTOR_NOT_FOUND));
     }
@@ -34,5 +34,5 @@ public interface MentorRepository extends JpaRepository<Mentor, Long> {
     @KoddyWritableTransactional
     @Modifying
     @Query("DELETE FROM Mentor m WHERE m.id = :id")
-    void deleteMentor(@Param("id") final long id);
+    void deleteMentor(@Param("id") final Long id);
 }

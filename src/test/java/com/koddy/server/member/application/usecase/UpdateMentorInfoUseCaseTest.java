@@ -4,7 +4,6 @@ import com.koddy.server.common.UseCaseTest;
 import com.koddy.server.common.fixture.TimelineFixture;
 import com.koddy.server.member.application.usecase.command.UpdateMentorBasicInfoCommand;
 import com.koddy.server.member.application.usecase.command.UpdateMentorScheduleCommand;
-import com.koddy.server.member.domain.model.Role;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.model.mentor.Schedule;
 import com.koddy.server.member.domain.repository.MentorRepository;
@@ -54,7 +53,6 @@ class UpdateMentorInfoUseCaseTest extends UseCaseTest {
                 () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(command.profileImageUrl()),
                 () -> assertThat(mentor.getIntroduction()).isEqualTo(command.introduction()),
                 () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(command.languages()),
-                () -> assertThat(mentor.getAuthorities()).containsExactlyInAnyOrder(Role.Type.MENTOR.getAuthority()),
                 () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(command.school()),
                 () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(command.major()),
                 () -> assertThat(mentor.getUniversityProfile().getEnteredIn()).isEqualTo(command.enteredIn())
