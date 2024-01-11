@@ -30,7 +30,7 @@ public class RequestTokenExtractor {
         }
 
         final String token = Arrays.stream(cookies)
-                .filter(cookie -> cookie.getName().equals(COOKIE_REFRESH_TOKEN))
+                .filter(it -> it.getName().equals(COOKIE_REFRESH_TOKEN))
                 .map(Cookie::getValue)
                 .findFirst()
                 .orElse(null);

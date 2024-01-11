@@ -15,7 +15,7 @@ public class TokenManager {
     public void synchronizeRefreshToken(final Long memberId, final String refreshToken) {
         tokenRepository.findByMemberId(memberId)
                 .ifPresentOrElse(
-                        token -> token.updateRefreshToken(refreshToken),
+                        it -> it.updateRefreshToken(refreshToken),
                         () -> tokenRepository.save(new Token(memberId, refreshToken))
                 );
     }

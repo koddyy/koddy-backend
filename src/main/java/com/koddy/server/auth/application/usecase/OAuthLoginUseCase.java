@@ -41,7 +41,7 @@ public class OAuthLoginUseCase {
 
     private OAuthConnector getOAuthConnectorByProvider(final OAuthProvider provider) {
         return oAuthConnectors.stream()
-                .filter(oAuthConnector -> oAuthConnector.isSupported(provider))
+                .filter(it -> it.isSupported(provider))
                 .findFirst()
                 .orElseThrow(() -> new AuthException(INVALID_OAUTH_PROVIDER));
     }
