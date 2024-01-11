@@ -1,6 +1,6 @@
 package com.koddy.server.common;
 
-import com.koddy.server.common.config.MySqlTestContainersExtension;
+import com.koddy.server.common.containers.MySqlTestContainersExtension;
 import com.koddy.server.global.config.P6SpyConfig;
 import com.koddy.server.global.config.QueryDslConfig;
 import org.junit.jupiter.api.Tag;

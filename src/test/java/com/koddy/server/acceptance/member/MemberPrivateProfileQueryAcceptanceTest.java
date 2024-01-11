@@ -1,7 +1,7 @@
 package com.koddy.server.acceptance.member;
 
 import com.koddy.server.common.AcceptanceTest;
-import com.koddy.server.common.config.DatabaseCleanerEachCallbackExtension;
+import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension;
 import com.koddy.server.member.domain.model.Language;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

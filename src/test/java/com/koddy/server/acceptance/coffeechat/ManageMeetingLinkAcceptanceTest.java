@@ -1,8 +1,8 @@
 package com.koddy.server.acceptance.coffeechat;
 
 import com.koddy.server.common.AcceptanceTest;
-import com.koddy.server.common.config.DatabaseCleanerEachCallbackExtension;
-import com.koddy.server.common.config.RedisCleanerEachCallbackExtension;
+import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension;
+import com.koddy.server.common.containers.callback.RedisCleanerEachCallbackExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

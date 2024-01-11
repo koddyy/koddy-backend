@@ -1,4 +1,4 @@
-package com.koddy.server.common.config;
+package com.koddy.server.common.containers;
 
 import org.junit.jupiter.api.extension.Extension;
 import org.testcontainers.containers.GenericContainer;

@@ -1,4 +1,4 @@
-package com.koddy.server.common.config;
+package com.koddy.server.common.containers;
 
 import org.flywaydb.test.junit5.annotation.FlywayTestExtension;
 import org.junit.jupiter.api.extension.Extension;

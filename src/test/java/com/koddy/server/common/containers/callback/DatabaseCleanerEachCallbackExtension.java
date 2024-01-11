@@ -1,4 +1,4 @@
-package com.koddy.server.common.config;
+package com.koddy.server.common.containers.callback;
 
 import com.koddy.server.common.utils.DatabaseCleaner;
 import org.junit.jupiter.api.extension.AfterEachCallback;
