@@ -14,7 +14,7 @@ public class BlackboxLogicControlConfig {
     @Bean
     @Primary
     public AuthCodeGenerator authCodeGenerator() {
-        return () -> "123456";
+        return () -> AUTH_CODE;
     }
 
     @Bean
