@@ -3,7 +3,6 @@ package com.koddy.server.member.domain.model.mentee;
 import com.koddy.server.common.ParallelTest;
 import com.koddy.server.common.fixture.LanguageFixture;
 import com.koddy.server.member.domain.model.Language;
-import com.koddy.server.member.domain.model.Role;
 import com.koddy.server.member.exception.MemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,6 +15,7 @@ import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_2;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_3;
 import static com.koddy.server.member.domain.model.ProfileComplete.NO;
 import static com.koddy.server.member.domain.model.ProfileComplete.YES;
+import static com.koddy.server.member.domain.model.Role.MENTEE;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -62,7 +62,7 @@ class MenteeTest extends ParallelTest {
                     () -> assertThat(mentee.getIntroduction()).isEqualTo(MENTEE_1.getIntroduction()),
                     () -> assertThat(mentee.isActive()).isTrue(),
                     () -> assertThat(mentee.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTEE_1.getLanguages()),
-                    () -> assertThat(mentee.getAuthorities()).containsExactlyInAnyOrder(Role.Type.MENTEE.getAuthority()),
+                    () -> assertThat(mentee.getRole()).isEqualTo(MENTEE),
                     () -> assertThat(mentee.getInterest().getSchool()).isEqualTo(MENTEE_1.getInterest().getSchool()),
                     () -> assertThat(mentee.getInterest().getMajor()).isEqualTo(MENTEE_1.getInterest().getMajor()),
                     () -> assertThat(mentee.isProfileComplete()).isTrue(),
@@ -144,7 +144,6 @@ class MenteeTest extends ParallelTest {
                     () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(MENTEE_2.getProfileImageUrl()),
                     () -> assertThat(mentee.getIntroduction()).isEqualTo(MENTEE_2.getIntroduction()),
                     () -> assertThat(mentee.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTEE_2.getLanguages()),
-                    () -> assertThat(mentee.getAuthorities()).containsExactlyInAnyOrder(Role.Type.MENTEE.getAuthority()),
                     () -> assertThat(mentee.getInterest().getSchool()).isEqualTo(MENTEE_2.getInterest().getSchool()),
                     () -> assertThat(mentee.getInterest().getMajor()).isEqualTo(MENTEE_2.getInterest().getMajor())
             );

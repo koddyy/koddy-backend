@@ -10,7 +10,7 @@ import java.util.List;
 import static com.koddy.server.member.domain.model.ProfileComplete.YES;
 
 public record MentorProfile(
-        Long id,
+        long id,
         String email,
         String name,
         String profileImageUrl,

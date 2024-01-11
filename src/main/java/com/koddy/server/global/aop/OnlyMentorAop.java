@@ -2,12 +2,12 @@ package com.koddy.server.global.aop;
 
 import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.auth.exception.AuthException;
-import com.koddy.server.member.domain.model.Role;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION;
+import static com.koddy.server.member.domain.model.Role.MENTOR;
 
 @Aspect
 @Component
@@ -20,6 +20,6 @@ public class OnlyMentorAop {
     }
 
     private boolean isNotMentor(final Authenticated authenticated) {
-        return !authenticated.authorities().contains(Role.Type.MENTOR.getAuthority());
+        return !MENTOR.getAuthority().equals(authenticated.authority());
     }
 }

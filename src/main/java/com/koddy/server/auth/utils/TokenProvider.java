@@ -19,7 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
-import java.util.List;
 
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN;
 
@@ -40,11 +39,11 @@ public class TokenProvider {
         this.refreshTokenValidityInSeconds = refreshTokenValidityInSeconds;
     }
 
-    public String createAccessToken(final Long memberId, final List<String> authorities) {
+    public String createAccessToken(final long memberId, final String authority) {
         // Payload
         final Claims claims = Jwts.claims();
         claims.put("id", memberId);
-        claims.put("authorities", authorities);
+        claims.put("authority", authority);
 
         // Expires At
         final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
@@ -58,7 +57,7 @@ public class TokenProvider {
                 .compact();
     }
 
-    public String createRefreshToken(final Long memberId) {
+    public String createRefreshToken(final long memberId) {
         // Payload
         final Claims claims = Jwts.claims();
         claims.put("id", memberId);
@@ -75,17 +74,16 @@ public class TokenProvider {
                 .compact();
     }
 
-    public Long getId(final String token) {
+    public long getId(final String token) {
         return getClaims(token)
                 .getBody()
                 .get("id", Long.class);
     }
 
-    @SuppressWarnings("unchecked")
-    public List<String> getAuthorities(final String token) {
+    public String getAuthority(final String token) {
         return getClaims(token)
                 .getBody()
-                .get("authorities", List.class);
+                .get("authority", String.class);
     }
 
     public void validateToken(final String token) {

@@ -3,7 +3,6 @@ package com.koddy.server.member.domain.model.mentor;
 import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Member;
-import com.koddy.server.member.domain.model.Role;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.koddy.server.member.domain.model.Nationality.KOREA;
+import static com.koddy.server.member.domain.model.Role.MENTOR;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static lombok.AccessLevel.PROTECTED;
@@ -44,7 +44,7 @@ public class Mentor extends Member<Mentor> {
             final List<Language> languages,
             final UniversityProfile universityProfile
     ) {
-        super(email, name, profileImageUrl, KOREA, languages, List.of(Role.Type.MENTOR));
+        super(email, name, profileImageUrl, KOREA, MENTOR, languages);
         this.universityProfile = universityProfile;
     }
 

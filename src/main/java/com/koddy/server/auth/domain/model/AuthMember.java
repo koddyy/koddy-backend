@@ -3,7 +3,7 @@ package com.koddy.server.auth.domain.model;
 import com.koddy.server.member.domain.model.Member;
 
 public record AuthMember(
-        Long id,
+        long id,
         String name,
         String profileImageUrl,
         AuthToken token

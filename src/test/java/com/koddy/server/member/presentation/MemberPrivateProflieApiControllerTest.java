@@ -20,7 +20,6 @@ import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFa
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createHttpSpecSnippets;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.failureDocsWithAccessToken;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocsWithAccessToken;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,8 +42,8 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         @DisplayName("멘토 프로필을 조회한다")
         void getMentorProfile() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getAuthorities());
-            given(getMemberPrivateProfileUseCase.getMentorProfile(any())).willReturn(new MentorProfile(mentor));
+            mockingToken(true, mentor.getId(), mentor.getRole());
+            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(new MentorProfile(mentor));
 
             // when
             final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);
@@ -85,8 +84,8 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         @DisplayName("멘티 프로필을 조회한다")
         void getMenteeProfile() throws Exception {
             // given
-            mockingToken(true, mentee.getId(), mentee.getAuthorities());
-            given(getMemberPrivateProfileUseCase.getMenteeProfile(any())).willReturn(new MenteeProfile(mentee));
+            mockingToken(true, mentee.getId(), mentee.getRole());
+            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(new MenteeProfile(mentee));
 
             // when
             final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);
@@ -124,7 +123,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() throws Exception {
             // given
-            mockingToken(true, mentee.getId(), mentee.getAuthorities());
+            mockingToken(true, mentee.getId(), mentee.getRole());
 
             // when
             final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);
@@ -140,8 +139,8 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         @DisplayName("멘토 마이페이지 프로필 정보를 조회한다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getAuthorities());
-            given(getMemberPrivateProfileUseCase.getMentorProfile(any())).willReturn(new MentorProfile(mentor));
+            mockingToken(true, mentor.getId(), mentor.getRole());
+            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(new MentorProfile(mentor));
 
             // when
             final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);
@@ -188,7 +187,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         @DisplayName("멘티가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getAuthorities());
+            mockingToken(true, mentor.getId(), mentor.getRole());
 
             // when
             final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);
@@ -204,8 +203,8 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         @DisplayName("멘티 마이페이지 프로필 정보를 조회한다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentee.getId(), mentee.getAuthorities());
-            given(getMemberPrivateProfileUseCase.getMenteeProfile(any())).willReturn(new MenteeProfile(mentee));
+            mockingToken(true, mentee.getId(), mentee.getRole());
+            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(new MenteeProfile(mentee));
 
             // when
             final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);

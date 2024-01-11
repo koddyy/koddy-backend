@@ -4,7 +4,6 @@ import com.koddy.server.common.ParallelTest;
 import com.koddy.server.common.fixture.LanguageFixture;
 import com.koddy.server.common.fixture.TimelineFixture;
 import com.koddy.server.member.domain.model.Language;
-import com.koddy.server.member.domain.model.Role;
 import com.koddy.server.member.exception.MemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -18,6 +17,7 @@ import static com.koddy.server.common.fixture.MentorFixture.MENTOR_3;
 import static com.koddy.server.member.domain.model.Nationality.KOREA;
 import static com.koddy.server.member.domain.model.ProfileComplete.NO;
 import static com.koddy.server.member.domain.model.ProfileComplete.YES;
+import static com.koddy.server.member.domain.model.Role.MENTOR;
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.ATTEMPT;
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.SUCCESS;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
@@ -65,7 +65,7 @@ class MentorTest extends ParallelTest {
                     () -> assertThat(mentor.getIntroduction()).isEqualTo(MENTOR_1.getIntroduction()),
                     () -> assertThat(mentor.isActive()).isTrue(),
                     () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTOR_1.getLanguages()),
-                    () -> assertThat(mentor.getAuthorities()).containsExactlyInAnyOrder(Role.Type.MENTOR.getAuthority()),
+                    () -> assertThat(mentor.getRole()).isEqualTo(MENTOR),
                     () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(MENTOR_1.getUniversityProfile().getSchool()),
                     () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(MENTOR_1.getUniversityProfile().getMajor()),
                     () -> assertThat(mentor.getUniversityProfile().getEnteredIn()).isEqualTo(MENTOR_1.getUniversityProfile().getEnteredIn()),
@@ -149,7 +149,6 @@ class MentorTest extends ParallelTest {
                     () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(MENTOR_2.getProfileImageUrl()),
                     () -> assertThat(mentor.getIntroduction()).isEqualTo(MENTOR_2.getIntroduction()),
                     () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTOR_2.getLanguages()),
-                    () -> assertThat(mentor.getAuthorities()).containsExactlyInAnyOrder(Role.Type.MENTOR.getAuthority()),
                     () -> assertThat(mentor.getUniversityProfile().getSchool()).isEqualTo(MENTOR_2.getUniversityProfile().getSchool()),
                     () -> assertThat(mentor.getUniversityProfile().getMajor()).isEqualTo(MENTOR_2.getUniversityProfile().getMajor()),
                     () -> assertThat(mentor.getUniversityProfile().getEnteredIn()).isEqualTo(MENTOR_2.getUniversityProfile().getEnteredIn()),

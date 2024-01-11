@@ -24,9 +24,9 @@ public interface MenteeRepository extends JpaRepository<Mentee, Long> {
             JOIN FETCH m.availableLanguages
             WHERE m.id = :id
             """)
-    Optional<Mentee> findProfile(@Param("id") final long id);
+    Optional<Mentee> findProfile(@Param("id") final Long id);
 
-    default Mentee getProfile(final long id) {
+    default Mentee getProfile(final Long id) {
         return findProfile(id)
                 .orElseThrow(() -> new MemberException(MENTEE_NOT_FOUND));
     }
@@ -34,5 +34,5 @@ public interface MenteeRepository extends JpaRepository<Mentee, Long> {
     @KoddyWritableTransactional
     @Modifying
     @Query("DELETE FROM Mentee m WHERE m.id = :id")
-    void deleteMentee(@Param("id") final long id);
+    void deleteMentee(@Param("id") final Long id);
 }

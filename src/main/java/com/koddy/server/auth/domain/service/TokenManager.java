@@ -12,7 +12,7 @@ public class TokenManager {
     private final TokenRepository tokenRepository;
 
     @KoddyWritableTransactional
-    public void synchronizeRefreshToken(final Long memberId, final String refreshToken) {
+    public void synchronizeRefreshToken(final long memberId, final String refreshToken) {
         tokenRepository.findByMemberId(memberId)
                 .ifPresentOrElse(
                         it -> it.updateRefreshToken(refreshToken),
@@ -20,15 +20,15 @@ public class TokenManager {
                 );
     }
 
-    public void updateRefreshToken(final Long memberId, final String newRefreshToken) {
+    public void updateRefreshToken(final long memberId, final String newRefreshToken) {
         tokenRepository.updateRefreshToken(memberId, newRefreshToken);
     }
 
-    public void deleteRefreshToken(final Long memberId) {
+    public void deleteRefreshToken(final long memberId) {
         tokenRepository.deleteRefreshToken(memberId);
     }
 
-    public boolean isMemberRefreshToken(final Long memberId, final String refreshToken) {
+    public boolean isMemberRefreshToken(final long memberId, final String refreshToken) {
         return tokenRepository.existsByMemberIdAndRefreshToken(memberId, refreshToken);
     }
 }

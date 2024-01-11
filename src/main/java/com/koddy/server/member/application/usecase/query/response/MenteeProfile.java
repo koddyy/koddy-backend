@@ -6,7 +6,7 @@ import com.koddy.server.member.domain.model.mentee.Mentee;
 import static com.koddy.server.member.domain.model.ProfileComplete.YES;
 
 public record MenteeProfile(
-        Long id,
+        long id,
         String email,
         String name,
         String profileImageUrl,

@@ -4,7 +4,6 @@ import com.koddy.server.auth.domain.model.Token;
 import com.koddy.server.common.IntegrateTest;
 import com.koddy.server.member.domain.model.AvailableLanguage;
 import com.koddy.server.member.domain.model.Member;
-import com.koddy.server.member.domain.model.Role;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.model.mentor.Schedule;
 import com.koddy.server.member.domain.repository.MemberRepository;
@@ -41,7 +40,6 @@ class MentorDeleterTest extends IntegrateTest {
         final Member<?> mentor = memberRepository.save(MENTOR_1.toDomain());
         assertAll(
                 () -> assertThat(getToken(mentor.getId())).hasSize(0),
-                () -> assertThat(getRole(mentor.getId())).hasSize(1),
                 () -> assertThat(getLanguage(mentor.getId())).hasSize(MENTOR_1.getLanguages().size()),
                 () -> assertThat(getSchedule(mentor.getId())).hasSize(MENTOR_1.getTimelines().size()),
                 () -> assertThat(getMentor(mentor.getId())).hasSize(1),
@@ -61,7 +59,6 @@ class MentorDeleterTest extends IntegrateTest {
         // then
         assertAll(
                 () -> assertThat(getToken(mentor.getId())).hasSize(0),
-                () -> assertThat(getRole(mentor.getId())).hasSize(0),
                 () -> assertThat(getLanguage(mentor.getId())).hasSize(0),
                 () -> assertThat(getSchedule(mentor.getId())).hasSize(0),
                 () -> assertThat(getMentor(mentor.getId())).hasSize(0),
@@ -85,18 +82,6 @@ class MentorDeleterTest extends IntegrateTest {
                                 WHERE t.memberId = :id
                                 """,
                         Token.class
-                ).setParameter("id", id)
-                .getResultList();
-    }
-
-    private List<Role> getRole(final long id) {
-        return em.createQuery(
-                        """
-                                SELECT r
-                                FROM Role r
-                                WHERE r.member.id = :id
-                                """,
-                        Role.class
                 ).setParameter("id", id)
                 .getResultList();
     }

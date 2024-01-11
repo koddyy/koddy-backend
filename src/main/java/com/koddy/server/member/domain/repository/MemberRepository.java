@@ -14,25 +14,12 @@ import static com.koddy.server.member.exception.MemberExceptionCode.MEMBER_NOT_F
 
 @SuppressWarnings("rawtypes")
 public interface MemberRepository extends JpaRepository<Member<?>, Long> {
-    default Member getById(final long id) {
+    default Member getById(final Long id) {
         return findById(id)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
     // @Query
-    @Query("""
-            SELECT m
-            FROM Member m
-            JOIN FETCH m.roles
-            WHERE m.id = :id
-            """)
-    Optional<Member> findByIdWithRoles(@Param("id") final long id);
-
-    default Member getByIdWithRoles(final long id) {
-        return findByIdWithRoles(id)
-                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
-    }
-
     @Query(
             value = """
                     SELECT type
@@ -41,9 +28,9 @@ public interface MemberRepository extends JpaRepository<Member<?>, Long> {
                     """,
             nativeQuery = true
     )
-    String getType(@Param("id") long id);
+    String getType(@Param("id") Long id);
 
-    default boolean isMentor(final long id) {
+    default boolean isMentor(final Long id) {
         return Member.MemberType.Value.MENTOR.equals(getType(id));
     }
 
@@ -54,10 +41,10 @@ public interface MemberRepository extends JpaRepository<Member<?>, Long> {
             SET m.status = 'INACTIVE', m.email.value = null
             WHERE m.id = :id
             """)
-    void deleteMember(@Param("id") final long id);
+    void deleteMember(@Param("id") final Long id);
 
     // Query Method
-    boolean existsById(final long id);
+    boolean existsById(final Long id);
 
     boolean existsByEmailValue(final String value);
 

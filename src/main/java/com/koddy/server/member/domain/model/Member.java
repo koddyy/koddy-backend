@@ -59,35 +59,36 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     protected String introduction;
 
     @Enumerated(STRING)
+    @Column(name = "profile_complete", nullable = false, columnDefinition = "VARCHAR(20)")
+    protected ProfileComplete profileComplete;
+
+    @Enumerated(STRING)
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(20)")
     protected MemberStatus status;
 
     @Enumerated(STRING)
-    @Column(name = "profile_complete", nullable = false, columnDefinition = "VARCHAR(20)")
-    protected ProfileComplete profileComplete;
+    @Column(name = "role", nullable = false, columnDefinition = "VARCHAR(30)")
+    protected Role role;
 
     @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     protected final List<AvailableLanguage> availableLanguages = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
-    protected final List<Role> roles = new ArrayList<>();
 
     protected Member(
             final Email email,
             final String name,
             final String profileImageUrl,
             final Nationality nationality,
-            final List<Language> languages,
-            final List<Role.Type> roles
+            final Role role,
+            final List<Language> languages
     ) {
         this.email = email;
         this.name = name;
         this.profileImageUrl = profileImageUrl;
         this.nationality = nationality;
-        this.status = ACTIVE;
+        this.role = role;
         this.profileComplete = NO;
+        this.status = ACTIVE;
         applyLanguages(languages);
-        applyRoles(roles);
     }
 
     private void applyLanguages(final List<Language> languages) {
@@ -116,15 +117,6 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         if (mainLanguageCount != 1) {
             throw new MemberException(MAIN_LANGUAGE_MUST_BE_ONLY_ONE);
         }
-    }
-
-    private void applyRoles(final List<Role.Type> roleTypes) {
-        this.roles.clear();
-        this.roles.addAll(
-                roleTypes.stream()
-                        .map(it -> new Role(this, it))
-                        .toList()
-        );
     }
 
     protected void completeInfo(final String introduction) {
@@ -159,11 +151,8 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
                 .toList();
     }
 
-    public List<String> getAuthorities() {
-        return roles.stream()
-                .map(Role::getType)
-                .map(Role.Type::getAuthority)
-                .toList();
+    public String getAuthority() {
+        return role.getAuthority();
     }
 
     protected abstract boolean isProfileComplete();

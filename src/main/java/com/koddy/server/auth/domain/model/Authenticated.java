@@ -1,17 +1,15 @@
 package com.koddy.server.auth.domain.model;
 
-import com.koddy.server.member.domain.model.Role;
-
-import java.util.List;
+import static com.koddy.server.member.domain.model.Role.MENTOR;
 
 public record Authenticated(
         String accessToken,
-        Long id,
-        List<String> authorities
+        long id,
+        String authority
 ) {
     public static final String SESSION_KEY = "Koddy";
 
     public boolean isMentor() {
-        return authorities.contains(Role.Type.MENTOR.getAuthority());
+        return MENTOR.getAuthority().equals(authority);
     }
 }
