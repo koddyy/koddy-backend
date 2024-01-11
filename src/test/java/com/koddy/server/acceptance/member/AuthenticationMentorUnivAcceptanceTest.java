@@ -1,6 +1,7 @@
 package com.koddy.server.acceptance.member;
 
 import com.koddy.server.common.AcceptanceTest;
+import com.koddy.server.common.config.BlackboxLogicControlConfig;
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension;
 import com.koddy.server.common.containers.callback.RedisCleanerEachCallbackExtension;
 import org.junit.jupiter.api.DisplayName;
@@ -70,9 +71,9 @@ public class AuthenticationMentorUnivAcceptanceTest extends AcceptanceTest {
     @DisplayName("메일 인증 확인 API")
     class ConfirmMailAuthCode {
         /**
-         * ExternalApiConfiguration에서 고정된 인증번호(123456) 적용 - @Bean AuthCodeGenerator
+         * BlackboxLogicControlConfig -> @Bean AuthCodeGenerator
          */
-        private static final String AUTH_CODE = "123456";
+        private static final String AUTH_CODE = BlackboxLogicControlConfig.AUTH_CODE;
 
         @Test
         @DisplayName("인증번호가 일치하지 않으면 인증에 실패한다")

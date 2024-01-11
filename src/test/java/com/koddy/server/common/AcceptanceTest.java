@@ -7,7 +7,9 @@ import com.koddy.server.auth.infrastructure.oauth.kakao.KakaoOAuthUriGenerator;
 import com.koddy.server.auth.infrastructure.oauth.zoom.ZoomOAuthConnector;
 import com.koddy.server.auth.infrastructure.oauth.zoom.ZoomOAuthUriGenerator;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.ZoomMeetingLinkManager;
-import com.koddy.server.common.config.ExternalApiConfiguration;
+import com.koddy.server.common.config.BlackboxLogicControlConfig;
+import com.koddy.server.common.config.ExternalApiConfig;
+import com.koddy.server.common.containers.LocalStackTestContainersConfig;
 import com.koddy.server.common.containers.MySqlTestContainersExtension;
 import com.koddy.server.common.containers.RedisTestContainersExtension;
 import io.restassured.RestAssured;
@@ -20,12 +22,12 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 
 @Tag("Acceptance")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = LocalStackTestContainersConfig.class)
 @ExtendWith({
         MySqlTestContainersExtension.class,
         RedisTestContainersExtension.class
 })
-@Import(ExternalApiConfiguration.class)
+@Import({ExternalApiConfig.class, BlackboxLogicControlConfig.class})
 public abstract class AcceptanceTest {
     @LocalServerPort
     private int port;
