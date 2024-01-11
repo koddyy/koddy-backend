@@ -1,7 +1,6 @@
 package com.koddy.server.acceptance.member;
 
 import com.koddy.server.common.AcceptanceTest;
-import com.koddy.server.common.config.BlackboxLogicControlConfig;
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension;
 import com.koddy.server.common.containers.callback.RedisCleanerEachCallbackExtension;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +14,7 @@ import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토가_
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_AUTH_CODE;
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION;
 import static com.koddy.server.auth.exception.AuthExceptionCode.TOO_MANY_MAIL_AUTH_ATTEMPTS;
+import static com.koddy.server.common.config.BlackboxLogicControlConfig.AUTH_CODE;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.hamcrest.Matchers.is;
@@ -70,11 +70,6 @@ public class AuthenticationMentorUnivAcceptanceTest extends AcceptanceTest {
     @Nested
     @DisplayName("메일 인증 확인 API")
     class ConfirmMailAuthCode {
-        /**
-         * BlackboxLogicControlConfig -> @Bean AuthCodeGenerator
-         */
-        private static final String AUTH_CODE = BlackboxLogicControlConfig.AUTH_CODE;
-
         @Test
         @DisplayName("인증번호가 일치하지 않으면 인증에 실패한다")
         void throwExceptionByInvalidAuthCode() {
