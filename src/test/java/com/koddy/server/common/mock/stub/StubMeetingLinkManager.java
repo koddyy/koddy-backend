@@ -6,13 +6,11 @@ import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLink
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkResponse;
 import lombok.extern.slf4j.Slf4j;
 
-import static com.koddy.server.coffeechat.domain.model.link.MeetingLinkProvider.ZOOM;
-
 @Slf4j
 public class StubMeetingLinkManager implements MeetingLinkManager {
     @Override
     public boolean isSupported(final MeetingLinkProvider provider) {
-        return provider == ZOOM;
+        return true;
     }
 
     @Override

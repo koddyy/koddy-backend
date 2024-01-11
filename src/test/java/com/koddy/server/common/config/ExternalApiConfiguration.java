@@ -28,6 +28,11 @@ public class ExternalApiConfiguration {
     }
 
     @Bean
+    public MeetingLinkManager meetingLinkManager() {
+        return new StubMeetingLinkManager();
+    }
+
+    @Bean
     @Primary
     public FileManager fileManager() {
         return new StubFileManager();
@@ -37,12 +42,6 @@ public class ExternalApiConfiguration {
     @Primary
     public EmailSender emailSender() {
         return new StubEmailSender();
-    }
-
-    @Bean
-    @Primary
-    public MeetingLinkManager meetingLinkManager() {
-        return new StubMeetingLinkManager();
     }
 
     @Bean

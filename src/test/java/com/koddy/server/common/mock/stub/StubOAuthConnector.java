@@ -6,12 +6,10 @@ import com.koddy.server.auth.domain.model.oauth.OAuthTokenResponse;
 import com.koddy.server.auth.domain.model.oauth.OAuthUserResponse;
 import com.koddy.server.common.fixture.OAuthFixture;
 
-import static com.koddy.server.auth.domain.model.oauth.OAuthProvider.GOOGLE;
-
 public class StubOAuthConnector implements OAuthConnector {
     @Override
     public boolean isSupported(final OAuthProvider provider) {
-        return provider == GOOGLE;
+        return true;
     }
 
     @Override

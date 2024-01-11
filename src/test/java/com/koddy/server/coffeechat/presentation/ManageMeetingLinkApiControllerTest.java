@@ -33,9 +33,9 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CreateMeetingLinkApiController.class)
-@DisplayName("CoffeeChat -> CreateMeetingLinkApiController 테스트")
-class CreateMeetingLinkApiControllerTest extends ControllerTest {
+@WebMvcTest(ManageMeetingLinkApiController.class)
+@DisplayName("CoffeeChat -> ManageMeetingLinkApiController 테스트")
+class ManageMeetingLinkApiControllerTest extends ControllerTest {
     @MockBean
     private ManageMeetingLinkUseCase manageMeetingLinkUseCase;
 
