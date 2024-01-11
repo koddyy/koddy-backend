@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 public @interface DailyMailAuthLimit {
     int maxTry() default 3;
 
-    int banTime() default 30;
+    int banTime() default 10;
 
     TimeUnit banTimeUnit() default TimeUnit.MINUTES;
 }
