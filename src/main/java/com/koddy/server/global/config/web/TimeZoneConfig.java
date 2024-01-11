@@ -1,4 +1,4 @@
-package com.koddy.server.global.config;
+package com.koddy.server.global.config.web;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;

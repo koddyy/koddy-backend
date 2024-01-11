@@ -1,4 +1,4 @@
-package com.koddy.server.global.config;
+package com.koddy.server.global.config.etc;
 
 import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.annotation.ExtractToken;

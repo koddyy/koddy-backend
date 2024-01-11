@@ -1,8 +1,8 @@
 package com.koddy.server.common;
 
 import com.koddy.server.common.containers.MySqlTestContainersExtension;
-import com.koddy.server.global.config.P6SpyConfig;
-import com.koddy.server.global.config.QueryDslConfig;
+import com.koddy.server.global.config.etc.P6SpyConfig;
+import com.koddy.server.global.config.infra.QueryDslConfig;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
