@@ -51,7 +51,7 @@ public class AuthenticationMentorUnivAcceptanceTest extends AcceptanceTest {
         }
 
         @Test
-        @DisplayName("짧은 시간동안 3회 이상 인증 시도를 하게 되면 5분동안 인증 시도 밴을 당한다 (HTTP Status 429)")
+        @DisplayName("짧은 시간동안 3회 이상 인증 시도를 하게 되면 10분동안 인증 시도 밴을 당한다 (HTTP Status 429)")
         void throwExceptionByTooManyRequest() {
             final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
             멘토가_메일을_통해서_학교_인증을_시도한다(accessToken)
