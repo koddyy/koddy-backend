@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import java.util.Set;
 
 @TestConfiguration
-public class TestWebBeanConfiguration {
+public class TestWebBeanConfig {
     @Bean
     public CorsProperties corsProperties() {
         return new CorsProperties(Set.of("http://localhost:8080"));

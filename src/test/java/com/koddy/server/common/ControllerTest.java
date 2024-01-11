@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.auth.utils.TokenProvider;
-import com.koddy.server.common.config.TestAopConfiguration;
-import com.koddy.server.common.config.TestWebBeanConfiguration;
+import com.koddy.server.common.config.TestAopConfig;
+import com.koddy.server.common.config.TestWebBeanConfig;
 import com.koddy.server.global.base.KoddyExceptionCode;
 import com.koddy.server.global.exception.alert.SlackAlertManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("Controller")
 @WebMvcTest
 @ExtendWith(RestDocumentationExtension.class)
-@Import({TestAopConfiguration.class, TestWebBeanConfiguration.class})
+@Import({TestAopConfig.class, TestWebBeanConfig.class})
 @AutoConfigureRestDocs
 public abstract class ControllerTest {
     // common & external

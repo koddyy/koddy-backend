@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
 @TestConfiguration
-public class ExternalApiConfiguration {
+public class ExternalApiConfig {
     @Bean
     public OAuthUriGenerator oAuthUri() {
         return new StubOAuthUriGenerator();

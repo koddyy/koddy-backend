@@ -8,7 +8,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @TestConfiguration
 @EnableAspectJAutoProxy
-public class TestAopConfiguration {
+public class TestAopConfig {
     @Bean
     public OnlyMentorAop onlyMentorAop() {
         return new OnlyMentorAop();
