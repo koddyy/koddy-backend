@@ -184,6 +184,8 @@ include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/http-response.adoc
 
 === 메일 인증 시도
 
+> 3회 이상 시도하면 10분동안 메일 발송 밴
+
 ==== HTTP Request
 
 include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Success/http-request.adoc[]
