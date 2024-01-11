@@ -4,11 +4,9 @@ import com.koddy.server.auth.application.adapter.OAuthConnector;
 import com.koddy.server.auth.application.adapter.OAuthUriGenerator;
 import com.koddy.server.coffeechat.application.adapter.MeetingLinkManager;
 import com.koddy.server.common.mock.stub.StubEmailSender;
-import com.koddy.server.common.mock.stub.StubFileManager;
 import com.koddy.server.common.mock.stub.StubMeetingLinkManager;
 import com.koddy.server.common.mock.stub.StubOAuthConnector;
 import com.koddy.server.common.mock.stub.StubOAuthUriGenerator;
-import com.koddy.server.file.application.adapter.FileManager;
 import com.koddy.server.mail.application.adapter.EmailSender;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -29,12 +27,6 @@ public class ExternalApiConfig {
     @Bean
     public MeetingLinkManager meetingLinkManager() {
         return new StubMeetingLinkManager();
-    }
-
-    @Bean
-    @Primary
-    public FileManager fileManager() {
-        return new StubFileManager();
     }
 
     @Bean
