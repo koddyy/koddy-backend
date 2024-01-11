@@ -152,6 +152,12 @@ public enum MentorFixture {
                 .split(" ")[1];
     }
 
+    public String 회원가입_로그인_후_프로필을_완성시킨다() {
+        final String accessToken = 회원가입_로그인_후_AccessToken을_추출한다();
+        MemberAcceptanceStep.멘토_프로필을_완성시킨다(this, accessToken);
+        return accessToken;
+    }
+
     public String 회원가입_로그인_후_RefreshToken을_추출한다() {
         return MemberAcceptanceStep.멘토_회원가입_후_로그인을_진행한다(this)
                 .extract()
