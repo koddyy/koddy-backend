@@ -1,4 +1,4 @@
-package com.koddy.server.global.config;
+package com.koddy.server.global.config.infra;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

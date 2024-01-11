@@ -1,4 +1,7 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
+
   jpa:
     open-in-view: false
     hibernate:
@@ -24,7 +27,7 @@ spring:
         access-key: access-key
         secret-key: secret-key
       s3:
-        bucket: s3-bucket
+        bucket: koddy-upload
 
   thymeleaf:
     cache: false

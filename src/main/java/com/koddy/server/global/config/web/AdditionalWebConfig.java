@@ -1,9 +1,8 @@
-package com.koddy.server.global.config;
+package com.koddy.server.global.config.web;
 
 import com.koddy.server.auth.utils.TokenProvider;
 import com.koddy.server.global.annotation.AuthArgumentResolver;
 import com.koddy.server.global.annotation.ExtractTokenArgumentResolver;
-import com.koddy.server.global.config.properties.CorsProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

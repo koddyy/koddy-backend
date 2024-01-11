@@ -1,4 +1,4 @@
-package com.koddy.server.global.config.properties;
+package com.koddy.server.global.config.encrypt;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

@@ -1,8 +1,8 @@
 package com.koddy.server.acceptance.member;
 
 import com.koddy.server.common.AcceptanceTest;
-import com.koddy.server.common.config.DatabaseCleanerEachCallbackExtension;
-import com.koddy.server.common.config.RedisCleanerEachCallbackExtension;
+import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension;
+import com.koddy.server.common.containers.callback.RedisCleanerEachCallbackExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,6 +14,7 @@ import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토가_
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_AUTH_CODE;
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION;
 import static com.koddy.server.auth.exception.AuthExceptionCode.TOO_MANY_MAIL_AUTH_ATTEMPTS;
+import static com.koddy.server.common.config.BlackboxLogicControlConfig.AUTH_CODE;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.hamcrest.Matchers.is;
@@ -50,7 +51,7 @@ public class AuthenticationMentorUnivAcceptanceTest extends AcceptanceTest {
         }
 
         @Test
-        @DisplayName("짧은 시간동안 3회 이상 인증 시도를 하게 되면 5분동안 인증 시도 밴을 당한다 (HTTP Status 429)")
+        @DisplayName("짧은 시간동안 3회 이상 인증 시도를 하게 되면 10분동안 인증 시도 밴을 당한다 (HTTP Status 429)")
         void throwExceptionByTooManyRequest() {
             final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
             멘토가_메일을_통해서_학교_인증을_시도한다(accessToken)
@@ -69,11 +70,6 @@ public class AuthenticationMentorUnivAcceptanceTest extends AcceptanceTest {
     @Nested
     @DisplayName("메일 인증 확인 API")
     class ConfirmMailAuthCode {
-        /**
-         * ExternalApiConfiguration에서 고정된 인증번호(123456) 적용 - @Bean AuthCodeGenerator
-         */
-        private static final String AUTH_CODE = "123456";
-
         @Test
         @DisplayName("인증번호가 일치하지 않으면 인증에 실패한다")
         void throwExceptionByInvalidAuthCode() {

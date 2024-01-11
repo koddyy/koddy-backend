@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.auth.utils.TokenProvider;
-import com.koddy.server.common.config.TestAopConfiguration;
-import com.koddy.server.common.config.TestWebBeanConfiguration;
+import com.koddy.server.common.config.TestAopConfig;
+import com.koddy.server.common.config.TestWebBeanConfig;
 import com.koddy.server.global.base.KoddyExceptionCode;
 import com.koddy.server.global.exception.alert.SlackAlertManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("Controller")
 @WebMvcTest
 @ExtendWith(RestDocumentationExtension.class)
-@Import({TestAopConfiguration.class, TestWebBeanConfiguration.class})
+@Import({TestAopConfig.class, TestWebBeanConfig.class})
 @AutoConfigureRestDocs
 public abstract class ControllerTest {
     // common & external
@@ -134,6 +134,19 @@ public abstract class ControllerTest {
         return RestDocumentationRequestBuilders
                 .get(path.url, path.variables)
                 .header(AUTHORIZATION, applyAccessToken());
+    }
+
+    @SafeVarargs
+    protected final RequestBuilder getWithAccessToken(final String url, final Map<String, String>... params) {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(url);
+
+        for (final Map<String, String> param : params) {
+            for (final String key : param.keySet()) {
+                requestBuilder = requestBuilder.param(key, param.get(key));
+            }
+        }
+
+        return requestBuilder.header(AUTHORIZATION, applyAccessToken());
     }
 
     /**
@@ -270,6 +283,19 @@ public abstract class ControllerTest {
         }
 
         return requestBuilder;
+    }
+
+    protected final RequestBuilder multipartWithAccessToken(
+            final String url,
+            final List<MultipartFile> files
+    ) {
+        MockMultipartHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.multipart(url);
+
+        for (final MultipartFile file : files) {
+            requestBuilder = requestBuilder.file((MockMultipartFile) file);
+        }
+
+        return requestBuilder.header(AUTHORIZATION, applyAccessToken());
     }
 
     @SafeVarargs

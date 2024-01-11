@@ -1,4 +1,4 @@
-package com.koddy.server.global.config;
+package com.koddy.server.global.config.infra;
 
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.context.annotation.Bean;

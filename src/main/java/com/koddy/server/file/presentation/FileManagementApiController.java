@@ -1,11 +1,13 @@
 package com.koddy.server.file.presentation;
 
+import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.file.application.adapter.FileManager;
 import com.koddy.server.file.domain.model.PresignedFileData;
 import com.koddy.server.file.domain.model.PresignedUrlDetails;
 import com.koddy.server.file.presentation.dto.request.GetImagePresignedUrlRequest;
 import com.koddy.server.file.presentation.dto.request.GetPdfPresignedUrlRequest;
 import com.koddy.server.file.utils.converter.FileConverter;
+import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.dto.ResponseWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +34,7 @@ public class FileManagementApiController {
     @Operation(summary = "파일 업로드 Endpoint")
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseWrapper<String>> upload(
+            @Auth final Authenticated authenticated,
             @RequestPart final MultipartFile file
     ) {
         final String uploadUrl = fileManager.upload(FileConverter.convertFile(file));
@@ -41,6 +44,7 @@ public class FileManagementApiController {
     @Operation(summary = "이미지 업로드에 대한 Presigned Url 응답 Endpoint")
     @GetMapping("/presigned/image")
     public ResponseEntity<PresignedUrlDetails> getImagePresignedUrl(
+            @Auth final Authenticated authenticated,
             @ModelAttribute @Valid final GetImagePresignedUrlRequest request
     ) {
         final PresignedUrlDetails presignedUrl = fileManager.createPresignedUrl(new PresignedFileData(request.fileName()));
@@ -50,6 +54,7 @@ public class FileManagementApiController {
     @Operation(summary = "PDF 파일 업로드에 대한 Presigned Url 응답 Endpoint")
     @GetMapping("/presigned/pdf")
     public ResponseEntity<PresignedUrlDetails> getPdfPresignedUrl(
+            @Auth final Authenticated authenticated,
             @ModelAttribute @Valid final GetPdfPresignedUrlRequest request
     ) {
         final PresignedUrlDetails presignedUrl = fileManager.createPresignedUrl(new PresignedFileData(request.fileName()));

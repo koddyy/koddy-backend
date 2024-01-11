@@ -1,4 +1,4 @@
-package com.koddy.server.global.config;
+package com.koddy.server.global.config.etc;
 
 import com.p6spy.engine.event.JdbcEventListener;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;

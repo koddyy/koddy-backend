@@ -17,7 +17,7 @@ include::{snippets}/TokenReissueApi/Success/request-cookies.adoc[]
 include::{snippets}/TokenReissueApi/Failure/http-response.adoc[]
 include::{snippets}/TokenReissueApi/Success/http-response.adoc[]
 
-== 파일 관련 API
+== 파일 관련 API (AccessToken)
 
 === PresignedUrl 응답
 
@@ -183,6 +183,8 @@ include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/http-response.adoc
 == 멘토 학교 인증 API (AccessToken + OnlyMentor)
 
 === 메일 인증 시도
+
+> 3회 이상 시도하면 10분동안 메일 발송 밴
 
 ==== HTTP Request
 

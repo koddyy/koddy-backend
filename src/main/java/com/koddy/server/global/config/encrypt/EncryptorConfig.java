@@ -1,6 +1,5 @@
-package com.koddy.server.global.config;
+package com.koddy.server.global.config.encrypt;
 
-import com.koddy.server.global.config.properties.EncryptorProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
