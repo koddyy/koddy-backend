@@ -2,6 +2,9 @@ package com.koddy.server.acceptance.member;
 
 import com.koddy.server.common.fixture.MenteeFixture;
 import com.koddy.server.common.fixture.MentorFixture;
+import com.koddy.server.member.presentation.dto.request.AuthenticationConfirmWithMailRequest;
+import com.koddy.server.member.presentation.dto.request.AuthenticationWithMailRequest;
+import com.koddy.server.member.presentation.dto.request.AuthenticationWithProofDataRequest;
 import com.koddy.server.member.presentation.dto.request.CompleteMenteeProfileRequest;
 import com.koddy.server.member.presentation.dto.request.CompleteMentorProfileRequest;
 import com.koddy.server.member.presentation.dto.request.LanguageRequest;
@@ -223,5 +226,44 @@ public class MemberAcceptanceStep {
                 .getPath();
 
         return getRequest(accessToken, uri);
+    }
+
+    public static ValidatableResponse 멘토가_메일을_통해서_학교_인증을_시도한다(final String accessToken) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/mentors/me/univ/mail")
+                .build()
+                .toUri()
+                .getPath();
+
+        final AuthenticationWithMailRequest request = new AuthenticationWithMailRequest("sjiwon@kyonggi.ac.kr");
+
+        return postRequest(accessToken, request, uri);
+    }
+
+    public static ValidatableResponse 멘토가_학교_메일로_발송된_인증번호를_제출한다(
+            final String authCode,
+            final String accessToken
+    ) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/mentors/me/univ/mail/confirm")
+                .build()
+                .toUri()
+                .getPath();
+
+        final AuthenticationConfirmWithMailRequest request = new AuthenticationConfirmWithMailRequest("sjiwon@kyonggi.ac.kr", authCode);
+
+        return postRequest(accessToken, request, uri);
+    }
+
+    public static ValidatableResponse 멘토가_증명자료를_통해서_학교_인증을_시도한다(final String accessToken) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/mentors/me/univ/proof-data")
+                .build()
+                .toUri()
+                .getPath();
+
+        final AuthenticationWithProofDataRequest request = new AuthenticationWithProofDataRequest("https://proof-data-upload-url");
+
+        return postRequest(accessToken, request, uri);
     }
 }
