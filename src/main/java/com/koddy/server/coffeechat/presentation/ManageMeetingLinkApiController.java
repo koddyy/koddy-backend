@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/oauth/{provider}/meetings")
-public class CreateMeetingLinkApiController {
+public class ManageMeetingLinkApiController {
     private final ManageMeetingLinkUseCase manageMeetingLinkUseCase;
 
     @Operation(summary = "커피챗 링크 생성 Endpoint")

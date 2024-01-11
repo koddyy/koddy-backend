@@ -61,14 +61,14 @@ public class ManageMeetingLinkUseCase {
 
     private OAuthConnector getOAuthConnectorByProvider(final OAuthProvider provider) {
         return oAuthConnectors.stream()
-                .filter(oAuthConnector -> oAuthConnector.isSupported(provider))
+                .filter(it -> it.isSupported(provider))
                 .findFirst()
                 .orElseThrow(() -> new AuthException(INVALID_OAUTH_PROVIDER));
     }
 
     private MeetingLinkManager getMeetingLinkCreatorByProvider(final MeetingLinkProvider provider) {
         return meetingLinkManagers.stream()
-                .filter(meetingLinkManager -> meetingLinkManager.isSupported(provider))
+                .filter(it -> it.isSupported(provider))
                 .findFirst()
                 .orElseThrow(() -> new CoffeeChatException(INVALID_MEETING_LINK_PROVIDER));
     }

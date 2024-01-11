@@ -20,7 +20,7 @@ public enum OAuthProvider {
 
     public static OAuthProvider from(final String provider) {
         return Arrays.stream(values())
-                .filter(oAuthProvider -> oAuthProvider.provider.equals(provider))
+                .filter(it -> it.provider.equals(provider))
                 .findFirst()
                 .orElseThrow(() -> new AuthException(INVALID_OAUTH_PROVIDER));
     }

@@ -17,7 +17,7 @@ public class GetOAuthLinkUseCase {
 
     public String invoke(final GetOAuthLink query) {
         final OAuthUriGenerator oAuthUriGenerator = oAuthUrisGenerators.stream()
-                .filter(oAuthUri -> oAuthUri.isSupported(query.provider()))
+                .filter(it -> it.isSupported(query.provider()))
                 .findFirst()
                 .orElseThrow(() -> new AuthException(INVALID_OAUTH_PROVIDER));
 

@@ -38,7 +38,7 @@ public class SlackAlertManager {
         try {
             slackClient.send(
                     slackWebhookUrl,
-                    payload(p -> p
+                    payload(it -> it
                             .text("서버 에러 발생!!")
                             .attachments(List.of(
                                     generateSlackErrorAttachments(e, request)

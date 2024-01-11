@@ -19,7 +19,7 @@ public enum MeetingLinkProvider {
 
     public static MeetingLinkProvider from(final String provider) {
         return Arrays.stream(values())
-                .filter(meetingLinkProvider -> meetingLinkProvider.provider.equals(provider))
+                .filter(it -> it.provider.equals(provider))
                 .findFirst()
                 .orElseThrow(() -> new CoffeeChatException(INVALID_MEETING_LINK_PROVIDER));
     }
