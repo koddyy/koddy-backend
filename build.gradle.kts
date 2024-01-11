@@ -94,8 +94,13 @@ dependencies {
     // TestContainers
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("org.testcontainers:junit-jupiter")
+
+    // TestContainers + RDB(MySQL)
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.flywaydb.flyway-test-extensions:flyway-spring-test:${property("flywayTestExtensionVersion")}")
+
+    // TestContainers + LocalStack
+    testImplementation("org.testcontainers:localstack:${property("localStackVersion")}")
 }
 
 // QueryDsl QClass
