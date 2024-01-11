@@ -154,7 +154,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
 
             // then
             mockMvc.perform(requestBuilder)
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isConflict())
                     .andExpectAll(getResultMatchersViaExceptionCode(INVALID_AUTH_CODE))
                     .andDo(failureDocsWithAccessToken("MemberApi/Mentor/UnivAuth/Mail/Confirm/Failure/Case2", createHttpSpecSnippets(
                             requestFields(
