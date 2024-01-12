@@ -6,7 +6,7 @@ import com.koddy.server.coffeechat.application.usecase.ManageMeetingLinkUseCase;
 import com.koddy.server.coffeechat.application.usecase.command.CreateMeetingLinkCommand;
 import com.koddy.server.coffeechat.application.usecase.command.DeleteMeetingLinkCommand;
 import com.koddy.server.coffeechat.domain.model.link.MeetingLinkProvider;
-import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkResponse;
+import com.koddy.server.coffeechat.domain.model.link.MeetingLinkResponse;
 import com.koddy.server.coffeechat.presentation.dto.request.CreateMeetingLinkRequest;
 import com.koddy.server.coffeechat.presentation.dto.response.CreateMeetingLinkResponse;
 import com.koddy.server.global.annotation.Auth;
@@ -37,7 +37,7 @@ public class ManageMeetingLinkApiController {
             @PathVariable final String provider,
             @RequestBody final CreateMeetingLinkRequest request
     ) {
-        final ZoomMeetingLinkResponse result = manageMeetingLinkUseCase.create(new CreateMeetingLinkCommand(
+        final MeetingLinkResponse result = manageMeetingLinkUseCase.create(new CreateMeetingLinkCommand(
                 authenticated.id(),
                 OAuthProvider.from(provider),
                 MeetingLinkProvider.from(provider),

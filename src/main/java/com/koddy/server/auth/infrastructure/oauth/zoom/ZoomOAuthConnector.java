@@ -1,9 +1,9 @@
 package com.koddy.server.auth.infrastructure.oauth.zoom;
 
-import com.koddy.server.auth.application.adapter.OAuthConnector;
 import com.koddy.server.auth.domain.model.oauth.OAuthProvider;
 import com.koddy.server.auth.domain.model.oauth.OAuthTokenResponse;
 import com.koddy.server.auth.domain.model.oauth.OAuthUserResponse;
+import com.koddy.server.auth.infrastructure.oauth.OAuthConnector;
 import com.koddy.server.auth.infrastructure.oauth.zoom.response.ZoomTokenResponse;
 import com.koddy.server.auth.infrastructure.oauth.zoom.response.ZoomUserResponse;
 import com.koddy.server.global.exception.GlobalException;
