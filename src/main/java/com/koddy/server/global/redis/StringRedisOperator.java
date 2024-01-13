@@ -5,11 +5,17 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
 public class StringRedisOperator implements RedisOperator<String, String> {
     private final StringRedisTemplate redisTemplate;
+
+    @Override
+    public void save(final String key, final String value, final long timeout, final TimeUnit timeUnit) {
+        redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
+    }
 
     @Override
     public void save(final String key, final String value, final Duration duration) {
