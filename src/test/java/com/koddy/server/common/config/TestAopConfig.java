@@ -1,7 +1,6 @@
 package com.koddy.server.common.config;
 
-import com.koddy.server.global.aop.OnlyMenteeAop;
-import com.koddy.server.global.aop.OnlyMentorAop;
+import com.koddy.server.global.aop.AccessControlAop;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -10,12 +9,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnableAspectJAutoProxy
 public class TestAopConfig {
     @Bean
-    public OnlyMentorAop onlyMentorAop() {
-        return new OnlyMentorAop();
-    }
-
-    @Bean
-    public OnlyMenteeAop onlyMenteeAop() {
-        return new OnlyMenteeAop();
+    public AccessControlAop accessControlAop() {
+        return new AccessControlAop();
     }
 }

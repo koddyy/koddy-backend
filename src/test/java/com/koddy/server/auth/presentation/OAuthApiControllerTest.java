@@ -14,9 +14,7 @@ import com.koddy.server.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
@@ -47,19 +45,17 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(OAuthApiController.class)
 @DisplayName("Auth -> OAuthApiController 테스트")
 class OAuthApiControllerTest extends ControllerTest {
-    @MockBean
+    @Autowired
     private GetOAuthLinkUseCase getOAuthLinkUseCase;
 
-    @MockBean
+    @Autowired
     private OAuthLoginUseCase oAuthLoginUseCase;
 
-    @MockBean
+    @Autowired
     private LogoutUseCase logoutUseCase;
 
     @Nested
@@ -69,46 +65,39 @@ class OAuthApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("제공하지 않는 OAuth Provider에 대해서는 예외가 발생한다")
-        void throwExceptionByInvalidOAuthProvider() throws Exception {
+        void throwExceptionByInvalidOAuthProvider() {
             // given
             doThrow(new AuthException(INVALID_OAUTH_PROVIDER))
                     .when(getOAuthLinkUseCase)
                     .invoke(any());
 
-            // when
-            final RequestBuilder requestBuilder = get(new PathWithVariables(BASE_URL, GOOGLE_PROVIDER), Map.of("redirectUri", REDIRECT_URI));
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isBadRequest())
-                    .andExpectAll(getResultMatchersViaExceptionCode(AuthExceptionCode.INVALID_OAUTH_PROVIDER))
-                    .andDo(failureDocs("OAuthApi/Access/Failure", createHttpSpecSnippets(
+            // when - then
+            failedExecute(
+                    getRequest(new UrlWithVariables(BASE_URL, GOOGLE_PROVIDER), Map.of("redirectUri", REDIRECT_URI)),
+                    status().isBadRequest(),
+                    ExceptionSpec.of(AuthExceptionCode.INVALID_OAUTH_PROVIDER),
+                    failureDocs("OAuthApi/Access/Failure", createHttpSpecSnippets(
                             pathParameters(
                                     path("provider", "OAuth Provider", "google / kakao / zoom", true)
                             ),
                             queryParameters(
                                     query("redirectUri", "Authorization Code와 함께 redirect될 URI", true)
                             )
-                    )));
+                    ))
+            );
         }
 
         @Test
         @DisplayName("Google OAuth Authorization Code 요청을 위한 URI를 생성한다")
-        void success() throws Exception {
+        void success() {
             // given
             given(getOAuthLinkUseCase.invoke(any())).willReturn("https://url-for-authorization-code");
 
-            // when
-            final RequestBuilder requestBuilder = get(new PathWithVariables(BASE_URL, GOOGLE_PROVIDER), Map.of("redirectUri", REDIRECT_URI));
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpectAll(
-                            status().isOk(),
-                            jsonPath("$.result").exists(),
-                            jsonPath("$.result").value("https://url-for-authorization-code")
-                    )
-                    .andDo(successDocs("OAuthApi/Access/Success", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    getRequest(new UrlWithVariables(BASE_URL, GOOGLE_PROVIDER), Map.of("redirectUri", REDIRECT_URI)),
+                    status().isOk(),
+                    successDocs("OAuthApi/Access/Success", createHttpSpecSnippets(
                             pathParameters(
                                     path("provider", "OAuth Provider", "google / kakao / zoom", true)
                             ),
@@ -118,7 +107,8 @@ class OAuthApiControllerTest extends ControllerTest {
                             responseFields(
                                     body("result", "Authorization Code 요청을 위한 URI")
                             )
-                    )));
+                    ))
+            );
         }
     }
 
@@ -130,28 +120,18 @@ class OAuthApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("Google OAuth 로그인을 진행할 때 해당 사용자가 DB에 존재하지 않으면 예외를 발생하고 회원가입을 진행한다")
-        void throwExceptionIfGoogleAuthUserNotInDB() throws Exception {
+        void throwExceptionIfGoogleAuthUserNotInDB() {
             // given
             final GoogleUserResponse googleUserResponse = MENTOR_1.toGoogleUserResponse();
             doThrow(new OAuthUserNotFoundException(googleUserResponse))
                     .when(oAuthLoginUseCase)
                     .invoke(any());
 
-            // when
-            final RequestBuilder requestBuilder = post(new PathWithVariables(BASE_URL, GOOGLE_PROVIDER), request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpectAll(
-                            status().isNotFound(),
-                            jsonPath("$.name").exists(),
-                            jsonPath("$.name").value(googleUserResponse.name()),
-                            jsonPath("$.email").exists(),
-                            jsonPath("$.email").value(googleUserResponse.email()),
-                            jsonPath("$.profileImageUrl").exists(),
-                            jsonPath("$.profileImageUrl").value(googleUserResponse.profileImageUrl())
-                    )
-                    .andDo(successDocs("OAuthApi/Login/Failure", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    postRequest(new UrlWithVariables(BASE_URL, GOOGLE_PROVIDER), request),
+                    status().isNotFound(),
+                    successDocs("OAuthApi/Login/Failure", createHttpSpecSnippets(
                             pathParameters(
                                     path("provider", "OAuth Provider", "google / kakao", true)
                             ),
@@ -165,31 +145,22 @@ class OAuthApiControllerTest extends ControllerTest {
                                     body("email", "회원가입 진행 시 이메일 정보 [Read-Only]"),
                                     body("profileImageUrl", "회원가입 진행 시 프로필 이미지 정보 기본값")
                             )
-                    )));
+                    ))
+            );
         }
 
         @Test
         @DisplayName("Google OAuth 로그인을 진행할 때 해당 사용자가 DB에 존재하면 로그인에 성공하고 사용자 정보 및 토큰을 발급해준다")
-        void success() throws Exception {
+        void success() {
             // given
             final AuthMember loginResponse = MENTOR_1.toAuthMember();
             given(oAuthLoginUseCase.invoke(any())).willReturn(loginResponse);
 
-            // when
-            final RequestBuilder requestBuilder = post(new PathWithVariables(BASE_URL, GOOGLE_PROVIDER), request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpectAll(
-                            status().isOk(),
-                            jsonPath("$.id").exists(),
-                            jsonPath("$.id").value(loginResponse.id()),
-                            jsonPath("$.name").exists(),
-                            jsonPath("$.name").value(loginResponse.name()),
-                            jsonPath("$.profileImageUrl").exists(),
-                            jsonPath("$.profileImageUrl").value(loginResponse.profileImageUrl())
-                    )
-                    .andDo(successDocs("OAuthApi/Login/Success", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    postRequest(new UrlWithVariables(BASE_URL, GOOGLE_PROVIDER), request),
+                    status().isOk(),
+                    successDocs("OAuthApi/Login/Success", createHttpSpecSnippets(
                             pathParameters(
                                     path("provider", "OAuth Provider", "google / kakao", true)
                             ),
@@ -209,7 +180,8 @@ class OAuthApiControllerTest extends ControllerTest {
                                     body("name", "사용자 이름"),
                                     body("profileImageUrl", "사용자 프로필 이미지")
                             )
-                    )));
+                    ))
+            );
         }
     }
 
@@ -221,20 +193,19 @@ class OAuthApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("로그아웃을 진행한다")
-        void success() throws Exception {
+        void success() {
             // given
-            mockingToken(true, member.getId(), member.getRole());
+            applyToken(true, member.getId(), member.getRole());
             doNothing()
                     .when(logoutUseCase)
                     .invoke(any());
 
-            // when
-            final RequestBuilder requestBuilder = postWithAccessToken(BASE_URL);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isNoContent())
-                    .andDo(successDocsWithAccessToken("OAuthApi/Logout"));
+            // when - then
+            successfulExecute(
+                    postRequestWithAccessToken(BASE_URL),
+                    status().isNoContent(),
+                    successDocsWithAccessToken("OAuthApi/Logout")
+            );
         }
     }
 }

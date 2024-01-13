@@ -3,7 +3,7 @@ package com.koddy.server.member.application.usecase;
 import com.koddy.server.auth.domain.model.AuthMember;
 import com.koddy.server.auth.domain.model.AuthToken;
 import com.koddy.server.auth.domain.service.TokenIssuer;
-import com.koddy.server.common.UseCaseTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.application.usecase.command.SignUpMenteeCommand;
 import com.koddy.server.member.application.usecase.command.SignUpMentorCommand;
 import com.koddy.server.member.domain.model.mentee.Mentee;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("Member -> SignUpUsecase 테스트")
-class SignUpUsecaseTest extends UseCaseTest {
+class SignUpUsecaseTest extends UnitTest {
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final MenteeRepository menteeRepository = mock(MenteeRepository.class);
     private final TokenIssuer tokenIssuer = mock(TokenIssuer.class);

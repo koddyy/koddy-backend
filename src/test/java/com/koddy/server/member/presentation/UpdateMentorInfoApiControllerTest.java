@@ -1,5 +1,6 @@
 package com.koddy.server.member.presentation;
 
+import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.UpdateMentorInfoUseCase;
 import com.koddy.server.member.domain.model.mentee.Mentee;
@@ -11,14 +12,11 @@ import com.koddy.server.member.presentation.dto.request.UpdateMentorScheduleRequ
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.body;
@@ -32,10 +30,9 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(UpdateMentorInfoApiController.class)
 @DisplayName("Member -> UpdateMentorInfoApiController 테스트")
 class UpdateMentorInfoApiControllerTest extends ControllerTest {
-    @MockBean
+    @Autowired
     private UpdateMentorInfoUseCase updateMentorInfoUseCase;
 
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
@@ -60,18 +57,16 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("멘토가 아니면 권한이 없다")
-        void throwExceptionByInvalidPermission() throws Exception {
+        void throwExceptionByInvalidPermission() {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee.getId(), mentee.getRole());
 
-            // when
-            final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isForbidden())
-                    .andExpectAll(getResultMatchersViaExceptionCode(INVALID_PERMISSION))
-                    .andDo(failureDocsWithAccessToken("MemberApi/Update/Mentor/BasicInfo/Failure", createHttpSpecSnippets(
+            // when - then
+            failedExecute(
+                    patchRequestWithAccessToken(BASE_URL, request),
+                    status().isForbidden(),
+                    ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
+                    failureDocsWithAccessToken("MemberApi/Update/Mentor/BasicInfo/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
@@ -83,25 +78,24 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                                     body("major", "전공", true),
                                     body("enteredIn", "학번", true)
                             )
-                    )));
+                    ))
+            );
         }
 
         @Test
         @DisplayName("멘토 기본정보를 수정한다")
-        void success() throws Exception {
+        void success() {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             doNothing()
                     .when(updateMentorInfoUseCase)
                     .updateBasicInfo(any());
 
-            // when
-            final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isNoContent())
-                    .andDo(successDocsWithAccessToken("MemberApi/Update/Mentor/BasicInfo/Success", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    patchRequestWithAccessToken(BASE_URL, request),
+                    status().isNoContent(),
+                    successDocsWithAccessToken("MemberApi/Update/Mentor/BasicInfo/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
@@ -113,7 +107,8 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                                     body("major", "전공", true),
                                     body("enteredIn", "학번", true)
                             )
-                    )));
+                    ))
+            );
         }
     }
 
@@ -134,18 +129,16 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("멘토가 아니면 권한이 없다")
-        void throwExceptionByInvalidPermission() throws Exception {
+        void throwExceptionByInvalidPermission() {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee.getId(), mentee.getRole());
 
-            // when
-            final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isForbidden())
-                    .andExpectAll(getResultMatchersViaExceptionCode(INVALID_PERMISSION))
-                    .andDo(failureDocsWithAccessToken("MemberApi/Update/Mentor/Schedule/Failure", createHttpSpecSnippets(
+            // when - then
+            failedExecute(
+                    patchRequestWithAccessToken(BASE_URL, request),
+                    status().isForbidden(),
+                    ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
+                    failureDocsWithAccessToken("MemberApi/Update/Mentor/Schedule/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("schedules", "멘토링 스케줄", false),
                                     body("schedules[].startDate", "시작 날짜", "KST", false),
@@ -156,25 +149,24 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                                     body("schedules[].endTime.hour", "종료 시간 (Hour)", "KST", false),
                                     body("schedules[].endTime.minute", "종료 시간 (Minute)", "KST", false)
                             )
-                    )));
+                    ))
+            );
         }
 
         @Test
         @DisplayName("멘토 스케줄을 수정한다")
-        void success() throws Exception {
+        void success() {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             doNothing()
                     .when(updateMentorInfoUseCase)
                     .updateSchedule(any());
 
-            // when
-            final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isNoContent())
-                    .andDo(successDocsWithAccessToken("MemberApi/Update/Mentor/Schedule/Success", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    patchRequestWithAccessToken(BASE_URL, request),
+                    status().isNoContent(),
+                    successDocsWithAccessToken("MemberApi/Update/Mentor/Schedule/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("schedules", "멘토링 스케줄", false),
                                     body("schedules[].startDate", "시작 날짜", "KST", false),
@@ -185,7 +177,8 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                                     body("schedules[].endTime.hour", "종료 시간 (Hour)", "KST", false),
                                     body("schedules[].endTime.minute", "종료 시간 (Minute)", "KST", false)
                             )
-                    )));
+                    ))
+            );
         }
     }
 }

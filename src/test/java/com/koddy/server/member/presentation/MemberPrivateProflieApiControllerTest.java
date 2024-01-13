@@ -1,5 +1,6 @@
 package com.koddy.server.member.presentation;
 
+import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.GetMemberPrivateProfileUseCase;
 import com.koddy.server.member.application.usecase.query.response.MenteeProfile;
@@ -9,11 +10,8 @@ import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.body;
@@ -24,10 +22,9 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(MemberPrivateProflieApiController.class)
 @DisplayName("Member -> MemberPrivateProflieApiController 테스트")
 class MemberPrivateProflieApiControllerTest extends ControllerTest {
-    @MockBean
+    @Autowired
     private GetMemberPrivateProfileUseCase getMemberPrivateProfileUseCase;
 
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
@@ -40,18 +37,16 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("멘토 프로필을 조회한다")
-        void getMentorProfile() throws Exception {
+        void getMentorProfile() {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(new MentorProfile(mentor));
 
-            // when
-            final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isOk())
-                    .andDo(successDocsWithAccessToken("MemberApi/PrivateProfile/Mix/Mentor", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    getRequestWithAccessToken(BASE_URL),
+                    status().isOk(),
+                    successDocsWithAccessToken("MemberApi/PrivateProfile/Mix/Mentor", createHttpSpecSnippets(
                             responseFields(
                                     body("id", "ID(PK)"),
                                     body("email", "이메일"),
@@ -77,23 +72,22 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
                                     body("role", "역할 (멘토/멘티)"),
                                     body("profileComplete", "프로필 완성 여부 (자기소개, 스케줄)")
                             )
-                    )));
+                    ))
+            );
         }
 
         @Test
         @DisplayName("멘티 프로필을 조회한다")
-        void getMenteeProfile() throws Exception {
+        void getMenteeProfile() {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee.getId(), mentee.getRole());
             given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(new MenteeProfile(mentee));
 
-            // when
-            final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isOk())
-                    .andDo(successDocsWithAccessToken("MemberApi/PrivateProfile/Mix/Mentee", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    getRequestWithAccessToken(BASE_URL),
+                    status().isOk(),
+                    successDocsWithAccessToken("MemberApi/PrivateProfile/Mix/Mentee", createHttpSpecSnippets(
                             responseFields(
                                     body("id", "ID(PK)"),
                                     body("email", "이메일"),
@@ -110,7 +104,8 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
                                     body("role", "역할 (멘토/멘티)"),
                                     body("profileComplete", "프로필 완성 여부 (자기소개)")
                             )
-                    )));
+                    ))
+            );
         }
     }
 
@@ -121,34 +116,31 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("멘토가 아니면 권한이 없다")
-        void throwExceptionByInvalidPermission() throws Exception {
+        void throwExceptionByInvalidPermission() {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee.getId(), mentee.getRole());
 
-            // when
-            final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isForbidden())
-                    .andExpectAll(getResultMatchersViaExceptionCode(INVALID_PERMISSION))
-                    .andDo(failureDocsWithAccessToken("MemberApi/PrivateProfile/Mentor/Failure"));
+            // when - then
+            failedExecute(
+                    getRequestWithAccessToken(BASE_URL),
+                    status().isForbidden(),
+                    ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
+                    failureDocsWithAccessToken("MemberApi/PrivateProfile/Mentor/Failure")
+            );
         }
 
         @Test
         @DisplayName("멘토 마이페이지 프로필 정보를 조회한다")
-        void success() throws Exception {
+        void success() {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(new MentorProfile(mentor));
 
-            // when
-            final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isOk())
-                    .andDo(successDocsWithAccessToken("MemberApi/PrivateProfile/Mentor/Success", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    getRequestWithAccessToken(BASE_URL),
+                    status().isOk(),
+                    successDocsWithAccessToken("MemberApi/PrivateProfile/Mentor/Success", createHttpSpecSnippets(
                             responseFields(
                                     body("id", "ID(PK)"),
                                     body("email", "이메일"),
@@ -174,7 +166,8 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
                                     body("role", "역할 (멘토/멘티)"),
                                     body("profileComplete", "프로필 완성 여부 (자기소개, 스케줄)")
                             )
-                    )));
+                    ))
+            );
         }
     }
 
@@ -185,34 +178,31 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("멘티가 아니면 권한이 없다")
-        void throwExceptionByInvalidPermission() throws Exception {
+        void throwExceptionByInvalidPermission() {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
 
-            // when
-            final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isForbidden())
-                    .andExpectAll(getResultMatchersViaExceptionCode(INVALID_PERMISSION))
-                    .andDo(failureDocsWithAccessToken("MemberApi/PrivateProfile/Mentee/Failure"));
+            // when - then
+            failedExecute(
+                    getRequestWithAccessToken(BASE_URL),
+                    status().isForbidden(),
+                    ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
+                    failureDocsWithAccessToken("MemberApi/PrivateProfile/Mentee/Failure")
+            );
         }
 
         @Test
         @DisplayName("멘티 마이페이지 프로필 정보를 조회한다")
-        void success() throws Exception {
+        void success() {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee.getId(), mentee.getRole());
             given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(new MenteeProfile(mentee));
 
-            // when
-            final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isOk())
-                    .andDo(successDocsWithAccessToken("MemberApi/PrivateProfile/Mentee/Success", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    getRequestWithAccessToken(BASE_URL),
+                    status().isOk(),
+                    successDocsWithAccessToken("MemberApi/PrivateProfile/Mentee/Success", createHttpSpecSnippets(
                             responseFields(
                                     body("id", "ID(PK)"),
                                     body("email", "이메일"),
@@ -229,7 +219,8 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
                                     body("role", "역할 (멘토/멘티)"),
                                     body("profileComplete", "프로필 완성 여부 (자기소개)")
                             )
-                    )));
+                    ))
+            );
         }
     }
 }

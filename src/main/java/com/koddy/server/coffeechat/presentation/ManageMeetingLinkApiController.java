@@ -6,11 +6,11 @@ import com.koddy.server.coffeechat.application.usecase.ManageMeetingLinkUseCase;
 import com.koddy.server.coffeechat.application.usecase.command.CreateMeetingLinkCommand;
 import com.koddy.server.coffeechat.application.usecase.command.DeleteMeetingLinkCommand;
 import com.koddy.server.coffeechat.domain.model.link.MeetingLinkProvider;
-import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkResponse;
+import com.koddy.server.coffeechat.domain.model.link.MeetingLinkResponse;
 import com.koddy.server.coffeechat.presentation.dto.request.CreateMeetingLinkRequest;
 import com.koddy.server.coffeechat.presentation.dto.response.CreateMeetingLinkResponse;
 import com.koddy.server.global.annotation.Auth;
-import com.koddy.server.global.aop.OnlyMentor;
+import com.koddy.server.global.aop.AccessControl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.koddy.server.member.domain.model.Role.MENTOR;
+
 @Tag(name = "커피챗 링크 생성/삭제 API")
 @RestController
 @RequiredArgsConstructor
@@ -31,13 +33,13 @@ public class ManageMeetingLinkApiController {
 
     @Operation(summary = "커피챗 링크 생성 Endpoint")
     @PostMapping
-    @OnlyMentor
+    @AccessControl(role = MENTOR)
     public ResponseEntity<CreateMeetingLinkResponse> create(
             @Auth final Authenticated authenticated,
             @PathVariable final String provider,
             @RequestBody final CreateMeetingLinkRequest request
     ) {
-        final ZoomMeetingLinkResponse result = manageMeetingLinkUseCase.create(new CreateMeetingLinkCommand(
+        final MeetingLinkResponse result = manageMeetingLinkUseCase.create(new CreateMeetingLinkCommand(
                 authenticated.id(),
                 OAuthProvider.from(provider),
                 MeetingLinkProvider.from(provider),
@@ -59,7 +61,7 @@ public class ManageMeetingLinkApiController {
 
     @Operation(summary = "커피챗 링크 삭제 Endpoint")
     @DeleteMapping("/{meetingId}")
-    @OnlyMentor
+    @AccessControl(role = MENTOR)
     public ResponseEntity<Void> delete(
             @Auth final Authenticated authenticated,
             @PathVariable final String provider,

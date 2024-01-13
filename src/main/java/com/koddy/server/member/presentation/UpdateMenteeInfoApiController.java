@@ -2,7 +2,7 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.global.annotation.Auth;
-import com.koddy.server.global.aop.OnlyMentee;
+import com.koddy.server.global.aop.AccessControl;
 import com.koddy.server.member.application.usecase.UpdateMenteeInfoUseCase;
 import com.koddy.server.member.application.usecase.command.UpdateMenteeBasicInfoCommand;
 import com.koddy.server.member.domain.model.Nationality;
@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.koddy.server.member.domain.model.Role.MENTEE;
+
 @Tag(name = "멘티 정보 수정 API")
 @RestController
 @RequestMapping("/api/mentees/me")
@@ -26,7 +28,7 @@ public class UpdateMenteeInfoApiController {
 
     @Operation(summary = "멘티 기본정보 수정 Endpoint")
     @PatchMapping("/basic-info")
-    @OnlyMentee
+    @AccessControl(role = MENTEE)
     public ResponseEntity<Void> updateBasicInfo(
             @Auth final Authenticated authenticated,
             @RequestBody @Valid final UpdateMenteeBasicInfoRequest request

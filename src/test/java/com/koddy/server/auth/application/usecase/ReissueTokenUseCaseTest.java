@@ -5,7 +5,7 @@ import com.koddy.server.auth.domain.model.AuthToken;
 import com.koddy.server.auth.domain.service.TokenIssuer;
 import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.auth.utils.TokenProvider;
-import com.koddy.server.common.UseCaseTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("Auth -> ReissueTokenUseCase 테스트")
-class ReissueTokenUseCaseTest extends UseCaseTest {
+class ReissueTokenUseCaseTest extends UnitTest {
     private final TokenProvider tokenProvider = mock(TokenProvider.class);
     private final TokenIssuer tokenIssuer = mock(TokenIssuer.class);
     private final ReissueTokenUseCase sut = new ReissueTokenUseCase(tokenProvider, tokenIssuer);

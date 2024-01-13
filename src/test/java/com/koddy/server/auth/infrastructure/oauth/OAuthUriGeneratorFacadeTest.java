@@ -14,10 +14,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import static com.koddy.server.auth.domain.model.oauth.OAuthProvider.GOOGLE;
+import static com.koddy.server.auth.domain.model.oauth.OAuthProvider.KAKAO;
+import static com.koddy.server.auth.domain.model.oauth.OAuthProvider.ZOOM;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest(classes = {
+        OAuthUriGeneratorFacade.class,
         GoogleOAuthUriGenerator.class,
         KakaoOAuthUriGenerator.class,
         ZoomOAuthUriGenerator.class
@@ -27,22 +31,16 @@ import static org.junit.jupiter.api.Assertions.assertAll;
         KakaoOAuthProperties.class,
         ZoomOAuthProperties.class
 })
-@DisplayName("Auth -> OAuthUriGenerator [구글, 카카오, 줌] 테스트")
-class OAuthUriGeneratorTest {
+@DisplayName("Auth -> OAuthUriGeneratorFacade [구글, 카카오, 줌] 테스트")
+class OAuthUriGeneratorFacadeTest {
     @Autowired
-    private GoogleOAuthUriGenerator googleOAuthUri;
+    private OAuthUriGeneratorFacade sut;
 
     @Autowired
     private GoogleOAuthProperties googleOAuthProperties;
 
     @Autowired
-    private KakaoOAuthUriGenerator kakaoOAuthUri;
-
-    @Autowired
     private KakaoOAuthProperties kakaoOAuthProperties;
-
-    @Autowired
-    private ZoomOAuthUriGenerator zoomOAuthUri;
 
     @Autowired
     private ZoomOAuthProperties zoomOAuthProperties;
@@ -51,7 +49,7 @@ class OAuthUriGeneratorTest {
     @DisplayName("Google's Authorization Code를 받기 위한 Authorization Code Request URI를 생성한다")
     void googleOAuthUri() {
         // when
-        final String uri = googleOAuthUri.generate(googleOAuthProperties.redirectUri());
+        final String uri = sut.generate(GOOGLE, googleOAuthProperties.redirectUri());
 
         // then
         final MultiValueMap<String, String> queryParams = UriComponentsBuilder
@@ -72,7 +70,7 @@ class OAuthUriGeneratorTest {
     @DisplayName("Kakao's Authorization Code를 받기 위한 Authorization Code Request URI를 생성한다")
     void kakaoOAuthUri() {
         // when
-        final String uri = kakaoOAuthUri.generate(kakaoOAuthProperties.redirectUri());
+        final String uri = sut.generate(KAKAO, kakaoOAuthProperties.redirectUri());
 
         // then
         final MultiValueMap<String, String> queryParams = UriComponentsBuilder
@@ -93,7 +91,7 @@ class OAuthUriGeneratorTest {
     @DisplayName("Zoom's Authorization Code를 받기 위한 Authorization Code Request URI를 생성한다")
     void zoomOAuthUri() {
         // when
-        final String uri = zoomOAuthUri.generate(zoomOAuthProperties.redirectUri());
+        final String uri = sut.generate(ZOOM, zoomOAuthProperties.redirectUri());
 
         // then
         final MultiValueMap<String, String> queryParams = UriComponentsBuilder

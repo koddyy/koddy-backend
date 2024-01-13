@@ -1,9 +1,9 @@
 package com.koddy.server.auth.infrastructure.oauth.kakao;
 
-import com.koddy.server.auth.application.adapter.OAuthConnector;
 import com.koddy.server.auth.domain.model.oauth.OAuthProvider;
 import com.koddy.server.auth.domain.model.oauth.OAuthTokenResponse;
 import com.koddy.server.auth.domain.model.oauth.OAuthUserResponse;
+import com.koddy.server.auth.infrastructure.oauth.OAuthConnector;
 import com.koddy.server.auth.infrastructure.oauth.kakao.response.KakaoTokenResponse;
 import com.koddy.server.auth.infrastructure.oauth.kakao.response.KakaoUserResponse;
 import com.koddy.server.global.exception.GlobalException;

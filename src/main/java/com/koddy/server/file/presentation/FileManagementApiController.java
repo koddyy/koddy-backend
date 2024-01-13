@@ -1,7 +1,10 @@
 package com.koddy.server.file.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
-import com.koddy.server.file.application.adapter.FileManager;
+import com.koddy.server.file.application.usecase.RegisterPresignedUrlUseCase;
+import com.koddy.server.file.application.usecase.UploadFileUseCase;
+import com.koddy.server.file.application.usecase.command.RegisterPresignedUrlCommand;
+import com.koddy.server.file.application.usecase.command.UploadFileCommand;
 import com.koddy.server.file.domain.model.PresignedFileData;
 import com.koddy.server.file.domain.model.PresignedUrlDetails;
 import com.koddy.server.file.presentation.dto.request.GetImagePresignedUrlRequest;
@@ -29,7 +32,8 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 @RequestMapping("/api/files")
 @RequiredArgsConstructor
 public class FileManagementApiController {
-    private final FileManager fileManager;
+    private final UploadFileUseCase uploadFileUseCase;
+    private final RegisterPresignedUrlUseCase registerPresignedUrlUseCase;
 
     @Operation(summary = "파일 업로드 Endpoint")
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
@@ -37,7 +41,7 @@ public class FileManagementApiController {
             @Auth final Authenticated authenticated,
             @RequestPart final MultipartFile file
     ) {
-        final String uploadUrl = fileManager.upload(FileConverter.convertFile(file));
+        final String uploadUrl = uploadFileUseCase.invoke(new UploadFileCommand(FileConverter.convertFile(file)));
         return ResponseEntity.ok(ResponseWrapper.from(uploadUrl));
     }
 
@@ -47,7 +51,9 @@ public class FileManagementApiController {
             @Auth final Authenticated authenticated,
             @ModelAttribute @Valid final GetImagePresignedUrlRequest request
     ) {
-        final PresignedUrlDetails presignedUrl = fileManager.createPresignedUrl(new PresignedFileData(request.fileName()));
+        final PresignedUrlDetails presignedUrl = registerPresignedUrlUseCase.invoke(new RegisterPresignedUrlCommand(
+                new PresignedFileData(request.fileName())
+        ));
         return ResponseEntity.ok(presignedUrl);
     }
 
@@ -57,7 +63,9 @@ public class FileManagementApiController {
             @Auth final Authenticated authenticated,
             @ModelAttribute @Valid final GetPdfPresignedUrlRequest request
     ) {
-        final PresignedUrlDetails presignedUrl = fileManager.createPresignedUrl(new PresignedFileData(request.fileName()));
+        final PresignedUrlDetails presignedUrl = registerPresignedUrlUseCase.invoke(new RegisterPresignedUrlCommand(
+                new PresignedFileData(request.fileName())
+        ));
         return ResponseEntity.ok(presignedUrl);
     }
 }

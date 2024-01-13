@@ -2,12 +2,14 @@ package com.koddy.server.auth.infrastructure.auth;
 
 import com.koddy.server.auth.domain.model.code.AuthCodeGenerator;
 import com.koddy.server.auth.exception.AuthException;
-import com.koddy.server.common.RedisTest;
+import com.koddy.server.common.containers.RedisTestContainersExtension;
 import com.koddy.server.global.redis.RedisOperator;
 import com.koddy.server.global.redis.StringRedisOperator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -20,9 +22,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+@DataRedisTest
+@ExtendWith(RedisTestContainersExtension.class)
 @Import({RedisAuthenticationProcessor.class, StringRedisOperator.class})
 @DisplayName("Auth -> RedisAuthenticationProcessor 테스트")
-class RedisAuthenticationProcessorTest extends RedisTest {
+class RedisAuthenticationProcessorTest {
     @Autowired
     private RedisAuthenticationProcessor sut;
 

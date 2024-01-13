@@ -16,11 +16,11 @@ public enum OAuthProvider {
     ZOOM("zoom"),
     ;
 
-    private final String provider;
+    private final String value;
 
-    public static OAuthProvider from(final String provider) {
+    public static OAuthProvider from(final String value) {
         return Arrays.stream(values())
-                .filter(it -> it.provider.equals(provider))
+                .filter(it -> it.value.equals(value))
                 .findFirst()
                 .orElseThrow(() -> new AuthException(INVALID_OAUTH_PROVIDER));
     }

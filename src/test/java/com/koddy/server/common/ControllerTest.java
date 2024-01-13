@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.auth.utils.TokenProvider;
+import com.koddy.server.common.config.MockAllUseCaseBeanFactoryPostProcessor;
+import com.koddy.server.common.config.ResetMockTestExecutionListener;
 import com.koddy.server.common.config.TestAopConfig;
 import com.koddy.server.common.config.TestWebBeanConfig;
 import com.koddy.server.global.base.KoddyExceptionCode;
@@ -22,8 +24,10 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
@@ -53,7 +57,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("Controller")
 @WebMvcTest
 @ExtendWith(RestDocumentationExtension.class)
-@Import({TestAopConfig.class, TestWebBeanConfig.class})
+@Import({TestAopConfig.class, TestWebBeanConfig.class, MockAllUseCaseBeanFactoryPostProcessor.class})
+@TestExecutionListeners(
+        value = ResetMockTestExecutionListener.class,
+        mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS
+)
 @AutoConfigureRestDocs
 public abstract class ControllerTest {
     // common & external
@@ -62,7 +70,7 @@ public abstract class ControllerTest {
 
     // common & internal
     @Autowired
-    protected ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @MockBean
     private TokenProvider tokenProvider;
@@ -80,7 +88,7 @@ public abstract class ControllerTest {
                 .build();
     }
 
-    public record PathWithVariables(
+    public record UrlWithVariables(
             String url,
             Object... variables
     ) {
@@ -89,62 +97,61 @@ public abstract class ControllerTest {
     /**
      * GET
      */
-    protected RequestBuilder get(final String url) {
-        return MockMvcRequestBuilders
-                .get(url);
+    protected RequestBuilder getRequest(final String url) {
+        return MockMvcRequestBuilders.get(url);
     }
 
-    protected RequestBuilder get(final PathWithVariables path) {
-        return RestDocumentationRequestBuilders
-                .get(path.url, path.variables);
+    protected RequestBuilder getRequest(final UrlWithVariables path) {
+        return RestDocumentationRequestBuilders.get(path.url, path.variables);
     }
 
-    @SafeVarargs
-    protected final RequestBuilder get(final String url, final Map<String, String>... params) {
+    protected final RequestBuilder getRequest(final String url, final Map<String, String> params) {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(url);
 
-        for (final Map<String, String> param : params) {
-            for (final String key : param.keySet()) {
-                requestBuilder = requestBuilder.param(key, param.get(key));
-            }
+        for (final String key : params.keySet()) {
+            requestBuilder = requestBuilder.param(key, params.get(key));
         }
 
         return requestBuilder;
     }
 
-    @SafeVarargs
-    protected final RequestBuilder get(final PathWithVariables path, final Map<String, String>... params) {
+    protected final RequestBuilder getRequest(final UrlWithVariables path, final Map<String, String> params) {
         MockHttpServletRequestBuilder requestBuilder = RestDocumentationRequestBuilders.get(path.url, path.variables);
 
-        for (final Map<String, String> param : params) {
-            for (final String key : param.keySet()) {
-                requestBuilder = requestBuilder.param(key, param.get(key));
-            }
+        for (final String key : params.keySet()) {
+            requestBuilder = requestBuilder.param(key, params.get(key));
         }
 
         return requestBuilder;
     }
 
-    protected RequestBuilder getWithAccessToken(final String url) {
+    protected RequestBuilder getRequestWithAccessToken(final String url) {
         return MockMvcRequestBuilders
                 .get(url)
                 .header(AUTHORIZATION, applyAccessToken());
     }
 
-    protected RequestBuilder getWithAccessToken(final PathWithVariables path) {
+    protected RequestBuilder getRequestWithAccessToken(final UrlWithVariables path) {
         return RestDocumentationRequestBuilders
                 .get(path.url, path.variables)
                 .header(AUTHORIZATION, applyAccessToken());
     }
 
-    @SafeVarargs
-    protected final RequestBuilder getWithAccessToken(final String url, final Map<String, String>... params) {
+    protected final RequestBuilder getRequestWithAccessToken(final String url, final Map<String, String> params) {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(url);
 
-        for (final Map<String, String> param : params) {
-            for (final String key : param.keySet()) {
-                requestBuilder = requestBuilder.param(key, param.get(key));
-            }
+        for (final String key : params.keySet()) {
+            requestBuilder = requestBuilder.param(key, params.get(key));
+        }
+
+        return requestBuilder.header(AUTHORIZATION, applyAccessToken());
+    }
+
+    protected final RequestBuilder getRequestWithAccessToken(final UrlWithVariables path, final Map<String, String> params) {
+        MockHttpServletRequestBuilder requestBuilder = RestDocumentationRequestBuilders.get(path.url, path.variables);
+
+        for (final String key : params.keySet()) {
+            requestBuilder = requestBuilder.param(key, params.get(key));
         }
 
         return requestBuilder.header(AUTHORIZATION, applyAccessToken());
@@ -153,47 +160,47 @@ public abstract class ControllerTest {
     /**
      * POST + application/json
      */
-    protected RequestBuilder post(final String url) {
+    protected RequestBuilder postRequest(final String url) {
         return MockMvcRequestBuilders
                 .post(url)
                 .contentType(APPLICATION_JSON);
     }
 
-    protected RequestBuilder post(final PathWithVariables path) {
+    protected RequestBuilder postRequest(final UrlWithVariables path) {
         return RestDocumentationRequestBuilders
                 .post(path.url, path.variables)
                 .contentType(APPLICATION_JSON);
     }
 
-    protected RequestBuilder post(final String url, final Object data) {
+    protected RequestBuilder postRequest(final String url, final Object data) {
         return MockMvcRequestBuilders
                 .post(url)
                 .contentType(APPLICATION_JSON)
                 .content(toBody(data));
     }
 
-    protected RequestBuilder post(final PathWithVariables path, final Object data) {
+    protected RequestBuilder postRequest(final UrlWithVariables path, final Object data) {
         return RestDocumentationRequestBuilders
                 .post(path.url, path.variables)
                 .contentType(APPLICATION_JSON)
                 .content(toBody(data));
     }
 
-    protected RequestBuilder postWithAccessToken(final String url) {
+    protected RequestBuilder postRequestWithAccessToken(final String url) {
         return MockMvcRequestBuilders
                 .post(url)
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, applyAccessToken());
     }
 
-    protected RequestBuilder postWithAccessToken(final PathWithVariables path) {
+    protected RequestBuilder postRequestWithAccessToken(final UrlWithVariables path) {
         return RestDocumentationRequestBuilders
                 .post(path.url, path.variables)
                 .contentType(APPLICATION_JSON)
                 .header(AUTHORIZATION, applyAccessToken());
     }
 
-    protected RequestBuilder postWithAccessToken(final String url, final Object data) {
+    protected RequestBuilder postRequestWithAccessToken(final String url, final Object data) {
         return MockMvcRequestBuilders
                 .post(url)
                 .contentType(APPLICATION_JSON)
@@ -201,7 +208,7 @@ public abstract class ControllerTest {
                 .content(toBody(data));
     }
 
-    protected RequestBuilder postWithAccessToken(final PathWithVariables path, final Object data) {
+    protected RequestBuilder postRequestWithAccessToken(final UrlWithVariables path, final Object data) {
         return RestDocumentationRequestBuilders
                 .post(path.url, path.variables)
                 .contentType(APPLICATION_JSON)
@@ -209,13 +216,13 @@ public abstract class ControllerTest {
                 .content(toBody(data));
     }
 
-    protected RequestBuilder postWithRefreshToken(final String url) {
+    protected RequestBuilder postRequestWithRefreshToken(final String url) {
         return MockMvcRequestBuilders
                 .post(url)
                 .cookie(applyRefreshToken());
     }
 
-    protected RequestBuilder postWithRefreshToken(final PathWithVariables path) {
+    protected RequestBuilder postRequestWithRefreshToken(final UrlWithVariables path) {
         return RestDocumentationRequestBuilders
                 .post(path.url, path.variables)
                 .cookie(applyRefreshToken());
@@ -224,10 +231,7 @@ public abstract class ControllerTest {
     /**
      * POST + multipart/form-data
      */
-    protected final RequestBuilder multipart(
-            final String url,
-            final List<MultipartFile> files
-    ) {
+    protected final RequestBuilder multipartRequest(final String url, final List<MultipartFile> files) {
         MockMultipartHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.multipart(url);
 
         for (final MultipartFile file : files) {
@@ -238,7 +242,7 @@ public abstract class ControllerTest {
     }
 
     @SafeVarargs
-    protected final RequestBuilder multipart(
+    protected final RequestBuilder multipartRequest(
             final String url,
             final List<MultipartFile> files,
             final Map<String, String> params,
@@ -262,7 +266,7 @@ public abstract class ControllerTest {
     }
 
     @SafeVarargs
-    protected final RequestBuilder multipart(
+    protected final RequestBuilder multipartRequest(
             final String url,
             final List<Object> uriVariables,
             final List<MultipartFile> files,
@@ -286,7 +290,7 @@ public abstract class ControllerTest {
         return requestBuilder;
     }
 
-    protected final RequestBuilder multipartWithAccessToken(
+    protected final RequestBuilder multipartRequestWithAccessToken(
             final String url,
             final List<MultipartFile> files
     ) {
@@ -300,7 +304,7 @@ public abstract class ControllerTest {
     }
 
     @SafeVarargs
-    protected final RequestBuilder multipartWithAccessToken(
+    protected final RequestBuilder multipartRequestWithAccessToken(
             final String url,
             final List<MultipartFile> files,
             final Map<String, String> params,
@@ -324,7 +328,7 @@ public abstract class ControllerTest {
     }
 
     @SafeVarargs
-    protected final RequestBuilder multipartWithAccessToken(
+    protected final RequestBuilder multipartRequestWithAccessToken(
             final String url,
             final List<Object> uriVariables,
             final List<MultipartFile> files,
@@ -351,21 +355,21 @@ public abstract class ControllerTest {
     /**
      * PATCH
      */
-    protected RequestBuilder patch(final String url, final Object data) {
+    protected RequestBuilder patchRequest(final String url, final Object data) {
         return MockMvcRequestBuilders
                 .patch(url)
                 .contentType(APPLICATION_JSON)
                 .content(toBody(data));
     }
 
-    protected RequestBuilder patch(final PathWithVariables path, final Object data) {
+    protected RequestBuilder patchRequest(final UrlWithVariables path, final Object data) {
         return RestDocumentationRequestBuilders
                 .patch(path.url, path.variables)
                 .contentType(APPLICATION_JSON)
                 .content(toBody(data));
     }
 
-    protected RequestBuilder patchWithAccessToken(final String url, final Object data) {
+    protected RequestBuilder patchRequestWithAccessToken(final String url, final Object data) {
         return MockMvcRequestBuilders
                 .patch(url)
                 .contentType(APPLICATION_JSON)
@@ -373,7 +377,7 @@ public abstract class ControllerTest {
                 .content(toBody(data));
     }
 
-    protected RequestBuilder patchWithAccessToken(final PathWithVariables path, final Object data) {
+    protected RequestBuilder patchRequestWithAccessToken(final UrlWithVariables path, final Object data) {
         return RestDocumentationRequestBuilders
                 .patch(path.url, path.variables)
                 .contentType(APPLICATION_JSON)
@@ -384,13 +388,13 @@ public abstract class ControllerTest {
     /**
      * DELETE
      */
-    protected RequestBuilder deleteWithAccessToken(final String url) {
+    protected RequestBuilder deleteRequestWithAccessToken(final String url) {
         return RestDocumentationRequestBuilders
                 .delete(url)
                 .header(AUTHORIZATION, applyAccessToken());
     }
 
-    protected RequestBuilder deleteWithAccessToken(final PathWithVariables path) {
+    protected RequestBuilder deleteRequestWithAccessToken(final UrlWithVariables path) {
         return RestDocumentationRequestBuilders
                 .delete(path.url, path.variables)
                 .header(AUTHORIZATION, applyAccessToken());
@@ -404,25 +408,70 @@ public abstract class ControllerTest {
         }
     }
 
-    protected ResultMatcher[] getResultMatchersViaExceptionCode(final KoddyExceptionCode code) {
+    /**
+     * Execute & Result Documentation
+     */
+    public record ExceptionSpec(
+            KoddyExceptionCode code,
+            String message
+    ) {
+        public static ExceptionSpec of(final KoddyExceptionCode code) {
+            return new ExceptionSpec(code, null);
+        }
+
+        public static ExceptionSpec of(final KoddyExceptionCode code, final String message) {
+            return new ExceptionSpec(code, message);
+        }
+    }
+
+    protected void failedExecute(
+            final RequestBuilder requestBuilder,
+            final ResultMatcher status,
+            final ExceptionSpec exceptionSpec,
+            final ResultHandler resultHandler
+    ) {
+        try {
+            mockMvc.perform(requestBuilder)
+                    .andExpect(status)
+                    .andExpectAll(createExceptionResultMatchers(exceptionSpec))
+                    .andDo(resultHandler);
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected void successfulExecute(
+            final RequestBuilder requestBuilder,
+            final ResultMatcher status,
+            final ResultHandler resultHandler
+    ) {
+        try {
+            mockMvc.perform(requestBuilder)
+                    .andExpect(status)
+                    .andDo(resultHandler);
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private ResultMatcher[] createExceptionResultMatchers(final ExceptionSpec exceptionSpec) {
+        if (exceptionSpec.message == null) {
+            return new ResultMatcher[]{
+                    jsonPath("$.errorCode").exists(),
+                    jsonPath("$.errorCode").value(exceptionSpec.code.getErrorCode()),
+                    jsonPath("$.message").exists(),
+                    jsonPath("$.message").value(exceptionSpec.code.getMessage())
+            };
+        }
         return new ResultMatcher[]{
                 jsonPath("$.errorCode").exists(),
-                jsonPath("$.errorCode").value(code.getErrorCode()),
+                jsonPath("$.errorCode").value(exceptionSpec.code.getErrorCode()),
                 jsonPath("$.message").exists(),
-                jsonPath("$.message").value(code.getMessage())
+                jsonPath("$.message").value(exceptionSpec.message)
         };
     }
 
-    protected ResultMatcher[] getResultMatchersViaExceptionCode(final KoddyExceptionCode code, final String message) {
-        return new ResultMatcher[]{
-                jsonPath("$.errorCode").exists(),
-                jsonPath("$.errorCode").value(code.getErrorCode()),
-                jsonPath("$.message").exists(),
-                jsonPath("$.message").value(message)
-        };
-    }
-
-    protected void mockingToken(final boolean isValid, final Long payloadId, final Role role) {
+    protected void applyToken(final boolean isValid, final Long payloadId, final Role role) {
         if (isValid) {
             doNothing()
                     .when(tokenProvider)
@@ -434,11 +483,5 @@ public abstract class ControllerTest {
         }
         given(tokenProvider.getId(anyString())).willReturn(payloadId);
         given(tokenProvider.getAuthority(anyString())).willReturn(role.getAuthority());
-    }
-
-    protected void mockingTokenWithInvalidException() {
-        doThrow(new AuthException(INVALID_TOKEN))
-                .when(tokenProvider)
-                .validateToken(anyString());
     }
 }

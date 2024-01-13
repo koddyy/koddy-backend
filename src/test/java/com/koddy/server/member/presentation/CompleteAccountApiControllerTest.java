@@ -9,9 +9,7 @@ import com.koddy.server.member.presentation.dto.request.MentorScheduleRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
@@ -23,10 +21,9 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CompleteAccountApiController.class)
 @DisplayName("Member -> CompleteAccountApiController 테스트")
 class CompleteAccountApiControllerTest extends ControllerTest {
-    @MockBean
+    @Autowired
     private CompleteProfileUseCase completeProfileUseCase;
 
     @Nested
@@ -36,7 +33,7 @@ class CompleteAccountApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("멘토 프로필을 완성한다")
-        void success() throws Exception {
+        void success() {
             // given
             doNothing()
                     .when(completeProfileUseCase)
@@ -62,13 +59,11 @@ class CompleteAccountApiControllerTest extends ControllerTest {
                             .toList()
             );
 
-            // when
-            final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isNoContent())
-                    .andDo(successDocsWithAccessToken("MemberApi/Complete/Mentor", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    patchRequestWithAccessToken(BASE_URL, request),
+                    status().isNoContent(),
+                    successDocsWithAccessToken("MemberApi/Complete/Mentor", createHttpSpecSnippets(
                             requestFields(
                                     body("introduction", "자기소개", false),
                                     body("schedules", "멘토링 스케줄", false),
@@ -80,7 +75,8 @@ class CompleteAccountApiControllerTest extends ControllerTest {
                                     body("schedules[].endTime.hour", "종료 시간 (Hour)", "KST", false),
                                     body("schedules[].endTime.minute", "종료 시간 (Minute)", "KST", false)
                             )
-                    )));
+                    ))
+            );
         }
     }
 
@@ -91,7 +87,7 @@ class CompleteAccountApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("멘티 프로필을 완성한다")
-        void success() throws Exception {
+        void success() {
             // given
             doNothing()
                     .when(completeProfileUseCase)
@@ -99,17 +95,16 @@ class CompleteAccountApiControllerTest extends ControllerTest {
 
             final CompleteMenteeProfileRequest request = new CompleteMenteeProfileRequest(MENTEE_1.getIntroduction());
 
-            // when
-            final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isNoContent())
-                    .andDo(successDocsWithAccessToken("MemberApi/Complete/Mentee", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    patchRequestWithAccessToken(BASE_URL, request),
+                    status().isNoContent(),
+                    successDocsWithAccessToken("MemberApi/Complete/Mentee", createHttpSpecSnippets(
                             requestFields(
                                     body("introduction", "자기소개", false)
                             )
-                    )));
+                    ))
+            );
         }
     }
 }

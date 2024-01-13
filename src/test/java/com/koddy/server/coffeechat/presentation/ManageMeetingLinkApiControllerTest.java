@@ -1,5 +1,6 @@
 package com.koddy.server.coffeechat.presentation;
 
+import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.coffeechat.application.usecase.ManageMeetingLinkUseCase;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkResponse;
 import com.koddy.server.coffeechat.presentation.dto.request.CreateMeetingLinkRequest;
@@ -9,9 +10,7 @@ import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
@@ -33,10 +32,9 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ManageMeetingLinkApiController.class)
 @DisplayName("CoffeeChat -> ManageMeetingLinkApiController 테스트")
 class ManageMeetingLinkApiControllerTest extends ControllerTest {
-    @MockBean
+    @Autowired
     private ManageMeetingLinkUseCase manageMeetingLinkUseCase;
 
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
@@ -57,17 +55,16 @@ class ManageMeetingLinkApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("멘토가 아니면 권한이 없다")
-        void throwExceptionByInvalidPermission() throws Exception {
+        void throwExceptionByInvalidPermission() {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee.getId(), mentee.getRole());
 
-            // when
-            final RequestBuilder requestBuilder = postWithAccessToken(new PathWithVariables(BASE_URL, "zoom"), request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isForbidden())
-                    .andDo(failureDocsWithAccessToken("CoffeeChatApi/MeetingLink/Create/Failure", createHttpSpecSnippets(
+            // when - then
+            failedExecute(
+                    postRequestWithAccessToken(new UrlWithVariables(BASE_URL, "zoom"), request),
+                    status().isForbidden(),
+                    ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
+                    failureDocsWithAccessToken("CoffeeChatApi/MeetingLink/Create/Failure", createHttpSpecSnippets(
                             pathParameters(
                                     path("provider", "OAuth & Link Provider", "zoom", true)
                             ),
@@ -79,14 +76,15 @@ class ManageMeetingLinkApiControllerTest extends ControllerTest {
                                     body("start", "회의 시작 시간", "KST", true),
                                     body("end", "회의 종료 시간", "KST", true)
                             )
-                    )));
+                    ))
+            );
         }
 
         @Test
         @DisplayName("커피챗 링크를 생성한다")
-        void success() throws Exception {
+        void success() {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             given(manageMeetingLinkUseCase.create(any())).willReturn(new ZoomMeetingLinkResponse(
                     "88141392261",
                     "sjiwon4491@gmail.com",
@@ -95,13 +93,11 @@ class ManageMeetingLinkApiControllerTest extends ControllerTest {
                     60
             ));
 
-            // when
-            final RequestBuilder requestBuilder = postWithAccessToken(new PathWithVariables(BASE_URL, "zoom"), request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isOk())
-                    .andDo(successDocsWithAccessToken("CoffeeChatApi/MeetingLink/Create/Success", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    postRequestWithAccessToken(new UrlWithVariables(BASE_URL, "zoom"), request),
+                    status().isOk(),
+                    successDocsWithAccessToken("CoffeeChatApi/MeetingLink/Create/Success", createHttpSpecSnippets(
                             pathParameters(
                                     path("provider", "OAuth & Link Provider", "zoom", true)
                             ),
@@ -120,7 +116,8 @@ class ManageMeetingLinkApiControllerTest extends ControllerTest {
                                     body("joinUrl", "회의 참여 URL"),
                                     body("duration", "회의 시간 (Minute 기준)")
                             )
-                    )));
+                    ))
+            );
         }
     }
 
@@ -131,45 +128,44 @@ class ManageMeetingLinkApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("멘토가 아니면 권한이 없다")
-        void throwExceptionByInvalidPermission() throws Exception {
+        void throwExceptionByInvalidPermission() {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee.getId(), mentee.getRole());
 
-            // when
-            final RequestBuilder requestBuilder = deleteWithAccessToken(new PathWithVariables(BASE_URL, "zoom", "88141392261"));
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isForbidden())
-                    .andDo(failureDocsWithAccessToken("CoffeeChatApi/MeetingLink/Delete/Failure", createHttpSpecSnippets(
+            // when - then
+            failedExecute(
+                    deleteRequestWithAccessToken(new UrlWithVariables(BASE_URL, "zoom", "88141392261")),
+                    status().isForbidden(),
+                    ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
+                    failureDocsWithAccessToken("CoffeeChatApi/MeetingLink/Delete/Failure", createHttpSpecSnippets(
                             pathParameters(
                                     path("provider", "OAuth & Link Provider", "zoom", true),
                                     path("meetingId", "미팅 ID", true)
                             )
-                    )));
+                    ))
+            );
         }
 
         @Test
         @DisplayName("생성한 커피챗 링크를 삭제한다")
-        void success() throws Exception {
+        void success() {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             doNothing()
                     .when(manageMeetingLinkUseCase)
                     .delete(any());
 
-            // when
-            final RequestBuilder requestBuilder = deleteWithAccessToken(new PathWithVariables(BASE_URL, "zoom", "88141392261"));
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isNoContent())
-                    .andDo(successDocsWithAccessToken("CoffeeChatApi/MeetingLink/Delete/Success", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    deleteRequestWithAccessToken(new UrlWithVariables(BASE_URL, "zoom", "88141392261")),
+                    status().isNoContent(),
+                    successDocsWithAccessToken("CoffeeChatApi/MeetingLink/Delete/Success", createHttpSpecSnippets(
                             pathParameters(
                                     path("provider", "OAuth & Link Provider", "zoom", true),
                                     path("meetingId", "미팅 ID", "미팅 생성 시 응답 받은 ID", true)
                             )
-                    )));
+                    ))
+            );
         }
     }
 }

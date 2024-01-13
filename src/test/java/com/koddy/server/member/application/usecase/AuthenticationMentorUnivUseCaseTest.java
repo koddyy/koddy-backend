@@ -3,7 +3,7 @@ package com.koddy.server.member.application.usecase;
 import com.koddy.server.auth.application.adapter.AuthenticationProcessor;
 import com.koddy.server.auth.domain.model.code.AuthKeyGenerator;
 import com.koddy.server.auth.exception.AuthException;
-import com.koddy.server.common.UseCaseTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.application.usecase.command.AuthenticationConfirmWithMailCommand;
 import com.koddy.server.member.application.usecase.command.AuthenticationWithMailCommand;
 import com.koddy.server.member.application.usecase.command.AuthenticationWithProofDataCommand;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("Member -> AuthenticationMentorUnivUseCase 테스트")
-class AuthenticationMentorUnivUseCaseTest extends UseCaseTest {
+class AuthenticationMentorUnivUseCaseTest extends UnitTest {
     private static final String AUTH_KEY_PREFIX = "MENTOR-MAIL-AUTH:%s";
     private static final String AUTH_CODE = "123456";
 

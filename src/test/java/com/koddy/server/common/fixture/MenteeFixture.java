@@ -4,6 +4,8 @@ import com.koddy.server.acceptance.member.MemberAcceptanceStep;
 import com.koddy.server.auth.domain.model.AuthMember;
 import com.koddy.server.auth.domain.model.AuthToken;
 import com.koddy.server.auth.infrastructure.oauth.google.response.GoogleUserResponse;
+import com.koddy.server.auth.infrastructure.oauth.kakao.response.KakaoUserResponse;
+import com.koddy.server.auth.infrastructure.oauth.zoom.response.ZoomUserResponse;
 import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Nationality;
@@ -12,6 +14,7 @@ import com.koddy.server.member.domain.model.mentee.Mentee;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -111,6 +114,31 @@ public enum MenteeFixture {
                 this.email.getValue(),
                 true,
                 "kr"
+        );
+    }
+
+    public KakaoUserResponse toKakaoUserResponse() {
+        return new KakaoUserResponse(
+                UUID.randomUUID().toString(),
+                LocalDateTime.now(),
+                null
+        );
+    }
+
+    public ZoomUserResponse toZoomUserResponse() {
+        return new ZoomUserResponse(
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                this.name,
+                this.name,
+                this.name,
+                this.email.getValue(),
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                "Asia/Seoul",
+                UUID.randomUUID().toString()
         );
     }
 

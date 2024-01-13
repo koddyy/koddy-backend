@@ -1,6 +1,6 @@
 package com.koddy.server.member.application.usecase;
 
-import com.koddy.server.common.UseCaseTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.application.usecase.query.response.MenteeProfile;
 import com.koddy.server.member.application.usecase.query.response.MentorProfile;
 import com.koddy.server.member.domain.model.Language;
@@ -28,7 +28,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 @DisplayName("Member -> GetMemberPrivateProfileUseCase 테스트")
-class GetMemberPrivateProfileUseCaseTest extends UseCaseTest {
+class GetMemberPrivateProfileUseCaseTest extends UnitTest {
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final MenteeRepository menteeRepository = mock(MenteeRepository.class);
     private final GetMemberPrivateProfileUseCase sut = new GetMemberPrivateProfileUseCase(mentorRepository, menteeRepository);
