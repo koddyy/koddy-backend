@@ -17,10 +17,11 @@ import com.koddy.server.member.presentation.dto.request.UpdateMentorScheduleRequ
 import io.restassured.response.ValidatableResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import static com.koddy.server.acceptance.CommonRequestFixture.deleteRequest;
-import static com.koddy.server.acceptance.CommonRequestFixture.getRequest;
-import static com.koddy.server.acceptance.CommonRequestFixture.patchRequest;
+import static com.koddy.server.acceptance.CommonRequestFixture.deleteRequestWithAccessToken;
+import static com.koddy.server.acceptance.CommonRequestFixture.getRequestWithAccessToken;
+import static com.koddy.server.acceptance.CommonRequestFixture.patchRequestWithAccessToken;
 import static com.koddy.server.acceptance.CommonRequestFixture.postRequest;
+import static com.koddy.server.acceptance.CommonRequestFixture.postRequestWithAccessToken;
 
 public class MemberAcceptanceStep {
     public static ValidatableResponse 멘토_회원가입_후_로그인을_진행한다(final MentorFixture fixture) {
@@ -46,7 +47,7 @@ public class MemberAcceptanceStep {
                 fixture.getUniversityProfile().getEnteredIn()
         );
 
-        return postRequest(request, uri);
+        return postRequest(uri, request);
     }
 
     public static ValidatableResponse 멘티_회원가입_후_로그인을_진행한다(final MenteeFixture fixture) {
@@ -72,7 +73,7 @@ public class MemberAcceptanceStep {
                 fixture.getInterest().getMajor()
         );
 
-        return postRequest(request, uri);
+        return postRequest(uri, request);
     }
 
     public static ValidatableResponse 서비스를_탈퇴한다(final String accessToken) {
@@ -82,7 +83,7 @@ public class MemberAcceptanceStep {
                 .toUri()
                 .getPath();
 
-        return deleteRequest(accessToken, uri);
+        return deleteRequestWithAccessToken(uri, accessToken);
     }
 
     public static ValidatableResponse 멘토_프로필을_완성시킨다(final MentorFixture fixture, final String accessToken) {
@@ -112,7 +113,7 @@ public class MemberAcceptanceStep {
                         .toList()
         );
 
-        return patchRequest(accessToken, request, uri);
+        return patchRequestWithAccessToken(uri, request, accessToken);
     }
 
     public static ValidatableResponse 멘티_프로필을_완성시킨다(final MenteeFixture fixture, final String accessToken) {
@@ -124,7 +125,7 @@ public class MemberAcceptanceStep {
 
         final CompleteMenteeProfileRequest request = new CompleteMenteeProfileRequest(fixture.getIntroduction());
 
-        return patchRequest(accessToken, request, uri);
+        return patchRequestWithAccessToken(uri, request, accessToken);
     }
 
     public static ValidatableResponse 멘토_기본_정보를_수정한다(final MentorFixture fixture, final String accessToken) {
@@ -150,7 +151,7 @@ public class MemberAcceptanceStep {
                 fixture.getUniversityProfile().getEnteredIn()
         );
 
-        return patchRequest(accessToken, request, uri);
+        return patchRequestWithAccessToken(uri, request, accessToken);
     }
 
     public static ValidatableResponse 멘토_스케줄_정보를_수정한다(final MentorFixture fixture, final String accessToken) {
@@ -179,7 +180,7 @@ public class MemberAcceptanceStep {
                         .toList()
         );
 
-        return patchRequest(accessToken, request, uri);
+        return patchRequestWithAccessToken(uri, request, accessToken);
     }
 
     public static ValidatableResponse 멘티_기본_정보를_수정한다(final MenteeFixture fixture, final String accessToken) {
@@ -205,7 +206,7 @@ public class MemberAcceptanceStep {
                 fixture.getInterest().getMajor()
         );
 
-        return patchRequest(accessToken, request, uri);
+        return patchRequestWithAccessToken(uri, request, accessToken);
     }
 
     public static ValidatableResponse 멘토_프로필을_조회한다(final String accessToken) {
@@ -215,7 +216,7 @@ public class MemberAcceptanceStep {
                 .toUri()
                 .getPath();
 
-        return getRequest(accessToken, uri);
+        return getRequestWithAccessToken(uri, accessToken);
     }
 
     public static ValidatableResponse 멘티_프로필을_조회한다(final String accessToken) {
@@ -225,22 +226,23 @@ public class MemberAcceptanceStep {
                 .toUri()
                 .getPath();
 
-        return getRequest(accessToken, uri);
+        return getRequestWithAccessToken(uri, accessToken);
     }
 
-    public static ValidatableResponse 멘토가_메일을_통해서_학교_인증을_시도한다(final String accessToken) {
+    public static ValidatableResponse 멘토가_메일을_통해서_학교_인증을_시도한다(final String schoolMail, final String accessToken) {
         final String uri = UriComponentsBuilder
                 .fromPath("/api/mentors/me/univ/mail")
                 .build()
                 .toUri()
                 .getPath();
 
-        final AuthenticationWithMailRequest request = new AuthenticationWithMailRequest("sjiwon@kyonggi.ac.kr");
+        final AuthenticationWithMailRequest request = new AuthenticationWithMailRequest(schoolMail);
 
-        return postRequest(accessToken, request, uri);
+        return postRequestWithAccessToken(uri, request, accessToken);
     }
 
     public static ValidatableResponse 멘토가_학교_메일로_발송된_인증번호를_제출한다(
+            final String schoolMail,
             final String authCode,
             final String accessToken
     ) {
@@ -250,9 +252,9 @@ public class MemberAcceptanceStep {
                 .toUri()
                 .getPath();
 
-        final AuthenticationConfirmWithMailRequest request = new AuthenticationConfirmWithMailRequest("sjiwon@kyonggi.ac.kr", authCode);
+        final AuthenticationConfirmWithMailRequest request = new AuthenticationConfirmWithMailRequest(schoolMail, authCode);
 
-        return postRequest(accessToken, request, uri);
+        return postRequestWithAccessToken(uri, request, accessToken);
     }
 
     public static ValidatableResponse 멘토가_증명자료를_통해서_학교_인증을_시도한다(final String accessToken) {
@@ -264,6 +266,6 @@ public class MemberAcceptanceStep {
 
         final AuthenticationWithProofDataRequest request = new AuthenticationWithProofDataRequest("https://proof-data-upload-url");
 
-        return postRequest(accessToken, request, uri);
+        return postRequestWithAccessToken(uri, request, accessToken);
     }
 }

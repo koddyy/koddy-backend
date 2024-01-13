@@ -10,10 +10,7 @@ import static com.koddy.server.acceptance.CommonRequestFixture.postRequestWithAc
 import static com.koddy.server.acceptance.CommonRequestFixture.postRequestWithRefreshToken;
 
 public class AuthAcceptanceStep {
-    public static ValidatableResponse Google_OAuth_인증_URL를_생성한다(
-            final String oAuthProvider,
-            final String redirectUri
-    ) {
+    public static ValidatableResponse Google_OAuth_인증_URL를_생성한다(final String oAuthProvider, final String redirectUri) {
         final String uri = UriComponentsBuilder
                 .fromPath("/api/oauth/access/{provider}?redirectUri={redirectUri}")
                 .build(oAuthProvider, redirectUri)
@@ -35,7 +32,7 @@ public class AuthAcceptanceStep {
 
         final OAuthLoginRequest request = new OAuthLoginRequest(authorizationCode, redirectUri, state);
 
-        return postRequest(request, uri);
+        return postRequest(uri, request);
     }
 
     public static ValidatableResponse 로그아웃을_진행한다(final String accessToken) {
@@ -45,7 +42,7 @@ public class AuthAcceptanceStep {
                 .toUri()
                 .getPath();
 
-        return postRequestWithAccessToken(accessToken, uri);
+        return postRequestWithAccessToken(uri, accessToken);
     }
 
     public static ValidatableResponse 토큰을_재발급받는다(final String refreshToken) {
@@ -55,6 +52,6 @@ public class AuthAcceptanceStep {
                 .toUri()
                 .getPath();
 
-        return postRequestWithRefreshToken(refreshToken, uri);
+        return postRequestWithRefreshToken(uri, refreshToken);
     }
 }

@@ -30,7 +30,7 @@ public class FileManagementAcceptanceTest extends AcceptanceTest {
         @DisplayName("파일을 업로드한다")
         void success() {
             final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
-            파일을_업로드한다(accessToken)
+            파일을_업로드한다("cat.png", accessToken)
                     .statusCode(OK.value());
         }
     }
