@@ -2,8 +2,8 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.global.annotation.Auth;
+import com.koddy.server.global.aop.AccessControl;
 import com.koddy.server.global.aop.DailyMailAuthLimit;
-import com.koddy.server.global.aop.OnlyMentor;
 import com.koddy.server.global.utils.UniversityInfo;
 import com.koddy.server.member.application.usecase.AuthenticationMentorUnivUseCase;
 import com.koddy.server.member.application.usecase.command.AuthenticationConfirmWithMailCommand;
@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.koddy.server.member.domain.model.Role.MENTOR;
+
 @Tag(name = "멘토 학교 인증 API")
 @RestController
 @RequestMapping("/api/mentors/me/univ")
@@ -31,7 +33,7 @@ public class AuthenticationMentorUnivApiController {
 
     @Operation(summary = "메일 인증 시도 Endpoint")
     @PostMapping("/mail")
-    @OnlyMentor
+    @AccessControl(role = MENTOR)
     @DailyMailAuthLimit
     public ResponseEntity<Void> authWithMail(
             @Auth final Authenticated authenticated,
@@ -47,7 +49,7 @@ public class AuthenticationMentorUnivApiController {
 
     @Operation(summary = "메일 인증 확인 Endpoint")
     @PostMapping("/mail/confirm")
-    @OnlyMentor
+    @AccessControl(role = MENTOR)
     public ResponseEntity<Void> confirmMailAuthCode(
             @Auth final Authenticated authenticated,
             @RequestBody @Valid final AuthenticationConfirmWithMailRequest request
@@ -63,7 +65,7 @@ public class AuthenticationMentorUnivApiController {
 
     @Operation(summary = "증명자료 인증 시도 Endpoint")
     @PostMapping("/proof-data")
-    @OnlyMentor
+    @AccessControl(role = MENTOR)
     public ResponseEntity<Void> authWithProofData(
             @Auth final Authenticated authenticated,
             @RequestBody @Valid final AuthenticationWithProofDataRequest request

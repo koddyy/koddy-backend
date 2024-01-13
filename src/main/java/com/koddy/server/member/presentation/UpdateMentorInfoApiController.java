@@ -2,7 +2,7 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.global.annotation.Auth;
-import com.koddy.server.global.aop.OnlyMentor;
+import com.koddy.server.global.aop.AccessControl;
 import com.koddy.server.member.application.usecase.UpdateMentorInfoUseCase;
 import com.koddy.server.member.application.usecase.command.UpdateMentorBasicInfoCommand;
 import com.koddy.server.member.application.usecase.command.UpdateMentorScheduleCommand;
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.koddy.server.member.domain.model.Role.MENTOR;
+
 @Tag(name = "멘토 정보 수정 API")
 @RestController
 @RequestMapping("/api/mentors/me")
@@ -27,7 +29,7 @@ public class UpdateMentorInfoApiController {
 
     @Operation(summary = "멘토 기본정보 수정 Endpoint")
     @PatchMapping("/basic-info")
-    @OnlyMentor
+    @AccessControl(role = MENTOR)
     public ResponseEntity<Void> updateBasicInfo(
             @Auth final Authenticated authenticated,
             @RequestBody @Valid final UpdateMentorBasicInfoRequest request
@@ -47,7 +49,7 @@ public class UpdateMentorInfoApiController {
 
     @Operation(summary = "멘토 스케줄 수정 Endpoint")
     @PatchMapping("/schedules")
-    @OnlyMentor
+    @AccessControl(role = MENTOR)
     public ResponseEntity<Void> updateSchedule(
             @Auth final Authenticated authenticated,
             @RequestBody @Valid final UpdateMentorScheduleRequest request

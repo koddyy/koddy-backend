@@ -2,8 +2,7 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.global.annotation.Auth;
-import com.koddy.server.global.aop.OnlyMentee;
-import com.koddy.server.global.aop.OnlyMentor;
+import com.koddy.server.global.aop.AccessControl;
 import com.koddy.server.member.application.usecase.GetMemberPrivateProfileUseCase;
 import com.koddy.server.member.application.usecase.query.response.MemberProfile;
 import com.koddy.server.member.application.usecase.query.response.MenteeProfile;
@@ -15,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import static com.koddy.server.member.domain.model.Role.MENTEE;
+import static com.koddy.server.member.domain.model.Role.MENTOR;
 
 @Tag(name = "사용자 마이페이지(Private) 프로필 조회 API")
 @RestController
@@ -36,7 +38,7 @@ public class MemberPrivateProflieApiController {
 
     @Operation(summary = "멘토 마이페이지 프로필 조회 Endpoint - Deprecated by requirements")
     @GetMapping("/mentors/me")
-    @OnlyMentor
+    @AccessControl(role = MENTOR)
     public ResponseEntity<MentorProfile> getMentorProfile(
             @Auth final Authenticated authenticated
     ) {
@@ -46,7 +48,7 @@ public class MemberPrivateProflieApiController {
 
     @Operation(summary = "멘티 마이페이지 프로필 조회 Endpoint - Deprecated by requirements")
     @GetMapping("/mentees/me")
-    @OnlyMentee
+    @AccessControl(role = MENTEE)
     public ResponseEntity<MenteeProfile> getMenteeProfile(
             @Auth final Authenticated authenticated
     ) {
