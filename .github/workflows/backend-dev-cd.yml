@@ -81,5 +81,6 @@ jobs:
               --name application \
               --network koddy-network \
               -p 8080:8080 \
+              -v /home/ec2-user/koddy/logs:/app/logs \
               ${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }}
             docker image prune -f
