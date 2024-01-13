@@ -81,15 +81,15 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     }
 
     public static CoffeeChat applyMenteeToMentor(
-            final Member<?> mentee,
-            final Member<?> mentor,
+            final Member<?> applier,
+            final Member<?> target,
             final String applyReason,
             final Reservation start,
             final Reservation end
     ) {
         return new CoffeeChat(
-                mentee,
-                mentor,
+                applier,
+                target,
                 applyReason,
                 APPLY,
                 start,
@@ -99,13 +99,13 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     }
 
     public static CoffeeChat applyMentorToMentee(
-            final Member<?> mentor,
-            final Member<?> mentee,
+            final Member<?> applier,
+            final Member<?> target,
             final String applyReason
     ) {
         return new CoffeeChat(
-                mentor,
-                mentee,
+                applier,
+                target,
                 applyReason,
                 APPLY,
                 null,
