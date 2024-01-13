@@ -21,11 +21,11 @@ import static lombok.AccessLevel.PROTECTED;
 @Embeddable
 public class Strategy {
     @Enumerated(STRING)
-    @Column(name = "chat_type", nullable = false, columnDefinition = "VARCHAR(30)")
+    @Column(name = "chat_type", columnDefinition = "VARCHAR(30)")
     private Type type;
 
     @Lob
-    @Column(name = "chat_type_value", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "chat_type_value", columnDefinition = "TEXT")
     private String value;
 
     private Strategy(final Type type, final String value) {

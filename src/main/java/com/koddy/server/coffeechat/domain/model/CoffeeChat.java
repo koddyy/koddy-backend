@@ -35,19 +35,19 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "year", column = @Column(name = "start_year", nullable = false)),
-            @AttributeOverride(name = "month", column = @Column(name = "start_month", nullable = false)),
-            @AttributeOverride(name = "day", column = @Column(name = "start_day", nullable = false)),
-            @AttributeOverride(name = "time", column = @Column(name = "start_time", nullable = false))
+            @AttributeOverride(name = "year", column = @Column(name = "start_year")),
+            @AttributeOverride(name = "month", column = @Column(name = "start_month")),
+            @AttributeOverride(name = "day", column = @Column(name = "start_day")),
+            @AttributeOverride(name = "time", column = @Column(name = "start_time"))
     })
     private Reservation start;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "year", column = @Column(name = "end_year", nullable = false)),
-            @AttributeOverride(name = "month", column = @Column(name = "end_month", nullable = false)),
-            @AttributeOverride(name = "day", column = @Column(name = "end_day", nullable = false)),
-            @AttributeOverride(name = "time", column = @Column(name = "end_time", nullable = false))
+            @AttributeOverride(name = "year", column = @Column(name = "end_year")),
+            @AttributeOverride(name = "month", column = @Column(name = "end_month")),
+            @AttributeOverride(name = "day", column = @Column(name = "end_day")),
+            @AttributeOverride(name = "time", column = @Column(name = "end_time"))
     })
     private Reservation end;
 
@@ -65,29 +65,52 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     private CoffeeChat(
             final Member<?> applier,
             final Member<?> target,
+            final String applyReason,
+            final CoffeeChatStatus status,
             final Reservation start,
             final Reservation end,
-            final Strategy strategy,
-            final String applyReason,
-            final CoffeeChatStatus status
+            final Strategy strategy
     ) {
         this.applier = applier;
         this.target = target;
+        this.applyReason = applyReason;
+        this.status = status;
         this.start = start;
         this.end = end;
         this.strategy = strategy;
-        this.applyReason = applyReason;
-        this.status = status;
     }
 
-    public static CoffeeChat apply(
-            final Member<?> applier,
-            final Member<?> target,
+    public static CoffeeChat applyMenteeToMentor(
+            final Member<?> mentee,
+            final Member<?> mentor,
+            final String applyReason,
             final Reservation start,
-            final Reservation end,
-            final Strategy strategy,
+            final Reservation end
+    ) {
+        return new CoffeeChat(
+                mentee,
+                mentor,
+                applyReason,
+                APPLY,
+                start,
+                end,
+                null
+        );
+    }
+
+    public static CoffeeChat applyMentorToMentee(
+            final Member<?> mentor,
+            final Member<?> mentee,
             final String applyReason
     ) {
-        return new CoffeeChat(applier, target, start, end, strategy, applyReason, APPLY);
+        return new CoffeeChat(
+                mentor,
+                mentee,
+                applyReason,
+                APPLY,
+                null,
+                null,
+                null
+        );
     }
 }
