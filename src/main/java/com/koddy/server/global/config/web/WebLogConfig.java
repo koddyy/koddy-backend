@@ -14,7 +14,7 @@ public class WebLogConfig {
     public FilterRegistrationBean<MdcLoggingFilter> firstFilter() {
         final FilterRegistrationBean<MdcLoggingFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new MdcLoggingFilter());
-        registrationBean.addUrlPatterns("/*");
+        registrationBean.addUrlPatterns("/api/*");
         registrationBean.setOrder(1);
         registrationBean.setName("mdcLoggingFilter");
         return registrationBean;
@@ -24,7 +24,7 @@ public class WebLogConfig {
     public FilterRegistrationBean<RequestResponseCachingFilter> secondFilter() {
         final FilterRegistrationBean<RequestResponseCachingFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new RequestResponseCachingFilter());
-        registrationBean.addUrlPatterns("/*");
+        registrationBean.addUrlPatterns("/api/*");
         registrationBean.setOrder(2);
         registrationBean.setName("requestResponseCachingFilter");
         return registrationBean;
@@ -41,7 +41,7 @@ public class WebLogConfig {
                 "/api-docs*",
                 "/actuator*"
         ));
-        registrationBean.addUrlPatterns("/*");
+        registrationBean.addUrlPatterns("/api/*");
         registrationBean.setOrder(3);
         registrationBean.setName("requestLoggingFilter");
         return registrationBean;
