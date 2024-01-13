@@ -2,15 +2,14 @@ package com.koddy.server.auth.presentation;
 
 import com.koddy.server.auth.application.usecase.ReissueTokenUseCase;
 import com.koddy.server.auth.domain.model.AuthToken;
+import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.RequestBuilder;
 
-import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN;
 import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.cookie;
@@ -42,34 +41,31 @@ class TokenReissueApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("유효하지 않은 RefreshToken으로 인해 토큰 재발급에 실패한다")
-        void throwExceptionByExpiredRefreshToken() throws Exception {
+        void throwExceptionByExpiredRefreshToken() {
             // given
             applyToken(false, member.getId(), member.getRole());
 
-            // when
-            final RequestBuilder requestBuilder = postWithRefreshToken(BASE_URL);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isUnauthorized())
-                    .andExpectAll(getResultMatchersViaExceptionCode(INVALID_TOKEN))
-                    .andDo(failureDocsWithRefreshToken("TokenReissueApi/Failure"));
+            // when - then
+            failedExecute(
+                    postRequestWithRefreshToken(BASE_URL),
+                    status().isUnauthorized(),
+                    ExceptionSpec.of(AuthExceptionCode.INVALID_TOKEN),
+                    failureDocsWithRefreshToken("TokenReissueApi/Failure")
+            );
         }
 
         @Test
         @DisplayName("사용자 소유의 RefreshToken을 통해서 AccessToken과 RefreshToken을 재발급받는다")
-        void success() throws Exception {
+        void success() {
             // given
             applyToken(true, member.getId(), member.getRole());
             given(reissueTokenUseCase.invoke(any())).willReturn(new AuthToken(ACCESS_TOKEN, REFRESH_TOKEN));
 
-            // when
-            final RequestBuilder requestBuilder = postWithRefreshToken(BASE_URL);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isNoContent())
-                    .andDo(successDocsWithRefreshToken("TokenReissueApi/Success", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    postRequestWithRefreshToken(BASE_URL),
+                    status().isNoContent(),
+                    successDocsWithRefreshToken("TokenReissueApi/Success", createHttpSpecSnippets(
                             responseHeaders(
                                     header(AUTHORIZATION, "Access Token"),
                                     header(SET_COOKIE, "Set Refresh Token")
@@ -77,7 +73,8 @@ class TokenReissueApiControllerTest extends ControllerTest {
                             responseCookies(
                                     cookie(COOKIE_REFRESH_TOKEN, "Refresh Token")
                             )
-                    )));
+                    ))
+            );
         }
     }
 }

@@ -1,7 +1,9 @@
 package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.exception.AuthException;
+import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
+import com.koddy.server.global.exception.GlobalExceptionCode;
 import com.koddy.server.member.application.usecase.AuthenticationMentorUnivUseCase;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -12,19 +14,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.RequestBuilder;
 
 import java.util.UUID;
 
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_AUTH_CODE;
-import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.body;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createHttpSpecSnippets;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.failureDocsWithAccessToken;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocsWithAccessToken;
-import static com.koddy.server.global.exception.GlobalExceptionCode.NOT_PROVIDED_UNIV_DOMAIN;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -47,64 +46,61 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("멘토가 아니면 권한이 없다")
-        void throwExceptionByInvalidPermission() throws Exception {
+        void throwExceptionByInvalidPermission() {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
 
-            // when
-            final RequestBuilder requestBuilder = postWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isForbidden())
-                    .andExpectAll(getResultMatchersViaExceptionCode(INVALID_PERMISSION))
-                    .andDo(failureDocsWithAccessToken("MemberApi/Mentor/UnivAuth/Mail/Failure/Case1", createHttpSpecSnippets(
+            // when - then
+            failedExecute(
+                    postRequestWithAccessToken(BASE_URL, request),
+                    status().isForbidden(),
+                    ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
+                    failureDocsWithAccessToken("MemberApi/Mentor/UnivAuth/Mail/Failure/Case1", createHttpSpecSnippets(
                             requestFields(
                                     body("schoolMail", "인증을 진행할 학교 메일", true)
                             )
-                    )));
+                    ))
+            );
         }
 
         @Test
-        @DisplayName("멘토가 아니면 권한이 없다")
-        void throwExceptionByInvalidUnivDomain() throws Exception {
+        @DisplayName("파악할 수 없는 대학교 도메인은 임시적으로 인증이 불가능하다")
+        void throwExceptionByInvalidUnivDomain() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
 
-            // when
-            final RequestBuilder requestBuilder = postWithAccessToken(BASE_URL, new AuthenticationWithMailRequest("sjiwon@kyonggi.edu"));
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isBadRequest())
-                    .andExpectAll(getResultMatchersViaExceptionCode(NOT_PROVIDED_UNIV_DOMAIN))
-                    .andDo(failureDocsWithAccessToken("MemberApi/Mentor/UnivAuth/Mail/Failure/Case2", createHttpSpecSnippets(
+            // when - then
+            failedExecute(
+                    postRequestWithAccessToken(BASE_URL, new AuthenticationWithMailRequest("sjiwon@kyonggi.edu")),
+                    status().isBadRequest(),
+                    ExceptionSpec.of(GlobalExceptionCode.NOT_PROVIDED_UNIV_DOMAIN),
+                    failureDocsWithAccessToken("MemberApi/Mentor/UnivAuth/Mail/Failure/Case2", createHttpSpecSnippets(
                             requestFields(
                                     body("schoolMail", "인증을 진행할 학교 메일", true)
                             )
-                    )));
+                    ))
+            );
         }
 
         @Test
         @DisplayName("학교 인증을 메일로 시도한다")
-        void success() throws Exception {
+        void success() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
             doNothing()
                     .when(authenticationMentorUnivUseCase)
                     .authWithMail(any());
 
-            // when
-            final RequestBuilder requestBuilder = postWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isNoContent())
-                    .andDo(successDocsWithAccessToken("MemberApi/Mentor/UnivAuth/Mail/Success", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    postRequestWithAccessToken(BASE_URL, request),
+                    status().isNoContent(),
+                    successDocsWithAccessToken("MemberApi/Mentor/UnivAuth/Mail/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("schoolMail", "인증을 진행할 학교 메일", true)
                             )
-                    )));
+                    ))
+            );
         }
     }
 
@@ -119,70 +115,67 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("멘토가 아니면 권한이 없다")
-        void throwExceptionByInvalidPermission() throws Exception {
+        void throwExceptionByInvalidPermission() {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
 
-            // when
-            final RequestBuilder requestBuilder = postWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isForbidden())
-                    .andExpectAll(getResultMatchersViaExceptionCode(INVALID_PERMISSION))
-                    .andDo(failureDocsWithAccessToken("MemberApi/Mentor/UnivAuth/Mail/Confirm/Failure/Case1", createHttpSpecSnippets(
+            // when - then
+            failedExecute(
+                    postRequestWithAccessToken(BASE_URL, request),
+                    status().isForbidden(),
+                    ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
+                    failureDocsWithAccessToken("MemberApi/Mentor/UnivAuth/Mail/Confirm/Failure/Case1", createHttpSpecSnippets(
                             requestFields(
                                     body("schoolMail", "인증을 진행할 학교 메일", true),
                                     body("authCode", "인증번호", true)
                             )
-                    )));
+                    ))
+            );
         }
 
         @Test
         @DisplayName("인증번호가 일치하지 않으면 실패한다")
-        void throwExceptionByInvalidAuthCode() throws Exception {
+        void throwExceptionByInvalidAuthCode() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
             doThrow(new AuthException(INVALID_AUTH_CODE))
                     .when(authenticationMentorUnivUseCase)
                     .confirmMailAuthCode(any());
 
-            // when
-            final RequestBuilder requestBuilder = postWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isConflict())
-                    .andExpectAll(getResultMatchersViaExceptionCode(INVALID_AUTH_CODE))
-                    .andDo(failureDocsWithAccessToken("MemberApi/Mentor/UnivAuth/Mail/Confirm/Failure/Case2", createHttpSpecSnippets(
+            // when - then
+            failedExecute(
+                    postRequestWithAccessToken(BASE_URL, request),
+                    status().isConflict(),
+                    ExceptionSpec.of(AuthExceptionCode.INVALID_AUTH_CODE),
+                    failureDocsWithAccessToken("MemberApi/Mentor/UnivAuth/Mail/Confirm/Failure/Case2", createHttpSpecSnippets(
                             requestFields(
                                     body("schoolMail", "인증을 진행할 학교 메일", true),
                                     body("authCode", "인증번호", true)
                             )
-                    )));
+                    ))
+            );
         }
 
         @Test
         @DisplayName("학교 메일로 받은 인증번호를 확인한다")
-        void success() throws Exception {
+        void success() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
             doNothing()
                     .when(authenticationMentorUnivUseCase)
                     .confirmMailAuthCode(any());
 
-            // when
-            final RequestBuilder requestBuilder = postWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isNoContent())
-                    .andDo(successDocsWithAccessToken("MemberApi/Mentor/UnivAuth/Mail/Confirm/Success", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    postRequestWithAccessToken(BASE_URL, request),
+                    status().isNoContent(),
+                    successDocsWithAccessToken("MemberApi/Mentor/UnivAuth/Mail/Confirm/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("schoolMail", "인증을 진행할 학교 메일", true),
                                     body("authCode", "인증번호", true)
                             )
-                    )));
+                    ))
+            );
         }
     }
 
@@ -194,44 +187,42 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("멘토가 아니면 권한이 없다")
-        void throwExceptionByInvalidPermission() throws Exception {
+        void throwExceptionByInvalidPermission() {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
 
-            // when
-            final RequestBuilder requestBuilder = postWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isForbidden())
-                    .andExpectAll(getResultMatchersViaExceptionCode(INVALID_PERMISSION))
-                    .andDo(failureDocsWithAccessToken("MemberApi/Mentor/UnivAuth/ProofData/Failure", createHttpSpecSnippets(
+            // when - then
+            failedExecute(
+                    postRequestWithAccessToken(BASE_URL, request),
+                    status().isForbidden(),
+                    ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
+                    failureDocsWithAccessToken("MemberApi/Mentor/UnivAuth/ProofData/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("proofDataUploadUrl", "Presigned로 업로드한 증명 자료 URL", "하나만 업로드", true)
                             )
-                    )));
+                    ))
+            );
         }
 
         @Test
         @DisplayName("학교 인증을 증명 자료로 시도한다")
-        void success() throws Exception {
+        void success() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
             doNothing()
                     .when(authenticationMentorUnivUseCase)
                     .authWithProofData(any());
 
-            // when
-            final RequestBuilder requestBuilder = postWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isNoContent())
-                    .andDo(successDocsWithAccessToken("MemberApi/Mentor/UnivAuth/ProofData/Success", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    postRequestWithAccessToken(BASE_URL, request),
+                    status().isNoContent(),
+                    successDocsWithAccessToken("MemberApi/Mentor/UnivAuth/ProofData/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("proofDataUploadUrl", "Presigned로 업로드한 증명 자료 URL", "PDF 파일 + 하나만 업로드", true)
                             )
-                    )));
+                    ))
+            );
         }
     }
 }

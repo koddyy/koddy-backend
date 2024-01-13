@@ -4,12 +4,12 @@ import com.koddy.server.common.ControllerTest;
 import com.koddy.server.file.application.usecase.RegisterPresignedUrlUseCase;
 import com.koddy.server.file.application.usecase.UploadFileUseCase;
 import com.koddy.server.file.domain.model.PresignedUrlDetails;
+import com.koddy.server.global.exception.GlobalExceptionCode;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.RequestBuilder;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +22,6 @@ import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFa
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createHttpSpecSnippets;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.failureDocsWithAccessToken;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocsWithAccessToken;
-import static com.koddy.server.global.exception.GlobalExceptionCode.VALIDATION_ERROR;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -47,25 +46,24 @@ class FileManagementApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("파일을 업로드한다")
-        void success() throws Exception {
+        void success() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
             given(uploadFileUseCase.invoke(any())).willReturn("https://file-upload-url");
 
-            // when
-            final RequestBuilder requestBuilder = multipartWithAccessToken(BASE_URL, List.of(createFile("cat.png", "image/png")));
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isOk())
-                    .andDo(successDocsWithAccessToken("FileApi/Upload", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    multipartRequestWithAccessToken(BASE_URL, List.of(createFile("cat.png", "image/png"))),
+                    status().isOk(),
+                    successDocsWithAccessToken("FileApi/Upload", createHttpSpecSnippets(
                             requestParts(
                                     file("file", "이미지", "파일 확장자 = JPG, JPEG, PNG", true)
                             ),
                             responseFields(
                                     body("result", "파일 업로드 URL")
                             )
-                    )));
+                    ))
+            );
         }
     }
 
@@ -76,27 +74,26 @@ class FileManagementApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("이미지 파일이 아니면 현재 API를 통해서 Presigned Url을 얻을 수 없다")
-        void throwExceptionByNotImage() throws Exception {
+        void throwExceptionByNotImage() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
 
-            // when
-            final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL, Map.of("fileName", "cat.pdf"));
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isBadRequest())
-                    .andExpectAll(getResultMatchersViaExceptionCode(VALIDATION_ERROR, "이미지 파일[JPG, JPEG, PNG]을 업로드해주세요."))
-                    .andDo(failureDocsWithAccessToken("FileApi/GetPresignedUrl/Image/Failure", createHttpSpecSnippets(
+            // when - then
+            failedExecute(
+                    getRequestWithAccessToken(BASE_URL, Map.of("fileName", "cat.pdf")),
+                    status().isBadRequest(),
+                    ExceptionSpec.of(GlobalExceptionCode.VALIDATION_ERROR, "이미지 파일[JPG, JPEG, PNG]을 업로드해주세요."),
+                    failureDocsWithAccessToken("FileApi/GetPresignedUrl/Image/Failure", createHttpSpecSnippets(
                             queryParameters(
                                     query("fileName", "프로필 이미지 사진 파일명", "프로필 이미지 사진 확장자 = JPG, JPEG, PNG", true)
                             )
-                    )));
+                    ))
+            );
         }
 
         @Test
         @DisplayName("Presigned Url을 얻는다")
-        void success() throws Exception {
+        void success() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
             given(registerPresignedUrlUseCase.invoke(any())).willReturn(new PresignedUrlDetails(
@@ -104,13 +101,11 @@ class FileManagementApiControllerTest extends ControllerTest {
                     "https://storage-url/path/fileName.png"
             ));
 
-            // when
-            final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL, Map.of("fileName", "cat.png"));
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isOk())
-                    .andDo(successDocsWithAccessToken("FileApi/GetPresignedUrl/Image/Success", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    getRequestWithAccessToken(BASE_URL, Map.of("fileName", "cat.png")),
+                    status().isOk(),
+                    successDocsWithAccessToken("FileApi/GetPresignedUrl/Image/Success", createHttpSpecSnippets(
                             queryParameters(
                                     query("fileName", "프로필 이미지 사진 파일명", "프로필 이미지 사진 확장자 = JPG, JPEG, PNG", true)
                             ),
@@ -118,7 +113,8 @@ class FileManagementApiControllerTest extends ControllerTest {
                                     body("preSignedUrl", "Presigned Url", "PUT 요청으로 이미지 업로드 (URL + File)"),
                                     body("uploadFileUrl", "스토리지 저장 URL", "스토리지 이미지 업로드 후 서버로 전송할 URL")
                             )
-                    )));
+                    ))
+            );
         }
     }
 
@@ -129,27 +125,26 @@ class FileManagementApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("PDF 파일이 아니면 현재 API를 통해서 Presigned Url을 얻을 수 없다")
-        void throwExceptionByNotImage() throws Exception {
+        void throwExceptionByNotImage() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
 
-            // when
-            final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL, Map.of("fileName", "cat.png"));
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isBadRequest())
-                    .andExpectAll(getResultMatchersViaExceptionCode(VALIDATION_ERROR, "PDF 파일을 업로드해주세요."))
-                    .andDo(failureDocsWithAccessToken("FileApi/GetPresignedUrl/Pdf/Failure", createHttpSpecSnippets(
+            // when - then
+            failedExecute(
+                    getRequestWithAccessToken(BASE_URL, Map.of("fileName", "cat.png")),
+                    status().isBadRequest(),
+                    ExceptionSpec.of(GlobalExceptionCode.VALIDATION_ERROR, "PDF 파일을 업로드해주세요."),
+                    failureDocsWithAccessToken("FileApi/GetPresignedUrl/Pdf/Failure", createHttpSpecSnippets(
                             queryParameters(
                                     query("fileName", "멘토 증명자료 파일명", "멘토 증명자료 파일 확장자 = PDF", true)
                             )
-                    )));
+                    ))
+            );
         }
 
         @Test
         @DisplayName("Presigned Url을 얻는다")
-        void success() throws Exception {
+        void success() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
             given(registerPresignedUrlUseCase.invoke(any())).willReturn(new PresignedUrlDetails(
@@ -157,13 +152,11 @@ class FileManagementApiControllerTest extends ControllerTest {
                     "https://storage-url/path/fileName.pdf"
             ));
 
-            // when
-            final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL, Map.of("fileName", "cat.pdf"));
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isOk())
-                    .andDo(successDocsWithAccessToken("FileApi/GetPresignedUrl/Pdf/Success", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    getRequestWithAccessToken(BASE_URL, Map.of("fileName", "cat.pdf")),
+                    status().isOk(),
+                    successDocsWithAccessToken("FileApi/GetPresignedUrl/Pdf/Success", createHttpSpecSnippets(
                             queryParameters(
                                     query("fileName", "멘토 증명자료 파일명", "멘토 증명자료 파일 확장자 = PDF", true)
                             ),
@@ -171,7 +164,8 @@ class FileManagementApiControllerTest extends ControllerTest {
                                     body("preSignedUrl", "Presigned Url", "PUT 요청으로 이미지 업로드 (URL + File)"),
                                     body("uploadFileUrl", "스토리지 저장 URL", "스토리지 이미지 업로드 후 서버로 전송할 URL")
                             )
-                    )));
+                    ))
+            );
         }
     }
 }

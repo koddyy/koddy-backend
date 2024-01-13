@@ -1,5 +1,6 @@
 package com.koddy.server.member.presentation;
 
+import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.UpdateMenteeInfoUseCase;
 import com.koddy.server.member.domain.model.mentee.Mentee;
@@ -10,9 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.RequestBuilder;
 
-import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.body;
@@ -51,18 +50,16 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("멘티가 아니면 권한이 없다")
-        void throwExceptionByInvalidPermission() throws Exception {
+        void throwExceptionByInvalidPermission() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
 
-            // when
-            final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isForbidden())
-                    .andExpectAll(getResultMatchersViaExceptionCode(INVALID_PERMISSION))
-                    .andDo(failureDocsWithAccessToken("MemberApi/Update/Mentee/BasicInfo/Failure", createHttpSpecSnippets(
+            // when - then
+            failedExecute(
+                    patchRequestWithAccessToken(BASE_URL, request),
+                    status().isForbidden(),
+                    ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
+                    failureDocsWithAccessToken("MemberApi/Update/Mentee/BasicInfo/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
                                     body("nationality", "국적", "한국 미국 일본 중국 베트남 Others", true),
@@ -75,25 +72,24 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)
                             )
-                    )));
+                    ))
+            );
         }
 
         @Test
         @DisplayName("멘티 기본정보를 수정한다")
-        void success() throws Exception {
+        void success() {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
             doNothing()
                     .when(updateMenteeInfoUseCase)
                     .updateBasicInfo(any());
 
-            // when
-            final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isNoContent())
-                    .andDo(successDocsWithAccessToken("MemberApi/Update/Mentee/BasicInfo/Success", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    patchRequestWithAccessToken(BASE_URL, request),
+                    status().isNoContent(),
+                    successDocsWithAccessToken("MemberApi/Update/Mentee/BasicInfo/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
                                     body("nationality", "국적", "한국 미국 일본 중국 베트남 Others", true),
@@ -105,7 +101,8 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)
                             )
-                    )));
+                    ))
+            );
         }
     }
 }

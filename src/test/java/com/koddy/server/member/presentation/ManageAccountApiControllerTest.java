@@ -12,7 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.RequestBuilder;
 
 import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
@@ -31,7 +30,6 @@ import static org.springframework.restdocs.cookies.CookieDocumentation.responseC
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Member -> ManageAccountApiController 테스트")
@@ -49,7 +47,7 @@ class ManageAccountApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("멘토 회원가입 + 로그인을 진행한다")
-        void success() throws Exception {
+        void success() {
             // given
             final AuthMember loginResponse = MENTOR_1.toAuthMember();
             given(signUpUsecase.signUpMentor(any())).willReturn(loginResponse);
@@ -70,17 +68,11 @@ class ManageAccountApiControllerTest extends ControllerTest {
                     MENTOR_1.getUniversityProfile().getEnteredIn()
             );
 
-            // when
-            final RequestBuilder requestBuilder = post(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpectAll(
-                            status().isOk(),
-                            jsonPath("$.id").exists(),
-                            jsonPath("$.id").value(1L)
-                    )
-                    .andDo(successDocs("MemberApi/SignUp/Mentor", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    postRequest(BASE_URL, request),
+                    status().isOk(),
+                    successDocs("MemberApi/SignUp/Mentor", createHttpSpecSnippets(
                             requestFields(
                                     body("email", "이메일", true),
                                     body("name", "이름", true),
@@ -103,7 +95,8 @@ class ManageAccountApiControllerTest extends ControllerTest {
                                     body("name", "사용자 이름"),
                                     body("profileImageUrl", "사용자 프로필 이미지")
                             )
-                    )));
+                    ))
+            );
         }
     }
 
@@ -114,7 +107,7 @@ class ManageAccountApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("멘티 회원가입 + 로그인을 진행한다")
-        void success() throws Exception {
+        void success() {
             // given
             final AuthMember loginResponse = MENTEE_1.toAuthMember();
             given(signUpUsecase.signUpMentee(any())).willReturn(loginResponse);
@@ -135,17 +128,11 @@ class ManageAccountApiControllerTest extends ControllerTest {
                     MENTEE_1.getInterest().getMajor()
             );
 
-            // when
-            final RequestBuilder requestBuilder = post(BASE_URL, request);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpectAll(
-                            status().isOk(),
-                            jsonPath("$.id").exists(),
-                            jsonPath("$.id").value(1L)
-                    )
-                    .andDo(successDocs("MemberApi/SignUp/Mentee", createHttpSpecSnippets(
+            // when - then
+            successfulExecute(
+                    postRequest(BASE_URL, request),
+                    status().isOk(),
+                    successDocs("MemberApi/SignUp/Mentee", createHttpSpecSnippets(
                             requestFields(
                                     body("email", "이메일", true),
                                     body("name", "이름", true),
@@ -168,7 +155,8 @@ class ManageAccountApiControllerTest extends ControllerTest {
                                     body("name", "사용자 이름"),
                                     body("profileImageUrl", "사용자 프로필 이미지")
                             )
-                    )));
+                    ))
+            );
         }
     }
 
@@ -180,20 +168,19 @@ class ManageAccountApiControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("서비스를 탙퇴한다")
-        void success() throws Exception {
+        void success() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
             doNothing()
                     .when(deleteMemberUseCase)
                     .invoke(any());
 
-            // when
-            final RequestBuilder requestBuilder = deleteWithAccessToken(BASE_URL);
-
-            // then
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isNoContent())
-                    .andDo(successDocsWithAccessToken("MemberApi/Delete"));
+            // when - then
+            successfulExecute(
+                    deleteRequestWithAccessToken(BASE_URL),
+                    status().isNoContent(),
+                    successDocsWithAccessToken("MemberApi/Delete")
+            );
         }
     }
 }
