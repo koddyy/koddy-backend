@@ -186,7 +186,7 @@ class OAuthApiControllerTest extends ControllerTest {
     }
 
     @Nested
-    @DisplayName("로그아웃 API [POST /api/oauth/logout] - Required AccessToken")
+    @DisplayName("로그아웃 API [POST /api/oauth/logout]")
     class Logout {
         private static final String BASE_URL = "/api/oauth/logout";
         private final Member<?> member = MENTOR_1.toDomain().apply(1L);

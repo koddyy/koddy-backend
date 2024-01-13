@@ -39,7 +39,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
     private final Mentee mentee = MENTEE_1.toDomain().apply(2L);
 
     @Nested
-    @DisplayName("멘토 기본정보 수정 API [PATCH /api/mentors/me/basic-info] - Required AccessToken")
+    @DisplayName("멘토 기본정보 수정 API [PATCH /api/mentors/me/basic-info]")
     class UpdateBasicInfo {
         private static final String BASE_URL = "/api/mentors/me/basic-info";
         private final UpdateMentorBasicInfoRequest request = new UpdateMentorBasicInfoRequest(
@@ -113,7 +113,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
     }
 
     @Nested
-    @DisplayName("멘토 스케줄 수정 API [PATCH /api/mentors/me/schedules] - Required AccessToken")
+    @DisplayName("멘토 스케줄 수정 API [PATCH /api/mentors/me/schedules]")
     class UpdateSchedule {
         private static final String BASE_URL = "/api/mentors/me/schedules";
         private final UpdateMentorScheduleRequest request = new UpdateMentorScheduleRequest(List.of(
