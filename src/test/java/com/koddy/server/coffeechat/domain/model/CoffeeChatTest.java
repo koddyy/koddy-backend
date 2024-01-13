@@ -26,7 +26,7 @@ class CoffeeChatTest extends ParallelTest {
 
         @Test
         @DisplayName("멘티 -> 멘토에게 커피챗을 신청한다")
-        void menteeToMentor() {
+        void applyMenteeToMentor() {
             // when
             final Reservation start = TARGET_2024_01_01.toDomain();
             final Reservation end = TARGET_2024_01_15.toDomain();
@@ -46,9 +46,9 @@ class CoffeeChatTest extends ParallelTest {
 
         @Test
         @DisplayName("멘토 -> 멘티에게 커피챗을 제안한다")
-        void mentorToMentee() {
+        void suggestMentorToMentee() {
             // when
-            final CoffeeChat coffeeChat = CoffeeChat.applyMentorToMentee(mentor, mentee, applyReason);
+            final CoffeeChat coffeeChat = CoffeeChat.suggestMentorToMentee(mentor, mentee, applyReason);
 
             // then
             assertAll(

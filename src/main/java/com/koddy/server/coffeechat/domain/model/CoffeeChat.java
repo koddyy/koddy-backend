@@ -98,7 +98,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         );
     }
 
-    public static CoffeeChat applyMentorToMentee(
+    public static CoffeeChat suggestMentorToMentee(
             final Member<?> applier,
             final Member<?> target,
             final String applyReason

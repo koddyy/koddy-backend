@@ -13,16 +13,16 @@ import lombok.RequiredArgsConstructor;
 
 @UseCase
 @RequiredArgsConstructor
-public class ApplyCoffeeChatUseCase {
+public class CreateCoffeeChatUseCase {
     private final MentorRepository mentorRepository;
     private final MenteeRepository menteeRepository;
     private final CoffeeChatRepository coffeeChatRepository;
 
-    public Long applyMentorToMentee(final MentorSuggestCoffeeChatCommand command) {
+    public Long suggestMentorToMentee(final MentorSuggestCoffeeChatCommand command) {
         final Mentor applier = mentorRepository.getById(command.mentorId());
         final Mentee target = menteeRepository.getById(command.menteeId());
 
-        return coffeeChatRepository.save(CoffeeChat.applyMentorToMentee(
+        return coffeeChatRepository.save(CoffeeChat.suggestMentorToMentee(
                 applier,
                 target,
                 command.applyReason()
