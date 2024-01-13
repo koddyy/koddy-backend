@@ -1,5 +1,6 @@
 package com.koddy.server.coffeechat.domain.model;
 
+import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.global.encrypt.Encryptor;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -9,6 +10,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
+import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.INVALID_MEETING_STRATEGY;
 import static jakarta.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -36,13 +40,21 @@ public class Strategy {
     @Getter
     @RequiredArgsConstructor
     public enum Type {
-        ZOOM_LINK("줌 링크"),
-        GOOGLE_MEET_LINK("구글 미트 링크"),
-        KAKAO_ID("카카오톡 ID"),
-        LINK_ID("라인 ID"),
-        WECHAT_ID("위챗 ID"),
+        ZOOM_LINK("줌 링크", "zoom"),
+        GOOGLE_MEET_LINK("구글 미트 링크", "google"),
+        KAKAO_ID("카카오톡 ID", "kakao"),
+        LINK_ID("라인 ID", "line"),
+        WECHAT_ID("위챗 ID", "wechat"),
         ;
 
-        private final String value;
+        private final String kor;
+        private final String eng;
+
+        public static Type from(final String eng) {
+            return Arrays.stream(values())
+                    .filter(it -> it.eng.equals(eng))
+                    .findFirst()
+                    .orElseThrow(() -> new CoffeeChatException(INVALID_MEETING_STRATEGY));
+        }
     }
 }
