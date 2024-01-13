@@ -2,6 +2,8 @@ package com.koddy.server.coffeechat.domain.model;
 
 import com.koddy.server.global.base.BaseEntity;
 import com.koddy.server.member.domain.model.Member;
+import com.koddy.server.member.domain.model.mentee.Mentee;
+import com.koddy.server.member.domain.model.mentor.Mentor;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
@@ -80,16 +82,16 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         this.strategy = strategy;
     }
 
-    public static CoffeeChat applyMenteeToMentor(
-            final Member<?> applier,
-            final Member<?> target,
+    public static CoffeeChat applyCoffeeChat(
+            final Mentee mentee,
+            final Mentor mentor,
             final String applyReason,
             final Reservation start,
             final Reservation end
     ) {
         return new CoffeeChat(
-                applier,
-                target,
+                mentee,
+                mentor,
                 applyReason,
                 APPLY,
                 start,
@@ -98,14 +100,14 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         );
     }
 
-    public static CoffeeChat suggestMentorToMentee(
-            final Member<?> applier,
-            final Member<?> target,
+    public static CoffeeChat suggestCoffeeChat(
+            final Mentor mentor,
+            final Mentee mentee,
             final String applyReason
     ) {
         return new CoffeeChat(
-                applier,
-                target,
+                mentor,
+                mentee,
                 applyReason,
                 APPLY,
                 null,

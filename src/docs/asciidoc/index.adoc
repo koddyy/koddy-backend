@@ -287,3 +287,29 @@ include::{snippets}/CoffeeChatApi/MeetingLink/Delete/Success/path-parameters.ado
 ==== HTTP Response
 
 include::{snippets}/CoffeeChatApi/MeetingLink/Delete/Success/http-response.adoc[]
+
+== 커피챗 신청/제안 API (AccessToken)
+
+=== 멘토 -> 멘티 커피챗 제안 (OnlyMentor)
+
+==== HTTP Request
+
+include::{snippets}/CoffeeChatApi/Create/MentorSuggest/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/Create/MentorSuggest/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/Create/MentorSuggest/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/CoffeeChatApi/Create/MentorSuggest/Success/http-response.adoc[]
+
+=== 멘티 -> 멘토 커피챗 신청 (OnlyMentee)
+
+==== HTTP Request
+
+include::{snippets}/CoffeeChatApi/Create/MenteeApply/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/Create/MenteeApply/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/Create/MenteeApply/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/CoffeeChatApi/Create/MenteeApply/Success/http-response.adoc[]

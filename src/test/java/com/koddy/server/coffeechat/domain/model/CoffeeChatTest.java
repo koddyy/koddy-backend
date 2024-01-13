@@ -7,11 +7,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
-import static com.koddy.server.common.fixture.ReservationFixture.TARGET_2024_01_01;
-import static com.koddy.server.common.fixture.ReservationFixture.TARGET_2024_01_15;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -26,11 +26,11 @@ class CoffeeChatTest extends ParallelTest {
 
         @Test
         @DisplayName("멘티 -> 멘토에게 커피챗을 신청한다")
-        void applyMenteeToMentor() {
+        void applyCoffeeChat() {
             // when
-            final Reservation start = TARGET_2024_01_01.toDomain();
-            final Reservation end = TARGET_2024_01_15.toDomain();
-            final CoffeeChat coffeeChat = CoffeeChat.applyMenteeToMentor(mentee, mentor, applyReason, start, end);
+            final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
+            final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
+            final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end);
 
             // then
             assertAll(
@@ -46,9 +46,9 @@ class CoffeeChatTest extends ParallelTest {
 
         @Test
         @DisplayName("멘토 -> 멘티에게 커피챗을 제안한다")
-        void suggestMentorToMentee() {
+        void suggestCoffeeChat() {
             // when
-            final CoffeeChat coffeeChat = CoffeeChat.suggestMentorToMentee(mentor, mentee, applyReason);
+            final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
 
             // then
             assertAll(
