@@ -1,14 +1,14 @@
 package com.koddy.server.file.presentation;
 
 import com.koddy.server.common.ControllerTest;
-import com.koddy.server.file.application.adapter.FileManager;
+import com.koddy.server.file.application.usecase.RegisterPresignedUrlUseCase;
+import com.koddy.server.file.application.usecase.UploadFileUseCase;
 import com.koddy.server.file.domain.model.PresignedUrlDetails;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 import java.util.List;
@@ -30,11 +30,13 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(FileManagementApiController.class)
 @DisplayName("File -> FileManagementApiController 테스트")
 class FileManagementApiControllerTest extends ControllerTest {
-    @MockBean
-    private FileManager fileManager;
+    @Autowired
+    private UploadFileUseCase uploadFileUseCase;
+
+    @Autowired
+    private RegisterPresignedUrlUseCase registerPresignedUrlUseCase;
 
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
 
@@ -48,7 +50,7 @@ class FileManagementApiControllerTest extends ControllerTest {
         void success() throws Exception {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
-            given(fileManager.upload(any())).willReturn("https://file-upload-url");
+            given(uploadFileUseCase.invoke(any())).willReturn("https://file-upload-url");
 
             // when
             final RequestBuilder requestBuilder = multipartWithAccessToken(BASE_URL, List.of(createFile("cat.png", "image/png")));
@@ -97,7 +99,7 @@ class FileManagementApiControllerTest extends ControllerTest {
         void success() throws Exception {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
-            given(fileManager.createPresignedUrl(any())).willReturn(new PresignedUrlDetails(
+            given(registerPresignedUrlUseCase.invoke(any())).willReturn(new PresignedUrlDetails(
                     "https://storage-url/path/fileName.png?X-xxx=xxx",
                     "https://storage-url/path/fileName.png"
             ));
@@ -150,7 +152,7 @@ class FileManagementApiControllerTest extends ControllerTest {
         void success() throws Exception {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
-            given(fileManager.createPresignedUrl(any())).willReturn(new PresignedUrlDetails(
+            given(registerPresignedUrlUseCase.invoke(any())).willReturn(new PresignedUrlDetails(
                     "https://storage-url/path/fileName.pdf?X-xxx=xxx",
                     "https://storage-url/path/fileName.pdf"
             ));

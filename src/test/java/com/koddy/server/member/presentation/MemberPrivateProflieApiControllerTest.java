@@ -9,8 +9,7 @@ import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION;
@@ -24,10 +23,9 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(MemberPrivateProflieApiController.class)
 @DisplayName("Member -> MemberPrivateProflieApiController 테스트")
 class MemberPrivateProflieApiControllerTest extends ControllerTest {
-    @MockBean
+    @Autowired
     private GetMemberPrivateProfileUseCase getMemberPrivateProfileUseCase;
 
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);

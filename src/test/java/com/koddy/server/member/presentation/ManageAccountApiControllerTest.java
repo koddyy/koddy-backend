@@ -11,8 +11,7 @@ import com.koddy.server.member.presentation.dto.request.SignUpMentorRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
@@ -35,13 +34,12 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ManageAccountApiController.class)
 @DisplayName("Member -> ManageAccountApiController 테스트")
 class ManageAccountApiControllerTest extends ControllerTest {
-    @MockBean
+    @Autowired
     private SignUpUsecase signUpUsecase;
 
-    @MockBean
+    @Autowired
     private DeleteMemberUseCase deleteMemberUseCase;
 
     @Nested

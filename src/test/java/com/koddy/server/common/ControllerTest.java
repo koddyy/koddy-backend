@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.auth.utils.TokenProvider;
+import com.koddy.server.common.config.MockAllUseCaseBeanFactoryPostProcessor;
+import com.koddy.server.common.config.ResetMockTestExecutionListener;
 import com.koddy.server.common.config.TestAopConfig;
 import com.koddy.server.common.config.TestWebBeanConfig;
 import com.koddy.server.global.base.KoddyExceptionCode;
@@ -22,6 +24,7 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -53,7 +56,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("Controller")
 @WebMvcTest
 @ExtendWith(RestDocumentationExtension.class)
-@Import({TestAopConfig.class, TestWebBeanConfig.class})
+@Import({TestAopConfig.class, TestWebBeanConfig.class, MockAllUseCaseBeanFactoryPostProcessor.class})
+@TestExecutionListeners(
+        value = ResetMockTestExecutionListener.class,
+        mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS
+)
 @AutoConfigureRestDocs
 public abstract class ControllerTest {
     // common & external

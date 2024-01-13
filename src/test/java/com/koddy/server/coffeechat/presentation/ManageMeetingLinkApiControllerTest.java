@@ -9,8 +9,7 @@ import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 import java.time.LocalDateTime;
@@ -33,10 +32,9 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ManageMeetingLinkApiController.class)
 @DisplayName("CoffeeChat -> ManageMeetingLinkApiController 테스트")
 class ManageMeetingLinkApiControllerTest extends ControllerTest {
-    @MockBean
+    @Autowired
     private ManageMeetingLinkUseCase manageMeetingLinkUseCase;
 
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);

@@ -7,8 +7,7 @@ import com.koddy.server.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN;
@@ -29,10 +28,9 @@ import static org.springframework.restdocs.cookies.CookieDocumentation.responseC
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(TokenReissueApiController.class)
 @DisplayName("Auth -> TokenReissueApiController 테스트")
 class TokenReissueApiControllerTest extends ControllerTest {
-    @MockBean
+    @Autowired
     private ReissueTokenUseCase reissueTokenUseCase;
 
     private final Member<?> member = MENTOR_1.toDomain().apply(1L);

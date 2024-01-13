@@ -11,8 +11,7 @@ import com.koddy.server.member.presentation.dto.request.AuthenticationWithProofD
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 import java.util.UUID;
@@ -32,10 +31,9 @@ import static org.mockito.Mockito.doThrow;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AuthenticationMentorUnivApiController.class)
 @DisplayName("Member -> AuthenticationMentorUnivApiController 테스트")
 class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
-    @MockBean
+    @Autowired
     private AuthenticationMentorUnivUseCase authenticationMentorUnivUseCase;
 
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);

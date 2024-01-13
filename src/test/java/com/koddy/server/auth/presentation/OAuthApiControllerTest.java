@@ -14,8 +14,7 @@ import com.koddy.server.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 import java.util.Map;
@@ -50,16 +49,15 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(OAuthApiController.class)
 @DisplayName("Auth -> OAuthApiController 테스트")
 class OAuthApiControllerTest extends ControllerTest {
-    @MockBean
+    @Autowired
     private GetOAuthLinkUseCase getOAuthLinkUseCase;
 
-    @MockBean
+    @Autowired
     private OAuthLoginUseCase oAuthLoginUseCase;
 
-    @MockBean
+    @Autowired
     private LogoutUseCase logoutUseCase;
 
     @Nested

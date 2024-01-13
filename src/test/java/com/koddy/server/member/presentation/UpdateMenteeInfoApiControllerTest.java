@@ -9,8 +9,7 @@ import com.koddy.server.member.presentation.dto.request.UpdateMenteeBasicInfoReq
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION;
@@ -25,10 +24,9 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(UpdateMenteeInfoApiController.class)
 @DisplayName("Member -> UpdateMenteeInfoApiController 테스트")
 class UpdateMenteeInfoApiControllerTest extends ControllerTest {
-    @MockBean
+    @Autowired
     private UpdateMenteeInfoUseCase updateMenteeInfoUseCase;
 
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
