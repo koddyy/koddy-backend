@@ -22,7 +22,7 @@ public class CompleteAccountAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘토의 프로필을 완성한다 (자기소개, 스케줄)")
         void success() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             멘토_프로필을_완성시킨다(MENTOR_1, accessToken)
                     .statusCode(NO_CONTENT.value());
         }
@@ -34,7 +34,7 @@ public class CompleteAccountAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘티의 프로필을 완성한다 (자기소개)")
         void success() {
-            final String accessToken = MENTEE_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
             멘티_프로필을_완성시킨다(MENTEE_1, accessToken)
                     .statusCode(NO_CONTENT.value());
         }

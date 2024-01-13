@@ -37,7 +37,7 @@ public class AuthenticationMentorUnivAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("학교 인증은 멘토 대상이므로 멘티는 권한이 없다")
         void throwExceptionByInvalidPermission() {
-            final String accessToken = MENTEE_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
             멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, accessToken)
                     .statusCode(FORBIDDEN.value())
                     .body("errorCode", is(INVALID_PERMISSION.getErrorCode()))
@@ -47,7 +47,7 @@ public class AuthenticationMentorUnivAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("메일을 통해서 학교 인증을 시도한다")
         void success() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, accessToken)
                     .statusCode(NO_CONTENT.value());
         }
@@ -55,7 +55,7 @@ public class AuthenticationMentorUnivAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("짧은 시간동안 3회 이상 인증 시도를 하게 되면 10분동안 인증 시도 밴을 당한다 (HTTP Status 429)")
         void throwExceptionByTooManyRequest() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, accessToken)
                     .statusCode(NO_CONTENT.value());
             멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, accessToken)
@@ -75,7 +75,7 @@ public class AuthenticationMentorUnivAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("인증번호가 일치하지 않으면 인증에 실패한다")
         void throwExceptionByInvalidAuthCode() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, accessToken);
             멘토가_학교_메일로_발송된_인증번호를_제출한다(SCHOOL_MAIL, AUTH_CODE + "7", accessToken)
                     .statusCode(CONFLICT.value())
@@ -86,7 +86,7 @@ public class AuthenticationMentorUnivAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("인증번호가 일치하면 인증에 성공한다")
         void success() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, accessToken);
             멘토가_학교_메일로_발송된_인증번호를_제출한다(SCHOOL_MAIL, AUTH_CODE, accessToken)
                     .statusCode(NO_CONTENT.value());
@@ -99,7 +99,7 @@ public class AuthenticationMentorUnivAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("학교 인증은 멘토 대상이므로 멘티는 권한이 없다")
         void throwExceptionByInvalidPermission() {
-            final String accessToken = MENTEE_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
             멘토가_증명자료를_통해서_학교_인증을_시도한다(accessToken)
                     .statusCode(FORBIDDEN.value())
                     .body("errorCode", is(INVALID_PERMISSION.getErrorCode()))
@@ -109,7 +109,7 @@ public class AuthenticationMentorUnivAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("증명자료를 통해서 학교 인증을 시도한다")
         void success() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             멘토가_증명자료를_통해서_학교_인증을_시도한다(accessToken)
                     .statusCode(NO_CONTENT.value());
         }

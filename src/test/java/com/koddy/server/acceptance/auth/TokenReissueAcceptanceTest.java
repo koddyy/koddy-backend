@@ -24,7 +24,7 @@ public class TokenReissueAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("유효한 RefreshToken을 통해서 AccessToken + RefreshToken을 재발급받는다")
         void success() {
-            final String refreshToken = MENTOR_1.회원가입_로그인_후_RefreshToken을_추출한다();
+            final String refreshToken = MENTOR_1.회원가입과_로그인을_진행한다().token().refreshToken();
             토큰을_재발급받는다(refreshToken)
                     .statusCode(NO_CONTENT.value())
                     .header(AUTHORIZATION, notNullValue(String.class))

@@ -55,7 +55,7 @@ public class OAuthAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("DB에 이메일에 대한 사용자 정보가 있으면 로그인을 진행하고 Token을 발급받는다")
         void success() {
-            MENTOR_1.회원가입_로그인_후_프로필을_완성시킨다();
+            MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             Google_OAuth_로그인을_진행한다(GOOGLE_PROVIDER, GOOGLE_MENTOR_1.getAuthorizationCode(), REDIRECT_URI, STATE)
                     .statusCode(OK.value())
                     .header(AUTHORIZATION, notNullValue(String.class))
@@ -73,7 +73,7 @@ public class OAuthAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("로그아웃을 진행한다")
         void success() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             로그아웃을_진행한다(accessToken)
                     .statusCode(NO_CONTENT.value());
         }

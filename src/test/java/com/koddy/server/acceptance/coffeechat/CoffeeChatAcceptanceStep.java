@@ -1,6 +1,8 @@
 package com.koddy.server.acceptance.coffeechat;
 
 import com.koddy.server.coffeechat.presentation.dto.request.CreateMeetingLinkRequest;
+import com.koddy.server.coffeechat.presentation.dto.request.MenteeApplyCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.dto.request.MentorSuggestCoffeeChatRequest;
 import io.restassured.response.ValidatableResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -42,5 +44,35 @@ public class CoffeeChatAcceptanceStep {
                 .getPath();
 
         return deleteRequestWithAccessToken(uri, accessToken);
+    }
+
+    public static ValidatableResponse 멘토가_멘티에게_커피챗을_제안한다(
+            final long menteeId,
+            final String accessToken
+    ) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/coffeechat/suggest/{menteeId}")
+                .build(menteeId)
+                .getPath();
+
+        final MentorSuggestCoffeeChatRequest request = new MentorSuggestCoffeeChatRequest("신청 이유...");
+
+        return postRequestWithAccessToken(uri, request, accessToken);
+    }
+
+    public static ValidatableResponse 멘티가_멘토에게_커피챗을_신청한다(
+            final LocalDateTime start,
+            final LocalDateTime end,
+            final long mentorId,
+            final String accessToken
+    ) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/coffeechat/apply/{mentorId}")
+                .build(mentorId)
+                .getPath();
+
+        final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest("신청 이유...", start, end);
+
+        return postRequestWithAccessToken(uri, request, accessToken);
     }
 }
