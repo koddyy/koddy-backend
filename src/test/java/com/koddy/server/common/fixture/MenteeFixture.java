@@ -3,14 +3,16 @@ package com.koddy.server.common.fixture;
 import com.koddy.server.acceptance.member.MemberAcceptanceStep;
 import com.koddy.server.auth.domain.model.AuthMember;
 import com.koddy.server.auth.domain.model.AuthToken;
-import com.koddy.server.auth.infrastructure.oauth.google.response.GoogleUserResponse;
-import com.koddy.server.auth.infrastructure.oauth.kakao.response.KakaoUserResponse;
-import com.koddy.server.auth.infrastructure.oauth.zoom.response.ZoomUserResponse;
+import com.koddy.server.auth.infrastructure.social.google.response.GoogleUserResponse;
+import com.koddy.server.auth.infrastructure.social.kakao.response.KakaoUserResponse;
+import com.koddy.server.auth.infrastructure.social.zoom.response.ZoomUserResponse;
 import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Nationality;
 import com.koddy.server.member.domain.model.mentee.Interest;
 import com.koddy.server.member.domain.model.mentee.Mentee;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -149,29 +151,33 @@ public enum MenteeFixture {
         );
     }
 
-    public long 회원가입_로그인_후_PK를_추출한다() {
-        return MemberAcceptanceStep.멘티_회원가입_후_로그인을_진행한다(this)
-                .extract()
-                .jsonPath()
-                .getLong("id");
+    public AuthMember 회원가입과_로그인을_진행한다() {
+        final ExtractableResponse<Response> result = MemberAcceptanceStep.멘티_회원가입_후_로그인을_진행한다(this).extract();
+        final long memberId = result.jsonPath().getLong("id");
+        final String accessToken = result.header(AUTHORIZATION).split(" ")[1];
+        final String refreshToken = result.cookie(COOKIE_REFRESH_TOKEN);
+
+        return new AuthMember(
+                memberId,
+                this.name,
+                this.profileImageUrl,
+                new AuthToken(accessToken, refreshToken)
+        );
     }
 
-    public String 회원가입_로그인_후_AccessToken을_추출한다() {
-        return MemberAcceptanceStep.멘티_회원가입_후_로그인을_진행한다(this)
-                .extract()
-                .header(AUTHORIZATION)
-                .split(" ")[1];
-    }
+    public AuthMember 회원가입과_로그인을_하고_프로필을_완성시킨다() {
+        final ExtractableResponse<Response> result = MemberAcceptanceStep.멘티_회원가입_후_로그인을_진행한다(this).extract();
+        final long memberId = result.jsonPath().getLong("id");
+        final String accessToken = result.header(AUTHORIZATION).split(" ")[1];
+        final String refreshToken = result.cookie(COOKIE_REFRESH_TOKEN);
 
-    public String 회원가입_로그인_후_프로필을_완성시킨다() {
-        final String accessToken = 회원가입_로그인_후_AccessToken을_추출한다();
         MemberAcceptanceStep.멘티_프로필을_완성시킨다(this, accessToken);
-        return accessToken;
-    }
 
-    public String 회원가입_로그인_후_RefreshToken을_추출한다() {
-        return MemberAcceptanceStep.멘티_회원가입_후_로그인을_진행한다(this)
-                .extract()
-                .cookie(COOKIE_REFRESH_TOKEN);
+        return new AuthMember(
+                memberId,
+                this.name,
+                this.profileImageUrl,
+                new AuthToken(accessToken, refreshToken)
+        );
     }
 }

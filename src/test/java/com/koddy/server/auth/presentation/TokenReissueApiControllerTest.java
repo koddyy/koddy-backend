@@ -35,7 +35,7 @@ class TokenReissueApiControllerTest extends ControllerTest {
     private final Member<?> member = MENTOR_1.toDomain().apply(1L);
 
     @Nested
-    @DisplayName("토큰 재발급 API [POST /api/token/reissue] - Required RefreshToken")
+    @DisplayName("토큰 재발급 API [POST /api/token/reissue]")
     class ReissueToken {
         private static final String BASE_URL = "/api/token/reissue";
 

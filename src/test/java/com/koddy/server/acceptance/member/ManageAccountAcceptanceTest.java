@@ -56,7 +56,7 @@ public class ManageAccountAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘토가 서비스를 탈퇴한다")
         void mentorDelete() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             서비스를_탈퇴한다(accessToken)
                     .statusCode(NO_CONTENT.value());
         }
@@ -64,7 +64,7 @@ public class ManageAccountAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘티가 서비스를 탈퇴한다")
         void menteeDelete() {
-            final String accessToken = MENTEE_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
             서비스를_탈퇴한다(accessToken)
                     .statusCode(NO_CONTENT.value());
         }

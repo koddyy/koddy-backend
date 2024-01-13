@@ -31,7 +31,7 @@ public class UpdateInfoAcceptanceTest extends AcceptanceTest {
             @Test
             @DisplayName("멘티는 접근 권한이 없다")
             void throwExceptionByInvalidPermission() {
-                final String accessToken = MENTEE_1.회원가입_로그인_후_AccessToken을_추출한다();
+                final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
                 멘토_기본_정보를_수정한다(MENTOR_2, accessToken)
                         .statusCode(FORBIDDEN.value())
                         .body("errorCode", is(INVALID_PERMISSION.getErrorCode()))
@@ -41,7 +41,7 @@ public class UpdateInfoAcceptanceTest extends AcceptanceTest {
             @Test
             @DisplayName("멘토 기본 정보를 수정한다")
             void success() {
-                final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+                final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
                 멘토_기본_정보를_수정한다(MENTOR_2, accessToken)
                         .statusCode(NO_CONTENT.value());
             }
@@ -53,7 +53,7 @@ public class UpdateInfoAcceptanceTest extends AcceptanceTest {
             @Test
             @DisplayName("멘티는 접근 권한이 없다")
             void throwExceptionByInvalidPermission() {
-                final String accessToken = MENTEE_1.회원가입_로그인_후_AccessToken을_추출한다();
+                final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
                 멘토_스케줄_정보를_수정한다(MENTOR_2, accessToken)
                         .statusCode(FORBIDDEN.value())
                         .body("errorCode", is(INVALID_PERMISSION.getErrorCode()))
@@ -63,7 +63,7 @@ public class UpdateInfoAcceptanceTest extends AcceptanceTest {
             @Test
             @DisplayName("멘토 스케줄 정보를 수정한다")
             void success() {
-                final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+                final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
                 멘토_스케줄_정보를_수정한다(MENTOR_2, accessToken)
                         .statusCode(NO_CONTENT.value());
             }
@@ -79,7 +79,7 @@ public class UpdateInfoAcceptanceTest extends AcceptanceTest {
             @Test
             @DisplayName("멘토는 접근 권한이 없다")
             void throwExceptionByInvalidPermission() {
-                final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+                final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
                 멘티_기본_정보를_수정한다(MENTEE_2, accessToken)
                         .statusCode(FORBIDDEN.value())
                         .body("errorCode", is(INVALID_PERMISSION.getErrorCode()))
@@ -89,7 +89,7 @@ public class UpdateInfoAcceptanceTest extends AcceptanceTest {
             @Test
             @DisplayName("멘티 기본 정보를 수정한다")
             void success() {
-                final String accessToken = MENTEE_1.회원가입_로그인_후_AccessToken을_추출한다();
+                final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
                 멘티_기본_정보를_수정한다(MENTEE_2, accessToken)
                         .statusCode(NO_CONTENT.value());
             }

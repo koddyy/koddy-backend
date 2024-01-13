@@ -29,8 +29,8 @@ public class FileManagementAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("파일을 업로드한다")
         void success() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
-            파일을_업로드한다(accessToken)
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
+            파일을_업로드한다("cat.png", accessToken)
                     .statusCode(OK.value());
         }
     }
@@ -41,7 +41,7 @@ public class FileManagementAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("파일 형식이 [JPG, JPEG, PNG] 아니면 예외가 발생한다")
         void throwExceptionByInvalidExtension() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             이미지_업로드에_대한_Presigned_Url을_응답받는다("cat.pdf", accessToken)
                     .statusCode(BAD_REQUEST.value())
                     .body("errorCode", is(VALIDATION_ERROR.getErrorCode()))
@@ -51,7 +51,7 @@ public class FileManagementAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("이미지 업로드에 대한 PresignedUrl을 응답받는다")
         void success() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             이미지_업로드에_대한_Presigned_Url을_응답받는다("cat.png", accessToken)
                     .statusCode(OK.value())
                     .body("preSignedUrl", startsWith(BUCKET_URL_PREFIX + BUCKET_UPLOAD_PREFIX + "cat.png"))
@@ -65,7 +65,7 @@ public class FileManagementAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("파일 형식이 PDF가 아니면 예외가 발생한다")
         void throwExceptionByInvalidExtension() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             PDF_파일_업로드에_대한_Presigned_Url을_응답받는다("cat.png", accessToken)
                     .statusCode(BAD_REQUEST.value())
                     .body("errorCode", is(VALIDATION_ERROR.getErrorCode()))
@@ -75,7 +75,7 @@ public class FileManagementAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("PDF 파일 업로드에 대한 PresignedUrl을 응답받는다")
         void success() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             PDF_파일_업로드에_대한_Presigned_Url을_응답받는다("cat.pdf", accessToken)
                     .statusCode(OK.value())
                     .body("preSignedUrl", startsWith(BUCKET_URL_PREFIX + BUCKET_UPLOAD_PREFIX + "cat.pdf"))

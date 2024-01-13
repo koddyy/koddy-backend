@@ -31,7 +31,7 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘토 프로필을 조회한다 (미완성 프로필)")
         void successWithUncomplete() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             멘토_프로필을_조회한다(accessToken)
                     .statusCode(OK.value())
                     .body("id", notNullValue(Long.class))
@@ -68,7 +68,7 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘토 프로필을 조회한다 (완성 프로필)")
         void successWithComplete() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             멘토_프로필을_완성시킨다(MENTOR_1, accessToken);
             멘토_프로필을_조회한다(accessToken)
                     .statusCode(OK.value())
@@ -110,7 +110,7 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘티 프로필을 조회한다 (미완성 프로필)")
         void successWithUncomplete() {
-            final String accessToken = MENTEE_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
             멘티_프로필을_조회한다(accessToken)
                     .statusCode(OK.value())
                     .body("id", notNullValue(Long.class))
@@ -145,7 +145,7 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘티 프로필을 조회한다 (완성 프로필)")
         void successWithComplete() {
-            final String accessToken = MENTEE_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
             멘티_프로필을_완성시킨다(MENTEE_1, accessToken);
             멘티_프로필을_조회한다(accessToken)
                     .statusCode(OK.value())

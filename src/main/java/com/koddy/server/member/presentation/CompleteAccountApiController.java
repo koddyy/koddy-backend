@@ -2,6 +2,7 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.global.annotation.Auth;
+import com.koddy.server.global.aop.AccessControl;
 import com.koddy.server.member.application.usecase.CompleteProfileUseCase;
 import com.koddy.server.member.application.usecase.command.CompleteMenteeProfileCommand;
 import com.koddy.server.member.application.usecase.command.CompleteMentorProfileCommand;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.koddy.server.member.domain.model.Role.MENTEE;
+import static com.koddy.server.member.domain.model.Role.MENTOR;
+
 @Tag(name = "사용자 프로필 완성 API")
 @RestController
 @RequestMapping("/api")
@@ -26,6 +30,7 @@ public class CompleteAccountApiController {
 
     @Operation(summary = "멘토 프로필 완성 Endpoint")
     @PatchMapping("/mentors/me/complete")
+    @AccessControl(role = MENTOR)
     public ResponseEntity<Void> completeMentor(
             @Auth final Authenticated authenticated,
             @RequestBody @Valid final CompleteMentorProfileRequest request
@@ -40,6 +45,7 @@ public class CompleteAccountApiController {
 
     @Operation(summary = "멘티 프로필 완성 Endpoint")
     @PatchMapping("/mentees/me/complete")
+    @AccessControl(role = MENTEE)
     public ResponseEntity<Void> completeMentee(
             @Auth final Authenticated authenticated,
             @RequestBody @Valid final CompleteMenteeProfileRequest request

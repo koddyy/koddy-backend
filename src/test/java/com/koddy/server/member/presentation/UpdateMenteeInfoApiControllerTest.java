@@ -32,7 +32,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
     private final Mentee mentee = MENTEE_1.toDomain().apply(2L);
 
     @Nested
-    @DisplayName("멘티 기본정보 수정 API [PATCH /api/mentees/me/basic-info] - Required AccessToken")
+    @DisplayName("멘티 기본정보 수정 API [PATCH /api/mentees/me/basic-info]")
     class UpdateBasicInfo {
         private static final String BASE_URL = "/api/mentees/me/basic-info";
         private final UpdateMenteeBasicInfoRequest request = new UpdateMenteeBasicInfoRequest(

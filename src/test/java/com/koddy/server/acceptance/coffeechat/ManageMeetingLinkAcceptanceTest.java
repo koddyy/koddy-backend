@@ -33,7 +33,7 @@ public class ManageMeetingLinkAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘티는 커피챗 링크 관련한 API에 권한이 없다")
         void throwExceptionByInvalidPermission() {
-            final String accessToken = MENTEE_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
             커피챗_링크를_자동_생성한다("zoom", accessToken)
                     .statusCode(FORBIDDEN.value())
                     .body("errorCode", is(INVALID_PERMISSION.getErrorCode()))
@@ -43,7 +43,7 @@ public class ManageMeetingLinkAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("제공하지 않는 Provider에 대한 커피챗 링크는 생성할 수 없다")
         void throwExceptionByInvalidMeetingLinkProvider() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             커피챗_링크를_자동_생성한다("kakao", accessToken)
                     .statusCode(BAD_REQUEST.value())
                     .body("errorCode", is(INVALID_MEETING_LINK_PROVIDER.getErrorCode()))
@@ -54,7 +54,7 @@ public class ManageMeetingLinkAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("줌을 통해서 커피챗 링크를 생성한다")
         void successWithZoom() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             커피챗_링크를_자동_생성한다("zoom", accessToken)
                     .statusCode(OK.value())
                     .body("id", notNullValue(String.class))
@@ -71,7 +71,7 @@ public class ManageMeetingLinkAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("자동 생성한 커피챗 링크를 삭제한다")
         void success() {
-            final String accessToken = MENTOR_1.회원가입_로그인_후_AccessToken을_추출한다();
+            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             커피챗_링크를_자동_생성한다("zoom", accessToken);
             자동_생성한_커피챗_링크를_삭제한다("zoom", "12345678", accessToken)
                     .statusCode(NO_CONTENT.value());

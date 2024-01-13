@@ -1,6 +1,6 @@
 package com.koddy.server.coffeechat.infrastructure.link.zoom;
 
-import com.koddy.server.auth.infrastructure.oauth.zoom.ZoomOAuthProperties;
+import com.koddy.server.auth.infrastructure.social.zoom.ZoomOAuthProperties;
 import com.koddy.server.coffeechat.domain.model.link.MeetingLinkResponse;
 import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkRequest;
