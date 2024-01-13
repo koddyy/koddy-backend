@@ -1,5 +1,6 @@
 package com.koddy.server.global.config;
 
+import com.koddy.server.global.decorator.MdcTaskDecorator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,7 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.setAwaitTerminationSeconds(60);
         executor.setThreadNamePrefix("Asynchronous Mail Sender Thread-");
+        executor.setTaskDecorator(new MdcTaskDecorator());
         return executor;
     }
 
