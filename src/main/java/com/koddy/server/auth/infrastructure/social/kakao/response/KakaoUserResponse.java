@@ -1,4 +1,4 @@
-package com.koddy.server.auth.infrastructure.oauth.kakao.response;
+package com.koddy.server.auth.infrastructure.social.kakao.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

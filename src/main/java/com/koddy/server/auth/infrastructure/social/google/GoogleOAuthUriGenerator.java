@@ -1,4 +1,4 @@
-package com.koddy.server.auth.infrastructure.oauth.kakao;
+package com.koddy.server.auth.infrastructure.social.google;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -8,8 +8,8 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class KakaoOAuthUriGenerator {
-    private final KakaoOAuthProperties properties;
+public class GoogleOAuthUriGenerator {
+    private final GoogleOAuthProperties properties;
 
     public String generate(final String redirectUri) {
         return UriComponentsBuilder

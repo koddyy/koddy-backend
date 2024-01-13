@@ -1,4 +1,4 @@
-package com.koddy.server.auth.infrastructure.oauth.zoom.response;
+package com.koddy.server.auth.infrastructure.social.zoom.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

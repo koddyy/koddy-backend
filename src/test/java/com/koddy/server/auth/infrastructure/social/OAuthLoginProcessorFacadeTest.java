@@ -1,12 +1,12 @@
-package com.koddy.server.auth.infrastructure.oauth;
+package com.koddy.server.auth.infrastructure.social;
 
 import com.koddy.server.auth.domain.model.oauth.OAuthUserResponse;
-import com.koddy.server.auth.infrastructure.oauth.google.GoogleOAuthConnector;
-import com.koddy.server.auth.infrastructure.oauth.google.response.GoogleUserResponse;
-import com.koddy.server.auth.infrastructure.oauth.kakao.KakaoOAuthConnector;
-import com.koddy.server.auth.infrastructure.oauth.kakao.response.KakaoUserResponse;
-import com.koddy.server.auth.infrastructure.oauth.zoom.ZoomOAuthConnector;
-import com.koddy.server.auth.infrastructure.oauth.zoom.response.ZoomUserResponse;
+import com.koddy.server.auth.infrastructure.social.google.GoogleOAuthConnector;
+import com.koddy.server.auth.infrastructure.social.google.response.GoogleUserResponse;
+import com.koddy.server.auth.infrastructure.social.kakao.KakaoOAuthConnector;
+import com.koddy.server.auth.infrastructure.social.kakao.response.KakaoUserResponse;
+import com.koddy.server.auth.infrastructure.social.zoom.ZoomOAuthConnector;
+import com.koddy.server.auth.infrastructure.social.zoom.response.ZoomUserResponse;
 import com.koddy.server.common.UnitTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

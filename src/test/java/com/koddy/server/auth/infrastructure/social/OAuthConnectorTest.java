@@ -1,9 +1,9 @@
-package com.koddy.server.auth.infrastructure.oauth;
+package com.koddy.server.auth.infrastructure.social;
 
-import com.koddy.server.auth.infrastructure.oauth.google.GoogleOAuthConnector;
-import com.koddy.server.auth.infrastructure.oauth.google.GoogleOAuthProperties;
-import com.koddy.server.auth.infrastructure.oauth.google.response.GoogleTokenResponse;
-import com.koddy.server.auth.infrastructure.oauth.google.response.GoogleUserResponse;
+import com.koddy.server.auth.infrastructure.social.google.GoogleOAuthConnector;
+import com.koddy.server.auth.infrastructure.social.google.GoogleOAuthProperties;
+import com.koddy.server.auth.infrastructure.social.google.response.GoogleTokenResponse;
+import com.koddy.server.auth.infrastructure.social.google.response.GoogleUserResponse;
 import com.koddy.server.common.utils.TokenUtils;
 import com.koddy.server.global.exception.GlobalException;
 import org.junit.jupiter.api.DisplayName;

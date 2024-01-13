@@ -1,4 +1,4 @@
-package com.koddy.server.auth.infrastructure.oauth.kakao;
+package com.koddy.server.auth.infrastructure.social.kakao;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

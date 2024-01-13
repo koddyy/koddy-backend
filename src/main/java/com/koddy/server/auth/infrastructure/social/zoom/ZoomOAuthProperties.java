@@ -1,4 +1,4 @@
-package com.koddy.server.auth.infrastructure.oauth.zoom;
+package com.koddy.server.auth.infrastructure.social.zoom;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

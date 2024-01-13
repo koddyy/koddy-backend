@@ -1,10 +1,10 @@
-package com.koddy.server.auth.infrastructure.oauth;
+package com.koddy.server.auth.infrastructure.social;
 
 import com.koddy.server.auth.application.adapter.OAuthUriGenerator;
 import com.koddy.server.auth.domain.model.oauth.OAuthProvider;
-import com.koddy.server.auth.infrastructure.oauth.google.GoogleOAuthUriGenerator;
-import com.koddy.server.auth.infrastructure.oauth.kakao.KakaoOAuthUriGenerator;
-import com.koddy.server.auth.infrastructure.oauth.zoom.ZoomOAuthUriGenerator;
+import com.koddy.server.auth.infrastructure.social.google.GoogleOAuthUriGenerator;
+import com.koddy.server.auth.infrastructure.social.kakao.KakaoOAuthUriGenerator;
+import com.koddy.server.auth.infrastructure.social.zoom.ZoomOAuthUriGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
 package com.koddy.server.common.utils;
 
-import com.koddy.server.auth.infrastructure.oauth.google.response.GoogleTokenResponse;
+import com.koddy.server.auth.infrastructure.social.google.response.GoogleTokenResponse;
 import jakarta.servlet.http.Cookie;
 
 import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;

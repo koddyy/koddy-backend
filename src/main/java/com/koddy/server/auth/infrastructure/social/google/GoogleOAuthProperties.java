@@ -1,4 +1,4 @@
-package com.koddy.server.auth.infrastructure.oauth.google;
+package com.koddy.server.auth.infrastructure.social.google;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

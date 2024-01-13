@@ -1,11 +1,11 @@
-package com.koddy.server.auth.infrastructure.oauth;
+package com.koddy.server.auth.infrastructure.social;
 
-import com.koddy.server.auth.infrastructure.oauth.google.GoogleOAuthProperties;
-import com.koddy.server.auth.infrastructure.oauth.google.GoogleOAuthUriGenerator;
-import com.koddy.server.auth.infrastructure.oauth.kakao.KakaoOAuthProperties;
-import com.koddy.server.auth.infrastructure.oauth.kakao.KakaoOAuthUriGenerator;
-import com.koddy.server.auth.infrastructure.oauth.zoom.ZoomOAuthProperties;
-import com.koddy.server.auth.infrastructure.oauth.zoom.ZoomOAuthUriGenerator;
+import com.koddy.server.auth.infrastructure.social.google.GoogleOAuthProperties;
+import com.koddy.server.auth.infrastructure.social.google.GoogleOAuthUriGenerator;
+import com.koddy.server.auth.infrastructure.social.kakao.KakaoOAuthProperties;
+import com.koddy.server.auth.infrastructure.social.kakao.KakaoOAuthUriGenerator;
+import com.koddy.server.auth.infrastructure.social.zoom.ZoomOAuthProperties;
+import com.koddy.server.auth.infrastructure.social.zoom.ZoomOAuthUriGenerator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

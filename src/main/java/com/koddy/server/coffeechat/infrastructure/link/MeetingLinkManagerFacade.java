@@ -2,8 +2,8 @@ package com.koddy.server.coffeechat.infrastructure.link;
 
 import com.koddy.server.auth.domain.model.oauth.OAuthProvider;
 import com.koddy.server.auth.domain.model.oauth.OAuthTokenResponse;
-import com.koddy.server.auth.infrastructure.oauth.google.GoogleOAuthConnector;
-import com.koddy.server.auth.infrastructure.oauth.zoom.ZoomOAuthConnector;
+import com.koddy.server.auth.infrastructure.social.google.GoogleOAuthConnector;
+import com.koddy.server.auth.infrastructure.social.zoom.ZoomOAuthConnector;
 import com.koddy.server.coffeechat.application.adapter.MeetingLinkManager;
 import com.koddy.server.coffeechat.domain.model.link.MeetingLinkProvider;
 import com.koddy.server.coffeechat.domain.model.link.MeetingLinkResponse;

@@ -2,7 +2,7 @@ package com.koddy.server.common.fixture;
 
 import com.koddy.server.auth.domain.model.oauth.OAuthTokenResponse;
 import com.koddy.server.auth.domain.model.oauth.OAuthUserResponse;
-import com.koddy.server.auth.infrastructure.oauth.google.response.GoogleTokenResponse;
+import com.koddy.server.auth.infrastructure.social.google.response.GoogleTokenResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

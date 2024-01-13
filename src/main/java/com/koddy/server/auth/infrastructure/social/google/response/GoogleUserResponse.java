@@ -1,4 +1,4 @@
-package com.koddy.server.auth.infrastructure.oauth.google.response;
+package com.koddy.server.auth.infrastructure.social.google.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
