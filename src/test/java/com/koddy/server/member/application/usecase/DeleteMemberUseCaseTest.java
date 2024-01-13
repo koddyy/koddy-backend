@@ -1,6 +1,6 @@
 package com.koddy.server.member.application.usecase;
 
-import com.koddy.server.common.UseCaseTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.application.usecase.command.DeleteMemberCommand;
 import com.koddy.server.member.domain.repository.MemberRepository;
 import com.koddy.server.member.domain.service.MenteeDeleter;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("Member -> DeleteMemberUseCase 테스트")
-class DeleteMemberUseCaseTest extends UseCaseTest {
+class DeleteMemberUseCaseTest extends UnitTest {
     private final MemberRepository memberRepository = mock(MemberRepository.class);
     private final MentorDeleter mentorDeleter = mock(MentorDeleter.class);
     private final MenteeDeleter menteeDeleter = mock(MenteeDeleter.class);

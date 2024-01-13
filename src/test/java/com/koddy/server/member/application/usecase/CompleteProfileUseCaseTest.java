@@ -1,6 +1,6 @@
 package com.koddy.server.member.application.usecase;
 
-import com.koddy.server.common.UseCaseTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.TimelineFixture;
 import com.koddy.server.member.application.usecase.command.CompleteMenteeProfileCommand;
 import com.koddy.server.member.application.usecase.command.CompleteMentorProfileCommand;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("Member -> CompleteProfileUseCase 테스트")
-class CompleteProfileUseCaseTest extends UseCaseTest {
+class CompleteProfileUseCaseTest extends UnitTest {
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final MenteeRepository menteeRepository = mock(MenteeRepository.class);
     private final CompleteProfileUseCase sut = new CompleteProfileUseCase(mentorRepository, menteeRepository);

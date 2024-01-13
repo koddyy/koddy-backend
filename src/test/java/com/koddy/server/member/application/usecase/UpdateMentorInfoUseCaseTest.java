@@ -1,6 +1,6 @@
 package com.koddy.server.member.application.usecase;
 
-import com.koddy.server.common.UseCaseTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.TimelineFixture;
 import com.koddy.server.member.application.usecase.command.UpdateMentorBasicInfoCommand;
 import com.koddy.server.member.application.usecase.command.UpdateMentorScheduleCommand;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("Member -> UpdateMentorInfoUseCase 테스트")
-class UpdateMentorInfoUseCaseTest extends UseCaseTest {
+class UpdateMentorInfoUseCaseTest extends UnitTest {
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final UpdateMentorInfoUseCase sut = new UpdateMentorInfoUseCase(mentorRepository);
 

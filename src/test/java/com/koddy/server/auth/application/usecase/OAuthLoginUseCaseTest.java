@@ -8,7 +8,7 @@ import com.koddy.server.auth.domain.service.TokenIssuer;
 import com.koddy.server.auth.exception.OAuthUserNotFoundException;
 import com.koddy.server.auth.infrastructure.oauth.google.response.GoogleTokenResponse;
 import com.koddy.server.auth.infrastructure.oauth.google.response.GoogleUserResponse;
-import com.koddy.server.common.UseCaseTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +34,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("Auth -> OAuthLoginUseCase 테스트")
-class OAuthLoginUseCaseTest extends UseCaseTest {
+class OAuthLoginUseCaseTest extends UnitTest {
     private final OAuthLoginProcessor oAuthLoginProcessor = mock(OAuthLoginProcessor.class);
     private final MemberRepository memberRepository = mock(MemberRepository.class);
     private final TokenIssuer tokenIssuer = mock(TokenIssuer.class);

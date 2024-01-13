@@ -2,7 +2,7 @@ package com.koddy.server.auth.domain.service;
 
 import com.koddy.server.auth.domain.model.Token;
 import com.koddy.server.auth.domain.repository.TokenRepository;
-import com.koddy.server.common.ServiceTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("Auth -> TokenManager 테스트")
-class TokenManagerTest extends ServiceTest {
+class TokenManagerTest extends UnitTest {
     private final TokenRepository tokenRepository = mock(TokenRepository.class);
     private final TokenManager sut = new TokenManager(tokenRepository);
 

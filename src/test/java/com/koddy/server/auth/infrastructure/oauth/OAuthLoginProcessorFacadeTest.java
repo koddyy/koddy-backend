@@ -7,7 +7,7 @@ import com.koddy.server.auth.infrastructure.oauth.kakao.KakaoOAuthConnector;
 import com.koddy.server.auth.infrastructure.oauth.kakao.response.KakaoUserResponse;
 import com.koddy.server.auth.infrastructure.oauth.zoom.ZoomOAuthConnector;
 import com.koddy.server.auth.infrastructure.oauth.zoom.response.ZoomUserResponse;
-import com.koddy.server.common.InfraTest;
+import com.koddy.server.common.UnitTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +24,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 @DisplayName("Auth -> OAuthLoginProcessorFacade [구글, 카카오, 줌] 테스트")
-class OAuthLoginProcessorFacadeTest extends InfraTest {
+class OAuthLoginProcessorFacadeTest extends UnitTest {
     private final GoogleOAuthConnector googleOAuthConnector = mock(GoogleOAuthConnector.class);
     private final KakaoOAuthConnector kakaoOAuthConnector = mock(KakaoOAuthConnector.class);
     private final ZoomOAuthConnector zoomOAuthConnector = mock(ZoomOAuthConnector.class);

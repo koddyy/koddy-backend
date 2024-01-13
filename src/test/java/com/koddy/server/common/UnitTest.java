@@ -2,7 +2,7 @@ package com.koddy.server.common;
 
 import org.junit.jupiter.api.Tag;
 
-@Tag("Service")
+@Tag("Unit")
 @ExecuteParallel
-public abstract class ServiceTest {
+public abstract class UnitTest {
 }
