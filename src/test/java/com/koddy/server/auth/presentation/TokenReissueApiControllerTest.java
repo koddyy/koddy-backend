@@ -35,6 +35,8 @@ class TokenReissueApiControllerTest extends ControllerTest {
     @MockBean
     private ReissueTokenUseCase reissueTokenUseCase;
 
+    private final Member<?> member = MENTOR_1.toDomain().apply(1L);
+
     @Nested
     @DisplayName("토큰 재발급 API [POST /api/token/reissue] - Required RefreshToken")
     class ReissueToken {
@@ -44,7 +46,7 @@ class TokenReissueApiControllerTest extends ControllerTest {
         @DisplayName("유효하지 않은 RefreshToken으로 인해 토큰 재발급에 실패한다")
         void throwExceptionByExpiredRefreshToken() throws Exception {
             // given
-            mockingTokenWithInvalidException();
+            applyToken(false, member.getId(), member.getRole());
 
             // when
             final RequestBuilder requestBuilder = postWithRefreshToken(BASE_URL);
@@ -60,8 +62,7 @@ class TokenReissueApiControllerTest extends ControllerTest {
         @DisplayName("사용자 소유의 RefreshToken을 통해서 AccessToken과 RefreshToken을 재발급받는다")
         void success() throws Exception {
             // given
-            final Member<?> member = MENTOR_1.toDomain().apply(1L);
-            mockingToken(true, member.getId(), member.getRole());
+            applyToken(true, member.getId(), member.getRole());
             given(reissueTokenUseCase.invoke(any())).willReturn(new AuthToken(ACCESS_TOKEN, REFRESH_TOKEN));
 
             // when

@@ -47,7 +47,7 @@ class FileManagementApiControllerTest extends ControllerTest {
         @DisplayName("파일을 업로드한다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             given(fileManager.upload(any())).willReturn("https://file-upload-url");
 
             // when
@@ -76,7 +76,7 @@ class FileManagementApiControllerTest extends ControllerTest {
         @DisplayName("이미지 파일이 아니면 현재 API를 통해서 Presigned Url을 얻을 수 없다")
         void throwExceptionByNotImage() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
 
             // when
             final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL, Map.of("fileName", "cat.pdf"));
@@ -96,7 +96,7 @@ class FileManagementApiControllerTest extends ControllerTest {
         @DisplayName("Presigned Url을 얻는다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             given(fileManager.createPresignedUrl(any())).willReturn(new PresignedUrlDetails(
                     "https://storage-url/path/fileName.png?X-xxx=xxx",
                     "https://storage-url/path/fileName.png"
@@ -129,7 +129,7 @@ class FileManagementApiControllerTest extends ControllerTest {
         @DisplayName("PDF 파일이 아니면 현재 API를 통해서 Presigned Url을 얻을 수 없다")
         void throwExceptionByNotImage() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
 
             // when
             final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL, Map.of("fileName", "cat.png"));
@@ -149,7 +149,7 @@ class FileManagementApiControllerTest extends ControllerTest {
         @DisplayName("Presigned Url을 얻는다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             given(fileManager.createPresignedUrl(any())).willReturn(new PresignedUrlDetails(
                     "https://storage-url/path/fileName.pdf?X-xxx=xxx",
                     "https://storage-url/path/fileName.pdf"

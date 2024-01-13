@@ -62,7 +62,7 @@ public abstract class ControllerTest {
 
     // common & internal
     @Autowired
-    protected ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @MockBean
     private TokenProvider tokenProvider;
@@ -422,7 +422,7 @@ public abstract class ControllerTest {
         };
     }
 
-    protected void mockingToken(final boolean isValid, final Long payloadId, final Role role) {
+    protected void applyToken(final boolean isValid, final Long payloadId, final Role role) {
         if (isValid) {
             doNothing()
                     .when(tokenProvider)
@@ -434,11 +434,5 @@ public abstract class ControllerTest {
         }
         given(tokenProvider.getId(anyString())).willReturn(payloadId);
         given(tokenProvider.getAuthority(anyString())).willReturn(role.getAuthority());
-    }
-
-    protected void mockingTokenWithInvalidException() {
-        doThrow(new AuthException(INVALID_TOKEN))
-                .when(tokenProvider)
-                .validateToken(anyString());
     }
 }

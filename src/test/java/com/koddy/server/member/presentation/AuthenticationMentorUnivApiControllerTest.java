@@ -51,7 +51,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() throws Exception {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee.getId(), mentee.getRole());
 
             // when
             final RequestBuilder requestBuilder = postWithAccessToken(BASE_URL, request);
@@ -71,7 +71,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidUnivDomain() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
 
             // when
             final RequestBuilder requestBuilder = postWithAccessToken(BASE_URL, new AuthenticationWithMailRequest("sjiwon@kyonggi.edu"));
@@ -91,7 +91,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("학교 인증을 메일로 시도한다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             doNothing()
                     .when(authenticationMentorUnivUseCase)
                     .authWithMail(any());
@@ -123,7 +123,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() throws Exception {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee.getId(), mentee.getRole());
 
             // when
             final RequestBuilder requestBuilder = postWithAccessToken(BASE_URL, request);
@@ -144,7 +144,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("인증번호가 일치하지 않으면 실패한다")
         void throwExceptionByInvalidAuthCode() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             doThrow(new AuthException(INVALID_AUTH_CODE))
                     .when(authenticationMentorUnivUseCase)
                     .confirmMailAuthCode(any());
@@ -168,7 +168,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("학교 메일로 받은 인증번호를 확인한다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             doNothing()
                     .when(authenticationMentorUnivUseCase)
                     .confirmMailAuthCode(any());
@@ -198,7 +198,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() throws Exception {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee.getId(), mentee.getRole());
 
             // when
             final RequestBuilder requestBuilder = postWithAccessToken(BASE_URL, request);
@@ -218,7 +218,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("학교 인증을 증명 자료로 시도한다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             doNothing()
                     .when(authenticationMentorUnivUseCase)
                     .authWithProofData(any());

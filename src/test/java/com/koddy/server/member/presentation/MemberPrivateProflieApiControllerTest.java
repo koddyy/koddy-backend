@@ -42,7 +42,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         @DisplayName("멘토 프로필을 조회한다")
         void getMentorProfile() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(new MentorProfile(mentor));
 
             // when
@@ -84,7 +84,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         @DisplayName("멘티 프로필을 조회한다")
         void getMenteeProfile() throws Exception {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee.getId(), mentee.getRole());
             given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(new MenteeProfile(mentee));
 
             // when
@@ -123,7 +123,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() throws Exception {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee.getId(), mentee.getRole());
 
             // when
             final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);
@@ -139,7 +139,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         @DisplayName("멘토 마이페이지 프로필 정보를 조회한다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(new MentorProfile(mentor));
 
             // when
@@ -187,7 +187,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         @DisplayName("멘티가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
 
             // when
             final RequestBuilder requestBuilder = getWithAccessToken(BASE_URL);
@@ -203,7 +203,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         @DisplayName("멘티 마이페이지 프로필 정보를 조회한다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee.getId(), mentee.getRole());
             given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(new MenteeProfile(mentee));
 
             // when

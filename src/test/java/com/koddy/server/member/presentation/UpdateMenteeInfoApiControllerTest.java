@@ -55,7 +55,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
         @DisplayName("멘티가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() throws Exception {
             // given
-            mockingToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
 
             // when
             final RequestBuilder requestBuilder = patchWithAccessToken(BASE_URL, request);
@@ -84,7 +84,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
         @DisplayName("멘티 기본정보를 수정한다")
         void success() throws Exception {
             // given
-            mockingToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee.getId(), mentee.getRole());
             doNothing()
                     .when(updateMenteeInfoUseCase)
                     .updateBasicInfo(any());
