@@ -3,7 +3,6 @@ package com.koddy.server.auth.domain.model;
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 
 public record Authenticated(
-        String accessToken,
         long id,
         String authority
 ) {
