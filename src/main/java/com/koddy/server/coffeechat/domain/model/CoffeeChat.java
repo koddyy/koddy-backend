@@ -25,6 +25,14 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Table(name = "coffee_chat")
 public class CoffeeChat extends BaseEntity<CoffeeChat> {
+    @Lob
+    @Column(name = "apply_reason", nullable = false, columnDefinition = "TEXT")
+    private String applyReason;
+
+    @Enumerated(STRING)
+    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(30)")
+    private CoffeeChatStatus status;
+
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "year", column = @Column(name = "start_year", nullable = false)),
@@ -45,14 +53,6 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
 
     @Embedded
     private Strategy strategy;
-
-    @Lob
-    @Column(name = "apply_reason", nullable = false, columnDefinition = "TEXT")
-    private String applyReason;
-
-    @Enumerated(STRING)
-    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(30)")
-    private CoffeeChatStatus status;
 
     @ManyToOne(fetch = LAZY, optional = false)
     @JoinColumn(name = "applier_id", referencedColumnName = "id", nullable = false)
