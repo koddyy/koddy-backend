@@ -102,7 +102,7 @@ public class RequestLoggingFilter implements Filter {
     private void loggingResponseInfo(final HttpServletResponse httpResponse, final StopWatch stopWatch) {
         log.info("Response Body = {}", readResponseBodyViaCachingRequestWrapper(httpResponse));
         log.info(
-                "[Request END] = [Task ID = {}, IP = {}, HTTP Method = {}, Uri = {}, HTTP Status = {}, 요청 종료 시간 = {}ms]",
+                "[Request END] = [Task ID = {}, IP = {}, HTTP Method = {}, Uri = {}, HTTP Status = {}, 요청 처리 시간 = {}ms]",
                 MDC.get(REQUEST_ID.name()),
                 MDC.get(REQUEST_IP.name()),
                 MDC.get(REQUEST_METHOD.name()),
