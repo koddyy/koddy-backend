@@ -56,6 +56,7 @@ public class UpdateMentorInfoApiController {
     ) {
         updateMentorInfoUseCase.updateSchedule(new UpdateMentorScheduleCommand(
                 authenticated.id(),
+                request.toPeriod(),
                 request.toSchedules()
         ));
         return ResponseEntity.noContent().build();

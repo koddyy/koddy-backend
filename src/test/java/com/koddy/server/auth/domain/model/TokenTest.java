@@ -9,7 +9,7 @@ import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Auth -> 도메인 [Token] 테스트")
+@DisplayName("Auth -> 도메인 Aggregate [Token] 테스트")
 class TokenTest extends ParallelTest {
     private final Member<?> member = MENTOR_1.toDomain().apply(1L);
 

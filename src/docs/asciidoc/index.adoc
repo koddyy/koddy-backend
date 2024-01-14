@@ -125,23 +125,23 @@ include::{snippets}/MemberApi/SignUp/Mentee/response-fields.adoc[]
 
 ==== HTTP Request
 
-include::{snippets}/MemberApi/Complete/Mentor/http-request.adoc[]
-include::{snippets}/MemberApi/Complete/Mentor/request-fields.adoc[]
+include::{snippets}/MemberApi/Complete/Mentor/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Complete/Mentor/Success/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/MemberApi/Complete/Mentor/http-response.adoc[]
+include::{snippets}/MemberApi/Complete/Mentor/Success/http-response.adoc[]
 
 === 멘티 프로필 완성
 
 ==== HTTP Request
 
-include::{snippets}/MemberApi/Complete/Mentee/http-request.adoc[]
-include::{snippets}/MemberApi/Complete/Mentee/request-fields.adoc[]
+include::{snippets}/MemberApi/Complete/Mentee/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Complete/Mentee/Success/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/MemberApi/Complete/Mentee/http-response.adoc[]
+include::{snippets}/MemberApi/Complete/Mentee/Success/http-response.adoc[]
 
 == 멘토 정보 수정 API (AccessToken + OnlyMentor)
 

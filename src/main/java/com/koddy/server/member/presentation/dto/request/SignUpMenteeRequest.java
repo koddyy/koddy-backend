@@ -2,7 +2,7 @@ package com.koddy.server.member.presentation.dto.request;
 
 import com.koddy.server.member.domain.model.Language;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 import java.util.List;
@@ -21,8 +21,8 @@ public record SignUpMenteeRequest(
         @NotBlank(message = "국적은 필수입니다.")
         String nationality,
 
-        @NotEmpty(message = "사용 가능한 언어는 하나 이상 선택해주세요.")
-        List<LanguageRequest> languages,
+        @NotNull(message = "사용 가능한 언어를 선택해주세요.")
+        LanguageRequest languages,
 
         @NotBlank(message = "관심있는 학교는 필수입니다.")
         String interestSchool,
@@ -31,8 +31,6 @@ public record SignUpMenteeRequest(
         String interestMajor
 ) {
     public List<Language> toLanguages() {
-        return languages.stream()
-                .map(LanguageRequest::toLanguage)
-                .toList();
+        return languages.toLanguages();
     }
 }

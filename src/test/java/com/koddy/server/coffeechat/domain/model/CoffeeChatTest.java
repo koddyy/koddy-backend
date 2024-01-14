@@ -15,7 +15,7 @@ import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("CoffeeChat -> 도메인 [CoffeeChat] 테스트")
+@DisplayName("CoffeeChat -> 도메인 Aggregate [CoffeeChat] 테스트")
 class CoffeeChatTest extends ParallelTest {
     @Nested
     @DisplayName("CoffeeChat 초기 생성")

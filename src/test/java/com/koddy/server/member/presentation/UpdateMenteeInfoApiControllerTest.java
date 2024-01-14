@@ -3,6 +3,7 @@ package com.koddy.server.member.presentation;
 import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.UpdateMenteeInfoUseCase;
+import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.dto.request.LanguageRequest;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
@@ -40,10 +43,14 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                 MENTEE_1.getNationality().getKor(),
                 MENTEE_1.getProfileImageUrl(),
                 MENTEE_1.getIntroduction(),
-                MENTEE_1.getLanguages()
-                        .stream()
-                        .map(it -> new LanguageRequest(it.getCategory().getCode(), it.getType().getValue()))
-                        .toList(),
+                new LanguageRequest(
+                        Language.Category.KR.getCode(),
+                        List.of(
+                                Language.Category.EN.getCode(),
+                                Language.Category.JP.getCode(),
+                                Language.Category.CN.getCode()
+                        )
+                ),
                 MENTEE_1.getInterest().getSchool(),
                 MENTEE_1.getInterest().getMajor()
         );
@@ -66,9 +73,8 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘티 자기소개", false),
                                     body("languages", "사용 가능한 언어", true),
-                                    body("languages[].category", "언어 종류", "[국가코드 기반] KR EN CH JP VN", true),
-                                    body("languages[].type", "언어 타입", "메인 언어 (1개) / 서브 언어 (0..N개)", true),
-                                    body("languages", "사용 가능한 언어", "[국가코드 기반] KR EN CH JP VN", true),
+                                    body("languages.main", "메인 언어 (코드 기반)", "1개 이상", true),
+                                    body("languages.sub[]", "서브 언어 (코드 기반)", "0..N개", false),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)
                             )
@@ -96,8 +102,8 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘티 자기소개", false),
                                     body("languages", "사용 가능한 언어", true),
-                                    body("languages[].category", "언어 종류", "[국가코드 기반] KR EN CH JP VN", true),
-                                    body("languages[].type", "언어 타입", "메인 언어 (1개) / 서브 언어 (0..N개)", true),
+                                    body("languages.main", "메인 언어 (코드 기반)", "1개 이상", true),
+                                    body("languages.sub[]", "서브 언어 (코드 기반)", "0..N개", false),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)
                             )

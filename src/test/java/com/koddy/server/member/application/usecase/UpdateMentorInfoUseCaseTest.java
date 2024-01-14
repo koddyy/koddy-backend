@@ -1,6 +1,7 @@
 package com.koddy.server.member.application.usecase;
 
 import com.koddy.server.common.UnitTest;
+import com.koddy.server.common.fixture.MentoringPeriodFixture;
 import com.koddy.server.common.fixture.TimelineFixture;
 import com.koddy.server.member.application.usecase.command.UpdateMentorBasicInfoCommand;
 import com.koddy.server.member.application.usecase.command.UpdateMentorScheduleCommand;
@@ -66,6 +67,7 @@ class UpdateMentorInfoUseCaseTest extends UnitTest {
         final Mentor mentor = MENTOR_1.toDomain().apply(1L);
         final UpdateMentorScheduleCommand command = new UpdateMentorScheduleCommand(
                 mentor.getId(),
+                MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain(),
                 TimelineFixture.allDays()
         );
         given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
@@ -76,6 +78,7 @@ class UpdateMentorInfoUseCaseTest extends UnitTest {
         // then
         assertAll(
                 () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
+                () -> assertThat(mentor.getMentoringPeriod()).isEqualTo(command.mentoringPeriod()),
                 () -> assertThat(mentor.getSchedules())
                         .map(Schedule::getTimeline)
                         .containsExactlyInAnyOrderElementsOf(command.timelines())

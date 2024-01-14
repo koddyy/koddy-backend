@@ -5,11 +5,11 @@ import com.koddy.server.member.domain.model.Language;
 import java.util.List;
 
 public record LanguageResponse(
-        String mainLanguage,
-        List<String> subLanguages
+        String main,
+        List<String> sub
 ) {
-    public LanguageResponse(final List<Language> languages) {
-        this(getMainLanguage(languages), getSubLanguages(languages));
+    public static LanguageResponse of(final List<Language> languages) {
+        return new LanguageResponse(getMainLanguage(languages), getSubLanguages(languages));
     }
 
     private static String getMainLanguage(final List<Language> languages) {
@@ -18,13 +18,13 @@ public record LanguageResponse(
                 .findFirst()
                 .orElseThrow(RuntimeException::new)
                 .getCategory()
-                .getValue();
+                .getCode();
     }
 
     private static List<String> getSubLanguages(final List<Language> languages) {
         return languages.stream()
                 .filter(it -> it.getType() == Language.Type.SUB)
-                .map(it -> it.getCategory().getValue())
+                .map(it -> it.getCategory().getCode())
                 .toList();
     }
 }

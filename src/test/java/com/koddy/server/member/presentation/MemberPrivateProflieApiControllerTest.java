@@ -40,7 +40,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         void getMentorProfile() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
-            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(new MentorProfile(mentor));
+            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorProfile.of(mentor));
 
             // when - then
             successfulExecute(
@@ -55,22 +55,23 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
                                     body("nationality", "국적"),
                                     body("introduction", "자기 소개"),
                                     body("languages", "사용 가능한 언어"),
-                                    body("languages.mainLanguage", "메인 언어 (1개)"),
-                                    body("languages.subLanguages[]", "서브 언어 (0..N개)"),
-                                    body("university", "대학 정보"),
-                                    body("university.school", "학교"),
-                                    body("university.major", "전공"),
-                                    body("university.enteredIn", "학번"),
+                                    body("languages.main", "메인 언어 (1개)"),
+                                    body("languages.sub[]", "서브 언어 (0..N개)"),
+                                    body("school", "학교"),
+                                    body("major", "전공"),
+                                    body("enteredIn", "학번"),
+                                    body("authenticated", "대학 인증 여부"),
+                                    body("period", "멘토링 기간"),
+                                    body("period.startDate", "멘토링 시작 날짜"),
+                                    body("period.endDate", "멘토링 종료 날짜"),
                                     body("schedules", "스케줄"),
-                                    body("schedules[].startDate", "시작 날짜", "KST"),
-                                    body("schedules[].endDate", "종료 날짜", "KST"),
                                     body("schedules[].dayOfWeek", "날짜", "월 화 수 목 금 토 일"),
-                                    body("schedules[].startTime.hour", "시작 시간 (Hour)", "KST"),
-                                    body("schedules[].startTime.minute", "시작 시간 (Minute)", "KST"),
-                                    body("schedules[].endTime.hour", "종료 시간 (Hour)", "KST"),
-                                    body("schedules[].endTime.minute", "종료 시간 (Minute)", "KST"),
+                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST"),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST"),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST"),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST"),
                                     body("role", "역할 (멘토/멘티)"),
-                                    body("profileComplete", "프로필 완성 여부 (자기소개, 스케줄)")
+                                    body("profileComplete", "프로필 완성 여부 (자기소개, 멘토링 기간, 스케줄)")
                             )
                     ))
             );
@@ -81,7 +82,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         void getMenteeProfile() {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
-            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(new MenteeProfile(mentee));
+            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteeProfile.of(mentee));
 
             // when - then
             successfulExecute(
@@ -96,11 +97,10 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
                                     body("nationality", "국적"),
                                     body("introduction", "자기 소개"),
                                     body("languages", "사용 가능한 언어"),
-                                    body("languages.mainLanguage", "메인 언어 (1개)"),
-                                    body("languages.subLanguages[]", "서브 언어 (0..N개)"),
-                                    body("interest", "관심있는 대학 정보"),
-                                    body("interest.school", "학교"),
-                                    body("interest.major", "전공"),
+                                    body("languages.main", "메인 언어 (1개)"),
+                                    body("languages.sub[]", "서브 언어 (0..N개)"),
+                                    body("interestSchool", "관심있는 학교"),
+                                    body("interestMajor", "관심있는 전공"),
                                     body("role", "역할 (멘토/멘티)"),
                                     body("profileComplete", "프로필 완성 여부 (자기소개)")
                             )
@@ -134,7 +134,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
-            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(new MentorProfile(mentor));
+            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorProfile.of(mentor));
 
             // when - then
             successfulExecute(
@@ -149,22 +149,23 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
                                     body("nationality", "국적"),
                                     body("introduction", "자기 소개"),
                                     body("languages", "사용 가능한 언어"),
-                                    body("languages.mainLanguage", "메인 언어 (1개)"),
-                                    body("languages.subLanguages[]", "서브 언어 (0..N개)"),
-                                    body("university", "대학 정보"),
-                                    body("university.school", "학교"),
-                                    body("university.major", "전공"),
-                                    body("university.enteredIn", "학번"),
+                                    body("languages.main", "메인 언어 (1개)"),
+                                    body("languages.sub[]", "서브 언어 (0..N개)"),
+                                    body("school", "학교"),
+                                    body("major", "전공"),
+                                    body("enteredIn", "학번"),
+                                    body("authenticated", "대학 인증 여부"),
+                                    body("period", "멘토링 기간"),
+                                    body("period.startDate", "멘토링 시작 날짜"),
+                                    body("period.endDate", "멘토링 종료 날짜"),
                                     body("schedules", "스케줄"),
-                                    body("schedules[].startDate", "시작 날짜", "KST"),
-                                    body("schedules[].endDate", "종료 날짜", "KST"),
                                     body("schedules[].dayOfWeek", "날짜", "월 화 수 목 금 토 일"),
-                                    body("schedules[].startTime.hour", "시작 시간 (Hour)", "KST"),
-                                    body("schedules[].startTime.minute", "시작 시간 (Minute)", "KST"),
-                                    body("schedules[].endTime.hour", "종료 시간 (Hour)", "KST"),
-                                    body("schedules[].endTime.minute", "종료 시간 (Minute)", "KST"),
+                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST"),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST"),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST"),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST"),
                                     body("role", "역할 (멘토/멘티)"),
-                                    body("profileComplete", "프로필 완성 여부 (자기소개, 스케줄)")
+                                    body("profileComplete", "프로필 완성 여부 (자기소개, 멘토링 기간, 스케줄)")
                             )
                     ))
             );
@@ -196,7 +197,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
-            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(new MenteeProfile(mentee));
+            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteeProfile.of(mentee));
 
             // when - then
             successfulExecute(
@@ -211,11 +212,10 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
                                     body("nationality", "국적"),
                                     body("introduction", "자기 소개"),
                                     body("languages", "사용 가능한 언어"),
-                                    body("languages.mainLanguage", "메인 언어 (1개)"),
-                                    body("languages.subLanguages[]", "서브 언어 (0..N개)"),
-                                    body("interest", "관심있는 대학 정보"),
-                                    body("interest.school", "학교"),
-                                    body("interest.major", "전공"),
+                                    body("languages.main", "메인 언어 (1개)"),
+                                    body("languages.sub[]", "서브 언어 (0..N개)"),
+                                    body("interestSchool", "관심있는 학교"),
+                                    body("interestMajor", "관심있는 전공"),
                                     body("role", "역할 (멘토/멘티)"),
                                     body("profileComplete", "프로필 완성 여부 (자기소개)")
                             )

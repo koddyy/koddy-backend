@@ -9,6 +9,7 @@ import com.koddy.server.auth.infrastructure.social.zoom.response.ZoomUserRespons
 import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentor.Mentor;
+import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
 import com.koddy.server.member.domain.model.mentor.Timeline;
 import com.koddy.server.member.domain.model.mentor.UniversityProfile;
 import io.restassured.response.ExtractableResponse;
@@ -32,62 +33,62 @@ public enum MentorFixture {
             Email.from("mentor1@gmail.com"), "멘토1", "s3/Mentor1.png",
             "Hello World~", LanguageFixture.메인_한국어_서브_영어(),
             new UniversityProfile("경기대학교", "컴퓨터공학부", 18),
-            TimelineFixture.월_수_금()
+            MentoringPeriodFixture.FROM_01_01_TO_12_31.toDomain(), TimelineFixture.월_수_금()
     ),
     MENTOR_2(
             Email.from("mentor2@gmail.com"), "멘토2", "s3/Mentor2.png",
             "Hello World~", LanguageFixture.메인_한국어_서브_일본어_중국어(),
             new UniversityProfile("서울대학교", "컴퓨터공학부", 19),
-            TimelineFixture.화_목_토()
+            MentoringPeriodFixture.FROM_01_01_TO_12_31.toDomain(), TimelineFixture.화_목_토()
     ),
     MENTOR_3(
             Email.from("mentor3@gmail.com"), "멘토3", "s3/Mentor3.png",
             "Hello World~", LanguageFixture.메인_한국어_서브_영어(),
             new UniversityProfile("연세대학교", "컴퓨터공학부", 18),
-            TimelineFixture.월_화_수_목_금()
+            MentoringPeriodFixture.FROM_01_01_TO_12_31.toDomain(), TimelineFixture.월_화_수_목_금()
     ),
     MENTOR_4(
             Email.from("mentor4@gmail.com"), "멘토4", "s3/Mentor4.png",
             "Hello World~", LanguageFixture.메인_한국어_서브_일본어_중국어(),
             new UniversityProfile("고려대학교", "컴퓨터공학부", 19),
-            TimelineFixture.주말()
+            MentoringPeriodFixture.FROM_01_01_TO_12_31.toDomain(), TimelineFixture.주말()
     ),
     MENTOR_5(
             Email.from("mentor5@gmail.com"), "멘토5", "s3/Mentor5.png",
             "Hello World~", LanguageFixture.메인_한국어_서브_영어(),
             new UniversityProfile("한양대학교", "컴퓨터공학부", 18),
-            TimelineFixture.allDays()
+            MentoringPeriodFixture.FROM_01_01_TO_12_31.toDomain(), TimelineFixture.allDays()
     ),
 
     MENTOR_6(
             Email.from("mentor6@gmail.com"), "멘토6", "s3/Mentor6.png",
             "Hello World~", LanguageFixture.메인_한국어_서브_일본어_중국어(),
             new UniversityProfile("경기대학교", "컴퓨터공학부", 19),
-            TimelineFixture.월_수_금()
+            MentoringPeriodFixture.FROM_01_01_TO_12_31.toDomain(), TimelineFixture.월_수_금()
     ),
     MENTOR_7(
             Email.from("mentor7@gmail.com"), "멘토7", "s3/Mentor7.png",
             "Hello World~", LanguageFixture.메인_한국어_서브_영어(),
             new UniversityProfile("서울대학교", "컴퓨터공학부", 18),
-            TimelineFixture.화_목_토()
+            MentoringPeriodFixture.FROM_01_01_TO_12_31.toDomain(), TimelineFixture.화_목_토()
     ),
     MENTOR_8(
             Email.from("mentor8@gmail.com"), "멘토8", "s3/Mentor8.png",
             "Hello World~", LanguageFixture.메인_한국어_서브_일본어_중국어(),
             new UniversityProfile("연세대학교", "컴퓨터공학부", 19),
-            TimelineFixture.월_화_수_목_금()
+            MentoringPeriodFixture.FROM_01_01_TO_12_31.toDomain(), TimelineFixture.월_화_수_목_금()
     ),
     MENTOR_9(
             Email.from("mentor9@gmail.com"), "멘토9", "s3/Mentor9.png",
             "Hello World~", LanguageFixture.메인_한국어_서브_영어(),
             new UniversityProfile("고려대학교", "컴퓨터공학부", 18),
-            TimelineFixture.주말()
+            MentoringPeriodFixture.FROM_01_01_TO_12_31.toDomain(), TimelineFixture.주말()
     ),
     MENTOR_10(
             Email.from("mentor10@gmail.com"), "멘토10", "s3/Mentor10.png",
             "Hello World~", LanguageFixture.메인_한국어_서브_일본어_중국어(),
             new UniversityProfile("한양대학교", "컴퓨터공학부", 19),
-            TimelineFixture.allDays()
+            MentoringPeriodFixture.FROM_01_01_TO_12_31.toDomain(), TimelineFixture.allDays()
     ),
     ;
 
@@ -97,29 +98,34 @@ public enum MentorFixture {
     private final String introduction;
     private final List<Language> languages;
     private final UniversityProfile universityProfile;
+    private final MentoringPeriod mentoringPeriod;
     private final List<Timeline> timelines;
 
     public Mentor toDomain() {
         final Mentor mentor = new Mentor(email, name, profileImageUrl, languages, universityProfile);
-        mentor.completeInfo(introduction, timelines);
+        mentor.completeInfo(introduction, mentoringPeriod, timelines);
         return mentor;
     }
 
     public Mentor toDomainWithLanguages(final List<Language> languages) {
         final Mentor mentor = new Mentor(email, name, profileImageUrl, languages, universityProfile);
-        mentor.completeInfo(introduction, timelines);
+        mentor.completeInfo(introduction, mentoringPeriod, timelines);
         return mentor;
     }
 
-    public Mentor toDomainWithTimelines(final List<Timeline> timelines) {
+    public Mentor toDomainWithMentoringInfo(final MentoringPeriod mentoringPeriod, final List<Timeline> timelines) {
         final Mentor mentor = new Mentor(email, name, profileImageUrl, languages, universityProfile);
-        mentor.completeInfo(introduction, timelines);
+        mentor.completeInfo(introduction, mentoringPeriod, timelines);
         return mentor;
     }
 
-    public Mentor toDomainWithLanguagesAndTimelines(final List<Language> languages, final List<Timeline> timelines) {
+    public Mentor toDomainWithLanguagesAndMentoringInfo(
+            final List<Language> languages,
+            final MentoringPeriod mentoringPeriod,
+            final List<Timeline> timelines
+    ) {
         final Mentor mentor = new Mentor(email, name, profileImageUrl, languages, universityProfile);
-        mentor.completeInfo(introduction, timelines);
+        mentor.completeInfo(introduction, mentoringPeriod, timelines);
         return mentor;
     }
 

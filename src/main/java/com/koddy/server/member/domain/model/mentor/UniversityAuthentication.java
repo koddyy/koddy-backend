@@ -46,4 +46,8 @@ public class UniversityAuthentication {
     public void complete() {
         status = SUCCESS;
     }
+
+    public boolean isAuthenticated() {
+        return status == SUCCESS;
+    }
 }
