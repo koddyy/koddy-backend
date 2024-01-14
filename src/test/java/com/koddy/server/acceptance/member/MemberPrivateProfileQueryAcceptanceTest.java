@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.List;
+
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_프로필을_완성시킨다;
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_프로필을_조회한다;
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘티_프로필을_완성시킨다;
@@ -40,26 +42,19 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
                     .body("profileImageUrl", is(MENTOR_1.getProfileImageUrl()))
                     .body("nationality", is(KOREA.getKor()))
                     .body("introduction", nullValue())
-                    .body("languages.mainLanguage", is(
-                            MENTOR_1.getLanguages()
-                                    .stream()
-                                    .filter(it -> it.getType() == Language.Type.MAIN)
-                                    .findFirst()
-                                    .orElseThrow(RuntimeException::new)
-                                    .getCategory()
-                                    .getValue()
+                    .body("languages.main", is(Language.Category.KR.getCode()))
+                    .body("languages.sub", containsInAnyOrder(
+                            List.of(
+                                    Language.Category.EN.getCode(),
+                                    Language.Category.JP.getCode(),
+                                    Language.Category.CN.getCode()
+                            ).toArray()
                     ))
-                    .body("languages.subLanguages", containsInAnyOrder(
-                            MENTOR_1.getLanguages()
-                                    .stream()
-                                    .filter(it -> it.getType() == Language.Type.SUB)
-                                    .map(it -> it.getCategory().getValue())
-                                    .toList()
-                                    .toArray()
-                    ))
-                    .body("university.school", is(MENTOR_1.getUniversityProfile().getSchool()))
-                    .body("university.major", is(MENTOR_1.getUniversityProfile().getMajor()))
-                    .body("university.enteredIn", is(MENTOR_1.getUniversityProfile().getEnteredIn()))
+                    .body("school", is(MENTOR_1.getUniversityProfile().getSchool()))
+                    .body("major", is(MENTOR_1.getUniversityProfile().getMajor()))
+                    .body("enteredIn", is(MENTOR_1.getUniversityProfile().getEnteredIn()))
+                    .body("authenticated", is(false))
+                    .body("period", nullValue())
                     .body("schedules", hasSize(0))
                     .body("role", is("mentor"))
                     .body("profileComplete", is(false));
@@ -78,26 +73,20 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
                     .body("profileImageUrl", is(MENTOR_1.getProfileImageUrl()))
                     .body("nationality", is(KOREA.getKor()))
                     .body("introduction", is(MENTOR_1.getIntroduction()))
-                    .body("languages.mainLanguage", is(
-                            MENTOR_1.getLanguages()
-                                    .stream()
-                                    .filter(it -> it.getType() == Language.Type.MAIN)
-                                    .findFirst()
-                                    .orElseThrow(RuntimeException::new)
-                                    .getCategory()
-                                    .getValue()
+                    .body("languages.main", is(Language.Category.KR.getCode()))
+                    .body("languages.sub", containsInAnyOrder(
+                            List.of(
+                                    Language.Category.EN.getCode(),
+                                    Language.Category.JP.getCode(),
+                                    Language.Category.CN.getCode()
+                            ).toArray()
                     ))
-                    .body("languages.subLanguages", containsInAnyOrder(
-                            MENTOR_1.getLanguages()
-                                    .stream()
-                                    .filter(it -> it.getType() == Language.Type.SUB)
-                                    .map(it -> it.getCategory().getValue())
-                                    .toList()
-                                    .toArray()
-                    ))
-                    .body("university.school", is(MENTOR_1.getUniversityProfile().getSchool()))
-                    .body("university.major", is(MENTOR_1.getUniversityProfile().getMajor()))
-                    .body("university.enteredIn", is(MENTOR_1.getUniversityProfile().getEnteredIn()))
+                    .body("school", is(MENTOR_1.getUniversityProfile().getSchool()))
+                    .body("major", is(MENTOR_1.getUniversityProfile().getMajor()))
+                    .body("enteredIn", is(MENTOR_1.getUniversityProfile().getEnteredIn()))
+                    .body("authenticated", is(false))
+                    .body("period.startDate", is(MENTOR_1.getMentoringPeriod().getStartDate().toString()))
+                    .body("period.endDate", is(MENTOR_1.getMentoringPeriod().getEndDate().toString()))
                     .body("schedules", hasSize(MENTOR_1.getTimelines().size()))
                     .body("role", is("mentor"))
                     .body("profileComplete", is(true));
@@ -119,25 +108,10 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
                     .body("profileImageUrl", is(MENTEE_1.getProfileImageUrl()))
                     .body("nationality", is(MENTEE_1.getNationality().getKor()))
                     .body("introduction", nullValue())
-                    .body("languages.mainLanguage", is(
-                            MENTEE_1.getLanguages()
-                                    .stream()
-                                    .filter(it -> it.getType() == Language.Type.MAIN)
-                                    .findFirst()
-                                    .orElseThrow(RuntimeException::new)
-                                    .getCategory()
-                                    .getValue()
-                    ))
-                    .body("languages.subLanguages", containsInAnyOrder(
-                            MENTEE_1.getLanguages()
-                                    .stream()
-                                    .filter(it -> it.getType() == Language.Type.SUB)
-                                    .map(it -> it.getCategory().getValue())
-                                    .toList()
-                                    .toArray()
-                    ))
-                    .body("interest.school", is(MENTEE_1.getInterest().getSchool()))
-                    .body("interest.major", is(MENTEE_1.getInterest().getMajor()))
+                    .body("languages.main", is(Language.Category.KR.getCode()))
+                    .body("languages.subs", nullValue())
+                    .body("interestSchool", is(MENTEE_1.getInterest().getSchool()))
+                    .body("interestMajor", is(MENTEE_1.getInterest().getMajor()))
                     .body("role", is("mentee"))
                     .body("profileComplete", is(false));
         }
@@ -155,25 +129,10 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
                     .body("profileImageUrl", is(MENTEE_1.getProfileImageUrl()))
                     .body("nationality", is(MENTEE_1.getNationality().getKor()))
                     .body("introduction", is(MENTEE_1.getIntroduction()))
-                    .body("languages.mainLanguage", is(
-                            MENTEE_1.getLanguages()
-                                    .stream()
-                                    .filter(it -> it.getType() == Language.Type.MAIN)
-                                    .findFirst()
-                                    .orElseThrow(RuntimeException::new)
-                                    .getCategory()
-                                    .getValue()
-                    ))
-                    .body("languages.subLanguages", containsInAnyOrder(
-                            MENTEE_1.getLanguages()
-                                    .stream()
-                                    .filter(it -> it.getType() == Language.Type.SUB)
-                                    .map(it -> it.getCategory().getValue())
-                                    .toList()
-                                    .toArray()
-                    ))
-                    .body("interest.school", is(MENTEE_1.getInterest().getSchool()))
-                    .body("interest.major", is(MENTEE_1.getInterest().getMajor()))
+                    .body("languages.main", is(Language.Category.KR.getCode()))
+                    .body("languages.subs", nullValue())
+                    .body("interestSchool", is(MENTEE_1.getInterest().getSchool()))
+                    .body("interestMajor", is(MENTEE_1.getInterest().getMajor()))
                     .body("role", is("mentee"))
                     .body("profileComplete", is(true));
         }

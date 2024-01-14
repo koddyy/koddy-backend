@@ -1,8 +1,9 @@
 package com.koddy.server.member.application.usecase.query.response;
 
 import com.koddy.server.member.domain.model.mentor.Mentor;
+import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
 import com.koddy.server.member.domain.model.mentor.Timeline;
-import com.koddy.server.member.domain.model.mentor.UniversityProfile;
+import com.koddy.server.member.domain.model.mentor.UniversityAuthentication;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,27 +18,31 @@ public record MentorProfile(
         String nationality,
         String introduction,
         LanguageResponse languages,
-        UniversityResponse university,
+        String school,
+        String major,
+        int enteredIn,
+        boolean authenticated,
+        MentoringPeriodResponse period,
         List<ScheduleResponse> schedules,
         String role,
         boolean profileComplete
 ) implements MemberProfile {
-    public record UniversityResponse(
-            String school,
-            String major,
-            int enteredIn
+    public record MentoringPeriodResponse(
+            LocalDate startDate,
+            LocalDate endDate
     ) {
-        public UniversityResponse(final UniversityProfile profile) {
-            this(profile.getSchool(), profile.getMajor(), profile.getEnteredIn());
+        public static MentoringPeriodResponse of(final MentoringPeriod mentoringPeriod) {
+            if (mentoringPeriod == null) {
+                return null;
+            }
+            return new MentoringPeriodResponse(mentoringPeriod.getStartDate(), mentoringPeriod.getEndDate());
         }
     }
 
     public record ScheduleResponse(
-            LocalDate startDate,
-            LocalDate endDate,
             String dayOfWeek,
-            Start startTime,
-            End endTime
+            Start start,
+            End end
     ) {
         public record Start(
                 int hour,
@@ -51,33 +56,42 @@ public record MentorProfile(
         ) {
         }
 
-        public ScheduleResponse(final Timeline timeline) {
-            this(
-                    timeline.getStartDate(),
-                    timeline.getEndDate(),
+        public static ScheduleResponse of(final Timeline timeline) {
+            return new ScheduleResponse(
                     timeline.getDayOfWeek().getKor(),
-                    new Start(timeline.getPeriod().getStartTime().getHour(), timeline.getPeriod().getStartTime().getMinute()),
-                    new End(timeline.getPeriod().getEndTime().getHour(), timeline.getPeriod().getEndTime().getMinute())
+                    new Start(timeline.getStartTime().getHour(), timeline.getStartTime().getMinute()),
+                    new End(timeline.getEndTime().getHour(), timeline.getEndTime().getMinute())
             );
         }
     }
 
-    public MentorProfile(final Mentor mentor) {
-        this(
+    public static MentorProfile of(final Mentor mentor) {
+        return new MentorProfile(
                 mentor.getId(),
                 mentor.getEmail().getValue(),
                 mentor.getName(),
                 mentor.getProfileImageUrl(),
                 mentor.getNationality().getKor(),
                 mentor.getIntroduction(),
-                new LanguageResponse(mentor.getLanguages()),
-                new UniversityResponse(mentor.getUniversityProfile()),
+                LanguageResponse.of(mentor.getLanguages()),
+                mentor.getUniversityProfile().getSchool(),
+                mentor.getUniversityProfile().getMajor(),
+                mentor.getUniversityProfile().getEnteredIn(),
+                isAuthenticated(mentor.getUniversityAuthentication()),
+                MentoringPeriodResponse.of(mentor.getMentoringPeriod()),
                 mentor.getSchedules()
                         .stream()
-                        .map(it -> new ScheduleResponse(it.getTimeline()))
+                        .map(it -> ScheduleResponse.of(it.getTimeline()))
                         .toList(),
                 "mentor",
                 mentor.getProfileComplete() == YES
         );
+    }
+
+    private static boolean isAuthenticated(final UniversityAuthentication universityAuthentication) {
+        if (universityAuthentication == null) {
+            return false;
+        }
+        return universityAuthentication.isAuthenticated();
     }
 }

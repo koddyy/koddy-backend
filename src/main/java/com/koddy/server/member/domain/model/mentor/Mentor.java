@@ -34,6 +34,9 @@ public class Mentor extends Member<Mentor> {
     @Embedded
     private UniversityAuthentication universityAuthentication;
 
+    @Embedded
+    private MentoringPeriod mentoringPeriod;
+
     @OneToMany(mappedBy = "mentor", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private final List<Schedule> schedules = new ArrayList<>();
 
@@ -48,8 +51,13 @@ public class Mentor extends Member<Mentor> {
         this.universityProfile = universityProfile;
     }
 
-    public void completeInfo(final String introduction, final List<Timeline> timelines) {
+    public void completeInfo(
+            final String introduction,
+            final MentoringPeriod mentoringPeriod,
+            final List<Timeline> timelines
+    ) {
         super.completeInfo(introduction);
+        this.mentoringPeriod = mentoringPeriod;
         applySchedules(timelines);
         super.checkProfileCompleted();
     }
@@ -68,7 +76,8 @@ public class Mentor extends Member<Mentor> {
         super.checkProfileCompleted();
     }
 
-    public void updateSchedules(final List<Timeline> timelines) {
+    public void updateSchedules(final MentoringPeriod mentoringPeriod, final List<Timeline> timelines) {
+        this.mentoringPeriod = mentoringPeriod;
         applySchedules(timelines);
         super.checkProfileCompleted();
     }
@@ -98,6 +107,8 @@ public class Mentor extends Member<Mentor> {
 
     @Override
     public boolean isProfileComplete() {
-        return StringUtils.hasText(introduction) && !CollectionUtils.isEmpty(schedules);
+        return StringUtils.hasText(introduction)
+                && mentoringPeriod != null
+                && !CollectionUtils.isEmpty(schedules);
     }
 }

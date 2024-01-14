@@ -9,6 +9,7 @@ import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.dto.request.CompleteMenteeProfileRequest;
 import com.koddy.server.member.presentation.dto.request.CompleteMentorProfileRequest;
 import com.koddy.server.member.presentation.dto.request.MentorScheduleRequest;
+import com.koddy.server.member.presentation.dto.request.MentoringPeriodRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -39,19 +40,21 @@ class CompleteAccountApiControllerTest extends ControllerTest {
         private static final String BASE_URL = "/api/mentors/me/complete";
         private final CompleteMentorProfileRequest request = new CompleteMentorProfileRequest(
                 MENTOR_1.getIntroduction(),
+                new MentoringPeriodRequest(
+                        MENTOR_1.getMentoringPeriod().getStartDate(),
+                        MENTOR_1.getMentoringPeriod().getEndDate()
+                ),
                 TimelineFixture.월_수_금()
                         .stream()
                         .map(it -> new MentorScheduleRequest(
-                                it.getStartDate(),
-                                it.getEndDate(),
                                 it.getDayOfWeek().getKor(),
                                 new MentorScheduleRequest.Start(
-                                        it.getPeriod().getStartTime().getHour(),
-                                        it.getPeriod().getStartTime().getMinute()
+                                        it.getStartTime().getHour(),
+                                        it.getStartTime().getMinute()
                                 ),
                                 new MentorScheduleRequest.End(
-                                        it.getPeriod().getEndTime().getHour(),
-                                        it.getPeriod().getEndTime().getMinute()
+                                        it.getEndTime().getHour(),
+                                        it.getEndTime().getMinute()
                                 )
                         ))
                         .toList()
@@ -71,14 +74,15 @@ class CompleteAccountApiControllerTest extends ControllerTest {
                     failureDocsWithAccessToken("MemberApi/Complete/Mentor/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("introduction", "자기소개", false),
+                                    body("period", "멘토링 기간", false),
+                                    body("period.startDate", "멘토링 시작 날짜", "KST", false),
+                                    body("period.endDate", "멘토링 종료 날짜", "KST", false),
                                     body("schedules", "멘토링 스케줄", false),
-                                    body("schedules[].startDate", "시작 날짜", "KST", false),
-                                    body("schedules[].endDate", "종료 날짜", "KST", false),
                                     body("schedules[].dayOfWeek", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].startTime.hour", "시작 시간 (Hour)", "KST", false),
-                                    body("schedules[].startTime.minute", "시작 시간 (Minute)", "KST", false),
-                                    body("schedules[].endTime.hour", "종료 시간 (Hour)", "KST", false),
-                                    body("schedules[].endTime.minute", "종료 시간 (Minute)", "KST", false)
+                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST", false),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST", false),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST", false),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST", false)
                             )
                     ))
             );
@@ -100,14 +104,15 @@ class CompleteAccountApiControllerTest extends ControllerTest {
                     successDocsWithAccessToken("MemberApi/Complete/Mentor/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("introduction", "자기소개", false),
+                                    body("period", "멘토링 기간", false),
+                                    body("period.startDate", "멘토링 시작 날짜", "KST", false),
+                                    body("period.endDate", "멘토링 종료 날짜", "KST", false),
                                     body("schedules", "멘토링 스케줄", false),
-                                    body("schedules[].startDate", "시작 날짜", "KST", false),
-                                    body("schedules[].endDate", "종료 날짜", "KST", false),
                                     body("schedules[].dayOfWeek", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].startTime.hour", "시작 시간 (Hour)", "KST", false),
-                                    body("schedules[].startTime.minute", "시작 시간 (Minute)", "KST", false),
-                                    body("schedules[].endTime.hour", "종료 시간 (Hour)", "KST", false),
-                                    body("schedules[].endTime.minute", "종료 시간 (Minute)", "KST", false)
+                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST", false),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST", false),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST", false),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST", false)
                             )
                     ))
             );

@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "OAuth 인증 관련 API")
+@Tag(name = "1-1. OAuth 인증 관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/oauth")

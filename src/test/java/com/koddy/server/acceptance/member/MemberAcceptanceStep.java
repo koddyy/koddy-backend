@@ -2,6 +2,7 @@ package com.koddy.server.acceptance.member;
 
 import com.koddy.server.common.fixture.MenteeFixture;
 import com.koddy.server.common.fixture.MentorFixture;
+import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.presentation.dto.request.AuthenticationConfirmWithMailRequest;
 import com.koddy.server.member.presentation.dto.request.AuthenticationWithMailRequest;
 import com.koddy.server.member.presentation.dto.request.AuthenticationWithProofDataRequest;
@@ -9,6 +10,7 @@ import com.koddy.server.member.presentation.dto.request.CompleteMenteeProfileReq
 import com.koddy.server.member.presentation.dto.request.CompleteMentorProfileRequest;
 import com.koddy.server.member.presentation.dto.request.LanguageRequest;
 import com.koddy.server.member.presentation.dto.request.MentorScheduleRequest;
+import com.koddy.server.member.presentation.dto.request.MentoringPeriodRequest;
 import com.koddy.server.member.presentation.dto.request.SignUpMenteeRequest;
 import com.koddy.server.member.presentation.dto.request.SignUpMentorRequest;
 import com.koddy.server.member.presentation.dto.request.UpdateMenteeBasicInfoRequest;
@@ -16,6 +18,8 @@ import com.koddy.server.member.presentation.dto.request.UpdateMentorBasicInfoReq
 import com.koddy.server.member.presentation.dto.request.UpdateMentorScheduleRequest;
 import io.restassured.response.ValidatableResponse;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.List;
 
 import static com.koddy.server.acceptance.CommonRequestFixture.deleteRequestWithAccessToken;
 import static com.koddy.server.acceptance.CommonRequestFixture.getRequestWithAccessToken;
@@ -35,13 +39,14 @@ public class MemberAcceptanceStep {
                 fixture.getEmail().getValue(),
                 fixture.getName(),
                 fixture.getProfileImageUrl(),
-                fixture.getLanguages()
-                        .stream()
-                        .map(it -> new LanguageRequest(
-                                it.getCategory().getCode(),
-                                it.getType().getValue()
-                        ))
-                        .toList(),
+                new LanguageRequest(
+                        Language.Category.KR.getCode(),
+                        List.of(
+                                Language.Category.EN.getCode(),
+                                Language.Category.JP.getCode(),
+                                Language.Category.CN.getCode()
+                        )
+                ),
                 fixture.getUniversityProfile().getSchool(),
                 fixture.getUniversityProfile().getMajor(),
                 fixture.getUniversityProfile().getEnteredIn()
@@ -62,13 +67,7 @@ public class MemberAcceptanceStep {
                 fixture.getName(),
                 fixture.getProfileImageUrl(),
                 fixture.getNationality().getKor(),
-                fixture.getLanguages()
-                        .stream()
-                        .map(it -> new LanguageRequest(
-                                it.getCategory().getCode(),
-                                it.getType().getValue()
-                        ))
-                        .toList(),
+                new LanguageRequest(Language.Category.KR.getCode(), List.of()),
                 fixture.getInterest().getSchool(),
                 fixture.getInterest().getMajor()
         );
@@ -95,19 +94,21 @@ public class MemberAcceptanceStep {
 
         final CompleteMentorProfileRequest request = new CompleteMentorProfileRequest(
                 fixture.getIntroduction(),
+                new MentoringPeriodRequest(
+                        fixture.getMentoringPeriod().getStartDate(),
+                        fixture.getMentoringPeriod().getEndDate()
+                ),
                 fixture.getTimelines()
                         .stream()
                         .map(it -> new MentorScheduleRequest(
-                                it.getStartDate(),
-                                it.getEndDate(),
                                 it.getDayOfWeek().getKor(),
                                 new MentorScheduleRequest.Start(
-                                        it.getPeriod().getStartTime().getHour(),
-                                        it.getPeriod().getStartTime().getMinute()
+                                        it.getStartTime().getHour(),
+                                        it.getStartTime().getMinute()
                                 ),
                                 new MentorScheduleRequest.End(
-                                        it.getPeriod().getEndTime().getHour(),
-                                        it.getPeriod().getEndTime().getMinute()
+                                        it.getEndTime().getHour(),
+                                        it.getEndTime().getMinute()
                                 )
                         ))
                         .toList()
@@ -139,13 +140,14 @@ public class MemberAcceptanceStep {
                 fixture.getName(),
                 fixture.getProfileImageUrl(),
                 fixture.getIntroduction(),
-                fixture.getLanguages()
-                        .stream()
-                        .map(it -> new LanguageRequest(
-                                it.getCategory().getCode(),
-                                it.getType().getValue()
-                        ))
-                        .toList(),
+                new LanguageRequest(
+                        Language.Category.KR.getCode(),
+                        List.of(
+                                Language.Category.EN.getCode(),
+                                Language.Category.JP.getCode(),
+                                Language.Category.CN.getCode()
+                        )
+                ),
                 fixture.getUniversityProfile().getSchool(),
                 fixture.getUniversityProfile().getMajor(),
                 fixture.getUniversityProfile().getEnteredIn()
@@ -162,19 +164,21 @@ public class MemberAcceptanceStep {
                 .getPath();
 
         final UpdateMentorScheduleRequest request = new UpdateMentorScheduleRequest(
+                new MentoringPeriodRequest(
+                        fixture.getMentoringPeriod().getStartDate(),
+                        fixture.getMentoringPeriod().getEndDate()
+                ),
                 fixture.getTimelines()
                         .stream()
                         .map(it -> new MentorScheduleRequest(
-                                it.getStartDate(),
-                                it.getEndDate(),
                                 it.getDayOfWeek().getKor(),
                                 new MentorScheduleRequest.Start(
-                                        it.getPeriod().getStartTime().getHour(),
-                                        it.getPeriod().getStartTime().getMinute()
+                                        it.getStartTime().getHour(),
+                                        it.getStartTime().getMinute()
                                 ),
                                 new MentorScheduleRequest.End(
-                                        it.getPeriod().getEndTime().getHour(),
-                                        it.getPeriod().getEndTime().getMinute()
+                                        it.getEndTime().getHour(),
+                                        it.getEndTime().getMinute()
                                 )
                         ))
                         .toList()
@@ -195,13 +199,14 @@ public class MemberAcceptanceStep {
                 fixture.getNationality().getKor(),
                 fixture.getProfileImageUrl(),
                 fixture.getIntroduction(),
-                fixture.getLanguages()
-                        .stream()
-                        .map(it -> new LanguageRequest(
-                                it.getCategory().getCode(),
-                                it.getType().getValue()
-                        ))
-                        .toList(),
+                new LanguageRequest(
+                        Language.Category.KR.getCode(),
+                        List.of(
+                                Language.Category.EN.getCode(),
+                                Language.Category.JP.getCode(),
+                                Language.Category.CN.getCode()
+                        )
+                ),
                 fixture.getInterest().getSchool(),
                 fixture.getInterest().getMajor()
         );

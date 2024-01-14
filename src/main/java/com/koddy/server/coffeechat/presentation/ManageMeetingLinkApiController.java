@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 
-@Tag(name = "커피챗 링크 생성/삭제 API")
+@Tag(name = "4-1. 커피챗 링크 생성/삭제 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/oauth/{provider}/meetings")

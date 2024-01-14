@@ -27,23 +27,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
-@Tag(name = "파일 관련 API")
+@Tag(name = "3. 파일 관련 API")
 @RestController
 @RequestMapping("/api/files")
 @RequiredArgsConstructor
 public class FileManagementApiController {
-    private final UploadFileUseCase uploadFileUseCase;
     private final RegisterPresignedUrlUseCase registerPresignedUrlUseCase;
-
-    @Operation(summary = "파일 업로드 Endpoint")
-    @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ResponseWrapper<String>> upload(
-            @Auth final Authenticated authenticated,
-            @RequestPart final MultipartFile file
-    ) {
-        final String uploadUrl = uploadFileUseCase.invoke(new UploadFileCommand(FileConverter.convertFile(file)));
-        return ResponseEntity.ok(ResponseWrapper.from(uploadUrl));
-    }
+    private final UploadFileUseCase uploadFileUseCase;
 
     @Operation(summary = "이미지 업로드에 대한 Presigned Url 응답 Endpoint")
     @GetMapping("/presigned/image")
@@ -67,5 +57,15 @@ public class FileManagementApiController {
                 new PresignedFileData(request.fileName())
         ));
         return ResponseEntity.ok(presignedUrl);
+    }
+
+    @Operation(summary = "파일 업로드 Endpoint - Deprecated")
+    @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ResponseWrapper<String>> upload(
+            @Auth final Authenticated authenticated,
+            @RequestPart final MultipartFile file
+    ) {
+        final String uploadUrl = uploadFileUseCase.invoke(new UploadFileCommand(FileConverter.convertFile(file)));
+        return ResponseEntity.ok(ResponseWrapper.from(uploadUrl));
     }
 }

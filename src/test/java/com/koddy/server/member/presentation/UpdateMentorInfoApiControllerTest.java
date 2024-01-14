@@ -3,10 +3,12 @@ package com.koddy.server.member.presentation;
 import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.UpdateMentorInfoUseCase;
+import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.dto.request.LanguageRequest;
 import com.koddy.server.member.presentation.dto.request.MentorScheduleRequest;
+import com.koddy.server.member.presentation.dto.request.MentoringPeriodRequest;
 import com.koddy.server.member.presentation.dto.request.UpdateMentorBasicInfoRequest;
 import com.koddy.server.member.presentation.dto.request.UpdateMentorScheduleRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -46,10 +48,14 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                 MENTOR_1.getName(),
                 MENTOR_1.getProfileImageUrl(),
                 MENTOR_1.getIntroduction(),
-                MENTOR_1.getLanguages()
-                        .stream()
-                        .map(it -> new LanguageRequest(it.getCategory().getCode(), it.getType().getValue()))
-                        .toList(),
+                new LanguageRequest(
+                        Language.Category.KR.getCode(),
+                        List.of(
+                                Language.Category.EN.getCode(),
+                                Language.Category.JP.getCode(),
+                                Language.Category.CN.getCode()
+                        )
+                ),
                 MENTOR_1.getUniversityProfile().getSchool(),
                 MENTOR_1.getUniversityProfile().getMajor(),
                 MENTOR_1.getUniversityProfile().getEnteredIn()
@@ -72,8 +78,8 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘토 자기소개", false),
                                     body("languages", "사용 가능한 언어", true),
-                                    body("languages[].category", "언어 종류", "[국가코드 기반] KR EN CH JP VN", true),
-                                    body("languages[].type", "언어 타입", "메인 언어 (1개) / 서브 언어 (0..N개)", true),
+                                    body("languages.main", "메인 언어 (코드 기반)", "1개 이상", true),
+                                    body("languages.sub[]", "서브 언어 (코드 기반)", "0..N개", false),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
                                     body("enteredIn", "학번", true)
@@ -101,8 +107,8 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘토 자기소개", false),
                                     body("languages", "사용 가능한 언어", true),
-                                    body("languages[].category", "언어 종류", "[국가코드 기반] KR EN CH JP VN", true),
-                                    body("languages[].type", "언어 타입", "메인 언어 (1개) / 서브 언어 (0..N개)", true),
+                                    body("languages.main", "메인 언어 (코드 기반)", "1개 이상", true),
+                                    body("languages.sub[]", "서브 언어 (코드 기반)", "0..N개", false),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
                                     body("enteredIn", "학번", true)
@@ -116,16 +122,16 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
     @DisplayName("멘토 스케줄 수정 API [PATCH /api/mentors/me/schedules]")
     class UpdateSchedule {
         private static final String BASE_URL = "/api/mentors/me/schedules";
-        private final UpdateMentorScheduleRequest request = new UpdateMentorScheduleRequest(List.of(
-                new MentorScheduleRequest(
-                        LocalDate.of(2024, 1, 1), LocalDate.of(2024, 3, 1),
-                        MON.getKor(), new MentorScheduleRequest.Start(9, 0), new MentorScheduleRequest.End(17, 0)
+        private final UpdateMentorScheduleRequest request = new UpdateMentorScheduleRequest(
+                new MentoringPeriodRequest(
+                        LocalDate.of(2024, 1, 1),
+                        LocalDate.of(2024, 5, 1)
                 ),
-                new MentorScheduleRequest(
-                        LocalDate.of(2024, 2, 3), LocalDate.of(2024, 5, 2),
-                        WED.getKor(), new MentorScheduleRequest.Start(13, 0), new MentorScheduleRequest.End(20, 0)
+                List.of(
+                        new MentorScheduleRequest(MON.getKor(), new MentorScheduleRequest.Start(9, 0), new MentorScheduleRequest.End(17, 0)),
+                        new MentorScheduleRequest(WED.getKor(), new MentorScheduleRequest.Start(13, 0), new MentorScheduleRequest.End(20, 0))
                 )
-        ));
+        );
 
         @Test
         @DisplayName("멘토가 아니면 권한이 없다")
@@ -140,14 +146,15 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                     ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
                     failureDocsWithAccessToken("MemberApi/Update/Mentor/Schedule/Failure", createHttpSpecSnippets(
                             requestFields(
+                                    body("period", "멘토링 기간", false),
+                                    body("period.startDate", "멘토링 시작 날짜", "KST", false),
+                                    body("period.endDate", "멘토링 종료 날짜", "KST", false),
                                     body("schedules", "멘토링 스케줄", false),
-                                    body("schedules[].startDate", "시작 날짜", "KST", false),
-                                    body("schedules[].endDate", "종료 날짜", "KST", false),
                                     body("schedules[].dayOfWeek", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].startTime.hour", "시작 시간 (Hour)", "KST", false),
-                                    body("schedules[].startTime.minute", "시작 시간 (Minute)", "KST", false),
-                                    body("schedules[].endTime.hour", "종료 시간 (Hour)", "KST", false),
-                                    body("schedules[].endTime.minute", "종료 시간 (Minute)", "KST", false)
+                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST", false),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST", false),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST", false),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST", false)
                             )
                     ))
             );
@@ -168,14 +175,15 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                     status().isNoContent(),
                     successDocsWithAccessToken("MemberApi/Update/Mentor/Schedule/Success", createHttpSpecSnippets(
                             requestFields(
+                                    body("period", "멘토링 기간", false),
+                                    body("period.startDate", "멘토링 시작 날짜", "KST", false),
+                                    body("period.endDate", "멘토링 종료 날짜", "KST", false),
                                     body("schedules", "멘토링 스케줄", false),
-                                    body("schedules[].startDate", "시작 날짜", "KST", false),
-                                    body("schedules[].endDate", "종료 날짜", "KST", false),
                                     body("schedules[].dayOfWeek", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].startTime.hour", "시작 시간 (Hour)", "KST", false),
-                                    body("schedules[].startTime.minute", "시작 시간 (Minute)", "KST", false),
-                                    body("schedules[].endTime.hour", "종료 시간 (Hour)", "KST", false),
-                                    body("schedules[].endTime.minute", "종료 시간 (Minute)", "KST", false)
+                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST", false),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST", false),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST", false),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST", false)
                             )
                     ))
             );

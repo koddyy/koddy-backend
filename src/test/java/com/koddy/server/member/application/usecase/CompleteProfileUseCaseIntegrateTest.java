@@ -1,6 +1,7 @@
 package com.koddy.server.member.application.usecase;
 
 import com.koddy.server.common.IntegrateTest;
+import com.koddy.server.common.fixture.MentoringPeriodFixture;
 import com.koddy.server.common.fixture.TimelineFixture;
 import com.koddy.server.member.application.usecase.command.CompleteMenteeProfileCommand;
 import com.koddy.server.member.application.usecase.command.CompleteMentorProfileCommand;
@@ -46,21 +47,31 @@ class CompleteProfileUseCaseIntegrateTest extends IntegrateTest {
                 MENTOR_1.getUniversityProfile()
         ));
         assertAll(
+                () -> assertThat(mentor.getIntroduction()).isNull(),
+                () -> assertThat(mentor.getMentoringPeriod()).isNull(),
+                () -> assertThat(mentor.getSchedules()).isEmpty(),
                 () -> assertThat(mentor.isProfileComplete()).isFalse(),
                 () -> assertThat(mentor.getProfileComplete()).isEqualTo(NO)
         );
 
-        // when
-        sut.completeMentor(new CompleteMentorProfileCommand(
+        final CompleteMentorProfileCommand command = new CompleteMentorProfileCommand(
                 mentor.getId(),
                 MENTOR_1.getIntroduction(),
+                MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain(),
                 TimelineFixture.주말()
-        ));
+        );
+
+        // when
+        sut.completeMentor(command);
 
         // then
         transactionTemplate.executeWithoutResult(status -> {
             final Mentor findMentor = mentorRepository.findById(mentor.getId()).orElseThrow();
             assertAll(
+                    () -> assertThat(findMentor.getIntroduction()).isEqualTo(command.introduction()),
+                    () -> assertThat(findMentor.getMentoringPeriod().getStartDate()).isEqualTo(command.mentoringPeriod().getStartDate()),
+                    () -> assertThat(findMentor.getMentoringPeriod().getEndDate()).isEqualTo(command.mentoringPeriod().getEndDate()),
+                    () -> assertThat(findMentor.getSchedules()).hasSize(command.timelines().size()),
                     () -> assertThat(findMentor.isProfileComplete()).isTrue(),
                     () -> assertThat(findMentor.getProfileComplete()).isEqualTo(YES)
             );
@@ -80,19 +91,23 @@ class CompleteProfileUseCaseIntegrateTest extends IntegrateTest {
                 MENTEE_1.getInterest()
         ));
         assertAll(
+                () -> assertThat(mentee.getIntroduction()).isNull(),
                 () -> assertThat(mentee.isProfileComplete()).isFalse(),
                 () -> assertThat(mentee.getProfileComplete()).isEqualTo(NO)
         );
 
-        // when
-        sut.completeMentee(new CompleteMenteeProfileCommand(
+        final CompleteMenteeProfileCommand command = new CompleteMenteeProfileCommand(
                 mentee.getId(),
                 MENTEE_1.getIntroduction()
-        ));
+        );
+
+        // when
+        sut.completeMentee(command);
 
         // then
         final Mentee findMentee = menteeRepository.findById(mentee.getId()).orElseThrow();
         assertAll(
+                () -> assertThat(findMentee.getIntroduction()).isEqualTo(command.introduction()),
                 () -> assertThat(findMentee.isProfileComplete()).isTrue(),
                 () -> assertThat(findMentee.getProfileComplete()).isEqualTo(YES)
         );

@@ -5,48 +5,6 @@
 :toc: left
 :toclevels: 3
 
-== 토큰 재발급 API (RefreshToken)
-
-=== HTTP Request
-
-include::{snippets}/TokenReissueApi/Success/http-request.adoc[]
-include::{snippets}/TokenReissueApi/Success/request-cookies.adoc[]
-
-=== HTTP Response
-
-include::{snippets}/TokenReissueApi/Failure/http-response.adoc[]
-include::{snippets}/TokenReissueApi/Success/http-response.adoc[]
-
-== 파일 관련 API (AccessToken)
-
-=== PresignedUrl 응답
-
-==== 이미지 파일
-
-===== HTTP Request
-
-include::{snippets}/FileApi/GetPresignedUrl/Image/Success/http-request.adoc[]
-include::{snippets}/FileApi/GetPresignedUrl/Image/Success/query-parameters.adoc[]
-
-===== HTTP Response
-
-include::{snippets}/FileApi/GetPresignedUrl/Image/Failure/http-response.adoc[]
-include::{snippets}/FileApi/GetPresignedUrl/Image/Success/http-response.adoc[]
-include::{snippets}/FileApi/GetPresignedUrl/Image/Success/response-fields.adoc[]
-
-==== PDF 파일
-
-===== HTTP Request
-
-include::{snippets}/FileApi/GetPresignedUrl/Pdf/Success/http-request.adoc[]
-include::{snippets}/FileApi/GetPresignedUrl/Pdf/Success/query-parameters.adoc[]
-
-===== HTTP Response
-
-include::{snippets}/FileApi/GetPresignedUrl/Pdf/Failure/http-response.adoc[]
-include::{snippets}/FileApi/GetPresignedUrl/Pdf/Success/http-response.adoc[]
-include::{snippets}/FileApi/GetPresignedUrl/Pdf/Success/response-fields.adoc[]
-
 == OAuth 로그인/로그아웃 API
 
 === OAuth Link 얻기
@@ -93,7 +51,19 @@ include::{snippets}/OAuthApi/Logout/http-request.adoc[]
 
 include::{snippets}/OAuthApi/Logout/http-response.adoc[]
 
-== 회원가입 + 로그인 API
+== 토큰 재발급 API (RefreshToken)
+
+=== HTTP Request
+
+include::{snippets}/TokenReissueApi/Success/http-request.adoc[]
+include::{snippets}/TokenReissueApi/Success/request-cookies.adoc[]
+
+=== HTTP Response
+
+include::{snippets}/TokenReissueApi/Failure/http-response.adoc[]
+include::{snippets}/TokenReissueApi/Success/http-response.adoc[]
+
+== 회원가입 + 로그인 / 탈퇴 API
 
 === 멘토 회원가입 + 로그인
 
@@ -119,64 +89,76 @@ include::{snippets}/MemberApi/SignUp/Mentee/request-fields.adoc[]
 include::{snippets}/MemberApi/SignUp/Mentee/http-response.adoc[]
 include::{snippets}/MemberApi/SignUp/Mentee/response-fields.adoc[]
 
+=== 사용자 탈퇴 (AccessToken)
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/Delete/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/Delete/http-response.adoc[]
+
 == 사용자 프로필 완성 API (AccessToken)
 
-=== 멘토 프로필 완성
+=== 멘토 프로필 완성 (OnlyMentor)
 
 ==== HTTP Request
 
-include::{snippets}/MemberApi/Complete/Mentor/http-request.adoc[]
-include::{snippets}/MemberApi/Complete/Mentor/request-fields.adoc[]
+include::{snippets}/MemberApi/Complete/Mentor/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Complete/Mentor/Success/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/MemberApi/Complete/Mentor/http-response.adoc[]
+include::{snippets}/MemberApi/Complete/Mentor/Success/http-response.adoc[]
 
-=== 멘티 프로필 완성
+=== 멘티 프로필 완성 (OnlyMentee)
 
 ==== HTTP Request
 
-include::{snippets}/MemberApi/Complete/Mentee/http-request.adoc[]
-include::{snippets}/MemberApi/Complete/Mentee/request-fields.adoc[]
+include::{snippets}/MemberApi/Complete/Mentee/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Complete/Mentee/Success/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/MemberApi/Complete/Mentee/http-response.adoc[]
+include::{snippets}/MemberApi/Complete/Mentee/Success/http-response.adoc[]
 
-== 멘토 정보 수정 API (AccessToken + OnlyMentor)
+== 사용자 정보 수정 API (AccessToken)
 
-=== 기본 정보
+=== 멘토 정보 수정 API (OnlyMentor)
 
-==== HTTP Request
+==== 기본 정보
+
+===== HTTP Request
 
 include::{snippets}/MemberApi/Update/Mentor/BasicInfo/Success/http-request.adoc[]
 include::{snippets}/MemberApi/Update/Mentor/BasicInfo/Success/request-fields.adoc[]
 
-==== HTTP Response
+===== HTTP Response
 
 include::{snippets}/MemberApi/Update/Mentor/BasicInfo/Success/http-response.adoc[]
 
-=== 스케줄
+==== 스케줄
 
-==== HTTP Request
+===== HTTP Request
 
 include::{snippets}/MemberApi/Update/Mentor/Schedule/Success/http-request.adoc[]
 include::{snippets}/MemberApi/Update/Mentor/Schedule/Success/request-fields.adoc[]
 
-==== HTTP Response
+===== HTTP Response
 
 include::{snippets}/MemberApi/Update/Mentor/Schedule/Success/http-response.adoc[]
 
-== 멘티 정보 수정 API (AccessToken + OnlyMentee)
+=== 멘티 정보 수정 API (OnlyMentee)
 
-=== 기본 정보
+==== 기본 정보
 
-==== HTTP Request
+===== HTTP Request
 
 include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/http-request.adoc[]
 include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/request-fields.adoc[]
 
-==== HTTP Response
+===== HTTP Response
 
 include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/http-response.adoc[]
 
@@ -219,16 +201,6 @@ include::{snippets}/MemberApi/Mentor/UnivAuth/ProofData/Success/request-fields.a
 
 include::{snippets}/MemberApi/Mentor/UnivAuth/ProofData/Success/http-response.adoc[]
 
-== 사용자 탈퇴 (AccessToken)
-
-=== HTTP Request
-
-include::{snippets}/MemberApi/Delete/http-request.adoc[]
-
-=== HTTP Response
-
-include::{snippets}/MemberApi/Delete/http-response.adoc[]
-
 == 사용자 마이페이지(Private) 프로필 조회 API (AccessToken)
 
 === 멘토 정보
@@ -252,6 +224,36 @@ include::{snippets}/MemberApi/PrivateProfile/Mix/Mentee/http-request.adoc[]
 
 include::{snippets}/MemberApi/PrivateProfile/Mix/Mentee/http-response.adoc[]
 include::{snippets}/MemberApi/PrivateProfile/Mix/Mentee/response-fields.adoc[]
+
+== 파일 관련 API (AccessToken)
+
+=== PresignedUrl 응답
+
+==== 이미지 파일
+
+===== HTTP Request
+
+include::{snippets}/FileApi/GetPresignedUrl/Image/Success/http-request.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/Image/Success/query-parameters.adoc[]
+
+===== HTTP Response
+
+include::{snippets}/FileApi/GetPresignedUrl/Image/Failure/http-response.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/Image/Success/http-response.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/Image/Success/response-fields.adoc[]
+
+==== PDF 파일
+
+===== HTTP Request
+
+include::{snippets}/FileApi/GetPresignedUrl/Pdf/Success/http-request.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/Pdf/Success/query-parameters.adoc[]
+
+===== HTTP Response
+
+include::{snippets}/FileApi/GetPresignedUrl/Pdf/Failure/http-response.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/Pdf/Success/http-response.adoc[]
+include::{snippets}/FileApi/GetPresignedUrl/Pdf/Success/response-fields.adoc[]
 
 == 커피챗 링크 생성/삭제 API (AccessToken + OnlyMentor)
 

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.koddy.server.member.domain.model.Role.MENTEE;
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 
-@Tag(name = "사용자 마이페이지(Private) 프로필 조회 API")
+@Tag(name = "2-6. 사용자 마이페이지(Private) 프로필 조회 API")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor

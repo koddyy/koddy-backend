@@ -19,12 +19,12 @@ public class GetMemberPrivateProfileUseCase {
     @KoddyReadOnlyTransactional
     public MentorProfile getMentorProfile(final long mentorId) {
         final Mentor mentor = mentorRepository.getProfile(mentorId);
-        return new MentorProfile(mentor);
+        return MentorProfile.of(mentor);
     }
 
     @KoddyReadOnlyTransactional
     public MenteeProfile getMenteeProfile(final long menteeId) {
         final Mentee mentee = menteeRepository.getProfile(menteeId);
-        return new MenteeProfile(mentee);
+        return MenteeProfile.of(mentee);
     }
 }

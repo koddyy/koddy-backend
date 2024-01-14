@@ -1,11 +1,13 @@
 package com.koddy.server.member.application.usecase;
 
 import com.koddy.server.common.UnitTest;
+import com.koddy.server.common.fixture.MentoringPeriodFixture;
 import com.koddy.server.member.application.usecase.query.response.MenteeProfile;
 import com.koddy.server.member.application.usecase.query.response.MentorProfile;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
+import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
 import com.koddy.server.member.domain.model.mentor.Timeline;
 import com.koddy.server.member.domain.repository.MenteeRepository;
 import com.koddy.server.member.domain.repository.MentorRepository;
@@ -37,7 +39,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
     @DisplayName("멘토 프로필 조회")
     class GetMentorProfile {
         @Test
-        @DisplayName("멘토 프로필을 조회한다 (미완성 - 자기소개, 스케줄)")
+        @DisplayName("멘토 프로필을 조회한다 (미완성 - 자기소개, 멘토링 기간, 스케줄)")
         void uncomplete() {
             // given
             final List<Language> languages = List.of(KR_MAIN.toDomain());
@@ -55,18 +57,25 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
 
             // then
             assertAll(
+                    // Required
                     () -> assertThat(mentorProfile.id()).isEqualTo(mentor.getId()),
                     () -> assertThat(mentorProfile.email()).isEqualTo(mentor.getEmail().getValue()),
                     () -> assertThat(mentorProfile.name()).isEqualTo(mentor.getName()),
                     () -> assertThat(mentorProfile.profileImageUrl()).isEqualTo(mentor.getProfileImageUrl()),
                     () -> assertThat(mentorProfile.nationality()).isEqualTo(mentor.getNationality().getKor()),
+                    () -> assertThat(mentorProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
+                    () -> assertThat(mentorProfile.languages().sub()).isEmpty(),
+                    () -> assertThat(mentorProfile.school()).isEqualTo(mentor.getUniversityProfile().getSchool()),
+                    () -> assertThat(mentorProfile.major()).isEqualTo(mentor.getUniversityProfile().getMajor()),
+                    () -> assertThat(mentorProfile.enteredIn()).isEqualTo(mentor.getUniversityProfile().getEnteredIn()),
+                    () -> assertThat(mentorProfile.authenticated()).isFalse(),
+
+                    // Optional
                     () -> assertThat(mentorProfile.introduction()).isNull(),
-                    () -> assertThat(mentorProfile.languages().mainLanguage()).isEqualTo(KR_MAIN.getCategory().getValue()),
-                    () -> assertThat(mentorProfile.languages().subLanguages()).isEmpty(),
-                    () -> assertThat(mentorProfile.university().school()).isEqualTo(mentor.getUniversityProfile().getSchool()),
-                    () -> assertThat(mentorProfile.university().major()).isEqualTo(mentor.getUniversityProfile().getMajor()),
-                    () -> assertThat(mentorProfile.university().enteredIn()).isEqualTo(mentor.getUniversityProfile().getEnteredIn()),
+                    () -> assertThat(mentorProfile.period()).isNull(),
                     () -> assertThat(mentorProfile.schedules()).isEmpty(),
+
+                    // isCompleted
                     () -> assertThat(mentorProfile.profileComplete()).isFalse()
             );
         }
@@ -76,8 +85,10 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
         void complete() {
             // given
             final List<Language> languages = List.of(KR_MAIN.toDomain());
+            final MentoringPeriod period = MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain();
             final List<Timeline> timelines = List.of(MON_09_17.toDomain(), THU_09_17.toDomain());
-            final Mentor mentor = MENTOR_1.toDomainWithLanguagesAndTimelines(languages, timelines).apply(1L);
+
+            final Mentor mentor = MENTOR_1.toDomainWithLanguagesAndMentoringInfo(languages, period, timelines).apply(1L);
             given(mentorRepository.getProfile(mentor.getId())).willReturn(mentor);
 
             // when
@@ -85,36 +96,42 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
 
             // then
             assertAll(
+                    // Required
                     () -> assertThat(mentorProfile.id()).isEqualTo(mentor.getId()),
                     () -> assertThat(mentorProfile.email()).isEqualTo(mentor.getEmail().getValue()),
                     () -> assertThat(mentorProfile.name()).isEqualTo(mentor.getName()),
                     () -> assertThat(mentorProfile.profileImageUrl()).isEqualTo(mentor.getProfileImageUrl()),
                     () -> assertThat(mentorProfile.nationality()).isEqualTo(mentor.getNationality().getKor()),
+                    () -> assertThat(mentorProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
+                    () -> assertThat(mentorProfile.languages().sub()).isEmpty(),
+                    () -> assertThat(mentorProfile.school()).isEqualTo(mentor.getUniversityProfile().getSchool()),
+                    () -> assertThat(mentorProfile.major()).isEqualTo(mentor.getUniversityProfile().getMajor()),
+                    () -> assertThat(mentorProfile.enteredIn()).isEqualTo(mentor.getUniversityProfile().getEnteredIn()),
+                    () -> assertThat(mentorProfile.authenticated()).isFalse(),
+
+                    // Optional
                     () -> assertThat(mentorProfile.introduction()).isEqualTo(mentor.getIntroduction()),
-                    () -> assertThat(mentorProfile.languages().mainLanguage()).isEqualTo(KR_MAIN.getCategory().getValue()),
-                    () -> assertThat(mentorProfile.languages().subLanguages()).isEmpty(),
-                    () -> assertThat(mentorProfile.university().school()).isEqualTo(mentor.getUniversityProfile().getSchool()),
-                    () -> assertThat(mentorProfile.university().major()).isEqualTo(mentor.getUniversityProfile().getMajor()),
-                    () -> assertThat(mentorProfile.university().enteredIn()).isEqualTo(mentor.getUniversityProfile().getEnteredIn()),
+                    () -> assertThat(mentorProfile.period().startDate()).isEqualTo(period.getStartDate()),
+                    () -> assertThat(mentorProfile.period().endDate()).isEqualTo(period.getEndDate()),
                     () -> assertThat(mentorProfile.schedules())
                             .usingRecursiveComparison()
                             .isEqualTo(
                                     timelines.stream()
                                             .map(it -> new MentorProfile.ScheduleResponse(
-                                                    it.getStartDate(),
-                                                    it.getEndDate(),
                                                     it.getDayOfWeek().getKor(),
                                                     new MentorProfile.ScheduleResponse.Start(
-                                                            it.getPeriod().getStartTime().getHour(),
-                                                            it.getPeriod().getStartTime().getMinute()
+                                                            it.getStartTime().getHour(),
+                                                            it.getStartTime().getMinute()
                                                     ),
                                                     new MentorProfile.ScheduleResponse.End(
-                                                            it.getPeriod().getEndTime().getHour(),
-                                                            it.getPeriod().getEndTime().getMinute()
+                                                            it.getEndTime().getHour(),
+                                                            it.getEndTime().getMinute()
                                                     )
                                             ))
                                             .toList()
                             ),
+
+                    // isCompleted
                     () -> assertThat(mentorProfile.profileComplete()).isTrue()
             );
         }
@@ -143,19 +160,24 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
 
             // then
             assertAll(
+                    // Required
                     () -> assertThat(menteeProfile.id()).isEqualTo(mentee.getId()),
                     () -> assertThat(menteeProfile.email()).isEqualTo(mentee.getEmail().getValue()),
                     () -> assertThat(menteeProfile.name()).isEqualTo(mentee.getName()),
                     () -> assertThat(menteeProfile.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),
                     () -> assertThat(menteeProfile.nationality()).isEqualTo(mentee.getNationality().getKor()),
-                    () -> assertThat(menteeProfile.introduction()).isNull(),
-                    () -> assertThat(menteeProfile.languages().mainLanguage()).isEqualTo(KR_MAIN.getCategory().getValue()),
-                    () -> assertThat(menteeProfile.languages().subLanguages()).containsExactlyInAnyOrder(
-                            EN_SUB.getCategory().getValue(),
-                            JP_SUB.getCategory().getValue()
+                    () -> assertThat(menteeProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
+                    () -> assertThat(menteeProfile.languages().sub()).containsExactlyInAnyOrder(
+                            EN_SUB.getCategory().getCode(),
+                            JP_SUB.getCategory().getCode()
                     ),
-                    () -> assertThat(menteeProfile.interest().school()).isEqualTo(mentee.getInterest().getSchool()),
-                    () -> assertThat(menteeProfile.interest().major()).isEqualTo(mentee.getInterest().getMajor()),
+                    () -> assertThat(menteeProfile.interestSchool()).isEqualTo(mentee.getInterest().getSchool()),
+                    () -> assertThat(menteeProfile.interestMajor()).isEqualTo(mentee.getInterest().getMajor()),
+
+                    // Optional
+                    () -> assertThat(menteeProfile.introduction()).isNull(),
+
+                    // isCompleted
                     () -> assertThat(menteeProfile.profileComplete()).isFalse()
             );
         }
@@ -173,19 +195,24 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
 
             // then
             assertAll(
+                    // Required
                     () -> assertThat(menteeProfile.id()).isEqualTo(mentee.getId()),
                     () -> assertThat(menteeProfile.email()).isEqualTo(mentee.getEmail().getValue()),
                     () -> assertThat(menteeProfile.name()).isEqualTo(mentee.getName()),
                     () -> assertThat(menteeProfile.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),
                     () -> assertThat(menteeProfile.nationality()).isEqualTo(mentee.getNationality().getKor()),
-                    () -> assertThat(menteeProfile.introduction()).isEqualTo(mentee.getIntroduction()),
-                    () -> assertThat(menteeProfile.languages().mainLanguage()).isEqualTo(KR_MAIN.getCategory().getValue()),
-                    () -> assertThat(menteeProfile.languages().subLanguages()).containsExactlyInAnyOrder(
-                            EN_SUB.getCategory().getValue(),
-                            JP_SUB.getCategory().getValue()
+                    () -> assertThat(menteeProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
+                    () -> assertThat(menteeProfile.languages().sub()).containsExactlyInAnyOrder(
+                            EN_SUB.getCategory().getCode(),
+                            JP_SUB.getCategory().getCode()
                     ),
-                    () -> assertThat(menteeProfile.interest().school()).isEqualTo(mentee.getInterest().getSchool()),
-                    () -> assertThat(menteeProfile.interest().major()).isEqualTo(mentee.getInterest().getMajor()),
+                    () -> assertThat(menteeProfile.interestSchool()).isEqualTo(mentee.getInterest().getSchool()),
+                    () -> assertThat(menteeProfile.interestMajor()).isEqualTo(mentee.getInterest().getMajor()),
+
+                    // Optional
+                    () -> assertThat(menteeProfile.introduction()).isEqualTo(mentee.getIntroduction()),
+
+                    // isCompleted
                     () -> assertThat(menteeProfile.profileComplete()).isTrue()
             );
         }

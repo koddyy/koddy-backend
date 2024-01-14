@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "사용자 계정 관리 (회원가입 + 로그인/탈퇴) API")
+@Tag(name = "2-1. 사용자 계정 관리 (회원가입 + 로그인/탈퇴) API")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor

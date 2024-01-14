@@ -9,7 +9,7 @@ import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.S
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("Member/Mentor -> UniversityAuthentication 테스트")
+@DisplayName("Member/Mentor -> 도메인 [UniversityAuthentication] 테스트")
 class UniversityAuthenticationTest extends ParallelTest {
     @Test
     @DisplayName("메일로 학교 인증을 시도한다")
@@ -21,7 +21,8 @@ class UniversityAuthenticationTest extends ParallelTest {
         assertAll(
                 () -> assertThat(attemptMail.getSchoolMail()).isEqualTo(schoolMail),
                 () -> assertThat(attemptMail.getProofDataUploadUrl()).isNull(),
-                () -> assertThat(attemptMail.getStatus()).isEqualTo(ATTEMPT)
+                () -> assertThat(attemptMail.getStatus()).isEqualTo(ATTEMPT),
+                () -> assertThat(attemptMail.isAuthenticated()).isFalse()
         );
 
         /* 2. 완료 */
@@ -29,7 +30,8 @@ class UniversityAuthenticationTest extends ParallelTest {
         assertAll(
                 () -> assertThat(attemptMail.getSchoolMail()).isEqualTo(schoolMail),
                 () -> assertThat(attemptMail.getProofDataUploadUrl()).isNull(),
-                () -> assertThat(attemptMail.getStatus()).isEqualTo(SUCCESS)
+                () -> assertThat(attemptMail.getStatus()).isEqualTo(SUCCESS),
+                () -> assertThat(attemptMail.isAuthenticated()).isTrue()
         );
     }
 
@@ -43,7 +45,8 @@ class UniversityAuthenticationTest extends ParallelTest {
         assertAll(
                 () -> assertThat(attemptProofData.getSchoolMail()).isNull(),
                 () -> assertThat(attemptProofData.getProofDataUploadUrl()).isEqualTo(proofDataUploadUrl),
-                () -> assertThat(attemptProofData.getStatus()).isEqualTo(ATTEMPT)
+                () -> assertThat(attemptProofData.getStatus()).isEqualTo(ATTEMPT),
+                () -> assertThat(attemptProofData.isAuthenticated()).isFalse()
         );
 
         /* 2. 완료 */
@@ -51,7 +54,8 @@ class UniversityAuthenticationTest extends ParallelTest {
         assertAll(
                 () -> assertThat(attemptProofData.getSchoolMail()).isNull(),
                 () -> assertThat(attemptProofData.getProofDataUploadUrl()).isEqualTo(proofDataUploadUrl),
-                () -> assertThat(attemptProofData.getStatus()).isEqualTo(SUCCESS)
+                () -> assertThat(attemptProofData.getStatus()).isEqualTo(SUCCESS),
+                () -> assertThat(attemptProofData.isAuthenticated()).isTrue()
         );
     }
 }

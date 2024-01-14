@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.koddy.server.member.domain.model.Role.MENTEE;
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 
-@Tag(name = "사용자 프로필 완성 API")
+@Tag(name = "2-2. 사용자 프로필 완성 API")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -38,6 +38,7 @@ public class CompleteAccountApiController {
         completeProfileUseCase.completeMentor(new CompleteMentorProfileCommand(
                 authenticated.id(),
                 request.introduction(),
+                request.toPeriod(),
                 request.toSchedules()
         ));
         return ResponseEntity.noContent().build();

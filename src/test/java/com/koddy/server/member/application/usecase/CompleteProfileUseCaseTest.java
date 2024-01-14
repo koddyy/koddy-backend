@@ -1,6 +1,7 @@
 package com.koddy.server.member.application.usecase;
 
 import com.koddy.server.common.UnitTest;
+import com.koddy.server.common.fixture.MentoringPeriodFixture;
 import com.koddy.server.common.fixture.TimelineFixture;
 import com.koddy.server.member.application.usecase.command.CompleteMenteeProfileCommand;
 import com.koddy.server.member.application.usecase.command.CompleteMentorProfileCommand;
@@ -40,19 +41,21 @@ class CompleteProfileUseCaseTest extends UnitTest {
                 MENTOR_1.getLanguages(),
                 MENTOR_1.getUniversityProfile()
         ).apply(1L);
-        final CompleteMentorProfileCommand command = new CompleteMentorProfileCommand(
-                mentor.getId(),
-                MENTOR_1.getIntroduction(),
-                TimelineFixture.월_수_금()
-        );
-        given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
-
         assertAll(
                 () -> assertThat(mentor.getIntroduction()).isNull(),
-                () -> assertThat(mentor.getSchedules()).hasSize(0),
+                () -> assertThat(mentor.getMentoringPeriod()).isNull(),
+                () -> assertThat(mentor.getSchedules()).isEmpty(),
                 () -> assertThat(mentor.isProfileComplete()).isFalse(),
                 () -> assertThat(mentor.getProfileComplete()).isEqualTo(NO)
         );
+
+        final CompleteMentorProfileCommand command = new CompleteMentorProfileCommand(
+                mentor.getId(),
+                MENTOR_1.getIntroduction(),
+                MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain(),
+                TimelineFixture.월_수_금()
+        );
+        given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
 
         // when
         sut.completeMentor(command);
@@ -62,6 +65,7 @@ class CompleteProfileUseCaseTest extends UnitTest {
                 () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
                 () -> verify(menteeRepository, times(0)).getById(anyLong()),
                 () -> assertThat(mentor.getIntroduction()).isNotNull(),
+                () -> assertThat(mentor.getMentoringPeriod()).isEqualTo(command.mentoringPeriod()),
                 () -> assertThat(mentor.getSchedules()).hasSize(TimelineFixture.월_수_금().size()),
                 () -> assertThat(mentor.isProfileComplete()).isTrue(),
                 () -> assertThat(mentor.getProfileComplete()).isEqualTo(YES)
@@ -80,14 +84,14 @@ class CompleteProfileUseCaseTest extends UnitTest {
                 MENTEE_1.getLanguages(),
                 MENTEE_1.getInterest()
         ).apply(1L);
-        final CompleteMenteeProfileCommand command = new CompleteMenteeProfileCommand(mentee.getId(), MENTEE_1.getIntroduction());
-        given(menteeRepository.getById(command.menteeId())).willReturn(mentee);
-
         assertAll(
                 () -> assertThat(mentee.getIntroduction()).isNull(),
                 () -> assertThat(mentee.isProfileComplete()).isFalse(),
                 () -> assertThat(mentee.getProfileComplete()).isEqualTo(NO)
         );
+
+        final CompleteMenteeProfileCommand command = new CompleteMenteeProfileCommand(mentee.getId(), MENTEE_1.getIntroduction());
+        given(menteeRepository.getById(command.menteeId())).willReturn(mentee);
 
         // when
         sut.completeMentee(command);
