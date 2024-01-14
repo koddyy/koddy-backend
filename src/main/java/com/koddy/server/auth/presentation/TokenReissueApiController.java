@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.koddy.server.auth.domain.model.TokenType.REFRESH;
 
-@Tag(name = "토큰 재발급 API")
+@Tag(name = "1-2. 토큰 재발급 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/token/reissue")

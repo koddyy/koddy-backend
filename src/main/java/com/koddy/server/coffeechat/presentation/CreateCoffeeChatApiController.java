@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.koddy.server.member.domain.model.Role.MENTEE;
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 
-@Tag(name = "커피챗 신청/제안 API")
+@Tag(name = "4-2. 커피챗 신청/제안 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/coffeechat")

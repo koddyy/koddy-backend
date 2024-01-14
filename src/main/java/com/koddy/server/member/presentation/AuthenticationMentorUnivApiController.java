@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 
-@Tag(name = "멘토 학교 인증 API")
+@Tag(name = "2-5. 멘토 학교 인증 API")
 @RestController
 @RequestMapping("/api/mentors/me/univ")
 @RequiredArgsConstructor
