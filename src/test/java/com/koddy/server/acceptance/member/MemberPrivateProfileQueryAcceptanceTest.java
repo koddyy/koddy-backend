@@ -85,8 +85,8 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
                     .body("major", is(MENTOR_1.getUniversityProfile().getMajor()))
                     .body("enteredIn", is(MENTOR_1.getUniversityProfile().getEnteredIn()))
                     .body("authenticated", is(false))
-                    .body("period.startDate", is(MENTOR_1.getMentoringPeriod().getStartDate().toString()))
-                    .body("period.endDate", is(MENTOR_1.getMentoringPeriod().getEndDate().toString()))
+                    .body("period.startDate", is(MENTOR_1.getMentoringSetting().getStartDate().toString()))
+                    .body("period.endDate", is(MENTOR_1.getMentoringSetting().getEndDate().toString()))
                     .body("schedules", hasSize(MENTOR_1.getTimelines().size()))
                     .body("role", is("mentor"))
                     .body("profileComplete", is(true));

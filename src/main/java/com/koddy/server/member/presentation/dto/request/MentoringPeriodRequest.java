@@ -1,6 +1,6 @@
 package com.koddy.server.member.presentation.dto.request;
 
-import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
+import com.koddy.server.member.domain.model.mentor.MentoringSetting;
 
 import java.time.LocalDate;
 
@@ -8,9 +8,9 @@ public record MentoringPeriodRequest(
         LocalDate startDate,
         LocalDate endDate
 ) {
-    public MentoringPeriod toPeriod() {
+    public MentoringSetting toPeriod() {
         if (startDate != null && endDate != null) {
-            return MentoringPeriod.of(startDate, endDate);
+            return MentoringSetting.of(startDate, endDate);
         }
         return null;
     }

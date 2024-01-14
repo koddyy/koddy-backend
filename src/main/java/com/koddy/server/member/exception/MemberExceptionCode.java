@@ -23,7 +23,7 @@ public enum MemberExceptionCode implements KoddyExceptionCode {
     INVALID_LANGUAGE_CATEGORY(BAD_REQUEST, "MEMBER_010", "유효하지 않은 언어 종류입니다."),
     INVALID_LANGUAGE_TYPE(BAD_REQUEST, "MEMBER_011", "유효하지 않은 언어 레벨입니다."),
     INVALID_DAY(BAD_REQUEST, "MEMBER_012", "유효하지 않은 날짜입니다."),
-    ;
+    INVALID_TIME_UNIT(BAD_REQUEST, "MEMBER_013", "설정할 수 없는 멘토링 시간 단위입니다.");
 
     private final HttpStatus status;
     private final String errorCode;

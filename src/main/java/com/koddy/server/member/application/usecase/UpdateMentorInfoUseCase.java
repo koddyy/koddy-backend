@@ -30,6 +30,6 @@ public class UpdateMentorInfoUseCase {
     @KoddyWritableTransactional
     public void updateSchedule(final UpdateMentorScheduleCommand command) {
         final Mentor mentor = mentorRepository.getById(command.mentorId());
-        mentor.updateSchedules(command.mentoringPeriod(), command.timelines());
+        mentor.updateSchedules(command.mentoringSetting(), command.timelines());
     }
 }

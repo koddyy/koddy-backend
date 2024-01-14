@@ -41,8 +41,8 @@ class CompleteAccountApiControllerTest extends ControllerTest {
         private final CompleteMentorProfileRequest request = new CompleteMentorProfileRequest(
                 MENTOR_1.getIntroduction(),
                 new MentoringPeriodRequest(
-                        MENTOR_1.getMentoringPeriod().getStartDate(),
-                        MENTOR_1.getMentoringPeriod().getEndDate()
+                        MENTOR_1.getMentoringSetting().getStartDate(),
+                        MENTOR_1.getMentoringSetting().getEndDate()
                 ),
                 TimelineFixture.월_수_금()
                         .stream()

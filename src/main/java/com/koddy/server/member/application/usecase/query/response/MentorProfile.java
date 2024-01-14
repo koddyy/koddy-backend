@@ -1,7 +1,7 @@
 package com.koddy.server.member.application.usecase.query.response;
 
 import com.koddy.server.member.domain.model.mentor.Mentor;
-import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
+import com.koddy.server.member.domain.model.mentor.MentoringSetting;
 import com.koddy.server.member.domain.model.mentor.Timeline;
 import com.koddy.server.member.domain.model.mentor.UniversityAuthentication;
 
@@ -31,11 +31,11 @@ public record MentorProfile(
             LocalDate startDate,
             LocalDate endDate
     ) {
-        public static MentoringPeriodResponse of(final MentoringPeriod mentoringPeriod) {
-            if (mentoringPeriod == null) {
+        public static MentoringPeriodResponse of(final MentoringSetting mentoringSetting) {
+            if (mentoringSetting == null) {
                 return null;
             }
-            return new MentoringPeriodResponse(mentoringPeriod.getStartDate(), mentoringPeriod.getEndDate());
+            return new MentoringPeriodResponse(mentoringSetting.getStartDate(), mentoringSetting.getEndDate());
         }
     }
 
@@ -78,7 +78,7 @@ public record MentorProfile(
                 mentor.getUniversityProfile().getMajor(),
                 mentor.getUniversityProfile().getEnteredIn(),
                 isAuthenticated(mentor.getUniversityAuthentication()),
-                MentoringPeriodResponse.of(mentor.getMentoringPeriod()),
+                MentoringPeriodResponse.of(mentor.getMentoringSetting()),
                 mentor.getSchedules()
                         .stream()
                         .map(it -> ScheduleResponse.of(it.getTimeline()))

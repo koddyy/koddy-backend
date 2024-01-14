@@ -78,7 +78,7 @@ class UpdateMentorInfoUseCaseTest extends UnitTest {
         // then
         assertAll(
                 () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
-                () -> assertThat(mentor.getMentoringPeriod()).isEqualTo(command.mentoringPeriod()),
+                () -> assertThat(mentor.getMentoringSetting()).isEqualTo(command.mentoringSetting()),
                 () -> assertThat(mentor.getSchedules())
                         .map(Schedule::getTimeline)
                         .containsExactlyInAnyOrderElementsOf(command.timelines())

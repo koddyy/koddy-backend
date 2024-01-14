@@ -43,7 +43,7 @@ class CompleteProfileUseCaseTest extends UnitTest {
         ).apply(1L);
         assertAll(
                 () -> assertThat(mentor.getIntroduction()).isNull(),
-                () -> assertThat(mentor.getMentoringPeriod()).isNull(),
+                () -> assertThat(mentor.getMentoringSetting()).isNull(),
                 () -> assertThat(mentor.getSchedules()).isEmpty(),
                 () -> assertThat(mentor.isProfileComplete()).isFalse(),
                 () -> assertThat(mentor.getProfileComplete()).isEqualTo(NO)
@@ -65,7 +65,7 @@ class CompleteProfileUseCaseTest extends UnitTest {
                 () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
                 () -> verify(menteeRepository, times(0)).getById(anyLong()),
                 () -> assertThat(mentor.getIntroduction()).isNotNull(),
-                () -> assertThat(mentor.getMentoringPeriod()).isEqualTo(command.mentoringPeriod()),
+                () -> assertThat(mentor.getMentoringSetting()).isEqualTo(command.mentoringSetting()),
                 () -> assertThat(mentor.getSchedules()).hasSize(TimelineFixture.월_수_금().size()),
                 () -> assertThat(mentor.isProfileComplete()).isTrue(),
                 () -> assertThat(mentor.getProfileComplete()).isEqualTo(YES)
