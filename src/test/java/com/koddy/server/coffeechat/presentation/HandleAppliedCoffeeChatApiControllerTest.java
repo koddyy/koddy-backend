@@ -1,9 +1,9 @@
 package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.auth.exception.AuthExceptionCode;
-import com.koddy.server.coffeechat.application.usecase.ApproveCoffeeChatUseCase;
-import com.koddy.server.coffeechat.presentation.dto.request.ApproveMenteeApplyRequest;
-import com.koddy.server.coffeechat.presentation.dto.request.ApproveMentorSuggestRequest;
+import com.koddy.server.coffeechat.application.usecase.HandleAppliedCoffeeChatUseCase;
+import com.koddy.server.coffeechat.presentation.dto.request.ApproveAppliedCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.dto.request.RejectAppliedCoffeeChatRequest;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.common.fixture.StrategyFixture;
 import com.koddy.server.member.domain.model.mentee.Mentee;
@@ -12,8 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.time.LocalDateTime;
 
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
@@ -28,67 +26,62 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("CoffeeChat -> ApproveCoffeeChatApiController 테스트")
-class ApproveCoffeeChatApiControllerTest extends ControllerTest {
+@DisplayName("CoffeeChat -> HandleAppliedCoffeeChatApiController 테스트")
+class HandleAppliedCoffeeChatApiControllerTest extends ControllerTest {
     @Autowired
-    private ApproveCoffeeChatUseCase approveCoffeeChatUseCase;
+    private HandleAppliedCoffeeChatUseCase handleAppliedCoffeeChatUseCase;
 
     private static final Long COFFEE_CHAT_ID = 1L;
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
     private final Mentee mentee = MENTEE_1.toDomain().apply(2L);
 
     @Nested
-    @DisplayName("멘토의 커피챗 제안 수락 API [POST /api/coffeechats/approve/suggested/{coffeeChatId}]")
-    class SuggestByMentor {
-        private static final String BASE_URL = "/api/coffeechats/approve/suggested/{coffeeChatId}";
-        private final ApproveMentorSuggestRequest request = new ApproveMentorSuggestRequest(
-                LocalDateTime.of(2024, 2, 1, 18, 0),
-                LocalDateTime.of(2024, 2, 1, 19, 0)
-        );
+    @DisplayName("멘티가 신청한 커피챗 거절 API [PATCH /api/coffeechats/applied/reject/{coffeeChatId}]")
+    class Reject {
+        private static final String BASE_URL = "/api/coffeechats/applied/reject/{coffeeChatId}";
+        private final RejectAppliedCoffeeChatRequest request = new RejectAppliedCoffeeChatRequest("거절..");
 
         @Test
-        @DisplayName("멘티가 아니면 권한이 없다")
+        @DisplayName("멘토 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentee.getId(), mentee.getRole());
 
             // when - then
             failedExecute(
                     patchRequestWithAccessToken(new UrlWithVariables(BASE_URL, COFFEE_CHAT_ID), request),
                     status().isForbidden(),
                     ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
-                    failureDocsWithAccessToken("CoffeeChatApi/Approve/SuggestByMentor/Failure", createHttpSpecSnippets(
+                    failureDocsWithAccessToken("CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Failure", createHttpSpecSnippets(
                             pathParameters(
                                     path("coffeeChatId", "커피챗 ID(PK)", true)
                             ),
                             requestFields(
-                                    body("start", "멘토링 시작 시간", "KST", true),
-                                    body("end", "멘토링 종료 시간", "KST", true)
+                                    body("rejectReason", "거절 사유", true)
                             )
                     ))
             );
         }
 
         @Test
-        @DisplayName("멘티가 멘토의 커피챗 제안을 수락한다")
+        @DisplayName("멘티가 신청한 커피챗을 거절한다")
         void success() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentor.getId(), mentor.getRole());
             doNothing()
-                    .when(approveCoffeeChatUseCase)
-                    .suggestByMentor(any());
+                    .when(handleAppliedCoffeeChatUseCase)
+                    .reject(any());
 
             // when - then
             successfulExecute(
                     patchRequestWithAccessToken(new UrlWithVariables(BASE_URL, COFFEE_CHAT_ID), request),
                     status().isNoContent(),
-                    successDocsWithAccessToken("CoffeeChatApi/Approve/SuggestByMentor/Success", createHttpSpecSnippets(
+                    successDocsWithAccessToken("CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Success", createHttpSpecSnippets(
                             pathParameters(
                                     path("coffeeChatId", "커피챗 ID(PK)", true)
                             ),
                             requestFields(
-                                    body("start", "멘토링 시작 시간", "KST", true),
-                                    body("end", "멘토링 종료 시간", "KST", true)
+                                    body("rejectReason", "거절 사유", true)
                             )
                     ))
             );
@@ -96,16 +89,16 @@ class ApproveCoffeeChatApiControllerTest extends ControllerTest {
     }
 
     @Nested
-    @DisplayName("멘티의 커피챗 신청 수락 API [POST /api/coffeechats/approve/applied/{coffeeChatId}]")
-    class ApplyByMentee {
-        private static final String BASE_URL = "/api/coffeechats/approve/applied/{coffeeChatId}";
-        private final ApproveMenteeApplyRequest request = new ApproveMenteeApplyRequest(
+    @DisplayName("멘티가 신청한 커피챗 수락 API [PATCH /api/coffeechats/applied/approve/{coffeeChatId}]")
+    class Approve {
+        private static final String BASE_URL = "/api/coffeechats/applied/approve/{coffeeChatId}";
+        private final ApproveAppliedCoffeeChatRequest request = new ApproveAppliedCoffeeChatRequest(
                 StrategyFixture.KAKAO_ID.getType().getEng(),
                 StrategyFixture.KAKAO_ID.getValue()
         );
 
         @Test
-        @DisplayName("멘토가 아니면 권한이 없다")
+        @DisplayName("멘토 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
@@ -115,7 +108,7 @@ class ApproveCoffeeChatApiControllerTest extends ControllerTest {
                     patchRequestWithAccessToken(new UrlWithVariables(BASE_URL, COFFEE_CHAT_ID), request),
                     status().isForbidden(),
                     ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
-                    failureDocsWithAccessToken("CoffeeChatApi/Approve/ApplyByMentee/Failure", createHttpSpecSnippets(
+                    failureDocsWithAccessToken("CoffeeChatApi/LifeCycle/AppliedByMentee/Approve/Failure", createHttpSpecSnippets(
                             pathParameters(
                                     path("coffeeChatId", "커피챗 ID(PK)", true)
                             ),
@@ -128,19 +121,19 @@ class ApproveCoffeeChatApiControllerTest extends ControllerTest {
         }
 
         @Test
-        @DisplayName("멘토가 멘티의 커피챗 신청을 수락한다")
+        @DisplayName("멘티가 신청한 커피챗을 거절한다")
         void success() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
             doNothing()
-                    .when(approveCoffeeChatUseCase)
-                    .applyByMentee(any());
+                    .when(handleAppliedCoffeeChatUseCase)
+                    .approve(any());
 
             // when - then
             successfulExecute(
                     patchRequestWithAccessToken(new UrlWithVariables(BASE_URL, COFFEE_CHAT_ID), request),
                     status().isNoContent(),
-                    successDocsWithAccessToken("CoffeeChatApi/Approve/ApplyByMentee/Success", createHttpSpecSnippets(
+                    successDocsWithAccessToken("CoffeeChatApi/LifeCycle/AppliedByMentee/Approve/Success", createHttpSpecSnippets(
                             pathParameters(
                                     path("coffeeChatId", "커피챗 ID(PK)", true)
                             ),

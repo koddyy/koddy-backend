@@ -296,48 +296,50 @@ include::{snippets}/CoffeeChatApi/MeetingLink/Delete/Success/http-response.adoc[
 
 ==== HTTP Request
 
-include::{snippets}/CoffeeChatApi/Create/MentorSuggest/Success/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/Create/MentorSuggest/Success/path-parameters.adoc[]
-include::{snippets}/CoffeeChatApi/Create/MentorSuggest/Success/request-fields.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/CoffeeChatApi/Create/MentorSuggest/Success/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/http-response.adoc[]
 
 === 멘티 -> 멘토 커피챗 신청 (OnlyMentee)
 
 ==== HTTP Request
 
-include::{snippets}/CoffeeChatApi/Create/MenteeApply/Success/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/Create/MenteeApply/Success/path-parameters.adoc[]
-include::{snippets}/CoffeeChatApi/Create/MenteeApply/Success/request-fields.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/CoffeeChatApi/Create/MenteeApply/Success/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/http-response.adoc[]
 
-== 커피챗 수락 (AccessToken)
+== 신청/제안된 커피챗 처리 (AccessToken)
 
-=== 멘토의 커피챗 제안 수락 (OnlyMentee)
+=== 멘티가 신청한 커피챗 처리 (OnlyMentor)
 
-==== HTTP Request
+==== 거절
 
-include::{snippets}/CoffeeChatApi/Approve/SuggestByMentor/Success/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/Approve/SuggestByMentor/Success/path-parameters.adoc[]
-include::{snippets}/CoffeeChatApi/Approve/SuggestByMentor/Success/request-fields.adoc[]
+===== HTTP Request
 
-==== HTTP Response
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Success/request-fields.adoc[]
 
-include::{snippets}/CoffeeChatApi/Approve/SuggestByMentor/Success/http-response.adoc[]
+===== HTTP Response
 
-=== 멘티의 커피챗 신청 수락 (OnlyMentor)
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Success/http-response.adoc[]
 
-==== HTTP Request
+==== 승인
 
-include::{snippets}/CoffeeChatApi/Approve/ApplyByMentee/Success/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/Approve/ApplyByMentee/Success/path-parameters.adoc[]
-include::{snippets}/CoffeeChatApi/Approve/ApplyByMentee/Success/request-fields.adoc[]
+===== HTTP Request
 
-==== HTTP Response
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Approve/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Approve/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Approve/Success/request-fields.adoc[]
 
-include::{snippets}/CoffeeChatApi/Approve/ApplyByMentee/Success/http-response.adoc[]
+===== HTTP Response
+
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Approve/Success/http-response.adoc[]

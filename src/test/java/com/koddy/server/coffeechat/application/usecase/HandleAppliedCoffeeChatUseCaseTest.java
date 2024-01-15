@@ -7,7 +7,6 @@ import com.koddy.server.coffeechat.domain.model.Reservation;
 import com.koddy.server.coffeechat.domain.model.Strategy;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.common.UnitTest;
-import com.koddy.server.common.fixture.StrategyFixture;
 import com.koddy.server.global.encrypt.Encryptor;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -44,7 +43,7 @@ class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
         final String applyReason = "신청 이유...";
         final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
         final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
-        final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end);
+        final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end).apply(1L);
 
         final String rejectReason = "거절...";
         final RejectAppliedCoffeeChatCommand command = new RejectAppliedCoffeeChatCommand(coffeeChat.getId(), rejectReason);
@@ -74,10 +73,11 @@ class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
         final String applyReason = "신청 이유...";
         final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
         final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
-        final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end);
+        final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end).apply(1L);
 
-        final Strategy strategy = StrategyFixture.KAKAO_ID.toDomain();
-        final ApproveAppliedCoffeeChatCommand command = new ApproveAppliedCoffeeChatCommand(coffeeChat.getId(), strategy.getType(), strategy.getValue());
+        final Strategy.Type type = Strategy.Type.from("kakao");
+        final String value = "sjiwon";
+        final ApproveAppliedCoffeeChatCommand command = new ApproveAppliedCoffeeChatCommand(coffeeChat.getId(), type, value);
         given(coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId())).willReturn(coffeeChat);
 
         // when
@@ -93,7 +93,9 @@ class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPROVE),
                 () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
                 () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
-                () -> assertThat(coffeeChat.getStrategy()).isEqualTo(strategy)
+                () -> assertThat(coffeeChat.getStrategy().getType()).isEqualTo(type),
+                () -> assertThat(coffeeChat.getStrategy().getValue()).isNotEqualTo(value),
+                () -> assertThat(encryptor.symmetricDecrypt(coffeeChat.getStrategy().getValue())).isEqualTo(value)
         );
     }
 }

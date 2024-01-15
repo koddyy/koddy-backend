@@ -54,7 +54,7 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
                     postRequestWithAccessToken(new UrlWithVariables(BASE_URL, mentee.getId()), request),
                     status().isForbidden(),
                     ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
-                    failureDocsWithAccessToken("CoffeeChatApi/Create/MentorSuggest/Failure", createHttpSpecSnippets(
+                    failureDocsWithAccessToken("CoffeeChatApi/LifeCycle/Create/MentorSuggest/Failure", createHttpSpecSnippets(
                             pathParameters(
                                     path("menteeId", "멘티 ID(PK)", true)
                             ),
@@ -76,7 +76,7 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
             successfulExecute(
                     postRequestWithAccessToken(new UrlWithVariables(BASE_URL, mentee.getId()), request),
                     status().isOk(),
-                    successDocsWithAccessToken("CoffeeChatApi/Create/MentorSuggest/Success", createHttpSpecSnippets(
+                    successDocsWithAccessToken("CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success", createHttpSpecSnippets(
                             pathParameters(
                                     path("menteeId", "멘티 ID(PK)", true)
                             ),
@@ -112,7 +112,7 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
                     postRequestWithAccessToken(new UrlWithVariables(BASE_URL, mentor.getId()), request),
                     status().isForbidden(),
                     ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
-                    failureDocsWithAccessToken("CoffeeChatApi/Create/MenteeApply/Failure", createHttpSpecSnippets(
+                    failureDocsWithAccessToken("CoffeeChatApi/LifeCycle/Create/MenteeApply/Failure", createHttpSpecSnippets(
                             pathParameters(
                                     path("mentorId", "멘토 ID(PK)", true)
                             ),
@@ -136,7 +136,7 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
             successfulExecute(
                     postRequestWithAccessToken(new UrlWithVariables(BASE_URL, mentor.getId()), request),
                     status().isOk(),
-                    successDocsWithAccessToken("CoffeeChatApi/Create/MenteeApply/Success", createHttpSpecSnippets(
+                    successDocsWithAccessToken("CoffeeChatApi/LifeCycle/Create/MenteeApply/Success", createHttpSpecSnippets(
                             pathParameters(
                                     path("mentorId", "멘토 ID(PK)", true)
                             ),

@@ -1,10 +1,11 @@
 package com.koddy.server.acceptance.coffeechat;
 
-import com.koddy.server.coffeechat.presentation.dto.request.ApproveMenteeApplyRequest;
-import com.koddy.server.coffeechat.presentation.dto.request.ApproveMentorSuggestRequest;
+import com.koddy.server.coffeechat.presentation.dto.request.ApproveAppliedCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.CreateMeetingLinkRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.MenteeApplyCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.MentorSuggestCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.dto.request.RejectAppliedCoffeeChatRequest;
+import com.koddy.server.common.fixture.StrategyFixture;
 import io.restassured.response.ValidatableResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -115,34 +116,32 @@ public class CoffeeChatAcceptanceStep {
                 .getLong("coffeeChatId");
     }
 
-    public static ValidatableResponse 멘티가_멘토의_커피챗_제안을_수락한다(
+    public static ValidatableResponse 멘토가_멘티의_커피챗_신청을_거절한다(
             final long coffeeChatId,
-            final LocalDateTime start,
-            final LocalDateTime end,
+            final String rejectReason,
             final String accessToken
     ) {
         final String uri = UriComponentsBuilder
-                .fromPath("/api/coffeechats/approve/suggested/{coffeeChatId}")
+                .fromPath("/api/coffeechats/applied/reject/{coffeeChatId}")
                 .build(coffeeChatId)
                 .getPath();
 
-        final ApproveMentorSuggestRequest request = new ApproveMentorSuggestRequest(start, end);
+        final RejectAppliedCoffeeChatRequest request = new RejectAppliedCoffeeChatRequest(rejectReason);
 
         return patchRequestWithAccessToken(uri, request, accessToken);
     }
 
     public static ValidatableResponse 멘토가_멘티의_커피챗_신청을_수락한다(
             final long coffeeChatId,
-            final String chatType,
-            final String chatValue,
+            final StrategyFixture fixture,
             final String accessToken
     ) {
         final String uri = UriComponentsBuilder
-                .fromPath("/api/coffeechats/approve/applied/{coffeeChatId}")
+                .fromPath("/api/coffeechats/applied/approve/{coffeeChatId}")
                 .build(coffeeChatId)
                 .getPath();
 
-        final ApproveMenteeApplyRequest request = new ApproveMenteeApplyRequest(chatType, chatValue);
+        final ApproveAppliedCoffeeChatRequest request = new ApproveAppliedCoffeeChatRequest(fixture.getType().getEng(), fixture.getValue());
 
         return patchRequestWithAccessToken(uri, request, accessToken);
     }
