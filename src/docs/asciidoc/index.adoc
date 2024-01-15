@@ -369,3 +369,29 @@ include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/re
 ===== HTTP Response
 
 include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/http-response.adoc[]
+
+=== Pending 상태인 커피챗에 대한 멘토의 최종 결정 (OnlyMentor)
+
+==== 최종 거절
+
+===== HTTP Request
+
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Reject/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Reject/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Reject/Success/request-fields.adoc[]
+
+===== HTTP Response
+
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Reject/Success/http-response.adoc[]
+
+==== 최종 수락
+
+===== HTTP Request
+
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Approve/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Approve/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Approve/Success/request-fields.adoc[]
+
+===== HTTP Response
+
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Approve/Success/http-response.adoc[]
