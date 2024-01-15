@@ -1,8 +1,9 @@
 package com.koddy.server.coffeechat.application.usecase;
 
-import com.koddy.server.coffeechat.application.usecase.command.ApproveMenteeApplyCommand;
-import com.koddy.server.coffeechat.application.usecase.command.ApproveMentorSuggestCommand;
+import com.koddy.server.coffeechat.application.usecase.command.ApproveAppliedCoffeeChatCommand;
+import com.koddy.server.coffeechat.application.usecase.command.RejectAppliedCoffeeChatCommand;
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
+import com.koddy.server.coffeechat.domain.model.Strategy;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.global.annotation.KoddyWritableTransactional;
 import com.koddy.server.global.annotation.UseCase;
@@ -11,21 +12,19 @@ import lombok.RequiredArgsConstructor;
 
 @UseCase
 @RequiredArgsConstructor
-public class ApproveCoffeeChatUseCase {
+public class HandleAppliedCoffeeChatUseCase {
     private final CoffeeChatRepository coffeeChatRepository;
     private final Encryptor encryptor;
 
-    // TODO delete
     @KoddyWritableTransactional
-    public void suggestByMentor(final ApproveMentorSuggestCommand command) {
+    public void reject(final RejectAppliedCoffeeChatCommand command) {
         final CoffeeChat coffeeChat = coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId());
-//        coffeeChat.approveMentorSuggest(command.start(), command.end());
+        coffeeChat.rejectFromMenteeApply(command.rejectReason());
     }
 
-    // TODO delete
     @KoddyWritableTransactional
-    public void applyByMentee(final ApproveMenteeApplyCommand command) {
+    public void approve(final ApproveAppliedCoffeeChatCommand command) {
         final CoffeeChat coffeeChat = coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId());
-//        coffeeChat.approveMenteeApply(Strategy.of(command.type(), command.value(), encryptor));
+        coffeeChat.approveFromMenteeApply(Strategy.of(command.type(), command.value(), encryptor));
     }
 }
