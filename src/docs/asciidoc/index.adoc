@@ -315,3 +315,29 @@ include::{snippets}/CoffeeChatApi/Create/MenteeApply/Success/request-fields.adoc
 ==== HTTP Response
 
 include::{snippets}/CoffeeChatApi/Create/MenteeApply/Success/http-response.adoc[]
+
+== 커피챗 수락 (AccessToken)
+
+=== 멘토의 커피챗 제안 수락 (OnlyMentee)
+
+==== HTTP Request
+
+include::{snippets}/CoffeeChatApi/Approve/SuggestByMentor/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/Approve/SuggestByMentor/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/Approve/SuggestByMentor/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/CoffeeChatApi/Approve/SuggestByMentor/Success/http-response.adoc[]
+
+=== 멘티의 커피챗 신청 수락 (OnlyMentor)
+
+==== HTTP Request
+
+include::{snippets}/CoffeeChatApi/Approve/ApplyByMentee/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/Approve/ApplyByMentee/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/Approve/ApplyByMentee/Success/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/CoffeeChatApi/Approve/ApplyByMentee/Success/http-response.adoc[]
