@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
@@ -117,6 +118,57 @@ class CoffeeChatTest extends ParallelTest {
                     () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
                     () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
                     () -> assertThat(coffeeChat.getStrategy()).isEqualTo(strategy)
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("멘토의 커피챗 제안에 대한 처리")
+    class FromMentorSuggest {
+        @Test
+        @DisplayName("거절한다")
+        void reject() {
+            // given
+            final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
+            final String rejectReason = "거절..";
+
+            // when
+            coffeeChat.rejectFromMentorSuggest(rejectReason);
+
+            // then
+            assertAll(
+                    () -> assertThat(coffeeChat.getApplier()).isEqualTo(mentor),
+                    () -> assertThat(coffeeChat.getTarget()).isEqualTo(mentee),
+                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(rejectReason),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(REJECT),
+                    () -> assertThat(coffeeChat.getStart()).isNull(),
+                    () -> assertThat(coffeeChat.getEnd()).isNull(),
+                    () -> assertThat(coffeeChat.getStrategy()).isNull()
+            );
+        }
+
+        @Test
+        @DisplayName("1차 수락한다 (멘토 최종 수락 대기)")
+        void pending() {
+            // given
+            final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
+            final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
+            final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
+
+            // when
+            coffeeChat.pendingFromMentorSuggest(start, end);
+
+            // then
+            assertAll(
+                    () -> assertThat(coffeeChat.getApplier()).isEqualTo(mentor),
+                    () -> assertThat(coffeeChat.getTarget()).isEqualTo(mentee),
+                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getRejectReason()).isNull(),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(PENDING),
+                    () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
+                    () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
+                    () -> assertThat(coffeeChat.getStrategy()).isNull()
             );
         }
     }

@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_APPROVE_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_REJECT_STATUS;
@@ -145,5 +146,24 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
 
         this.strategy = strategy;
         this.status = APPROVE;
+    }
+
+    public void rejectFromMentorSuggest(final String rejectReason) {
+        if (this.status != APPLY) {
+            throw new CoffeeChatException(CANNOT_REJECT_STATUS);
+        }
+
+        this.rejectReason = rejectReason;
+        this.status = REJECT;
+    }
+
+    public void pendingFromMentorSuggest(final Reservation start, final Reservation end) {
+        if (this.status != APPLY) {
+            throw new CoffeeChatException(CANNOT_APPROVE_STATUS);
+        }
+
+        this.start = start;
+        this.end = end;
+        this.status = PENDING;
     }
 }
