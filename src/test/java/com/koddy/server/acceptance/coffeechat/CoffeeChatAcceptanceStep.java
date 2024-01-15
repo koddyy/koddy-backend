@@ -4,7 +4,9 @@ import com.koddy.server.coffeechat.presentation.dto.request.ApproveAppliedCoffee
 import com.koddy.server.coffeechat.presentation.dto.request.CreateMeetingLinkRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.MenteeApplyCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.MentorSuggestCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.dto.request.PendingSuggestedCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.RejectAppliedCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.dto.request.RejectSuggestedCoffeeChatRequest;
 import com.koddy.server.common.fixture.StrategyFixture;
 import io.restassured.response.ValidatableResponse;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -142,6 +144,37 @@ public class CoffeeChatAcceptanceStep {
                 .getPath();
 
         final ApproveAppliedCoffeeChatRequest request = new ApproveAppliedCoffeeChatRequest(fixture.getType().getEng(), fixture.getValue());
+
+        return patchRequestWithAccessToken(uri, request, accessToken);
+    }
+
+    public static ValidatableResponse 멘티가_멘토의_커피챗_제안을_거절한다(
+            final long coffeeChatId,
+            final String rejectReason,
+            final String accessToken
+    ) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/coffeechats/suggested/reject/{coffeeChatId}")
+                .build(coffeeChatId)
+                .getPath();
+
+        final RejectSuggestedCoffeeChatRequest request = new RejectSuggestedCoffeeChatRequest(rejectReason);
+
+        return patchRequestWithAccessToken(uri, request, accessToken);
+    }
+
+    public static ValidatableResponse 멘티가_멘토의_커피챗_제안을_1차_수락한다(
+            final long coffeeChatId,
+            final LocalDateTime start,
+            final LocalDateTime end,
+            final String accessToken
+    ) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/coffeechats/suggested/pending/{coffeeChatId}")
+                .build(coffeeChatId)
+                .getPath();
+
+        final PendingSuggestedCoffeeChatRequest request = new PendingSuggestedCoffeeChatRequest(start, end);
 
         return patchRequestWithAccessToken(uri, request, accessToken);
     }
