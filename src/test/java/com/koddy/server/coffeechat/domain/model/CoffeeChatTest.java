@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -109,7 +110,7 @@ class CoffeeChatTest extends ParallelTest {
                     () -> assertThat(coffeeChat.getApplier()).isEqualTo(mentor),
                     () -> assertThat(coffeeChat.getTarget()).isEqualTo(mentee),
                     () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
-                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPLY),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(PENDING),
                     () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
                     () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
