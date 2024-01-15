@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
@@ -32,6 +33,10 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     @Lob
     @Column(name = "apply_reason", nullable = false, columnDefinition = "TEXT")
     private String applyReason;
+
+    @Lob
+    @Column(name = "reject_reason", columnDefinition = "TEXT")
+    private String rejectReason;
 
     @Enumerated(STRING)
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(30)")
@@ -70,6 +75,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             final Member<?> applier,
             final Member<?> target,
             final String applyReason,
+            final String rejectReason,
             final CoffeeChatStatus status,
             final Reservation start,
             final Reservation end,
@@ -78,6 +84,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         this.applier = applier;
         this.target = target;
         this.applyReason = applyReason;
+        this.rejectReason = rejectReason;
         this.status = status;
         this.start = start;
         this.end = end;
@@ -95,6 +102,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
                 mentee,
                 mentor,
                 applyReason,
+                null,
                 APPLY,
                 start,
                 end,
@@ -111,6 +119,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
                 mentor,
                 mentee,
                 applyReason,
+                null,
                 APPLY,
                 null,
                 null,
@@ -127,5 +136,10 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         this.start = start;
         this.end = end;
         this.status = PENDING;
+    }
+
+    public void reject(final String rejectReason) {
+        this.rejectReason = rejectReason;
+        this.status = REJECT;
     }
 }
