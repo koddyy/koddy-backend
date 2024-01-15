@@ -1,5 +1,6 @@
 package com.koddy.server.coffeechat.domain.model;
 
+import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.global.base.BaseEntity;
 import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.model.mentee.Mentee;
@@ -21,6 +22,8 @@ import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
+import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_APPROVE_STATUS;
+import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_REJECT_STATUS;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
@@ -128,17 +131,29 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     }
 
     public void approveMenteeApply(final Strategy strategy) {
+        if (this.status != APPLY) {
+            throw new CoffeeChatException(CANNOT_APPROVE_STATUS);
+        }
+
         this.strategy = strategy;
         this.status = APPROVE;
     }
 
     public void approveMentorSuggest(final Reservation start, final Reservation end) {
+        if (this.status != APPLY) {
+            throw new CoffeeChatException(CANNOT_APPROVE_STATUS);
+        }
+
         this.start = start;
         this.end = end;
         this.status = PENDING;
     }
 
     public void reject(final String rejectReason) {
+        if (this.status != APPLY) {
+            throw new CoffeeChatException(CANNOT_REJECT_STATUS);
+        }
+
         this.rejectReason = rejectReason;
         this.status = REJECT;
     }
