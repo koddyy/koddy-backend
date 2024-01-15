@@ -1,5 +1,7 @@
 package com.koddy.server.acceptance.coffeechat;
 
+import com.koddy.server.coffeechat.presentation.dto.request.ApproveMenteeApplyRequest;
+import com.koddy.server.coffeechat.presentation.dto.request.ApproveMentorSuggestRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.CreateMeetingLinkRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.MenteeApplyCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.MentorSuggestCoffeeChatRequest;
@@ -9,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.time.LocalDateTime;
 
 import static com.koddy.server.acceptance.CommonRequestFixture.deleteRequestWithAccessToken;
+import static com.koddy.server.acceptance.CommonRequestFixture.patchRequestWithAccessToken;
 import static com.koddy.server.acceptance.CommonRequestFixture.postRequestWithAccessToken;
 import static com.koddy.server.common.fixture.OAuthFixture.GOOGLE_MENTOR_1;
 import static com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI;
@@ -60,6 +63,23 @@ public class CoffeeChatAcceptanceStep {
         return postRequestWithAccessToken(uri, request, accessToken);
     }
 
+    public static long 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(
+            final long menteeId,
+            final String accessToken
+    ) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/coffeechats/suggest/{menteeId}")
+                .build(menteeId)
+                .getPath();
+
+        final MentorSuggestCoffeeChatRequest request = new MentorSuggestCoffeeChatRequest("신청 이유...");
+
+        return postRequestWithAccessToken(uri, request, accessToken)
+                .extract()
+                .jsonPath()
+                .getLong("coffeeChatId");
+    }
+
     public static ValidatableResponse 멘티가_멘토에게_커피챗을_신청한다(
             final LocalDateTime start,
             final LocalDateTime end,
@@ -74,5 +94,56 @@ public class CoffeeChatAcceptanceStep {
         final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest("신청 이유...", start, end);
 
         return postRequestWithAccessToken(uri, request, accessToken);
+    }
+
+    public static long 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
+            final LocalDateTime start,
+            final LocalDateTime end,
+            final long mentorId,
+            final String accessToken
+    ) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/coffeechats/apply/{mentorId}")
+                .build(mentorId)
+                .getPath();
+
+        final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest("신청 이유...", start, end);
+
+        return postRequestWithAccessToken(uri, request, accessToken)
+                .extract()
+                .jsonPath()
+                .getLong("coffeeChatId");
+    }
+
+    public static ValidatableResponse 멘티가_멘토의_커피챗_제안을_수락한다(
+            final long coffeeChatId,
+            final LocalDateTime start,
+            final LocalDateTime end,
+            final String accessToken
+    ) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/coffeechats/approve/suggested/{coffeeChatId}")
+                .build(coffeeChatId)
+                .getPath();
+
+        final ApproveMentorSuggestRequest request = new ApproveMentorSuggestRequest(start, end);
+
+        return patchRequestWithAccessToken(uri, request, accessToken);
+    }
+
+    public static ValidatableResponse 멘토가_멘티의_커피챗_신청을_수락한다(
+            final long coffeeChatId,
+            final String chatType,
+            final String chatValue,
+            final String accessToken
+    ) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/coffeechats/approve/applied/{coffeeChatId}")
+                .build(coffeeChatId)
+                .getPath();
+
+        final ApproveMenteeApplyRequest request = new ApproveMenteeApplyRequest(chatType, chatValue);
+
+        return patchRequestWithAccessToken(uri, request, accessToken);
     }
 }

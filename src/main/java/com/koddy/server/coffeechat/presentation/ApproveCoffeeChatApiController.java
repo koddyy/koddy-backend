@@ -27,12 +27,12 @@ import static com.koddy.server.member.domain.model.Role.MENTOR;
 @Tag(name = "4-3. 커피챗 수락 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/coffeechats")
+@RequestMapping("/api/coffeechats/approve")
 public class ApproveCoffeeChatApiController {
     private final ApproveCoffeeChatUseCase approveCoffeeChatUseCase;
 
     @Operation(summary = "멘토의 커피챗 제안 수락 Endpoint -> 멘티 API")
-    @PatchMapping("/approve/suggest/{coffeeChatId}")
+    @PatchMapping("/suggested/{coffeeChatId}")
     @AccessControl(role = MENTEE)
     public ResponseEntity<Void> suggestByMentor(
             @Auth final Authenticated authenticated,
@@ -48,7 +48,7 @@ public class ApproveCoffeeChatApiController {
     }
 
     @Operation(summary = "멘티의 커피챗 신청 수락 Endpoint -> 멘토 API")
-    @PatchMapping("/approve/apply/{coffeeChatId}")
+    @PatchMapping("/applied/{coffeeChatId}")
     @AccessControl(role = MENTOR)
     public ResponseEntity<Void> applyByMentee(
             @Auth final Authenticated authenticated,

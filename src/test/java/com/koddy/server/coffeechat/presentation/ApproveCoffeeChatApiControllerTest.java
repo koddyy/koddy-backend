@@ -38,9 +38,9 @@ class ApproveCoffeeChatApiControllerTest extends ControllerTest {
     private final Mentee mentee = MENTEE_1.toDomain().apply(2L);
 
     @Nested
-    @DisplayName("멘토의 커피챗 제안 수락 API [POST /api/coffeechats/approve/suggest/{coffeeChatId}]")
+    @DisplayName("멘토의 커피챗 제안 수락 API [POST /api/coffeechats/approve/suggested/{coffeeChatId}]")
     class SuggestByMentor {
-        private static final String BASE_URL = "/api/coffeechats/approve/suggest/{coffeeChatId}";
+        private static final String BASE_URL = "/api/coffeechats/approve/suggested/{coffeeChatId}";
         private final ApproveMentorSuggestRequest request = new ApproveMentorSuggestRequest(
                 LocalDateTime.of(2024, 2, 1, 18, 0),
                 LocalDateTime.of(2024, 2, 1, 19, 0)
@@ -96,9 +96,9 @@ class ApproveCoffeeChatApiControllerTest extends ControllerTest {
     }
 
     @Nested
-    @DisplayName("멘티의 커피챗 신청 수락 API [POST /api/coffeechats/approve/apply/{coffeeChatId}]")
+    @DisplayName("멘티의 커피챗 신청 수락 API [POST /api/coffeechats/approve/applied/{coffeeChatId}]")
     class ApplyByMentee {
-        private static final String BASE_URL = "/api/coffeechats/approve/apply/{coffeeChatId}";
+        private static final String BASE_URL = "/api/coffeechats/approve/applied/{coffeeChatId}";
         private final ApproveMenteeApplyRequest request = new ApproveMenteeApplyRequest(
                 StrategyFixture.KAKAO_ID.getType().getEng(),
                 StrategyFixture.KAKAO_ID.getValue()
