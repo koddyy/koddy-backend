@@ -83,7 +83,7 @@ class MentorTest extends ParallelTest {
                     // Optional
                     () -> assertThat(mentor.getIntroduction()).isNull(),
                     () -> assertThat(mentor.getUniversityAuthentication()).isNull(),
-                    () -> assertThat(mentor.getMentoringSetting()).isNull(),
+                    () -> assertThat(mentor.getMentoringPeriod()).isNull(),
                     () -> assertThat(mentor.getSchedules()).isEmpty(),
 
                     // isCompleted
@@ -183,7 +183,7 @@ class MentorTest extends ParallelTest {
                     () -> assertThat(mentor.getUniversityProfile().getEnteredIn()).isEqualTo(MENTOR_2.getUniversityProfile().getEnteredIn()),
 
                     // Non-Target
-                    () -> assertThat(mentor.getMentoringSetting()).isEqualTo(MENTOR_1.getMentoringSetting()),
+                    () -> assertThat(mentor.getMentoringPeriod()).isEqualTo(MENTOR_1.getMentoringPeriod()),
                     () -> assertThat(mentor.getSchedules())
                             .map(Schedule::getTimeline)
                             .containsExactlyInAnyOrderElementsOf(MENTOR_1.getTimelines())
@@ -201,13 +201,13 @@ class MentorTest extends ParallelTest {
             final Mentor mentor = MENTOR_1.toDomain().apply(1L);
 
             // when
-            final MentoringSetting mentoringSetting = MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain();
+            final MentoringPeriod mentoringPeriod = MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain();
             final List<Timeline> timelines = TimelineFixture.allDays();
-            mentor.updateSchedules(mentoringSetting, timelines);
+            mentor.updateSchedules(mentoringPeriod, timelines);
 
             // then
             assertAll(
-                    () -> assertThat(mentor.getMentoringSetting()).isEqualTo(mentoringSetting),
+                    () -> assertThat(mentor.getMentoringPeriod()).isEqualTo(mentoringPeriod),
                     () -> assertThat(mentor.getSchedules())
                             .map(Schedule::getTimeline)
                             .containsExactlyInAnyOrderElementsOf(timelines)

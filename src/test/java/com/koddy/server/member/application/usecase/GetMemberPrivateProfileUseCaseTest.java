@@ -7,7 +7,7 @@ import com.koddy.server.member.application.usecase.query.response.MentorProfile;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
-import com.koddy.server.member.domain.model.mentor.MentoringSetting;
+import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
 import com.koddy.server.member.domain.model.mentor.Timeline;
 import com.koddy.server.member.domain.repository.MenteeRepository;
 import com.koddy.server.member.domain.repository.MentorRepository;
@@ -85,7 +85,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
         void complete() {
             // given
             final List<Language> languages = List.of(KR_MAIN.toDomain());
-            final MentoringSetting period = MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain();
+            final MentoringPeriod period = MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain();
             final List<Timeline> timelines = List.of(MON_09_17.toDomain(), THU_09_17.toDomain());
 
             final Mentor mentor = MENTOR_1.toDomainWithLanguagesAndMentoringInfo(languages, period, timelines).apply(1L);

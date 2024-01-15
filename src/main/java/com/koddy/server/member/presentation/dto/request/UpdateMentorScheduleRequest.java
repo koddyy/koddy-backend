@@ -1,6 +1,6 @@
 package com.koddy.server.member.presentation.dto.request;
 
-import com.koddy.server.member.domain.model.mentor.MentoringSetting;
+import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
 import com.koddy.server.member.domain.model.mentor.Timeline;
 import lombok.Builder;
 import org.springframework.util.CollectionUtils;
@@ -12,7 +12,7 @@ public record UpdateMentorScheduleRequest(
         MentoringPeriodRequest period,
         List<MentorScheduleRequest> schedules
 ) {
-    public MentoringSetting toPeriod() {
+    public MentoringPeriod toPeriod() {
         return period.toPeriod();
     }
 

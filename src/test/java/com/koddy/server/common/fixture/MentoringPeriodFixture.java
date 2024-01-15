@@ -1,6 +1,6 @@
 package com.koddy.server.common.fixture;
 
-import com.koddy.server.member.domain.model.mentor.MentoringSetting;
+import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +17,7 @@ public enum MentoringPeriodFixture {
     private final LocalDate startDate;
     private final LocalDate endDate;
 
-    public MentoringSetting toDomain() {
-        return MentoringSetting.of(startDate, endDate);
+    public MentoringPeriod toDomain() {
+        return MentoringPeriod.of(startDate, endDate);
     }
 }

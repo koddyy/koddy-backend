@@ -48,7 +48,7 @@ class CompleteProfileUseCaseIntegrateTest extends IntegrateTest {
         ));
         assertAll(
                 () -> assertThat(mentor.getIntroduction()).isNull(),
-                () -> assertThat(mentor.getMentoringSetting()).isNull(),
+                () -> assertThat(mentor.getMentoringPeriod()).isNull(),
                 () -> assertThat(mentor.getSchedules()).isEmpty(),
                 () -> assertThat(mentor.isProfileComplete()).isFalse(),
                 () -> assertThat(mentor.getProfileComplete()).isEqualTo(NO)
@@ -69,8 +69,8 @@ class CompleteProfileUseCaseIntegrateTest extends IntegrateTest {
             final Mentor findMentor = mentorRepository.findById(mentor.getId()).orElseThrow();
             assertAll(
                     () -> assertThat(findMentor.getIntroduction()).isEqualTo(command.introduction()),
-                    () -> assertThat(findMentor.getMentoringSetting().getStartDate()).isEqualTo(command.mentoringSetting().getStartDate()),
-                    () -> assertThat(findMentor.getMentoringSetting().getEndDate()).isEqualTo(command.mentoringSetting().getEndDate()),
+                    () -> assertThat(findMentor.getMentoringPeriod().getStartDate()).isEqualTo(command.mentoringPeriod().getStartDate()),
+                    () -> assertThat(findMentor.getMentoringPeriod().getEndDate()).isEqualTo(command.mentoringPeriod().getEndDate()),
                     () -> assertThat(findMentor.getSchedules()).hasSize(command.timelines().size()),
                     () -> assertThat(findMentor.isProfileComplete()).isTrue(),
                     () -> assertThat(findMentor.getProfileComplete()).isEqualTo(YES)

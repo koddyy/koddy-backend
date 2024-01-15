@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDate;
 import java.util.Arrays;
 
-import static com.koddy.server.member.domain.model.mentor.MentoringSetting.TimeUnit.HALF_HOUR;
+import static com.koddy.server.member.domain.model.mentor.MentoringPeriod.TimeUnit.HALF_HOUR;
 import static com.koddy.server.member.exception.MemberExceptionCode.INVALID_TIME_UNIT;
 import static com.koddy.server.member.exception.MemberExceptionCode.SCHEDULE_PERIOD_TIME_MUST_ALIGN;
 import static com.koddy.server.member.exception.MemberExceptionCode.SCHEDULE_PERIOD_TIME_MUST_EXISTS;
@@ -21,7 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @Embeddable
-public class MentoringSetting {
+public class MentoringPeriod {
     @Column(name = "mentoring_start_date")
     private LocalDate startDate;
 
@@ -32,17 +32,17 @@ public class MentoringSetting {
     @Column(name = "mentoring_time_unit", nullable = false, columnDefinition = "VARCHAR(20)")
     private TimeUnit timeUnit;
 
-    private MentoringSetting(final LocalDate startDate, final LocalDate endDate, final TimeUnit timeUnit) {
+    private MentoringPeriod(final LocalDate startDate, final LocalDate endDate, final TimeUnit timeUnit) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.timeUnit = timeUnit;
     }
 
     // TODO 회의하고 UI 픽스 후 TimeUnit 선택할 수 있도록 Request에 적용
-    public static MentoringSetting of(final LocalDate startDate, final LocalDate endDate) {
+    public static MentoringPeriod of(final LocalDate startDate, final LocalDate endDate) {
         validateDateExists(startDate, endDate);
         validateStartIsBeforeEnd(startDate, endDate);
-        return new MentoringSetting(startDate, endDate, HALF_HOUR);
+        return new MentoringPeriod(startDate, endDate, HALF_HOUR);
     }
 
     private static void validateDateExists(final LocalDate startDate, final LocalDate endDate) {

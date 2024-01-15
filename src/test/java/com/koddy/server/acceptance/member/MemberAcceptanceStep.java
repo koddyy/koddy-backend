@@ -95,8 +95,8 @@ public class MemberAcceptanceStep {
         final CompleteMentorProfileRequest request = new CompleteMentorProfileRequest(
                 fixture.getIntroduction(),
                 new MentoringPeriodRequest(
-                        fixture.getMentoringSetting().getStartDate(),
-                        fixture.getMentoringSetting().getEndDate()
+                        fixture.getMentoringPeriod().getStartDate(),
+                        fixture.getMentoringPeriod().getEndDate()
                 ),
                 fixture.getTimelines()
                         .stream()
@@ -165,8 +165,8 @@ public class MemberAcceptanceStep {
 
         final UpdateMentorScheduleRequest request = new UpdateMentorScheduleRequest(
                 new MentoringPeriodRequest(
-                        fixture.getMentoringSetting().getStartDate(),
-                        fixture.getMentoringSetting().getEndDate()
+                        fixture.getMentoringPeriod().getStartDate(),
+                        fixture.getMentoringPeriod().getEndDate()
                 ),
                 fixture.getTimelines()
                         .stream()

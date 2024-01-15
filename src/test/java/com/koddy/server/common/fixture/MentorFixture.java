@@ -9,7 +9,7 @@ import com.koddy.server.auth.infrastructure.social.zoom.response.ZoomUserRespons
 import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentor.Mentor;
-import com.koddy.server.member.domain.model.mentor.MentoringSetting;
+import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
 import com.koddy.server.member.domain.model.mentor.Timeline;
 import com.koddy.server.member.domain.model.mentor.UniversityProfile;
 import io.restassured.response.ExtractableResponse;
@@ -98,34 +98,34 @@ public enum MentorFixture {
     private final String introduction;
     private final List<Language> languages;
     private final UniversityProfile universityProfile;
-    private final MentoringSetting mentoringSetting;
+    private final MentoringPeriod mentoringPeriod;
     private final List<Timeline> timelines;
 
     public Mentor toDomain() {
         final Mentor mentor = new Mentor(email, name, profileImageUrl, languages, universityProfile);
-        mentor.completeInfo(introduction, mentoringSetting, timelines);
+        mentor.completeInfo(introduction, mentoringPeriod, timelines);
         return mentor;
     }
 
     public Mentor toDomainWithLanguages(final List<Language> languages) {
         final Mentor mentor = new Mentor(email, name, profileImageUrl, languages, universityProfile);
-        mentor.completeInfo(introduction, mentoringSetting, timelines);
+        mentor.completeInfo(introduction, mentoringPeriod, timelines);
         return mentor;
     }
 
-    public Mentor toDomainWithMentoringInfo(final MentoringSetting mentoringSetting, final List<Timeline> timelines) {
+    public Mentor toDomainWithMentoringInfo(final MentoringPeriod mentoringPeriod, final List<Timeline> timelines) {
         final Mentor mentor = new Mentor(email, name, profileImageUrl, languages, universityProfile);
-        mentor.completeInfo(introduction, mentoringSetting, timelines);
+        mentor.completeInfo(introduction, mentoringPeriod, timelines);
         return mentor;
     }
 
     public Mentor toDomainWithLanguagesAndMentoringInfo(
             final List<Language> languages,
-            final MentoringSetting mentoringSetting,
+            final MentoringPeriod mentoringPeriod,
             final List<Timeline> timelines
     ) {
         final Mentor mentor = new Mentor(email, name, profileImageUrl, languages, universityProfile);
-        mentor.completeInfo(introduction, mentoringSetting, timelines);
+        mentor.completeInfo(introduction, mentoringPeriod, timelines);
         return mentor;
     }
 
