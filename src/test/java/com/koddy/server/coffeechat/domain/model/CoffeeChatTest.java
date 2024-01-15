@@ -175,7 +175,7 @@ class CoffeeChatTest extends ParallelTest {
     }
 
     @Nested
-    @DisplayName("멘토의 대기중인 커피챗에 대한 최종 결정")
+    @DisplayName("최종 결정 대기 상태인 CoffeeChat에 대한 멘토의 결정")
     class PendingCoffeeChat {
         private final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
         private final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
