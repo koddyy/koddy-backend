@@ -31,12 +31,12 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
 
     private final Mentee mentee = MENTEE_1.toDomain().apply(1L);
     private final Mentor mentor = MENTOR_1.toDomain().apply(2L);
+    private final String applyReason = "신청 이유...";
 
     @Test
     @DisplayName("멘토의 커피챗 제안을 거절한다")
     void reject() {
         // given
-        final String applyReason = "신청 이유...";
         final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason).apply(1L);
 
         final String rejectReason = "거절...";
@@ -64,7 +64,6 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
     @DisplayName("멘토의 커피챗 제안을 1차 수락한다 (멘토 최종 수락 대기)")
     void pending() {
         // given
-        final String applyReason = "신청 이유...";
         final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason).apply(1L);
 
         final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));

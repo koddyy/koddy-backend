@@ -35,14 +35,14 @@ class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
 
     private final Mentee mentee = MENTEE_1.toDomain().apply(1L);
     private final Mentor mentor = MENTOR_1.toDomain().apply(2L);
+    private final String applyReason = "신청 이유...";
+    private final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
+    private final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
 
     @Test
     @DisplayName("멘티의 커피챗 신청을 거절한다")
     void reject() {
         // given
-        final String applyReason = "신청 이유...";
-        final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
-        final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
         final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end).apply(1L);
 
         final String rejectReason = "거절...";
@@ -70,9 +70,6 @@ class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
     @DisplayName("멘티의 커피챗 신청을 수락한다")
     void approve() {
         // given
-        final String applyReason = "신청 이유...";
-        final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
-        final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
         final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end).apply(1L);
 
         final Strategy.Type type = Strategy.Type.from("kakao");

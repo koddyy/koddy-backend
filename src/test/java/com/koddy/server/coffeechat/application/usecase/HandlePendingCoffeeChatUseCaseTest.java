@@ -10,7 +10,6 @@ import com.koddy.server.common.UnitTest;
 import com.koddy.server.global.encrypt.Encryptor;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -40,18 +39,13 @@ class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
     private final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
     private final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
 
-    private CoffeeChat coffeeChat;
-
-    @BeforeEach
-    void setUp() {
-        coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason).apply(1L);
-        coffeeChat.pendingFromMentorSuggest(start, end);
-    }
-
     @Test
     @DisplayName("최종 결정 대기 상태인 CoffeeChat에 대해서 멘토는 거절한다")
     void reject() {
         // given
+        final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason).apply(1L);
+        coffeeChat.pendingFromMentorSuggest(start, end);
+
         final String rejectReason = "거절...";
         final RejectPendingCoffeeChatCommand command = new RejectPendingCoffeeChatCommand(coffeeChat.getId(), rejectReason);
         given(coffeeChatRepository.getPendingCoffeeChat(command.coffeeChatId())).willReturn(coffeeChat);
@@ -77,6 +71,9 @@ class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
     @DisplayName("최종 결정 대기 상태인 CoffeeChat에 대해서 멘토는 수락한다")
     void approve() {
         // given
+        final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason).apply(1L);
+        coffeeChat.pendingFromMentorSuggest(start, end);
+
         final Strategy.Type type = Strategy.Type.from("kakao");
         final String value = "sjiwon";
         final ApprovePendingCoffeeChatCommand command = new ApprovePendingCoffeeChatCommand(coffeeChat.getId(), type, value);
