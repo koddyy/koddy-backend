@@ -4,6 +4,7 @@ import com.koddy.server.common.ParallelTest;
 import com.koddy.server.common.fixture.StrategyFixture;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -169,6 +170,65 @@ class CoffeeChatTest extends ParallelTest {
                     () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
                     () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("멘토의 대기중인 커피챗에 대한 최종 결정")
+    class PendingCoffeeChat {
+        private final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
+        private final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
+
+        private CoffeeChat coffeeChat;
+
+        @BeforeEach
+        void setUp() {
+            coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
+            coffeeChat.pendingFromMentorSuggest(start, end);
+        }
+
+        @Test
+        @DisplayName("거절한다")
+        void reject() {
+            // given
+            final String rejectReason = "거절...";
+
+            // when
+            coffeeChat.rejectPendingCoffeeChat(rejectReason);
+
+            // then
+            assertAll(
+                    () -> assertThat(coffeeChat.getApplier()).isEqualTo(mentor),
+                    () -> assertThat(coffeeChat.getTarget()).isEqualTo(mentee),
+                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(rejectReason),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(REJECT),
+                    () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
+                    () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
+                    () -> assertThat(coffeeChat.getStrategy()).isNull()
+            );
+        }
+
+        @Test
+        @DisplayName("수락한다")
+        void approve() {
+            // given
+            final Strategy strategy = StrategyFixture.KAKAO_ID.toDomain();
+
+            // when
+            coffeeChat.approvePendingCoffeeChat(strategy);
+
+            // then
+            assertAll(
+                    () -> assertThat(coffeeChat.getApplier()).isEqualTo(mentor),
+                    () -> assertThat(coffeeChat.getTarget()).isEqualTo(mentee),
+                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getRejectReason()).isNull(),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPROVE),
+                    () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
+                    () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
+                    () -> assertThat(coffeeChat.getStrategy()).isEqualTo(strategy)
             );
         }
     }

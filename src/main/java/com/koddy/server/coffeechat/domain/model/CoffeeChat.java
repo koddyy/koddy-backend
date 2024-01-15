@@ -23,6 +23,7 @@ import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_APPROVE_STATUS;
+import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_FINALLY_DECIDE_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_REJECT_STATUS;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
@@ -165,5 +166,23 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         this.start = start;
         this.end = end;
         this.status = PENDING;
+    }
+
+    public void rejectPendingCoffeeChat(final String rejectReason) {
+        if (this.status != PENDING) {
+            throw new CoffeeChatException(CANNOT_FINALLY_DECIDE_STATUS);
+        }
+
+        this.rejectReason = rejectReason;
+        this.status = REJECT;
+    }
+
+    public void approvePendingCoffeeChat(final Strategy strategy) {
+        if (this.status != PENDING) {
+            throw new CoffeeChatException(CANNOT_FINALLY_DECIDE_STATUS);
+        }
+
+        this.strategy = strategy;
+        this.status = APPROVE;
     }
 }
