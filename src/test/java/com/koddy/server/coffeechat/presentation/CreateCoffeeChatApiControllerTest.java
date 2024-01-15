@@ -38,9 +38,9 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
     private final String applyReason = "신청 이유...";
 
     @Nested
-    @DisplayName("멘토 -> 멘티 커피챗 제안 API [POST /api/coffeechat/suggest/{menteeId}]")
+    @DisplayName("멘토 -> 멘티 커피챗 제안 API [POST /api/coffeechats/suggest/{menteeId}]")
     class SuggestCoffeeChat {
-        private static final String BASE_URL = "/api/coffeechat/suggest/{menteeId}";
+        private static final String BASE_URL = "/api/coffeechats/suggest/{menteeId}";
         private final MentorSuggestCoffeeChatRequest request = new MentorSuggestCoffeeChatRequest(applyReason);
 
         @Test
@@ -92,9 +92,9 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
     }
 
     @Nested
-    @DisplayName("멘티 -> 멘토 커피챗 신청 API [POST /api/coffeechat/apply/{mentorId}]")
+    @DisplayName("멘티 -> 멘토 커피챗 신청 API [POST /api/coffeechats/apply/{mentorId}]")
     class ApplyCoffeeChat {
-        private static final String BASE_URL = "/api/coffeechat/apply/{mentorId}";
+        private static final String BASE_URL = "/api/coffeechats/apply/{mentorId}";
         private final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest(
                 applyReason,
                 LocalDateTime.of(2024, 2, 1, 18, 0),

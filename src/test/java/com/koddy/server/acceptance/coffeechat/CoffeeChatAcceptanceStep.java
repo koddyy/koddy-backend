@@ -51,7 +51,7 @@ public class CoffeeChatAcceptanceStep {
             final String accessToken
     ) {
         final String uri = UriComponentsBuilder
-                .fromPath("/api/coffeechat/suggest/{menteeId}")
+                .fromPath("/api/coffeechats/suggest/{menteeId}")
                 .build(menteeId)
                 .getPath();
 
@@ -67,7 +67,7 @@ public class CoffeeChatAcceptanceStep {
             final String accessToken
     ) {
         final String uri = UriComponentsBuilder
-                .fromPath("/api/coffeechat/apply/{mentorId}")
+                .fromPath("/api/coffeechats/apply/{mentorId}")
                 .build(mentorId)
                 .getPath();
 
