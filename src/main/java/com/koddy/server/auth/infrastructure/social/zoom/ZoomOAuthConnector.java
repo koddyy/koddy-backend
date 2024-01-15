@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -24,6 +23,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 
 @Slf4j
 @Component
@@ -34,21 +34,27 @@ public class ZoomOAuthConnector implements OAuthConnector {
 
     @Override
     public OAuthTokenResponse fetchToken(final String code, final String redirectUri, final String state) {
-        final HttpHeaders headers = createTokenRequestHeader();
-        final MultiValueMap<String, String> params = createTokenRequestParams(code, redirectUri, state);
-
-        final HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-        return fetchZoomToken(request).getBody();
+        try {
+            return restTemplate.exchange(
+                    properties.tokenUrl(),
+                    POST,
+                    new HttpEntity<>(createTokenRequestParams(code, redirectUri, state), createTokenRequestHeader()),
+                    ZoomTokenResponse.class
+            ).getBody();
+        } catch (final RestClientException e) {
+            log.error("OAuth Error... ", e);
+            throw new GlobalException(UNEXPECTED_SERVER_ERROR);
+        }
     }
 
     private HttpHeaders createTokenRequestHeader() {
         final HttpHeaders headers = new HttpHeaders();
         headers.set(CONTENT_TYPE, OAUTH_CONTENT_TYPE);
-        headers.set(AUTHORIZATION, String.join(" ", "Basic", getEncodedClientProperties()));
+        headers.set(AUTHORIZATION, String.join(" ", "Basic", createEncodedAuthorizationHeaderWithClientProperties()));
         return headers;
     }
 
-    private String getEncodedClientProperties() {
+    private String createEncodedAuthorizationHeaderWithClientProperties() {
         final String value = String.join(":", properties.clientId(), properties.clientSecret());
         final byte[] encode = Base64.getEncoder().encode(value.getBytes());
         return new String(encode, UTF_8);
@@ -67,20 +73,19 @@ public class ZoomOAuthConnector implements OAuthConnector {
         return params;
     }
 
-    private ResponseEntity<ZoomTokenResponse> fetchZoomToken(final HttpEntity<MultiValueMap<String, String>> request) {
+    @Override
+    public OAuthUserResponse fetchUserInfo(final String accessToken) {
         try {
-            return restTemplate.postForEntity(properties.tokenUrl(), request, ZoomTokenResponse.class);
+            return restTemplate.exchange(
+                    properties.userInfoUrl(),
+                    GET,
+                    new HttpEntity<>(createUserInfoRequestHeader(accessToken)),
+                    ZoomUserResponse.class
+            ).getBody();
         } catch (final RestClientException e) {
             log.error("OAuth Error... ", e);
             throw new GlobalException(UNEXPECTED_SERVER_ERROR);
         }
-    }
-
-    @Override
-    public OAuthUserResponse fetchUserInfo(final String accessToken) {
-        final HttpHeaders headers = createUserInfoRequestHeader(accessToken);
-        final HttpEntity<Void> request = new HttpEntity<>(headers);
-        return fetchZoomUserInfo(request).getBody();
     }
 
     private HttpHeaders createUserInfoRequestHeader(final String accessToken) {
@@ -88,14 +93,5 @@ public class ZoomOAuthConnector implements OAuthConnector {
         headers.set(CONTENT_TYPE, OAUTH_CONTENT_TYPE);
         headers.set(AUTHORIZATION, String.join(" ", BEARER_TOKEN_TYPE, accessToken));
         return headers;
-    }
-
-    private ResponseEntity<ZoomUserResponse> fetchZoomUserInfo(final HttpEntity<Void> request) {
-        try {
-            return restTemplate.exchange(properties.userInfoUrl(), GET, request, ZoomUserResponse.class);
-        } catch (final RestClientException e) {
-            log.error("OAuth Error... ", e);
-            throw new GlobalException(UNEXPECTED_SERVER_ERROR);
-        }
     }
 }
