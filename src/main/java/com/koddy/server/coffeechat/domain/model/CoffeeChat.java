@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
@@ -114,5 +115,15 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
                 null,
                 null
         );
+    }
+
+    public void approveMenteeApply(final Strategy strategy) {
+        this.strategy = strategy;
+        this.status = APPROVE;
+    }
+
+    public void approveMentorSuggest(final Reservation start, final Reservation end) {
+        this.start = start;
+        this.end = end;
     }
 }
