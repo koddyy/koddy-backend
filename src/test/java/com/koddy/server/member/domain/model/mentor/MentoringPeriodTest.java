@@ -8,10 +8,12 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
+import static com.koddy.server.member.domain.model.mentor.MentoringPeriod.TimeUnit.HALF_HOUR;
 import static com.koddy.server.member.exception.MemberExceptionCode.SCHEDULE_PERIOD_TIME_MUST_ALIGN;
 import static com.koddy.server.member.exception.MemberExceptionCode.SCHEDULE_PERIOD_TIME_MUST_EXISTS;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("Member/Mentor -> 도메인 [MentoringPeriod] 테스트")
 class MentoringPeriodTest extends ParallelTest {
@@ -40,10 +42,19 @@ class MentoringPeriodTest extends ParallelTest {
         @Test
         @DisplayName("MentoringPeriod을 생성한다")
         void construct() {
+            // given
             final LocalDate startDate = LocalDate.of(2024, 2, 1);
             final LocalDate endDate = LocalDate.of(2024, 3, 1);
 
-            assertDoesNotThrow(() -> MentoringPeriod.of(startDate, endDate));
+            // when
+            final MentoringPeriod mentoringPeriod = MentoringPeriod.of(startDate, endDate);
+
+            // then
+            assertAll(
+                    () -> assertThat(mentoringPeriod.getStartDate()).isEqualTo(startDate),
+                    () -> assertThat(mentoringPeriod.getEndDate()).isEqualTo(endDate),
+                    () -> assertThat(mentoringPeriod.getTimeUnit()).isEqualTo(HALF_HOUR)
+            );
         }
     }
 }

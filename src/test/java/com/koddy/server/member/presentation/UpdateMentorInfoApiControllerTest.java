@@ -146,7 +146,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                     ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
                     failureDocsWithAccessToken("MemberApi/Update/Mentor/Schedule/Failure", createHttpSpecSnippets(
                             requestFields(
-                                    body("period", "멘토링 기간", false),
+                                    body("period", "멘토링 시간 관련 설정", false),
                                     body("period.startDate", "멘토링 시작 날짜", "KST", false),
                                     body("period.endDate", "멘토링 종료 날짜", "KST", false),
                                     body("schedules", "멘토링 스케줄", false),
@@ -175,7 +175,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                     status().isNoContent(),
                     successDocsWithAccessToken("MemberApi/Update/Mentor/Schedule/Success", createHttpSpecSnippets(
                             requestFields(
-                                    body("period", "멘토링 기간", false),
+                                    body("period", "멘토링 시간 관련 설정", false),
                                     body("period.startDate", "멘토링 시작 날짜", "KST", false),
                                     body("period.endDate", "멘토링 종료 날짜", "KST", false),
                                     body("schedules", "멘토링 스케줄", false),

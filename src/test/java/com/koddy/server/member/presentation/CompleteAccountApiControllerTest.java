@@ -74,7 +74,7 @@ class CompleteAccountApiControllerTest extends ControllerTest {
                     failureDocsWithAccessToken("MemberApi/Complete/Mentor/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("introduction", "자기소개", false),
-                                    body("period", "멘토링 기간", false),
+                                    body("period", "멘토링 시간 관련 설정", false),
                                     body("period.startDate", "멘토링 시작 날짜", "KST", false),
                                     body("period.endDate", "멘토링 종료 날짜", "KST", false),
                                     body("schedules", "멘토링 스케줄", false),
@@ -104,7 +104,7 @@ class CompleteAccountApiControllerTest extends ControllerTest {
                     successDocsWithAccessToken("MemberApi/Complete/Mentor/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("introduction", "자기소개", false),
-                                    body("period", "멘토링 기간", false),
+                                    body("period", "멘토링 시간 관련 설정", false),
                                     body("period.startDate", "멘토링 시작 날짜", "KST", false),
                                     body("period.endDate", "멘토링 종료 날짜", "KST", false),
                                     body("schedules", "멘토링 스케줄", false),
