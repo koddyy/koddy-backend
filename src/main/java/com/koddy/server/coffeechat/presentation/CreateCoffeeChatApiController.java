@@ -27,7 +27,7 @@ import static com.koddy.server.member.domain.model.Role.MENTOR;
 @Tag(name = "4-2. 커피챗 신청/제안 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/coffeechat")
+@RequestMapping("/api/coffeechats")
 public class CreateCoffeeChatApiController {
     private final CreateCoffeeChatUseCase createCoffeeChatUseCase;
 

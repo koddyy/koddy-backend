@@ -296,22 +296,102 @@ include::{snippets}/CoffeeChatApi/MeetingLink/Delete/Success/http-response.adoc[
 
 ==== HTTP Request
 
-include::{snippets}/CoffeeChatApi/Create/MentorSuggest/Success/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/Create/MentorSuggest/Success/path-parameters.adoc[]
-include::{snippets}/CoffeeChatApi/Create/MentorSuggest/Success/request-fields.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/CoffeeChatApi/Create/MentorSuggest/Success/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/http-response.adoc[]
 
 === 멘티 -> 멘토 커피챗 신청 (OnlyMentee)
 
 ==== HTTP Request
 
-include::{snippets}/CoffeeChatApi/Create/MenteeApply/Success/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/Create/MenteeApply/Success/path-parameters.adoc[]
-include::{snippets}/CoffeeChatApi/Create/MenteeApply/Success/request-fields.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/CoffeeChatApi/Create/MenteeApply/Success/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/http-response.adoc[]
+
+== 신청/제안된 커피챗 처리 (AccessToken)
+
+=== 멘티가 신청한 커피챗 처리 (OnlyMentor)
+
+==== 거절
+
+===== HTTP Request
+
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Success/request-fields.adoc[]
+
+===== HTTP Response
+
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Success/http-response.adoc[]
+
+==== 승인
+
+===== HTTP Request
+
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Approve/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Approve/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Approve/Success/request-fields.adoc[]
+
+===== HTTP Response
+
+include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Approve/Success/http-response.adoc[]
+
+=== 멘토가 제안한 커피챗 처리 (OnlyMentee)
+
+==== 거절
+
+===== HTTP Request
+
+include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Reject/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Reject/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Reject/Success/request-fields.adoc[]
+
+===== HTTP Response
+
+include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Reject/Success/http-response.adoc[]
+
+==== 1차 수락 (멘토 최종 결정 대기)
+
+===== HTTP Request
+
+include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/request-fields.adoc[]
+
+===== HTTP Response
+
+include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/http-response.adoc[]
+
+=== Pending 상태인 커피챗에 대한 멘토의 최종 결정 (OnlyMentor)
+
+==== 최종 거절
+
+===== HTTP Request
+
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Reject/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Reject/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Reject/Success/request-fields.adoc[]
+
+===== HTTP Response
+
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Reject/Success/http-response.adoc[]
+
+==== 최종 수락
+
+===== HTTP Request
+
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Approve/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Approve/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Approve/Success/request-fields.adoc[]
+
+===== HTTP Response
+
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Approve/Success/http-response.adoc[]

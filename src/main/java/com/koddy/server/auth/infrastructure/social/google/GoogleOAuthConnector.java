@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -21,6 +20,7 @@ import static com.koddy.server.global.exception.GlobalExceptionCode.UNEXPECTED_S
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 
 @Slf4j
 @Component
@@ -31,11 +31,17 @@ public class GoogleOAuthConnector implements OAuthConnector {
 
     @Override
     public OAuthTokenResponse fetchToken(final String code, final String redirectUri, final String state) {
-        final HttpHeaders headers = createTokenRequestHeader();
-        final MultiValueMap<String, String> params = createTokenRequestParams(code, redirectUri, state);
-
-        final HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-        return fetchGoogleToken(request).getBody();
+        try {
+            return restTemplate.exchange(
+                    properties.tokenUrl(),
+                    POST,
+                    new HttpEntity<>(createTokenRequestParams(code, redirectUri, state), createTokenRequestHeader()),
+                    GoogleTokenResponse.class
+            ).getBody();
+        } catch (final RestClientException e) {
+            log.error("OAuth Error... ", e);
+            throw new GlobalException(UNEXPECTED_SERVER_ERROR);
+        }
     }
 
     private HttpHeaders createTokenRequestHeader() {
@@ -59,34 +65,24 @@ public class GoogleOAuthConnector implements OAuthConnector {
         return params;
     }
 
-    private ResponseEntity<GoogleTokenResponse> fetchGoogleToken(final HttpEntity<MultiValueMap<String, String>> request) {
+    @Override
+    public OAuthUserResponse fetchUserInfo(final String accessToken) {
         try {
-            return restTemplate.postForEntity(properties.tokenUrl(), request, GoogleTokenResponse.class);
+            return restTemplate.exchange(
+                    properties.userInfoUrl(),
+                    GET,
+                    new HttpEntity<>(createUserInfoRequestHeader(accessToken)),
+                    GoogleUserResponse.class
+            ).getBody();
         } catch (final RestClientException e) {
             log.error("OAuth Error... ", e);
             throw new GlobalException(UNEXPECTED_SERVER_ERROR);
         }
-    }
-
-    @Override
-    public OAuthUserResponse fetchUserInfo(final String accessToken) {
-        final HttpHeaders headers = createUserInfoRequestHeader(accessToken);
-        final HttpEntity<Void> request = new HttpEntity<>(headers);
-        return fetchGoogleUserInfo(request).getBody();
     }
 
     private HttpHeaders createUserInfoRequestHeader(final String accessToken) {
         final HttpHeaders headers = new HttpHeaders();
         headers.set(AUTHORIZATION, String.join(" ", BEARER_TOKEN_TYPE, accessToken));
         return headers;
-    }
-
-    private ResponseEntity<GoogleUserResponse> fetchGoogleUserInfo(final HttpEntity<Void> request) {
-        try {
-            return restTemplate.exchange(properties.userInfoUrl(), GET, request, GoogleUserResponse.class);
-        } catch (final RestClientException e) {
-            log.error("OAuth Error... ", e);
-            throw new GlobalException(UNEXPECTED_SERVER_ERROR);
-        }
     }
 }
