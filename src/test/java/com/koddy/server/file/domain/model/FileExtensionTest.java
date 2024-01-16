@@ -1,6 +1,6 @@
 package com.koddy.server.file.domain.model;
 
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.file.exception.FileException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("File -> 도메인 [FileExtension] 테스트")
-class FileExtensionTest extends ParallelTest {
+class FileExtensionTest extends UnitTest {
     @Nested
     @DisplayName("파일 확장자 추출")
     class GetExtensionFromFileName {

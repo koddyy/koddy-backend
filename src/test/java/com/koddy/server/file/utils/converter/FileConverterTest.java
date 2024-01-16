@@ -1,6 +1,6 @@
 package com.koddy.server.file.utils.converter;
 
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.file.domain.model.RawFileData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("File -> FileConverter 테스트")
-class FileConverterTest extends ParallelTest {
+class FileConverterTest extends UnitTest {
     @Nested
     @DisplayName("파일 Convert")
     class ConvertFile {

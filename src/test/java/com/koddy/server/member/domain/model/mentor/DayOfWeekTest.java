@@ -1,6 +1,6 @@
 package com.koddy.server.member.domain.model.mentor;
 
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.exception.MemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("Member/Mentor -> 도메인 [DayOfWeek] 테스트")
-class DayOfWeekTest extends ParallelTest {
+class DayOfWeekTest extends UnitTest {
     @Test
     @DisplayName("kor 정보를 토대로 DayOfWeek을 가져온다")
     void from() {

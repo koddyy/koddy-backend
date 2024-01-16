@@ -1,6 +1,6 @@
 package com.koddy.server.auth.utils;
 
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UnitTest;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @DisplayName("Auth -> RequestTokenExtractor 테스트")
-class RequestTokenExtractorTest extends ParallelTest {
+class RequestTokenExtractorTest extends UnitTest {
     private final HttpServletRequest request = mock(HttpServletRequest.class);
 
     @Nested

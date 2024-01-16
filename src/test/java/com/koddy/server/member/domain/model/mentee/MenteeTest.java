@@ -1,6 +1,6 @@
 package com.koddy.server.member.domain.model.mentee;
 
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.LanguageFixture;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.exception.MemberException;
@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("Member/Mentee -> 도메인 Aggregate [Mentee] 테스트")
-class MenteeTest extends ParallelTest {
+class MenteeTest extends UnitTest {
     @Nested
     @DisplayName("초기 Mentee 생성")
     class Construct {

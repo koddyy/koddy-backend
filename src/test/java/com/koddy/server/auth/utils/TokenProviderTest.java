@@ -1,7 +1,7 @@
 package com.koddy.server.auth.utils;
 
 import com.koddy.server.auth.exception.AuthException;
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @DisplayName("Auth -> TokenProvider 테스트")
-class TokenProviderTest extends ParallelTest {
+class TokenProviderTest extends UnitTest {
     private static final String SECRET_KEY = "asldfjsadlfjalksjf01jf02j9012f0120f12jf1j29v0saduf012ue101212c01";
 
     private final TokenProvider invalidProvider = new TokenProvider(SECRET_KEY, 0L, 0L);

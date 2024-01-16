@@ -1,6 +1,6 @@
 package com.koddy.server.coffeechat.domain.model;
 
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.StrategyFixture;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("CoffeeChat -> 도메인 Aggregate [CoffeeChat] 테스트")
-class CoffeeChatTest extends ParallelTest {
+class CoffeeChatTest extends UnitTest {
     private final Mentee mentee = MENTEE_1.toDomain().apply(1L);
     private final Mentor mentor = MENTOR_1.toDomain().apply(2L);
     private final String applyReason = "신청 이유...";

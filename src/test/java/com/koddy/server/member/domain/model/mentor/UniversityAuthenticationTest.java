@@ -1,6 +1,6 @@
 package com.koddy.server.member.domain.model.mentor;
 
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UnitTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("Member/Mentor -> 도메인 [UniversityAuthentication] 테스트")
-class UniversityAuthenticationTest extends ParallelTest {
+class UniversityAuthenticationTest extends UnitTest {
     @Test
     @DisplayName("메일로 학교 인증을 시도한다")
     void attemptMail() {

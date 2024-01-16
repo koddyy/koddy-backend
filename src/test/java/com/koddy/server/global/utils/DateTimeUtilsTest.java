@@ -1,6 +1,6 @@
 package com.koddy.server.global.utils;
 
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UnitTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("Global -> DateTimeUtils 테스트")
-class DateTimeUtilsTest extends ParallelTest {
+class DateTimeUtilsTest extends UnitTest {
     @Test
     @DisplayName("시작/종료 시간 차이를 Minute 기준으로 응답한다 (ZonedDateTime)")
     void calculateDurationByMinutes1() {

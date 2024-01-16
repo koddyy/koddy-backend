@@ -1,6 +1,6 @@
 package com.koddy.server.coffeechat.domain.model;
 
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.global.encrypt.Encryptor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("CoffeeChat -> 도메인 [StrategyTest] 테스트")
-class StrategyTest extends ParallelTest {
+class StrategyTest extends UnitTest {
     private final Encryptor encryptor = getEncryptor();
 
     @Test

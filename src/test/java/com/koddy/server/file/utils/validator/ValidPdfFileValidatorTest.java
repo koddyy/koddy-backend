@@ -1,5 +1,6 @@
 package com.koddy.server.file.utils.validator;
 
+import com.koddy.server.common.UnitTest;
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
 
 @DisplayName("File -> ValidPdfFileValidator 테스트")
-class ValidPdfFileValidatorTest {
+class ValidPdfFileValidatorTest extends UnitTest {
     private final ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
     private final ValidPdfFileValidator sut = new ValidPdfFileValidator();
 

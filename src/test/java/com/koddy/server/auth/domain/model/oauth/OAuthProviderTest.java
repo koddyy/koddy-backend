@@ -1,7 +1,7 @@
 package com.koddy.server.auth.domain.model.oauth;
 
 import com.koddy.server.auth.exception.AuthException;
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UnitTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("Auth -> 도메인 [OAuthProvider] 테스트")
-class OAuthProviderTest extends ParallelTest {
+class OAuthProviderTest extends UnitTest {
     @Test
     @DisplayName("제공하지 않는 Provider에 대해서 OAuthProvider를 가져오려고 하면 예외가 발생한다")
     void throwExceptionByInvalidOAuthProvider() {
