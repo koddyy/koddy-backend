@@ -1,7 +1,7 @@
 package com.koddy.server.coffeechat.domain.model.link;
 
 import com.koddy.server.coffeechat.exception.CoffeeChatException;
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UnitTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("CoffeeChat/Link -> MeetingLinkProvider 테스트")
-class MeetingLinkProviderTest extends ParallelTest {
+class MeetingLinkProviderTest extends UnitTest {
     @Test
     @DisplayName("제공하지 않는 Provider에 대해서 MeetingLinkProvider를 가져오려고 하면 예외가 발생한다")
     void throwExceptionByInvalidMeetingLinkProvider() {

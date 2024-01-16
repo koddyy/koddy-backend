@@ -1,6 +1,6 @@
 package com.koddy.server.auth.domain.model;
 
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import static com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Auth -> 도메인 Aggregate [Token] 테스트")
-class TokenTest extends ParallelTest {
+class TokenTest extends UnitTest {
     private final Member<?> member = MENTOR_1.toDomain().apply(1L);
 
     @Test

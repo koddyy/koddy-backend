@@ -1,6 +1,6 @@
 package com.koddy.server.member.domain.model.mentor;
 
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.LanguageFixture;
 import com.koddy.server.common.fixture.MentoringPeriodFixture;
 import com.koddy.server.common.fixture.TimelineFixture;
@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("Member/Mentor -> 도메인 Aggregate [Mentor] 테스트")
-class MentorTest extends ParallelTest {
+class MentorTest extends UnitTest {
     @Nested
     @DisplayName("초기 Mentor 생성")
     class Construct {

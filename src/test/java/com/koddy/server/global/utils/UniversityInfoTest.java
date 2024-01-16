@@ -1,6 +1,6 @@
 package com.koddy.server.global.utils;
 
-import com.koddy.server.common.ParallelTest;
+import com.koddy.server.common.UnitTest;
 import com.koddy.server.global.exception.GlobalException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @DisplayName("Member/Mentor -> 도메인 [UniversityInfo] 테스트")
-class UniversityInfoTest extends ParallelTest {
+class UniversityInfoTest extends UnitTest {
     @Test
     @DisplayName("파악할 수 없는 대학교 도메인은 검증할 수 없다")
     void throwExceptionByNotProvidedUnivDomain() {
