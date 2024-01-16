@@ -1,5 +1,6 @@
 package com.koddy.server.coffeechat.domain.model;
 
+import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.StrategyFixture;
 import com.koddy.server.member.domain.model.mentee.Mentee;
@@ -13,11 +14,14 @@ import java.time.LocalDateTime;
 
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
+import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_CANCEL_STATUS;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("CoffeeChat -> 도메인 Aggregate [CoffeeChat] 테스트")
@@ -229,6 +233,77 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
                     () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
                     () -> assertThat(coffeeChat.getStrategy()).isEqualTo(strategy)
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("신청/제안한 커피챗 취소")
+    class Cancel {
+        private final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
+        private final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
+
+        @Test
+        @DisplayName("APPLY 상태가 아니면 취소가 불가능하다")
+        void throwExceptionByCannotCancelStatus() {
+            // given
+            final CoffeeChat applyCoffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end);
+            final CoffeeChat suggestCoffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
+            applyCoffeeChat.approveFromMenteeApply(StrategyFixture.KAKAO_ID.toDomain());
+            suggestCoffeeChat.pendingFromMentorSuggest(start, end);
+
+            // when - then
+            assertAll(
+                    () -> assertThatThrownBy(applyCoffeeChat::cancel)
+                            .isInstanceOf(CoffeeChatException.class)
+                            .hasMessage(CANNOT_CANCEL_STATUS.getMessage()),
+                    () -> assertThatThrownBy(suggestCoffeeChat::cancel)
+                            .isInstanceOf(CoffeeChatException.class)
+                            .hasMessage(CANNOT_CANCEL_STATUS.getMessage())
+            );
+        }
+
+        @Test
+        @DisplayName("멘티는 자신이 신청한 커피챗을 취소한다")
+        void cancelAppliedCoffeeChat() {
+            // given
+            final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end);
+
+            // when
+            coffeeChat.cancel();
+
+            // then
+            assertAll(
+                    () -> assertThat(coffeeChat.getApplier()).isEqualTo(mentee),
+                    () -> assertThat(coffeeChat.getTarget()).isEqualTo(mentor),
+                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getRejectReason()).isNull(),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(CANCEL),
+                    () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
+                    () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
+                    () -> assertThat(coffeeChat.getStrategy()).isNull()
+            );
+        }
+
+        @Test
+        @DisplayName("멘토는 자신이 제안한 커피챗을 취소한다")
+        void cancelSuggestedCoffeeChat() {
+            // given
+            final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
+
+            // when
+            coffeeChat.cancel();
+
+            // then
+            assertAll(
+                    () -> assertThat(coffeeChat.getApplier()).isEqualTo(mentor),
+                    () -> assertThat(coffeeChat.getTarget()).isEqualTo(mentee),
+                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getRejectReason()).isNull(),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(CANCEL),
+                    () -> assertThat(coffeeChat.getStart()).isNull(),
+                    () -> assertThat(coffeeChat.getEnd()).isNull(),
+                    () -> assertThat(coffeeChat.getStrategy()).isNull()
             );
         }
     }

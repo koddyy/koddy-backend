@@ -20,6 +20,8 @@ public enum CoffeeChatExceptionCode implements KoddyExceptionCode {
     CANNOT_APPROVE_STATUS(CONFLICT, "COFFEE_CHAT_005", "수락할 수 없는 상태입니다."),
     CANNOT_REJECT_STATUS(CONFLICT, "COFFEE_CHAT_006", "거절할 수 없는 상태입니다."),
     CANNOT_FINALLY_DECIDE_STATUS(CONFLICT, "COFFEE_CHAT_007", "최종 결정을 할 수 없는 상태입니다."),
+    CANNOT_CANCEL_STATUS(CONFLICT, "COFFEE_CHAT_008", "취소할 수 없는 상태입니다."),
+    APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND(NOT_FOUND, "COFFEE_CHAT_009", "신청/제안 상태인 커피챗이 존재하지 않습니다."),
     ;
 
     private final HttpStatus status;
