@@ -13,7 +13,10 @@ public record UpdateMentorScheduleRequest(
         List<MentorScheduleRequest> schedules
 ) {
     public MentoringPeriod toPeriod() {
-        return period.toPeriod();
+        if (period != null) {
+            return period.toPeriod();
+        }
+        return null;
     }
 
     public List<Timeline> toSchedules() {
