@@ -14,7 +14,7 @@ public class CancelCoffeeChatUseCase {
 
     @KoddyWritableTransactional
     public void invoke(final CancelCoffeeChatCommand command) {
-        final CoffeeChat coffeeChat = coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId());
+        final CoffeeChat coffeeChat = coffeeChatRepository.getAppliedOrSuggestedCoffeeChat(command.coffeeChatId(), command.memberId());
         coffeeChat.cancel();
     }
 }

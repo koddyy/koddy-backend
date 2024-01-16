@@ -39,15 +39,15 @@ class CancelCoffeeChatUseCaseTest extends UnitTest {
         final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
         final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end).apply(1L);
 
-        final CancelCoffeeChatCommand command = new CancelCoffeeChatCommand(coffeeChat.getId());
-        given(coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId())).willReturn(coffeeChat);
+        final CancelCoffeeChatCommand command = new CancelCoffeeChatCommand(mentee.getId(), coffeeChat.getId());
+        given(coffeeChatRepository.getAppliedOrSuggestedCoffeeChat(command.coffeeChatId(), command.memberId())).willReturn(coffeeChat);
 
         // when
         sut.invoke(command);
 
         // then
         assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getAppliedCoffeeChat(command.coffeeChatId()),
+                () -> verify(coffeeChatRepository, times(1)).getAppliedOrSuggestedCoffeeChat(command.coffeeChatId(), command.memberId()),
                 () -> assertThat(coffeeChat.getApplier()).isEqualTo(mentee),
                 () -> assertThat(coffeeChat.getTarget()).isEqualTo(mentor),
                 () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
@@ -65,15 +65,15 @@ class CancelCoffeeChatUseCaseTest extends UnitTest {
         // given
         final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason).apply(1L);
 
-        final CancelCoffeeChatCommand command = new CancelCoffeeChatCommand(coffeeChat.getId());
-        given(coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId())).willReturn(coffeeChat);
+        final CancelCoffeeChatCommand command = new CancelCoffeeChatCommand(mentor.getId(), coffeeChat.getId());
+        given(coffeeChatRepository.getAppliedOrSuggestedCoffeeChat(command.coffeeChatId(), command.memberId())).willReturn(coffeeChat);
 
         // when
         sut.invoke(command);
 
         // then
         assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getAppliedCoffeeChat(command.coffeeChatId()),
+                () -> verify(coffeeChatRepository, times(1)).getAppliedOrSuggestedCoffeeChat(command.coffeeChatId(), command.memberId()),
                 () -> assertThat(coffeeChat.getApplier()).isEqualTo(mentor),
                 () -> assertThat(coffeeChat.getTarget()).isEqualTo(mentee),
                 () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),

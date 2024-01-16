@@ -26,7 +26,7 @@ public class CancelCoffeeChatApiController {
             @Auth final Authenticated authenticated,
             @PathVariable final Long coffeeChatId
     ) {
-        cancelCoffeeChatUseCase.invoke(new CancelCoffeeChatCommand(coffeeChatId));
+        cancelCoffeeChatUseCase.invoke(new CancelCoffeeChatCommand(authenticated.id(), coffeeChatId));
         return ResponseEntity.noContent().build();
     }
 }
