@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 
-@Tag(name = "4-3-3. 최종 결정 대기상태인 커피챗에 대한 멘토의 결정")
+@Tag(name = "4-4-3. 최종 결정 대기상태인 커피챗에 대한 멘토의 결정")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/coffeechats/pending")

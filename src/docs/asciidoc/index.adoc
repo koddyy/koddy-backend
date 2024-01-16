@@ -316,6 +316,17 @@ include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/request-f
 
 include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/http-response.adoc[]
 
+== 신청/제안한 커피챗 취소 API (AccessToken)
+
+=== HTTP Request
+
+include::{snippets}/CoffeeChatApi/LifeCycle/Cancel/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Cancel/path-parameters.adoc[]
+
+=== HTTP Response
+
+include::{snippets}/CoffeeChatApi/LifeCycle/Cancel/http-response.adoc[]
+
 == 신청/제안된 커피챗 처리 (AccessToken)
 
 === 멘티가 신청한 커피챗 처리 (OnlyMentor)

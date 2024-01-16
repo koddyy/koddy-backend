@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 
-@Tag(name = "4-3-1. 멘티가 신청한 커피챗 처리 API")
+@Tag(name = "4-4-1. 멘티가 신청한 커피챗 처리 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/coffeechats/applied")
