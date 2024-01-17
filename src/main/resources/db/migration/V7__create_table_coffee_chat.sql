@@ -1,10 +1,11 @@
 CREATE TABLE IF NOT EXISTS coffee_chat
 (
     id               BIGINT AUTO_INCREMENT PRIMARY KEY,
-    applier_id       BIGINT      NOT NULL,
-    target_id        BIGINT      NOT NULL,
-    apply_reason     TEXT        NOT NULL,
+    source_member_id BIGINT      NOT NULL,
+    target_member_id BIGINT      NOT NULL,
     status           VARCHAR(30) NOT NULL,
+    apply_reason     TEXT        NOT NULL,
+    reject_reason    TEXT        NULL,
     start_year       INT         NULL,
     start_month      INT         NULL,
     start_day        INT         NULL,
@@ -21,11 +22,11 @@ CREATE TABLE IF NOT EXISTS coffee_chat
   DEFAULT CHARSET = utf8mb4;
 
 ALTER TABLE coffee_chat
-    ADD CONSTRAINT fk_coffee_chat_applier_id_from_member
-        FOREIGN KEY (applier_id)
+    ADD CONSTRAINT fk_coffee_chat_source_member_id_from_member
+        FOREIGN KEY (source_member_id)
             REFERENCES member (id);
 
 ALTER TABLE coffee_chat
-    ADD CONSTRAINT fk_coffee_chat_target_id_from_member
-        FOREIGN KEY (target_id)
+    ADD CONSTRAINT fk_coffee_chat_target_member_id_from_member
+        FOREIGN KEY (target_member_id)
             REFERENCES member (id);

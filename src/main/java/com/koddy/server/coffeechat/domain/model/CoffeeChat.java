@@ -2,7 +2,6 @@ package com.koddy.server.coffeechat.domain.model;
 
 import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.global.base.BaseEntity;
-import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import jakarta.persistence.AttributeOverride;
@@ -11,9 +10,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +25,6 @@ import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANN
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_FINALLY_DECIDE_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_REJECT_STATUS;
 import static jakarta.persistence.EnumType.STRING;
-import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
@@ -36,6 +32,16 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Table(name = "coffee_chat")
 public class CoffeeChat extends BaseEntity<CoffeeChat> {
+    @Column(name = "source_member_id", nullable = false)
+    private Long sourceMemberId;
+
+    @Column(name = "target_member_id", nullable = false)
+    private Long targetMemberId;
+
+    @Enumerated(STRING)
+    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(30)")
+    private CoffeeChatStatus status;
+
     @Lob
     @Column(name = "apply_reason", nullable = false, columnDefinition = "TEXT")
     private String applyReason;
@@ -43,10 +49,6 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     @Lob
     @Column(name = "reject_reason", columnDefinition = "TEXT")
     private String rejectReason;
-
-    @Enumerated(STRING)
-    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(30)")
-    private CoffeeChatStatus status;
 
     @Embedded
     @AttributeOverrides({
@@ -69,17 +71,9 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     @Embedded
     private Strategy strategy;
 
-    @ManyToOne(fetch = LAZY, optional = false)
-    @JoinColumn(name = "applier_id", referencedColumnName = "id", nullable = false)
-    private Member<?> applier;
-
-    @ManyToOne(fetch = LAZY, optional = false)
-    @JoinColumn(name = "target_id", referencedColumnName = "id", nullable = false)
-    private Member<?> target;
-
     private CoffeeChat(
-            final Member<?> applier,
-            final Member<?> target,
+            final Long sourceMemberId,
+            final Long targetMemberId,
             final String applyReason,
             final String rejectReason,
             final CoffeeChatStatus status,
@@ -87,8 +81,8 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             final Reservation end,
             final Strategy strategy
     ) {
-        this.applier = applier;
-        this.target = target;
+        this.sourceMemberId = sourceMemberId;
+        this.targetMemberId = targetMemberId;
         this.applyReason = applyReason;
         this.rejectReason = rejectReason;
         this.status = status;
@@ -105,8 +99,8 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             final Reservation end
     ) {
         return new CoffeeChat(
-                mentee,
-                mentor,
+                mentee.getId(),
+                mentor.getId(),
                 applyReason,
                 null,
                 APPLY,
@@ -116,14 +110,10 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         );
     }
 
-    public static CoffeeChat suggestCoffeeChat(
-            final Mentor mentor,
-            final Mentee mentee,
-            final String applyReason
-    ) {
+    public static CoffeeChat suggestCoffeeChat(final Mentor mentor, final Mentee mentee, final String applyReason) {
         return new CoffeeChat(
-                mentor,
-                mentee,
+                mentor.getId(),
+                mentee.getId(),
                 applyReason,
                 null,
                 APPLY,

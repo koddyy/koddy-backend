@@ -26,10 +26,10 @@ public interface CoffeeChatRepository extends JpaRepository<CoffeeChat, Long> {
                 .orElseThrow(() -> new CoffeeChatException(PENDING_COFFEE_CHAT_NOT_FOUND));
     }
 
-    Optional<CoffeeChat> findByIdAndApplierIdAndStatus(final Long id, final Long applierId, final CoffeeChatStatus status);
+    Optional<CoffeeChat> findByIdAndSourceMemberIdAndStatus(final Long id, final Long sourceMemberId, final CoffeeChatStatus status);
 
-    default CoffeeChat getAppliedOrSuggestedCoffeeChat(final Long id, final Long applierId) {
-        return findByIdAndApplierIdAndStatus(id, applierId, APPLY)
+    default CoffeeChat getAppliedOrSuggestedCoffeeChat(final Long id, final Long sourceMemberId) {
+        return findByIdAndSourceMemberIdAndStatus(id, sourceMemberId, APPLY)
                 .orElseThrow(() -> new CoffeeChatException(APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND));
     }
 }

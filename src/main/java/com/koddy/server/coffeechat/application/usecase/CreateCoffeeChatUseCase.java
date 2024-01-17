@@ -19,23 +19,19 @@ public class CreateCoffeeChatUseCase {
     private final CoffeeChatRepository coffeeChatRepository;
 
     public Long suggestCoffeeChat(final MentorSuggestCoffeeChatCommand command) {
-        final Mentor applier = mentorRepository.getById(command.mentorId());
-        final Mentee target = menteeRepository.getById(command.menteeId());
+        final Mentor mentor = mentorRepository.getById(command.mentorId());
+        final Mentee mentee = menteeRepository.getById(command.menteeId());
 
-        return coffeeChatRepository.save(CoffeeChat.suggestCoffeeChat(
-                applier,
-                target,
-                command.applyReason()
-        )).getId();
+        return coffeeChatRepository.save(CoffeeChat.suggestCoffeeChat(mentor, mentee, command.applyReason())).getId();
     }
 
     public Long applyCoffeeChat(final MenteeApplyCoffeeChatCommand command) {
-        final Mentee applier = menteeRepository.getById(command.menteeId());
-        final Mentor target = mentorRepository.getById(command.mentorId());
+        final Mentee mentee = menteeRepository.getById(command.menteeId());
+        final Mentor mentor = mentorRepository.getById(command.mentorId());
 
         return coffeeChatRepository.save(CoffeeChat.applyCoffeeChat(
-                applier,
-                target,
+                mentee,
+                mentor,
                 command.applyReason(),
                 command.start(),
                 command.end()
