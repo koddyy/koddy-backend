@@ -1,5 +1,6 @@
 package com.koddy.server.auth.domain.service;
 
+import com.koddy.server.auth.application.adapter.TokenStore;
 import com.koddy.server.auth.domain.model.AuthToken;
 import com.koddy.server.auth.utils.TokenProvider;
 import com.koddy.server.common.UnitTest;
@@ -22,8 +23,8 @@ import static org.mockito.Mockito.verify;
 public class TokenIssuerTest extends UnitTest {
     private final MemberRepository memberRepository = mock(MemberRepository.class);
     private final TokenProvider tokenProvider = mock(TokenProvider.class);
-    private final TokenManager tokenManager = mock(TokenManager.class);
-    private final TokenIssuer sut = new TokenIssuer(memberRepository, tokenProvider, tokenManager);
+    private final TokenStore tokenStore = mock(TokenStore.class);
+    private final TokenIssuer sut = new TokenIssuer(memberRepository, tokenProvider, tokenStore);
 
     private final Member<?> member = MENTOR_1.toDomain().apply(1L);
 
@@ -43,7 +44,7 @@ public class TokenIssuerTest extends UnitTest {
                 () -> verify(memberRepository, times(1)).getById(member.getId()),
                 () -> verify(tokenProvider, times(1)).createAccessToken(member.getId(), member.getAuthority()),
                 () -> verify(tokenProvider, times(1)).createRefreshToken(member.getId()),
-                () -> verify(tokenManager, times(1)).synchronizeRefreshToken(member.getId(), REFRESH_TOKEN),
+                () -> verify(tokenStore, times(1)).synchronizeRefreshToken(member.getId(), REFRESH_TOKEN),
                 () -> assertThat(authToken.accessToken()).isEqualTo(ACCESS_TOKEN),
                 () -> assertThat(authToken.refreshToken()).isEqualTo(REFRESH_TOKEN)
         );
@@ -65,7 +66,7 @@ public class TokenIssuerTest extends UnitTest {
                 () -> verify(memberRepository, times(1)).getById(member.getId()),
                 () -> verify(tokenProvider, times(1)).createAccessToken(member.getId(), member.getAuthority()),
                 () -> verify(tokenProvider, times(1)).createRefreshToken(member.getId()),
-                () -> verify(tokenManager, times(1)).updateRefreshToken(member.getId(), REFRESH_TOKEN),
+                () -> verify(tokenStore, times(1)).updateRefreshToken(member.getId(), REFRESH_TOKEN),
                 () -> assertThat(authToken.accessToken()).isEqualTo(ACCESS_TOKEN),
                 () -> assertThat(authToken.refreshToken()).isEqualTo(REFRESH_TOKEN)
         );
