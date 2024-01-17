@@ -3,8 +3,8 @@ package com.koddy.server.coffeechat.application.adapter;
 import com.koddy.server.auth.domain.model.oauth.OAuthProvider;
 import com.koddy.server.auth.domain.model.oauth.OAuthTokenResponse;
 import com.koddy.server.coffeechat.domain.model.link.MeetingLinkProvider;
+import com.koddy.server.coffeechat.domain.model.link.MeetingLinkRequest;
 import com.koddy.server.coffeechat.domain.model.link.MeetingLinkResponse;
-import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkRequest;
 
 public interface MeetingLinkManager {
     OAuthTokenResponse fetchToken(
@@ -16,8 +16,8 @@ public interface MeetingLinkManager {
 
     MeetingLinkResponse create(
             final MeetingLinkProvider provider,
-            final String accessToken,
-            final ZoomMeetingLinkRequest meetingLinkRequest
+            final String oAuthAccessToken,
+            final MeetingLinkRequest meetingLinkRequest
     );
 
     void delete(final MeetingLinkProvider provider, final String meetingId);

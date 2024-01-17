@@ -2,6 +2,7 @@ package com.koddy.server.coffeechat.infrastructure.link.zoom.spec;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.koddy.server.coffeechat.domain.model.link.MeetingLinkRequest;
 import com.koddy.server.global.utils.DateTimeUtils;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ public record ZoomMeetingLinkRequest(
         long duration, // 회의 기간 (Minute)
         String timezone, // Timezone = UTC
         Settings settings
-) {
+) implements MeetingLinkRequest {
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
     public record Settings(
             String autoRecording, // local(로컬 레코딩), cloud(클라우드 레코딩), none(레코딩 X)
