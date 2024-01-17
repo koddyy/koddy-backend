@@ -55,8 +55,8 @@ class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
         // then
         assertAll(
                 () -> verify(coffeeChatRepository, times(1)).getAppliedCoffeeChat(command.coffeeChatId()),
-                () -> assertThat(coffeeChat.getApplier()).isEqualTo(mentee),
-                () -> assertThat(coffeeChat.getTarget()).isEqualTo(mentor),
+                () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
+                () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
                 () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(rejectReason),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(REJECT),
@@ -83,8 +83,8 @@ class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
         // then
         assertAll(
                 () -> verify(coffeeChatRepository, times(1)).getAppliedCoffeeChat(command.coffeeChatId()),
-                () -> assertThat(coffeeChat.getApplier()).isEqualTo(mentee),
-                () -> assertThat(coffeeChat.getTarget()).isEqualTo(mentor),
+                () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
+                () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
                 () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPROVE),

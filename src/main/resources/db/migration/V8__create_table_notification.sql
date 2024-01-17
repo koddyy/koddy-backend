@@ -12,11 +12,11 @@ CREATE TABLE IF NOT EXISTS notification
   DEFAULT CHARSET = utf8mb4;
 
 ALTER TABLE notification
-    ADD CONSTRAINT fk_mnotification_source_member_id_from_member
+    ADD CONSTRAINT fk_notification_source_member_id_from_member
         FOREIGN KEY (source_member_id)
             REFERENCES member (id);
 
 ALTER TABLE notification
-    ADD CONSTRAINT fk_mnotification_target_member_id_from_member
+    ADD CONSTRAINT fk_notification_target_member_id_from_member
         FOREIGN KEY (target_member_id)
             REFERENCES member (id);
