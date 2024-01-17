@@ -210,4 +210,16 @@ public class CoffeeChatAcceptanceStep {
 
         return patchRequestWithAccessToken(uri, request, accessToken);
     }
+
+    public static ValidatableResponse 신청_제안한_커피챗을_취소한다(
+            final long coffeeChatId,
+            final String accessToken
+    ) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/coffeechats/cancel/{coffeeChatId}")
+                .build(coffeeChatId)
+                .getPath();
+
+        return deleteRequestWithAccessToken(uri, accessToken);
+    }
 }
