@@ -7,6 +7,7 @@ import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.auth.utils.TokenProvider;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.domain.model.Member;
+import com.koddy.server.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -24,9 +25,10 @@ import static org.mockito.Mockito.verify;
 
 @DisplayName("Auth -> ReissueTokenUseCase 테스트")
 class ReissueTokenUseCaseTest extends UnitTest {
+    private final MemberRepository memberRepository = mock(MemberRepository.class);
     private final TokenProvider tokenProvider = mock(TokenProvider.class);
     private final TokenIssuer tokenIssuer = mock(TokenIssuer.class);
-    private final ReissueTokenUseCase sut = new ReissueTokenUseCase(tokenProvider, tokenIssuer);
+    private final ReissueTokenUseCase sut = new ReissueTokenUseCase(memberRepository, tokenProvider, tokenIssuer);
 
     private final Member<?> member = MENTOR_1.toDomain().apply(1L);
     private final ReissueTokenCommand command = new ReissueTokenCommand(REFRESH_TOKEN);
@@ -36,6 +38,7 @@ class ReissueTokenUseCaseTest extends UnitTest {
     void throwExceptionByInvalidRefreshToken() {
         // given
         given(tokenProvider.getId(command.refreshToken())).willReturn(member.getId());
+        given(memberRepository.getById(member.getId())).willReturn(member);
         given(tokenIssuer.isMemberRefreshToken(member.getId(), command.refreshToken())).willReturn(false);
 
         // when - then
@@ -45,6 +48,7 @@ class ReissueTokenUseCaseTest extends UnitTest {
 
         assertAll(
                 () -> verify(tokenProvider, times(1)).getId(command.refreshToken()),
+                () -> verify(memberRepository, times(1)).getById(member.getId()),
                 () -> verify(tokenIssuer, times(1)).isMemberRefreshToken(member.getId(), command.refreshToken())
         );
     }
@@ -54,6 +58,7 @@ class ReissueTokenUseCaseTest extends UnitTest {
     void reissueSuccess() {
         // given
         given(tokenProvider.getId(command.refreshToken())).willReturn(member.getId());
+        given(memberRepository.getById(member.getId())).willReturn(member);
         given(tokenIssuer.isMemberRefreshToken(member.getId(), command.refreshToken())).willReturn(true);
 
         final AuthToken authToken = new AuthToken(ACCESS_TOKEN, REFRESH_TOKEN);
@@ -65,6 +70,7 @@ class ReissueTokenUseCaseTest extends UnitTest {
         // then
         assertAll(
                 () -> verify(tokenProvider, times(1)).getId(command.refreshToken()),
+                () -> verify(memberRepository, times(1)).getById(member.getId()),
                 () -> verify(tokenIssuer, times(1)).isMemberRefreshToken(member.getId(), command.refreshToken()),
                 () -> assertThat(result.accessToken()).isEqualTo(ACCESS_TOKEN),
                 () -> assertThat(result.refreshToken()).isEqualTo(REFRESH_TOKEN)
