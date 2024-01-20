@@ -17,8 +17,6 @@ import static com.koddy.server.common.fixture.MentorFixture.MENTOR_2;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_3;
 import static com.koddy.server.member.domain.model.MemberStatus.ACTIVE;
 import static com.koddy.server.member.domain.model.Nationality.KOREA;
-import static com.koddy.server.member.domain.model.ProfileComplete.NO;
-import static com.koddy.server.member.domain.model.ProfileComplete.YES;
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.ATTEMPT;
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.SUCCESS;
@@ -87,8 +85,7 @@ class MentorTest extends UnitTest {
                     () -> assertThat(mentor.getSchedules()).isEmpty(),
 
                     // isCompleted
-                    () -> assertThat(mentor.isProfileComplete()).isFalse(),
-                    () -> assertThat(mentor.getProfileComplete()).isEqualTo(NO)
+                    () -> assertThat(mentor.isProfileComplete()).isFalse()
             );
         }
     }
@@ -98,10 +95,7 @@ class MentorTest extends UnitTest {
     void isProfileComplete() {
         /* mentorA 완성 */
         final Mentor mentorA = MENTOR_1.toDomain();
-        assertAll(
-                () -> assertThat(mentorA.isProfileComplete()).isTrue(),
-                () -> assertThat(mentorA.getProfileComplete()).isEqualTo(YES)
-        );
+        assertThat(mentorA.isProfileComplete()).isTrue();
 
         /* mentorB 1차 회원가입 */
         final Mentor mentorB = new Mentor(
@@ -111,17 +105,11 @@ class MentorTest extends UnitTest {
                 MENTOR_2.getLanguages(),
                 MENTOR_2.getUniversityProfile()
         );
-        assertAll(
-                () -> assertThat(mentorB.isProfileComplete()).isFalse(),
-                () -> assertThat(mentorB.getProfileComplete()).isEqualTo(NO)
-        );
+        assertThat(mentorB.isProfileComplete()).isFalse();
 
         /* mentorB 프로필 완성 */
         mentorB.completeInfo(MENTOR_2.getIntroduction(), MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain(), TimelineFixture.allDays());
-        assertAll(
-                () -> assertThat(mentorB.isProfileComplete()).isTrue(),
-                () -> assertThat(mentorB.getProfileComplete()).isEqualTo(YES)
-        );
+        assertThat(mentorB.isProfileComplete()).isTrue();
 
         /* mentorC 1차 회원가입 */
         final Mentor mentorC = new Mentor(
@@ -131,24 +119,15 @@ class MentorTest extends UnitTest {
                 MENTOR_3.getLanguages(),
                 MENTOR_3.getUniversityProfile()
         );
-        assertAll(
-                () -> assertThat(mentorC.isProfileComplete()).isFalse(),
-                () -> assertThat(mentorC.getProfileComplete()).isEqualTo(NO)
-        );
+        assertThat(mentorC.isProfileComplete()).isFalse();
 
         /* mentorC 자기소개 기입 */
         mentorC.completeInfo(MENTOR_3.getIntroduction(), null, List.of());
-        assertAll(
-                () -> assertThat(mentorC.isProfileComplete()).isFalse(),
-                () -> assertThat(mentorC.getProfileComplete()).isEqualTo(NO)
-        );
+        assertThat(mentorC.isProfileComplete()).isFalse();
 
         /* mentorC 멘토링 스케줄 */
         mentorC.completeInfo(MENTOR_3.getIntroduction(), MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain(), TimelineFixture.allDays());
-        assertAll(
-                () -> assertThat(mentorC.isProfileComplete()).isTrue(),
-                () -> assertThat(mentorC.getProfileComplete()).isEqualTo(YES)
-        );
+        assertThat(mentorC.isProfileComplete()).isTrue();
     }
 
     @Nested
