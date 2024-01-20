@@ -14,8 +14,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
-import static com.koddy.server.member.domain.model.ProfileComplete.NO;
-import static com.koddy.server.member.domain.model.ProfileComplete.YES;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -45,8 +43,7 @@ class CompleteProfileUseCaseTest extends UnitTest {
                 () -> assertThat(mentor.getIntroduction()).isNull(),
                 () -> assertThat(mentor.getMentoringPeriod()).isNull(),
                 () -> assertThat(mentor.getSchedules()).isEmpty(),
-                () -> assertThat(mentor.isProfileComplete()).isFalse(),
-                () -> assertThat(mentor.getProfileComplete()).isEqualTo(NO)
+                () -> assertThat(mentor.isProfileComplete()).isFalse()
         );
 
         final CompleteMentorProfileCommand command = new CompleteMentorProfileCommand(
@@ -67,8 +64,7 @@ class CompleteProfileUseCaseTest extends UnitTest {
                 () -> assertThat(mentor.getIntroduction()).isNotNull(),
                 () -> assertThat(mentor.getMentoringPeriod()).isEqualTo(command.mentoringPeriod()),
                 () -> assertThat(mentor.getSchedules()).hasSize(TimelineFixture.월_수_금().size()),
-                () -> assertThat(mentor.isProfileComplete()).isTrue(),
-                () -> assertThat(mentor.getProfileComplete()).isEqualTo(YES)
+                () -> assertThat(mentor.isProfileComplete()).isTrue()
         );
     }
 
@@ -86,8 +82,7 @@ class CompleteProfileUseCaseTest extends UnitTest {
         ).apply(1L);
         assertAll(
                 () -> assertThat(mentee.getIntroduction()).isNull(),
-                () -> assertThat(mentee.isProfileComplete()).isFalse(),
-                () -> assertThat(mentee.getProfileComplete()).isEqualTo(NO)
+                () -> assertThat(mentee.isProfileComplete()).isFalse()
         );
 
         final CompleteMenteeProfileCommand command = new CompleteMenteeProfileCommand(mentee.getId(), MENTEE_1.getIntroduction());
@@ -101,8 +96,7 @@ class CompleteProfileUseCaseTest extends UnitTest {
                 () -> verify(mentorRepository, times(0)).getById(anyLong()),
                 () -> verify(menteeRepository, times(1)).getById(command.menteeId()),
                 () -> assertThat(mentee.getIntroduction()).isNotNull(),
-                () -> assertThat(mentee.isProfileComplete()).isTrue(),
-                () -> assertThat(mentee.getProfileComplete()).isEqualTo(YES)
+                () -> assertThat(mentee.isProfileComplete()).isTrue()
         );
     }
 }

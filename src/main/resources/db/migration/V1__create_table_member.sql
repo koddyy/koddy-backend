@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS member
     profile_image_url VARCHAR(250) NOT NULL,
     nationality       VARCHAR(50)  NOT NULL,
     introduction      TEXT         NULL,
-    profile_complete  VARCHAR(20)  NOT NULL,
+    profile_complete  TINYINT      NOT NULL,
     status            VARCHAR(20)  NOT NULL,
     role              VARCHAR(30)  NOT NULL,
     type              VARCHAR(31)  NOT NULL,

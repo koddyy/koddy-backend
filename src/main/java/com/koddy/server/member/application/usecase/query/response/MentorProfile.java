@@ -8,8 +8,6 @@ import com.koddy.server.member.domain.model.mentor.UniversityAuthentication;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.koddy.server.member.domain.model.ProfileComplete.YES;
-
 public record MentorProfile(
         long id,
         String email,
@@ -84,7 +82,7 @@ public record MentorProfile(
                         .map(it -> ScheduleResponse.of(it.getTimeline()))
                         .toList(),
                 "mentor",
-                mentor.getProfileComplete() == YES
+                mentor.isProfileComplete()
         );
     }
 

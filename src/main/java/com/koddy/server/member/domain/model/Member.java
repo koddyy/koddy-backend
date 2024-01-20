@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.koddy.server.member.domain.model.MemberStatus.ACTIVE;
-import static com.koddy.server.member.domain.model.ProfileComplete.NO;
-import static com.koddy.server.member.domain.model.ProfileComplete.YES;
 import static com.koddy.server.member.exception.MemberExceptionCode.AVAILABLE_LANGUAGE_MUST_EXISTS;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static jakarta.persistence.CascadeType.PERSIST;
@@ -58,9 +56,8 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     @Column(name = "introduction", columnDefinition = "TEXT")
     protected String introduction;
 
-    @Enumerated(STRING)
-    @Column(name = "profile_complete", nullable = false, columnDefinition = "VARCHAR(20)")
-    protected ProfileComplete profileComplete;
+    @Column(name = "profile_complete", nullable = false, columnDefinition = "TINYINT")
+    protected boolean profileComplete;
 
     @Enumerated(STRING)
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(20)")
@@ -86,7 +83,7 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         this.profileImageUrl = profileImageUrl;
         this.nationality = nationality;
         this.role = role;
-        this.profileComplete = NO;
+        this.profileComplete = false;
         this.status = ACTIVE;
         applyLanguages(languages);
     }
@@ -124,7 +121,7 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     }
 
     protected void checkProfileCompleted() {
-        profileComplete = isProfileComplete() ? YES : NO;
+        profileComplete = isProfileComplete();
     }
 
     protected void updateBasicInfo(
@@ -139,10 +136,6 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         this.profileImageUrl = profileImageUrl;
         this.introduction = introduction;
         applyLanguages(languages);
-    }
-
-    public boolean isActive() {
-        return status == ACTIVE;
     }
 
     public List<Language> getLanguages() {

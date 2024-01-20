@@ -14,8 +14,6 @@ import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_2;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_3;
 import static com.koddy.server.member.domain.model.MemberStatus.ACTIVE;
-import static com.koddy.server.member.domain.model.ProfileComplete.NO;
-import static com.koddy.server.member.domain.model.ProfileComplete.YES;
 import static com.koddy.server.member.domain.model.Role.MENTEE;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -78,8 +76,7 @@ class MenteeTest extends UnitTest {
                     () -> assertThat(mentee.getIntroduction()).isNull(),
 
                     // isCompleted
-                    () -> assertThat(mentee.isProfileComplete()).isFalse(),
-                    () -> assertThat(mentee.getProfileComplete()).isEqualTo(NO)
+                    () -> assertThat(mentee.isProfileComplete()).isFalse()
             );
         }
     }
@@ -89,10 +86,7 @@ class MenteeTest extends UnitTest {
     void isProfileComplete() {
         /* menteeA 완성 */
         final Mentee menteeA = MENTEE_1.toDomain();
-        assertAll(
-                () -> assertThat(menteeA.isProfileComplete()).isTrue(),
-                () -> assertThat(menteeA.getProfileComplete()).isEqualTo(YES)
-        );
+        assertThat(menteeA.isProfileComplete()).isTrue();
 
         /* menteeB 1차 회원가입 */
         final Mentee menteeB = new Mentee(
@@ -103,31 +97,19 @@ class MenteeTest extends UnitTest {
                 MENTEE_2.getLanguages(),
                 MENTEE_2.getInterest()
         );
-        assertAll(
-                () -> assertThat(menteeB.isProfileComplete()).isFalse(),
-                () -> assertThat(menteeB.getProfileComplete()).isEqualTo(NO)
-        );
+        assertThat(menteeB.isProfileComplete()).isFalse();
 
         /* menteeB 프로필 완성 */
         menteeB.completeInfo(MENTEE_2.getIntroduction());
-        assertAll(
-                () -> assertThat(menteeB.isProfileComplete()).isTrue(),
-                () -> assertThat(menteeB.getProfileComplete()).isEqualTo(YES)
-        );
+        assertThat(menteeB.isProfileComplete()).isTrue();
 
         /* menteeC 완성 */
         final Mentee menteeC = MENTEE_3.toDomain();
-        assertAll(
-                () -> assertThat(menteeC.isProfileComplete()).isTrue(),
-                () -> assertThat(menteeC.getProfileComplete()).isEqualTo(YES)
-        );
+        assertThat(menteeC.isProfileComplete()).isTrue();
 
         /* menteeC 미완성 진행 */
         menteeC.completeInfo(null);
-        assertAll(
-                () -> assertThat(menteeC.isProfileComplete()).isFalse(),
-                () -> assertThat(menteeC.getProfileComplete()).isEqualTo(NO)
-        );
+        assertThat(menteeC.isProfileComplete()).isFalse();
     }
 
     @Nested

@@ -16,8 +16,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
-import static com.koddy.server.member.domain.model.ProfileComplete.NO;
-import static com.koddy.server.member.domain.model.ProfileComplete.YES;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -50,8 +48,7 @@ class CompleteProfileUseCaseIntegrateTest extends IntegrateTest {
                 () -> assertThat(mentor.getIntroduction()).isNull(),
                 () -> assertThat(mentor.getMentoringPeriod()).isNull(),
                 () -> assertThat(mentor.getSchedules()).isEmpty(),
-                () -> assertThat(mentor.isProfileComplete()).isFalse(),
-                () -> assertThat(mentor.getProfileComplete()).isEqualTo(NO)
+                () -> assertThat(mentor.isProfileComplete()).isFalse()
         );
 
         final CompleteMentorProfileCommand command = new CompleteMentorProfileCommand(
@@ -72,8 +69,7 @@ class CompleteProfileUseCaseIntegrateTest extends IntegrateTest {
                     () -> assertThat(findMentor.getMentoringPeriod().getStartDate()).isEqualTo(command.mentoringPeriod().getStartDate()),
                     () -> assertThat(findMentor.getMentoringPeriod().getEndDate()).isEqualTo(command.mentoringPeriod().getEndDate()),
                     () -> assertThat(findMentor.getSchedules()).hasSize(command.timelines().size()),
-                    () -> assertThat(findMentor.isProfileComplete()).isTrue(),
-                    () -> assertThat(findMentor.getProfileComplete()).isEqualTo(YES)
+                    () -> assertThat(findMentor.isProfileComplete()).isTrue()
             );
         }); // for schedule mapping
     }
@@ -92,8 +88,7 @@ class CompleteProfileUseCaseIntegrateTest extends IntegrateTest {
         ));
         assertAll(
                 () -> assertThat(mentee.getIntroduction()).isNull(),
-                () -> assertThat(mentee.isProfileComplete()).isFalse(),
-                () -> assertThat(mentee.getProfileComplete()).isEqualTo(NO)
+                () -> assertThat(mentee.isProfileComplete()).isFalse()
         );
 
         final CompleteMenteeProfileCommand command = new CompleteMenteeProfileCommand(
@@ -108,8 +103,7 @@ class CompleteProfileUseCaseIntegrateTest extends IntegrateTest {
         final Mentee findMentee = menteeRepository.findById(mentee.getId()).orElseThrow();
         assertAll(
                 () -> assertThat(findMentee.getIntroduction()).isEqualTo(command.introduction()),
-                () -> assertThat(findMentee.isProfileComplete()).isTrue(),
-                () -> assertThat(findMentee.getProfileComplete()).isEqualTo(YES)
+                () -> assertThat(findMentee.isProfileComplete()).isTrue()
         );
     }
 }

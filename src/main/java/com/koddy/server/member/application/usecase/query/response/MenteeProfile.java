@@ -2,8 +2,6 @@ package com.koddy.server.member.application.usecase.query.response;
 
 import com.koddy.server.member.domain.model.mentee.Mentee;
 
-import static com.koddy.server.member.domain.model.ProfileComplete.YES;
-
 public record MenteeProfile(
         long id,
         String email,
@@ -29,7 +27,7 @@ public record MenteeProfile(
                 mentee.getInterest().getSchool(),
                 mentee.getInterest().getMajor(),
                 "mentee",
-                mentee.getProfileComplete() == YES
+                mentee.isProfileComplete()
         );
     }
 }
