@@ -225,6 +225,19 @@ include::{snippets}/MemberApi/PrivateProfile/Mix/Mentee/http-request.adoc[]
 include::{snippets}/MemberApi/PrivateProfile/Mix/Mentee/http-response.adoc[]
 include::{snippets}/MemberApi/PrivateProfile/Mix/Mentee/response-fields.adoc[]
 
+== 특정 Year-Month에 대해서 멘토의 예약된 스케줄 조회 API (AccessToken)
+
+=== HTTP Request
+
+include::{snippets}/MemberApi/Mentor/ReservedSchedule/http-request.adoc[]
+include::{snippets}/MemberApi/Mentor/ReservedSchedule/path-parameters.adoc[]
+include::{snippets}/MemberApi/Mentor/ReservedSchedule/query-parameters.adoc[]
+
+=== HTTP Response
+
+include::{snippets}/MemberApi/Mentor/ReservedSchedule/http-response.adoc[]
+include::{snippets}/MemberApi/Mentor/ReservedSchedule/response-fields.adoc[]
+
 == 파일 관련 API (AccessToken)
 
 === PresignedUrl 응답
