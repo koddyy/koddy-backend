@@ -3,7 +3,7 @@ package com.koddy.server.coffeechat.infrastructure.link.zoom.spec;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.koddy.server.coffeechat.domain.model.link.MeetingLinkRequest;
-import com.koddy.server.global.utils.DateTimeUtils;
+import com.koddy.server.global.utils.TimeUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -38,8 +38,8 @@ public record ZoomMeetingLinkRequest(
     ) {
         this(
                 topic,
-                ZonedDateTime.of(DateTimeUtils.kstToUtc(start), ZoneId.of("UTC")),
-                DateTimeUtils.calculateDurationByMinutes(start, end),
+                ZonedDateTime.of(TimeUtils.kstToUtc(start), ZoneId.of("UTC")),
+                TimeUtils.calculateDurationByMinutes(start, end),
                 "UTC",
                 new Settings()
         );
