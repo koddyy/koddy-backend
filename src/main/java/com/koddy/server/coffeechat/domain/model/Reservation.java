@@ -24,4 +24,8 @@ public class Reservation {
         this.day = target.getDayOfMonth();
         this.time = target.toLocalTime();
     }
+
+    public LocalDateTime toLocalDateTime() {
+        return LocalDateTime.of(year, month, day, time.getHour(), time.getMinute());
+    }
 }
