@@ -20,6 +20,7 @@ public enum GlobalExceptionCode implements KoddyExceptionCode {
     UNSUPPORTED_MEDIA_TYPE_ERROR(UNSUPPORTED_MEDIA_TYPE, "GLOBAL_004", "잘못된 요청입니다."),
     UNEXPECTED_SERVER_ERROR(INTERNAL_SERVER_ERROR, "GLOBAL_005", "내부 서버 오류입니다.\nKoddy 고객센터에 문의해주세요."),
     NOT_PROVIDED_UNIV_DOMAIN(BAD_REQUEST, "GLOBAL_006", "파악할 수 없는 대학교 도메인입니다.\nKoddy 고객센터에 문의해주세요."),
+    INVALID_TIME_DATA(BAD_REQUEST, "GLOBAL_007", "시간 정보는 00:00:00 ~ 23:59:59 범위만 허용합니다"),
     ;
 
     private final HttpStatus status;

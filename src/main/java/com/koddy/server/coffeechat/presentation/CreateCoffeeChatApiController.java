@@ -4,7 +4,6 @@ import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.coffeechat.application.usecase.CreateCoffeeChatUseCase;
 import com.koddy.server.coffeechat.application.usecase.command.MenteeApplyCoffeeChatCommand;
 import com.koddy.server.coffeechat.application.usecase.command.MentorSuggestCoffeeChatCommand;
-import com.koddy.server.coffeechat.domain.model.Reservation;
 import com.koddy.server.coffeechat.presentation.dto.request.MenteeApplyCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.MentorSuggestCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.dto.response.CreateCoffeeChatResponse;
@@ -59,8 +58,8 @@ public class CreateCoffeeChatApiController {
                 authenticated.id(),
                 mentorId,
                 request.applyReason(),
-                new Reservation(request.start()),
-                new Reservation(request.end())
+                request.toReservationStart(),
+                request.toReservationEnd()
         ));
         return ResponseEntity.ok(new CreateCoffeeChatResponse(coffeeChatId));
     }

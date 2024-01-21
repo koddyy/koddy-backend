@@ -94,8 +94,8 @@ class HandleSuggestedCoffeeChatApiControllerTest extends ControllerTest {
     class Pending {
         private static final String BASE_URL = "/api/coffeechats/suggested/pending/{coffeeChatId}";
         private final PendingSuggestedCoffeeChatRequest request = new PendingSuggestedCoffeeChatRequest(
-                LocalDateTime.of(2024, 2, 1, 18, 0),
-                LocalDateTime.of(2024, 2, 1, 19, 0)
+                LocalDateTime.of(2024, 2, 1, 18, 0).toString(),
+                LocalDateTime.of(2024, 2, 1, 19, 0).toString()
         );
 
         @Test
@@ -114,8 +114,8 @@ class HandleSuggestedCoffeeChatApiControllerTest extends ControllerTest {
                                     path("coffeeChatId", "커피챗 ID(PK)", true)
                             ),
                             requestFields(
-                                    body("start", "멘토링 시작 날짜", "KST", true),
-                                    body("end", "멘토링 종료 날짜", "KST", true)
+                                    body("start", "멘토링 시작 날짜", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true),
+                                    body("end", "멘토링 종료 날짜", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true)
                             )
                     ))
             );
@@ -139,8 +139,8 @@ class HandleSuggestedCoffeeChatApiControllerTest extends ControllerTest {
                                     path("coffeeChatId", "커피챗 ID(PK)", true)
                             ),
                             requestFields(
-                                    body("start", "멘토링 시작 날짜", "KST", true),
-                                    body("end", "멘토링 종료 날짜", "KST", true)
+                                    body("start", "멘토링 시작 날짜", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true),
+                                    body("end", "멘토링 종료 날짜", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true)
                             )
                     ))
             );

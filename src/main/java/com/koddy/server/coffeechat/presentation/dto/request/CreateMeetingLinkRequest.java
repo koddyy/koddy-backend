@@ -1,7 +1,8 @@
 package com.koddy.server.coffeechat.presentation.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.koddy.server.global.utils.TimeUtils;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -20,10 +21,19 @@ public record CreateMeetingLinkRequest(
         @NotBlank(message = "회의 제목은 필수입니다")
         String topic,
 
-        @NotNull(message = "회의 시작 시간은 필수입니다.")
-        LocalDateTime start,
+        @NotBlank(message = "회의 시작 시간은 필수입니다.")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        String start,
 
-        @NotNull(message = "회의 종료 시간은 필수입니다.")
-        LocalDateTime end
+        @NotBlank(message = "회의 종료 시간은 필수입니다.")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        String end
 ) {
+    public LocalDateTime toStart() {
+        return TimeUtils.toLocalDateTime(start);
+    }
+
+    public LocalDateTime toEnd() {
+        return TimeUtils.toLocalDateTime(end);
+    }
 }
