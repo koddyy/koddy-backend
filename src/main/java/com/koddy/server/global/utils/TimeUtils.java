@@ -16,6 +16,14 @@ public class TimeUtils {
     private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_LOCAL_TIME;
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
+    public static LocalTime toLocalTime(final int hour, final int minute) {
+        try {
+            return LocalTime.of(hour, minute);
+        } catch (final DateTimeException e) {
+            throw new GlobalException(INVALID_TIME_DATA);
+        }
+    }
+
     public static LocalTime toLocalTime(final String value) {
         try {
             return LocalTime.parse(value, timeFormatter);

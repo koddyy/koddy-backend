@@ -1,10 +1,9 @@
 package com.koddy.server.member.presentation.dto.request;
 
+import com.koddy.server.global.utils.TimeUtils;
 import com.koddy.server.member.domain.model.mentor.DayOfWeek;
 import com.koddy.server.member.domain.model.mentor.Timeline;
 import lombok.Builder;
-
-import java.time.LocalTime;
 
 @Builder
 public record MentorScheduleRequest(
@@ -27,8 +26,8 @@ public record MentorScheduleRequest(
     public Timeline toTimeline() {
         return Timeline.of(
                 DayOfWeek.from(dayOfWeek),
-                LocalTime.of(start.hour, start.minute),
-                LocalTime.of(end.hour, end.minute)
+                TimeUtils.toLocalTime(start.hour, start.minute),
+                TimeUtils.toLocalTime(end.hour, end.minute)
         );
     }
 }

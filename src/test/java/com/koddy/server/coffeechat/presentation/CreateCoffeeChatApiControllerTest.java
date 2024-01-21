@@ -97,8 +97,8 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
         private static final String BASE_URL = "/api/coffeechats/apply/{mentorId}";
         private final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest(
                 applyReason,
-                LocalDateTime.of(2024, 2, 1, 18, 0),
-                LocalDateTime.of(2024, 2, 1, 19, 30)
+                LocalDateTime.of(2024, 2, 1, 18, 0).toString(),
+                LocalDateTime.of(2024, 2, 1, 19, 30).toString()
         );
 
         @Test
@@ -118,8 +118,8 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
                             ),
                             requestFields(
                                     body("applyReason", "커피챗 신청 이유", true),
-                                    body("start", "커피챗 날짜 (시작 시간)", "KST", true),
-                                    body("end", "커피챗 날짜 (종료 시간)", "KST", true)
+                                    body("start", "커피챗 날짜 (시작 시간)", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true),
+                                    body("end", "커피챗 날짜 (종료 시간)", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true)
                             )
                     ))
             );
@@ -142,8 +142,8 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
                             ),
                             requestFields(
                                     body("applyReason", "커피챗 신청 이유", true),
-                                    body("start", "커피챗 날짜 (시작 시간)", "KST", true),
-                                    body("end", "커피챗 날짜 (종료 시간)", "KST", true)
+                                    body("start", "커피챗 날짜 (시작 시간)", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true),
+                                    body("end", "커피챗 날짜 (종료 시간)", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true)
                             ),
                             responseFields(
                                     body("coffeeChatId", "커피챗 ID(PK)")

@@ -47,8 +47,8 @@ public class ManageMeetingLinkApiController {
                 request.redirectUri(),
                 request.state(),
                 request.topic(),
-                request.start(),
-                request.end()
+                request.toStart(),
+                request.toEnd()
         ));
         return ResponseEntity.ok(new CreateMeetingLinkResponse(
                 result.id(),

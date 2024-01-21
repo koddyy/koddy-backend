@@ -19,6 +19,35 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("Global -> TimeUtils 테스트")
 class TimeUtilsTest extends UnitTest {
     @Nested
+    @DisplayName("int hour, minute -> LocalTime 변환")
+    class HourMinuteToLocalTime {
+        @Test
+        @DisplayName("Hour 정보가 0 ~ 23 범위가 아니면 예외가 발생한다")
+        void throwExceptionByInvalidTimeDataA() {
+            assertThatThrownBy(() -> TimeUtils.toLocalTime(24, 0))
+                    .isInstanceOf(GlobalException.class)
+                    .hasMessage(INVALID_TIME_DATA.getMessage());
+        }
+
+        @Test
+        @DisplayName("Minute 정보가 0 ~ 59 범위가 아니면 예외가 발생한다")
+        void throwExceptionByInvalidTimeDataB() {
+            assertThatThrownBy(() -> TimeUtils.toLocalTime(23, 61))
+                    .isInstanceOf(GlobalException.class)
+                    .hasMessage(INVALID_TIME_DATA.getMessage());
+        }
+
+        @Test
+        @DisplayName("시간 정보를 변환한다 (LocalTime)")
+        void success() {
+            assertAll(
+                    () -> assertThat(TimeUtils.toLocalTime(0, 0)).isEqualTo(LocalTime.of(0, 0, 0)),
+                    () -> assertThat(TimeUtils.toLocalTime(23, 59)).isEqualTo(LocalTime.of(23, 59, 0))
+            );
+        }
+    }
+
+    @Nested
     @DisplayName("String -> LocalTime 변환")
     class ToLocalTime {
         @Test

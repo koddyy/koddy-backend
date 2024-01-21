@@ -34,8 +34,8 @@ public class CoffeeChatAcceptanceStep {
                 REDIRECT_URI,
                 STATE,
                 "줌 회의 Hello",
-                LocalDateTime.of(2024, 1, 10, 18, 0),
-                LocalDateTime.of(2024, 1, 10, 19, 0)
+                LocalDateTime.of(2024, 1, 10, 18, 0).toString(),
+                LocalDateTime.of(2024, 1, 10, 19, 0).toString()
         );
 
         return postRequestWithAccessToken(uri, request, accessToken);
@@ -96,7 +96,7 @@ public class CoffeeChatAcceptanceStep {
                 .build(mentorId)
                 .getPath();
 
-        final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest("신청 이유...", start, end);
+        final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest("신청 이유...", start.toString(), end.toString());
 
         return postRequestWithAccessToken(uri, request, accessToken);
     }
@@ -112,7 +112,7 @@ public class CoffeeChatAcceptanceStep {
                 .build(mentorId)
                 .getPath();
 
-        final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest("신청 이유...", start, end);
+        final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest("신청 이유...", start.toString(), end.toString());
 
         return postRequestWithAccessToken(uri, request, accessToken)
                 .extract()
@@ -176,7 +176,7 @@ public class CoffeeChatAcceptanceStep {
                 .build(coffeeChatId)
                 .getPath();
 
-        final PendingSuggestedCoffeeChatRequest request = new PendingSuggestedCoffeeChatRequest(start, end);
+        final PendingSuggestedCoffeeChatRequest request = new PendingSuggestedCoffeeChatRequest(start.toString(), end.toString());
 
         return patchRequestWithAccessToken(uri, request, accessToken);
     }
