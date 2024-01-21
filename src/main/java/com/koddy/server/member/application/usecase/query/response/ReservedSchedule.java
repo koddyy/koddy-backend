@@ -5,9 +5,9 @@ import com.koddy.server.coffeechat.domain.model.Reservation;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ReservedMentoringTime(
+public record ReservedSchedule(
         int timeUnit,
-        List<Period> reserved
+        List<Period> periods
 ) {
     public record Period(
             LocalDateTime start,
