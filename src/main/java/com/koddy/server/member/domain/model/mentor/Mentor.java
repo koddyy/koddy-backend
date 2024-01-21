@@ -111,4 +111,8 @@ public class Mentor extends Member<Mentor> {
                 && mentoringPeriod != null
                 && !CollectionUtils.isEmpty(schedules);
     }
+
+    public int getMentoringTimeUnit() {
+        return mentoringPeriod.getTimeUnit().getValue();
+    }
 }
