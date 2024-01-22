@@ -273,4 +273,18 @@ public class MemberAcceptanceStep {
 
         return postRequestWithAccessToken(uri, request, accessToken);
     }
+
+    public static ValidatableResponse 멘토의_예약된_스케줄_정보를_조회한다(
+            final long mentorId,
+            final int year,
+            final int month,
+            final String accessToken
+    ) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/mentors/{mentorId}/reserved-schedule?year={year}&month={month}")
+                .build(mentorId, year, month)
+                .getPath();
+
+        return getRequestWithAccessToken(uri, accessToken);
+    }
 }

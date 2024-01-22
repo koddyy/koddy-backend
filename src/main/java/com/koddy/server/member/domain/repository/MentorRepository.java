@@ -21,6 +21,19 @@ public interface MentorRepository extends JpaRepository<Mentor, Long> {
     @Query("""
             SELECT m
             FROM Mentor m
+            LEFT JOIN FETCH m.schedules
+            WHERE m.id = :id
+            """)
+    Optional<Mentor> findByIdWithSchedules(@Param("id") final Long id);
+
+    default Mentor getByIdWithSchedules(final Long id) {
+        return findByIdWithSchedules(id)
+                .orElseThrow(() -> new MemberException(MENTOR_NOT_FOUND));
+    }
+
+    @Query("""
+            SELECT m
+            FROM Mentor m
             JOIN FETCH m.availableLanguages
             WHERE m.id = :id
             """)

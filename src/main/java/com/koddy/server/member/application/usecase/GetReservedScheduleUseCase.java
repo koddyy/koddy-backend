@@ -20,13 +20,8 @@ public class GetReservedScheduleUseCase {
 
     @KoddyReadOnlyTransactional
     public ReservedSchedule invoke(final GetReservedSchedule query) {
-        final Mentor mentor = mentorRepository.getById(query.mentorId());
+        final Mentor mentor = mentorRepository.getByIdWithSchedules(query.mentorId());
         final List<CoffeeChat> reservedCoffeeChat = coffeeChatRepository.getReservedCoffeeChat(query.mentorId(), query.year(), query.month());
-        return new ReservedSchedule(
-                mentor.getMentoringTimeUnit(),
-                reservedCoffeeChat.stream()
-                        .map(it -> ReservedSchedule.Period.of(it.getStart(), it.getEnd()))
-                        .toList()
-        );
+        return ReservedSchedule.of(mentor, reservedCoffeeChat);
     }
 }

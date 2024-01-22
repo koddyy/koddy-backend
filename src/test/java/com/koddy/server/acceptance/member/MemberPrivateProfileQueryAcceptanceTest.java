@@ -17,6 +17,7 @@ import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘티_프
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.member.domain.model.Nationality.KOREA;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -87,7 +88,41 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
                     .body("authenticated", is(false))
                     .body("period.startDate", is(MENTOR_1.getMentoringPeriod().getStartDate().toString()))
                     .body("period.endDate", is(MENTOR_1.getMentoringPeriod().getEndDate().toString()))
-                    .body("schedules", hasSize(MENTOR_1.getTimelines().size()))
+                    .body("schedules.dayOfWeek", contains(
+                            MENTOR_1.getTimelines()
+                                    .stream()
+                                    .map(it -> it.getDayOfWeek().getKor())
+                                    .toList()
+                                    .toArray()
+                    ))
+                    .body("schedules.start.hour", contains(
+                            MENTOR_1.getTimelines()
+                                    .stream()
+                                    .map(it -> it.getStartTime().getHour())
+                                    .toList()
+                                    .toArray()
+                    ))
+                    .body("schedules.start.minute", contains(
+                            MENTOR_1.getTimelines()
+                                    .stream()
+                                    .map(it -> it.getStartTime().getMinute())
+                                    .toList()
+                                    .toArray()
+                    ))
+                    .body("schedules.end.hour", contains(
+                            MENTOR_1.getTimelines()
+                                    .stream()
+                                    .map(it -> it.getEndTime().getHour())
+                                    .toList()
+                                    .toArray()
+                    ))
+                    .body("schedules.end.minute", contains(
+                            MENTOR_1.getTimelines()
+                                    .stream()
+                                    .map(it -> it.getEndTime().getMinute())
+                                    .toList()
+                                    .toArray()
+                    ))
                     .body("role", is("mentor"))
                     .body("profileComplete", is(true));
         }
