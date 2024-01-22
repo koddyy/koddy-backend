@@ -53,6 +53,6 @@ public class Timeline {
     }
 
     public boolean isTimeIncluded(final LocalTime time) {
-        return time.isAfter(startTime) && time.isBefore(endTime);
+        return !time.isBefore(startTime) && !time.isAfter(endTime);
     }
 }

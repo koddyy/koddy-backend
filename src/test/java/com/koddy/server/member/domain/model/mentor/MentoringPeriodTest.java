@@ -67,13 +67,17 @@ class MentoringPeriodTest extends UnitTest {
         final MentoringPeriod mentoringPeriod = MentoringPeriod.of(startDate, endDate);
 
         // when
-        final boolean actual1 = mentoringPeriod.isDateIncluded(LocalDate.of(2024, 2, 15));
-        final boolean actual2 = mentoringPeriod.isDateIncluded(LocalDate.of(2024, 3, 15));
+        final boolean actual1 = mentoringPeriod.isDateIncluded(LocalDate.of(2024, 2, 1));
+        final boolean actual2 = mentoringPeriod.isDateIncluded(LocalDate.of(2024, 2, 15));
+        final boolean actual3 = mentoringPeriod.isDateIncluded(LocalDate.of(2024, 3, 1));
+        final boolean actual4 = mentoringPeriod.isDateIncluded(LocalDate.of(2024, 3, 15));
 
         // then
         assertAll(
                 () -> assertThat(actual1).isTrue(),
-                () -> assertThat(actual2).isFalse()
+                () -> assertThat(actual2).isTrue(),
+                () -> assertThat(actual3).isTrue(),
+                () -> assertThat(actual4).isFalse()
         );
     }
 }

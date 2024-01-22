@@ -58,7 +58,7 @@ public class MentoringPeriod {
     }
 
     public boolean isDateIncluded(final LocalDate date) {
-        return date.isAfter(startDate) && date.isBefore(endDate);
+        return !date.isBefore(startDate) && !date.isAfter(endDate);
     }
 
     @Getter
