@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class MemberBasicProflieApiController {
+public class MemberBasicProflieQueryApiController {
     private final GetMemberBasicProfileUseCase getMemberBasicProfileUseCase;
 
     @Operation(summary = "멘토 기본 프로필 조회 Endpoint")

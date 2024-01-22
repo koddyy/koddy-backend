@@ -10,10 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
-import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_프로필을_완성시킨다;
-import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_프로필을_조회한다;
-import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘티_프로필을_완성시킨다;
-import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘티_프로필을_조회한다;
+import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_마이페이지_프로필을_조회한다;
+import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘티_마이페이지_프로필을_조회한다;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.member.domain.model.Nationality.KOREA;
@@ -26,16 +24,16 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.http.HttpStatus.OK;
 
 @ExtendWith(DatabaseCleanerEachCallbackExtension.class)
-@DisplayName("[Acceptance Test] 사용자 마이페이지 프로필 조회")
+@DisplayName("[Acceptance Test] 사용자 마이페이지(Private) 프로필 조회")
 public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
     @Nested
-    @DisplayName("멘토 프로필 조회 API")
+    @DisplayName("멘토 마이페이지 프로필 조회 API")
     class GetMentorProfile {
         @Test
-        @DisplayName("멘토 프로필을 조회한다 (미완성 프로필)")
+        @DisplayName("멘토 마이페이지 프로필을 조회한다 (미완성 프로필)")
         void successWithUncomplete() {
             final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
-            멘토_프로필을_조회한다(accessToken)
+            멘토_마이페이지_프로필을_조회한다(accessToken)
                     .statusCode(OK.value())
                     .body("id", notNullValue(Long.class))
                     .body("email", is(MENTOR_1.getEmail().getValue()))
@@ -62,11 +60,10 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
         }
 
         @Test
-        @DisplayName("멘토 프로필을 조회한다 (완성 프로필)")
+        @DisplayName("멘토 마이페이지 프로필을 조회한다 (완성 프로필)")
         void successWithComplete() {
-            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
-            멘토_프로필을_완성시킨다(MENTOR_1, accessToken);
-            멘토_프로필을_조회한다(accessToken)
+            final String accessToken = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다().token().accessToken();
+            멘토_마이페이지_프로필을_조회한다(accessToken)
                     .statusCode(OK.value())
                     .body("id", notNullValue(Long.class))
                     .body("email", is(MENTOR_1.getEmail().getValue()))
@@ -129,13 +126,13 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
     }
 
     @Nested
-    @DisplayName("멘티 프로필 조회 API")
+    @DisplayName("멘티 마이페이지 프로필 조회 API")
     class GetMenteeProfile {
         @Test
-        @DisplayName("멘티 프로필을 조회한다 (미완성 프로필)")
+        @DisplayName("멘티 마이페이지 프로필을 조회한다 (미완성 프로필)")
         void successWithUncomplete() {
             final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
-            멘티_프로필을_조회한다(accessToken)
+            멘티_마이페이지_프로필을_조회한다(accessToken)
                     .statusCode(OK.value())
                     .body("id", notNullValue(Long.class))
                     .body("email", is(MENTEE_1.getEmail().getValue()))
@@ -152,11 +149,10 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
         }
 
         @Test
-        @DisplayName("멘티 프로필을 조회한다 (완성 프로필)")
+        @DisplayName("멘티 마이페이지 프로필을 조회한다 (완성 프로필)")
         void successWithComplete() {
-            final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
-            멘티_프로필을_완성시킨다(MENTEE_1, accessToken);
-            멘티_프로필을_조회한다(accessToken)
+            final String accessToken = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다().token().accessToken();
+            멘티_마이페이지_프로필을_조회한다(accessToken)
                     .statusCode(OK.value())
                     .body("id", notNullValue(Long.class))
                     .body("email", is(MENTEE_1.getEmail().getValue()))

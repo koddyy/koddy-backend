@@ -22,7 +22,7 @@ import static com.koddy.server.member.domain.model.Role.MENTOR;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class MemberPrivateProflieApiController {
+public class MemberPrivateProflieQueryApiController {
     private final GetMemberPrivateProfileUseCase getMemberPrivateProfileUseCase;
 
     @Operation(summary = "마이페이지 프로필 조회 Endpoint (@Auth Authorities에 따른 분기)")
