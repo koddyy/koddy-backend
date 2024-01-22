@@ -201,6 +201,6 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     }
 
     private boolean isReservationTimeIncluded(final Reservation target) {
-        return !target.getTime().isBefore(start.getTime()) && !target.getTime().isAfter(end.getTime());
+        return !target.getTime().isBefore(start.getTime()) && target.getTime().isBefore(end.getTime());
     }
 }

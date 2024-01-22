@@ -68,7 +68,7 @@ class TimelineTest extends UnitTest {
         assertAll(
                 () -> assertThat(actual1).isTrue(),
                 () -> assertThat(actual2).isTrue(),
-                () -> assertThat(actual3).isTrue(),
+                () -> assertThat(actual3).isFalse(),
                 () -> assertThat(actual4).isFalse()
         );
     }

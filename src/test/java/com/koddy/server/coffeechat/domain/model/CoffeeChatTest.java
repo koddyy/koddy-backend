@@ -333,9 +333,10 @@ class CoffeeChatTest extends UnitTest {
         final boolean actual1 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 1, 18, 20)));
         final boolean actual2 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 2, 17, 59)));
         final boolean actual3 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 2, 18, 0)));
-        final boolean actual4 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 2, 18, 30)));
-        final boolean actual5 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 2, 18, 40)));
-        final boolean actual6 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 3, 18, 20)));
+        final boolean actual4 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 2, 18, 20)));
+        final boolean actual5 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 2, 18, 30)));
+        final boolean actual6 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 2, 18, 40)));
+        final boolean actual7 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 3, 18, 20)));
 
         // then
         assertAll(
@@ -344,7 +345,8 @@ class CoffeeChatTest extends UnitTest {
                 () -> assertThat(actual3).isTrue(),
                 () -> assertThat(actual4).isTrue(),
                 () -> assertThat(actual5).isFalse(),
-                () -> assertThat(actual6).isFalse()
+                () -> assertThat(actual6).isFalse(),
+                () -> assertThat(actual7).isFalse()
         );
     }
 }
