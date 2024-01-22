@@ -144,13 +144,13 @@ class CoffeeChatRepositoryTest extends RepositoryTest {
          * -> mentee1 제안 + 1차 수락 (2024-02-05) = PENTING
          * -> mentee2 제안 = APPLY
          * -> mentee3 제안 + 거절 = REJECT
-         * -> mentee4 신청 (2024-02-20) = APPLY
-         * -> mentee5 신청 (2024-03-03) + 수락 = APPROVE
-         * -> mentee6 제안 (2024-03-15) + 1차 수락 + 최종 수락 = APPROVE
-         * -> mentee7 제안 (2024-04-02) + 1차 수락 + 거절 = REJECT
+         * -> mentee4 신청 (2024-02-19) = APPLY
+         * -> mentee5 신청 (2024-03-04) + 수락 = APPROVE
+         * -> mentee6 제안 + 1차 수락 (2024-03-15) + 최종 수락 = APPROVE
+         * -> mentee7 제안 + 1차 수락 (2024-04-01) + 거절 = REJECT
          * -> mentee8 신청 (2024-04-05) = APPLY
          * -> mentee9 신청 (2024-04-17) + 수락 = APPROVE
-         * -> mentee10 제안 (2024-04-10) + 1차 수락 = PENDING
+         * -> mentee10 제안 + 1차 수락 (2024-04-10) = PENDING
          */
         final Mentor mentor = memberRepository.save(MENTOR_1.toDomain());
 
@@ -165,14 +165,14 @@ class CoffeeChatRepositoryTest extends RepositoryTest {
         final CoffeeChat coffeeChat4 = apply(
                 mentee4,
                 mentor,
-                new Reservation(LocalDateTime.of(2024, 2, 20, 18, 0)),
-                new Reservation(LocalDateTime.of(2024, 2, 20, 18, 30))
+                new Reservation(LocalDateTime.of(2024, 2, 19, 18, 0)),
+                new Reservation(LocalDateTime.of(2024, 2, 19, 18, 30))
         );
         final CoffeeChat coffeeChat5 = applyAndApprove(
                 mentee5,
                 mentor,
-                new Reservation(LocalDateTime.of(2024, 3, 3, 18, 0)),
-                new Reservation(LocalDateTime.of(2024, 3, 3, 18, 30))
+                new Reservation(LocalDateTime.of(2024, 3, 4, 18, 0)),
+                new Reservation(LocalDateTime.of(2024, 3, 4, 18, 30))
         );
         final CoffeeChat coffeeChat6 = suggestAndPendingAndApprove(
                 mentor,
@@ -183,8 +183,8 @@ class CoffeeChatRepositoryTest extends RepositoryTest {
         final CoffeeChat coffeeChat7 = suggestAndPendingAndReject(
                 mentor,
                 mentee7,
-                new Reservation(LocalDateTime.of(2024, 4, 2, 18, 0)),
-                new Reservation(LocalDateTime.of(2024, 4, 2, 18, 30))
+                new Reservation(LocalDateTime.of(2024, 4, 1, 18, 0)),
+                new Reservation(LocalDateTime.of(2024, 4, 1, 18, 30))
         );
         final CoffeeChat coffeeChat8 = apply(
                 mentee8,
