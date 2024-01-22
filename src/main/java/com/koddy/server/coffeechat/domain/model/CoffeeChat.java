@@ -79,6 +79,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             final Long sourceMemberId,
             final Long targetMemberId,
             final String applyReason,
+            final String question,
             final String rejectReason,
             final CoffeeChatStatus status,
             final Reservation start,
@@ -88,6 +89,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         this.sourceMemberId = sourceMemberId;
         this.targetMemberId = targetMemberId;
         this.applyReason = applyReason;
+        this.question = question;
         this.rejectReason = rejectReason;
         this.status = status;
         this.start = start;
@@ -107,6 +109,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
                 mentor.getId(),
                 applyReason,
                 null,
+                null,
                 APPLY,
                 start,
                 end,
@@ -119,6 +122,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
                 mentor.getId(),
                 mentee.getId(),
                 applyReason,
+                null,
                 null,
                 APPLY,
                 null,
@@ -154,11 +158,12 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         this.status = REJECT;
     }
 
-    public void pendingFromMentorSuggest(final Reservation start, final Reservation end) {
+    public void pendingFromMentorSuggest(final String question, final Reservation start, final Reservation end) {
         if (this.status != APPLY) {
             throw new CoffeeChatException(CANNOT_APPROVE_STATUS);
         }
 
+        this.question = question;
         this.start = start;
         this.end = end;
         this.status = PENDING;

@@ -46,6 +46,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPLY),
                     () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
@@ -65,6 +66,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPLY),
                     () -> assertThat(coffeeChat.getStart()).isNull(),
@@ -95,6 +97,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(rejectReason),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(REJECT),
                     () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
@@ -118,6 +121,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPROVE),
                     () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
@@ -145,6 +149,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(rejectReason),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(REJECT),
                     () -> assertThat(coffeeChat.getStart()).isNull(),
@@ -158,17 +163,19 @@ class CoffeeChatTest extends UnitTest {
         void pending() {
             // given
             final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
+            final String question = "질문..";
             final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
             final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
 
             // when
-            coffeeChat.pendingFromMentorSuggest(start, end);
+            coffeeChat.pendingFromMentorSuggest(question, start, end);
 
             // then
             assertAll(
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getQuestion()).isEqualTo(question),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(PENDING),
                     () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
@@ -181,6 +188,7 @@ class CoffeeChatTest extends UnitTest {
     @Nested
     @DisplayName("최종 결정 대기 상태인 CoffeeChat에 대한 멘토의 결정")
     class PendingCoffeeChat {
+        private final String question = "질문..";
         private final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
         private final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
 
@@ -189,7 +197,7 @@ class CoffeeChatTest extends UnitTest {
         @BeforeEach
         void setUp() {
             coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
-            coffeeChat.pendingFromMentorSuggest(start, end);
+            coffeeChat.pendingFromMentorSuggest(question, start, end);
         }
 
         @Test
@@ -206,6 +214,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getQuestion()).isEqualTo(question),
                     () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(rejectReason),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(REJECT),
                     () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
@@ -228,6 +237,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getQuestion()).isEqualTo(question),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPROVE),
                     () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
@@ -240,6 +250,7 @@ class CoffeeChatTest extends UnitTest {
     @Nested
     @DisplayName("신청/제안한 커피챗 취소")
     class Cancel {
+        private final String question = "질문..";
         private final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
         private final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
 
@@ -250,7 +261,7 @@ class CoffeeChatTest extends UnitTest {
             final CoffeeChat applyCoffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end);
             final CoffeeChat suggestCoffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
             applyCoffeeChat.approveFromMenteeApply(StrategyFixture.KAKAO_ID.toDomain());
-            suggestCoffeeChat.pendingFromMentorSuggest(start, end);
+            suggestCoffeeChat.pendingFromMentorSuggest(question, start, end);
 
             // when - then
             assertAll(
@@ -277,6 +288,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(CANCEL),
                     () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
@@ -299,6 +311,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(CANCEL),
                     () -> assertThat(coffeeChat.getStart()).isNull(),

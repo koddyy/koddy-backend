@@ -176,7 +176,7 @@ public class CoffeeChatAcceptanceStep {
                 .build(coffeeChatId)
                 .getPath();
 
-        final PendingSuggestedCoffeeChatRequest request = new PendingSuggestedCoffeeChatRequest(start.toString(), end.toString());
+        final PendingSuggestedCoffeeChatRequest request = new PendingSuggestedCoffeeChatRequest("질문..", start.toString(), end.toString());
 
         return patchRequestWithAccessToken(uri, request, accessToken);
     }

@@ -50,6 +50,7 @@ public class HandleSuggestedCoffeeChatApiController {
     ) {
         handleSuggestedCoffeeChatUseCase.pending(new PendingSuggestedCoffeeChatCommand(
                 coffeeChatId,
+                request.question(),
                 request.toReservationStart(),
                 request.toReservationEnd()
         ));

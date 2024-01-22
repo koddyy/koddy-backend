@@ -4,6 +4,7 @@ import com.koddy.server.coffeechat.domain.model.Reservation;
 
 public record PendingSuggestedCoffeeChatCommand(
         long coffeeChatId,
+        String question,
         Reservation start,
         Reservation end
 ) {
