@@ -5,7 +5,7 @@ import com.koddy.server.member.domain.model.mentee.Mentee;
 public record MenteeBasicProfile(
         long id,
         String name,
-        String profileImageurl,
+        String profileImageUrl,
         String nationality,
         String introduction,
         LanguageResponse languages,

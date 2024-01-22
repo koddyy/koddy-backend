@@ -5,7 +5,7 @@ import com.koddy.server.member.domain.model.mentor.Mentor;
 public record MentorBasicProfile(
         long id,
         String name,
-        String profileImageurl,
+        String profileImageUrl,
         String introduction,
         LanguageResponse languages,
         String school,
