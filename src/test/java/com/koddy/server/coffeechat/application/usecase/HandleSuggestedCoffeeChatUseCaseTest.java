@@ -66,9 +66,10 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
         // given
         final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason).apply(1L);
 
+        final String question = "질문..";
         final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
         final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
-        final PendingSuggestedCoffeeChatCommand command = new PendingSuggestedCoffeeChatCommand(coffeeChat.getId(), start, end);
+        final PendingSuggestedCoffeeChatCommand command = new PendingSuggestedCoffeeChatCommand(coffeeChat.getId(), question, start, end);
         given(coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId())).willReturn(coffeeChat);
 
         // when
@@ -80,6 +81,7 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                () -> assertThat(coffeeChat.getQuestion()).isEqualTo(question),
                 () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(PENDING),
                 () -> assertThat(coffeeChat.getStart()).isEqualTo(start),

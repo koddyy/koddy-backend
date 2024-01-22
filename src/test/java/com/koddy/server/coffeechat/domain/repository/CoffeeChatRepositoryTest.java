@@ -45,6 +45,7 @@ class CoffeeChatRepositoryTest extends RepositoryTest {
     private MemberRepository memberRepository;
 
     private final String applyReason = "신청..";
+    private final String question = "질문..";
     private final String rejectReason = "거절..";
 
     @Test
@@ -76,6 +77,7 @@ class CoffeeChatRepositoryTest extends RepositoryTest {
 
         /* coffeeChatB 1차 수락 */
         coffeeChatB.pendingFromMentorSuggest(
+                question,
                 new Reservation(LocalDateTime.of(2024, 2, 1, 18, 0)),
                 new Reservation(LocalDateTime.of(2024, 2, 1, 19, 0))
         );
@@ -234,20 +236,20 @@ class CoffeeChatRepositoryTest extends RepositoryTest {
 
     private CoffeeChat suggestAndPending(final Mentor mentor, final Mentee mentee, final Reservation start, final Reservation end) {
         final CoffeeChat coffeeChat = sut.save(CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason));
-        coffeeChat.pendingFromMentorSuggest(start, end);
+        coffeeChat.pendingFromMentorSuggest(question, start, end);
         return coffeeChat;
     }
 
     private CoffeeChat suggestAndPendingAndApprove(final Mentor mentor, final Mentee mentee, final Reservation start, final Reservation end) {
         final CoffeeChat coffeeChat = sut.save(CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason));
-        coffeeChat.pendingFromMentorSuggest(start, end);
+        coffeeChat.pendingFromMentorSuggest(question, start, end);
         coffeeChat.approvePendingCoffeeChat(StrategyFixture.ZOOM_LINK.toDomain());
         return coffeeChat;
     }
 
     private CoffeeChat suggestAndPendingAndReject(final Mentor mentor, final Mentee mentee, final Reservation start, final Reservation end) {
         final CoffeeChat coffeeChat = sut.save(CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason));
-        coffeeChat.pendingFromMentorSuggest(start, end);
+        coffeeChat.pendingFromMentorSuggest(question, start, end);
         coffeeChat.rejectPendingCoffeeChat(rejectReason);
         return coffeeChat;
     }

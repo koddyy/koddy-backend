@@ -36,6 +36,7 @@ class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
     private final Mentee mentee = MENTEE_1.toDomain().apply(1L);
     private final Mentor mentor = MENTOR_1.toDomain().apply(2L);
     private final String applyReason = "신청 이유...";
+    private final String question = "질문..";
     private final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
     private final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
 
@@ -44,7 +45,7 @@ class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
     void reject() {
         // given
         final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason).apply(1L);
-        coffeeChat.pendingFromMentorSuggest(start, end);
+        coffeeChat.pendingFromMentorSuggest(question, start, end);
 
         final String rejectReason = "거절...";
         final RejectPendingCoffeeChatCommand command = new RejectPendingCoffeeChatCommand(coffeeChat.getId(), rejectReason);
@@ -59,6 +60,7 @@ class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                () -> assertThat(coffeeChat.getQuestion()).isEqualTo(question),
                 () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(rejectReason),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(REJECT),
                 () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
@@ -72,7 +74,7 @@ class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
     void approve() {
         // given
         final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason).apply(1L);
-        coffeeChat.pendingFromMentorSuggest(start, end);
+        coffeeChat.pendingFromMentorSuggest(question, start, end);
 
         final Strategy.Type type = Strategy.Type.from("kakao");
         final String value = "sjiwon";
@@ -88,6 +90,7 @@ class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                () -> assertThat(coffeeChat.getQuestion()).isEqualTo(question),
                 () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPROVE),
                 () -> assertThat(coffeeChat.getStart()).isEqualTo(start),

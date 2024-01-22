@@ -22,6 +22,6 @@ public class HandleSuggestedCoffeeChatUseCase {
     @KoddyWritableTransactional
     public void pending(final PendingSuggestedCoffeeChatCommand command) {
         final CoffeeChat coffeeChat = coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId());
-        coffeeChat.pendingFromMentorSuggest(command.start(), command.end());
+        coffeeChat.pendingFromMentorSuggest(command.question(), command.start(), command.end());
     }
 }
