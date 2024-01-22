@@ -2,7 +2,7 @@ package com.koddy.server.member.application.usecase.query.response;
 
 import com.koddy.server.member.domain.model.mentee.Mentee;
 
-public record MenteeProfile(
+public record MenteePrivateProfile(
         long id,
         String email,
         String name,
@@ -14,9 +14,9 @@ public record MenteeProfile(
         String interestMajor,
         String role,
         boolean profileComplete
-) implements MemberProfile {
-    public static MenteeProfile of(final Mentee mentee) {
-        return new MenteeProfile(
+) implements MemberPrivateProfile {
+    public static MenteePrivateProfile of(final Mentee mentee) {
+        return new MenteePrivateProfile(
                 mentee.getId(),
                 mentee.getEmail().getValue(),
                 mentee.getName(),

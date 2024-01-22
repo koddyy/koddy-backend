@@ -4,7 +4,7 @@ import com.koddy.server.member.domain.model.mentor.Mentor;
 
 import java.util.List;
 
-public record MentorProfile(
+public record MentorPrivateProfile(
         long id,
         String email,
         String name,
@@ -20,9 +20,9 @@ public record MentorProfile(
         List<ScheduleResponse> schedules,
         String role,
         boolean profileComplete
-) implements MemberProfile {
-    public static MentorProfile of(final Mentor mentor) {
-        return new MentorProfile(
+) implements MemberPrivateProfile {
+    public static MentorPrivateProfile of(final Mentor mentor) {
+        return new MentorPrivateProfile(
                 mentor.getId(),
                 mentor.getEmail().getValue(),
                 mentor.getName(),

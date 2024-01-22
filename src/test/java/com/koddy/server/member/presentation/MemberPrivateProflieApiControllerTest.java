@@ -3,8 +3,8 @@ package com.koddy.server.member.presentation;
 import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.GetMemberPrivateProfileUseCase;
-import com.koddy.server.member.application.usecase.query.response.MenteeProfile;
-import com.koddy.server.member.application.usecase.query.response.MentorProfile;
+import com.koddy.server.member.application.usecase.query.response.MenteePrivateProfile;
+import com.koddy.server.member.application.usecase.query.response.MentorPrivateProfile;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;
@@ -40,7 +40,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         void getMentorProfile() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
-            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorProfile.of(mentor));
+            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorPrivateProfile.of(mentor));
 
             // when - then
             successfulExecute(
@@ -82,7 +82,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         void getMenteeProfile() {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
-            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteeProfile.of(mentee));
+            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteePrivateProfile.of(mentee));
 
             // when - then
             successfulExecute(
@@ -134,7 +134,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
-            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorProfile.of(mentor));
+            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorPrivateProfile.of(mentor));
 
             // when - then
             successfulExecute(
@@ -197,7 +197,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
-            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteeProfile.of(mentee));
+            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteePrivateProfile.of(mentee));
 
             // when - then
             successfulExecute(

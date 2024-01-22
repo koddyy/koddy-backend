@@ -2,8 +2,8 @@ package com.koddy.server.member.application.usecase;
 
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.MentoringPeriodFixture;
-import com.koddy.server.member.application.usecase.query.response.MenteeProfile;
-import com.koddy.server.member.application.usecase.query.response.MentorProfile;
+import com.koddy.server.member.application.usecase.query.response.MenteePrivateProfile;
+import com.koddy.server.member.application.usecase.query.response.MentorPrivateProfile;
 import com.koddy.server.member.application.usecase.query.response.ScheduleResponse;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
@@ -54,7 +54,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             given(mentorRepository.getProfile(mentor.getId())).willReturn(mentor);
 
             // when
-            final MentorProfile mentorProfile = sut.getMentorProfile(mentor.getId());
+            final MentorPrivateProfile mentorProfile = sut.getMentorProfile(mentor.getId());
 
             // then
             assertAll(
@@ -93,7 +93,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             given(mentorRepository.getProfile(mentor.getId())).willReturn(mentor);
 
             // when
-            final MentorProfile mentorProfile = sut.getMentorProfile(mentor.getId());
+            final MentorPrivateProfile mentorProfile = sut.getMentorProfile(mentor.getId());
 
             // then
             assertAll(
@@ -157,7 +157,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             given(menteeRepository.getProfile(mentee.getId())).willReturn(mentee);
 
             // when
-            final MenteeProfile menteeProfile = sut.getMenteeProfile(mentee.getId());
+            final MenteePrivateProfile menteeProfile = sut.getMenteeProfile(mentee.getId());
 
             // then
             assertAll(
@@ -192,7 +192,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             given(menteeRepository.getProfile(mentee.getId())).willReturn(mentee);
 
             // when
-            final MenteeProfile menteeProfile = sut.getMenteeProfile(mentee.getId());
+            final MenteePrivateProfile menteeProfile = sut.getMenteeProfile(mentee.getId());
 
             // then
             assertAll(
