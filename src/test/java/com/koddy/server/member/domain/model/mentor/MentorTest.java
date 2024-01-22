@@ -209,7 +209,8 @@ class MentorTest extends UnitTest {
             assertAll(
                     () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isEqualTo(schoolMail),
                     () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
-                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(ATTEMPT)
+                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(ATTEMPT),
+                    () -> assertThat(mentor.isAuthenticated()).isFalse()
             );
 
             /* 인증 완료 */
@@ -217,7 +218,8 @@ class MentorTest extends UnitTest {
             assertAll(
                     () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isEqualTo(schoolMail),
                     () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
-                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(SUCCESS)
+                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(SUCCESS),
+                    () -> assertThat(mentor.isAuthenticated()).isTrue()
             );
         }
 
@@ -233,7 +235,8 @@ class MentorTest extends UnitTest {
             assertAll(
                     () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isNull(),
                     () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isEqualTo(proofDataUploadUrl),
-                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(ATTEMPT)
+                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(ATTEMPT),
+                    () -> assertThat(mentor.isAuthenticated()).isFalse()
             );
 
             /* 인증 완료 */
@@ -241,7 +244,8 @@ class MentorTest extends UnitTest {
             assertAll(
                     () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isNull(),
                     () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isEqualTo(proofDataUploadUrl),
-                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(SUCCESS)
+                    () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(SUCCESS),
+                    () -> assertThat(mentor.isAuthenticated()).isTrue()
             );
         }
     }

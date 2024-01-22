@@ -112,7 +112,17 @@ public class Mentor extends Member<Mentor> {
                 && !CollectionUtils.isEmpty(schedules);
     }
 
-    public int getMentoringTimeUnit() {
+    public boolean isAuthenticated() {
+        if (universityAuthentication == null) {
+            return false;
+        }
+        return universityAuthentication.isAuthenticated();
+    }
+
+    public Integer getMentoringTimeUnit() {
+        if (mentoringPeriod == null) {
+            return null;
+        }
         return mentoringPeriod.getTimeUnit().getValue();
     }
 }

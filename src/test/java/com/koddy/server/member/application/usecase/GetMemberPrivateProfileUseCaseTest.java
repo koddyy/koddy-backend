@@ -4,6 +4,7 @@ import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.MentoringPeriodFixture;
 import com.koddy.server.member.application.usecase.query.response.MenteeProfile;
 import com.koddy.server.member.application.usecase.query.response.MentorProfile;
+import com.koddy.server.member.application.usecase.query.response.ScheduleResponse;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -117,13 +118,13 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
                             .usingRecursiveComparison()
                             .isEqualTo(
                                     timelines.stream()
-                                            .map(it -> new MentorProfile.ScheduleResponse(
+                                            .map(it -> new ScheduleResponse(
                                                     it.getDayOfWeek().getKor(),
-                                                    new MentorProfile.ScheduleResponse.Start(
+                                                    new ScheduleResponse.Start(
                                                             it.getStartTime().getHour(),
                                                             it.getStartTime().getMinute()
                                                     ),
-                                                    new MentorProfile.ScheduleResponse.End(
+                                                    new ScheduleResponse.End(
                                                             it.getEndTime().getHour(),
                                                             it.getEndTime().getMinute()
                                                     )
