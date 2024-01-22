@@ -7,6 +7,8 @@ import com.koddy.server.coffeechat.presentation.dto.request.MentorSuggestCoffeeC
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
+import com.koddy.server.member.exception.MemberException;
+import com.koddy.server.member.exception.MemberExceptionCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,8 +23,10 @@ import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFa
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createHttpSpecSnippets;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.failureDocsWithAccessToken;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocsWithAccessToken;
+import static com.koddy.server.member.exception.MemberExceptionCode.CANNOT_RESERVATION;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -112,7 +116,34 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
                     postRequestWithAccessToken(new UrlWithVariables(BASE_URL, mentor.getId()), request),
                     status().isForbidden(),
                     ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
-                    failureDocsWithAccessToken("CoffeeChatApi/LifeCycle/Create/MenteeApply/Failure", createHttpSpecSnippets(
+                    failureDocsWithAccessToken("CoffeeChatApi/LifeCycle/Create/MenteeApply/Failure/Case1", createHttpSpecSnippets(
+                            pathParameters(
+                                    path("mentorId", "멘토 ID(PK)", true)
+                            ),
+                            requestFields(
+                                    body("applyReason", "커피챗 신청 이유", true),
+                                    body("start", "커피챗 날짜 (시작 시간)", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true),
+                                    body("end", "커피챗 날짜 (종료 시간)", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true)
+                            )
+                    ))
+            );
+        }
+
+        @Test
+        @DisplayName("이미 예약되었거나 멘토링이 가능하지 않은 날짜면 예외가 발생한다")
+        void throwExceptionByCannotReservation() {
+            // given
+            applyToken(true, mentee.getId(), mentee.getRole());
+            doThrow(new MemberException(CANNOT_RESERVATION))
+                    .when(createCoffeeChatUseCase)
+                    .applyCoffeeChat(any());
+
+            // when - then
+            failedExecute(
+                    postRequestWithAccessToken(new UrlWithVariables(BASE_URL, mentor.getId()), request),
+                    status().isConflict(),
+                    ExceptionSpec.of(MemberExceptionCode.CANNOT_RESERVATION),
+                    failureDocsWithAccessToken("CoffeeChatApi/LifeCycle/Create/MenteeApply/Failure/Case2", createHttpSpecSnippets(
                             pathParameters(
                                     path("mentorId", "멘토 ID(PK)", true)
                             ),
