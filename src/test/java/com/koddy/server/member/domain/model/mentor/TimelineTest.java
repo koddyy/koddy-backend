@@ -59,13 +59,17 @@ class TimelineTest extends UnitTest {
         final Timeline timeline = Timeline.of(MON, startTime, endTime);
 
         // when
-        final boolean actual1 = timeline.isTimeIncluded(LocalTime.of(9, 30));
-        final boolean actual2 = timeline.isTimeIncluded(LocalTime.of(10, 10));
+        final boolean actual1 = timeline.isTimeIncluded(LocalTime.of(9, 0));
+        final boolean actual2 = timeline.isTimeIncluded(LocalTime.of(9, 30));
+        final boolean actual3 = timeline.isTimeIncluded(LocalTime.of(10, 0));
+        final boolean actual4 = timeline.isTimeIncluded(LocalTime.of(10, 10));
 
         // then
         assertAll(
                 () -> assertThat(actual1).isTrue(),
-                () -> assertThat(actual2).isFalse()
+                () -> assertThat(actual2).isTrue(),
+                () -> assertThat(actual3).isFalse(),
+                () -> assertThat(actual4).isFalse()
         );
     }
 }

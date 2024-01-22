@@ -4,6 +4,8 @@ import com.koddy.server.coffeechat.application.usecase.command.MenteeApplyCoffee
 import com.koddy.server.coffeechat.application.usecase.command.MentorSuggestCoffeeChatCommand;
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
+import com.koddy.server.coffeechat.domain.service.ReservationAvailabilityChecker;
+import com.koddy.server.global.annotation.KoddyWritableTransactional;
 import com.koddy.server.global.annotation.UseCase;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class CreateCoffeeChatUseCase {
     private final MentorRepository mentorRepository;
     private final MenteeRepository menteeRepository;
+    private final ReservationAvailabilityChecker reservationAvailabilityChecker;
     private final CoffeeChatRepository coffeeChatRepository;
 
     public Long suggestCoffeeChat(final MentorSuggestCoffeeChatCommand command) {
@@ -25,10 +28,12 @@ public class CreateCoffeeChatUseCase {
         return coffeeChatRepository.save(CoffeeChat.suggestCoffeeChat(mentor, mentee, command.applyReason())).getId();
     }
 
+    @KoddyWritableTransactional
     public Long applyCoffeeChat(final MenteeApplyCoffeeChatCommand command) {
         final Mentee mentee = menteeRepository.getById(command.menteeId());
         final Mentor mentor = mentorRepository.getById(command.mentorId());
 
+        reservationAvailabilityChecker.check(mentor, command.start(), command.end());
         return coffeeChatRepository.save(CoffeeChat.applyCoffeeChat(
                 mentee,
                 mentor,

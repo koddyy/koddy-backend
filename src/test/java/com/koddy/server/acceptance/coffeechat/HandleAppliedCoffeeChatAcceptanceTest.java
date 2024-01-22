@@ -30,11 +30,11 @@ public class HandleAppliedCoffeeChatAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
-            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_진행한다();
-            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_진행한다();
+            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             final long coffeeChatId = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 2, 1, 18, 0),
-                    LocalDateTime.of(2024, 2, 1, 19, 0),
+                    LocalDateTime.of(2024, 2, 5, 18, 0),
+                    LocalDateTime.of(2024, 2, 5, 18, 30),
                     mentor.id(),
                     mentee.token().accessToken()
             );
@@ -51,11 +51,11 @@ public class HandleAppliedCoffeeChatAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘토는 멘티가 신청한 커피챗을 거절한다")
         void success() {
-            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_진행한다();
-            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_진행한다();
+            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             final long coffeeChatId = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 2, 1, 18, 0),
-                    LocalDateTime.of(2024, 2, 1, 19, 0),
+                    LocalDateTime.of(2024, 2, 5, 18, 0),
+                    LocalDateTime.of(2024, 2, 5, 18, 30),
                     mentor.id(),
                     mentee.token().accessToken()
             );
@@ -74,11 +74,11 @@ public class HandleAppliedCoffeeChatAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
-            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_진행한다();
-            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_진행한다();
+            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             final long coffeeChatId = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 2, 1, 18, 0),
-                    LocalDateTime.of(2024, 2, 1, 19, 0),
+                    LocalDateTime.of(2024, 2, 5, 18, 0),
+                    LocalDateTime.of(2024, 2, 5, 18, 30),
                     mentor.id(),
                     mentee.token().accessToken()
             );
@@ -95,11 +95,11 @@ public class HandleAppliedCoffeeChatAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘토는 멘티가 신청한 커피챗을 수락한다")
         void success() {
-            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_진행한다();
-            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_진행한다();
+            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             final long coffeeChatId = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 2, 1, 18, 0),
-                    LocalDateTime.of(2024, 2, 1, 19, 0),
+                    LocalDateTime.of(2024, 2, 5, 18, 0),
+                    LocalDateTime.of(2024, 2, 5, 18, 30),
                     mentor.id(),
                     mentee.token().accessToken()
             );

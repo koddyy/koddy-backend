@@ -19,13 +19,13 @@ import static com.koddy.server.member.domain.model.mentor.DayOfWeek.WED;
 @Getter
 @RequiredArgsConstructor
 public enum TimelineFixture {
-    MON_09_17(MON, LocalTime.of(9, 0), LocalTime.of(17, 0)),
-    TUE_09_17(TUE, LocalTime.of(9, 0), LocalTime.of(17, 0)),
-    WED_09_17(WED, LocalTime.of(9, 0), LocalTime.of(17, 0)),
-    THU_09_17(THU, LocalTime.of(9, 0), LocalTime.of(17, 0)),
-    FRI_09_17(FRI, LocalTime.of(9, 0), LocalTime.of(17, 0)),
-    SAT_09_17(SAT, LocalTime.of(9, 0), LocalTime.of(17, 0)),
-    SUN_09_17(SUN, LocalTime.of(9, 0), LocalTime.of(17, 0)),
+    MON_09_22(MON, LocalTime.of(9, 0), LocalTime.of(22, 0)),
+    TUE_09_22(TUE, LocalTime.of(9, 0), LocalTime.of(22, 0)),
+    WED_09_22(WED, LocalTime.of(9, 0), LocalTime.of(22, 0)),
+    THU_09_22(THU, LocalTime.of(9, 0), LocalTime.of(22, 0)),
+    FRI_09_22(FRI, LocalTime.of(9, 0), LocalTime.of(22, 0)),
+    SAT_09_22(SAT, LocalTime.of(9, 0), LocalTime.of(22, 0)),
+    SUN_09_22(SUN, LocalTime.of(9, 0), LocalTime.of(22, 0)),
     ;
 
     private final DayOfWeek dayOfWeek;
@@ -38,46 +38,46 @@ public enum TimelineFixture {
 
     public static List<Timeline> 월_수_금() {
         return List.of(
-                MON_09_17.toDomain(),
-                WED_09_17.toDomain(),
-                FRI_09_17.toDomain()
+                MON_09_22.toDomain(),
+                WED_09_22.toDomain(),
+                FRI_09_22.toDomain()
         );
     }
 
     public static List<Timeline> 화_목_토() {
         return List.of(
-                TUE_09_17.toDomain(),
-                THU_09_17.toDomain(),
-                SAT_09_17.toDomain()
+                TUE_09_22.toDomain(),
+                THU_09_22.toDomain(),
+                SAT_09_22.toDomain()
         );
     }
 
     public static List<Timeline> 월_화_수_목_금() {
         return List.of(
-                MON_09_17.toDomain(),
-                TUE_09_17.toDomain(),
-                WED_09_17.toDomain(),
-                THU_09_17.toDomain(),
-                FRI_09_17.toDomain()
+                MON_09_22.toDomain(),
+                TUE_09_22.toDomain(),
+                WED_09_22.toDomain(),
+                THU_09_22.toDomain(),
+                FRI_09_22.toDomain()
         );
     }
 
     public static List<Timeline> 주말() {
         return List.of(
-                SAT_09_17.toDomain(),
-                SUN_09_17.toDomain()
+                SAT_09_22.toDomain(),
+                SUN_09_22.toDomain()
         );
     }
 
     public static List<Timeline> allDays() {
         return List.of(
-                MON_09_17.toDomain(),
-                TUE_09_17.toDomain(),
-                WED_09_17.toDomain(),
-                THU_09_17.toDomain(),
-                FRI_09_17.toDomain(),
-                SAT_09_17.toDomain(),
-                SUN_09_17.toDomain()
+                MON_09_22.toDomain(),
+                TUE_09_22.toDomain(),
+                WED_09_22.toDomain(),
+                THU_09_22.toDomain(),
+                FRI_09_22.toDomain(),
+                SAT_09_22.toDomain(),
+                SUN_09_22.toDomain()
         );
     }
 }

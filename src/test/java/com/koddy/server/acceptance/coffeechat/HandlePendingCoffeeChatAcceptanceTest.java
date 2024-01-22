@@ -31,13 +31,13 @@ public class HandlePendingCoffeeChatAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
-            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_진행한다();
-            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_진행한다();
+            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
             멘티가_멘토의_커피챗_제안을_1차_수락한다(
                     coffeeChatId,
-                    LocalDateTime.of(2024, 2, 1, 18, 0),
-                    LocalDateTime.of(2024, 2, 1, 19, 0),
+                    LocalDateTime.of(2024, 2, 5, 13, 0),
+                    LocalDateTime.of(2024, 2, 5, 13, 30),
                     mentee.token().accessToken()
             );
 
@@ -53,13 +53,13 @@ public class HandlePendingCoffeeChatAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘토는 Pending 상태인 커피챗에 대해서 최종 거절한다")
         void success() {
-            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_진행한다();
-            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_진행한다();
+            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
             멘티가_멘토의_커피챗_제안을_1차_수락한다(
                     coffeeChatId,
-                    LocalDateTime.of(2024, 2, 1, 18, 0),
-                    LocalDateTime.of(2024, 2, 1, 19, 0),
+                    LocalDateTime.of(2024, 2, 5, 13, 0),
+                    LocalDateTime.of(2024, 2, 5, 13, 30),
                     mentee.token().accessToken()
             );
 
@@ -77,13 +77,13 @@ public class HandlePendingCoffeeChatAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
-            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_진행한다();
-            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_진행한다();
+            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
             멘티가_멘토의_커피챗_제안을_1차_수락한다(
                     coffeeChatId,
-                    LocalDateTime.of(2024, 2, 1, 18, 0),
-                    LocalDateTime.of(2024, 2, 1, 19, 0),
+                    LocalDateTime.of(2024, 2, 5, 13, 0),
+                    LocalDateTime.of(2024, 2, 5, 13, 30),
                     mentee.token().accessToken()
             );
 
@@ -99,13 +99,13 @@ public class HandlePendingCoffeeChatAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘토는 Pending 상태인 커피챗에 대해서 최종 수락한다")
         void success() {
-            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_진행한다();
-            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_진행한다();
+            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
             멘티가_멘토의_커피챗_제안을_1차_수락한다(
                     coffeeChatId,
-                    LocalDateTime.of(2024, 2, 1, 18, 0),
-                    LocalDateTime.of(2024, 2, 1, 19, 0),
+                    LocalDateTime.of(2024, 2, 5, 13, 0),
+                    LocalDateTime.of(2024, 2, 5, 13, 30),
                     mentee.token().accessToken()
             );
 

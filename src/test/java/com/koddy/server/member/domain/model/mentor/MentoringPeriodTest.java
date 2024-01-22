@@ -57,4 +57,27 @@ class MentoringPeriodTest extends UnitTest {
             );
         }
     }
+
+    @Test
+    @DisplayName("주어진 날짜가 멘토링 진행 기간에 포함되는지 확인한다")
+    void isDateIncluded() {
+        // given
+        final LocalDate startDate = LocalDate.of(2024, 2, 1);
+        final LocalDate endDate = LocalDate.of(2024, 3, 1);
+        final MentoringPeriod mentoringPeriod = MentoringPeriod.of(startDate, endDate);
+
+        // when
+        final boolean actual1 = mentoringPeriod.isDateIncluded(LocalDate.of(2024, 2, 1));
+        final boolean actual2 = mentoringPeriod.isDateIncluded(LocalDate.of(2024, 2, 15));
+        final boolean actual3 = mentoringPeriod.isDateIncluded(LocalDate.of(2024, 3, 1));
+        final boolean actual4 = mentoringPeriod.isDateIncluded(LocalDate.of(2024, 3, 15));
+
+        // then
+        assertAll(
+                () -> assertThat(actual1).isTrue(),
+                () -> assertThat(actual2).isTrue(),
+                () -> assertThat(actual3).isTrue(),
+                () -> assertThat(actual4).isFalse()
+        );
+    }
 }

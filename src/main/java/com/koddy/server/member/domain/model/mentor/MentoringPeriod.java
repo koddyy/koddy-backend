@@ -57,6 +57,10 @@ public class MentoringPeriod {
         }
     }
 
+    public boolean isDateIncluded(final LocalDate date) {
+        return !date.isBefore(startDate) && !date.isAfter(endDate);
+    }
+
     @Getter
     @RequiredArgsConstructor
     public enum TimeUnit {

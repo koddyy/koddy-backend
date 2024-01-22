@@ -194,4 +194,13 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
 
         this.status = CANCEL;
     }
+
+    public boolean isReservationIncluded(final Reservation target) {
+        return start.isSameDate(target) && isReservationTimeIncluded(target)
+                || end.isSameDate(target) && isReservationTimeIncluded(target);
+    }
+
+    private boolean isReservationTimeIncluded(final Reservation target) {
+        return !target.getTime().isBefore(start.getTime()) && target.getTime().isBefore(end.getTime());
+    }
 }

@@ -345,13 +345,27 @@ include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/http-re
 
 === 멘티 -> 멘토 커피챗 신청 (OnlyMentee)
 
-==== HTTP Request
+==== 1. 실패 (이미 예약되었거나 멘토링이 가능하지 않은 날짜)
+
+===== HTTP Request
+
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Failure/Case2/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Failure/Case2/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Failure/Case2/request-fields.adoc[]
+
+===== HTTP Response
+
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Failure/Case2/http-response.adoc[]
+
+==== 2. 성공
+
+===== HTTP Request
 
 include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/http-request.adoc[]
 include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/path-parameters.adoc[]
 include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/request-fields.adoc[]
 
-==== HTTP Response
+===== HTTP Response
 
 include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/http-response.adoc[]
 
@@ -410,13 +424,27 @@ include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Reject/Success/htt
 
 ==== 1차 수락 (멘토 최종 결정 대기)
 
-===== HTTP Request
+===== 1. 실패 (이미 예약되었거나 멘토링이 가능하지 않은 날짜)
+
+====== HTTP Request
+
+include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Failure/Case2/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Failure/Case2/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Failure/Case2/request-fields.adoc[]
+
+====== HTTP Response
+
+include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Failure/Case2/http-response.adoc[]
+
+===== 2. 성공
+
+====== HTTP Request
 
 include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/http-request.adoc[]
 include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/path-parameters.adoc[]
 include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/request-fields.adoc[]
 
-===== HTTP Response
+====== HTTP Response
 
 include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/http-response.adoc[]
 
