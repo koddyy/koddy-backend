@@ -33,4 +33,10 @@ public class Reservation {
     public LocalDateTime toLocalDateTime() {
         return LocalDateTime.of(year, month, day, time.getHour(), time.getMinute());
     }
+
+    public boolean isSameDate(final Reservation compare) {
+        return this.year == compare.getYear()
+                && this.month == compare.getMonth()
+                && this.day == compare.getDay();
+    }
 }

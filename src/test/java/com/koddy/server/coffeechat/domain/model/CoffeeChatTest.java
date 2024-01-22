@@ -320,4 +320,31 @@ class CoffeeChatTest extends UnitTest {
             );
         }
     }
+
+    @Test
+    @DisplayName("CoffeeChat의 Reservation[start, end]와 비교 대상 Reservation의 시간대가 겹치는지 확인한다")
+    void isReservationIncluded() {
+        // given
+        final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 2, 18, 0));
+        final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 2, 18, 30));
+        final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end);
+
+        // when
+        final boolean actual1 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 1, 18, 20)));
+        final boolean actual2 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 2, 17, 59)));
+        final boolean actual3 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 2, 18, 0)));
+        final boolean actual4 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 2, 18, 30)));
+        final boolean actual5 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 2, 18, 40)));
+        final boolean actual6 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 3, 18, 20)));
+
+        // then
+        assertAll(
+                () -> assertThat(actual1).isFalse(),
+                () -> assertThat(actual2).isFalse(),
+                () -> assertThat(actual3).isTrue(),
+                () -> assertThat(actual4).isTrue(),
+                () -> assertThat(actual5).isFalse(),
+                () -> assertThat(actual6).isFalse()
+        );
+    }
 }
