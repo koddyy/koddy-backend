@@ -1,5 +1,6 @@
 package com.koddy.server.member.domain.model.mentor;
 
+import com.koddy.server.coffeechat.domain.model.Reservation;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.LanguageFixture;
 import com.koddy.server.common.fixture.MentoringPeriodFixture;
@@ -10,6 +11,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
@@ -20,10 +24,16 @@ import static com.koddy.server.member.domain.model.Nationality.KOREA;
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.ATTEMPT;
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.SUCCESS;
+import static com.koddy.server.member.domain.model.mentor.DayOfWeek.FRI;
+import static com.koddy.server.member.domain.model.mentor.DayOfWeek.THU;
+import static com.koddy.server.member.domain.model.mentor.DayOfWeek.TUE;
+import static com.koddy.server.member.domain.model.mentor.DayOfWeek.WED;
+import static com.koddy.server.member.exception.MemberExceptionCode.CANNOT_RESERVATION;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @DisplayName("Member/Mentor -> 도메인 Aggregate [Mentor] 테스트")
 class MentorTest extends UnitTest {
@@ -246,6 +256,138 @@ class MentorTest extends UnitTest {
                     () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isEqualTo(proofDataUploadUrl),
                     () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(SUCCESS),
                     () -> assertThat(mentor.isAuthenticated()).isTrue()
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("멘토링 예약 날짜 검증")
+    class ValidateReservationData {
+        @Test
+        @DisplayName("멘토가 멘토링 관련 정보를 기입하지 않았다면 검증에 실패하고 예외가 발생한다")
+        void throwExceptionByNotCompleted() {
+            // given
+            final Mentor mentor = new Mentor(
+                    MENTOR_1.getEmail(),
+                    MENTOR_1.getName(),
+                    MENTOR_1.getProfileImageUrl(),
+                    MENTOR_1.getLanguages(),
+                    MENTOR_1.getUniversityProfile()
+            );
+
+            // when - then
+            final LocalDateTime target = LocalDateTime.of(2024, 2, 5, 18, 0);
+            assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target), new Reservation(target.plusMinutes(30))))
+                    .isInstanceOf(MemberException.class)
+                    .hasMessage(CANNOT_RESERVATION.getMessage());
+        }
+
+        @Test
+        @DisplayName("예약 날짜가 멘토링 진행 기간에 포함되지 않으면 예외가 발생한다 -> MentoringPeriod")
+        void throwExceptionByOutOfDate() {
+            // given
+            final MentoringPeriod mentoringPeriod = MentoringPeriod.of(
+                    LocalDate.of(2024, 2, 6),
+                    LocalDate.of(2024, 3, 1)
+            );
+            final Mentor mentor = MENTOR_1.toDomainWithMentoringInfo(mentoringPeriod, MENTOR_1.getTimelines());
+
+            // when - then
+            final LocalDateTime target1 = LocalDateTime.of(2024, 2, 5, 18, 0);
+            final LocalDateTime target2 = LocalDateTime.of(2024, 3, 2, 18, 0);
+
+            assertAll(
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target1), new Reservation(target1.plusMinutes(30))))
+                            .isInstanceOf(MemberException.class)
+                            .hasMessage(CANNOT_RESERVATION.getMessage()),
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target2), new Reservation(target2.plusMinutes(30))))
+                            .isInstanceOf(MemberException.class)
+                            .hasMessage(CANNOT_RESERVATION.getMessage())
+            );
+        }
+
+        @Test
+        @DisplayName("예약 날짜가 멘토링 가능 시간에 포함되지 않으면 예외가 발생한다 -> Mentor-Schedule-Timeline")
+        void throwExceptionByNotAllowedTime() {
+            // given
+            final MentoringPeriod mentoringPeriod = MentoringPeriod.of(
+                    LocalDate.of(2024, 2, 1),
+                    LocalDate.of(2024, 3, 1)
+            );
+            final LocalTime time = LocalTime.of(19, 0);
+            final List<Timeline> timelines = List.of(
+                    Timeline.of(TUE, time, time.plusHours(3)),
+                    Timeline.of(WED, time, time.plusHours(3)),
+                    Timeline.of(THU, time, time.plusHours(3)),
+                    Timeline.of(FRI, time, time.plusHours(3))
+            );
+            final Mentor mentor = MENTOR_1.toDomainWithMentoringInfo(mentoringPeriod, timelines);
+
+            // when - then
+            final LocalDateTime target1 = LocalDateTime.of(2024, 2, 5, 18, 0);
+            final LocalDateTime target2 = LocalDateTime.of(2024, 2, 5, 18, 30);
+            final LocalDateTime target3 = LocalDateTime.of(2024, 2, 5, 18, 50);
+            final LocalDateTime target4 = LocalDateTime.of(2024, 2, 5, 19, 30);
+            final LocalDateTime target5 = LocalDateTime.of(2024, 2, 5, 21, 50);
+            final LocalDateTime target6 = LocalDateTime.of(2024, 2, 5, 22, 0);
+            final LocalDateTime target7 = LocalDateTime.of(2024, 2, 5, 22, 30);
+
+            assertAll(
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target1), new Reservation(target1.plusMinutes(30))))
+                            .isInstanceOf(MemberException.class)
+                            .hasMessage(CANNOT_RESERVATION.getMessage()),
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target2), new Reservation(target2.plusMinutes(30))))
+                            .isInstanceOf(MemberException.class)
+                            .hasMessage(CANNOT_RESERVATION.getMessage()),
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target3), new Reservation(target3.plusMinutes(30))))
+                            .isInstanceOf(MemberException.class)
+                            .hasMessage(CANNOT_RESERVATION.getMessage()),
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target4), new Reservation(target4.plusHours(3))))
+                            .isInstanceOf(MemberException.class)
+                            .hasMessage(CANNOT_RESERVATION.getMessage()),
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target5), new Reservation(target5.plusMinutes(30))))
+                            .isInstanceOf(MemberException.class)
+                            .hasMessage(CANNOT_RESERVATION.getMessage()),
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target6), new Reservation(target6.plusMinutes(30))))
+                            .isInstanceOf(MemberException.class)
+                            .hasMessage(CANNOT_RESERVATION.getMessage()),
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target7), new Reservation(target7.plusMinutes(30))))
+                            .isInstanceOf(MemberException.class)
+                            .hasMessage(CANNOT_RESERVATION.getMessage())
+            );
+        }
+
+        @Test
+        @DisplayName("멘토의 멘토링 시간대에 대한 검증에 성공한다")
+        void success() {
+            // given
+            final MentoringPeriod mentoringPeriod = MentoringPeriod.of(
+                    LocalDate.of(2024, 2, 1),
+                    LocalDate.of(2024, 3, 1)
+            );
+            final LocalTime time = LocalTime.of(18, 0);
+            final List<Timeline> timelines = List.of(
+                    Timeline.of(TUE, time, time.plusHours(3)),
+                    Timeline.of(WED, time, time.plusHours(3)),
+                    Timeline.of(THU, time, time.plusHours(3))
+            );
+            final Mentor mentor = MENTOR_1.toDomainWithMentoringInfo(mentoringPeriod, timelines);
+
+            // when - then
+            final LocalDateTime target1 = LocalDateTime.of(2024, 2, 6, 18, 0);
+            final LocalDateTime target2 = LocalDateTime.of(2024, 2, 7, 18, 0);
+            final LocalDateTime target3 = LocalDateTime.of(2024, 2, 8, 18, 0);
+            final LocalDateTime target4 = LocalDateTime.of(2024, 2, 13, 18, 0);
+            final LocalDateTime target5 = LocalDateTime.of(2024, 2, 14, 18, 0);
+            final LocalDateTime target6 = LocalDateTime.of(2024, 2, 15, 18, 0);
+
+            assertAll(
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target1), new Reservation(target1.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target2), new Reservation(target2.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target3), new Reservation(target3.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target4), new Reservation(target4.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target5), new Reservation(target5.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target6), new Reservation(target6.plusMinutes(30))))
             );
         }
     }

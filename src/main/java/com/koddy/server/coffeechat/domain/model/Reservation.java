@@ -4,6 +4,7 @@ import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -23,6 +24,10 @@ public class Reservation {
         this.month = target.getMonthValue();
         this.day = target.getDayOfMonth();
         this.time = target.toLocalTime();
+    }
+
+    public LocalDate toLocalDate() {
+        return LocalDate.of(year, month, day);
     }
 
     public LocalDateTime toLocalDateTime() {
