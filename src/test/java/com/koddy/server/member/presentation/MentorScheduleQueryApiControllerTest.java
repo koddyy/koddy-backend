@@ -2,7 +2,9 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.GetReservedScheduleUseCase;
+import com.koddy.server.member.application.usecase.query.response.MentoringPeriodResponse;
 import com.koddy.server.member.application.usecase.query.response.ReservedSchedule;
+import com.koddy.server.member.application.usecase.query.response.ScheduleResponse;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -48,27 +51,43 @@ class MentorScheduleQueryApiControllerTest extends ControllerTest {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
             given(getReservedScheduleUseCase.invoke(any())).willReturn(new ReservedSchedule(
+                    new MentoringPeriodResponse(
+                            LocalDate.of(2024, 1, 1),
+                            LocalDate.of(2024, 12, 31)
+                    ),
+                    List.of(
+                            new ScheduleResponse(
+                                    "월",
+                                    new ScheduleResponse.Start(18, 0),
+                                    new ScheduleResponse.End(23, 0)
+                            ),
+                            new ScheduleResponse(
+                                    "수",
+                                    new ScheduleResponse.Start(18, 0),
+                                    new ScheduleResponse.End(23, 0)
+                            )
+                    ),
                     MentoringPeriod.TimeUnit.HALF_HOUR.getValue(),
                     List.of(
-                            new ReservedSchedule.Period(
-                                    LocalDateTime.of(2024, 2, 3, 18, 30),
-                                    LocalDateTime.of(2024, 2, 3, 19, 0)
+                            new ReservedSchedule.Reserved(
+                                    LocalDateTime.of(2024, 2, 7, 18, 30),
+                                    LocalDateTime.of(2024, 2, 7, 19, 0)
                             ),
-                            new ReservedSchedule.Period(
-                                    LocalDateTime.of(2024, 2, 10, 18, 30),
-                                    LocalDateTime.of(2024, 2, 10, 19, 0)
-                            ),
-                            new ReservedSchedule.Period(
+                            new ReservedSchedule.Reserved(
                                     LocalDateTime.of(2024, 2, 12, 18, 30),
                                     LocalDateTime.of(2024, 2, 12, 19, 0)
                             ),
-                            new ReservedSchedule.Period(
-                                    LocalDateTime.of(2024, 2, 21, 18, 30),
-                                    LocalDateTime.of(2024, 2, 21, 19, 0)
+                            new ReservedSchedule.Reserved(
+                                    LocalDateTime.of(2024, 2, 14, 18, 30),
+                                    LocalDateTime.of(2024, 2, 14, 19, 0)
                             ),
-                            new ReservedSchedule.Period(
-                                    LocalDateTime.of(2024, 2, 24, 18, 30),
-                                    LocalDateTime.of(2024, 2, 24, 19, 0)
+                            new ReservedSchedule.Reserved(
+                                    LocalDateTime.of(2024, 2, 19, 18, 30),
+                                    LocalDateTime.of(2024, 2, 19, 19, 0)
+                            ),
+                            new ReservedSchedule.Reserved(
+                                    LocalDateTime.of(2024, 2, 26, 18, 30),
+                                    LocalDateTime.of(2024, 2, 26, 19, 0)
                             )
                     )
             ));
@@ -89,10 +108,19 @@ class MentorScheduleQueryApiControllerTest extends ControllerTest {
                                     query("month", "Month 정보", true)
                             ),
                             responseFields(
+                                    body("period", "멘토링 시간 관련 설정"),
+                                    body("period.startDate", "멘토링 시작 날짜", "KST"),
+                                    body("period.endDate", "멘토링 종료 날짜", "KST"),
+                                    body("schedules", "스케줄"),
+                                    body("schedules[].dayOfWeek", "날짜", "월 화 수 목 금 토 일"),
+                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST"),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST"),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST"),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST"),
                                     body("timeUnit", "멘토링 시간 단위", "minute 단위 -> 30 / 60"),
-                                    body("periods", "예약된 시간", "오름차순으로 제공"),
-                                    body("periods[].start", "예약된 시작 시간", "KST"),
-                                    body("periods[].end", "예약된 종료 시간", "KST")
+                                    body("reserved", "예약된 시간", "오름차순으로 제공"),
+                                    body("reserved[].start", "예약된 시작 시간", "KST"),
+                                    body("reserved[].end", "예약된 종료 시간", "KST")
                             )
                     ))
             );
