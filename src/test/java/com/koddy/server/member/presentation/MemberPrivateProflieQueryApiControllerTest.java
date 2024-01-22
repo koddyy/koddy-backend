@@ -3,8 +3,8 @@ package com.koddy.server.member.presentation;
 import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.GetMemberPrivateProfileUseCase;
-import com.koddy.server.member.application.usecase.query.response.MenteeProfile;
-import com.koddy.server.member.application.usecase.query.response.MentorProfile;
+import com.koddy.server.member.application.usecase.query.response.MenteePrivateProfile;
+import com.koddy.server.member.application.usecase.query.response.MentorPrivateProfile;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;
@@ -22,8 +22,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("Member -> MemberPrivateProflieApiController 테스트")
-class MemberPrivateProflieApiControllerTest extends ControllerTest {
+@DisplayName("Member -> MemberPrivateProflieQueryApiController 테스트")
+class MemberPrivateProflieQueryApiControllerTest extends ControllerTest {
     @Autowired
     private GetMemberPrivateProfileUseCase getMemberPrivateProfileUseCase;
 
@@ -31,16 +31,16 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
     private final Mentee mentee = MENTEE_1.toDomain().apply(2L);
 
     @Nested
-    @DisplayName("사용자 프로필 조회 API [GET /api/members/me]")
+    @DisplayName("사용자 마이페이지 프로필 조회 API [GET /api/members/me]")
     class GetProfile {
         private static final String BASE_URL = "/api/members/me";
 
         @Test
-        @DisplayName("멘토 프로필을 조회한다")
+        @DisplayName("멘토 마이페이지 프로필을 조회한다")
         void getMentorProfile() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
-            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorProfile.of(mentor));
+            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorPrivateProfile.of(mentor));
 
             // when - then
             successfulExecute(
@@ -78,11 +78,11 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         }
 
         @Test
-        @DisplayName("멘티 프로필을 조회한다")
+        @DisplayName("멘티 마이페이지 프로필을 조회한다")
         void getMenteeProfile() {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
-            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteeProfile.of(mentee));
+            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteePrivateProfile.of(mentee));
 
             // when - then
             successfulExecute(
@@ -110,7 +110,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
     }
 
     @Nested
-    @DisplayName("멘토 프로필 조회 API [GET /api/mentors/me]")
+    @DisplayName("멘토 마이페이지 프로필 조회 API [GET /api/mentors/me]")
     class GetMentorProfile {
         private static final String BASE_URL = "/api/mentors/me";
 
@@ -134,7 +134,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
-            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorProfile.of(mentor));
+            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorPrivateProfile.of(mentor));
 
             // when - then
             successfulExecute(
@@ -173,7 +173,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
     }
 
     @Nested
-    @DisplayName("멘티 프로필 조회 API [GET /api/mentees/me]")
+    @DisplayName("멘티 마이페이지 프로필 조회 API [GET /api/mentees/me]")
     class GetMenteeProfile {
         private static final String BASE_URL = "/api/mentees/me";
 
@@ -197,7 +197,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
-            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteeProfile.of(mentee));
+            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteePrivateProfile.of(mentee));
 
             // when - then
             successfulExecute(

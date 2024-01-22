@@ -22,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 
 import static com.koddy.server.acceptance.CommonRequestFixture.deleteRequestWithAccessToken;
+import static com.koddy.server.acceptance.CommonRequestFixture.getRequest;
 import static com.koddy.server.acceptance.CommonRequestFixture.getRequestWithAccessToken;
 import static com.koddy.server.acceptance.CommonRequestFixture.patchRequestWithAccessToken;
 import static com.koddy.server.acceptance.CommonRequestFixture.postRequest;
@@ -214,7 +215,7 @@ public class MemberAcceptanceStep {
         return patchRequestWithAccessToken(uri, request, accessToken);
     }
 
-    public static ValidatableResponse 멘토_프로필을_조회한다(final String accessToken) {
+    public static ValidatableResponse 멘토_마이페이지_프로필을_조회한다(final String accessToken) {
         final String uri = UriComponentsBuilder
                 .fromPath("/api/mentors/me")
                 .build()
@@ -224,7 +225,7 @@ public class MemberAcceptanceStep {
         return getRequestWithAccessToken(uri, accessToken);
     }
 
-    public static ValidatableResponse 멘티_프로필을_조회한다(final String accessToken) {
+    public static ValidatableResponse 멘티_마이페이지_프로필을_조회한다(final String accessToken) {
         final String uri = UriComponentsBuilder
                 .fromPath("/api/mentees/me")
                 .build()
@@ -232,6 +233,24 @@ public class MemberAcceptanceStep {
                 .getPath();
 
         return getRequestWithAccessToken(uri, accessToken);
+    }
+
+    public static ValidatableResponse 멘토_기본_프로필을_조회한다(final long mentorId) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/mentors/{mentorId}")
+                .build(mentorId)
+                .getPath();
+
+        return getRequest(uri);
+    }
+
+    public static ValidatableResponse 멘티_기본_프로필을_조회한다(final long menteeId) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/mentees/{menteeId}")
+                .build(menteeId)
+                .getPath();
+
+        return getRequest(uri);
     }
 
     public static ValidatableResponse 멘토가_메일을_통해서_학교_인증을_시도한다(final String schoolMail, final String accessToken) {

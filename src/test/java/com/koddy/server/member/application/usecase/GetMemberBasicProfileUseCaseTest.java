@@ -2,9 +2,8 @@ package com.koddy.server.member.application.usecase;
 
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.MentoringPeriodFixture;
-import com.koddy.server.member.application.usecase.query.response.MenteePrivateProfile;
-import com.koddy.server.member.application.usecase.query.response.MentorPrivateProfile;
-import com.koddy.server.member.application.usecase.query.response.ScheduleResponse;
+import com.koddy.server.member.application.usecase.query.response.MenteeBasicProfile;
+import com.koddy.server.member.application.usecase.query.response.MentorBasicProfile;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -30,11 +29,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-@DisplayName("Member -> GetMemberPrivateProfileUseCase 테스트")
-class GetMemberPrivateProfileUseCaseTest extends UnitTest {
+@DisplayName("Member -> GetMemberBasicProfileUseCase 테스트")
+class GetMemberBasicProfileUseCaseTest extends UnitTest {
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final MenteeRepository menteeRepository = mock(MenteeRepository.class);
-    private final GetMemberPrivateProfileUseCase sut = new GetMemberPrivateProfileUseCase(mentorRepository, menteeRepository);
+    private final GetMemberBasicProfileUseCase sut = new GetMemberBasicProfileUseCase(mentorRepository, menteeRepository);
 
     @Nested
     @DisplayName("멘토 프로필 조회")
@@ -54,30 +53,22 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             given(mentorRepository.getProfile(mentor.getId())).willReturn(mentor);
 
             // when
-            final MentorPrivateProfile mentorProfile = sut.getMentorProfile(mentor.getId());
+            final MentorBasicProfile mentorProfile = sut.getMentorProfile(mentor.getId());
 
             // then
             assertAll(
                     // Required
                     () -> assertThat(mentorProfile.id()).isEqualTo(mentor.getId()),
-                    () -> assertThat(mentorProfile.email()).isEqualTo(mentor.getEmail().getValue()),
                     () -> assertThat(mentorProfile.name()).isEqualTo(mentor.getName()),
                     () -> assertThat(mentorProfile.profileImageUrl()).isEqualTo(mentor.getProfileImageUrl()),
-                    () -> assertThat(mentorProfile.nationality()).isEqualTo(mentor.getNationality().getKor()),
                     () -> assertThat(mentorProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
                     () -> assertThat(mentorProfile.languages().sub()).isEmpty(),
                     () -> assertThat(mentorProfile.school()).isEqualTo(mentor.getUniversityProfile().getSchool()),
                     () -> assertThat(mentorProfile.major()).isEqualTo(mentor.getUniversityProfile().getMajor()),
                     () -> assertThat(mentorProfile.enteredIn()).isEqualTo(mentor.getUniversityProfile().getEnteredIn()),
-                    () -> assertThat(mentorProfile.authenticated()).isFalse(),
 
                     // Optional
-                    () -> assertThat(mentorProfile.introduction()).isNull(),
-                    () -> assertThat(mentorProfile.period()).isNull(),
-                    () -> assertThat(mentorProfile.schedules()).isEmpty(),
-
-                    // isCompleted
-                    () -> assertThat(mentorProfile.profileComplete()).isFalse()
+                    () -> assertThat(mentorProfile.introduction()).isNull()
             );
         }
 
@@ -93,47 +84,22 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             given(mentorRepository.getProfile(mentor.getId())).willReturn(mentor);
 
             // when
-            final MentorPrivateProfile mentorProfile = sut.getMentorProfile(mentor.getId());
+            final MentorBasicProfile mentorProfile = sut.getMentorProfile(mentor.getId());
 
             // then
             assertAll(
                     // Required
                     () -> assertThat(mentorProfile.id()).isEqualTo(mentor.getId()),
-                    () -> assertThat(mentorProfile.email()).isEqualTo(mentor.getEmail().getValue()),
                     () -> assertThat(mentorProfile.name()).isEqualTo(mentor.getName()),
                     () -> assertThat(mentorProfile.profileImageUrl()).isEqualTo(mentor.getProfileImageUrl()),
-                    () -> assertThat(mentorProfile.nationality()).isEqualTo(mentor.getNationality().getKor()),
                     () -> assertThat(mentorProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
                     () -> assertThat(mentorProfile.languages().sub()).isEmpty(),
                     () -> assertThat(mentorProfile.school()).isEqualTo(mentor.getUniversityProfile().getSchool()),
                     () -> assertThat(mentorProfile.major()).isEqualTo(mentor.getUniversityProfile().getMajor()),
                     () -> assertThat(mentorProfile.enteredIn()).isEqualTo(mentor.getUniversityProfile().getEnteredIn()),
-                    () -> assertThat(mentorProfile.authenticated()).isFalse(),
 
                     // Optional
-                    () -> assertThat(mentorProfile.introduction()).isEqualTo(mentor.getIntroduction()),
-                    () -> assertThat(mentorProfile.period().startDate()).isEqualTo(period.getStartDate()),
-                    () -> assertThat(mentorProfile.period().endDate()).isEqualTo(period.getEndDate()),
-                    () -> assertThat(mentorProfile.schedules())
-                            .usingRecursiveComparison()
-                            .isEqualTo(
-                                    timelines.stream()
-                                            .map(it -> new ScheduleResponse(
-                                                    it.getDayOfWeek().getKor(),
-                                                    new ScheduleResponse.Start(
-                                                            it.getStartTime().getHour(),
-                                                            it.getStartTime().getMinute()
-                                                    ),
-                                                    new ScheduleResponse.End(
-                                                            it.getEndTime().getHour(),
-                                                            it.getEndTime().getMinute()
-                                                    )
-                                            ))
-                                            .toList()
-                            ),
-
-                    // isCompleted
-                    () -> assertThat(mentorProfile.profileComplete()).isTrue()
+                    () -> assertThat(mentorProfile.introduction()).isEqualTo(mentor.getIntroduction())
             );
         }
     }
@@ -157,13 +123,12 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             given(menteeRepository.getProfile(mentee.getId())).willReturn(mentee);
 
             // when
-            final MenteePrivateProfile menteeProfile = sut.getMenteeProfile(mentee.getId());
+            final MenteeBasicProfile menteeProfile = sut.getMenteeProfile(mentee.getId());
 
             // then
             assertAll(
                     // Required
                     () -> assertThat(menteeProfile.id()).isEqualTo(mentee.getId()),
-                    () -> assertThat(menteeProfile.email()).isEqualTo(mentee.getEmail().getValue()),
                     () -> assertThat(menteeProfile.name()).isEqualTo(mentee.getName()),
                     () -> assertThat(menteeProfile.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),
                     () -> assertThat(menteeProfile.nationality()).isEqualTo(mentee.getNationality().getKor()),
@@ -176,10 +141,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
                     () -> assertThat(menteeProfile.interestMajor()).isEqualTo(mentee.getInterest().getMajor()),
 
                     // Optional
-                    () -> assertThat(menteeProfile.introduction()).isNull(),
-
-                    // isCompleted
-                    () -> assertThat(menteeProfile.profileComplete()).isFalse()
+                    () -> assertThat(menteeProfile.introduction()).isNull()
             );
         }
 
@@ -192,13 +154,12 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             given(menteeRepository.getProfile(mentee.getId())).willReturn(mentee);
 
             // when
-            final MenteePrivateProfile menteeProfile = sut.getMenteeProfile(mentee.getId());
+            final MenteeBasicProfile menteeProfile = sut.getMenteeProfile(mentee.getId());
 
             // then
             assertAll(
                     // Required
                     () -> assertThat(menteeProfile.id()).isEqualTo(mentee.getId()),
-                    () -> assertThat(menteeProfile.email()).isEqualTo(mentee.getEmail().getValue()),
                     () -> assertThat(menteeProfile.name()).isEqualTo(mentee.getName()),
                     () -> assertThat(menteeProfile.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),
                     () -> assertThat(menteeProfile.nationality()).isEqualTo(mentee.getNationality().getKor()),
@@ -211,10 +172,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
                     () -> assertThat(menteeProfile.interestMajor()).isEqualTo(mentee.getInterest().getMajor()),
 
                     // Optional
-                    () -> assertThat(menteeProfile.introduction()).isEqualTo(mentee.getIntroduction()),
-
-                    // isCompleted
-                    () -> assertThat(menteeProfile.profileComplete()).isTrue()
+                    () -> assertThat(menteeProfile.introduction()).isEqualTo(mentee.getIntroduction())
             );
         }
     }

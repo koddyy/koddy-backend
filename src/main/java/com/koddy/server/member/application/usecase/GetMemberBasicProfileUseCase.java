@@ -2,8 +2,8 @@ package com.koddy.server.member.application.usecase;
 
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
 import com.koddy.server.global.annotation.UseCase;
-import com.koddy.server.member.application.usecase.query.response.MenteePrivateProfile;
-import com.koddy.server.member.application.usecase.query.response.MentorPrivateProfile;
+import com.koddy.server.member.application.usecase.query.response.MenteeBasicProfile;
+import com.koddy.server.member.application.usecase.query.response.MentorBasicProfile;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MenteeRepository;
@@ -12,19 +12,19 @@ import lombok.RequiredArgsConstructor;
 
 @UseCase
 @RequiredArgsConstructor
-public class GetMemberPrivateProfileUseCase {
+public class GetMemberBasicProfileUseCase {
     private final MentorRepository mentorRepository;
     private final MenteeRepository menteeRepository;
 
     @KoddyReadOnlyTransactional
-    public MentorPrivateProfile getMentorProfile(final long mentorId) {
+    public MentorBasicProfile getMentorProfile(final long mentorId) {
         final Mentor mentor = mentorRepository.getProfile(mentorId);
-        return MentorPrivateProfile.of(mentor);
+        return MentorBasicProfile.of(mentor);
     }
 
     @KoddyReadOnlyTransactional
-    public MenteePrivateProfile getMenteeProfile(final long menteeId) {
+    public MenteeBasicProfile getMenteeProfile(final long menteeId) {
         final Mentee mentee = menteeRepository.getProfile(menteeId);
-        return MenteePrivateProfile.of(mentee);
+        return MenteeBasicProfile.of(mentee);
     }
 }
