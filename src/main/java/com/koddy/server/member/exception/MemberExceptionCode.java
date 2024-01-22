@@ -25,7 +25,7 @@ public enum MemberExceptionCode implements KoddyExceptionCode {
     INVALID_LANGUAGE_TYPE(BAD_REQUEST, "MEMBER_011", "유효하지 않은 언어 레벨입니다."),
     INVALID_DAY(BAD_REQUEST, "MEMBER_012", "유효하지 않은 날짜입니다."),
     INVALID_TIME_UNIT(BAD_REQUEST, "MEMBER_013", "설정할 수 없는 멘토링 시간 단위입니다."),
-    CANNOT_RESERVATION(CONFLICT, "MEMBER_014", "해당 날짜는 멘토링 예약을 할 수 없습니다.")
+    CANNOT_RESERVATION(CONFLICT, "MEMBER_014", "이미 예약되었거나 멘토링이 가능하지 않은 날짜입니다."),
     ;
 
     private final HttpStatus status;
