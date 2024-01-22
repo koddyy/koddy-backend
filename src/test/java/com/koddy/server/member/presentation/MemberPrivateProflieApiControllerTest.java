@@ -31,12 +31,12 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
     private final Mentee mentee = MENTEE_1.toDomain().apply(2L);
 
     @Nested
-    @DisplayName("사용자 프로필 조회 API [GET /api/members/me]")
+    @DisplayName("사용자 마이페이지 프로필 조회 API [GET /api/members/me]")
     class GetProfile {
         private static final String BASE_URL = "/api/members/me";
 
         @Test
-        @DisplayName("멘토 프로필을 조회한다")
+        @DisplayName("멘토 마이페이지 프로필을 조회한다")
         void getMentorProfile() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
@@ -78,7 +78,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
         }
 
         @Test
-        @DisplayName("멘티 프로필을 조회한다")
+        @DisplayName("멘티 마이페이지 프로필을 조회한다")
         void getMenteeProfile() {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
@@ -110,7 +110,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
     }
 
     @Nested
-    @DisplayName("멘토 프로필 조회 API [GET /api/mentors/me]")
+    @DisplayName("멘토 마이페이지 프로필 조회 API [GET /api/mentors/me]")
     class GetMentorProfile {
         private static final String BASE_URL = "/api/mentors/me";
 
@@ -173,7 +173,7 @@ class MemberPrivateProflieApiControllerTest extends ControllerTest {
     }
 
     @Nested
-    @DisplayName("멘티 프로필 조회 API [GET /api/mentees/me]")
+    @DisplayName("멘티 마이페이지 프로필 조회 API [GET /api/mentees/me]")
     class GetMenteeProfile {
         private static final String BASE_URL = "/api/mentees/me";
 

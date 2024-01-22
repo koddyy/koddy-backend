@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "2-7. 멘토 스케줄 조회 API")
+@Tag(name = "2-6. 멘토 스케줄 조회 API")
 @RestController
 @RequestMapping("/api/mentors/{mentorId}/reserved-schedule")
 @RequiredArgsConstructor

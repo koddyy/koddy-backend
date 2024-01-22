@@ -201,6 +201,19 @@ include::{snippets}/MemberApi/Mentor/UnivAuth/ProofData/Success/request-fields.a
 
 include::{snippets}/MemberApi/Mentor/UnivAuth/ProofData/Success/http-response.adoc[]
 
+== 특정 Year-Month에 대해서 멘토의 예약된 스케줄 조회 API (AccessToken)
+
+=== HTTP Request
+
+include::{snippets}/MemberApi/Mentor/ReservedSchedule/http-request.adoc[]
+include::{snippets}/MemberApi/Mentor/ReservedSchedule/path-parameters.adoc[]
+include::{snippets}/MemberApi/Mentor/ReservedSchedule/query-parameters.adoc[]
+
+=== HTTP Response
+
+include::{snippets}/MemberApi/Mentor/ReservedSchedule/http-response.adoc[]
+include::{snippets}/MemberApi/Mentor/ReservedSchedule/response-fields.adoc[]
+
 == 사용자 마이페이지(Private) 프로필 조회 API (AccessToken)
 
 === 멘토 정보
@@ -225,18 +238,31 @@ include::{snippets}/MemberApi/PrivateProfile/Mix/Mentee/http-request.adoc[]
 include::{snippets}/MemberApi/PrivateProfile/Mix/Mentee/http-response.adoc[]
 include::{snippets}/MemberApi/PrivateProfile/Mix/Mentee/response-fields.adoc[]
 
-== 특정 Year-Month에 대해서 멘토의 예약된 스케줄 조회 API (AccessToken)
+== 사용자 기본(Public) 프로필 조회 API
 
-=== HTTP Request
+=== 멘토 정보
 
-include::{snippets}/MemberApi/Mentor/ReservedSchedule/http-request.adoc[]
-include::{snippets}/MemberApi/Mentor/ReservedSchedule/path-parameters.adoc[]
-include::{snippets}/MemberApi/Mentor/ReservedSchedule/query-parameters.adoc[]
+==== HTTP Request
 
-=== HTTP Response
+include::{snippets}/MemberApi/PublicProfile/Mentor/http-request.adoc[]
+include::{snippets}/MemberApi/PublicProfile/Mentor/path-parameters.adoc[]
 
-include::{snippets}/MemberApi/Mentor/ReservedSchedule/http-response.adoc[]
-include::{snippets}/MemberApi/Mentor/ReservedSchedule/response-fields.adoc[]
+==== HTTP Response
+
+include::{snippets}/MemberApi/PublicProfile/Mentor/http-response.adoc[]
+include::{snippets}/MemberApi/PublicProfile/Mentor/response-fields.adoc[]
+
+=== 멘티 정보
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/PublicProfile/Mentee/http-request.adoc[]
+include::{snippets}/MemberApi/PublicProfile/Mentee/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/PublicProfile/Mentee/http-response.adoc[]
+include::{snippets}/MemberApi/PublicProfile/Mentee/response-fields.adoc[]
 
 == 파일 관련 API (AccessToken)
 
