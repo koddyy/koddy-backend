@@ -23,8 +23,8 @@ import static com.koddy.server.common.fixture.LanguageFixture.JP_SUB;
 import static com.koddy.server.common.fixture.LanguageFixture.KR_MAIN;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
-import static com.koddy.server.common.fixture.TimelineFixture.MON_09_17;
-import static com.koddy.server.common.fixture.TimelineFixture.THU_09_17;
+import static com.koddy.server.common.fixture.TimelineFixture.MON_09_22;
+import static com.koddy.server.common.fixture.TimelineFixture.THU_09_22;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
@@ -87,7 +87,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             // given
             final List<Language> languages = List.of(KR_MAIN.toDomain());
             final MentoringPeriod period = MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain();
-            final List<Timeline> timelines = List.of(MON_09_17.toDomain(), THU_09_17.toDomain());
+            final List<Timeline> timelines = List.of(MON_09_22.toDomain(), THU_09_22.toDomain());
 
             final Mentor mentor = MENTOR_1.toDomainWithLanguagesAndMentoringInfo(languages, period, timelines).apply(1L);
             given(mentorRepository.getProfile(mentor.getId())).willReturn(mentor);

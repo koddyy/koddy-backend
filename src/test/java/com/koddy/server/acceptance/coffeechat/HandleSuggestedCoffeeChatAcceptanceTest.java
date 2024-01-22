@@ -16,7 +16,9 @@ import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.�
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
+import static com.koddy.server.member.exception.MemberExceptionCode.CANNOT_RESERVATION;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
@@ -29,8 +31,8 @@ public class HandleSuggestedCoffeeChatAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘티가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
-            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_진행한다();
-            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_진행한다();
+            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
 
             멘티가_멘토의_커피챗_제안을_거절한다(
@@ -45,8 +47,8 @@ public class HandleSuggestedCoffeeChatAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘티는 멘토가 제안한 커피챗을 거절한다")
         void success() {
-            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_진행한다();
-            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_진행한다();
+            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
 
             멘티가_멘토의_커피챗_제안을_거절한다(
@@ -63,8 +65,8 @@ public class HandleSuggestedCoffeeChatAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("멘티가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
-            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_진행한다();
-            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_진행한다();
+            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
 
             멘티가_멘토의_커피챗_제안을_1차_수락한다(
@@ -78,16 +80,33 @@ public class HandleSuggestedCoffeeChatAcceptanceTest extends AcceptanceTest {
         }
 
         @Test
-        @DisplayName("멘티는 멘토가 제안한 커피챗을 1차 수락한다")
-        void success() {
-            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_진행한다();
-            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_진행한다();
+        @DisplayName("이미 예약되었거나 멘토링이 가능하지 않은 날짜면 예외가 발생한다")
+        void throwExceptionByCannotReservation() {
+            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
 
             멘티가_멘토의_커피챗_제안을_1차_수락한다(
                     coffeeChatId,
                     LocalDateTime.of(2024, 2, 1, 18, 0),
                     LocalDateTime.of(2024, 2, 1, 19, 0),
+                    mentee.token().accessToken()
+            ).statusCode(CONFLICT.value())
+                    .body("errorCode", is(CANNOT_RESERVATION.getErrorCode()))
+                    .body("message", is(CANNOT_RESERVATION.getMessage()));
+        }
+
+        @Test
+        @DisplayName("멘티는 멘토가 제안한 커피챗을 1차 수락한다")
+        void success() {
+            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+            final AuthMember mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+            final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
+
+            멘티가_멘토의_커피챗_제안을_1차_수락한다(
+                    coffeeChatId,
+                    LocalDateTime.of(2024, 2, 5, 13, 0),
+                    LocalDateTime.of(2024, 2, 5, 13, 30),
                     mentee.token().accessToken()
             ).statusCode(NO_CONTENT.value());
         }

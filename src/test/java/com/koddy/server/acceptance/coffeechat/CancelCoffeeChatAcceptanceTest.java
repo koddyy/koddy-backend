@@ -33,10 +33,10 @@ public class CancelCoffeeChatAcceptanceTest extends AcceptanceTest {
 
     @BeforeEach
     void setUp() {
-        mentorA = MENTOR_1.회원가입과_로그인을_진행한다();
-        mentorB = MENTOR_2.회원가입과_로그인을_진행한다();
-        menteeA = MENTEE_1.회원가입과_로그인을_진행한다();
-        menteeB = MENTEE_2.회원가입과_로그인을_진행한다();
+        mentorA = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+        mentorB = MENTOR_2.회원가입과_로그인을_하고_프로필을_완성시킨다();
+        menteeA = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
+        menteeB = MENTEE_2.회원가입과_로그인을_하고_프로필을_완성시킨다();
     }
 
     @Nested
@@ -78,14 +78,14 @@ public class CancelCoffeeChatAcceptanceTest extends AcceptanceTest {
         @DisplayName("자신이 신청한 커피챗이 아니면 취소할 수 없다")
         void throwExceptionByInvalidPermission() {
             final long appliedByMenteeA = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 2, 1, 15, 0),
-                    LocalDateTime.of(2024, 2, 1, 16, 0),
+                    LocalDateTime.of(2024, 2, 5, 15, 0),
+                    LocalDateTime.of(2024, 2, 5, 15, 30),
                     mentorA.id(),
                     menteeA.token().accessToken()
             );
             final long appliedByMenteeB = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 2, 1, 17, 0),
-                    LocalDateTime.of(2024, 2, 1, 18, 0),
+                    LocalDateTime.of(2024, 2, 5, 17, 0),
+                    LocalDateTime.of(2024, 2, 5, 17, 30),
                     mentorA.id(),
                     menteeB.token().accessToken()
             );
@@ -104,14 +104,14 @@ public class CancelCoffeeChatAcceptanceTest extends AcceptanceTest {
         @DisplayName("멘티 자신이 신청한 커피챗을 취소한다")
         void success() {
             final long appliedByMenteeA = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 2, 1, 15, 0),
-                    LocalDateTime.of(2024, 2, 1, 16, 0),
+                    LocalDateTime.of(2024, 2, 5, 15, 0),
+                    LocalDateTime.of(2024, 2, 5, 15, 30),
                     mentorA.id(),
                     menteeA.token().accessToken()
             );
             final long appliedByMenteeB = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 2, 1, 17, 0),
-                    LocalDateTime.of(2024, 2, 1, 18, 0),
+                    LocalDateTime.of(2024, 2, 5, 17, 0),
+                    LocalDateTime.of(2024, 2, 5, 17, 30),
                     mentorA.id(),
                     menteeB.token().accessToken()
             );
