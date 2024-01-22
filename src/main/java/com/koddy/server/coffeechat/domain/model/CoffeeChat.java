@@ -47,6 +47,10 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     private String applyReason;
 
     @Lob
+    @Column(name = "question", columnDefinition = "TEXT")
+    private String question;
+
+    @Lob
     @Column(name = "reject_reason", columnDefinition = "TEXT")
     private String rejectReason;
 
