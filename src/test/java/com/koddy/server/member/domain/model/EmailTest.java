@@ -17,7 +17,7 @@ class EmailTest extends UnitTest {
     @DisplayName("Email 생성")
     class Construct {
         @ParameterizedTest
-        @ValueSource(strings = {"", "abc", "@gmail.com", "abc@gmail", "abc@gmail.", "abc@naver.com"})
+        @ValueSource(strings = {"", "abc", "@gmail.com", "abc@gmail", "abc@gmail.c"})
         @DisplayName("형식에 맞지 않는 Email이면 예외가 발생한다")
         void throwExceptionByInvalidEmailPattern(final String value) {
             assertThatThrownBy(() -> Email.from(value))
@@ -26,7 +26,7 @@ class EmailTest extends UnitTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = {"sjiwon4491@gmail.com", "sjiwon4491@kakao.com"})
+        @ValueSource(strings = {"sjiwon@gmail.com", "sjiwon@kakao.com", "sjiwon@naver.com", "sjiwon@nate.com"})
         @DisplayName("Email을 생성한다")
         void construct(final String value) {
             assertDoesNotThrow(() -> Email.from(value));
