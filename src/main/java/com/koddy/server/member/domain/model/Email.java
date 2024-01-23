@@ -15,10 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Embeddable
 public class Email {
-    /**
-     * 이메일 형식은 [@gmail.com, @kakao.com]만 허용
-     */
-    private static final Pattern pattern = Pattern.compile("^[a-zA-Z0-9._%+-]+@(gmail\\.com|kakao\\.com)$");
+    private static final Pattern pattern = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
 
     @Column(name = "email", unique = true)
     private String value;

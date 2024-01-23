@@ -26,6 +26,7 @@ public enum MemberExceptionCode implements KoddyExceptionCode {
     INVALID_DAY(BAD_REQUEST, "MEMBER_012", "유효하지 않은 날짜입니다."),
     INVALID_TIME_UNIT(BAD_REQUEST, "MEMBER_013", "설정할 수 없는 멘토링 시간 단위입니다."),
     CANNOT_RESERVATION(CONFLICT, "MEMBER_014", "이미 예약되었거나 멘토링이 가능하지 않은 날짜입니다."),
+    ACCOUNT_ALREADY_EXISTS(CONFLICT, "MEMBER_015", "이미 가입된 사용자입니다."),
     ;
 
     private final HttpStatus status;
