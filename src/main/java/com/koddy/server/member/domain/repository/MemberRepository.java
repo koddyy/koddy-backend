@@ -1,6 +1,7 @@
 package com.koddy.server.member.domain.repository;
 
 import com.koddy.server.global.annotation.KoddyWritableTransactional;
+import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.exception.MemberException;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -46,12 +47,7 @@ public interface MemberRepository extends JpaRepository<Member<?>, Long> {
     // Query Method
     boolean existsById(final Long id);
 
-    boolean existsByEmailValue(final String value);
+    boolean existsByEmail(final Email email);
 
     Optional<Member> findByEmailValue(final String email);
-
-    default Member getByEmail(final String email) {
-        return findByEmailValue(email)
-                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
-    }
 }

@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
+import static com.koddy.server.common.fixture.MentorFixture.MENTOR_2;
 import static com.koddy.server.member.domain.model.MemberStatus.INACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -50,26 +51,22 @@ class MemberRepositoryTest extends RepositoryTest {
         // given
         final Member<?> member = sut.save(MENTOR_1.toDomain());
 
-        // when
-        final Optional<Member> actual1 = sut.findByEmailValue(member.getEmail().getValue());
-        final Optional<Member> actual2 = sut.findByEmailValue("diff" + member.getEmail().getValue());
-
-        // then
+        // when - then
         assertAll(
-                () -> assertThat(actual1).isPresent(),
-                () -> assertThat(actual2).isEmpty()
+                () -> assertThat(sut.findByEmailValue(member.getEmail().getValue())).isPresent(),
+                () -> assertThat(sut.findByEmailValue("diff" + member.getEmail().getValue())).isEmpty()
         );
     }
 
     @Test
     @DisplayName("해당 이메일을 사용하고 있는 사용자가 존재하는지 확인한다")
-    void existsByEmailValue() {
+    void existsByEmail() {
         // given
-        final Member<?> member = sut.save(MENTOR_1.toDomain());
+        sut.save(MENTOR_1.toDomain());
 
         // when
-        final boolean actual1 = sut.existsByEmailValue(member.getEmail().getValue());
-        final boolean actual2 = sut.existsByEmailValue("diff" + member.getEmail().getValue());
+        final boolean actual1 = sut.existsByEmail(MENTOR_1.getEmail());
+        final boolean actual2 = sut.existsByEmail(MENTOR_2.getEmail());
 
         // then
         assertAll(

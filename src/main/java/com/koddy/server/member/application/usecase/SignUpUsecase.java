@@ -3,47 +3,45 @@ package com.koddy.server.member.application.usecase;
 import com.koddy.server.auth.domain.model.AuthMember;
 import com.koddy.server.auth.domain.model.AuthToken;
 import com.koddy.server.auth.domain.service.TokenIssuer;
-import com.koddy.server.global.annotation.KoddyWritableTransactional;
 import com.koddy.server.global.annotation.UseCase;
 import com.koddy.server.member.application.usecase.command.SignUpMenteeCommand;
 import com.koddy.server.member.application.usecase.command.SignUpMentorCommand;
+import com.koddy.server.member.domain.model.Email;
+import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
-import com.koddy.server.member.domain.repository.MenteeRepository;
-import com.koddy.server.member.domain.repository.MentorRepository;
+import com.koddy.server.member.domain.repository.MemberRepository;
+import com.koddy.server.member.exception.MemberException;
 import lombok.RequiredArgsConstructor;
+
+import static com.koddy.server.member.exception.MemberExceptionCode.ACCOUNT_ALREADY_EXISTS;
 
 @UseCase
 @RequiredArgsConstructor
 public class SignUpUsecase {
-    private final MentorRepository mentorRepository;
-    private final MenteeRepository menteeRepository;
+    private final MemberRepository memberRepository;
     private final TokenIssuer tokenIssuer;
 
-    @KoddyWritableTransactional
     public AuthMember signUpMentor(final SignUpMentorCommand command) {
-        final Mentor mentor = mentorRepository.save(new Mentor(
-                command.email(),
-                command.name(),
-                command.profileImageUrl(),
-                command.languages(),
-                command.universityProfile()
-        ));
-        final AuthToken authToken = tokenIssuer.provideAuthorityToken(mentor.getId());
-        return new AuthMember(mentor, authToken);
+        validateAccountExists(command.email());
+        final Mentor mentor = memberRepository.save(command.toDomain());
+        return provideAuthMember(mentor);
     }
 
-    @KoddyWritableTransactional
     public AuthMember signUpMentee(final SignUpMenteeCommand command) {
-        final Mentee mentee = menteeRepository.save(new Mentee(
-                command.email(),
-                command.name(),
-                command.profileImageUrl(),
-                command.nationality(),
-                command.languages(),
-                command.interest()
-        ));
-        final AuthToken authToken = tokenIssuer.provideAuthorityToken(mentee.getId());
-        return new AuthMember(mentee, authToken);
+        validateAccountExists(command.email());
+        final Mentee mentee = memberRepository.save(command.toDomain());
+        return provideAuthMember(mentee);
+    }
+
+    private void validateAccountExists(final Email email) {
+        if (memberRepository.existsByEmail(email)) {
+            throw new MemberException(ACCOUNT_ALREADY_EXISTS);
+        }
+    }
+
+    private AuthMember provideAuthMember(final Member<?> member) {
+        final AuthToken authToken = tokenIssuer.provideAuthorityToken(member.getId());
+        return new AuthMember(member, authToken);
     }
 }
