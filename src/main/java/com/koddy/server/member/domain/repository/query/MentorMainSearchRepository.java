@@ -8,7 +8,7 @@ import org.springframework.data.domain.Slice;
 import java.util.List;
 
 public interface MentorMainSearchRepository {
-    List<Mentee> findAppliedMentees(final long mentorId, final int limit);
+    List<Mentee> fetchAppliedMentees(final long mentorId, final int limit);
 
-    Slice<Mentee> findMentees(final SearchMentee search, final Pageable pageable);
+    Slice<Mentee> fetchMentees(final SearchMentee search, final Pageable pageable);
 }

@@ -84,6 +84,57 @@ public enum MenteeFixture {
             OTHERS, "Hello World~", LanguageFixture.메인_영어_서브_일본어(),
             new Interest("한양대학교", "컴퓨터공학부")
     ),
+    MENTEE_11(
+            Email.from("mentee11@gmail.com"), "멘티11", "s3/Mentee11.png",
+            USA, "Hello World~", LanguageFixture.메인_영어_서브_한국어(),
+            new Interest("경기대학교", "컴퓨터공학부")
+    ),
+    MENTEE_12(
+            Email.from("mentee12@gmail.com"), "멘티12", "s3/Mentee12.png",
+            CHINA, "Hello World~", LanguageFixture.메인_영어_서브_일본어(),
+            new Interest("서울대학교", "컴퓨터공학부")
+    ),
+    MENTEE_13(
+            Email.from("mentee13@gmail.com"), "멘티13", "s3/Mentee13.png",
+            JAPAN, "Hello World~", LanguageFixture.메인_영어_서브_한국어(),
+            new Interest("연세대학교", "컴퓨터공학부")
+    ),
+    MENTEE_14(
+            Email.from("mentee14@gmail.com"), "멘티14", "s3/Mentee14.png",
+            VIETNAM, "Hello World~", LanguageFixture.메인_영어_서브_일본어(),
+            new Interest("고려대학교", "컴퓨터공학부")
+    ),
+    MENTEE_15(
+            Email.from("mentee15@gmail.com"), "멘티15", "s3/Mentee15.png",
+            OTHERS, "Hello World~", LanguageFixture.메인_영어_서브_한국어(),
+            new Interest("한양대학교", "컴퓨터공학부")
+    ),
+
+    MENTEE_16(
+            Email.from("mentee16@gmail.com"), "멘티16", "s3/Mentee16.png",
+            USA, "Hello World~", LanguageFixture.메인_영어_서브_일본어(),
+            new Interest("경기대학교", "컴퓨터공학부")
+    ),
+    MENTEE_17(
+            Email.from("mentee17@gmail.com"), "멘티17", "s3/Mentee17.png",
+            CHINA, "Hello World~", LanguageFixture.메인_영어_서브_한국어(),
+            new Interest("서울대학교", "컴퓨터공학부")
+    ),
+    MENTEE_18(
+            Email.from("mentee18@gmail.com"), "멘티18", "s3/Mentee18.png",
+            JAPAN, "Hello World~", LanguageFixture.메인_영어_서브_일본어(),
+            new Interest("연세대학교", "컴퓨터공학부")
+    ),
+    MENTEE_19(
+            Email.from("mentee19@gmail.com"), "멘티19", "s3/Mentee19.png",
+            VIETNAM, "Hello World~", LanguageFixture.메인_영어_서브_한국어(),
+            new Interest("고려대학교", "컴퓨터공학부")
+    ),
+    MENTEE_20(
+            Email.from("mentee20@gmail.com"), "멘티20", "s3/Mentee20.png",
+            OTHERS, "Hello World~", LanguageFixture.메인_영어_서브_일본어(),
+            new Interest("한양대학교", "컴퓨터공학부")
+    ),
     ;
 
     private final Email email;
