@@ -7,7 +7,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.Collections;
 import java.util.List;
 
-public record SearchMentee(
+public record SearchMenteeCondition(
         NationalityCondition nationality,
         LanguageCondition language
 ) {
@@ -23,18 +23,18 @@ public record SearchMentee(
     ) {
     }
 
-    public static SearchMentee basic() {
-        return new SearchMentee(
+    public static SearchMenteeCondition basic() {
+        return new SearchMenteeCondition(
                 createNationalityCondition(Collections.emptyList()),
                 createLanguageCondition(Collections.emptyList())
         );
     }
 
-    public static SearchMentee of(
+    public static SearchMenteeCondition of(
             final List<Nationality> nationalities,
             final List<Language.Category> languages
     ) {
-        return new SearchMentee(
+        return new SearchMenteeCondition(
                 createNationalityCondition(nationalities),
                 createLanguageCondition(languages)
         );
