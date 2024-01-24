@@ -11,7 +11,7 @@ import com.koddy.server.file.presentation.dto.request.GetImagePresignedUrlReques
 import com.koddy.server.file.presentation.dto.request.GetPdfPresignedUrlRequest;
 import com.koddy.server.file.utils.converter.FileConverter;
 import com.koddy.server.global.annotation.Auth;
-import com.koddy.server.global.dto.ResponseWrapper;
+import com.koddy.server.global.ResponseWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

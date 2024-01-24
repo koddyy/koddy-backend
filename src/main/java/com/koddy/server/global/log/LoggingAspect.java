@@ -25,8 +25,6 @@ public class LoggingAspect {
             && !execution(* com.koddy.server.global.base..*(..))
             && !execution(* com.koddy.server.global.config..*(..))
             && !execution(* com.koddy.server.global.decorator..*(..))
-            && !execution(* com.koddy.server.global.dto..*(..))
-            && !execution(* com.koddy.server.global.encrypt..*(..))
             && !execution(* com.koddy.server.global.filter..*(..))
             && !execution(* com.koddy.server.global.log..*(..))
             && !execution(* com.koddy.server..*Config.*(..))

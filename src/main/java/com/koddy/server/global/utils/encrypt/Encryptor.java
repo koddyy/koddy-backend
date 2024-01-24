@@ -1,4 +1,4 @@
-package com.koddy.server.global.encrypt;
+package com.koddy.server.global.utils.encrypt;
 
 public interface Encryptor {
     String hashEncrypt(final String value);

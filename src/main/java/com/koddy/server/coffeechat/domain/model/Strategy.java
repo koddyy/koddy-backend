@@ -1,7 +1,7 @@
 package com.koddy.server.coffeechat.domain.model;
 
 import com.koddy.server.coffeechat.exception.CoffeeChatException;
-import com.koddy.server.global.encrypt.Encryptor;
+import com.koddy.server.global.utils.encrypt.Encryptor;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Enumerated;

@@ -1,4 +1,4 @@
-package com.koddy.server.global.redis;
+package com.koddy.server.global.utils.redis;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;

@@ -13,7 +13,7 @@ import com.koddy.server.auth.presentation.dto.request.OAuthLoginRequest;
 import com.koddy.server.auth.presentation.dto.response.LoginResponse;
 import com.koddy.server.auth.utils.TokenResponseWriter;
 import com.koddy.server.global.annotation.Auth;
-import com.koddy.server.global.dto.ResponseWrapper;
+import com.koddy.server.global.ResponseWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;

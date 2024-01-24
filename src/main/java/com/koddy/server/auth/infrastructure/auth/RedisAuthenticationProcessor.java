@@ -3,7 +3,7 @@ package com.koddy.server.auth.infrastructure.auth;
 import com.koddy.server.auth.application.adapter.AuthenticationProcessor;
 import com.koddy.server.auth.domain.model.code.AuthCodeGenerator;
 import com.koddy.server.auth.exception.AuthException;
-import com.koddy.server.global.redis.RedisOperator;
+import com.koddy.server.global.utils.redis.RedisOperator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

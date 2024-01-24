@@ -1,8 +1,8 @@
 package com.koddy.server.auth.infrastructure.token;
 
 import com.koddy.server.common.RedisTest;
-import com.koddy.server.global.redis.RedisOperator;
-import com.koddy.server.global.redis.StringRedisOperator;
+import com.koddy.server.global.utils.redis.RedisOperator;
+import com.koddy.server.global.utils.redis.StringRedisOperator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

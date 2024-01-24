@@ -2,7 +2,7 @@ package com.koddy.server.global.aop;
 
 import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.auth.exception.AuthException;
-import com.koddy.server.global.redis.RedisOperator;
+import com.koddy.server.global.utils.redis.RedisOperator;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

@@ -1,4 +1,4 @@
-package com.koddy.server.global.dto;
+package com.koddy.server.global;
 
 import lombok.Getter;
 

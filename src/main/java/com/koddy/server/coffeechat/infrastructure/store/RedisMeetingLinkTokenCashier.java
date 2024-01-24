@@ -1,7 +1,7 @@
 package com.koddy.server.coffeechat.infrastructure.store;
 
 import com.koddy.server.coffeechat.application.adapter.MeetingLinkTokenCashier;
-import com.koddy.server.global.redis.RedisOperator;
+import com.koddy.server.global.utils.redis.RedisOperator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
