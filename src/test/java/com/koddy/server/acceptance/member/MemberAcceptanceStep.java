@@ -29,6 +29,16 @@ import static com.koddy.server.acceptance.CommonRequestFixture.postRequest;
 import static com.koddy.server.acceptance.CommonRequestFixture.postRequestWithAccessToken;
 
 public class MemberAcceptanceStep {
+    public static ValidatableResponse 멘토_회원가입_후_로그인을_진행한다(final SignUpMentorRequest request) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/mentors")
+                .build()
+                .toUri()
+                .getPath();
+
+        return postRequest(uri, request);
+    }
+
     public static ValidatableResponse 멘토_회원가입_후_로그인을_진행한다(final MentorFixture fixture) {
         final String uri = UriComponentsBuilder
                 .fromPath("/api/mentors")
@@ -52,6 +62,16 @@ public class MemberAcceptanceStep {
                 fixture.getUniversityProfile().getMajor(),
                 fixture.getUniversityProfile().getEnteredIn()
         );
+
+        return postRequest(uri, request);
+    }
+
+    public static ValidatableResponse 멘티_회원가입_후_로그인을_진행한다(final SignUpMenteeRequest request) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/mentees")
+                .build()
+                .toUri()
+                .getPath();
 
         return postRequest(uri, request);
     }
@@ -305,5 +325,19 @@ public class MemberAcceptanceStep {
                 .getPath();
 
         return getRequestWithAccessToken(uri, accessToken);
+    }
+
+    public static ValidatableResponse 커피챗_신청한_멘티를_조회한다(final String accessToken) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/mentees/applied-coffeechats")
+                .build()
+                .toUri()
+                .getPath();
+
+        return getRequestWithAccessToken(uri, accessToken);
+    }
+
+    public static ValidatableResponse 멘티들을_둘러본다(final String url) {
+        return getRequest(url);
     }
 }
