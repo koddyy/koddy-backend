@@ -6,6 +6,7 @@ public record MenteeSimpleSearchProfile(
         long id,
         String name,
         String profileImageUrl,
+        String nationality,
         String interestSchool,
         String interestMajor
 ) {
@@ -14,6 +15,7 @@ public record MenteeSimpleSearchProfile(
                 mentee.getId(),
                 mentee.getName(),
                 mentee.getProfileImageUrl(),
+                mentee.getNationality().getKor(),
                 mentee.getInterest().getSchool(),
                 mentee.getInterest().getMajor()
         );
