@@ -25,8 +25,8 @@ public record SearchMenteeCondition(
 
     public static SearchMenteeCondition basic() {
         return new SearchMenteeCondition(
-                createNationalityCondition(Collections.emptyList()),
-                createLanguageCondition(Collections.emptyList())
+                new NationalityCondition(false, Collections.emptyList()),
+                new LanguageCondition(false, Collections.emptyList())
         );
     }
 
