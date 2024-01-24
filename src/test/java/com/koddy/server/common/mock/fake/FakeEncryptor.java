@@ -1,6 +1,6 @@
 package com.koddy.server.common.mock.fake;
 
-import com.koddy.server.global.encrypt.Encryptor;
+import com.koddy.server.global.utils.encrypt.Encryptor;
 
 public class FakeEncryptor implements Encryptor {
     private static final String DUMMY = "_koddy";

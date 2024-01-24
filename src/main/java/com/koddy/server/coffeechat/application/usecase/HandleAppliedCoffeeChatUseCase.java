@@ -7,7 +7,7 @@ import com.koddy.server.coffeechat.domain.model.Strategy;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.global.annotation.KoddyWritableTransactional;
 import com.koddy.server.global.annotation.UseCase;
-import com.koddy.server.global.encrypt.Encryptor;
+import com.koddy.server.global.utils.encrypt.Encryptor;
 import lombok.RequiredArgsConstructor;
 
 @UseCase

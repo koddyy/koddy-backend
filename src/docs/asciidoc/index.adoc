@@ -264,6 +264,31 @@ include::{snippets}/MemberApi/PublicProfile/Mentee/path-parameters.adoc[]
 include::{snippets}/MemberApi/PublicProfile/Mentee/http-response.adoc[]
 include::{snippets}/MemberApi/PublicProfile/Mentee/response-fields.adoc[]
 
+== 멘토 메인 홈 관련 API
+
+=== 커피챗 신청한 멘티 (AccessToken + OnlyMentor)
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/Mentor/MainSearch/AppliedMentees/Success/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/Mentor/MainSearch/AppliedMentees/Success/http-response.adoc[]
+include::{snippets}/MemberApi/Mentor/MainSearch/AppliedMentees/Success/response-fields.adoc[]
+
+=== 멘티 둘러보기
+
+==== HTTP Request
+
+include::{snippets}/MemberApi/Mentor/MainSearch/Mentees/http-request.adoc[]
+include::{snippets}/MemberApi/Mentor/MainSearch/Mentees/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/MemberApi/Mentor/MainSearch/Mentees/http-response.adoc[]
+include::{snippets}/MemberApi/Mentor/MainSearch/Mentees/response-fields.adoc[]
+
 == 파일 관련 API (AccessToken)
 
 === PresignedUrl 응답

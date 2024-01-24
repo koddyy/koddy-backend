@@ -1,7 +1,7 @@
 package com.koddy.server.auth.infrastructure.token;
 
 import com.koddy.server.auth.application.adapter.TokenStore;
-import com.koddy.server.global.redis.RedisOperator;
+import com.koddy.server.global.utils.redis.RedisOperator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;

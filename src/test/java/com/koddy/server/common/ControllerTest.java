@@ -109,7 +109,7 @@ public abstract class ControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(url);
 
         for (final String key : params.keySet()) {
-            requestBuilder = requestBuilder.param(key, params.get(key));
+            requestBuilder = requestBuilder.queryParam(key, params.get(key));
         }
 
         return requestBuilder;
@@ -119,7 +119,43 @@ public abstract class ControllerTest {
         MockHttpServletRequestBuilder requestBuilder = RestDocumentationRequestBuilders.get(path.url, path.variables);
 
         for (final String key : params.keySet()) {
-            requestBuilder = requestBuilder.param(key, params.get(key));
+            requestBuilder = requestBuilder.queryParam(key, params.get(key));
+        }
+
+        return requestBuilder;
+    }
+
+    protected final RequestBuilder getRequest(
+            final String url,
+            final Map<String, String> params,
+            final List<MultiValueMap<String, String>> multiParams
+    ) {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(url);
+
+        for (final String key : params.keySet()) {
+            requestBuilder = requestBuilder.queryParam(key, params.get(key));
+        }
+
+        for (final MultiValueMap<String, String> multiValue : multiParams) {
+            requestBuilder = requestBuilder.queryParams(multiValue);
+        }
+
+        return requestBuilder;
+    }
+
+    protected final RequestBuilder getRequest(
+            final UrlWithVariables path,
+            final Map<String, String> params,
+            final List<MultiValueMap<String, String>> multiParams
+    ) {
+        MockHttpServletRequestBuilder requestBuilder = RestDocumentationRequestBuilders.get(path.url, path.variables);
+
+        for (final String key : params.keySet()) {
+            requestBuilder = requestBuilder.queryParam(key, params.get(key));
+        }
+
+        for (final MultiValueMap<String, String> multiValue : multiParams) {
+            requestBuilder = requestBuilder.queryParams(multiValue);
         }
 
         return requestBuilder;
@@ -141,7 +177,7 @@ public abstract class ControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(url);
 
         for (final String key : params.keySet()) {
-            requestBuilder = requestBuilder.param(key, params.get(key));
+            requestBuilder = requestBuilder.queryParam(key, params.get(key));
         }
 
         return requestBuilder.header(AUTHORIZATION, applyAccessToken());
@@ -151,7 +187,43 @@ public abstract class ControllerTest {
         MockHttpServletRequestBuilder requestBuilder = RestDocumentationRequestBuilders.get(path.url, path.variables);
 
         for (final String key : params.keySet()) {
-            requestBuilder = requestBuilder.param(key, params.get(key));
+            requestBuilder = requestBuilder.queryParam(key, params.get(key));
+        }
+
+        return requestBuilder.header(AUTHORIZATION, applyAccessToken());
+    }
+
+    protected final RequestBuilder getRequestWithAccessToken(
+            final String url,
+            final Map<String, String> params,
+            final List<MultiValueMap<String, String>> multiParams
+    ) {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(url);
+
+        for (final String key : params.keySet()) {
+            requestBuilder = requestBuilder.queryParam(key, params.get(key));
+        }
+
+        for (final MultiValueMap<String, String> multiValue : multiParams) {
+            requestBuilder = requestBuilder.queryParams(multiValue);
+        }
+
+        return requestBuilder.header(AUTHORIZATION, applyAccessToken());
+    }
+
+    protected final RequestBuilder getRequestWithAccessToken(
+            final UrlWithVariables path,
+            final Map<String, String> params,
+            final List<MultiValueMap<String, String>> multiParams
+    ) {
+        MockHttpServletRequestBuilder requestBuilder = RestDocumentationRequestBuilders.get(path.url, path.variables);
+
+        for (final String key : params.keySet()) {
+            requestBuilder = requestBuilder.queryParam(key, params.get(key));
+        }
+
+        for (final MultiValueMap<String, String> multiValue : multiParams) {
+            requestBuilder = requestBuilder.queryParams(multiValue);
         }
 
         return requestBuilder.header(AUTHORIZATION, applyAccessToken());

@@ -1,4 +1,4 @@
-package com.koddy.server.global.encrypt;
+package com.koddy.server.global.utils.encrypt;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.encrypt.BytesEncryptor;

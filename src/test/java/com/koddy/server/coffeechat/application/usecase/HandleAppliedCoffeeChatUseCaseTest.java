@@ -7,7 +7,7 @@ import com.koddy.server.coffeechat.domain.model.Reservation;
 import com.koddy.server.coffeechat.domain.model.Strategy;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.common.UnitTest;
-import com.koddy.server.global.encrypt.Encryptor;
+import com.koddy.server.global.utils.encrypt.Encryptor;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;

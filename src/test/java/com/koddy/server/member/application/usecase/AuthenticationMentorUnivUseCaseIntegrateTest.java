@@ -5,7 +5,7 @@ import com.koddy.server.auth.domain.model.code.AuthKeyGenerator;
 import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.common.IntegrateTest;
 import com.koddy.server.common.mock.stub.StubEmailSender;
-import com.koddy.server.global.redis.RedisOperator;
+import com.koddy.server.global.utils.redis.RedisOperator;
 import com.koddy.server.mail.application.adapter.EmailSender;
 import com.koddy.server.member.application.usecase.command.AuthenticationConfirmWithMailCommand;
 import com.koddy.server.member.application.usecase.command.AuthenticationWithMailCommand;
