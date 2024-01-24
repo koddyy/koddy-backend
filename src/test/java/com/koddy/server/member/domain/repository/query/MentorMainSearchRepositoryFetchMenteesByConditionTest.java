@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @Import(MentorMainSearchRepositoryImpl.class)
 @DisplayName("Member -> MentorMainSearchRepository [fetchMenteesByCondition] 테스트")
-class MentorMainSearchRepositoryFetchMenteesTest extends RepositoryTest {
+class MentorMainSearchRepositoryFetchMenteesByConditionTest extends RepositoryTest {
     @Autowired
     private MentorMainSearchRepositoryImpl sut;
 
