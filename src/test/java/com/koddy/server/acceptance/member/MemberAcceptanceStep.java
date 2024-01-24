@@ -340,4 +340,18 @@ public class MemberAcceptanceStep {
     public static ValidatableResponse 멘티들을_둘러본다(final String url) {
         return getRequest(url);
     }
+
+    public static ValidatableResponse 커피챗_제안한_멘토를_조회한다(final String accessToken) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/mentors/suggested-coffeechats")
+                .build()
+                .toUri()
+                .getPath();
+
+        return getRequestWithAccessToken(uri, accessToken);
+    }
+
+    public static ValidatableResponse 멘토들을_둘러본다(final String url) {
+        return getRequest(url);
+    }
 }
