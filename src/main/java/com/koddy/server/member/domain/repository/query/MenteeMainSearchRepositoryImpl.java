@@ -3,7 +3,6 @@ package com.koddy.server.member.domain.repository.query;
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.query.spec.SearchMentorCondition;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -67,19 +66,25 @@ public class MenteeMainSearchRepositoryImpl implements MenteeMainSearchRepositor
     }
 
     private List<Long> filteringByCondition(final SearchMentorCondition condition) {
+        return filteringLanguage(condition.language());
+    }
+
+    private List<Long> filteringLanguage(final SearchMentorCondition.LanguageCondition language) {
+        if (language.contains()) {
+            return query
+                    .selectDistinct(availableLanguage.member.id)
+                    .from(availableLanguage)
+                    .where(availableLanguage.language.category.in(language.values()))
+                    .groupBy(availableLanguage.member.id)
+                    .having(availableLanguage.language.category.count().goe(language.values().size()))
+                    .orderBy(availableLanguage.member.id.desc())
+                    .fetch();
+        }
         return query
                 .selectDistinct(availableLanguage.member.id)
                 .from(availableLanguage)
-                .where(filteringLanguage(condition.language()))
                 .orderBy(availableLanguage.member.id.desc())
                 .fetch();
-    }
-
-    private Predicate filteringLanguage(final SearchMentorCondition.LanguageCondition language) {
-        if (language.contains()) {
-            return availableLanguage.language.category.in(language.values());
-        }
-        return null;
     }
 
     private boolean hasNext(

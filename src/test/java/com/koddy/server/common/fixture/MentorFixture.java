@@ -59,7 +59,6 @@ public enum MentorFixture {
             new UniversityProfile("한양대학교", "컴퓨터공학부", 18),
             MentoringPeriodFixture.FROM_01_01_TO_12_31.toDomain(), TimelineFixture.allDays()
     ),
-
     MENTOR_6(
             Email.from("mentor6@gmail.com"), "멘토6", "s3/Mentor6.png",
             "Hello World~", LanguageFixture.메인_한국어_서브_일본어_중국어(),
@@ -120,7 +119,6 @@ public enum MentorFixture {
             new UniversityProfile("한양대학교", "컴퓨터공학부", 18),
             MentoringPeriodFixture.FROM_01_01_TO_12_31.toDomain(), TimelineFixture.allDays()
     ),
-
     MENTOR_16(
             Email.from("mentor16@gmail.com"), "멘토16", "s3/Mentor16.png",
             "Hello World~", LanguageFixture.메인_한국어_서브_일본어_중국어(),

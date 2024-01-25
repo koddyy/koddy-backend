@@ -45,6 +45,7 @@ public class MentorMainSearchRepositoryImpl implements MentorMainSearchRepositor
     @Override
     public Slice<Mentee> fetchMenteesByCondition(final SearchMenteeCondition condition, final Pageable pageable) {
         final List<Long> filteringMenteeIds = filteringByCondition(condition);
+        System.out.println("통합 = " + filteringMenteeIds);
 
         final List<Mentee> result = query
                 .select(mentee)
@@ -76,13 +77,10 @@ public class MentorMainSearchRepositoryImpl implements MentorMainSearchRepositor
                 .where(filteringNationality(condition.nationality()))
                 .orderBy(mentee.id.desc())
                 .fetch();
+        System.out.println("국적 = " + containsNationalityMenteeIds);
 
-        final List<Long> containsLanguageMenteeIds = query
-                .selectDistinct(availableLanguage.member.id)
-                .from(availableLanguage)
-                .where(filteringLanguage(condition.language()))
-                .orderBy(availableLanguage.member.id.desc())
-                .fetch();
+        final List<Long> containsLanguageMenteeIds = filteringLanguage(condition.language());
+        System.out.println("언어 = " + containsLanguageMenteeIds);
 
         return compactMenteeIds(containsNationalityMenteeIds, containsLanguageMenteeIds);
     }
@@ -98,11 +96,22 @@ public class MentorMainSearchRepositoryImpl implements MentorMainSearchRepositor
         return null;
     }
 
-    private Predicate filteringLanguage(final SearchMenteeCondition.LanguageCondition language) {
+    private List<Long> filteringLanguage(final SearchMenteeCondition.LanguageCondition language) {
         if (language.contains()) {
-            return availableLanguage.language.category.in(language.values());
+            return query
+                    .selectDistinct(availableLanguage.member.id)
+                    .from(availableLanguage)
+                    .where(availableLanguage.language.category.in(language.values()))
+                    .groupBy(availableLanguage.member.id)
+                    .having(availableLanguage.language.category.count().goe(language.values().size()))
+                    .orderBy(availableLanguage.member.id.desc())
+                    .fetch();
         }
-        return null;
+        return query
+                .selectDistinct(availableLanguage.member.id)
+                .from(availableLanguage)
+                .orderBy(availableLanguage.member.id.desc())
+                .fetch();
     }
 
     private List<Long> compactMenteeIds(
