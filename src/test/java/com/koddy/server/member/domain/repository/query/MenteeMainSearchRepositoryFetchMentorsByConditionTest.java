@@ -17,9 +17,9 @@ import org.springframework.data.domain.Slice;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.koddy.server.member.domain.model.Language.Category.CN;
 import static com.koddy.server.member.domain.model.Language.Category.EN;
 import static com.koddy.server.member.domain.model.Language.Category.JP;
+import static com.koddy.server.member.domain.model.Language.Category.KR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -77,48 +77,52 @@ class MenteeMainSearchRepositoryFetchMentorsByConditionTest extends RepositoryTe
     @DisplayName("사용 가능한 언어 기준으로 멘토를 둘러본다")
     void withLanguage() {
         // given
-        final SearchMentorCondition condition1 = SearchMentorCondition.of(List.of(EN));
-        final SearchMentorCondition condition2 = SearchMentorCondition.of(List.of(JP, CN));
-        final SearchMentorCondition condition3 = SearchMentorCondition.of(List.of(EN, JP, CN));
+        final SearchMentorCondition condition1 = SearchMentorCondition.of(List.of(KR));
+        final SearchMentorCondition condition2 = SearchMentorCondition.of(List.of(KR, EN));
+        final SearchMentorCondition condition3 = SearchMentorCondition.of(List.of(KR, JP));
+        final SearchMentorCondition condition4 = SearchMentorCondition.of(List.of(KR, EN, JP));
 
         /* 페이지 1 */
         final Slice<Mentor> result1 = sut.fetchMentorsByCondition(condition1, pageable1);
         final Slice<Mentor> result2 = sut.fetchMentorsByCondition(condition2, pageable1);
         final Slice<Mentor> result3 = sut.fetchMentorsByCondition(condition3, pageable1);
+        final Slice<Mentor> result4 = sut.fetchMentorsByCondition(condition4, pageable1);
 
         assertAll(
-                () -> assertThat(result1.hasNext()).isFalse(),
+                () -> assertThat(result1.hasNext()).isTrue(),
                 () -> assertThat(result1.getContent()).containsExactly(
-                        mentors[18], mentors[16], mentors[14], mentors[12], mentors[10],
-                        mentors[8], mentors[6], mentors[4], mentors[2], mentors[0]
+                        mentors[19], mentors[18], mentors[17], mentors[16], mentors[15],
+                        mentors[14], mentors[13], mentors[12], mentors[11], mentors[10]
                 ),
                 () -> assertThat(result2.hasNext()).isFalse(),
                 () -> assertThat(result2.getContent()).containsExactly(
+                        mentors[18], mentors[16], mentors[14], mentors[12], mentors[10],
+                        mentors[8], mentors[6], mentors[4], mentors[2], mentors[0]
+                ),
+                () -> assertThat(result3.hasNext()).isFalse(),
+                () -> assertThat(result3.getContent()).containsExactly(
                         mentors[19], mentors[17], mentors[15], mentors[13], mentors[11],
                         mentors[9], mentors[7], mentors[5], mentors[3], mentors[1]
                 ),
-                () -> assertThat(result3.hasNext()).isTrue(),
-                () -> assertThat(result3.getContent()).containsExactly(
-                        mentors[19], mentors[18], mentors[17], mentors[16], mentors[15],
-                        mentors[14], mentors[13], mentors[12], mentors[11], mentors[10]
-                )
+                () -> assertThat(result4.hasNext()).isFalse(),
+                () -> assertThat(result4.getContent()).isEmpty()
         );
 
         /* 페이지 2 */
-        final Slice<Mentor> result4 = sut.fetchMentorsByCondition(condition1, pageable2);
-        final Slice<Mentor> result5 = sut.fetchMentorsByCondition(condition2, pageable2);
-        final Slice<Mentor> result6 = sut.fetchMentorsByCondition(condition3, pageable2);
+        final Slice<Mentor> result5 = sut.fetchMentorsByCondition(condition1, pageable2);
+        final Slice<Mentor> result6 = sut.fetchMentorsByCondition(condition2, pageable2);
+        final Slice<Mentor> result7 = sut.fetchMentorsByCondition(condition3, pageable2);
 
         assertAll(
-                () -> assertThat(result4.hasNext()).isFalse(),
-                () -> assertThat(result4.getContent()).isEmpty(),
                 () -> assertThat(result5.hasNext()).isFalse(),
-                () -> assertThat(result5.getContent()).isEmpty(),
-                () -> assertThat(result6.hasNext()).isFalse(),
-                () -> assertThat(result6.getContent()).containsExactly(
+                () -> assertThat(result5.getContent()).containsExactly(
                         mentors[9], mentors[8], mentors[7], mentors[6], mentors[5],
                         mentors[4], mentors[3], mentors[2], mentors[1], mentors[0]
-                )
+                ),
+                () -> assertThat(result6.hasNext()).isFalse(),
+                () -> assertThat(result6.getContent()).isEmpty(),
+                () -> assertThat(result7.hasNext()).isFalse(),
+                () -> assertThat(result7.getContent()).isEmpty()
         );
     }
 }

@@ -58,7 +58,6 @@ public enum MenteeFixture {
             OTHERS, "Hello World~", LanguageFixture.메인_영어_서브_한국어(),
             new Interest("한양대학교", "컴퓨터공학부")
     ),
-
     MENTEE_6(
             Email.from("mentee6@gmail.com"), "멘티6", "s3/Mentee6.png",
             USA, "Hello World~", LanguageFixture.메인_영어_서브_일본어(),
@@ -109,7 +108,6 @@ public enum MenteeFixture {
             OTHERS, "Hello World~", LanguageFixture.메인_영어_서브_한국어(),
             new Interest("한양대학교", "컴퓨터공학부")
     ),
-
     MENTEE_16(
             Email.from("mentee16@gmail.com"), "멘티16", "s3/Mentee16.png",
             USA, "Hello World~", LanguageFixture.메인_영어_서브_일본어(),
