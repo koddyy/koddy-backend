@@ -45,7 +45,6 @@ public class MentorMainSearchRepositoryImpl implements MentorMainSearchRepositor
     @Override
     public Slice<Mentee> fetchMenteesByCondition(final SearchMenteeCondition condition, final Pageable pageable) {
         final List<Long> filteringMenteeIds = filteringByCondition(condition);
-        System.out.println("통합 = " + filteringMenteeIds);
 
         final List<Mentee> result = query
                 .select(mentee)
@@ -77,10 +76,8 @@ public class MentorMainSearchRepositoryImpl implements MentorMainSearchRepositor
                 .where(filteringNationality(condition.nationality()))
                 .orderBy(mentee.id.desc())
                 .fetch();
-        System.out.println("국적 = " + containsNationalityMenteeIds);
 
         final List<Long> containsLanguageMenteeIds = filteringLanguage(condition.language());
-        System.out.println("언어 = " + containsLanguageMenteeIds);
 
         return compactMenteeIds(containsNationalityMenteeIds, containsLanguageMenteeIds);
     }
