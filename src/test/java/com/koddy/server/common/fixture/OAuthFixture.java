@@ -28,7 +28,7 @@ import static com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN;
 @RequiredArgsConstructor
 public enum OAuthFixture {
     GOOGLE_MENTOR_1(
-            MENTOR_1.getEmail().getValue(),
+            MENTOR_1.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
                     BEARER_TOKEN,
@@ -40,7 +40,7 @@ public enum OAuthFixture {
             MENTOR_1.toGoogleUserResponse()
     ),
     GOOGLE_MENTOR_2(
-            MENTOR_2.getEmail().getValue(),
+            MENTOR_2.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
                     BEARER_TOKEN,
@@ -52,7 +52,7 @@ public enum OAuthFixture {
             MENTOR_2.toGoogleUserResponse()
     ),
     GOOGLE_MENTOR_3(
-            MENTOR_3.getEmail().getValue(),
+            MENTOR_3.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
                     BEARER_TOKEN,
@@ -64,7 +64,7 @@ public enum OAuthFixture {
             MENTOR_3.toGoogleUserResponse()
     ),
     GOOGLE_MENTOR_4(
-            MENTOR_4.getEmail().getValue(),
+            MENTOR_4.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
                     BEARER_TOKEN,
@@ -76,7 +76,7 @@ public enum OAuthFixture {
             MENTOR_4.toGoogleUserResponse()
     ),
     GOOGLE_MENTOR_5(
-            MENTOR_5.getEmail().getValue(),
+            MENTOR_5.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
                     BEARER_TOKEN,
@@ -88,7 +88,7 @@ public enum OAuthFixture {
             MENTOR_5.toGoogleUserResponse()
     ),
     GOOGLE_MENTEE_1(
-            MENTEE_1.getEmail().getValue(),
+            MENTEE_1.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
                     BEARER_TOKEN,
@@ -100,7 +100,7 @@ public enum OAuthFixture {
             MENTEE_1.toGoogleUserResponse()
     ),
     GOOGLE_MENTEE_2(
-            MENTEE_2.getEmail().getValue(),
+            MENTEE_2.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
                     BEARER_TOKEN,
@@ -112,7 +112,7 @@ public enum OAuthFixture {
             MENTEE_2.toGoogleUserResponse()
     ),
     GOOGLE_MENTEE_3(
-            MENTEE_3.getEmail().getValue(),
+            MENTEE_3.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
                     BEARER_TOKEN,
@@ -124,7 +124,7 @@ public enum OAuthFixture {
             MENTEE_3.toGoogleUserResponse()
     ),
     GOOGLE_MENTEE_4(
-            MENTEE_4.getEmail().getValue(),
+            MENTEE_4.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
                     BEARER_TOKEN,
@@ -136,7 +136,7 @@ public enum OAuthFixture {
             MENTEE_4.toGoogleUserResponse()
     ),
     GOOGLE_MENTEE_5(
-            MENTEE_5.getEmail().getValue(),
+            MENTEE_5.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
                     BEARER_TOKEN,
@@ -153,14 +153,6 @@ public enum OAuthFixture {
     private final String authorizationCode;
     private final OAuthTokenResponse oAuthTokenResponse;
     private final OAuthUserResponse oAuthUserResponse;
-
-    public static String getAuthorizationCodeByIdentifier(final String identifier) {
-        return Arrays.stream(values())
-                .filter(value -> value.identifier.equals(identifier))
-                .findFirst()
-                .orElseThrow(NoSuchElementException::new)
-                .authorizationCode;
-    }
 
     public static OAuthTokenResponse parseOAuthTokenByCode(final String authorizationCode) {
         return Arrays.stream(values())

@@ -24,7 +24,7 @@ public record MentorPrivateProfile(
     public static MentorPrivateProfile of(final Mentor mentor) {
         return new MentorPrivateProfile(
                 mentor.getId(),
-                mentor.getEmail().getValue(),
+                mentor.getPlatform().getEmail().getValue(),
                 mentor.getName(),
                 mentor.getProfileImageUrl(),
                 mentor.getNationality().getKor(),

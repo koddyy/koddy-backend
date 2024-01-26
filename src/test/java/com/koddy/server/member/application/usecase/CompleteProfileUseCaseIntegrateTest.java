@@ -38,7 +38,7 @@ class CompleteProfileUseCaseIntegrateTest extends IntegrateTest {
     void completeMentor() {
         // given
         final Mentor mentor = mentorRepository.save(new Mentor(
-                MENTOR_1.getEmail(),
+                MENTOR_1.getPlatform(),
                 MENTOR_1.getName(),
                 MENTOR_1.getProfileImageUrl(),
                 MENTOR_1.getLanguages(),
@@ -79,7 +79,7 @@ class CompleteProfileUseCaseIntegrateTest extends IntegrateTest {
     void completeMentee() {
         // given
         final Mentee mentee = menteeRepository.save(new Mentee(
-                MENTEE_1.getEmail(),
+                MENTEE_1.getPlatform(),
                 MENTEE_1.getName(),
                 MENTEE_1.getProfileImageUrl(),
                 MENTEE_1.getNationality(),

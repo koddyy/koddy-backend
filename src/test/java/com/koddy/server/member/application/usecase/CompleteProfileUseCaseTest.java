@@ -33,7 +33,7 @@ class CompleteProfileUseCaseTest extends UnitTest {
     void completeMentor() {
         // given
         final Mentor mentor = new Mentor(
-                MENTOR_1.getEmail(),
+                MENTOR_1.getPlatform(),
                 MENTOR_1.getName(),
                 MENTOR_1.getProfileImageUrl(),
                 MENTOR_1.getLanguages(),
@@ -73,7 +73,7 @@ class CompleteProfileUseCaseTest extends UnitTest {
     void completeMentee() {
         // given
         final Mentee mentee = new Mentee(
-                MENTEE_1.getEmail(),
+                MENTEE_1.getPlatform(),
                 MENTEE_1.getName(),
                 MENTEE_1.getProfileImageUrl(),
                 MENTEE_1.getNationality(),

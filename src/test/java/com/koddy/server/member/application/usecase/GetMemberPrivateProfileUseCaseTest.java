@@ -45,7 +45,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             // given
             final List<Language> languages = List.of(KR_MAIN.toDomain());
             final Mentor mentor = new Mentor(
-                    MENTOR_1.getEmail(),
+                    MENTOR_1.getPlatform(),
                     MENTOR_1.getName(),
                     MENTOR_1.getProfileImageUrl(),
                     languages,
@@ -60,7 +60,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             assertAll(
                     // Required
                     () -> assertThat(mentorProfile.id()).isEqualTo(mentor.getId()),
-                    () -> assertThat(mentorProfile.email()).isEqualTo(mentor.getEmail().getValue()),
+                    () -> assertThat(mentorProfile.email()).isEqualTo(mentor.getPlatform().getEmail().getValue()),
                     () -> assertThat(mentorProfile.name()).isEqualTo(mentor.getName()),
                     () -> assertThat(mentorProfile.profileImageUrl()).isEqualTo(mentor.getProfileImageUrl()),
                     () -> assertThat(mentorProfile.nationality()).isEqualTo(mentor.getNationality().getKor()),
@@ -99,7 +99,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             assertAll(
                     // Required
                     () -> assertThat(mentorProfile.id()).isEqualTo(mentor.getId()),
-                    () -> assertThat(mentorProfile.email()).isEqualTo(mentor.getEmail().getValue()),
+                    () -> assertThat(mentorProfile.email()).isEqualTo(mentor.getPlatform().getEmail().getValue()),
                     () -> assertThat(mentorProfile.name()).isEqualTo(mentor.getName()),
                     () -> assertThat(mentorProfile.profileImageUrl()).isEqualTo(mentor.getProfileImageUrl()),
                     () -> assertThat(mentorProfile.nationality()).isEqualTo(mentor.getNationality().getKor()),
@@ -147,7 +147,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             // given
             final List<Language> languages = List.of(KR_MAIN.toDomain(), EN_SUB.toDomain(), JP_SUB.toDomain());
             final Mentee mentee = new Mentee(
-                    MENTEE_1.getEmail(),
+                    MENTEE_1.getPlatform(),
                     MENTEE_1.getName(),
                     MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getNationality(),
@@ -163,7 +163,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             assertAll(
                     // Required
                     () -> assertThat(menteeProfile.id()).isEqualTo(mentee.getId()),
-                    () -> assertThat(menteeProfile.email()).isEqualTo(mentee.getEmail().getValue()),
+                    () -> assertThat(menteeProfile.email()).isEqualTo(mentee.getPlatform().getEmail().getValue()),
                     () -> assertThat(menteeProfile.name()).isEqualTo(mentee.getName()),
                     () -> assertThat(menteeProfile.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),
                     () -> assertThat(menteeProfile.nationality()).isEqualTo(mentee.getNationality().getKor()),
@@ -198,7 +198,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             assertAll(
                     // Required
                     () -> assertThat(menteeProfile.id()).isEqualTo(mentee.getId()),
-                    () -> assertThat(menteeProfile.email()).isEqualTo(mentee.getEmail().getValue()),
+                    () -> assertThat(menteeProfile.email()).isEqualTo(mentee.getPlatform().getEmail().getValue()),
                     () -> assertThat(menteeProfile.name()).isEqualTo(mentee.getName()),
                     () -> assertThat(menteeProfile.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),
                     () -> assertThat(menteeProfile.nationality()).isEqualTo(mentee.getNationality().getKor()),

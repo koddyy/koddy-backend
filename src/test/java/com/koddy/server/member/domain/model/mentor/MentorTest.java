@@ -19,7 +19,7 @@ import java.util.List;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_2;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_3;
-import static com.koddy.server.member.domain.model.MemberStatus.ACTIVE;
+import static com.koddy.server.member.domain.model.Member.Status.ACTIVE;
 import static com.koddy.server.member.domain.model.Nationality.KOREA;
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.ATTEMPT;
@@ -52,7 +52,7 @@ class MentorTest extends UnitTest {
 
             // when - then
             assertThatThrownBy(() -> new Mentor(
-                    MENTOR_1.getEmail(),
+                    MENTOR_1.getPlatform(),
                     MENTOR_1.name(),
                     MENTOR_1.getProfileImageUrl(),
                     languages,
@@ -67,7 +67,7 @@ class MentorTest extends UnitTest {
         void success() {
             // given
             final Mentor mentor = new Mentor(
-                    MENTOR_1.getEmail(),
+                    MENTOR_1.getPlatform(),
                     MENTOR_1.getName(),
                     MENTOR_1.getProfileImageUrl(),
                     MENTOR_1.getLanguages(),
@@ -77,7 +77,9 @@ class MentorTest extends UnitTest {
             // when - then
             assertAll(
                     // Required
-                    () -> assertThat(mentor.getEmail().getValue()).isEqualTo(MENTOR_1.getEmail().getValue()),
+                    () -> assertThat(mentor.getPlatform().getProvider()).isEqualTo(MENTOR_1.getPlatform().getProvider()),
+                    () -> assertThat(mentor.getPlatform().getSocialId()).isEqualTo(MENTOR_1.getPlatform().getSocialId()),
+                    () -> assertThat(mentor.getPlatform().getEmail().getValue()).isEqualTo(MENTOR_1.getPlatform().getEmail().getValue()),
                     () -> assertThat(mentor.getName()).isEqualTo(MENTOR_1.getName()),
                     () -> assertThat(mentor.getNationality()).isEqualTo(KOREA),
                     () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(MENTOR_1.getProfileImageUrl()),
@@ -109,7 +111,7 @@ class MentorTest extends UnitTest {
 
         /* mentorB 1차 회원가입 */
         final Mentor mentorB = new Mentor(
-                MENTOR_2.getEmail(),
+                MENTOR_2.getPlatform(),
                 MENTOR_2.getName(),
                 MENTOR_2.getProfileImageUrl(),
                 MENTOR_2.getLanguages(),
@@ -123,7 +125,7 @@ class MentorTest extends UnitTest {
 
         /* mentorC 1차 회원가입 */
         final Mentor mentorC = new Mentor(
-                MENTOR_3.getEmail(),
+                MENTOR_3.getPlatform(),
                 MENTOR_3.getName(),
                 MENTOR_3.getProfileImageUrl(),
                 MENTOR_3.getLanguages(),
@@ -268,7 +270,7 @@ class MentorTest extends UnitTest {
         void throwExceptionByNotCompleted() {
             // given
             final Mentor mentor = new Mentor(
-                    MENTOR_1.getEmail(),
+                    MENTOR_1.getPlatform(),
                     MENTOR_1.getName(),
                     MENTOR_1.getProfileImageUrl(),
                     MENTOR_1.getLanguages(),

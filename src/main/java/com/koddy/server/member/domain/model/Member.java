@@ -13,15 +13,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.koddy.server.member.domain.model.MemberStatus.ACTIVE;
+import static com.koddy.server.member.domain.model.Member.Status.ACTIVE;
 import static com.koddy.server.member.exception.MemberExceptionCode.AVAILABLE_LANGUAGE_MUST_EXISTS;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static jakarta.persistence.CascadeType.PERSIST;
@@ -36,11 +34,10 @@ import static lombok.AccessLevel.PROTECTED;
 @DiscriminatorColumn(name = "type")
 @Entity
 @Table(name = "member")
-@SQLDelete(sql = "UPDATE member SET status = 'INACTIVE', email = null WHERE id = ?")
 @SQLRestriction("status = 'ACTIVE'")
 public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     @Embedded
-    protected Email email;
+    protected SocialPlatform platform;
 
     @Column(name = "name", nullable = false)
     protected String name;
@@ -61,7 +58,7 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
 
     @Enumerated(STRING)
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(20)")
-    protected MemberStatus status;
+    protected Status status;
 
     @Enumerated(STRING)
     @Column(name = "role", nullable = false, columnDefinition = "VARCHAR(30)")
@@ -71,14 +68,14 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     protected final List<AvailableLanguage> availableLanguages = new ArrayList<>();
 
     protected Member(
-            final Email email,
+            final SocialPlatform platform,
             final String name,
             final String profileImageUrl,
             final Nationality nationality,
             final Role role,
             final List<Language> languages
     ) {
-        this.email = email;
+        this.platform = platform;
         this.name = name;
         this.profileImageUrl = profileImageUrl;
         this.nationality = nationality;
@@ -138,6 +135,10 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         applyLanguages(languages);
     }
 
+    public void syncEmail(final Email email) {
+        this.platform = this.platform.syncEmail(email);
+    }
+
     public List<Language> getLanguages() {
         return availableLanguages.stream()
                 .map(AvailableLanguage::getLanguage)
@@ -148,18 +149,13 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         return role.getAuthority();
     }
 
-    protected abstract boolean isProfileComplete();
+    public boolean profileComplete() {
+        return profileComplete;
+    }
 
-    @Getter
-    @RequiredArgsConstructor
-    public enum MemberType {
-        MENTOR("MENTOR"), MENTEE("MENTEE");
+    public abstract boolean isProfileComplete();
 
-        private final String value;
-
-        public static class Value {
-            public static final String MENTOR = "MENTOR";
-            public static final String MENTEE = "MENTEE";
-        }
+    public enum Status {
+        ACTIVE, INACTIVE, BAN
     }
 }

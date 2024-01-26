@@ -10,10 +10,6 @@ import com.koddy.server.member.application.usecase.SignUpUsecase;
 import com.koddy.server.member.application.usecase.command.DeleteMemberCommand;
 import com.koddy.server.member.application.usecase.command.SignUpMenteeCommand;
 import com.koddy.server.member.application.usecase.command.SignUpMentorCommand;
-import com.koddy.server.member.domain.model.Email;
-import com.koddy.server.member.domain.model.Nationality;
-import com.koddy.server.member.domain.model.mentee.Interest;
-import com.koddy.server.member.domain.model.mentor.UniversityProfile;
 import com.koddy.server.member.presentation.dto.request.SignUpMenteeRequest;
 import com.koddy.server.member.presentation.dto.request.SignUpMentorRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,11 +40,11 @@ public class ManageAccountApiController {
             final HttpServletResponse response
     ) {
         final AuthMember authMember = signUpUsecase.signUpMentor(new SignUpMentorCommand(
-                Email.from(request.email()),
+                request.toSocialPlatform(),
                 request.name(),
                 request.profileImageUrl(),
                 request.toLanguages(),
-                new UniversityProfile(request.school(), request.major(), request.enteredIn())
+                request.toUniversityProfile()
         ));
         tokenResponseWriter.applyToken(response, authMember.token());
         return ResponseEntity.ok(new LoginResponse(
@@ -65,12 +61,12 @@ public class ManageAccountApiController {
             final HttpServletResponse response
     ) {
         final AuthMember authMember = signUpUsecase.signUpMentee(new SignUpMenteeCommand(
-                Email.from(request.email()),
+                request.toSocialPlatform(),
                 request.name(),
                 request.profileImageUrl(),
-                Nationality.from(request.nationality()),
+                request.toNationality(),
                 request.toLanguages(),
-                new Interest(request.interestSchool(), request.interestMajor())
+                request.toInterest()
         ));
         tokenResponseWriter.applyToken(response, authMember.token());
         return ResponseEntity.ok(new LoginResponse(

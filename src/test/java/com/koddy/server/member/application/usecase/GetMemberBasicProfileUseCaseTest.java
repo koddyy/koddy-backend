@@ -44,7 +44,7 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
             // given
             final List<Language> languages = List.of(KR_MAIN.toDomain());
             final Mentor mentor = new Mentor(
-                    MENTOR_1.getEmail(),
+                    MENTOR_1.getPlatform(),
                     MENTOR_1.getName(),
                     MENTOR_1.getProfileImageUrl(),
                     languages,
@@ -113,7 +113,7 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
             // given
             final List<Language> languages = List.of(KR_MAIN.toDomain(), EN_SUB.toDomain(), JP_SUB.toDomain());
             final Mentee mentee = new Mentee(
-                    MENTEE_1.getEmail(),
+                    MENTEE_1.getPlatform(),
                     MENTEE_1.getName(),
                     MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getNationality(),

@@ -6,8 +6,8 @@ import com.koddy.server.auth.domain.service.TokenIssuer;
 import com.koddy.server.global.annotation.UseCase;
 import com.koddy.server.member.application.usecase.command.SignUpMenteeCommand;
 import com.koddy.server.member.application.usecase.command.SignUpMentorCommand;
-import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Member;
+import com.koddy.server.member.domain.model.SocialPlatform;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MemberRepository;
@@ -23,19 +23,19 @@ public class SignUpUsecase {
     private final TokenIssuer tokenIssuer;
 
     public AuthMember signUpMentor(final SignUpMentorCommand command) {
-        validateAccountExists(command.email());
+        validateAccountExists(command.platform());
         final Mentor mentor = memberRepository.save(command.toDomain());
         return provideAuthMember(mentor);
     }
 
     public AuthMember signUpMentee(final SignUpMenteeCommand command) {
-        validateAccountExists(command.email());
+        validateAccountExists(command.platform());
         final Mentee mentee = memberRepository.save(command.toDomain());
         return provideAuthMember(mentee);
     }
 
-    private void validateAccountExists(final Email email) {
-        if (memberRepository.existsByEmail(email)) {
+    private void validateAccountExists(final SocialPlatform platform) {
+        if (memberRepository.existsByPlatformSocialId(platform.getSocialId())) {
             throw new MemberException(ACCOUNT_ALREADY_EXISTS);
         }
     }

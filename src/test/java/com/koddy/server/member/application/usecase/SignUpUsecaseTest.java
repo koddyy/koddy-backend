@@ -43,20 +43,20 @@ class SignUpUsecaseTest extends UnitTest {
         void throwExceptionByAccountAlreadyExists() {
             // given
             final SignUpMentorCommand command = new SignUpMentorCommand(
-                    MENTOR_1.getEmail(),
+                    MENTOR_1.getPlatform(),
                     MENTOR_1.getName(),
                     MENTOR_1.getProfileImageUrl(),
                     MENTOR_1.getLanguages(),
                     MENTOR_1.getUniversityProfile()
             );
-            given(memberRepository.existsByEmail(command.email())).willReturn(true);
+            given(memberRepository.existsByPlatformSocialId(command.platform().getSocialId())).willReturn(true);
 
             // when - then
             assertAll(
                     () -> assertThatThrownBy(() -> sut.signUpMentor(command))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(ACCOUNT_ALREADY_EXISTS.getMessage()),
-                    () -> verify(memberRepository, times(1)).existsByEmail(command.email()),
+                    () -> verify(memberRepository, times(1)).existsByPlatformSocialId(command.platform().getSocialId()),
                     () -> verify(memberRepository, times(0)).save(any(Mentor.class)),
                     () -> verify(tokenIssuer, times(0)).provideAuthorityToken(anyLong())
             );
@@ -67,13 +67,13 @@ class SignUpUsecaseTest extends UnitTest {
         void success() {
             // given
             final SignUpMentorCommand command = new SignUpMentorCommand(
-                    MENTOR_1.getEmail(),
+                    MENTOR_1.getPlatform(),
                     MENTOR_1.getName(),
                     MENTOR_1.getProfileImageUrl(),
                     MENTOR_1.getLanguages(),
                     MENTOR_1.getUniversityProfile()
             );
-            given(memberRepository.existsByEmail(command.email())).willReturn(false);
+            given(memberRepository.existsByPlatformSocialId(command.platform().getSocialId())).willReturn(false);
 
             final Mentor mentor = MENTOR_1.toDomain().apply(1L);
             given(memberRepository.save(any(Mentor.class))).willReturn(mentor);
@@ -86,6 +86,7 @@ class SignUpUsecaseTest extends UnitTest {
 
             // then
             assertAll(
+                    () -> verify(memberRepository, times(1)).existsByPlatformSocialId(command.platform().getSocialId()),
                     () -> verify(memberRepository, times(1)).save(any(Mentor.class)),
                     () -> verify(tokenIssuer, times(1)).provideAuthorityToken(mentor.getId()),
                     () -> assertThat(authMember.id()).isEqualTo(mentor.getId()),
@@ -105,21 +106,21 @@ class SignUpUsecaseTest extends UnitTest {
         void throwExceptionByAccountAlreadyExists() {
             // given
             final SignUpMenteeCommand command = new SignUpMenteeCommand(
-                    MENTEE_1.getEmail(),
+                    MENTEE_1.getPlatform(),
                     MENTEE_1.getName(),
                     MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getNationality(),
                     MENTEE_1.getLanguages(),
                     MENTEE_1.getInterest()
             );
-            given(memberRepository.existsByEmail(command.email())).willReturn(true);
+            given(memberRepository.existsByPlatformSocialId(command.platform().getSocialId())).willReturn(true);
 
             // when - then
             assertAll(
                     () -> assertThatThrownBy(() -> sut.signUpMentee(command))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(ACCOUNT_ALREADY_EXISTS.getMessage()),
-                    () -> verify(memberRepository, times(1)).existsByEmail(command.email()),
+                    () -> verify(memberRepository, times(1)).existsByPlatformSocialId(command.platform().getSocialId()),
                     () -> verify(memberRepository, times(0)).save(any(Mentee.class)),
                     () -> verify(tokenIssuer, times(0)).provideAuthorityToken(anyLong())
             );
@@ -130,14 +131,14 @@ class SignUpUsecaseTest extends UnitTest {
         void success() {
             // given
             final SignUpMenteeCommand command = new SignUpMenteeCommand(
-                    MENTEE_1.getEmail(),
+                    MENTEE_1.getPlatform(),
                     MENTEE_1.getName(),
                     MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getNationality(),
                     MENTEE_1.getLanguages(),
                     MENTEE_1.getInterest()
             );
-            given(memberRepository.existsByEmail(command.email())).willReturn(false);
+            given(memberRepository.existsByPlatformSocialId(command.platform().getSocialId())).willReturn(false);
 
             final Mentee mentee = MENTEE_1.toDomain().apply(1L);
             given(memberRepository.save(any(Mentee.class))).willReturn(mentee);
@@ -150,6 +151,7 @@ class SignUpUsecaseTest extends UnitTest {
 
             // then
             assertAll(
+                    () -> verify(memberRepository, times(1)).existsByPlatformSocialId(command.platform().getSocialId()),
                     () -> verify(memberRepository, times(1)).save(any(Mentee.class)),
                     () -> verify(tokenIssuer, times(1)).provideAuthorityToken(mentee.getId()),
                     () -> assertThat(authMember.id()).isEqualTo(mentee.getId()),

@@ -300,7 +300,9 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
 
     private static AuthMember createMentor(final MentorFixture fixture) {
         final SignUpMentorRequest request = new SignUpMentorRequest(
-                fixture.getEmail().getValue(),
+                fixture.getPlatform().getProvider().getValue(),
+                fixture.getPlatform().getSocialId(),
+                fixture.getPlatform().getEmail().getValue(),
                 fixture.getName(),
                 fixture.getProfileImageUrl(),
                 new LanguageRequest(
@@ -338,7 +340,9 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
 
     private static AuthMember createMentee(final MenteeFixture fixture) {
         final SignUpMenteeRequest request = new SignUpMenteeRequest(
-                fixture.getEmail().getValue(),
+                fixture.getPlatform().getProvider().getValue(),
+                fixture.getPlatform().getSocialId(),
+                fixture.getPlatform().getEmail().getValue(),
                 fixture.getName(),
                 fixture.getProfileImageUrl(),
                 fixture.getNationality().getKor(),

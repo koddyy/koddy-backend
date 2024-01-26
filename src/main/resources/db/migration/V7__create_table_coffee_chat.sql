@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS coffee_chat
     target_member_id BIGINT      NOT NULL,
     status           VARCHAR(30) NOT NULL,
     apply_reason     TEXT        NOT NULL,
+    question         TEXT        NULL,
     reject_reason    TEXT        NULL,
     start_year       INT         NULL,
     start_month      INT         NULL,

@@ -6,7 +6,6 @@ import com.koddy.server.auth.domain.model.AuthMember;
 import com.koddy.server.auth.domain.model.AuthToken;
 import com.koddy.server.auth.domain.service.TokenIssuer;
 import com.koddy.server.auth.exception.OAuthUserNotFoundException;
-import com.koddy.server.auth.infrastructure.social.google.response.GoogleTokenResponse;
 import com.koddy.server.auth.infrastructure.social.google.response.GoogleUserResponse;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.domain.model.Member;
@@ -24,7 +23,6 @@ import static com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI;
 import static com.koddy.server.common.utils.OAuthUtils.STATE;
 import static com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN;
 import static com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN;
-import static com.koddy.server.common.utils.TokenUtils.createGoogleTokenResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -45,7 +43,6 @@ class OAuthLoginUseCaseTest extends UnitTest {
     class GoogleLogin {
         private final Member<?> member = MENTOR_1.toDomain().apply(1L);
         private final OAuthLoginCommand command = new OAuthLoginCommand(GOOGLE, AUTHORIZATION_CODE, REDIRECT_URI, STATE);
-        private final GoogleTokenResponse googleTokenResponse = createGoogleTokenResponse();
         private final GoogleUserResponse googleUserResponse = MENTOR_1.toGoogleUserResponse();
 
         @Test
@@ -53,7 +50,7 @@ class OAuthLoginUseCaseTest extends UnitTest {
         void throwExceptionIfGoogleAuthUserNotInDB() {
             // given
             given(oAuthLoginProcessor.login(GOOGLE, AUTHORIZATION_CODE, REDIRECT_URI, STATE)).willReturn(googleUserResponse);
-            given(memberRepository.findByEmailValue(googleUserResponse.email())).willReturn(Optional.empty());
+            given(memberRepository.findByPlatformSocialId(googleUserResponse.id())).willReturn(Optional.empty());
 
             // when - then
             final OAuthUserNotFoundException exception = assertThrows(
@@ -63,7 +60,7 @@ class OAuthLoginUseCaseTest extends UnitTest {
 
             assertAll(
                     () -> verify(oAuthLoginProcessor, times(1)).login(GOOGLE, AUTHORIZATION_CODE, REDIRECT_URI, STATE),
-                    () -> verify(memberRepository, times(1)).findByEmailValue(googleUserResponse.email()),
+                    () -> verify(memberRepository, times(1)).findByPlatformSocialId(googleUserResponse.id()),
                     () -> verify(tokenIssuer, times(0)).provideAuthorityToken(member.getId()),
                     () -> assertThat(exception.getResponse())
                             .usingRecursiveComparison()
@@ -76,7 +73,7 @@ class OAuthLoginUseCaseTest extends UnitTest {
         void success() {
             // given
             given(oAuthLoginProcessor.login(GOOGLE, AUTHORIZATION_CODE, REDIRECT_URI, STATE)).willReturn(googleUserResponse);
-            given(memberRepository.findByEmailValue(googleUserResponse.email())).willReturn(Optional.of(member));
+            given(memberRepository.findByPlatformSocialId(googleUserResponse.id())).willReturn(Optional.of(member));
 
             final AuthToken authToken = new AuthToken(ACCESS_TOKEN, REFRESH_TOKEN);
             given(tokenIssuer.provideAuthorityToken(member.getId())).willReturn(authToken);
@@ -87,7 +84,7 @@ class OAuthLoginUseCaseTest extends UnitTest {
             // then
             assertAll(
                     () -> verify(oAuthLoginProcessor, times(1)).login(GOOGLE, AUTHORIZATION_CODE, REDIRECT_URI, STATE),
-                    () -> verify(memberRepository, times(1)).findByEmailValue(googleUserResponse.email()),
+                    () -> verify(memberRepository, times(1)).findByPlatformSocialId(googleUserResponse.id()),
                     () -> verify(tokenIssuer, times(1)).provideAuthorityToken(member.getId()),
                     () -> assertThat(response.id()).isEqualTo(member.getId()),
                     () -> assertThat(response.name()).isEqualTo(member.getName()),

@@ -1,9 +1,10 @@
 package com.koddy.server.member.domain.model.mentee;
 
-import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.model.Nationality;
+import com.koddy.server.member.domain.model.Role;
+import com.koddy.server.member.domain.model.SocialPlatform;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -21,20 +22,20 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "mentee")
-@DiscriminatorValue(value = Member.MemberType.Value.MENTEE)
+@DiscriminatorValue(value = Role.Value.MENTEE)
 public class Mentee extends Member<Mentee> {
     @Embedded
     private Interest interest;
 
     public Mentee(
-            final Email email,
+            final SocialPlatform platform,
             final String name,
             final String profileImageUrl,
             final Nationality nationality,
             final List<Language> languages,
             final Interest interest
     ) {
-        super(email, name, profileImageUrl, nationality, MENTEE, languages);
+        super(platform, name, profileImageUrl, nationality, MENTEE, languages);
         this.interest = interest;
     }
 

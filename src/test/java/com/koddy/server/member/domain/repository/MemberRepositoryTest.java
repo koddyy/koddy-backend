@@ -2,6 +2,7 @@ package com.koddy.server.member.domain.repository;
 
 import com.koddy.server.common.RepositoryTest;
 import com.koddy.server.member.domain.model.Member;
+import com.koddy.server.member.domain.model.Role;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +14,9 @@ import java.util.Optional;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_2;
-import static com.koddy.server.member.domain.model.MemberStatus.INACTIVE;
+import static com.koddy.server.member.domain.model.Member.Status.INACTIVE;
+import static com.koddy.server.member.domain.model.Nationality.KOREA;
+import static com.koddy.server.member.domain.model.Role.MENTOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -38,35 +41,35 @@ class MemberRepositoryTest extends RepositoryTest {
 
         // then
         assertAll(
-                () -> assertThat(typeA).isEqualTo(Member.MemberType.Value.MENTOR),
+                () -> assertThat(typeA).isEqualTo(Role.Value.MENTOR),
                 () -> assertThat(sut.isMentor(memberA.getId())).isTrue(),
-                () -> assertThat(typeB).isEqualTo(Member.MemberType.Value.MENTEE),
+                () -> assertThat(typeB).isEqualTo(Role.Value.MENTEE),
                 () -> assertThat(sut.isMentor(memberB.getId())).isFalse()
         );
     }
 
     @Test
-    @DisplayName("이메일 기반 사용자를 조회한다")
-    void findByEmailValue() {
+    @DisplayName("소셜 플랫폼 고유 ID를 기반으로 사용자를 조회한다")
+    void findByPlatformSocialId() {
         // given
-        final Member<?> member = sut.save(MENTOR_1.toDomain());
+        sut.save(MENTOR_1.toDomain());
 
         // when - then
         assertAll(
-                () -> assertThat(sut.findByEmailValue(member.getEmail().getValue())).isPresent(),
-                () -> assertThat(sut.findByEmailValue("diff" + member.getEmail().getValue())).isEmpty()
+                () -> assertThat(sut.findByPlatformSocialId(MENTOR_1.getPlatform().getSocialId())).isPresent(),
+                () -> assertThat(sut.findByPlatformSocialId(MENTOR_1.getPlatform().getSocialId() + "diff")).isEmpty()
         );
     }
 
     @Test
-    @DisplayName("해당 이메일을 사용하고 있는 사용자가 존재하는지 확인한다")
-    void existsByEmail() {
+    @DisplayName("해당 소셜 플랫폼 ID로 가입된 사용자가 존재하는지 확인한다")
+    void existsByPlatformSocialId() {
         // given
         sut.save(MENTOR_1.toDomain());
 
         // when
-        final boolean actual1 = sut.existsByEmail(MENTOR_1.getEmail());
-        final boolean actual2 = sut.existsByEmail(MENTOR_2.getEmail());
+        final boolean actual1 = sut.existsByPlatformSocialId(MENTOR_1.getPlatform().getSocialId());
+        final boolean actual2 = sut.existsByPlatformSocialId(MENTOR_2.getPlatform().getSocialId());
 
         // then
         assertAll(
@@ -93,7 +96,15 @@ class MemberRepositoryTest extends RepositoryTest {
                     final Member<?> findMember = getMemberByNative(member.getId());
                     assertAll(
                             () -> assertThat(findMember).isNotNull(),
-                            () -> assertThat(findMember.getEmail()).isNull(),
+                            () -> assertThat(findMember.getPlatform().getProvider()).isEqualTo(MENTOR_1.getPlatform().getProvider()),
+                            () -> assertThat(findMember.getPlatform().getSocialId()).isNull(),
+                            () -> assertThat(findMember.getPlatform().getEmail()).isNull(),
+                            () -> assertThat(findMember.getName()).isEqualTo(MENTOR_1.getName()),
+                            () -> assertThat(findMember.getProfileImageUrl()).isEqualTo(MENTOR_1.getProfileImageUrl()),
+                            () -> assertThat(findMember.getNationality()).isEqualTo(KOREA),
+                            () -> assertThat(findMember.getIntroduction()).isEqualTo(MENTOR_1.getIntroduction()),
+                            () -> assertThat(findMember.profileComplete()).isFalse(),
+                            () -> assertThat(findMember.getRole()).isEqualTo(MENTOR),
                             () -> assertThat(findMember.getStatus()).isEqualTo(INACTIVE)
                     );
                 }
