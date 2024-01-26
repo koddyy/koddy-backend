@@ -5,7 +5,6 @@ import com.koddy.server.file.application.usecase.RegisterPresignedUrlUseCase;
 import com.koddy.server.file.application.usecase.UploadFileUseCase;
 import com.koddy.server.file.application.usecase.command.RegisterPresignedUrlCommand;
 import com.koddy.server.file.application.usecase.command.UploadFileCommand;
-import com.koddy.server.file.domain.model.PresignedFileData;
 import com.koddy.server.file.domain.model.PresignedUrlDetails;
 import com.koddy.server.file.presentation.dto.request.GetImagePresignedUrlRequest;
 import com.koddy.server.file.presentation.dto.request.GetPdfPresignedUrlRequest;
@@ -41,9 +40,7 @@ public class FileManagementApiController {
             @Auth final Authenticated authenticated,
             @ModelAttribute @Valid final GetImagePresignedUrlRequest request
     ) {
-        final PresignedUrlDetails presignedUrl = registerPresignedUrlUseCase.invoke(new RegisterPresignedUrlCommand(
-                new PresignedFileData(request.fileName())
-        ));
+        final PresignedUrlDetails presignedUrl = registerPresignedUrlUseCase.invoke(new RegisterPresignedUrlCommand(request.toFileData()));
         return ResponseEntity.ok(presignedUrl);
     }
 
@@ -53,9 +50,7 @@ public class FileManagementApiController {
             @Auth final Authenticated authenticated,
             @ModelAttribute @Valid final GetPdfPresignedUrlRequest request
     ) {
-        final PresignedUrlDetails presignedUrl = registerPresignedUrlUseCase.invoke(new RegisterPresignedUrlCommand(
-                new PresignedFileData(request.fileName())
-        ));
+        final PresignedUrlDetails presignedUrl = registerPresignedUrlUseCase.invoke(new RegisterPresignedUrlCommand(request.toFileData()));
         return ResponseEntity.ok(presignedUrl);
     }
 

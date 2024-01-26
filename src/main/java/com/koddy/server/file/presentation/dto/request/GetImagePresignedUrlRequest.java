@@ -1,5 +1,6 @@
 package com.koddy.server.file.presentation.dto.request;
 
+import com.koddy.server.file.domain.model.PresignedFileData;
 import com.koddy.server.file.utils.validator.ValidImageFile;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -10,4 +11,7 @@ public record GetImagePresignedUrlRequest(
         @ValidImageFile
         String fileName
 ) {
+    public PresignedFileData toFileData() {
+        return new PresignedFileData(fileName);
+    }
 }

@@ -4,7 +4,6 @@ import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.coffeechat.application.usecase.HandlePendingCoffeeChatUseCase;
 import com.koddy.server.coffeechat.application.usecase.command.ApprovePendingCoffeeChatCommand;
 import com.koddy.server.coffeechat.application.usecase.command.RejectPendingCoffeeChatCommand;
-import com.koddy.server.coffeechat.domain.model.Strategy;
 import com.koddy.server.coffeechat.presentation.dto.request.ApprovePendingCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.RejectPendingCoffeeChatRequest;
 import com.koddy.server.global.annotation.Auth;
@@ -51,7 +50,7 @@ public class HandlePendingCoffeeChatApiController {
     ) {
         handlePendingCoffeeChatUseCase.approve(new ApprovePendingCoffeeChatCommand(
                 coffeeChatId,
-                Strategy.Type.from(request.chatType()),
+                request.toStrategyType(),
                 request.chatValue()
         ));
         return ResponseEntity.noContent().build();
