@@ -37,7 +37,7 @@ class MenteeTest extends UnitTest {
 
             // when - then
             assertThatThrownBy(() -> new Mentee(
-                    MENTEE_1.getEmail(),
+                    MENTEE_1.getPlatform(),
                     MENTEE_1.name(),
                     MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getNationality(),
@@ -52,7 +52,7 @@ class MenteeTest extends UnitTest {
         @DisplayName("초기 Mentee를 생성한다")
         void success() {
             final Mentee mentee = new Mentee(
-                    MENTEE_1.getEmail(),
+                    MENTEE_1.getPlatform(),
                     MENTEE_1.getName(),
                     MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getNationality(),
@@ -62,7 +62,9 @@ class MenteeTest extends UnitTest {
 
             assertAll(
                     // Required
-                    () -> assertThat(mentee.getEmail().getValue()).isEqualTo(MENTEE_1.getEmail().getValue()),
+                    () -> assertThat(mentee.getPlatform().getProvider()).isEqualTo(MENTEE_1.getPlatform().getProvider()),
+                    () -> assertThat(mentee.getPlatform().getSocialId()).isEqualTo(MENTEE_1.getPlatform().getSocialId()),
+                    () -> assertThat(mentee.getPlatform().getEmail().getValue()).isEqualTo(MENTEE_1.getPlatform().getEmail().getValue()),
                     () -> assertThat(mentee.getName()).isEqualTo(MENTEE_1.getName()),
                     () -> assertThat(mentee.getNationality()).isEqualTo(MENTEE_1.getNationality()),
                     () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(MENTEE_1.getProfileImageUrl()),
@@ -90,7 +92,7 @@ class MenteeTest extends UnitTest {
 
         /* menteeB 1차 회원가입 */
         final Mentee menteeB = new Mentee(
-                MENTEE_2.getEmail(),
+                MENTEE_2.getPlatform(),
                 MENTEE_2.getName(),
                 MENTEE_2.getProfileImageUrl(),
                 MENTEE_2.getNationality(),

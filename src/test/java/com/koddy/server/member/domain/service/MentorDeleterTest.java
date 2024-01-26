@@ -58,7 +58,9 @@ class MentorDeleterTest extends IntegrateTest {
                     final Member<?> findMember = getMemberByJpql(mentor.getId());
                     assertAll(
                             () -> assertThat(findMember).isNotNull(),
-                            () -> assertThat(findMember.getEmail().getValue()).isEqualTo(MENTOR_1.getEmail().getValue()),
+                            () -> assertThat(findMember.getPlatform().getProvider()).isEqualTo(MENTOR_1.getPlatform().getProvider()),
+                            () -> assertThat(findMember.getPlatform().getSocialId()).isEqualTo(MENTOR_1.getPlatform().getSocialId()),
+                            () -> assertThat(findMember.getPlatform().getEmail().getValue()).isEqualTo(MENTOR_1.getPlatform().getEmail().getValue()),
                             () -> assertThat(findMember.getName()).isEqualTo(MENTOR_1.getName()),
                             () -> assertThat(findMember.getProfileImageUrl()).isEqualTo(MENTOR_1.getProfileImageUrl()),
                             () -> assertThat(findMember.getNationality()).isEqualTo(KOREA),
@@ -92,7 +94,9 @@ class MentorDeleterTest extends IntegrateTest {
                     final Member<?> findMember = getMemberByNative(mentor.getId());
                     assertAll(
                             () -> assertThat(findMember).isNotNull(),
-                            () -> assertThat(findMember.getEmail()).isNull(),
+                            () -> assertThat(findMember.getPlatform().getProvider()).isEqualTo(MENTOR_1.getPlatform().getProvider()),
+                            () -> assertThat(findMember.getPlatform().getSocialId()).isNull(),
+                            () -> assertThat(findMember.getPlatform().getEmail()).isNull(),
                             () -> assertThat(findMember.getName()).isEqualTo(MENTOR_1.getName()),
                             () -> assertThat(findMember.getProfileImageUrl()).isEqualTo(MENTOR_1.getProfileImageUrl()),
                             () -> assertThat(findMember.getNationality()).isEqualTo(KOREA),

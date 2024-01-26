@@ -1,15 +1,15 @@
 package com.koddy.server.member.application.usecase.command;
 
-import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Nationality;
+import com.koddy.server.member.domain.model.SocialPlatform;
 import com.koddy.server.member.domain.model.mentee.Interest;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 
 import java.util.List;
 
 public record SignUpMenteeCommand(
-        Email email,
+        SocialPlatform platform,
         String name,
         String profileImageUrl,
         Nationality nationality,
@@ -18,7 +18,7 @@ public record SignUpMenteeCommand(
 ) {
     public Mentee toDomain() {
         return new Mentee(
-                email,
+                platform,
                 name,
                 profileImageUrl,
                 nationality,

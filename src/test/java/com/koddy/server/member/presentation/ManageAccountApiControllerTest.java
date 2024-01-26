@@ -56,7 +56,9 @@ class ManageAccountApiControllerTest extends ControllerTest {
             given(signUpUsecase.signUpMentor(any())).willReturn(loginResponse);
 
             final SignUpMentorRequest request = new SignUpMentorRequest(
-                    MENTOR_1.getEmail().getValue(),
+                    MENTOR_1.getPlatform().getProvider().getValue(),
+                    MENTOR_1.getPlatform().getSocialId(),
+                    MENTOR_1.getPlatform().getEmail().getValue(),
                     MENTOR_1.getName(),
                     MENTOR_1.getProfileImageUrl(),
                     new LanguageRequest(
@@ -78,6 +80,8 @@ class ManageAccountApiControllerTest extends ControllerTest {
                     status().isOk(),
                     successDocs("MemberApi/SignUp/Mentor", createHttpSpecSnippets(
                             requestFields(
+                                    body("provider", "소셜 플랫폼", "google / kakao", true),
+                                    body("socialId", "소셜 플랫폼 고유 ID", "서버에서 응답한 값 그대로 포함", true),
                                     body("email", "이메일", true),
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
@@ -117,7 +121,9 @@ class ManageAccountApiControllerTest extends ControllerTest {
             given(signUpUsecase.signUpMentee(any())).willReturn(loginResponse);
 
             final SignUpMenteeRequest request = new SignUpMenteeRequest(
-                    MENTEE_1.getEmail().getValue(),
+                    MENTEE_1.getPlatform().getProvider().getValue(),
+                    MENTEE_1.getPlatform().getSocialId(),
+                    MENTEE_1.getPlatform().getEmail().getValue(),
                     MENTEE_1.getName(),
                     MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getNationality().getKor(),
@@ -132,6 +138,8 @@ class ManageAccountApiControllerTest extends ControllerTest {
                     status().isOk(),
                     successDocs("MemberApi/SignUp/Mentee", createHttpSpecSnippets(
                             requestFields(
+                                    body("provider", "소셜 플랫폼", "google / kakao", true),
+                                    body("socialId", "소셜 플랫폼 고유 ID", "서버에서 응답한 값 그대로 포함", true),
                                     body("email", "이메일", true),
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),

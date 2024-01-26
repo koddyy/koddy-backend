@@ -47,8 +47,9 @@ public class OAuthAcceptanceTest extends AcceptanceTest {
         void failure() {
             Google_OAuth_로그인을_진행한다(GOOGLE_PROVIDER, GOOGLE_MENTOR_1.getAuthorizationCode(), REDIRECT_URI, STATE)
                     .statusCode(NOT_FOUND.value())
+                    .body("id", is(MENTOR_1.getPlatform().getSocialId()))
                     .body("name", is(MENTOR_1.getName()))
-                    .body("email", is(MENTOR_1.getEmail().getValue()))
+                    .body("email", is(MENTOR_1.getPlatform().getEmail().getValue()))
                     .body("profileImageUrl", is(MENTOR_1.getProfileImageUrl()));
         }
 

@@ -1,6 +1,8 @@
 CREATE TABLE IF NOT EXISTS member
 (
     id                BIGINT AUTO_INCREMENT PRIMARY KEY,
+    social_provider   VARCHAR(30)  NOT NULL,
+    social_id         VARCHAR(200) NULL UNIQUE,
     email             VARCHAR(200) NULL UNIQUE,
     name              VARCHAR(100) NOT NULL,
     profile_image_url VARCHAR(250) NOT NULL,

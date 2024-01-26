@@ -21,13 +21,13 @@ public class OAuthLoginUseCase {
 
     public AuthMember invoke(final OAuthLoginCommand command) {
         final OAuthUserResponse oAuthUser = oAuthLoginProcessor.login(command.provider(), command.code(), command.redirectUrl(), command.state());
-        final Member<?> member = getMemberByOAuthEmail(oAuthUser);
+        final Member<?> member = getMemberBySocialId(oAuthUser);
         final AuthToken authToken = tokenIssuer.provideAuthorityToken(member.getId());
         return new AuthMember(member, authToken);
     }
 
-    private Member<?> getMemberByOAuthEmail(final OAuthUserResponse oAuthUser) {
-        return memberRepository.findByEmailValue(oAuthUser.email())
+    private Member<?> getMemberBySocialId(final OAuthUserResponse oAuthUser) {
+        return memberRepository.findByPlatformSocialId(oAuthUser.id())
                 .orElseThrow(() -> new OAuthUserNotFoundException(oAuthUser));
     }
 }

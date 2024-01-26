@@ -1,7 +1,6 @@
 package com.koddy.server.member.domain.repository;
 
 import com.koddy.server.global.annotation.KoddyWritableTransactional;
-import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.model.Role;
 import com.koddy.server.member.exception.MemberException;
@@ -42,6 +41,7 @@ public interface MemberRepository extends JpaRepository<Member<?>, Long> {
             value = """
                     UPDATE member
                     SET status = 'INACTIVE',
+                        social_id = null,
                         email = null,
                         profile_complete = false
                     WHERE id = :id
@@ -53,7 +53,7 @@ public interface MemberRepository extends JpaRepository<Member<?>, Long> {
     // Query Method
     boolean existsById(final Long id);
 
-    boolean existsByEmail(final Email email);
+    boolean existsByPlatformSocialId(final String socialId);
 
-    Optional<Member> findByEmailValue(final String email);
+    Optional<Member> findByPlatformSocialId(final String socialId);
 }

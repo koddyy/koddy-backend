@@ -37,7 +37,7 @@ import static lombok.AccessLevel.PROTECTED;
 @SQLRestriction("status = 'ACTIVE'")
 public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     @Embedded
-    protected Email email;
+    protected SocialPlatform platform;
 
     @Column(name = "name", nullable = false)
     protected String name;
@@ -68,14 +68,14 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     protected final List<AvailableLanguage> availableLanguages = new ArrayList<>();
 
     protected Member(
-            final Email email,
+            final SocialPlatform platform,
             final String name,
             final String profileImageUrl,
             final Nationality nationality,
             final Role role,
             final List<Language> languages
     ) {
-        this.email = email;
+        this.platform = platform;
         this.name = name;
         this.profileImageUrl = profileImageUrl;
         this.nationality = nationality;
@@ -133,6 +133,10 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         this.profileImageUrl = profileImageUrl;
         this.introduction = introduction;
         applyLanguages(languages);
+    }
+
+    public void syncEmail(final Email email) {
+        this.platform = this.platform.syncEmail(email);
     }
 
     public List<Language> getLanguages() {

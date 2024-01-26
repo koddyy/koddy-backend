@@ -54,7 +54,9 @@ class MenteeDeleterTest extends IntegrateTest {
                     final Member<?> findMember = getMemberByJpql(mentee.getId());
                     assertAll(
                             () -> assertThat(findMember).isNotNull(),
-                            () -> assertThat(findMember.getEmail().getValue()).isEqualTo(MENTEE_1.getEmail().getValue()),
+                            () -> assertThat(findMember.getPlatform().getProvider()).isEqualTo(MENTEE_1.getPlatform().getProvider()),
+                            () -> assertThat(findMember.getPlatform().getSocialId()).isEqualTo(MENTEE_1.getPlatform().getSocialId()),
+                            () -> assertThat(findMember.getPlatform().getEmail().getValue()).isEqualTo(MENTEE_1.getPlatform().getEmail().getValue()),
                             () -> assertThat(findMember.getName()).isEqualTo(MENTEE_1.getName()),
                             () -> assertThat(findMember.getProfileImageUrl()).isEqualTo(MENTEE_1.getProfileImageUrl()),
                             () -> assertThat(findMember.getNationality()).isEqualTo(MENTEE_1.getNationality()),
@@ -86,7 +88,9 @@ class MenteeDeleterTest extends IntegrateTest {
                     final Member<?> findMember = getMemberByNative(mentee.getId());
                     assertAll(
                             () -> assertThat(findMember).isNotNull(),
-                            () -> assertThat(findMember.getEmail()).isNull(),
+                            () -> assertThat(findMember.getPlatform().getProvider()).isEqualTo(MENTEE_1.getPlatform().getProvider()),
+                            () -> assertThat(findMember.getPlatform().getSocialId()).isNull(),
+                            () -> assertThat(findMember.getPlatform().getEmail()).isNull(),
                             () -> assertThat(findMember.getName()).isEqualTo(MENTEE_1.getName()),
                             () -> assertThat(findMember.getProfileImageUrl()).isEqualTo(MENTEE_1.getProfileImageUrl()),
                             () -> assertThat(findMember.getNationality()).isEqualTo(MENTEE_1.getNationality()),

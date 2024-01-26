@@ -1,14 +1,14 @@
 package com.koddy.server.member.application.usecase.command;
 
-import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
+import com.koddy.server.member.domain.model.SocialPlatform;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.model.mentor.UniversityProfile;
 
 import java.util.List;
 
 public record SignUpMentorCommand(
-        Email email,
+        SocialPlatform platform,
         String name,
         String profileImageUrl,
         List<Language> languages,
@@ -16,7 +16,7 @@ public record SignUpMentorCommand(
 ) {
     public Mentor toDomain() {
         return new Mentor(
-                email,
+                platform,
                 name,
                 profileImageUrl,
                 languages,

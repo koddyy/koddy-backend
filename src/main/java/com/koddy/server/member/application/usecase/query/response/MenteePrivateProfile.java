@@ -18,7 +18,7 @@ public record MenteePrivateProfile(
     public static MenteePrivateProfile of(final Mentee mentee) {
         return new MenteePrivateProfile(
                 mentee.getId(),
-                mentee.getEmail().getValue(),
+                mentee.getPlatform().getEmail().getValue(),
                 mentee.getName(),
                 mentee.getProfileImageUrl(),
                 mentee.getNationality().getKor(),

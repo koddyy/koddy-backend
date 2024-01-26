@@ -141,9 +141,10 @@ class OAuthApiControllerTest extends ControllerTest {
                                     body("state", "State 값", "Authorization Code Redirect 응답 시 QueryParam으로 넘어오는 State 값", true)
                             ),
                             responseFields(
-                                    body("name", "회원가입 진행 시 이름 정보 기본값"),
-                                    body("email", "회원가입 진행 시 이메일 정보 [Read-Only]"),
-                                    body("profileImageUrl", "회원가입 진행 시 프로필 이미지 정보 기본값")
+                                    body("id", "소셜 플랫폼 고유 ID", "ReadOnly"),
+                                    body("name", "소셜 플랫폼 이름"),
+                                    body("email", "소셜 플랫폼 이메일", "ReadOnly"),
+                                    body("profileImageUrl", "프로필 이미지 URL")
                             )
                     ))
             );
