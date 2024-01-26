@@ -21,8 +21,8 @@ public class MentorMainSearchUseCase {
     private final MentorMainSearchRepository mentorMainSearchRepository;
 
     @KoddyReadOnlyTransactional
-    public List<MenteeSimpleSearchProfile> getAppliedMentees(final long mentorId) {
-        final List<Mentee> result = mentorMainSearchRepository.fetchAppliedMentees(mentorId, 3);
+    public List<MenteeSimpleSearchProfile> getAppliedMentees(final long mentorId, final int limit) {
+        final List<Mentee> result = mentorMainSearchRepository.fetchAppliedMentees(mentorId, limit);
         return result.stream()
                 .map(MenteeSimpleSearchProfile::of)
                 .toList();

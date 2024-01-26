@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,9 +32,10 @@ public class MenteeMainSearchApiController {
     @GetMapping("/suggested-coffeechats")
     @AccessControl(role = MENTEE)
     public ResponseEntity<ResponseWrapper<List<MentorSimpleSearchProfile>>> getSuggestedMentors(
-            @Auth final Authenticated authenticated
+            @Auth final Authenticated authenticated,
+            @RequestParam(defaultValue = "3") final int limit
     ) {
-        final List<MentorSimpleSearchProfile> result = menteeMainSearchUseCase.getSuggestedMentors(authenticated.id());
+        final List<MentorSimpleSearchProfile> result = menteeMainSearchUseCase.getSuggestedMentors(authenticated.id(), limit);
         return ResponseEntity.ok(ResponseWrapper.from(result));
     }
 

@@ -271,6 +271,7 @@ include::{snippets}/MemberApi/PublicProfile/Mentee/response-fields.adoc[]
 ==== HTTP Request
 
 include::{snippets}/MemberApi/Mentor/MainSearch/AppliedMentees/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Mentor/MainSearch/AppliedMentees/Success/query-parameters.adoc[]
 
 ==== HTTP Response
 
@@ -296,6 +297,7 @@ include::{snippets}/MemberApi/Mentor/MainSearch/Mentees/response-fields.adoc[]
 ==== HTTP Request
 
 include::{snippets}/MemberApi/Mentee/MainSearch/SuggestedMentors/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Mentee/MainSearch/SuggestedMentors/Success/query-parameters.adoc[]
 
 ==== HTTP Response
 

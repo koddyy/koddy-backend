@@ -60,11 +60,11 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
         }
 
         @Test
-        @DisplayName("멘티 자신에게 커피챗을 제안한 멘토들을 최신순 기준으로 조회한다 [Limit 3]")
+        @DisplayName("멘티 자신에게 커피챗을 제안한 멘토들을 최신순 기준으로 조회한다")
         void success() {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
-            given(menteeMainSearchUseCase.getSuggestedMentors(mentee.getId())).willReturn(List.of(
+            given(menteeMainSearchUseCase.getSuggestedMentors(mentee.getId(), 3)).willReturn(List.of(
                     new MentorSimpleSearchProfile(
                             3,
                             "멘토3",
@@ -96,6 +96,9 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
                     getRequestWithAccessToken(BASE_URL),
                     status().isOk(),
                     successDocsWithAccessToken("MemberApi/Mentee/MainSearch/SuggestedMentors/Success", createHttpSpecSnippets(
+                            queryParameters(
+                                    query("limit", "데이터 Limit 개수", "안넘어오면 기본 3", false)
+                            ),
                             responseFields(
                                     body("result[].id", "멘토 ID(PK)"),
                                     body("result[].name", "이름"),
