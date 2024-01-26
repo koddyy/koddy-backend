@@ -2,6 +2,7 @@ package com.koddy.server.member.domain.repository;
 
 import com.koddy.server.common.RepositoryTest;
 import com.koddy.server.member.domain.model.Member;
+import com.koddy.server.member.domain.model.Role;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +14,9 @@ import java.util.Optional;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_2;
-import static com.koddy.server.member.domain.model.MemberStatus.INACTIVE;
+import static com.koddy.server.member.domain.model.Member.Status.INACTIVE;
+import static com.koddy.server.member.domain.model.Nationality.KOREA;
+import static com.koddy.server.member.domain.model.Role.MENTOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -38,9 +41,9 @@ class MemberRepositoryTest extends RepositoryTest {
 
         // then
         assertAll(
-                () -> assertThat(typeA).isEqualTo(Member.MemberType.Value.MENTOR),
+                () -> assertThat(typeA).isEqualTo(Role.Value.MENTOR),
                 () -> assertThat(sut.isMentor(memberA.getId())).isTrue(),
-                () -> assertThat(typeB).isEqualTo(Member.MemberType.Value.MENTEE),
+                () -> assertThat(typeB).isEqualTo(Role.Value.MENTEE),
                 () -> assertThat(sut.isMentor(memberB.getId())).isFalse()
         );
     }
@@ -94,6 +97,12 @@ class MemberRepositoryTest extends RepositoryTest {
                     assertAll(
                             () -> assertThat(findMember).isNotNull(),
                             () -> assertThat(findMember.getEmail()).isNull(),
+                            () -> assertThat(findMember.getName()).isEqualTo(MENTOR_1.getName()),
+                            () -> assertThat(findMember.getProfileImageUrl()).isEqualTo(MENTOR_1.getProfileImageUrl()),
+                            () -> assertThat(findMember.getNationality()).isEqualTo(KOREA),
+                            () -> assertThat(findMember.getIntroduction()).isEqualTo(MENTOR_1.getIntroduction()),
+                            () -> assertThat(findMember.profileComplete()).isFalse(),
+                            () -> assertThat(findMember.getRole()).isEqualTo(MENTOR),
                             () -> assertThat(findMember.getStatus()).isEqualTo(INACTIVE)
                     );
                 }

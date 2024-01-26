@@ -13,7 +13,7 @@ import java.util.List;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_2;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_3;
-import static com.koddy.server.member.domain.model.MemberStatus.ACTIVE;
+import static com.koddy.server.member.domain.model.Member.Status.ACTIVE;
 import static com.koddy.server.member.domain.model.Role.MENTEE;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
 import static org.assertj.core.api.Assertions.assertThat;

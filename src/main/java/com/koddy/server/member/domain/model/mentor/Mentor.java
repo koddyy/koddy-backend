@@ -4,6 +4,7 @@ import com.koddy.server.coffeechat.domain.model.Reservation;
 import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Member;
+import com.koddy.server.member.domain.model.Role;
 import com.koddy.server.member.exception.MemberException;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
@@ -29,7 +30,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "mentor")
-@DiscriminatorValue(value = Member.MemberType.Value.MENTOR)
+@DiscriminatorValue(value = Role.Value.MENTOR)
 public class Mentor extends Member<Mentor> {
     @Embedded
     private UniversityProfile universityProfile;

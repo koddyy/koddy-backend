@@ -19,7 +19,7 @@ import java.util.List;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_2;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_3;
-import static com.koddy.server.member.domain.model.MemberStatus.ACTIVE;
+import static com.koddy.server.member.domain.model.Member.Status.ACTIVE;
 import static com.koddy.server.member.domain.model.Nationality.KOREA;
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.ATTEMPT;

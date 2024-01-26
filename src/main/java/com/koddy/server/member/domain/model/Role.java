@@ -14,4 +14,9 @@ public enum Role {
 
     private final String authority;
     private final String value;
+
+    public static class Value {
+        public static final String MENTOR = "MENTOR";
+        public static final String MENTEE = "MENTEE";
+    }
 }
