@@ -1,13 +1,19 @@
-INSERT INTO member(email, name, profile_image_url, nationality, introduction, profile_complete, status, role, type)
-VALUES ('mentor1@gmail.com', '멘토1', 'https://koddy-upload.s3.ap-northeast-2.amazonaws.com/profiles/koddy.png',
+INSERT INTO member(social_provider, social_id, email, name, profile_image_url, nationality, introduction,
+                   profile_complete, status, role, type)
+VALUES ('GOOGLE', 'ID-MENTOR-1', 'mentor1@gmail.com', '멘토1',
+        'https://koddy-upload.s3.ap-northeast-2.amazonaws.com/profiles/koddy.png',
         'KOREA', '안녕하세요', 1, 'ACTIVE', 'MENTOR', 'MENTOR'),
-       ('mentor2@gmail.com', '멘토2', 'https://koddy-upload.s3.ap-northeast-2.amazonaws.com/profiles/koddy.png',
+       ('GOOGLE', 'ID-MENTOR-2', 'mentor2@gmail.com', '멘토2',
+        'https://koddy-upload.s3.ap-northeast-2.amazonaws.com/profiles/koddy.png',
         'KOREA', NULL, 0, 'ACTIVE', 'MENTOR', 'MENTOR'),
-       ('mentor3@gmail.com', '멘토3', 'https://koddy-upload.s3.ap-northeast-2.amazonaws.com/profiles/koddy.png',
+       ('GOOGLE', 'ID-MENTOR-3', 'mentor3@gmail.com', '멘토3',
+        'https://koddy-upload.s3.ap-northeast-2.amazonaws.com/profiles/koddy.png',
         'KOREA', '안녕하세요', 0, 'ACTIVE', 'MENTOR', 'MENTOR'),
-       ('mentor4@gmail.com', '멘토4', 'https://koddy-upload.s3.ap-northeast-2.amazonaws.com/profiles/koddy.png',
+       ('GOOGLE', 'ID-MENTOR-4', 'mentor4@gmail.com', '멘토4',
+        'https://koddy-upload.s3.ap-northeast-2.amazonaws.com/profiles/koddy.png',
         'KOREA', NULL, 0, 'ACTIVE', 'MENTOR', 'MENTOR'),
-       ('mentor5@gmail.com', '멘토5', 'https://koddy-upload.s3.ap-northeast-2.amazonaws.com/profiles/koddy.png',
+       ('GOOGLE', 'ID-MENTOR-5', 'mentor5@gmail.com', '멘토5',
+        'https://koddy-upload.s3.ap-northeast-2.amazonaws.com/profiles/koddy.png',
         'KOREA', '안녕하세요', 1, 'ACTIVE', 'MENTOR', 'MENTOR');
 
 INSERT INTO mentor(id, school, major, entered_in, mentoring_start_date, mentoring_end_date, mentoring_time_unit,
