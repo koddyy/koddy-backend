@@ -11,6 +11,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.HEAD;
+import static org.springframework.http.HttpMethod.OPTIONS;
+import static org.springframework.http.HttpMethod.PATCH;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
+
 @Configuration
 @RequiredArgsConstructor
 public class AdditionalWebConfig implements WebMvcConfigurer {
@@ -21,9 +30,17 @@ public class AdditionalWebConfig implements WebMvcConfigurer {
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns(corsProperties.allowedOriginPatterns().toArray(String[]::new))
-                .allowedMethods("*")
+                .allowedMethods(
+                        GET.name(),
+                        POST.name(),
+                        PUT.name(),
+                        PATCH.name(),
+                        DELETE.name(),
+                        OPTIONS.name(),
+                        HEAD.name()
+                )
                 .allowedHeaders("*")
-                .exposedHeaders("*")
+                .exposedHeaders(AUTHORIZATION)
                 .allowCredentials(true)
                 .maxAge(3600);
     }
