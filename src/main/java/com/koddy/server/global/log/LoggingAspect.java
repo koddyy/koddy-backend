@@ -27,6 +27,7 @@ public class LoggingAspect {
             && !execution(* com.koddy.server.global.decorator..*(..))
             && !execution(* com.koddy.server.global.filter..*(..))
             && !execution(* com.koddy.server.global.log..*(..))
+            && !execution(* com.koddy.server..*AnonymousRequestExceptionHandler.*(..))
             && !execution(* com.koddy.server..*Config.*(..))
             && !execution(* com.koddy.server..*Formatter.*(..))
             && !execution(* com.koddy.server..*Properties.*(..))
