@@ -91,7 +91,7 @@ public class MemberAcceptanceStep {
                 fixture.getPlatform().getEmail().getValue(),
                 fixture.getName(),
                 fixture.getProfileImageUrl(),
-                fixture.getNationality().getKor(),
+                fixture.getNationality().getValue(),
                 new LanguageRequest(Language.Category.KR.getCode(), List.of()),
                 fixture.getInterest().getSchool(),
                 fixture.getInterest().getMajor()
@@ -221,7 +221,7 @@ public class MemberAcceptanceStep {
 
         final UpdateMenteeBasicInfoRequest request = new UpdateMenteeBasicInfoRequest(
                 fixture.getName(),
-                fixture.getNationality().getKor(),
+                fixture.getNationality().getValue(),
                 fixture.getProfileImageUrl(),
                 fixture.getIntroduction(),
                 new LanguageRequest(

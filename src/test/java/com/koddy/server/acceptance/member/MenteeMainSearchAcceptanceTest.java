@@ -293,7 +293,7 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
                 fixture.getPlatform().getEmail().getValue(),
                 fixture.getName(),
                 fixture.getProfileImageUrl(),
-                fixture.getNationality().getKor(),
+                fixture.getNationality().getValue(),
                 new LanguageRequest(
                         fixture.getLanguages()
                                 .stream()

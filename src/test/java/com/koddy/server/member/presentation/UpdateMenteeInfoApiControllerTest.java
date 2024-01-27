@@ -40,7 +40,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
         private static final String BASE_URL = "/api/mentees/me/basic-info";
         private final UpdateMenteeBasicInfoRequest request = new UpdateMenteeBasicInfoRequest(
                 MENTEE_1.getName(),
-                MENTEE_1.getNationality().getKor(),
+                MENTEE_1.getNationality().getValue(),
                 MENTEE_1.getProfileImageUrl(),
                 MENTEE_1.getIntroduction(),
                 new LanguageRequest(

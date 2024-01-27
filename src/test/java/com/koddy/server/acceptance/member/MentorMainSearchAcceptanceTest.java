@@ -292,7 +292,7 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
                     .body(index + ".id", is(id.intValue()))
                     .body(index + ".name", is(mentee.getName()))
                     .body(index + ".profileImageUrl", is(mentee.getProfileImageUrl()))
-                    .body(index + ".nationality", is(mentee.getNationality().getKor()))
+                    .body(index + ".nationality", is(mentee.getNationality().getValue()))
                     .body(index + ".interestSchool", is(mentee.getInterest().getSchool()))
                     .body(index + ".interestMajor", is(mentee.getInterest().getMajor()));
         }
@@ -345,7 +345,7 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
                 fixture.getPlatform().getEmail().getValue(),
                 fixture.getName(),
                 fixture.getProfileImageUrl(),
-                fixture.getNationality().getKor(),
+                fixture.getNationality().getValue(),
                 new LanguageRequest(
                         fixture.getLanguages()
                                 .stream()

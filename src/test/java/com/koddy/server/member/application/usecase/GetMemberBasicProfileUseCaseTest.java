@@ -131,7 +131,7 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
                     () -> assertThat(menteeProfile.id()).isEqualTo(mentee.getId()),
                     () -> assertThat(menteeProfile.name()).isEqualTo(mentee.getName()),
                     () -> assertThat(menteeProfile.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),
-                    () -> assertThat(menteeProfile.nationality()).isEqualTo(mentee.getNationality().getKor()),
+                    () -> assertThat(menteeProfile.nationality()).isEqualTo(mentee.getNationality().getValue()),
                     () -> assertThat(menteeProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
                     () -> assertThat(menteeProfile.languages().sub()).containsExactlyInAnyOrder(
                             EN_SUB.getCategory().getCode(),
@@ -162,7 +162,7 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
                     () -> assertThat(menteeProfile.id()).isEqualTo(mentee.getId()),
                     () -> assertThat(menteeProfile.name()).isEqualTo(mentee.getName()),
                     () -> assertThat(menteeProfile.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),
-                    () -> assertThat(menteeProfile.nationality()).isEqualTo(mentee.getNationality().getKor()),
+                    () -> assertThat(menteeProfile.nationality()).isEqualTo(mentee.getNationality().getValue()),
                     () -> assertThat(menteeProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
                     () -> assertThat(menteeProfile.languages().sub()).containsExactlyInAnyOrder(
                             EN_SUB.getCategory().getCode(),
