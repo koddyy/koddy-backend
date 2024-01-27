@@ -153,9 +153,9 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
 
             // when - then
             final MultiValueMap<String, String> nationalities = new LinkedMultiValueMap<>();
-            nationalities.add("nationalities", "미국");
-            nationalities.add("nationalities", "일본");
-            nationalities.add("nationalities", "중국");
+            nationalities.add("nationalities", "EN");
+            nationalities.add("nationalities", "JP");
+            nationalities.add("nationalities", "CN");
 
             final MultiValueMap<String, String> languages = new LinkedMultiValueMap<>();
             languages.add("languages", "EN");
@@ -170,8 +170,8 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
                     status().isOk(),
                     successDocs("MemberApi/Mentor/MainSearch/Mentees", createHttpSpecSnippets(
                             queryParameters(
-                                    query("nationalities", "선택한 국적", false),
-                                    query("languages", "선택한 언어", false),
+                                    query("nationalities", "선택한 국적", "국가 코드 기반", false),
+                                    query("languages", "선택한 언어", "국가 코드 기반", false),
                                     query("page", "페이지", "1부터 시작", true)
                             ),
                             responseFields(
