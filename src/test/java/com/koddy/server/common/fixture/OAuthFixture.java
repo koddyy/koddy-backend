@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+import static com.koddy.server.auth.domain.model.AuthToken.TOKEN_TYPE;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_2;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_3;
@@ -19,7 +20,6 @@ import static com.koddy.server.common.fixture.MentorFixture.MENTOR_2;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_3;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_4;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_5;
-import static com.koddy.server.common.utils.TokenUtils.BEARER_TOKEN;
 import static com.koddy.server.common.utils.TokenUtils.EXPIRES_IN;
 import static com.koddy.server.common.utils.TokenUtils.ID_TOKEN;
 import static com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN;
@@ -31,7 +31,7 @@ public enum OAuthFixture {
             MENTOR_1.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
-                    BEARER_TOKEN,
+                    TOKEN_TYPE,
                     ID_TOKEN,
                     "JIWON_TOKEN",
                     REFRESH_TOKEN,
@@ -43,7 +43,7 @@ public enum OAuthFixture {
             MENTOR_2.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
-                    BEARER_TOKEN,
+                    TOKEN_TYPE,
                     ID_TOKEN,
                     "JIWON_TOKEN",
                     REFRESH_TOKEN,
@@ -55,7 +55,7 @@ public enum OAuthFixture {
             MENTOR_3.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
-                    BEARER_TOKEN,
+                    TOKEN_TYPE,
                     ID_TOKEN,
                     "JIWON_TOKEN",
                     REFRESH_TOKEN,
@@ -67,7 +67,7 @@ public enum OAuthFixture {
             MENTOR_4.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
-                    BEARER_TOKEN,
+                    TOKEN_TYPE,
                     ID_TOKEN,
                     "JIWON_TOKEN",
                     REFRESH_TOKEN,
@@ -79,7 +79,7 @@ public enum OAuthFixture {
             MENTOR_5.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
-                    BEARER_TOKEN,
+                    TOKEN_TYPE,
                     ID_TOKEN,
                     "JIWON_TOKEN",
                     REFRESH_TOKEN,
@@ -91,7 +91,7 @@ public enum OAuthFixture {
             MENTEE_1.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
-                    BEARER_TOKEN,
+                    TOKEN_TYPE,
                     ID_TOKEN,
                     "JIWON_TOKEN",
                     REFRESH_TOKEN,
@@ -103,7 +103,7 @@ public enum OAuthFixture {
             MENTEE_2.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
-                    BEARER_TOKEN,
+                    TOKEN_TYPE,
                     ID_TOKEN,
                     "JIWON_TOKEN",
                     REFRESH_TOKEN,
@@ -115,7 +115,7 @@ public enum OAuthFixture {
             MENTEE_3.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
-                    BEARER_TOKEN,
+                    TOKEN_TYPE,
                     ID_TOKEN,
                     "JIWON_TOKEN",
                     REFRESH_TOKEN,
@@ -127,7 +127,7 @@ public enum OAuthFixture {
             MENTEE_4.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
-                    BEARER_TOKEN,
+                    TOKEN_TYPE,
                     ID_TOKEN,
                     "JIWON_TOKEN",
                     REFRESH_TOKEN,
@@ -139,7 +139,7 @@ public enum OAuthFixture {
             MENTEE_5.getPlatform().getSocialId(),
             "JIWON",
             new GoogleTokenResponse(
-                    BEARER_TOKEN,
+                    TOKEN_TYPE,
                     ID_TOKEN,
                     "JIWON_TOKEN",
                     REFRESH_TOKEN,

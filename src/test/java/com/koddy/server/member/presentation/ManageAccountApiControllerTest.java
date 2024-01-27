@@ -16,7 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
+import static com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER;
+import static com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.body;
@@ -28,7 +29,6 @@ import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDo
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -93,10 +93,10 @@ class ManageAccountApiControllerTest extends ControllerTest {
                                     body("enteredIn", "학번", true)
                             ),
                             responseHeaders(
-                                    header(AUTHORIZATION, "Access Token")
+                                    header(ACCESS_TOKEN_HEADER, "Access Token")
                             ),
                             responseCookies(
-                                    cookie(COOKIE_REFRESH_TOKEN, "Refresh Token")
+                                    cookie(REFRESH_TOKEN_HEADER, "Refresh Token")
                             ),
                             responseFields(
                                     body("id", "사용자 ID(PK)"),
@@ -151,10 +151,10 @@ class ManageAccountApiControllerTest extends ControllerTest {
                                     body("interestMajor", "관심있는 전공", true)
                             ),
                             responseHeaders(
-                                    header(AUTHORIZATION, "Access Token")
+                                    header(ACCESS_TOKEN_HEADER, "Access Token")
                             ),
                             responseCookies(
-                                    cookie(COOKIE_REFRESH_TOKEN, "Refresh Token")
+                                    cookie(REFRESH_TOKEN_HEADER, "Refresh Token")
                             ),
                             responseFields(
                                     body("id", "사용자 ID(PK)"),

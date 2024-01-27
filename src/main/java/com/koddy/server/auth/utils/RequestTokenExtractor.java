@@ -9,14 +9,14 @@ import org.springframework.util.StringUtils;
 import java.util.Arrays;
 import java.util.Optional;
 
-import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
-import static com.koddy.server.auth.utils.TokenResponseWriter.HEADER_ACCESS_TOKEN_PREFIX;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER;
+import static com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER;
+import static com.koddy.server.auth.domain.model.AuthToken.TOKEN_TYPE;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RequestTokenExtractor {
     public static Optional<String> extractAccessToken(final HttpServletRequest request) {
-        final String token = request.getHeader(AUTHORIZATION);
+        final String token = request.getHeader(ACCESS_TOKEN_HEADER);
         if (isEmptyToken(token)) {
             return Optional.empty();
         }
@@ -30,7 +30,7 @@ public class RequestTokenExtractor {
         }
 
         final String token = Arrays.stream(cookies)
-                .filter(it -> it.getName().equals(COOKIE_REFRESH_TOKEN))
+                .filter(it -> it.getName().equals(REFRESH_TOKEN_HEADER))
                 .map(Cookie::getValue)
                 .findFirst()
                 .orElse(null);
@@ -46,7 +46,7 @@ public class RequestTokenExtractor {
     }
 
     private static Optional<String> checkToken(final String[] parts) {
-        if (parts.length == 2 && parts[0].equals(HEADER_ACCESS_TOKEN_PREFIX)) {
+        if (parts.length == 2 && parts[0].equals(TOKEN_TYPE)) {
             return Optional.ofNullable(parts[1]);
         }
         return Optional.empty();

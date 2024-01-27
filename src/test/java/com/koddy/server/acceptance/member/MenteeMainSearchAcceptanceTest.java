@@ -27,8 +27,9 @@ import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.�
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.신청_제안한_커피챗을_취소한다;
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토들을_둘러본다;
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.커피챗_제안한_멘토를_조회한다;
+import static com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER;
+import static com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER;
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION;
-import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_10;
@@ -52,7 +53,6 @@ import static com.koddy.server.common.fixture.MentorFixture.MENTOR_8;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_9;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -274,8 +274,8 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
 
         final ExtractableResponse<Response> result = MemberAcceptanceStep.멘토_회원가입_후_로그인을_진행한다(request).extract();
         final long memberId = result.jsonPath().getLong("id");
-        final String accessToken = result.header(AUTHORIZATION).split(" ")[1];
-        final String refreshToken = result.cookie(COOKIE_REFRESH_TOKEN);
+        final String accessToken = result.header(ACCESS_TOKEN_HEADER).split(" ")[1];
+        final String refreshToken = result.cookie(REFRESH_TOKEN_HEADER);
 
         MemberAcceptanceStep.멘토_프로필을_완성시킨다(fixture, accessToken);
         return new AuthMember(
@@ -314,8 +314,8 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
 
         final ExtractableResponse<Response> result = MemberAcceptanceStep.멘티_회원가입_후_로그인을_진행한다(request).extract();
         final long memberId = result.jsonPath().getLong("id");
-        final String accessToken = result.header(AUTHORIZATION).split(" ")[1];
-        final String refreshToken = result.cookie(COOKIE_REFRESH_TOKEN);
+        final String accessToken = result.header(ACCESS_TOKEN_HEADER).split(" ")[1];
+        final String refreshToken = result.cookie(REFRESH_TOKEN_HEADER);
 
         MemberAcceptanceStep.멘티_프로필을_완성시킨다(fixture, accessToken);
         return new AuthMember(

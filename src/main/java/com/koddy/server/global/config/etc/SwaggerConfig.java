@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Profile;
 
 import java.util.List;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER;
 
 @Configuration
 public class SwaggerConfig {
@@ -41,7 +41,7 @@ public class SwaggerConfig {
                         .addSecuritySchemes(
                                 "JWT Token",
                                 new SecurityScheme()
-                                        .name(AUTHORIZATION)
+                                        .name(ACCESS_TOKEN_HEADER)
                                         .type(SecurityScheme.Type.HTTP)
                                         .in(SecurityScheme.In.HEADER)
                                         .scheme("bearer")

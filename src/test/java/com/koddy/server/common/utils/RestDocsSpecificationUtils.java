@@ -14,10 +14,10 @@ import org.springframework.restdocs.snippet.Snippet;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
+import static com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER;
+import static com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.cookie;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.header;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
 import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -102,13 +102,13 @@ public class RestDocsSpecificationUtils {
 
     private static Snippet getHeaderWithAccessToken() {
         return requestHeaders(
-                header(AUTHORIZATION, "Access Token", true)
+                header(ACCESS_TOKEN_HEADER, "Access Token", true)
         );
     }
 
     private static Snippet getCookieWithRefreshToken() {
         return requestCookies(
-                cookie(COOKIE_REFRESH_TOKEN, "Refresh Token", true)
+                cookie(REFRESH_TOKEN_HEADER, "Refresh Token", true)
         );
     }
 

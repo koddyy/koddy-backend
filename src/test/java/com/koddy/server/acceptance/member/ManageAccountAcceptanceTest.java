@@ -10,12 +10,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_회원가입_후_로그인을_진행한다;
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘티_회원가입_후_로그인을_진행한다;
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.서비스를_탈퇴한다;
-import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
+import static com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER;
+import static com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -30,8 +30,8 @@ public class ManageAccountAcceptanceTest extends AcceptanceTest {
         void mentorSuccess() {
             멘토_회원가입_후_로그인을_진행한다(MENTOR_1)
                     .statusCode(OK.value())
-                    .header(AUTHORIZATION, notNullValue(String.class))
-                    .cookie(COOKIE_REFRESH_TOKEN, notNullValue(String.class))
+                    .header(ACCESS_TOKEN_HEADER, notNullValue(String.class))
+                    .cookie(REFRESH_TOKEN_HEADER, notNullValue(String.class))
                     .body("id", notNullValue(Long.class))
                     .body("name", is(MENTOR_1.getName()))
                     .body("profileImageUrl", is(MENTOR_1.getProfileImageUrl()));
@@ -42,8 +42,8 @@ public class ManageAccountAcceptanceTest extends AcceptanceTest {
         void menteeSuccess() {
             멘티_회원가입_후_로그인을_진행한다(MENTEE_1)
                     .statusCode(OK.value())
-                    .header(AUTHORIZATION, notNullValue(String.class))
-                    .cookie(COOKIE_REFRESH_TOKEN, notNullValue(String.class))
+                    .header(ACCESS_TOKEN_HEADER, notNullValue(String.class))
+                    .cookie(REFRESH_TOKEN_HEADER, notNullValue(String.class))
                     .body("id", notNullValue(Long.class))
                     .body("name", is(MENTEE_1.getName()))
                     .body("profileImageUrl", is(MENTEE_1.getProfileImageUrl()));

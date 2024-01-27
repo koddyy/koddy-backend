@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
+import static com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER;
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.ContentType.MULTIPART;
 
@@ -64,7 +64,7 @@ public class CommonRequestFixture {
     public static ValidatableResponse postRequestWithRefreshToken(final String uri, final String refreshToken) {
         return request(given -> given
                 .contentType(JSON)
-                .cookie(new Cookie.Builder(COOKIE_REFRESH_TOKEN, refreshToken).build())
+                .cookie(new Cookie.Builder(REFRESH_TOKEN_HEADER, refreshToken).build())
                 .when()
                 .post(uri)
         );

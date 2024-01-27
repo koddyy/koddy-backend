@@ -6,14 +6,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER;
+import static com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER;
+import static com.koddy.server.auth.domain.model.AuthToken.TOKEN_TYPE;
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
 
 @Component
 public class TokenResponseWriter {
-    public static final String COOKIE_REFRESH_TOKEN = "refresh_token";
-    public static final String HEADER_ACCESS_TOKEN_PREFIX = "Bearer";
-
     private final long refreshTokenCookieAge;
 
     public TokenResponseWriter(@Value("${jwt.refresh-token-validity-seconds}") final long refreshTokenCookieAge) {
@@ -26,11 +25,11 @@ public class TokenResponseWriter {
     }
 
     private void applyAccessToken(final HttpServletResponse response, final String accessToken) {
-        response.setHeader(AUTHORIZATION, String.join(" ", HEADER_ACCESS_TOKEN_PREFIX, accessToken));
+        response.setHeader(ACCESS_TOKEN_HEADER, String.join(" ", TOKEN_TYPE, accessToken));
     }
 
     private void applyRefreshToken(final HttpServletResponse response, final String refreshToken) {
-        final ResponseCookie cookie = ResponseCookie.from(COOKIE_REFRESH_TOKEN, refreshToken)
+        final ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN_HEADER, refreshToken)
                 .maxAge(refreshTokenCookieAge)
                 .secure(true)
                 .httpOnly(true)

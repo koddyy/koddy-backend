@@ -10,7 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static com.koddy.server.acceptance.auth.AuthAcceptanceStep.Google_OAuth_로그인을_진행한다;
 import static com.koddy.server.acceptance.auth.AuthAcceptanceStep.Google_OAuth_인증_URL를_생성한다;
 import static com.koddy.server.acceptance.auth.AuthAcceptanceStep.로그아웃을_진행한다;
-import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
+import static com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER;
+import static com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.fixture.OAuthFixture.GOOGLE_MENTOR_1;
 import static com.koddy.server.common.utils.OAuthUtils.GOOGLE_PROVIDER;
@@ -18,7 +19,6 @@ import static com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI;
 import static com.koddy.server.common.utils.OAuthUtils.STATE;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -59,9 +59,9 @@ public class OAuthAcceptanceTest extends AcceptanceTest {
             MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             Google_OAuth_로그인을_진행한다(GOOGLE_PROVIDER, GOOGLE_MENTOR_1.getAuthorizationCode(), REDIRECT_URI, STATE)
                     .statusCode(OK.value())
-                    .header(AUTHORIZATION, notNullValue(String.class))
+                    .header(ACCESS_TOKEN_HEADER, notNullValue(String.class))
                     .header(SET_COOKIE, notNullValue(String.class))
-                    .cookie(COOKIE_REFRESH_TOKEN, notNullValue(String.class))
+                    .cookie(REFRESH_TOKEN_HEADER, notNullValue(String.class))
                     .body("id", notNullValue(Long.class))
                     .body("name", is(MENTOR_1.getName()))
                     .body("profileImageUrl", is(MENTOR_1.getProfileImageUrl()));

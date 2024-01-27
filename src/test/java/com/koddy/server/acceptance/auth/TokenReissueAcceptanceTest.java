@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.koddy.server.acceptance.auth.AuthAcceptanceStep.토큰을_재발급받는다;
-import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
+import static com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER;
+import static com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
@@ -27,9 +27,9 @@ public class TokenReissueAcceptanceTest extends AcceptanceTest {
             final String refreshToken = MENTOR_1.회원가입과_로그인을_진행한다().token().refreshToken();
             토큰을_재발급받는다(refreshToken)
                     .statusCode(NO_CONTENT.value())
-                    .header(AUTHORIZATION, notNullValue(String.class))
+                    .header(ACCESS_TOKEN_HEADER, notNullValue(String.class))
                     .header(SET_COOKIE, notNullValue(String.class))
-                    .cookie(COOKIE_REFRESH_TOKEN, notNullValue(String.class));
+                    .cookie(REFRESH_TOKEN_HEADER, notNullValue(String.class));
         }
     }
 }

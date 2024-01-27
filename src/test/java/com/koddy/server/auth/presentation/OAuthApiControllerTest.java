@@ -18,8 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
+import static com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER;
+import static com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER;
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_OAUTH_PROVIDER;
-import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.OAuthUtils.AUTHORIZATION_CODE;
 import static com.koddy.server.common.utils.OAuthUtils.GOOGLE_PROVIDER;
@@ -38,7 +39,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -171,10 +171,10 @@ class OAuthApiControllerTest extends ControllerTest {
                                     body("state", "State 값", "Authorization Code Redirect 응답 시 QueryParam으로 넘어오는 State 값", true)
                             ),
                             responseHeaders(
-                                    header(AUTHORIZATION, "Access Token")
+                                    header(ACCESS_TOKEN_HEADER, "Access Token")
                             ),
                             responseCookies(
-                                    cookie(COOKIE_REFRESH_TOKEN, "Refresh Token")
+                                    cookie(REFRESH_TOKEN_HEADER, "Refresh Token")
                             ),
                             responseFields(
                                     body("id", "사용자 ID(PK)"),

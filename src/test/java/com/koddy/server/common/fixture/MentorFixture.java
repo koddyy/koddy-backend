@@ -22,11 +22,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER;
+import static com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER;
 import static com.koddy.server.auth.domain.model.oauth.OAuthProvider.GOOGLE;
-import static com.koddy.server.auth.utils.TokenResponseWriter.COOKIE_REFRESH_TOKEN;
 import static com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN;
 import static com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Getter
 @RequiredArgsConstructor
@@ -238,8 +238,8 @@ public enum MentorFixture {
     public AuthMember 회원가입과_로그인을_진행한다() {
         final ExtractableResponse<Response> result = MemberAcceptanceStep.멘토_회원가입_후_로그인을_진행한다(this).extract();
         final long memberId = result.jsonPath().getLong("id");
-        final String accessToken = result.header(AUTHORIZATION).split(" ")[1];
-        final String refreshToken = result.cookie(COOKIE_REFRESH_TOKEN);
+        final String accessToken = result.header(ACCESS_TOKEN_HEADER).split(" ")[1];
+        final String refreshToken = result.cookie(REFRESH_TOKEN_HEADER);
 
         return new AuthMember(
                 memberId,
@@ -252,8 +252,8 @@ public enum MentorFixture {
     public AuthMember 회원가입과_로그인을_하고_프로필을_완성시킨다() {
         final ExtractableResponse<Response> result = MemberAcceptanceStep.멘토_회원가입_후_로그인을_진행한다(this).extract();
         final long memberId = result.jsonPath().getLong("id");
-        final String accessToken = result.header(AUTHORIZATION).split(" ")[1];
-        final String refreshToken = result.cookie(COOKIE_REFRESH_TOKEN);
+        final String accessToken = result.header(ACCESS_TOKEN_HEADER).split(" ")[1];
+        final String refreshToken = result.cookie(REFRESH_TOKEN_HEADER);
 
         MemberAcceptanceStep.멘토_프로필을_완성시킨다(this, accessToken);
 
