@@ -11,8 +11,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 import java.util.Map;
@@ -152,20 +150,18 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
             ));
 
             // when - then
-            final MultiValueMap<String, String> languages = new LinkedMultiValueMap<>();
-            languages.add("languages", "EN");
-            languages.add("languages", "CN");
-
             successfulExecute(
                     getRequest(
                             BASE_URL,
-                            Map.of("page", "1"),
-                            List.of(languages)
+                            Map.of(
+                                    "languages", "EN,CN",
+                                    "page", "1"
+                            )
                     ),
                     status().isOk(),
                     successDocs("MemberApi/Mentee/MainSearch/Mentors", createHttpSpecSnippets(
                             queryParameters(
-                                    query("languages", "선택한 언어", false),
+                                    query("languages", "선택한 언어", "국가 코드 기반 & 콤마(,) 기준 분리", false),
                                     query("page", "페이지", "1부터 시작", true)
                             ),
                             responseFields(
