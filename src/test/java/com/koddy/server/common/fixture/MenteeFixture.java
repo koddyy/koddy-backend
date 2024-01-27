@@ -27,8 +27,8 @@ import static com.koddy.server.auth.domain.model.oauth.OAuthProvider.GOOGLE;
 import static com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN;
 import static com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN;
 import static com.koddy.server.member.domain.model.Nationality.CHINA;
+import static com.koddy.server.member.domain.model.Nationality.ETC;
 import static com.koddy.server.member.domain.model.Nationality.JAPAN;
-import static com.koddy.server.member.domain.model.Nationality.OTHERS;
 import static com.koddy.server.member.domain.model.Nationality.USA;
 import static com.koddy.server.member.domain.model.Nationality.VIETNAM;
 
@@ -57,7 +57,7 @@ public enum MenteeFixture {
     ),
     MENTEE_5(
             new SocialPlatform(GOOGLE, "ID-MENTEE-5", Email.from("mentee5@gmail.com")),
-            "멘티5", "s3/Mentee5.png", OTHERS, "Hello World~",
+            "멘티5", "s3/Mentee5.png", ETC, "Hello World~",
             LanguageFixture.메인_영어_서브_한국어(), new Interest("한양대학교", "컴퓨터공학부")
     ),
     MENTEE_6(
@@ -82,7 +82,7 @@ public enum MenteeFixture {
     ),
     MENTEE_10(
             new SocialPlatform(GOOGLE, "ID-MENTEE-10", Email.from("mentee10@gmail.com")),
-            "멘티10", "s3/Mentee10.png", OTHERS, "Hello World~",
+            "멘티10", "s3/Mentee10.png", ETC, "Hello World~",
             LanguageFixture.메인_영어_서브_일본어(), new Interest("한양대학교", "컴퓨터공학부")
     ),
     MENTEE_11(
@@ -107,7 +107,7 @@ public enum MenteeFixture {
     ),
     MENTEE_15(
             new SocialPlatform(GOOGLE, "ID-MENTEE-15", Email.from("mentee15@gmail.com")),
-            "멘티15", "s3/Mentee15.png", OTHERS, "Hello World~",
+            "멘티15", "s3/Mentee15.png", ETC, "Hello World~",
             LanguageFixture.메인_영어_서브_한국어(), new Interest("한양대학교", "컴퓨터공학부")
     ),
     MENTEE_16(
@@ -132,7 +132,7 @@ public enum MenteeFixture {
     ),
     MENTEE_20(
             new SocialPlatform(GOOGLE, "ID-MENTEE-20", Email.from("mentee20@gmail.com")),
-            "멘티20", "s3/Mentee20.png", OTHERS, "Hello World~",
+            "멘티20", "s3/Mentee20.png", ETC, "Hello World~",
             LanguageFixture.메인_영어_서브_일본어(), new Interest("한양대학교", "컴퓨터공학부")
     ),
     ;

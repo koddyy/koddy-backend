@@ -11,20 +11,20 @@ import static com.koddy.server.member.exception.MemberExceptionCode.INVALID_NATI
 @Getter
 @RequiredArgsConstructor
 public enum Nationality {
-    KOREA("한국", "Korea"),
-    USA("미국", "USA"),
-    JAPAN("일본", "Japen"),
-    CHINA("중국", "China"),
-    VIETNAM("베트남", "Vietnam"),
-    OTHERS("Others", "Others"),
+    KOREA("KR", "한국"),
+    USA("EN", "미국"),
+    JAPAN("CN", "일본"),
+    CHINA("JP", "중국"),
+    VIETNAM("VN", "베트남"),
+    ETC("ETC", "ETC"),
     ;
 
-    private final String kor;
-    private final String eng;
+    private final String code;
+    private final String value;
 
-    public static Nationality from(final String kor) {
+    public static Nationality from(final String code) {
         return Arrays.stream(values())
-                .filter(it -> it.kor.equals(kor))
+                .filter(it -> it.code.equals(code))
                 .findFirst()
                 .orElseThrow(() -> new MemberException(INVALID_NATIONALITY));
     }

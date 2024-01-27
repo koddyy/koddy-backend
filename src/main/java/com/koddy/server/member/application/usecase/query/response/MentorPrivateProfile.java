@@ -27,7 +27,7 @@ public record MentorPrivateProfile(
                 mentor.getPlatform().getEmail().getValue(),
                 mentor.getName(),
                 mentor.getProfileImageUrl(),
-                mentor.getNationality().getKor(),
+                mentor.getNationality().getCode(),
                 mentor.getIntroduction(),
                 LanguageResponse.of(mentor.getLanguages()),
                 mentor.getUniversityProfile().getSchool(),

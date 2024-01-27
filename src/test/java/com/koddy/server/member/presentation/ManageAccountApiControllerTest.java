@@ -126,7 +126,7 @@ class ManageAccountApiControllerTest extends ControllerTest {
                     MENTEE_1.getPlatform().getEmail().getValue(),
                     MENTEE_1.getName(),
                     MENTEE_1.getProfileImageUrl(),
-                    MENTEE_1.getNationality().getKor(),
+                    MENTEE_1.getNationality().getCode(),
                     new LanguageRequest(Language.Category.KR.getCode(), List.of()),
                     MENTEE_1.getInterest().getSchool(),
                     MENTEE_1.getInterest().getMajor()
@@ -143,7 +143,7 @@ class ManageAccountApiControllerTest extends ControllerTest {
                                     body("email", "이메일", true),
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
-                                    body("nationality", "국적", "한국 미국 일본 중국 베트남 Others", true),
+                                    body("nationality", "국적 (코드 기반)", "KR EN CN JP VN ETC", true),
                                     body("languages", "사용 가능한 언어", true),
                                     body("languages.main", "메인 언어 (코드 기반)", "1개 이상", true),
                                     body("languages.sub[]", "서브 언어 (코드 기반)", "0..N개", false),

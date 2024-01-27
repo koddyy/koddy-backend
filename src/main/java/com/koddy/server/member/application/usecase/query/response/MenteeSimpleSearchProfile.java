@@ -15,7 +15,7 @@ public record MenteeSimpleSearchProfile(
                 mentee.getId(),
                 mentee.getName(),
                 mentee.getProfileImageUrl(),
-                mentee.getNationality().getKor(),
+                mentee.getNationality().getCode(),
                 mentee.getInterest().getSchool(),
                 mentee.getInterest().getMajor()
         );

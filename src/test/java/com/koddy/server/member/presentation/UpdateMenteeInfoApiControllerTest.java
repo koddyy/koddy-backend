@@ -40,7 +40,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
         private static final String BASE_URL = "/api/mentees/me/basic-info";
         private final UpdateMenteeBasicInfoRequest request = new UpdateMenteeBasicInfoRequest(
                 MENTEE_1.getName(),
-                MENTEE_1.getNationality().getKor(),
+                MENTEE_1.getNationality().getCode(),
                 MENTEE_1.getProfileImageUrl(),
                 MENTEE_1.getIntroduction(),
                 new LanguageRequest(
@@ -69,7 +69,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                     failureDocsWithAccessToken("MemberApi/Update/Mentee/BasicInfo/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
-                                    body("nationality", "국적", "한국 미국 일본 중국 베트남 Others", true),
+                                    body("nationality", "국적 (코드 기반)", "KR EN CN JP VN ETC", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘티 자기소개", false),
                                     body("languages", "사용 가능한 언어", true),
@@ -98,7 +98,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                     successDocsWithAccessToken("MemberApi/Update/Mentee/BasicInfo/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
-                                    body("nationality", "국적", "한국 미국 일본 중국 베트남 Others", true),
+                                    body("nationality", "국적 (코드 기반)", "KR EN CN JP VN ETC", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘티 자기소개", false),
                                     body("languages", "사용 가능한 언어", true),

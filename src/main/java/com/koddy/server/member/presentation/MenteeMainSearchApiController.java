@@ -8,6 +8,7 @@ import com.koddy.server.global.aop.AccessControl;
 import com.koddy.server.member.application.usecase.MenteeMainSearchUseCase;
 import com.koddy.server.member.application.usecase.query.response.MentorSimpleSearchProfile;
 import com.koddy.server.member.presentation.dto.request.GetMentorsByConditionRequest;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +23,14 @@ import java.util.List;
 
 import static com.koddy.server.member.domain.model.Role.MENTEE;
 
-@Tag(name = "2-10. 커피챗 제안한 멘토, 멘토 둘러보기 조회 API (멘티 전용)")
+@Tag(name = "2-10. 커피챗 제안한 멘토, 멘토 둘러보기 조회 API")
 @RestController
 @RequestMapping("/api/mentors")
 @RequiredArgsConstructor
 public class MenteeMainSearchApiController {
     private final MenteeMainSearchUseCase menteeMainSearchUseCase;
 
+    @Operation(summary = "커피챗 제안한 멘토 조회 Endpoint (멘티 전용)")
     @GetMapping("/suggested-coffeechats")
     @AccessControl(role = MENTEE)
     public ResponseEntity<ResponseWrapper<List<MentorSimpleSearchProfile>>> getSuggestedMentors(
@@ -39,6 +41,7 @@ public class MenteeMainSearchApiController {
         return ResponseEntity.ok(ResponseWrapper.from(result));
     }
 
+    @Operation(summary = "멘토 둘러보기 Endpoint")
     @GetMapping
     public ResponseEntity<PageResponse<List<MentorSimpleSearchProfile>>> getMentorsByCondition(
             @ModelAttribute @Valid final GetMentorsByConditionRequest request
