@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static com.koddy.server.member.exception.MemberExceptionCode.INVALID_LANGUAGE_CATEGORY;
 import static com.koddy.server.member.exception.MemberExceptionCode.INVALID_LANGUAGE_TYPE;
@@ -51,12 +50,6 @@ public class Language {
                     .filter(it -> it.code.equals(code))
                     .findFirst()
                     .orElseThrow(() -> new MemberException(INVALID_LANGUAGE_CATEGORY));
-        }
-
-        public static List<Category> of(final List<String> codes) {
-            return codes.stream()
-                    .map(Category::from)
-                    .toList();
         }
     }
 
