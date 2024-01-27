@@ -187,7 +187,7 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
 
             /* 최신 가입순 + 국적 */
             final String url3 = UriComponentsBuilder
-                    .fromUriString("/api/mentees?page=1&nationalities=EN&nationalities=JP&nationalities=CN")
+                    .fromUriString("/api/mentees?page=1&nationalities=EN,JP,CN")
                     .build()
                     .toUriString();
             final ValidatableResponse response3 = 멘티들을_둘러본다(url3).statusCode(OK.value());
@@ -205,7 +205,7 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
             response3.body("hasNext", is(true));
 
             final String url4 = UriComponentsBuilder
-                    .fromUriString("/api/mentees?page=2&nationalities=EN&nationalities=JP&nationalities=CN")
+                    .fromUriString("/api/mentees?page=2&nationalities=EN,JP,CN")
                     .build()
                     .toUriString();
             final ValidatableResponse response4 = 멘티들을_둘러본다(url4).statusCode(OK.value());
@@ -218,7 +218,7 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
 
             /* 최신 가입순 + 언어 */
             final String url5 = UriComponentsBuilder
-                    .fromUriString("/api/mentees?page=1&languages=EN&languages=KR")
+                    .fromUriString("/api/mentees?page=1&languages=EN,KR")
                     .build()
                     .toUriString();
             final ValidatableResponse response5 = 멘티들을_둘러본다(url5).statusCode(OK.value());
@@ -249,7 +249,7 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
 
             /* 최신 가입순 + 국적 + 언어 */
             final String url7 = UriComponentsBuilder
-                    .fromUriString("/api/mentees?page=1&nationalities=EN&nationalities=JP&nationalities=CN&languages=EN&languages=KR")
+                    .fromUriString("/api/mentees?page=1&nationalities=EN,JP,CN&languages=EN,KR")
                     .build()
                     .toUriString();
             final ValidatableResponse response7 = 멘티들을_둘러본다(url7).statusCode(OK.value());
@@ -261,7 +261,7 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
             response7.body("hasNext", is(false));
 
             final String url8 = UriComponentsBuilder
-                    .fromUriString("/api/mentees?page=2&nationalities=EN&nationalities=JP&nationalities=CN&languages=EN&languages=KR")
+                    .fromUriString("/api/mentees?page=2&nationalities=EN,JP,CN&languages=EN,KR")
                     .build()
                     .toUriString();
             final ValidatableResponse response8 = 멘티들을_둘러본다(url8).statusCode(OK.value());

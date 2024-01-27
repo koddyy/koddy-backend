@@ -161,7 +161,7 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
 
             /* 최신 가입순 + 언어 */
             final String url3 = UriComponentsBuilder
-                    .fromUriString("/api/mentors?page=1&languages=KR&languages=EN")
+                    .fromUriString("/api/mentors?page=1&languages=KR,EN")
                     .build()
                     .toUriString();
             final ValidatableResponse response3 = 멘토들을_둘러본다(url3).statusCode(OK.value());
@@ -179,7 +179,7 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
             response3.body("hasNext", is(false));
 
             final String url4 = UriComponentsBuilder
-                    .fromUriString("/api/mentors?page=2&languages=KR&languages=EN")
+                    .fromUriString("/api/mentors?page=2&languages=KR,EN")
                     .build()
                     .toUriString();
             final ValidatableResponse response4 = 멘토들을_둘러본다(url4).statusCode(OK.value());
@@ -191,7 +191,7 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
             response4.body("hasNext", is(false));
 
             final String url5 = UriComponentsBuilder
-                    .fromUriString("/api/mentors?page=1&languages=KR&languages=JP")
+                    .fromUriString("/api/mentors?page=1&languages=KR,JP")
                     .build()
                     .toUriString();
             final ValidatableResponse response5 = 멘토들을_둘러본다(url5).statusCode(OK.value());
@@ -209,7 +209,7 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
             response5.body("hasNext", is(false));
 
             final String url6 = UriComponentsBuilder
-                    .fromUriString("/api/mentors?page=2&languages=KR&languages=JP")
+                    .fromUriString("/api/mentors?page=2&languages=KR,JP")
                     .build()
                     .toUriString();
             final ValidatableResponse response6 = 멘토들을_둘러본다(url6).statusCode(OK.value());

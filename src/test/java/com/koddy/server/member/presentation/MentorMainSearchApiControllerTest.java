@@ -11,8 +11,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 import java.util.Map;
@@ -152,26 +150,20 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
             ));
 
             // when - then
-            final MultiValueMap<String, String> nationalities = new LinkedMultiValueMap<>();
-            nationalities.add("nationalities", "EN");
-            nationalities.add("nationalities", "JP");
-            nationalities.add("nationalities", "CN");
-
-            final MultiValueMap<String, String> languages = new LinkedMultiValueMap<>();
-            languages.add("languages", "EN");
-            languages.add("languages", "KR");
-
             successfulExecute(
                     getRequest(
                             BASE_URL,
-                            Map.of("page", "1"),
-                            List.of(nationalities, languages)
+                            Map.of(
+                                    "nationalities", "EN,JP,CN",
+                                    "languages", "EN,KR",
+                                    "page", "1"
+                            )
                     ),
                     status().isOk(),
                     successDocs("MemberApi/Mentor/MainSearch/Mentees", createHttpSpecSnippets(
                             queryParameters(
-                                    query("nationalities", "선택한 국적", "국가 코드 기반", false),
-                                    query("languages", "선택한 언어", "국가 코드 기반", false),
+                                    query("nationalities", "선택한 국적", "국가 코드 기반 & 콤마(,) 기준 분리", false),
+                                    query("languages", "선택한 언어", "국가 코드 기반 & 콤마(,) 기준 분리", false),
                                     query("page", "페이지", "1부터 시작", true)
                             ),
                             responseFields(
