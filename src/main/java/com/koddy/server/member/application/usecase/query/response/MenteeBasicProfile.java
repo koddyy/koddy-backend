@@ -17,7 +17,7 @@ public record MenteeBasicProfile(
                 mentee.getId(),
                 mentee.getName(),
                 mentee.getProfileImageUrl(),
-                mentee.getNationality().getValue(),
+                mentee.getNationality().getCode(),
                 mentee.getIntroduction(),
                 LanguageResponse.of(mentee.getLanguages()),
                 mentee.getInterest().getSchool(),

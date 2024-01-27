@@ -69,7 +69,7 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
                             3,
                             "멘티3",
                             "https://mentee3-url",
-                            "미국",
+                            "EN",
                             "서울대학교",
                             "컴퓨터공학부"
                     ),
@@ -77,7 +77,7 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
                             2,
                             "멘티2",
                             "https://mentee2-url",
-                            "일본",
+                            "JP",
                             "연세대학교",
                             "컴퓨터공학부"
                     ),
@@ -85,7 +85,7 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
                             1,
                             "멘티1",
                             "https://mentee1-url",
-                            "중국",
+                            "CN",
                             "고려대학교",
                             "컴퓨터공학부"
                     )
@@ -127,7 +127,7 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
                                     3,
                                     "멘티3",
                                     "https://mentee3-url",
-                                    "미국",
+                                    "EN",
                                     "서울대학교",
                                     "컴퓨터공학부"
                             ),
@@ -135,7 +135,7 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
                                     2,
                                     "멘티2",
                                     "https://mentee2-url",
-                                    "일본",
+                                    "JP",
                                     "연세대학교",
                                     "컴퓨터공학부"
                             ),
@@ -143,7 +143,7 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
                                     1,
                                     "멘티1",
                                     "https://mentee1-url",
-                                    "중국",
+                                    "CN",
                                     "고려대학교",
                                     "컴퓨터공학부"
                             )
