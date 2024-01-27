@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -121,7 +122,7 @@ public class ApiGlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleHttpRequestMethodNotSupportedException(
             final HttpRequestMethodNotSupportedException exception
     ) {
-        log.warn("HttpRequestMethodNotSupportedException: ", exception);
+        log.warn("handleHttpRequestMethodNotSupportedException: ", exception);
         return createExceptionResponse(GlobalExceptionCode.NOT_SUPPORTED_METHOD_ERROR);
     }
 
@@ -132,7 +133,7 @@ public class ApiGlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleHttpMediaTypeNotSupportedException(
             final HttpMediaTypeNotSupportedException exception
     ) {
-        log.warn("HttpMediaTypeNotSupportedException: ", exception);
+        log.warn("handleHttpMediaTypeNotSupportedException: ", exception);
         return createExceptionResponse(GlobalExceptionCode.UNSUPPORTED_MEDIA_TYPE_ERROR);
     }
 
@@ -150,8 +151,14 @@ public class ApiGlobalExceptionHandler {
                 getRequestUriWithQueryString(request),
                 exception
         );
-        slackAlertManager.sendErrorLog(request, exception);
+        sendAlert(request, exception);
         return createExceptionResponse(GlobalExceptionCode.UNEXPECTED_SERVER_ERROR);
+    }
+
+    private void sendAlert(final HttpServletRequest request, final Exception exception) {
+        if (!(exception instanceof NoHandlerFoundException)) {
+            slackAlertManager.sendErrorLog(request, exception);
+        }
     }
 
     private ResponseEntity<ExceptionResponse> createExceptionResponse(final KoddyExceptionCode code) {
