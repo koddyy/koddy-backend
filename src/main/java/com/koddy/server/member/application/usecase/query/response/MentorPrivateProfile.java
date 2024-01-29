@@ -1,6 +1,9 @@
 package com.koddy.server.member.application.usecase.query.response;
 
 import com.koddy.server.member.domain.model.mentor.Mentor;
+import com.koddy.server.member.domain.model.response.LanguageResponse;
+import com.koddy.server.member.domain.model.response.MentoringPeriodResponse;
+import com.koddy.server.member.domain.model.response.ScheduleResponse;
 
 import java.util.List;
 

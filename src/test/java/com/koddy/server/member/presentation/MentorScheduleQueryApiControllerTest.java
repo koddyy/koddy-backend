@@ -2,12 +2,12 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.GetReservedScheduleUseCase;
-import com.koddy.server.member.application.usecase.query.response.MentoringPeriodResponse;
 import com.koddy.server.member.application.usecase.query.response.ReservedSchedule;
-import com.koddy.server.member.application.usecase.query.response.ScheduleResponse;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
+import com.koddy.server.member.domain.model.response.MentoringPeriodResponse;
+import com.koddy.server.member.domain.model.response.ScheduleResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

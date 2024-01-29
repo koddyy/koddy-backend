@@ -1,4 +1,4 @@
-package com.koddy.server.member.application.usecase.query.response;
+package com.koddy.server.member.domain.model.response;
 
 import com.koddy.server.member.domain.model.mentor.Timeline;
 
