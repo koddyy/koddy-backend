@@ -36,4 +36,27 @@ public class StringRedisOperator implements RedisOperator<String, String> {
     public void delete(final String key) {
         redisTemplate.delete(key);
     }
+
+    @Override
+    public long incr(final String key) {
+        return redisTemplate.opsForValue().increment(key);
+    }
+
+    @Override
+    public long incr(final String key, final long timeout, final TimeUnit timeUnit) {
+        final long count = redisTemplate.opsForValue().increment(key);
+        if (count == 1) {
+            redisTemplate.opsForValue().getAndExpire(key, timeout, timeUnit);
+        }
+        return count;
+    }
+
+    @Override
+    public long incr(final String key, final Duration duration) {
+        final long count = redisTemplate.opsForValue().increment(key);
+        if (count == 1) {
+            redisTemplate.opsForValue().getAndExpire(key, duration);
+        }
+        return count;
+    }
 }

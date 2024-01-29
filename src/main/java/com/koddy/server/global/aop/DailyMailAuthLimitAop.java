@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
-import java.time.Duration;
 
 import static com.koddy.server.auth.exception.AuthExceptionCode.TOO_MANY_MAIL_AUTH_ATTEMPTS;
 
@@ -20,25 +19,26 @@ import static com.koddy.server.auth.exception.AuthExceptionCode.TOO_MANY_MAIL_AU
 @Component
 @RequiredArgsConstructor
 public class DailyMailAuthLimitAop {
-    private static final String AUTH_BAN_KEY = "MAIL-AUTH-BAN:%s";
     private static final String AUTH_TRY_COUNT_KEY = "MAIL-AUTH-TRY:%s";
+    private static final String AUTH_BAN_KEY = "MAIL-AUTH-BAN:%s";
+    private static final String AUTH_BAN_VALUE = "ban";
 
     private final RedisOperator<String, String> redisOperator;
 
     @Before("@annotation(com.koddy.server.global.aop.DailyMailAuthLimit) && args(authenticated, ..)")
     public void applyDailyAuthLimit(final JoinPoint joinPoint, final Authenticated authenticated) {
-        checkUserAlreadyBanned(authenticated.id());
+        checkUserAlreadyBanned(authenticated);
 
         final DailyMailAuthLimit dailyMailAuthLimit = getDailyMailAuthLimitAnnotation(joinPoint);
-        final long dailyTryCount = applyDailyTryCount(authenticated.id());
-        applyBanIfExceededDailyLimit(dailyMailAuthLimit, dailyTryCount, authenticated.id());
+        final long dailyTryCount = applyDailyTryCount(authenticated, dailyMailAuthLimit);
+        applyBanIfExceededDailyLimit(authenticated, dailyMailAuthLimit, dailyTryCount);
     }
 
-    private void checkUserAlreadyBanned(final long id) {
-        final String authBanKey = createKey(AUTH_BAN_KEY, id);
+    private void checkUserAlreadyBanned(final Authenticated authenticated) {
+        final String authBanKey = createKey(AUTH_BAN_KEY, authenticated.id());
         final String value = redisOperator.get(authBanKey);
 
-        if (StringUtils.hasText(value)) {
+        if (StringUtils.hasText(value) && AUTH_BAN_VALUE.equals(value)) {
             throw new AuthException(TOO_MANY_MAIL_AUTH_ATTEMPTS);
         }
     }
@@ -49,40 +49,37 @@ public class DailyMailAuthLimitAop {
         return method.getAnnotation(DailyMailAuthLimit.class);
     }
 
-    private long applyDailyTryCount(final long id) {
-        final String authTryCountKey = createKey(AUTH_TRY_COUNT_KEY, id);
-        final String authTryCount = redisOperator.get(authTryCountKey);
-
-        if (authTryCount == null) {
-            redisOperator.save(authTryCountKey, String.valueOf(1), Duration.ofMinutes(10));
-            return 1;
-        }
-
-        final int currentTryCount = Integer.parseInt(authTryCount) + 1;
-        redisOperator.save(authTryCountKey, String.valueOf(currentTryCount), Duration.ofMinutes(10));
-        return currentTryCount;
+    private long applyDailyTryCount(final Authenticated authenticated, final DailyMailAuthLimit dailyMailAuthLimit) {
+        return redisOperator.incr(
+                createKey(AUTH_TRY_COUNT_KEY, authenticated.id()),
+                dailyMailAuthLimit.banTime(),
+                dailyMailAuthLimit.banTimeUnit()
+        );
     }
 
     private void applyBanIfExceededDailyLimit(
+            final Authenticated authenticated,
             final DailyMailAuthLimit dailyMailAuthLimit,
-            final long dailyTryCount,
-            final long id
+            final long dailyTryCount
     ) {
         if (dailyTryCount > dailyMailAuthLimit.maxTry()) {
-            applyUserBan(dailyMailAuthLimit, id);
-            deleteUserAuthTryCount(id);
+            applyUserBan(dailyMailAuthLimit, authenticated.id());
+            deleteUserAuthTryCount(authenticated.id());
             throw new AuthException(TOO_MANY_MAIL_AUTH_ATTEMPTS);
         }
     }
 
     private void applyUserBan(final DailyMailAuthLimit dailyMailAuthLimit, final long id) {
-        final String authBanKey = createKey(AUTH_BAN_KEY, id);
-        redisOperator.save(authBanKey, "ban", dailyMailAuthLimit.banTime(), dailyMailAuthLimit.banTimeUnit());
+        redisOperator.save(
+                createKey(AUTH_BAN_KEY, id),
+                AUTH_BAN_VALUE,
+                dailyMailAuthLimit.banTime(),
+                dailyMailAuthLimit.banTimeUnit()
+        );
     }
 
     private void deleteUserAuthTryCount(final long id) {
-        final String authTryCountKey = createKey(AUTH_TRY_COUNT_KEY, id);
-        redisOperator.delete(authTryCountKey);
+        redisOperator.delete(createKey(AUTH_TRY_COUNT_KEY, id));
     }
 
     private String createKey(final String prefix, final Object suffix) {
