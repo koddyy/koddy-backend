@@ -14,6 +14,7 @@ import java.util.List;
 
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
 import static com.koddy.server.coffeechat.domain.model.QCoffeeChat.coffeeChat;
+import static com.koddy.server.global.PageResponse.hasNext;
 import static com.koddy.server.member.domain.model.QAvailableLanguage.availableLanguage;
 import static com.koddy.server.member.domain.model.mentor.QMentor.mentor;
 
@@ -85,16 +86,5 @@ public class MenteeMainSearchRepositoryImpl implements MenteeMainSearchRepositor
                 .from(availableLanguage)
                 .orderBy(availableLanguage.member.id.desc())
                 .fetch();
-    }
-
-    private boolean hasNext(
-            final Pageable pageable,
-            final int contentSize,
-            final Long totalCount
-    ) {
-        if (contentSize == pageable.getPageSize()) {
-            return (long) contentSize * (pageable.getPageNumber() + 1) != totalCount;
-        }
-        return false;
     }
 }

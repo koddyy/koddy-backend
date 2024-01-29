@@ -18,6 +18,7 @@ import java.util.List;
 
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
 import static com.koddy.server.coffeechat.domain.model.QCoffeeChat.coffeeChat;
+import static com.koddy.server.global.PageResponse.hasNext;
 import static com.koddy.server.member.domain.model.QAvailableLanguage.availableLanguage;
 import static com.koddy.server.member.domain.model.mentee.QMentee.mentee;
 
@@ -118,16 +119,5 @@ public class MentorMainSearchRepositoryImpl implements MentorMainSearchRepositor
         final List<Long> commonMenteeIds = new ArrayList<>(containsNationalityMenteeIds);
         commonMenteeIds.retainAll(containsLanguageMenteeIds);
         return commonMenteeIds;
-    }
-
-    private boolean hasNext(
-            final Pageable pageable,
-            final int contentSize,
-            final Long totalCount
-    ) {
-        if (contentSize == pageable.getPageSize()) {
-            return (long) contentSize * (pageable.getPageNumber() + 1) != totalCount;
-        }
-        return false;
     }
 }
