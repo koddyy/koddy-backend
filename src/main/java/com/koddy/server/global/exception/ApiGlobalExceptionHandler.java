@@ -145,20 +145,17 @@ public class ApiGlobalExceptionHandler {
             final HttpServletRequest request,
             final Exception exception
     ) {
-        log.error(
-                "handleAnyException: {} {}",
-                request.getMethod(),
-                getRequestUriWithQueryString(request),
-                exception
-        );
-        sendAlert(request, exception);
-        return createExceptionResponse(GlobalExceptionCode.UNEXPECTED_SERVER_ERROR);
-    }
-
-    private void sendAlert(final HttpServletRequest request, final Exception exception) {
         if (!(exception instanceof NoHandlerFoundException)) {
+            log.error(
+                    "handleAnyException: {} {}",
+                    request.getMethod(),
+                    getRequestUriWithQueryString(request),
+                    exception
+            );
             slackAlertManager.sendErrorLog(request, exception);
+            return createExceptionResponse(GlobalExceptionCode.UNEXPECTED_SERVER_ERROR);
         }
+        return createExceptionResponse(GlobalExceptionCode.NOT_SUPPORTED_URI_ERROR);
     }
 
     private ResponseEntity<ExceptionResponse> createExceptionResponse(final KoddyExceptionCode code) {
