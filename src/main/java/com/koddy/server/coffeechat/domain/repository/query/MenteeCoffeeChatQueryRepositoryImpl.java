@@ -1,9 +1,10 @@
 package com.koddy.server.coffeechat.domain.repository.query;
 
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus;
+import com.koddy.server.coffeechat.domain.repository.query.response.MenteeCoffeeChatScheduleData;
+import com.koddy.server.coffeechat.domain.repository.query.response.QMenteeCoffeeChatScheduleData;
 import com.koddy.server.coffeechat.domain.repository.query.spec.MenteeCoffeeChatQueryCondition;
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
-import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,19 @@ public class MenteeCoffeeChatQueryRepositoryImpl implements MenteeCoffeeChatQuer
     private final JPAQueryFactory query;
 
     @Override
-    public Slice<Mentor> fetchAppliedCoffeeChatsByCondition(
+    public Slice<MenteeCoffeeChatScheduleData> fetchAppliedCoffeeChatsByCondition(
             final MenteeCoffeeChatQueryCondition condition,
             final Pageable pageable
     ) {
-        final List<Mentor> result = query
-                .select(mentor)
+        final List<MenteeCoffeeChatScheduleData> result = query
+                .select(new QMenteeCoffeeChatScheduleData(
+                        coffeeChat.id,
+                        coffeeChat.status,
+                        mentor.id,
+                        mentor.name,
+                        mentor.profileImageUrl,
+                        mentor.universityProfile
+                ))
                 .from(coffeeChat)
                 .innerJoin(mentor).on(mentor.id.eq(coffeeChat.targetMemberId))
                 .where(
@@ -50,12 +58,19 @@ public class MenteeCoffeeChatQueryRepositoryImpl implements MenteeCoffeeChatQuer
     }
 
     @Override
-    public Slice<Mentor> fetchSuggestedCoffeeChatsByCondition(
+    public Slice<MenteeCoffeeChatScheduleData> fetchSuggestedCoffeeChatsByCondition(
             final MenteeCoffeeChatQueryCondition condition,
             final Pageable pageable
     ) {
-        final List<Mentor> result = query
-                .select(mentor)
+        final List<MenteeCoffeeChatScheduleData> result = query
+                .select(new QMenteeCoffeeChatScheduleData(
+                        coffeeChat.id,
+                        coffeeChat.status,
+                        mentor.id,
+                        mentor.name,
+                        mentor.profileImageUrl,
+                        mentor.universityProfile
+                ))
                 .from(coffeeChat)
                 .innerJoin(mentor).on(mentor.id.eq(coffeeChat.sourceMemberId))
                 .where(
