@@ -1,23 +1,23 @@
 package com.koddy.server.coffeechat.domain.repository.query;
 
-import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.repository.query.spec.MentorCoffeeChatQueryCondition;
+import com.koddy.server.member.domain.model.mentee.Mentee;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 public interface MentorCoffeeChatQueryRepository {
     /**
-     * 제안한 커피챗에 대한 상태별 정보 (멘토 -> 멘티)
+     * 제안한 커피챗에 대한 상태별 리스트에 포함된 멘티 정보
      */
-    Slice<CoffeeChat> fetchSuggestedCoffeeChatsByCondition(
+    Slice<Mentee> fetchSuggestedCoffeeChatsByCondition(
             final MentorCoffeeChatQueryCondition condition,
             final Pageable pageable
     );
 
     /**
-     * 신청온 커피챗에 대한 상태별 정보 (멘티 -> 멘토)
+     * 신청받은 커피챗에 대한 상태별 리스트에 포함된 멘티 정보
      */
-    Slice<CoffeeChat> fetchAppliedCoffeeChatsByCondition(
+    Slice<Mentee> fetchAppliedCoffeeChatsByCondition(
             final MentorCoffeeChatQueryCondition condition,
             final Pageable pageable
     );

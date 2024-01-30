@@ -2,7 +2,7 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
-import com.koddy.server.global.PageResponse;
+import com.koddy.server.global.SliceResponse;
 import com.koddy.server.member.application.usecase.MenteeMainSearchUseCase;
 import com.koddy.server.member.application.usecase.query.response.CarouselProfileResponse;
 import com.koddy.server.member.application.usecase.query.response.MentorSimpleSearchProfile;
@@ -124,7 +124,7 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
         @DisplayName("멘토들을 조건에 따라 둘러본다")
         void success() {
             // given
-            given(menteeMainSearchUseCase.getMentorsByCondition(any())).willReturn(new PageResponse<>(
+            given(menteeMainSearchUseCase.getMentorsByCondition(any())).willReturn(new SliceResponse<>(
                     List.of(
                             new MentorSimpleSearchProfile(
                                     3,

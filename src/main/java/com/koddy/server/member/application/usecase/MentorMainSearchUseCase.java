@@ -1,7 +1,7 @@
 package com.koddy.server.member.application.usecase;
 
 import com.koddy.server.global.PageCreator;
-import com.koddy.server.global.PageResponse;
+import com.koddy.server.global.SliceResponse;
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
 import com.koddy.server.global.annotation.UseCase;
 import com.koddy.server.member.application.usecase.query.GetAppliedMentees;
@@ -35,12 +35,12 @@ public class MentorMainSearchUseCase {
     }
 
     @KoddyReadOnlyTransactional
-    public PageResponse<List<MenteeSimpleSearchProfile>> getMenteesByCondition(final GetMenteesByCondition query) {
+    public SliceResponse<List<MenteeSimpleSearchProfile>> getMenteesByCondition(final GetMenteesByCondition query) {
         final SearchMenteeCondition condition = query.toCondition();
         final Pageable pageable = PageCreator.create(query.page());
         final Slice<Mentee> result = mentorMainSearchRepository.fetchMenteesByCondition(condition, pageable);
 
-        return new PageResponse<>(
+        return new SliceResponse<>(
                 result.getContent()
                         .stream()
                         .map(MenteeSimpleSearchProfile::of)

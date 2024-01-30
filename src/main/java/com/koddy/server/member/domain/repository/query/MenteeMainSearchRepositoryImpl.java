@@ -17,7 +17,6 @@ import java.util.List;
 
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
 import static com.koddy.server.coffeechat.domain.model.QCoffeeChat.coffeeChat;
-import static com.koddy.server.global.PageResponse.hasNext;
 import static com.koddy.server.member.domain.model.QAvailableLanguage.availableLanguage;
 import static com.koddy.server.member.domain.model.mentor.QMentor.mentor;
 
@@ -64,20 +63,13 @@ public class MenteeMainSearchRepositoryImpl implements MenteeMainSearchRepositor
                 .where(mentor.id.in(filteringMentorIds))
                 .orderBy(mentor.id.desc())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-        final Long totalCount = query
-                .select(mentor.id.count())
-                .from(mentor)
-                .where(mentor.id.in(filteringMentorIds))
-                .where()
-                .fetchOne();
-
         return new SliceImpl<>(
-                result,
+                result.stream().limit(pageable.getPageSize()).toList(),
                 pageable,
-                hasNext(pageable, result.size(), totalCount)
+                result.size() > pageable.getPageSize()
         );
     }
 

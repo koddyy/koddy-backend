@@ -1,7 +1,7 @@
 package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
-import com.koddy.server.global.PageResponse;
+import com.koddy.server.global.SliceResponse;
 import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.aop.AccessControl;
 import com.koddy.server.member.application.usecase.MentorMainSearchUseCase;
@@ -46,10 +46,10 @@ public class MentorMainSearchApiController {
 
     @Operation(summary = "멘티 둘러보기 Endpoint")
     @GetMapping
-    public ResponseEntity<PageResponse<List<MenteeSimpleSearchProfile>>> getMenteesByCondition(
+    public ResponseEntity<SliceResponse<List<MenteeSimpleSearchProfile>>> getMenteesByCondition(
             @ModelAttribute @Valid final GetMenteesByConditionRequest request
     ) {
-        final PageResponse<List<MenteeSimpleSearchProfile>> result = mentorMainSearchUseCase.getMenteesByCondition(request.toQuery());
+        final SliceResponse<List<MenteeSimpleSearchProfile>> result = mentorMainSearchUseCase.getMenteesByCondition(request.toQuery());
         return ResponseEntity.ok(result);
     }
 }
