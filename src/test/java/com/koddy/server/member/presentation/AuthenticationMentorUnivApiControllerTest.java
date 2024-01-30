@@ -198,7 +198,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
                     ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
                     failureDocsWithAccessToken("MemberApi/Mentor/UnivAuth/ProofData/Failure", createHttpSpecSnippets(
                             requestFields(
-                                    body("proofDataUploadUrl", "Presigned로 업로드한 증명 자료 URL", "하나만 업로드", true)
+                                    body("proofDataUploadUrl", "Presigned로 업로드한 증명 자료 URL", "PDF 파일 + 하나만 업로드", true)
                             )
                     ))
             );

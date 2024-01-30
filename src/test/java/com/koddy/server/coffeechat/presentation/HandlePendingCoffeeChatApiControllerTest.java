@@ -113,8 +113,8 @@ class HandlePendingCoffeeChatApiControllerTest extends ControllerTest {
                                     path("coffeeChatId", "커피챗 ID(PK)", true)
                             ),
                             requestFields(
-                                    body("chatType", "멘토링 진행 방식", "zoom, google, kakao, link, wechat", true),
-                                    body("chatValue", "멘토링 진행 방식에 대한 값", "미팅 URL, 메신저 ID, ..", true)
+                                    body("chatType", "멘토링 진행 방식", "- 링크 = zoom google" + ENTER + "- 메신저 = kakao line wechat", true),
+                                    body("chatValue", "멘토링 진행 방식에 대한 값", "미팅 URL or 메신저 ID", true)
                             )
                     ))
             );
@@ -138,8 +138,8 @@ class HandlePendingCoffeeChatApiControllerTest extends ControllerTest {
                                     path("coffeeChatId", "커피챗 ID(PK)", true)
                             ),
                             requestFields(
-                                    body("chatType", "멘토링 진행 방식", "zoom, google, kakao, link, wechat", true),
-                                    body("chatValue", "멘토링 진행 방식에 대한 값", "미팅 URL, 메신저 ID, ..", true)
+                                    body("chatType", "멘토링 진행 방식", "- 링크 = zoom google" + ENTER + "- 메신저 = kakao line wechat", true),
+                                    body("chatValue", "멘토링 진행 방식에 대한 값", "미팅 URL or 메신저 ID", true)
                             )
                     ))
             );

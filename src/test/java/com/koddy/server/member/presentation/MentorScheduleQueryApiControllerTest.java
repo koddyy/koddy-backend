@@ -108,19 +108,19 @@ class MentorScheduleQueryApiControllerTest extends ControllerTest {
                                     query("month", "Month 정보", true)
                             ),
                             responseFields(
-                                    body("period", "멘토링 시간 관련 설정"),
-                                    body("period.startDate", "멘토링 시작 날짜", "KST"),
-                                    body("period.endDate", "멘토링 종료 날짜", "KST"),
-                                    body("schedules", "스케줄"),
+                                    body("period", "멘토링 시간 관련 설정", "Nullable"),
+                                    body("period.startDate", "멘토링 시작 날짜", "[KST] yyyy-MM-dd"),
+                                    body("period.endDate", "멘토링 종료 날짜", "[KST] yyyy-MM-dd"),
+                                    body("schedules", "스케줄", "0..N개"),
                                     body("schedules[].dayOfWeek", "날짜", "월 화 수 목 금 토 일"),
-                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST"),
-                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST"),
-                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST"),
-                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST"),
-                                    body("timeUnit", "멘토링 시간 단위", "minute 단위 -> 30 / 60"),
+                                    body("schedules[].start.hour", "시작 시간 (Hour)"),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)"),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)"),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)"),
+                                    body("timeUnit", "멘토링 시간 단위", "minute 단위 (30, 60, ...)"),
                                     body("reserved", "예약된 시간", "오름차순으로 제공"),
-                                    body("reserved[].start", "예약된 시작 시간", "KST"),
-                                    body("reserved[].end", "예약된 종료 시간", "KST")
+                                    body("reserved[].start", "예약된 시작 시간", "[KST] yyyy-MM-ddTHH:mm:ss" + ENTER + "-> 시간 = 00:00:00 ~ 23:59:59"),
+                                    body("reserved[].end", "예약된 종료 시간", "[KST] yyyy-MM-ddTHH:mm:ss" + ENTER + "-> 시간 = 00:00:00 ~ 23:59:59")
                             )
                     ))
             );

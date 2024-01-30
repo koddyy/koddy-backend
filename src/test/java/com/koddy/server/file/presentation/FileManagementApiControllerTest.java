@@ -57,7 +57,7 @@ class FileManagementApiControllerTest extends ControllerTest {
                     status().isOk(),
                     successDocsWithAccessToken("FileApi/Upload", createHttpSpecSnippets(
                             requestParts(
-                                    file("file", "이미지", "파일 확장자 = JPG, JPEG, PNG", true)
+                                    file("file", "업로드 파일", "파일 확장자 = JPG, JPEG, PNG, PDF", true)
                             ),
                             responseFields(
                                     body("result", "파일 업로드 URL")
@@ -85,7 +85,7 @@ class FileManagementApiControllerTest extends ControllerTest {
                     ExceptionSpec.of(GlobalExceptionCode.VALIDATION_ERROR, "이미지 파일[JPG, JPEG, PNG]을 업로드해주세요."),
                     failureDocsWithAccessToken("FileApi/GetPresignedUrl/Image/Failure", createHttpSpecSnippets(
                             queryParameters(
-                                    query("fileName", "프로필 이미지 사진 파일명", "프로필 이미지 사진 확장자 = JPG, JPEG, PNG", true)
+                                    query("fileName", "프로필 이미지 사진 파일명", "파일 확장자 = JPG, JPEG, PNG", true)
                             )
                     ))
             );
@@ -107,7 +107,7 @@ class FileManagementApiControllerTest extends ControllerTest {
                     status().isOk(),
                     successDocsWithAccessToken("FileApi/GetPresignedUrl/Image/Success", createHttpSpecSnippets(
                             queryParameters(
-                                    query("fileName", "프로필 이미지 사진 파일명", "프로필 이미지 사진 확장자 = JPG, JPEG, PNG", true)
+                                    query("fileName", "프로필 이미지 사진 파일명", "파일 확장자 = JPG, JPEG, PNG", true)
                             ),
                             responseFields(
                                     body("preSignedUrl", "Presigned Url", "PUT 요청으로 이미지 업로드 (URL + File)"),
@@ -136,7 +136,7 @@ class FileManagementApiControllerTest extends ControllerTest {
                     ExceptionSpec.of(GlobalExceptionCode.VALIDATION_ERROR, "PDF 파일을 업로드해주세요."),
                     failureDocsWithAccessToken("FileApi/GetPresignedUrl/Pdf/Failure", createHttpSpecSnippets(
                             queryParameters(
-                                    query("fileName", "멘토 증명자료 파일명", "멘토 증명자료 파일 확장자 = PDF", true)
+                                    query("fileName", "멘토 증명자료 파일명", "파일 확장자 = PDF", true)
                             )
                     ))
             );
@@ -158,7 +158,7 @@ class FileManagementApiControllerTest extends ControllerTest {
                     status().isOk(),
                     successDocsWithAccessToken("FileApi/GetPresignedUrl/Pdf/Success", createHttpSpecSnippets(
                             queryParameters(
-                                    query("fileName", "멘토 증명자료 파일명", "멘토 증명자료 파일 확장자 = PDF", true)
+                                    query("fileName", "멘토 증명자료 파일명", "파일 확장자 = PDF", true)
                             ),
                             responseFields(
                                     body("preSignedUrl", "Presigned Url", "PUT 요청으로 이미지 업로드 (URL + File)"),

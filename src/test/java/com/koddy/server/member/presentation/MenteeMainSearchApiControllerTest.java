@@ -161,7 +161,7 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
                     status().isOk(),
                     successDocs("MemberApi/Mentee/MainSearch/Mentors", createHttpSpecSnippets(
                             queryParameters(
-                                    query("languages", "선택한 언어", "국가 코드 기반 & 콤마(,) 기준 분리", false),
+                                    query("languages", "선택한 언어", "- 국가 코드 기반 (KR EN CN JP VN)" + ENTER + "- 콤마(,) 기준 분리", false),
                                     query("page", "페이지", "1부터 시작", true)
                             ),
                             responseFields(

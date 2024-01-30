@@ -69,12 +69,12 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                     failureDocsWithAccessToken("MemberApi/Update/Mentee/BasicInfo/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
-                                    body("nationality", "국적 (코드 기반)", "KR EN CN JP VN ETC", true),
+                                    body("nationality", "국적", "KR EN CN JP VN ETC", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘티 자기소개", false),
-                                    body("languages", "사용 가능한 언어", true),
-                                    body("languages.main", "메인 언어 (코드 기반)", "1개 이상", true),
-                                    body("languages.sub[]", "서브 언어 (코드 기반)", "0..N개", false),
+                                    body("languages", "사용 가능한 언어", "KR EN CN JP VN", true),
+                                    body("languages.main", "메인 언어", "1개", true),
+                                    body("languages.sub[]", "서브 언어", "0..N개", false),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)
                             )
@@ -98,12 +98,12 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
                     successDocsWithAccessToken("MemberApi/Update/Mentee/BasicInfo/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("name", "이름", true),
-                                    body("nationality", "국적 (코드 기반)", "KR EN CN JP VN ETC", true),
+                                    body("nationality", "국적", "KR EN CN JP VN ETC", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘티 자기소개", false),
-                                    body("languages", "사용 가능한 언어", true),
-                                    body("languages.main", "메인 언어 (코드 기반)", "1개 이상", true),
-                                    body("languages.sub[]", "서브 언어 (코드 기반)", "0..N개", false),
+                                    body("languages", "사용 가능한 언어", "KR EN CN JP VN", true),
+                                    body("languages.main", "메인 언어", "1개", true),
+                                    body("languages.sub[]", "서브 언어", "0..N개", false),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)
                             )

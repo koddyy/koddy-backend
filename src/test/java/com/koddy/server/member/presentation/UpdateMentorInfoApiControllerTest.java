@@ -77,9 +77,9 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘토 자기소개", false),
-                                    body("languages", "사용 가능한 언어", true),
-                                    body("languages.main", "메인 언어 (코드 기반)", "1개 이상", true),
-                                    body("languages.sub[]", "서브 언어 (코드 기반)", "0..N개", false),
+                                    body("languages", "사용 가능한 언어", "KR EN CN JP VN", true),
+                                    body("languages.main", "메인 언어", "1개", true),
+                                    body("languages.sub[]", "서브 언어", "0..N개", false),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
                                     body("enteredIn", "학번", true)
@@ -106,9 +106,9 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("introduction", "멘토 자기소개", false),
-                                    body("languages", "사용 가능한 언어", true),
-                                    body("languages.main", "메인 언어 (코드 기반)", "1개 이상", true),
-                                    body("languages.sub[]", "서브 언어 (코드 기반)", "0..N개", false),
+                                    body("languages", "사용 가능한 언어", "KR EN CN JP VN", true),
+                                    body("languages.main", "메인 언어", "1개", true),
+                                    body("languages.sub[]", "서브 언어", "0..N개", false),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
                                     body("enteredIn", "학번", true)
@@ -147,14 +147,14 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                     failureDocsWithAccessToken("MemberApi/Update/Mentor/Schedule/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("period", "멘토링 시간 관련 설정", false),
-                                    body("period.startDate", "멘토링 시작 날짜", "KST", false),
-                                    body("period.endDate", "멘토링 종료 날짜", "KST", false),
+                                    body("period.startDate", "멘토링 시작 날짜", "[KST] yyyy-MM-dd", false),
+                                    body("period.endDate", "멘토링 종료 날짜", "[KST] yyyy-MM-dd", false),
                                     body("schedules", "멘토링 스케줄", false),
                                     body("schedules[].dayOfWeek", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST -> 0 ~ 23", false),
-                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST -> 0 ~ 59", false),
-                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST -> 0 ~ 23", false),
-                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST -> 0 ~ 59", false)
+                                    body("schedules[].start.hour", "시작 시간 (Hour)", "0 ~ 23", false),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)", "0 ~ 59", false),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)", "0 ~ 23", false),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)", "0 ~ 59", false)
                             )
                     ))
             );
@@ -176,14 +176,14 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
                     successDocsWithAccessToken("MemberApi/Update/Mentor/Schedule/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("period", "멘토링 시간 관련 설정", false),
-                                    body("period.startDate", "멘토링 시작 날짜", "KST", false),
-                                    body("period.endDate", "멘토링 종료 날짜", "KST", false),
+                                    body("period.startDate", "멘토링 시작 날짜", "[KST] yyyy-MM-dd", false),
+                                    body("period.endDate", "멘토링 종료 날짜", "[KST] yyyy-MM-dd", false),
                                     body("schedules", "멘토링 스케줄", false),
                                     body("schedules[].dayOfWeek", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST -> 0 ~ 23", false),
-                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST -> 0 ~ 59", false),
-                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST -> 0 ~ 23", false),
-                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST -> 0 ~ 59", false)
+                                    body("schedules[].start.hour", "시작 시간 (Hour)", "0 ~ 23", false),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)", "0 ~ 59", false),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)", "0 ~ 23", false),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)", "0 ~ 59", false)
                             )
                     ))
             );

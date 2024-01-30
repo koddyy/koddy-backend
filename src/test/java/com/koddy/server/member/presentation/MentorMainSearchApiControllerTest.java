@@ -101,7 +101,7 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
                                     body("result[].id", "멘티 ID(PK)"),
                                     body("result[].name", "이름"),
                                     body("result[].profileImageUrl", "프로필 이미지 URL"),
-                                    body("result[].nationality", "국적"),
+                                    body("result[].nationality", "국적", "KR EN CN JP VN ETC"),
                                     body("result[].interestSchool", "관심있는 학교"),
                                     body("result[].interestMajor", "관심있는 전공")
                             )
@@ -162,15 +162,15 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
                     status().isOk(),
                     successDocs("MemberApi/Mentor/MainSearch/Mentees", createHttpSpecSnippets(
                             queryParameters(
-                                    query("nationalities", "선택한 국적", "국가 코드 기반 & 콤마(,) 기준 분리", false),
-                                    query("languages", "선택한 언어", "국가 코드 기반 & 콤마(,) 기준 분리", false),
+                                    query("nationalities", "선택한 국적", "- 국가 코드 기반 (KR EN CN JP VN ETC)" + ENTER + "- 콤마(,) 기준 분리", false),
+                                    query("languages", "선택한 언어", "- 국가 코드 기반 (KR EN CN JP VN)" + ENTER + "- 콤마(,) 기준 분리", false),
                                     query("page", "페이지", "1부터 시작", true)
                             ),
                             responseFields(
                                     body("result[].id", "멘티 ID(PK)"),
                                     body("result[].name", "이름"),
                                     body("result[].profileImageUrl", "프로필 이미지 URL"),
-                                    body("result[].nationality", "국적"),
+                                    body("result[].nationality", "국적", "KR EN CN JP VN ETC"),
                                     body("result[].interestSchool", "관심있는 학교"),
                                     body("result[].interestMajor", "관심있는 전공"),
                                     body("hasNext", "다음 스크롤 존재 여부")
