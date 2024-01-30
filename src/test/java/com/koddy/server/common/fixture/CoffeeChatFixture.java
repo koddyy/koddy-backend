@@ -236,5 +236,13 @@ public enum CoffeeChatFixture {
             coffeeChat.rejectPendingCoffeeChat("거절..");
             return coffeeChat;
         }
+
+        public static CoffeeChat suggestAndComplete(final CoffeeChatFixture fixture, final Mentor mentor, final Mentee mentee) {
+            final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, "신청..");
+            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(fixture.start), new Reservation(fixture.end));
+            coffeeChat.approvePendingCoffeeChat(fixture.strategy);
+            coffeeChat.complete();
+            return coffeeChat;
+        }
     }
 }
