@@ -5,7 +5,7 @@ import com.koddy.server.coffeechat.domain.repository.query.spec.MentorCoffeeChat
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
-public interface MentorCoffeeChatQueryRepository {
+public interface MentorCoffeeChatScheduleQueryRepository {
     /**
      * 제안한 커피챗에 대한 상태별 리스트 정보
      */

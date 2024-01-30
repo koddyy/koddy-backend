@@ -5,7 +5,7 @@ import com.koddy.server.coffeechat.domain.repository.query.spec.MenteeCoffeeChat
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
-public interface MenteeCoffeeChatQueryRepository {
+public interface MenteeCoffeeChatScheduleQueryRepository {
     /**
      * 신청한 커피챗에 대한 상태별 리스트 정보
      */
