@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
 
 import java.util.Arrays;
 import java.util.List;
@@ -60,16 +61,30 @@ class MenteeMainSearchRepositoryFetchSuggestedMentorsTest extends RepositoryTest
         final CoffeeChat coffeeChat9 = suggest(mentors[9], mentee);
 
         /* limit별 조회 */
-        final List<Mentor> result1 = sut.fetchSuggestedMentors(mentee.getId(), 3);
-        final List<Mentor> result2 = sut.fetchSuggestedMentors(mentee.getId(), 5);
-        final List<Mentor> result3 = sut.fetchSuggestedMentors(mentee.getId(), 7);
-        final List<Mentor> result4 = sut.fetchSuggestedMentors(mentee.getId(), 10);
+        final Page<Mentor> result1 = sut.fetchSuggestedMentors(mentee.getId(), 3);
+        final Page<Mentor> result2 = sut.fetchSuggestedMentors(mentee.getId(), 5);
+        final Page<Mentor> result3 = sut.fetchSuggestedMentors(mentee.getId(), 7);
+        final Page<Mentor> result4 = sut.fetchSuggestedMentors(mentee.getId(), 10);
 
         assertAll(
-                () -> assertThat(result1).containsExactly(mentors[9], mentors[8], mentors[7]),
-                () -> assertThat(result2).containsExactly(mentors[9], mentors[8], mentors[7], mentors[6], mentors[5]),
-                () -> assertThat(result3).containsExactly(mentors[9], mentors[8], mentors[7], mentors[6], mentors[5], mentors[4], mentors[3]),
-                () -> assertThat(result4).containsExactly(mentors[9], mentors[8], mentors[7], mentors[6], mentors[5], mentors[4], mentors[3], mentors[2], mentors[1], mentors[0])
+                () -> assertThat(result1.hasNext()).isTrue(),
+                () -> assertThat(result1.getTotalElements()).isEqualTo(10),
+                () -> assertThat(result1.getContent()).containsExactly(mentors[9], mentors[8], mentors[7]),
+                () -> assertThat(result2.hasNext()).isTrue(),
+                () -> assertThat(result2.getTotalElements()).isEqualTo(10),
+                () -> assertThat(result2.getContent()).containsExactly(mentors[9], mentors[8], mentors[7], mentors[6], mentors[5]),
+                () -> assertThat(result3.hasNext()).isTrue(),
+                () -> assertThat(result3.getTotalElements()).isEqualTo(10),
+                () -> assertThat(result3.getContent()).containsExactly(
+                        mentors[9], mentors[8], mentors[7], mentors[6],
+                        mentors[5], mentors[4], mentors[3]
+                ),
+                () -> assertThat(result4.hasNext()).isFalse(),
+                () -> assertThat(result4.getTotalElements()).isEqualTo(10),
+                () -> assertThat(result4.getContent()).containsExactly(
+                        mentors[9], mentors[8], mentors[7], mentors[6], mentors[5],
+                        mentors[4], mentors[3], mentors[2], mentors[1], mentors[0]
+                )
         );
 
         /* cancel 후 limit별 조회 */
@@ -78,16 +93,24 @@ class MenteeMainSearchRepositoryFetchSuggestedMentorsTest extends RepositoryTest
         coffeeChat7.cancel();
         coffeeChat9.cancel();
 
-        final List<Mentor> result5 = sut.fetchSuggestedMentors(mentee.getId(), 3);
-        final List<Mentor> result6 = sut.fetchSuggestedMentors(mentee.getId(), 5);
-        final List<Mentor> result7 = sut.fetchSuggestedMentors(mentee.getId(), 7);
-        final List<Mentor> result8 = sut.fetchSuggestedMentors(mentee.getId(), 10);
+        final Page<Mentor> result5 = sut.fetchSuggestedMentors(mentee.getId(), 3);
+        final Page<Mentor> result6 = sut.fetchSuggestedMentors(mentee.getId(), 5);
+        final Page<Mentor> result7 = sut.fetchSuggestedMentors(mentee.getId(), 7);
+        final Page<Mentor> result8 = sut.fetchSuggestedMentors(mentee.getId(), 10);
 
         assertAll(
-                () -> assertThat(result5).containsExactly(mentors[8], mentors[6], mentors[4]),
-                () -> assertThat(result6).containsExactly(mentors[8], mentors[6], mentors[4], mentors[2], mentors[1]),
-                () -> assertThat(result7).containsExactly(mentors[8], mentors[6], mentors[4], mentors[2], mentors[1], mentors[0]),
-                () -> assertThat(result8).containsExactly(mentors[8], mentors[6], mentors[4], mentors[2], mentors[1], mentors[0])
+                () -> assertThat(result5.hasNext()).isTrue(),
+                () -> assertThat(result5.getTotalElements()).isEqualTo(6),
+                () -> assertThat(result5.getContent()).containsExactly(mentors[8], mentors[6], mentors[4]),
+                () -> assertThat(result6.hasNext()).isTrue(),
+                () -> assertThat(result6.getTotalElements()).isEqualTo(6),
+                () -> assertThat(result6.getContent()).containsExactly(mentors[8], mentors[6], mentors[4], mentors[2], mentors[1]),
+                () -> assertThat(result7.hasNext()).isFalse(),
+                () -> assertThat(result7.getTotalElements()).isEqualTo(6),
+                () -> assertThat(result7.getContent()).containsExactly(mentors[8], mentors[6], mentors[4], mentors[2], mentors[1], mentors[0]),
+                () -> assertThat(result8.hasNext()).isFalse(),
+                () -> assertThat(result8.getTotalElements()).isEqualTo(6),
+                () -> assertThat(result8.getContent()).containsExactly(mentors[8], mentors[6], mentors[4], mentors[2], mentors[1], mentors[0])
         );
     }
 

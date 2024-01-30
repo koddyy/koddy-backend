@@ -4,12 +4,15 @@ import com.koddy.server.global.PageCreator;
 import com.koddy.server.global.PageResponse;
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
 import com.koddy.server.global.annotation.UseCase;
+import com.koddy.server.member.application.usecase.query.GetAppliedMentees;
 import com.koddy.server.member.application.usecase.query.GetMenteesByCondition;
+import com.koddy.server.member.application.usecase.query.response.CarouselProfileResponse;
 import com.koddy.server.member.application.usecase.query.response.MenteeSimpleSearchProfile;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.repository.query.MentorMainSearchRepository;
 import com.koddy.server.member.domain.repository.query.spec.SearchMenteeCondition;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
@@ -21,11 +24,14 @@ public class MentorMainSearchUseCase {
     private final MentorMainSearchRepository mentorMainSearchRepository;
 
     @KoddyReadOnlyTransactional
-    public List<MenteeSimpleSearchProfile> getAppliedMentees(final long mentorId, final int limit) {
-        final List<Mentee> result = mentorMainSearchRepository.fetchAppliedMentees(mentorId, limit);
-        return result.stream()
-                .map(MenteeSimpleSearchProfile::of)
-                .toList();
+    public CarouselProfileResponse<List<MenteeSimpleSearchProfile>> getAppliedMentees(final GetAppliedMentees query) {
+        final Page<Mentee> result = mentorMainSearchRepository.fetchAppliedMentees(query.mentorId(), query.limit());
+        return new CarouselProfileResponse<>(
+                result.stream()
+                        .map(MenteeSimpleSearchProfile::of)
+                        .toList(),
+                result.getTotalElements()
+        );
     }
 
     @KoddyReadOnlyTransactional

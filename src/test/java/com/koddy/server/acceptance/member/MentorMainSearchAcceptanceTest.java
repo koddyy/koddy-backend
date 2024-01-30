@@ -125,10 +125,11 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
             assertMenteesMatch(
                     response1,
                     List.of(MENTEE_5, MENTEE_4, MENTEE_3),
-                    List.of(mentees[4].id(), mentees[3].id(), mentees[2].id())
+                    List.of(mentees[4].id(), mentees[3].id(), mentees[2].id()),
+                    5L
             );
 
-            /* 3명 취소 */
+            /* 2명 취소 */
             신청_제안한_커피챗을_취소한다(coffeeChatId4, mentees[3].token().accessToken());
             신청_제안한_커피챗을_취소한다(coffeeChatId2, mentees[1].token().accessToken());
 
@@ -137,7 +138,8 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
             assertMenteesMatch(
                     response2,
                     List.of(MENTEE_5, MENTEE_3, MENTEE_1),
-                    List.of(mentees[4].id(), mentees[2].id(), mentees[0].id())
+                    List.of(mentees[4].id(), mentees[2].id(), mentees[0].id()),
+                    3L
             );
         }
     }
@@ -163,9 +165,9 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
                     List.of(
                             mentees[19].id(), mentees[18].id(), mentees[17].id(), mentees[16].id(), mentees[15].id(),
                             mentees[14].id(), mentees[13].id(), mentees[12].id(), mentees[11].id(), mentees[10].id()
-                    )
+                    ),
+                    true
             );
-            response1.body("hasNext", is(true));
 
             final String url2 = UriComponentsBuilder
                     .fromUriString("/api/mentees?page=2")
@@ -181,9 +183,9 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
                     List.of(
                             mentees[9].id(), mentees[8].id(), mentees[7].id(), mentees[6].id(), mentees[5].id(),
                             mentees[4].id(), mentees[3].id(), mentees[2].id(), mentees[1].id(), mentees[0].id()
-                    )
+                    ),
+                    false
             );
-            response2.body("hasNext", is(false));
 
             /* 최신 가입순 + 국적 */
             final String url3 = UriComponentsBuilder
@@ -200,9 +202,9 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
                     List.of(
                             mentees[17].id(), mentees[16].id(), mentees[15].id(), mentees[12].id(), mentees[11].id(),
                             mentees[10].id(), mentees[7].id(), mentees[6].id(), mentees[5].id(), mentees[2].id()
-                    )
+                    ),
+                    true
             );
-            response3.body("hasNext", is(true));
 
             final String url4 = UriComponentsBuilder
                     .fromUriString("/api/mentees?page=2&nationalities=EN,JP,CN")
@@ -212,9 +214,9 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
             assertMenteesMatch(
                     response4,
                     List.of(MENTEE_2, MENTEE_1),
-                    List.of(mentees[1].id(), mentees[0].id())
+                    List.of(mentees[1].id(), mentees[0].id()),
+                    false
             );
-            response4.body("hasNext", is(false));
 
             /* 최신 가입순 + 언어 */
             final String url5 = UriComponentsBuilder
@@ -231,9 +233,9 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
                     List.of(
                             mentees[18].id(), mentees[16].id(), mentees[14].id(), mentees[12].id(), mentees[10].id(),
                             mentees[8].id(), mentees[6].id(), mentees[4].id(), mentees[2].id(), mentees[0].id()
-                    )
+                    ),
+                    false
             );
-            response5.body("hasNext", is(false));
 
             final String url6 = UriComponentsBuilder
                     .fromUriString("/api/mentees?page=2&languages=KR")
@@ -243,9 +245,9 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
             assertMenteesMatch(
                     response6,
                     List.of(),
-                    List.of()
+                    List.of(),
+                    false
             );
-            response6.body("hasNext", is(false));
 
             /* 최신 가입순 + 국적 + 언어 */
             final String url7 = UriComponentsBuilder
@@ -256,9 +258,9 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
             assertMenteesMatch(
                     response7,
                     List.of(MENTEE_17, MENTEE_13, MENTEE_11, MENTEE_7, MENTEE_3, MENTEE_1),
-                    List.of(mentees[16].id(), mentees[12].id(), mentees[10].id(), mentees[6].id(), mentees[2].id(), mentees[0].id())
+                    List.of(mentees[16].id(), mentees[12].id(), mentees[10].id(), mentees[6].id(), mentees[2].id(), mentees[0].id()),
+                    false
             );
-            response7.body("hasNext", is(false));
 
             final String url8 = UriComponentsBuilder
                     .fromUriString("/api/mentees?page=2&nationalities=EN,JP,CN&languages=EN,KR")
@@ -268,22 +270,50 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
             assertMenteesMatch(
                     response8,
                     List.of(),
-                    List.of()
+                    List.of(),
+                    false
             );
-            response8.body("hasNext", is(false));
         }
     }
 
     private void assertMenteesMatch(
             final ValidatableResponse response,
             final List<MenteeFixture> mentees,
-            final List<Long> ids
+            final List<Long> ids,
+            final Long totalCount
     ) {
-        final int totalCount = mentees.size();
+        final int totalSize = mentees.size();
         response
-                .body("result", hasSize(totalCount));
+                .body("result", hasSize(totalSize))
+                .body("totalCount", is(totalCount.intValue()));
 
-        for (int i = 0; i < totalCount; i++) {
+        for (int i = 0; i < totalSize; i++) {
+            final String index = String.format("result[%d]", i);
+            final MenteeFixture mentee = mentees.get(i);
+            final Long id = ids.get(i);
+
+            response
+                    .body(index + ".id", is(id.intValue()))
+                    .body(index + ".name", is(mentee.getName()))
+                    .body(index + ".profileImageUrl", is(mentee.getProfileImageUrl()))
+                    .body(index + ".nationality", is(mentee.getNationality().getCode()))
+                    .body(index + ".interestSchool", is(mentee.getInterest().getSchool()))
+                    .body(index + ".interestMajor", is(mentee.getInterest().getMajor()));
+        }
+    }
+
+    private void assertMenteesMatch(
+            final ValidatableResponse response,
+            final List<MenteeFixture> mentees,
+            final List<Long> ids,
+            final boolean hasNext
+    ) {
+        final int totalSize = mentees.size();
+        response
+                .body("result", hasSize(totalSize))
+                .body("hasNext", is(hasNext));
+
+        for (int i = 0; i < totalSize; i++) {
             final String index = String.format("result[%d]", i);
             final MenteeFixture mentee = mentees.get(i);
             final Long id = ids.get(i);
