@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class MenteeCoffeeChatQueryRepositoryImpl implements MenteeCoffeeChatQuer
                 .innerJoin(mentor).on(mentor.id.eq(coffeeChat.targetMemberId))
                 .where(
                         coffeeChat.sourceMemberId.eq(condition.menteeId()),
-                        statusEq(condition.status())
+                        statusIn(condition.status())
                 )
                 .orderBy(coffeeChat.lastModifiedAt.desc(), coffeeChat.id.desc())
                 .offset(pageable.getOffset())
@@ -59,7 +60,7 @@ public class MenteeCoffeeChatQueryRepositoryImpl implements MenteeCoffeeChatQuer
                 .innerJoin(mentor).on(mentor.id.eq(coffeeChat.sourceMemberId))
                 .where(
                         coffeeChat.targetMemberId.eq(condition.menteeId()),
-                        statusEq(condition.status())
+                        statusIn(condition.status())
                 )
                 .orderBy(coffeeChat.lastModifiedAt.desc(), coffeeChat.id.desc())
                 .offset(pageable.getOffset())
@@ -73,10 +74,10 @@ public class MenteeCoffeeChatQueryRepositoryImpl implements MenteeCoffeeChatQuer
         );
     }
 
-    private BooleanExpression statusEq(final CoffeeChatStatus status) {
-        if (status == null) {
+    private BooleanExpression statusIn(final List<CoffeeChatStatus> status) {
+        if (CollectionUtils.isEmpty(status)) {
             return null;
         }
-        return coffeeChat.status.eq(status);
+        return coffeeChat.status.in(status);
     }
 }
