@@ -96,7 +96,7 @@ class MentorMainSearchRepositoryFetchAppliedMenteesTest extends RepositoryTest {
     }
 
     private CoffeeChat apply(final Mentee mentee, final Mentor mentor, final LocalDateTime start, final LocalDateTime end) {
-        return coffeeChatRepository.save(CoffeeChat.applyCoffeeChat(
+        return coffeeChatRepository.save(CoffeeChat.apply(
                 mentee,
                 mentor,
                 "신청..",

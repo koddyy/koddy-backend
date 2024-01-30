@@ -44,7 +44,7 @@ class CoffeeChatTest extends UnitTest {
             // when
             final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
             final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
-            final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end);
+            final CoffeeChat coffeeChat = CoffeeChat.apply(mentee, mentor, applyReason, start, end);
 
             // then
             assertAll(
@@ -64,7 +64,7 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("멘토 -> 멘티에게 커피챗을 제안한다")
         void suggestCoffeeChat() {
             // when
-            final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
+            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason);
 
             // then
             assertAll(
@@ -91,7 +91,7 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("거절한다")
         void reject() {
             // given
-            final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end);
+            final CoffeeChat coffeeChat = CoffeeChat.apply(mentee, mentor, applyReason, start, end);
             final String rejectReason = "거절..";
 
             // when
@@ -115,7 +115,7 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("수락한다")
         void approve() {
             // given
-            final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end);
+            final CoffeeChat coffeeChat = CoffeeChat.apply(mentee, mentor, applyReason, start, end);
             final Strategy strategy = StrategyFixture.KAKAO_ID.toDomain();
 
             // when
@@ -143,7 +143,7 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("거절한다")
         void reject() {
             // given
-            final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
+            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason);
             final String rejectReason = "거절..";
 
             // when
@@ -167,7 +167,7 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("1차 수락한다 (멘토 최종 수락 대기)")
         void pending() {
             // given
-            final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
+            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason);
             final String question = "질문..";
             final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
             final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
@@ -201,7 +201,7 @@ class CoffeeChatTest extends UnitTest {
 
         @BeforeEach
         void setUp() {
-            coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
+            coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason);
             coffeeChat.pendingFromMentorSuggest(question, start, end);
         }
 
@@ -263,8 +263,8 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("APPLY 상태가 아니면 취소가 불가능하다")
         void throwExceptionByCannotCancelStatus() {
             // given
-            final CoffeeChat applyCoffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end);
-            final CoffeeChat suggestCoffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
+            final CoffeeChat applyCoffeeChat = CoffeeChat.apply(mentee, mentor, applyReason, start, end);
+            final CoffeeChat suggestCoffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason);
             applyCoffeeChat.approveFromMenteeApply(StrategyFixture.KAKAO_ID.toDomain());
             suggestCoffeeChat.pendingFromMentorSuggest(question, start, end);
 
@@ -283,7 +283,7 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("멘티는 자신이 신청한 커피챗을 취소한다")
         void cancelAppliedCoffeeChat() {
             // given
-            final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end);
+            final CoffeeChat coffeeChat = CoffeeChat.apply(mentee, mentor, applyReason, start, end);
 
             // when
             coffeeChat.cancel();
@@ -306,7 +306,7 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("멘토는 자신이 제안한 커피챗을 취소한다")
         void cancelSuggestedCoffeeChat() {
             // given
-            final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
+            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason);
 
             // when
             coffeeChat.cancel();
@@ -374,7 +374,7 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("멘토는 자신이 제안한 커피챗을 취소한다")
         void cancelSuggestedCoffeeChat() {
             // given
-            final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
+            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason);
 
             // when
             coffeeChat.cancel();
@@ -400,7 +400,7 @@ class CoffeeChatTest extends UnitTest {
         // given
         final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 2, 18, 0));
         final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 2, 18, 30));
-        final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end);
+        final CoffeeChat coffeeChat = CoffeeChat.apply(mentee, mentor, applyReason, start, end);
 
         // when
         final boolean actual1 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 1, 18, 20)));

@@ -99,7 +99,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         this.strategy = strategy;
     }
 
-    public static CoffeeChat applyCoffeeChat(
+    public static CoffeeChat apply(
             final Mentee mentee,
             final Mentor mentor,
             final String applyReason,
@@ -119,7 +119,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         );
     }
 
-    public static CoffeeChat suggestCoffeeChat(final Mentor mentor, final Mentee mentee, final String applyReason) {
+    public static CoffeeChat suggest(final Mentor mentor, final Mentee mentee, final String applyReason) {
         return new CoffeeChat(
                 mentor.getId(),
                 mentee.getId(),
@@ -131,6 +131,14 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
                 null,
                 null
         );
+    }
+
+    public void cancel() {
+        if (this.status != APPLY) {
+            throw new CoffeeChatException(CANNOT_CANCEL_STATUS);
+        }
+
+        this.status = CANCEL;
     }
 
     public void rejectFromMenteeApply(final String rejectReason) {
@@ -187,14 +195,6 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
 
         this.strategy = strategy;
         this.status = APPROVE;
-    }
-
-    public void cancel() {
-        if (this.status != APPLY) {
-            throw new CoffeeChatException(CANNOT_CANCEL_STATUS);
-        }
-
-        this.status = CANCEL;
     }
 
     public void complete() {

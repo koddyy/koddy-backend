@@ -92,6 +92,6 @@ class MenteeMainSearchRepositoryFetchSuggestedMentorsTest extends RepositoryTest
     }
 
     private CoffeeChat suggest(final Mentor mentor, final Mentee mentee) {
-        return coffeeChatRepository.save(CoffeeChat.suggestCoffeeChat(mentor, mentee, "신청.."));
+        return coffeeChatRepository.save(CoffeeChat.suggest(mentor, mentee, "신청.."));
     }
 }

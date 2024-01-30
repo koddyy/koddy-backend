@@ -231,41 +231,41 @@ class CoffeeChatRepositoryTest extends RepositoryTest {
     }
 
     private CoffeeChat suggest(final Mentor mentor, final Mentee mentee) {
-        return sut.save(CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason));
+        return sut.save(CoffeeChat.suggest(mentor, mentee, applyReason));
     }
 
     private CoffeeChat suggestAndPending(final Mentor mentor, final Mentee mentee, final Reservation start, final Reservation end) {
-        final CoffeeChat coffeeChat = sut.save(CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason));
+        final CoffeeChat coffeeChat = sut.save(CoffeeChat.suggest(mentor, mentee, applyReason));
         coffeeChat.pendingFromMentorSuggest(question, start, end);
         return coffeeChat;
     }
 
     private CoffeeChat suggestAndPendingAndApprove(final Mentor mentor, final Mentee mentee, final Reservation start, final Reservation end) {
-        final CoffeeChat coffeeChat = sut.save(CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason));
+        final CoffeeChat coffeeChat = sut.save(CoffeeChat.suggest(mentor, mentee, applyReason));
         coffeeChat.pendingFromMentorSuggest(question, start, end);
         coffeeChat.approvePendingCoffeeChat(StrategyFixture.ZOOM_LINK.toDomain());
         return coffeeChat;
     }
 
     private CoffeeChat suggestAndPendingAndReject(final Mentor mentor, final Mentee mentee, final Reservation start, final Reservation end) {
-        final CoffeeChat coffeeChat = sut.save(CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason));
+        final CoffeeChat coffeeChat = sut.save(CoffeeChat.suggest(mentor, mentee, applyReason));
         coffeeChat.pendingFromMentorSuggest(question, start, end);
         coffeeChat.rejectPendingCoffeeChat(rejectReason);
         return coffeeChat;
     }
 
     private CoffeeChat suggestAndReject(final Mentor mentor, final Mentee mentee) {
-        final CoffeeChat coffeeChat = sut.save(CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason));
+        final CoffeeChat coffeeChat = sut.save(CoffeeChat.suggest(mentor, mentee, applyReason));
         coffeeChat.rejectFromMentorSuggest(rejectReason);
         return coffeeChat;
     }
 
     private CoffeeChat apply(final Mentee mentee, final Mentor mentor, final Reservation start, final Reservation end) {
-        return sut.save(CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end));
+        return sut.save(CoffeeChat.apply(mentee, mentor, applyReason, start, end));
     }
 
     private CoffeeChat applyAndApprove(final Mentee mentee, final Mentor mentor, final Reservation start, final Reservation end) {
-        final CoffeeChat coffeeChat = sut.save(CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end));
+        final CoffeeChat coffeeChat = sut.save(CoffeeChat.apply(mentee, mentor, applyReason, start, end));
         coffeeChat.approveFromMenteeApply(StrategyFixture.ZOOM_LINK.toDomain());
         return coffeeChat;
     }

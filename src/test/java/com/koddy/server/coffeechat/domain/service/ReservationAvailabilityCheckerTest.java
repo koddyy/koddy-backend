@@ -135,9 +135,9 @@ class ReservationAvailabilityCheckerTest extends UnitTest {
         final LocalDateTime start1 = LocalDateTime.of(2024, 2, 6, 18, 0);
         final LocalDateTime start2 = LocalDateTime.of(2024, 2, 7, 18, 0);
         final LocalDateTime start3 = LocalDateTime.of(2024, 2, 8, 18, 0);
-        final CoffeeChat coffeeChat1 = CoffeeChat.applyCoffeeChat(mentee, mentor, "신청..", new Reservation(start1), new Reservation(start1.plusHours(2))).apply(1L);
-        final CoffeeChat coffeeChat2 = CoffeeChat.applyCoffeeChat(mentee, mentor, "신청..", new Reservation(start2), new Reservation(start2.plusHours(2))).apply(2L);
-        final CoffeeChat coffeeChat3 = CoffeeChat.applyCoffeeChat(mentee, mentor, "신청..", new Reservation(start3), new Reservation(start3.plusHours(2))).apply(3L);
+        final CoffeeChat coffeeChat1 = CoffeeChat.apply(mentee, mentor, "신청..", new Reservation(start1), new Reservation(start1.plusHours(2))).apply(1L);
+        final CoffeeChat coffeeChat2 = CoffeeChat.apply(mentee, mentor, "신청..", new Reservation(start2), new Reservation(start2.plusHours(2))).apply(2L);
+        final CoffeeChat coffeeChat3 = CoffeeChat.apply(mentee, mentor, "신청..", new Reservation(start3), new Reservation(start3.plusHours(2))).apply(3L);
         given(coffeeChatRepository.getReservedCoffeeChat(mentor.getId(), 2024, 2)).willReturn(List.of(coffeeChat1, coffeeChat2, coffeeChat3));
 
         // when - then
@@ -201,9 +201,9 @@ class ReservationAvailabilityCheckerTest extends UnitTest {
         final LocalDateTime start1 = LocalDateTime.of(2024, 2, 6, 18, 0);
         final LocalDateTime start2 = LocalDateTime.of(2024, 2, 7, 18, 0);
         final LocalDateTime start3 = LocalDateTime.of(2024, 2, 8, 18, 0);
-        final CoffeeChat coffeeChat1 = CoffeeChat.applyCoffeeChat(mentee, mentor, "신청..", new Reservation(start1), new Reservation(start1.plusHours(2))).apply(1L);
-        final CoffeeChat coffeeChat2 = CoffeeChat.applyCoffeeChat(mentee, mentor, "신청..", new Reservation(start2), new Reservation(start2.plusHours(2))).apply(2L);
-        final CoffeeChat coffeeChat3 = CoffeeChat.applyCoffeeChat(mentee, mentor, "신청..", new Reservation(start3), new Reservation(start3.plusHours(2))).apply(3L);
+        final CoffeeChat coffeeChat1 = CoffeeChat.apply(mentee, mentor, "신청..", new Reservation(start1), new Reservation(start1.plusHours(2))).apply(1L);
+        final CoffeeChat coffeeChat2 = CoffeeChat.apply(mentee, mentor, "신청..", new Reservation(start2), new Reservation(start2.plusHours(2))).apply(2L);
+        final CoffeeChat coffeeChat3 = CoffeeChat.apply(mentee, mentor, "신청..", new Reservation(start3), new Reservation(start3.plusHours(2))).apply(3L);
         given(coffeeChatRepository.getReservedCoffeeChat(mentor.getId(), 2024, 2)).willReturn(List.of(coffeeChat1, coffeeChat2, coffeeChat3));
 
         // when - then

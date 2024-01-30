@@ -45,9 +45,9 @@ class GetReservedScheduleUseCaseTest extends UnitTest {
         final GetReservedSchedule query = new GetReservedSchedule(mentor.getId(), 2024, 2);
         given(mentorRepository.getByIdWithSchedules(query.mentorId())).willReturn(mentor);
 
-        final CoffeeChat coffeeChatA = CoffeeChat.suggestCoffeeChat(mentor, menteeA, "제안..").apply(1L);
-        final CoffeeChat coffeeChatB = CoffeeChat.suggestCoffeeChat(mentor, menteeB, "제안..").apply(2L);
-        final CoffeeChat coffeeChatC = CoffeeChat.suggestCoffeeChat(mentor, menteeC, "제안..").apply(3L);
+        final CoffeeChat coffeeChatA = CoffeeChat.suggest(mentor, menteeA, "제안..").apply(1L);
+        final CoffeeChat coffeeChatB = CoffeeChat.suggest(mentor, menteeB, "제안..").apply(2L);
+        final CoffeeChat coffeeChatC = CoffeeChat.suggest(mentor, menteeC, "제안..").apply(3L);
         coffeeChatA.rejectFromMentorSuggest("거절..");
         coffeeChatB.pendingFromMentorSuggest(
                 "질문..",
