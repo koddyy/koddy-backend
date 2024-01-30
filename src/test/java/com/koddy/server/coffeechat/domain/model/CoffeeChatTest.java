@@ -2,6 +2,8 @@ package com.koddy.server.coffeechat.domain.model;
 
 import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.common.UnitTest;
+import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow;
+import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow;
 import com.koddy.server.common.fixture.StrategyFixture;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -15,9 +17,12 @@ import java.time.LocalDateTime;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.COMPLETE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_CANCEL_STATUS;
+import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_COMPLETE_STATUS;
+import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -294,6 +299,74 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
                     () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
+            );
+        }
+
+        @Test
+        @DisplayName("멘토는 자신이 제안한 커피챗을 취소한다")
+        void cancelSuggestedCoffeeChat() {
+            // given
+            final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason);
+
+            // when
+            coffeeChat.cancel();
+
+            // then
+            assertAll(
+                    () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
+                    () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
+                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getQuestion()).isNull(),
+                    () -> assertThat(coffeeChat.getRejectReason()).isNull(),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(CANCEL),
+                    () -> assertThat(coffeeChat.getStart()).isNull(),
+                    () -> assertThat(coffeeChat.getEnd()).isNull(),
+                    () -> assertThat(coffeeChat.getStrategy()).isNull()
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("신청/제안한 커피챗 진행 완료")
+    class Complete {
+        @Test
+        @DisplayName("APPROVE 상태가 아니면 완료 상태로 갱신이 불가능하다")
+        void throwExceptionByCannotCompleteStatus() {
+            // given
+            final CoffeeChat coffeeChatA = MenteeFlow.applyAndReject(월요일_1주차_20_00_시작, mentee, mentor);
+            final CoffeeChat coffeeChatB = MentorFlow.suggestAndReject(mentor, mentee);
+
+            // when - then
+            assertAll(
+                    () -> assertThatThrownBy(coffeeChatA::complete)
+                            .isInstanceOf(CoffeeChatException.class)
+                            .hasMessage(CANNOT_COMPLETE_STATUS.getMessage()),
+                    () -> assertThatThrownBy(coffeeChatB::complete)
+                            .isInstanceOf(CoffeeChatException.class)
+                            .hasMessage(CANNOT_COMPLETE_STATUS.getMessage())
+            );
+        }
+
+        @Test
+        @DisplayName("APPROVE 상태의 커피챗을 진행한 후 완료 상태로 갱신한다")
+        void success() {
+            // given
+            final CoffeeChat coffeeChat = MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor);
+
+            // when
+            coffeeChat.complete();
+
+            // then
+            assertAll(
+                    () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
+                    () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
+                    () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
+                    () -> assertThat(coffeeChat.getQuestion()).isNull(),
+                    () -> assertThat(coffeeChat.getRejectReason()).isNull(),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(COMPLETE),
+                    () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
+                    () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
+                    () -> assertThat(coffeeChat.getStrategy()).isEqualTo(월요일_1주차_20_00_시작.getStrategy())
             );
         }
 
