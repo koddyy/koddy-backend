@@ -67,6 +67,7 @@ public abstract class ControllerTest {
     protected static final String ENTER = " +\n";
 
     private MockMvc mockMvc;
+
     @Autowired
     private ObjectMapper objectMapper;
 
