@@ -1,12 +1,12 @@
 package com.koddy.server.member.application.usecase;
 
-import com.koddy.server.global.PageCreator;
-import com.koddy.server.global.SliceResponse;
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
 import com.koddy.server.global.annotation.UseCase;
+import com.koddy.server.global.query.PageCreator;
+import com.koddy.server.global.query.PageResponse;
+import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.application.usecase.query.GetAppliedMentees;
 import com.koddy.server.member.application.usecase.query.GetMenteesByCondition;
-import com.koddy.server.member.application.usecase.query.response.CarouselProfileResponse;
 import com.koddy.server.member.application.usecase.query.response.MenteeSimpleSearchProfile;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.repository.query.MentorMainSearchRepository;
@@ -24,13 +24,14 @@ public class MentorMainSearchUseCase {
     private final MentorMainSearchRepository mentorMainSearchRepository;
 
     @KoddyReadOnlyTransactional
-    public CarouselProfileResponse<List<MenteeSimpleSearchProfile>> getAppliedMentees(final GetAppliedMentees query) {
+    public PageResponse<List<MenteeSimpleSearchProfile>> getAppliedMentees(final GetAppliedMentees query) {
         final Page<Mentee> result = mentorMainSearchRepository.fetchAppliedMentees(query.mentorId(), query.limit());
-        return new CarouselProfileResponse<>(
+        return new PageResponse<>(
                 result.stream()
                         .map(MenteeSimpleSearchProfile::of)
                         .toList(),
-                result.getTotalElements()
+                result.getTotalElements(),
+                result.hasNext()
         );
     }
 

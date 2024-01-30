@@ -1,12 +1,12 @@
 package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
-import com.koddy.server.global.SliceResponse;
 import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.aop.AccessControl;
+import com.koddy.server.global.query.PageResponse;
+import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.application.usecase.MentorMainSearchUseCase;
 import com.koddy.server.member.application.usecase.query.GetAppliedMentees;
-import com.koddy.server.member.application.usecase.query.response.CarouselProfileResponse;
 import com.koddy.server.member.application.usecase.query.response.MenteeSimpleSearchProfile;
 import com.koddy.server.member.presentation.dto.request.GetMenteesByConditionRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,11 +34,11 @@ public class MentorMainSearchApiController {
     @Operation(summary = "커피챗 신청한 멘티 조회 Endpoint (멘토 전용)")
     @GetMapping("/applied-coffeechats")
     @AccessControl(role = MENTOR)
-    public ResponseEntity<CarouselProfileResponse<List<MenteeSimpleSearchProfile>>> getAppliedMentees(
+    public ResponseEntity<PageResponse<List<MenteeSimpleSearchProfile>>> getAppliedMentees(
             @Auth final Authenticated authenticated,
             @RequestParam(defaultValue = "3") final int limit
     ) {
-        final CarouselProfileResponse<List<MenteeSimpleSearchProfile>> result = mentorMainSearchUseCase.getAppliedMentees(
+        final PageResponse<List<MenteeSimpleSearchProfile>> result = mentorMainSearchUseCase.getAppliedMentees(
                 new GetAppliedMentees(authenticated.id(), limit)
         );
         return ResponseEntity.ok(result);

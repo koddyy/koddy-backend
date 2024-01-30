@@ -2,9 +2,9 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
-import com.koddy.server.global.SliceResponse;
+import com.koddy.server.global.query.PageResponse;
+import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.application.usecase.MenteeMainSearchUseCase;
-import com.koddy.server.member.application.usecase.query.response.CarouselProfileResponse;
 import com.koddy.server.member.application.usecase.query.response.MentorSimpleSearchProfile;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -63,7 +63,7 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
-            given(menteeMainSearchUseCase.getSuggestedMentors(any())).willReturn(new CarouselProfileResponse<>(
+            given(menteeMainSearchUseCase.getSuggestedMentors(any())).willReturn(new PageResponse<>(
                     List.of(
                             new MentorSimpleSearchProfile(
                                     3,
@@ -90,7 +90,8 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
                                     18
                             )
                     ),
-                    5
+                    5,
+                    true
             ));
 
             // when - then
@@ -108,7 +109,8 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
                                     body("result[].school", "학교"),
                                     body("result[].major", "전공"),
                                     body("result[].enteredIn", "학번"),
-                                    body("totalCount", "전체 개수")
+                                    body("totalCount", "전체 데이터 개수"),
+                                    body("hasNext", "다음 페이지 존재 여부")
                             )
                     ))
             );

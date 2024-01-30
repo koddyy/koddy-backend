@@ -100,7 +100,8 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
                     response1,
                     List.of(MENTOR_5, MENTOR_4, MENTOR_3),
                     List.of(mentors[4].id(), mentors[3].id(), mentors[2].id()),
-                    5L
+                    5L,
+                    true
             );
 
             /* 2명 취소 */
@@ -113,7 +114,8 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
                     response2,
                     List.of(MENTOR_5, MENTOR_3, MENTOR_1),
                     List.of(mentors[4].id(), mentors[2].id(), mentors[0].id()),
-                    3L
+                    3L,
+                    false
             );
         }
     }
@@ -228,12 +230,14 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
             final ValidatableResponse response,
             final List<MentorFixture> mentees,
             final List<Long> ids,
-            final Long totalCount
+            final Long totalCount,
+            final boolean hasNext
     ) {
         final int totalSize = mentees.size();
         response
                 .body("result", hasSize(totalSize))
-                .body("totalCount", is(totalCount.intValue()));
+                .body("totalCount", is(totalCount.intValue()))
+                .body("hasNext", is(hasNext));
 
         for (int i = 0; i < totalSize; i++) {
             final String index = String.format("result[%d]", i);

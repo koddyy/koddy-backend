@@ -2,9 +2,9 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
-import com.koddy.server.global.SliceResponse;
+import com.koddy.server.global.query.PageResponse;
+import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.application.usecase.MentorMainSearchUseCase;
-import com.koddy.server.member.application.usecase.query.response.CarouselProfileResponse;
 import com.koddy.server.member.application.usecase.query.response.MenteeSimpleSearchProfile;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -63,7 +63,7 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
-            given(mentorMainSearchUseCase.getAppliedMentees(any())).willReturn(new CarouselProfileResponse<>(
+            given(mentorMainSearchUseCase.getAppliedMentees(any())).willReturn(new PageResponse<>(
                     List.of(
                             new MenteeSimpleSearchProfile(
                                     3,
@@ -90,7 +90,8 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
                                     "컴퓨터공학부"
                             )
                     ),
-                    5
+                    5,
+                    true
             ));
 
             // when - then
@@ -108,7 +109,8 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
                                     body("result[].nationality", "국적", "KR EN CN JP VN ETC"),
                                     body("result[].interestSchool", "관심있는 학교"),
                                     body("result[].interestMajor", "관심있는 전공"),
-                                    body("totalCount", "전체 개수")
+                                    body("totalCount", "전체 데이터 개수"),
+                                    body("hasNext", "다음 페이지 존재 여부")
                             )
                     ))
             );
