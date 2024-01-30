@@ -1,5 +1,6 @@
 package com.koddy.server.global.utils;
 
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Nationality;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,12 @@ public class FilteringConverter {
     public static List<Language.Category> convertToLanguage(final String value) {
         return Arrays.stream(splitValue(value))
                 .map(Language.Category::from)
+                .toList();
+    }
+
+    public static List<CoffeeChatStatus> convertToCoffeeChatStatus(final String value) {
+        return Arrays.stream(splitValue(value))
+                .map(CoffeeChatStatus::from)
                 .toList();
     }
 
