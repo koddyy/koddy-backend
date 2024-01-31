@@ -101,7 +101,7 @@ include::{snippets}/MemberApi/Delete/http-response.adoc[]
 
 == 사용자 프로필 완성 API (AccessToken)
 
-=== 멘토 프로필 완성 (OnlyMentor)
+=== 멘토 프로필 완성 (Mentor)
 
 > HTTP Request
 
@@ -112,7 +112,7 @@ include::{snippets}/MemberApi/Complete/Mentor/Success/request-fields.adoc[]
 
 include::{snippets}/MemberApi/Complete/Mentor/Success/http-response.adoc[]
 
-=== 멘티 프로필 완성 (OnlyMentee)
+=== 멘티 프로필 완성 (Mentee)
 
 > HTTP Request
 
@@ -125,7 +125,7 @@ include::{snippets}/MemberApi/Complete/Mentee/Success/http-response.adoc[]
 
 == 사용자 정보 수정 API (AccessToken)
 
-=== 멘토 정보 수정 API (OnlyMentor)
+=== 멘토 정보 수정 API (Mentor)
 
 ==== 기본 정보
 
@@ -149,7 +149,7 @@ include::{snippets}/MemberApi/Update/Mentor/Schedule/Success/request-fields.adoc
 
 include::{snippets}/MemberApi/Update/Mentor/Schedule/Success/http-response.adoc[]
 
-=== 멘티 정보 수정 API (OnlyMentee)
+=== 멘티 정보 수정 API (Mentee)
 
 ==== 기본 정보
 
@@ -162,7 +162,7 @@ include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/request-fields.ado
 
 include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/http-response.adoc[]
 
-== 멘토 학교 인증 API (AccessToken + OnlyMentor)
+== 멘토 학교 인증 API (AccessToken + Mentor)
 
 === 메일 인증 시도
 
@@ -266,7 +266,7 @@ include::{snippets}/MemberApi/PublicProfile/Mentee/response-fields.adoc[]
 
 == 멘토 메인 홈 관련 API
 
-=== 커피챗 신청한 멘티 (AccessToken + OnlyMentor)
+=== 커피챗 신청한 멘티 (AccessToken + Mentor)
 
 > HTTP Request
 
@@ -292,7 +292,7 @@ include::{snippets}/MemberApi/Mentor/MainSearch/Mentees/response-fields.adoc[]
 
 == 멘티 메인 홈 관련 API
 
-=== 커피챗 제안한 멘토 (AccessToken + OnlyMentee)
+=== 커피챗 제안한 멘토 (AccessToken + Mentee)
 
 > HTTP Request
 
@@ -346,7 +346,7 @@ include::{snippets}/FileApi/GetPresignedUrl/Pdf/Failure/http-response.adoc[]
 include::{snippets}/FileApi/GetPresignedUrl/Pdf/Success/http-response.adoc[]
 include::{snippets}/FileApi/GetPresignedUrl/Pdf/Success/response-fields.adoc[]
 
-== 커피챗 링크 생성/삭제 API (AccessToken + OnlyMentor)
+== 커피챗 링크 생성/삭제 API (AccessToken + Mentor)
 
 OAuth 인증 후 진행되는 흐름
 
@@ -383,7 +383,7 @@ include::{snippets}/CoffeeChatApi/MeetingLink/Delete/Success/http-response.adoc[
 
 == 커피챗 신청/제안 API (AccessToken)
 
-=== 멘토 -> 멘티 커피챗 제안 (OnlyMentor)
+=== 멘토 -> 멘티 커피챗 제안 (Mentor)
 
 > HTTP Request
 
@@ -395,7 +395,7 @@ include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/request
 
 include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/http-response.adoc[]
 
-=== 멘티 -> 멘토 커피챗 신청 (OnlyMentee)
+=== 멘티 -> 멘토 커피챗 신청 (Mentee)
 
 ==== 1. 실패 (이미 예약되었거나 멘토링이 가능하지 않은 날짜)
 
@@ -434,7 +434,7 @@ include::{snippets}/CoffeeChatApi/LifeCycle/Cancel/http-response.adoc[]
 
 == 신청/제안된 커피챗 처리 (AccessToken)
 
-=== 멘티가 신청한 커피챗 처리 (OnlyMentor)
+=== 멘티가 신청한 커피챗 처리 (Mentor)
 
 ==== 거절
 
@@ -460,7 +460,7 @@ include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Approve/Success/requ
 
 include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Approve/Success/http-response.adoc[]
 
-=== 멘토가 제안한 커피챗 처리 (OnlyMentee)
+=== 멘토가 제안한 커피챗 처리 (Mentee)
 
 ==== 거절
 
@@ -500,7 +500,7 @@ include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/re
 
 include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/http-response.adoc[]
 
-=== Pending 상태인 커피챗에 대한 멘토의 최종 결정 (OnlyMentor)
+=== Pending 상태인 커피챗에 대한 멘토의 최종 결정 (Mentor)
 
 ==== 최종 거절
 
@@ -525,3 +525,57 @@ include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Approve/Success/re
 > HTTP Response
 
 include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Approve/Success/http-response.adoc[]
+
+== 커피챗 스케줄 조회
+
+=== 멘토 스케줄 (Mentor)
+
+==== 제안한 스케줄 상태별 조회
+
+> HTTP Request
+
+include::{snippets}/CoffeeChatApi/Schedule/Mentor/Suggested/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentor/Suggested/Success/query-parameters.adoc[]
+
+> HTTP Response
+
+include::{snippets}/CoffeeChatApi/Schedule/Mentor/Suggested/Success/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentor/Suggested/Success/response-fields.adoc[]
+
+==== 신청받은 스케줄 상태별 조회
+
+> HTTP Request
+
+include::{snippets}/CoffeeChatApi/Schedule/Mentor/Applied/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentor/Applied/Success/query-parameters.adoc[]
+
+> HTTP Response
+
+include::{snippets}/CoffeeChatApi/Schedule/Mentor/Applied/Success/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentor/Applied/Success/response-fields.adoc[]
+
+=== 멘티 스케줄 (Mentee)
+
+==== 신청한 스케줄 상태별 조회
+
+> HTTP Request
+
+include::{snippets}/CoffeeChatApi/Schedule/Mentee/Applied/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentee/Applied/Success/query-parameters.adoc[]
+
+> HTTP Response
+
+include::{snippets}/CoffeeChatApi/Schedule/Mentee/Applied/Success/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentee/Applied/Success/response-fields.adoc[]
+
+==== 제안받은 스케줄 상태별 조회
+
+> HTTP Request
+
+include::{snippets}/CoffeeChatApi/Schedule/Mentee/Suggested/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentee/Suggested/Success/query-parameters.adoc[]
+
+> HTTP Response
+
+include::{snippets}/CoffeeChatApi/Schedule/Mentee/Suggested/Success/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentee/Suggested/Success/response-fields.adoc[]
