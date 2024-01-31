@@ -49,6 +49,9 @@ spring:
           starttls:
             enable: true
 
+account:
+  dummy: test-account-password
+
 mail:
   auth:
     ttl: 600
