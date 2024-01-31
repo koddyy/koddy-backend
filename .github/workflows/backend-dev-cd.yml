@@ -3,7 +3,7 @@ name: Backend Dev CD
 on:
   push:
     branches:
-      - dev
+      - dev-x
 
 env:
   SUBMODULE_TOKEN: ${{ secrets.SUBMODULE_TOKEN }}
