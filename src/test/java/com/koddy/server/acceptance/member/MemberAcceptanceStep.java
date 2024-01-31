@@ -19,8 +19,6 @@ import com.koddy.server.member.presentation.dto.request.UpdateMentorScheduleRequ
 import io.restassured.response.ValidatableResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
-
 import static com.koddy.server.acceptance.CommonRequestFixture.deleteRequestWithAccessToken;
 import static com.koddy.server.acceptance.CommonRequestFixture.getRequest;
 import static com.koddy.server.acceptance.CommonRequestFixture.getRequestWithAccessToken;
@@ -53,12 +51,18 @@ public class MemberAcceptanceStep {
                 fixture.getName(),
                 fixture.getProfileImageUrl(),
                 new LanguageRequest(
-                        Language.Category.KR.getCode(),
-                        List.of(
-                                Language.Category.EN.getCode(),
-                                Language.Category.JP.getCode(),
-                                Language.Category.CN.getCode()
-                        )
+                        fixture.getLanguages()
+                                .stream()
+                                .filter(it -> it.getType() == Language.Type.MAIN)
+                                .toList()
+                                .get(0)
+                                .getCategory()
+                                .getCode(),
+                        fixture.getLanguages()
+                                .stream()
+                                .filter(it -> it.getType() == Language.Type.SUB)
+                                .map(it -> it.getCategory().getCode())
+                                .toList()
                 ),
                 fixture.getUniversityProfile().getSchool(),
                 fixture.getUniversityProfile().getMajor(),
@@ -92,7 +96,20 @@ public class MemberAcceptanceStep {
                 fixture.getName(),
                 fixture.getProfileImageUrl(),
                 fixture.getNationality().getCode(),
-                new LanguageRequest(Language.Category.KR.getCode(), List.of()),
+                new LanguageRequest(
+                        fixture.getLanguages()
+                                .stream()
+                                .filter(it -> it.getType() == Language.Type.MAIN)
+                                .toList()
+                                .get(0)
+                                .getCategory()
+                                .getCode(),
+                        fixture.getLanguages()
+                                .stream()
+                                .filter(it -> it.getType() == Language.Type.SUB)
+                                .map(it -> it.getCategory().getCode())
+                                .toList()
+                ),
                 fixture.getInterest().getSchool(),
                 fixture.getInterest().getMajor()
         );
@@ -154,7 +171,11 @@ public class MemberAcceptanceStep {
         return patchRequestWithAccessToken(uri, request, accessToken);
     }
 
-    public static ValidatableResponse 멘토_기본_정보를_수정한다(final MentorFixture fixture, final String accessToken) {
+    public static ValidatableResponse 멘토_기본_정보를_수정한다(
+            final MentorFixture fixture,
+            final LanguageRequest languageRequest,
+            final String accessToken
+    ) {
         final String uri = UriComponentsBuilder
                 .fromPath("/api/mentors/me/basic-info")
                 .build()
@@ -165,14 +186,7 @@ public class MemberAcceptanceStep {
                 fixture.getName(),
                 fixture.getProfileImageUrl(),
                 fixture.getIntroduction(),
-                new LanguageRequest(
-                        Language.Category.KR.getCode(),
-                        List.of(
-                                Language.Category.EN.getCode(),
-                                Language.Category.JP.getCode(),
-                                Language.Category.CN.getCode()
-                        )
-                ),
+                languageRequest,
                 fixture.getUniversityProfile().getSchool(),
                 fixture.getUniversityProfile().getMajor(),
                 fixture.getUniversityProfile().getEnteredIn()
@@ -212,7 +226,11 @@ public class MemberAcceptanceStep {
         return patchRequestWithAccessToken(uri, request, accessToken);
     }
 
-    public static ValidatableResponse 멘티_기본_정보를_수정한다(final MenteeFixture fixture, final String accessToken) {
+    public static ValidatableResponse 멘티_기본_정보를_수정한다(
+            final MenteeFixture fixture,
+            final LanguageRequest languageRequest,
+            final String accessToken
+    ) {
         final String uri = UriComponentsBuilder
                 .fromPath("/api/mentees/me/basic-info")
                 .build()
@@ -224,14 +242,7 @@ public class MemberAcceptanceStep {
                 fixture.getNationality().getCode(),
                 fixture.getProfileImageUrl(),
                 fixture.getIntroduction(),
-                new LanguageRequest(
-                        Language.Category.KR.getCode(),
-                        List.of(
-                                Language.Category.EN.getCode(),
-                                Language.Category.JP.getCode(),
-                                Language.Category.CN.getCode()
-                        )
-                ),
+                languageRequest,
                 fixture.getInterest().getSchool(),
                 fixture.getInterest().getMajor()
         );
