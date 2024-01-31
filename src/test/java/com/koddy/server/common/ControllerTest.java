@@ -64,11 +64,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 )
 @AutoConfigureRestDocs
 public abstract class ControllerTest {
-    // common & external
-    @Autowired
-    protected MockMvc mockMvc;
+    protected static final String ENTER = " +\n";
 
-    // common & internal
+    private MockMvc mockMvc;
+
     @Autowired
     private ObjectMapper objectMapper;
 

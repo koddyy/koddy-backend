@@ -8,9 +8,12 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -28,8 +31,8 @@ public class MentorMainSearchRepositoryImpl implements MentorMainSearchRepositor
     private final JPAQueryFactory query;
 
     @Override
-    public List<Mentee> fetchAppliedMentees(final long mentorId, final int limit) {
-        return query
+    public Page<Mentee> fetchAppliedMentees(final long mentorId, final int limit) {
+        final List<Mentee> result = query
                 .select(mentee)
                 .from(coffeeChat)
                 .innerJoin(mentee).on(mentee.id.eq(coffeeChat.sourceMemberId))
@@ -40,6 +43,18 @@ public class MentorMainSearchRepositoryImpl implements MentorMainSearchRepositor
                 .limit(limit)
                 .orderBy(coffeeChat.id.desc())
                 .fetch();
+
+        final Long totalCount = query
+                .select(mentee.id.count())
+                .from(coffeeChat)
+                .innerJoin(mentee).on(mentee.id.eq(coffeeChat.sourceMemberId))
+                .where(
+                        coffeeChat.targetMemberId.eq(mentorId),
+                        coffeeChat.status.eq(APPLY)
+                )
+                .fetchOne();
+
+        return PageableExecutionUtils.getPage(result, PageRequest.of(0, limit), () -> totalCount);
     }
 
     @Override
@@ -52,20 +67,13 @@ public class MentorMainSearchRepositoryImpl implements MentorMainSearchRepositor
                 .where(mentee.id.in(filteringMenteeIds))
                 .orderBy(mentee.id.desc())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-        final Long totalCount = query
-                .select(mentee.id.count())
-                .from(mentee)
-                .where(mentee.id.in(filteringMenteeIds))
-                .where()
-                .fetchOne();
-
         return new SliceImpl<>(
-                result,
+                result.stream().limit(pageable.getPageSize()).toList(),
                 pageable,
-                hasNext(pageable, result.size(), totalCount)
+                result.size() > pageable.getPageSize()
         );
     }
 
@@ -118,16 +126,5 @@ public class MentorMainSearchRepositoryImpl implements MentorMainSearchRepositor
         final List<Long> commonMenteeIds = new ArrayList<>(containsNationalityMenteeIds);
         commonMenteeIds.retainAll(containsLanguageMenteeIds);
         return commonMenteeIds;
-    }
-
-    private boolean hasNext(
-            final Pageable pageable,
-            final int contentSize,
-            final Long totalCount
-    ) {
-        if (contentSize == pageable.getPageSize()) {
-            return (long) contentSize * (pageable.getPageNumber() + 1) != totalCount;
-        }
-        return false;
     }
 }

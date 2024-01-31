@@ -25,7 +25,7 @@ public class CreateCoffeeChatUseCase {
         final Mentor mentor = mentorRepository.getById(command.mentorId());
         final Mentee mentee = menteeRepository.getById(command.menteeId());
 
-        return coffeeChatRepository.save(CoffeeChat.suggestCoffeeChat(mentor, mentee, command.applyReason())).getId();
+        return coffeeChatRepository.save(CoffeeChat.suggest(mentor, mentee, command.applyReason())).getId();
     }
 
     @KoddyWritableTransactional
@@ -34,7 +34,7 @@ public class CreateCoffeeChatUseCase {
         final Mentor mentor = mentorRepository.getById(command.mentorId());
 
         reservationAvailabilityChecker.check(mentor, command.start(), command.end());
-        return coffeeChatRepository.save(CoffeeChat.applyCoffeeChat(
+        return coffeeChatRepository.save(CoffeeChat.apply(
                 mentee,
                 mentor,
                 command.applyReason(),

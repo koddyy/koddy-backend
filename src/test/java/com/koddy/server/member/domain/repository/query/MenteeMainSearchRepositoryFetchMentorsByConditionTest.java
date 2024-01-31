@@ -2,7 +2,7 @@ package com.koddy.server.member.domain.repository.query;
 
 import com.koddy.server.common.RepositoryTest;
 import com.koddy.server.common.fixture.MentorFixture;
-import com.koddy.server.global.PageCreator;
+import com.koddy.server.global.query.PageCreator;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MemberRepository;
 import com.koddy.server.member.domain.repository.query.spec.SearchMentorCondition;

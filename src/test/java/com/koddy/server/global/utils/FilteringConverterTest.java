@@ -1,5 +1,6 @@
 package com.koddy.server.global.utils;
 
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Nationality;
@@ -8,6 +9,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.COMPLETE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
 import static com.koddy.server.member.domain.model.Language.Category.CN;
 import static com.koddy.server.member.domain.model.Language.Category.EN;
 import static com.koddy.server.member.domain.model.Language.Category.JP;
@@ -24,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Global -> FilteringConverter 테스트")
 class FilteringConverterTest extends UnitTest {
     @Test
-    @DisplayName("N개의 국적 데이터를 Nationality 도메인으로 변환한다")
+    @DisplayName("N개의 국적 데이터를 List<Nationality> 도메인으로 변환한다")
     void convertToNationality() {
         // given
         final String value = "KR,EN,CN,JP,VN,ETC";
@@ -37,7 +44,7 @@ class FilteringConverterTest extends UnitTest {
     }
 
     @Test
-    @DisplayName("N개의 언어 데이터를 Language.Category 도메인으로 변환한다")
+    @DisplayName("N개의 언어 데이터를 List<Language.Category> 도메인으로 변환한다")
     void convertToLanguage() {
         // given
         final String value = "KR,EN,CN,JP,VN";
@@ -47,5 +54,18 @@ class FilteringConverterTest extends UnitTest {
 
         // then
         assertThat(result).containsExactly(KR, EN, CN, JP, VN);
+    }
+
+    @Test
+    @DisplayName("N개의 커피챗 상태 데이터를 List<CoffeeChatStatus> 도메인으로 변환한다")
+    void convertToCoffeeChatStatus() {
+        // given
+        final String value = "apply,cancel,reject,pending,approve,complete";
+
+        // when
+        final List<CoffeeChatStatus> result = FilteringConverter.convertToCoffeeChatStatus(value);
+
+        // then
+        assertThat(result).containsExactly(APPLY, CANCEL, REJECT, PENDING, APPROVE, COMPLETE);
     }
 }

@@ -43,7 +43,7 @@ class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
     @DisplayName("멘티의 커피챗 신청을 거절한다")
     void reject() {
         // given
-        final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end).apply(1L);
+        final CoffeeChat coffeeChat = CoffeeChat.apply(mentee, mentor, applyReason, start, end).apply(1L);
 
         final String rejectReason = "거절...";
         final RejectAppliedCoffeeChatCommand command = new RejectAppliedCoffeeChatCommand(coffeeChat.getId(), rejectReason);
@@ -70,7 +70,7 @@ class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
     @DisplayName("멘티의 커피챗 신청을 수락한다")
     void approve() {
         // given
-        final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end).apply(1L);
+        final CoffeeChat coffeeChat = CoffeeChat.apply(mentee, mentor, applyReason, start, end).apply(1L);
 
         final Strategy.Type type = Strategy.Type.from("kakao");
         final String value = "sjiwon";

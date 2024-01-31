@@ -120,8 +120,8 @@ class HandleSuggestedCoffeeChatApiControllerTest extends ControllerTest {
                             ),
                             requestFields(
                                     body("question", "멘토에게 궁금한 점", true),
-                                    body("start", "멘토링 시작 날짜", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true),
-                                    body("end", "멘토링 종료 날짜", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true)
+                                    body("start", "멘토링 시작 날짜", "[KST] yyyy-MM-ddTHH:mm:ss" + ENTER + "-> 시간 = 00:00:00 ~ 23:59:59", true),
+                                    body("end", "멘토링 종료 날짜", "[KST] yyyy-MM-ddTHH:mm:ss" + ENTER + "-> 시간 = 00:00:00 ~ 23:59:59", true)
                             )
                     ))
             );
@@ -147,8 +147,8 @@ class HandleSuggestedCoffeeChatApiControllerTest extends ControllerTest {
                             ),
                             requestFields(
                                     body("question", "멘토에게 궁금한 점", true),
-                                    body("start", "멘토링 시작 날짜", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true),
-                                    body("end", "멘토링 종료 날짜", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true)
+                                    body("start", "멘토링 시작 날짜", "[KST] yyyy-MM-ddTHH:mm:ss" + ENTER + "-> 시간 = 00:00:00 ~ 23:59:59", true),
+                                    body("end", "멘토링 종료 날짜", "[KST] yyyy-MM-ddTHH:mm:ss" + ENTER + "-> 시간 = 00:00:00 ~ 23:59:59", true)
                             )
                     ))
             );
@@ -173,8 +173,8 @@ class HandleSuggestedCoffeeChatApiControllerTest extends ControllerTest {
                             ),
                             requestFields(
                                     body("question", "멘토에게 궁금한 점", true),
-                                    body("start", "멘토링 시작 날짜", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true),
-                                    body("end", "멘토링 종료 날짜", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true)
+                                    body("start", "멘토링 시작 날짜", "[KST] yyyy-MM-ddTHH:mm:ss" + ENTER + "-> 시간 = 00:00:00 ~ 23:59:59", true),
+                                    body("end", "멘토링 종료 날짜", "[KST] yyyy-MM-ddTHH:mm:ss" + ENTER + "-> 시간 = 00:00:00 ~ 23:59:59", true)
                             )
                     ))
             );

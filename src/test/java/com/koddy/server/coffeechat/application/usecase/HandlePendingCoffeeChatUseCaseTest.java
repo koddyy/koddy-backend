@@ -44,7 +44,7 @@ class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
     @DisplayName("최종 결정 대기 상태인 CoffeeChat에 대해서 멘토는 거절한다")
     void reject() {
         // given
-        final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason).apply(1L);
+        final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason).apply(1L);
         coffeeChat.pendingFromMentorSuggest(question, start, end);
 
         final String rejectReason = "거절...";
@@ -73,7 +73,7 @@ class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
     @DisplayName("최종 결정 대기 상태인 CoffeeChat에 대해서 멘토는 수락한다")
     void approve() {
         // given
-        final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason).apply(1L);
+        final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason).apply(1L);
         coffeeChat.pendingFromMentorSuggest(question, start, end);
 
         final Strategy.Type type = Strategy.Type.from("kakao");

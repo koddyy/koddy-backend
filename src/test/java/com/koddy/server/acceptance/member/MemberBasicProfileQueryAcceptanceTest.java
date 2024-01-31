@@ -3,7 +3,6 @@ package com.koddy.server.acceptance.member;
 import com.koddy.server.auth.domain.model.AuthMember;
 import com.koddy.server.common.AcceptanceTest;
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension;
-import com.koddy.server.member.domain.model.Language;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,6 +14,8 @@ import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_기
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘티_기본_프로필을_조회한다;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
+import static com.koddy.server.member.domain.model.Language.Category.EN;
+import static com.koddy.server.member.domain.model.Language.Category.KR;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -37,14 +38,8 @@ public class MemberBasicProfileQueryAcceptanceTest extends AcceptanceTest {
                     .body("name", is(MENTOR_1.getName()))
                     .body("profileImageUrl", is(MENTOR_1.getProfileImageUrl()))
                     .body("introduction", nullValue())
-                    .body("languages.main", is(Language.Category.KR.getCode()))
-                    .body("languages.sub", containsInAnyOrder(
-                            List.of(
-                                    Language.Category.EN.getCode(),
-                                    Language.Category.JP.getCode(),
-                                    Language.Category.CN.getCode()
-                            ).toArray()
-                    ))
+                    .body("languages.main", is(KR.getCode()))
+                    .body("languages.sub", containsInAnyOrder(List.of(EN.getCode()).toArray()))
                     .body("school", is(MENTOR_1.getUniversityProfile().getSchool()))
                     .body("major", is(MENTOR_1.getUniversityProfile().getMajor()))
                     .body("enteredIn", is(MENTOR_1.getUniversityProfile().getEnteredIn()));
@@ -60,14 +55,8 @@ public class MemberBasicProfileQueryAcceptanceTest extends AcceptanceTest {
                     .body("name", is(MENTOR_1.getName()))
                     .body("profileImageUrl", is(MENTOR_1.getProfileImageUrl()))
                     .body("introduction", is(MENTOR_1.getIntroduction()))
-                    .body("languages.main", is(Language.Category.KR.getCode()))
-                    .body("languages.sub", containsInAnyOrder(
-                            List.of(
-                                    Language.Category.EN.getCode(),
-                                    Language.Category.JP.getCode(),
-                                    Language.Category.CN.getCode()
-                            ).toArray()
-                    ))
+                    .body("languages.main", is(KR.getCode()))
+                    .body("languages.sub", containsInAnyOrder(List.of(EN.getCode()).toArray()))
                     .body("school", is(MENTOR_1.getUniversityProfile().getSchool()))
                     .body("major", is(MENTOR_1.getUniversityProfile().getMajor()))
                     .body("enteredIn", is(MENTOR_1.getUniversityProfile().getEnteredIn()));
@@ -88,8 +77,8 @@ public class MemberBasicProfileQueryAcceptanceTest extends AcceptanceTest {
                     .body("profileImageUrl", is(MENTEE_1.getProfileImageUrl()))
                     .body("nationality", is(MENTEE_1.getNationality().getCode()))
                     .body("introduction", nullValue())
-                    .body("languages.main", is(Language.Category.KR.getCode()))
-                    .body("languages.subs", nullValue())
+                    .body("languages.main", is(EN.getCode()))
+                    .body("languages.sub", containsInAnyOrder(List.of(KR.getCode()).toArray()))
                     .body("interestSchool", is(MENTEE_1.getInterest().getSchool()))
                     .body("interestMajor", is(MENTEE_1.getInterest().getMajor()));
         }
@@ -105,8 +94,8 @@ public class MemberBasicProfileQueryAcceptanceTest extends AcceptanceTest {
                     .body("profileImageUrl", is(MENTEE_1.getProfileImageUrl()))
                     .body("nationality", is(MENTEE_1.getNationality().getCode()))
                     .body("introduction", is(MENTEE_1.getIntroduction()))
-                    .body("languages.main", is(Language.Category.KR.getCode()))
-                    .body("languages.subs", nullValue())
+                    .body("languages.main", is(EN.getCode()))
+                    .body("languages.sub", containsInAnyOrder(List.of(KR.getCode()).toArray()))
                     .body("interestSchool", is(MENTEE_1.getInterest().getSchool()))
                     .body("interestMajor", is(MENTEE_1.getInterest().getMajor()));
         }

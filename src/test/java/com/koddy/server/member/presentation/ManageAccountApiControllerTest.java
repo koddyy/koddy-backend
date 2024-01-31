@@ -80,13 +80,13 @@ class ManageAccountApiControllerTest extends ControllerTest {
                     status().isOk(),
                     successDocs("MemberApi/SignUp/Mentor", createHttpSpecSnippets(
                             requestFields(
-                                    body("provider", "소셜 플랫폼", "google / kakao", true),
-                                    body("socialId", "소셜 플랫폼 고유 ID", "서버에서 응답한 값 그대로 포함", true),
+                                    body("provider", "소셜 플랫폼", "google kakao", true),
+                                    body("socialId", "소셜 플랫폼 고유 ID", "서버에서 응답한 socialId 그대로 포함", true),
                                     body("email", "이메일", true),
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
-                                    body("languages", "사용 가능한 언어", true),
-                                    body("languages.main", "메인 언어 (코드 기반)", "1개 이상", true),
+                                    body("languages", "사용 가능한 언어", "KR EN CN JP VN", true),
+                                    body("languages.main", "메인 언어 (코드 기반)", "1개", true),
                                     body("languages.sub[]", "서브 언어 (코드 기반)", "0..N개", false),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
@@ -138,14 +138,14 @@ class ManageAccountApiControllerTest extends ControllerTest {
                     status().isOk(),
                     successDocs("MemberApi/SignUp/Mentee", createHttpSpecSnippets(
                             requestFields(
-                                    body("provider", "소셜 플랫폼", "google / kakao", true),
-                                    body("socialId", "소셜 플랫폼 고유 ID", "서버에서 응답한 값 그대로 포함", true),
+                                    body("provider", "소셜 플랫폼", "google kakao", true),
+                                    body("socialId", "소셜 플랫폼 고유 ID", "서버에서 응답한 socialId 그대로 포함", true),
                                     body("email", "이메일", true),
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
-                                    body("nationality", "국적 (코드 기반)", "KR EN CN JP VN ETC", true),
-                                    body("languages", "사용 가능한 언어", true),
-                                    body("languages.main", "메인 언어 (코드 기반)", "1개 이상", true),
+                                    body("nationality", "국적", "KR EN CN JP VN ETC", true),
+                                    body("languages", "사용 가능한 언어", "KR EN CN JP VN", true),
+                                    body("languages.main", "메인 언어 (코드 기반)", "1개", true),
                                     body("languages.sub[]", "서브 언어 (코드 기반)", "0..N개", false),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)

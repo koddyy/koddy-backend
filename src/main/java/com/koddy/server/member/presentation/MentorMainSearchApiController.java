@@ -1,11 +1,12 @@
 package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
-import com.koddy.server.global.PageResponse;
-import com.koddy.server.global.ResponseWrapper;
 import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.aop.AccessControl;
+import com.koddy.server.global.query.PageResponse;
+import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.application.usecase.MentorMainSearchUseCase;
+import com.koddy.server.member.application.usecase.query.GetAppliedMentees;
 import com.koddy.server.member.application.usecase.query.response.MenteeSimpleSearchProfile;
 import com.koddy.server.member.presentation.dto.request.GetMenteesByConditionRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,20 +34,22 @@ public class MentorMainSearchApiController {
     @Operation(summary = "커피챗 신청한 멘티 조회 Endpoint (멘토 전용)")
     @GetMapping("/applied-coffeechats")
     @AccessControl(role = MENTOR)
-    public ResponseEntity<ResponseWrapper<List<MenteeSimpleSearchProfile>>> getAppliedMentees(
+    public ResponseEntity<PageResponse<List<MenteeSimpleSearchProfile>>> getAppliedMentees(
             @Auth final Authenticated authenticated,
             @RequestParam(defaultValue = "3") final int limit
     ) {
-        final List<MenteeSimpleSearchProfile> result = mentorMainSearchUseCase.getAppliedMentees(authenticated.id(), limit);
-        return ResponseEntity.ok(ResponseWrapper.from(result));
+        final PageResponse<List<MenteeSimpleSearchProfile>> result = mentorMainSearchUseCase.getAppliedMentees(
+                new GetAppliedMentees(authenticated.id(), limit)
+        );
+        return ResponseEntity.ok(result);
     }
 
     @Operation(summary = "멘티 둘러보기 Endpoint")
     @GetMapping
-    public ResponseEntity<PageResponse<List<MenteeSimpleSearchProfile>>> getMenteesByCondition(
+    public ResponseEntity<SliceResponse<List<MenteeSimpleSearchProfile>>> getMenteesByCondition(
             @ModelAttribute @Valid final GetMenteesByConditionRequest request
     ) {
-        final PageResponse<List<MenteeSimpleSearchProfile>> result = mentorMainSearchUseCase.getMenteesByCondition(request.toQuery());
+        final SliceResponse<List<MenteeSimpleSearchProfile>> result = mentorMainSearchUseCase.getMenteesByCondition(request.toQuery());
         return ResponseEntity.ok(result);
     }
 }

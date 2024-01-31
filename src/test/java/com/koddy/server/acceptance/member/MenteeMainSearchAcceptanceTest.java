@@ -1,24 +1,15 @@
 package com.koddy.server.acceptance.member;
 
 import com.koddy.server.auth.domain.model.AuthMember;
-import com.koddy.server.auth.domain.model.AuthToken;
 import com.koddy.server.common.AcceptanceTest;
 import com.koddy.server.common.containers.callback.DatabaseCleanerAllCallbackExtension;
-import com.koddy.server.common.fixture.MenteeFixture;
 import com.koddy.server.common.fixture.MentorFixture;
-import com.koddy.server.member.domain.model.Language;
-import com.koddy.server.member.presentation.dto.request.LanguageRequest;
-import com.koddy.server.member.presentation.dto.request.SignUpMenteeRequest;
-import com.koddy.server.member.presentation.dto.request.SignUpMentorRequest;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,8 +18,6 @@ import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.�
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.신청_제안한_커피챗을_취소한다;
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토들을_둘러본다;
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.커피챗_제안한_멘토를_조회한다;
-import static com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER;
-import static com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER;
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
@@ -64,12 +53,12 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
 
     @BeforeAll
     static void setUp() {
-        mentee = createMentee(MENTEE_1);
+        mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
 
         final List<MentorFixture> fixtures = Arrays.stream(MentorFixture.values())
                 .limit(20)
                 .toList();
-        Arrays.setAll(mentors, it -> createMentor(fixtures.get(it)));
+        Arrays.setAll(mentors, it -> fixtures.get(it).회원가입과_로그인을_하고_프로필을_완성시킨다());
     }
 
     @Nested
@@ -99,10 +88,12 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
             assertMenteesMatch(
                     response1,
                     List.of(MENTOR_5, MENTOR_4, MENTOR_3),
-                    List.of(mentors[4].id(), mentors[3].id(), mentors[2].id())
+                    List.of(mentors[4].id(), mentors[3].id(), mentors[2].id()),
+                    5L,
+                    true
             );
 
-            /* 3명 취소 */
+            /* 2명 취소 */
             신청_제안한_커피챗을_취소한다(coffeeChatId4, mentors[3].token().accessToken());
             신청_제안한_커피챗을_취소한다(coffeeChatId2, mentors[1].token().accessToken());
 
@@ -111,7 +102,9 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
             assertMenteesMatch(
                     response2,
                     List.of(MENTOR_5, MENTOR_3, MENTOR_1),
-                    List.of(mentors[4].id(), mentors[2].id(), mentors[0].id())
+                    List.of(mentors[4].id(), mentors[2].id(), mentors[0].id()),
+                    3L,
+                    false
             );
         }
     }
@@ -119,15 +112,13 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
     @Nested
     @DisplayName("멘토 둘러보기 API")
     class GetMentorsByCondition {
+        private static final String BASE_URL = "/api/mentors";
+
         @Test
         @DisplayName("멘토 둘러보기를 진행한다")
         void success() {
             /* 최신 가입순 */
-            final String url1 = UriComponentsBuilder
-                    .fromUriString("/api/mentors?page=1")
-                    .build()
-                    .toUriString();
-            final ValidatableResponse response1 = 멘토들을_둘러본다(url1).statusCode(OK.value());
+            final ValidatableResponse response1 = 멘토들을_둘러본다(BASE_URL + "?page=1").statusCode(OK.value());
             assertMenteesMatch(
                     response1,
                     List.of(
@@ -137,15 +128,11 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
                     List.of(
                             mentors[19].id(), mentors[18].id(), mentors[17].id(), mentors[16].id(), mentors[15].id(),
                             mentors[14].id(), mentors[13].id(), mentors[12].id(), mentors[11].id(), mentors[10].id()
-                    )
+                    ),
+                    true
             );
-            response1.body("hasNext", is(true));
 
-            final String url2 = UriComponentsBuilder
-                    .fromUriString("/api/mentors?page=2")
-                    .build()
-                    .toUriString();
-            final ValidatableResponse response2 = 멘토들을_둘러본다(url2).statusCode(OK.value());
+            final ValidatableResponse response2 = 멘토들을_둘러본다(BASE_URL + "?page=2").statusCode(OK.value());
             assertMenteesMatch(
                     response2,
                     List.of(
@@ -155,16 +142,12 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
                     List.of(
                             mentors[9].id(), mentors[8].id(), mentors[7].id(), mentors[6].id(), mentors[5].id(),
                             mentors[4].id(), mentors[3].id(), mentors[2].id(), mentors[1].id(), mentors[0].id()
-                    )
+                    ),
+                    false
             );
-            response2.body("hasNext", is(false));
 
             /* 최신 가입순 + 언어 */
-            final String url3 = UriComponentsBuilder
-                    .fromUriString("/api/mentors?page=1&languages=KR,EN")
-                    .build()
-                    .toUriString();
-            final ValidatableResponse response3 = 멘토들을_둘러본다(url3).statusCode(OK.value());
+            final ValidatableResponse response3 = 멘토들을_둘러본다(BASE_URL + "?page=1&languages=KR,EN").statusCode(OK.value());
             assertMenteesMatch(
                     response3,
                     List.of(
@@ -174,27 +157,19 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
                     List.of(
                             mentors[18].id(), mentors[16].id(), mentors[14].id(), mentors[12].id(), mentors[10].id(),
                             mentors[8].id(), mentors[6].id(), mentors[4].id(), mentors[2].id(), mentors[0].id()
-                    )
+                    ),
+                    false
             );
-            response3.body("hasNext", is(false));
 
-            final String url4 = UriComponentsBuilder
-                    .fromUriString("/api/mentors?page=2&languages=KR,EN")
-                    .build()
-                    .toUriString();
-            final ValidatableResponse response4 = 멘토들을_둘러본다(url4).statusCode(OK.value());
+            final ValidatableResponse response4 = 멘토들을_둘러본다(BASE_URL + "?page=2&languages=KR,EN").statusCode(OK.value());
             assertMenteesMatch(
                     response4,
                     List.of(),
-                    List.of()
+                    List.of(),
+                    false
             );
-            response4.body("hasNext", is(false));
 
-            final String url5 = UriComponentsBuilder
-                    .fromUriString("/api/mentors?page=1&languages=KR,JP")
-                    .build()
-                    .toUriString();
-            final ValidatableResponse response5 = 멘토들을_둘러본다(url5).statusCode(OK.value());
+            final ValidatableResponse response5 = 멘토들을_둘러본다(BASE_URL + "?page=1&languages=KR,JP").statusCode(OK.value());
             assertMenteesMatch(
                     response5,
                     List.of(
@@ -204,34 +179,34 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
                     List.of(
                             mentors[19].id(), mentors[17].id(), mentors[15].id(), mentors[13].id(), mentors[11].id(),
                             mentors[9].id(), mentors[7].id(), mentors[5].id(), mentors[3].id(), mentors[1].id()
-                    )
+                    ),
+                    false
             );
-            response5.body("hasNext", is(false));
 
-            final String url6 = UriComponentsBuilder
-                    .fromUriString("/api/mentors?page=2&languages=KR,JP")
-                    .build()
-                    .toUriString();
-            final ValidatableResponse response6 = 멘토들을_둘러본다(url6).statusCode(OK.value());
+            final ValidatableResponse response6 = 멘토들을_둘러본다(BASE_URL + "?page=2&languages=KR,JP").statusCode(OK.value());
             assertMenteesMatch(
                     response6,
                     List.of(),
-                    List.of()
+                    List.of(),
+                    false
             );
-            response6.body("hasNext", is(false));
         }
     }
 
     private void assertMenteesMatch(
             final ValidatableResponse response,
             final List<MentorFixture> mentees,
-            final List<Long> ids
+            final List<Long> ids,
+            final Long totalCount,
+            final boolean hasNext
     ) {
-        final int totalCount = mentees.size();
+        final int totalSize = mentees.size();
         response
-                .body("result", hasSize(totalCount));
+                .body("result", hasSize(totalSize))
+                .body("totalCount", is(totalCount.intValue()))
+                .body("hasNext", is(hasNext));
 
-        for (int i = 0; i < totalCount; i++) {
+        for (int i = 0; i < totalSize; i++) {
             final String index = String.format("result[%d]", i);
             final MentorFixture mentor = mentees.get(i);
             final Long id = ids.get(i);
@@ -246,83 +221,29 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
         }
     }
 
-    private static AuthMember createMentor(final MentorFixture fixture) {
-        final SignUpMentorRequest request = new SignUpMentorRequest(
-                fixture.getPlatform().getProvider().getValue(),
-                fixture.getPlatform().getSocialId(),
-                fixture.getPlatform().getEmail().getValue(),
-                fixture.getName(),
-                fixture.getProfileImageUrl(),
-                new LanguageRequest(
-                        fixture.getLanguages()
-                                .stream()
-                                .filter(it -> it.getType() == Language.Type.MAIN)
-                                .toList()
-                                .get(0)
-                                .getCategory()
-                                .getCode(),
-                        fixture.getLanguages()
-                                .stream()
-                                .filter(it -> it.getType() == Language.Type.SUB)
-                                .map(it -> it.getCategory().getCode())
-                                .toList()
-                ),
-                fixture.getUniversityProfile().getSchool(),
-                fixture.getUniversityProfile().getMajor(),
-                fixture.getUniversityProfile().getEnteredIn()
-        );
+    private void assertMenteesMatch(
+            final ValidatableResponse response,
+            final List<MentorFixture> mentees,
+            final List<Long> ids,
+            final boolean hasNext
+    ) {
+        final int totalSize = mentees.size();
+        response
+                .body("result", hasSize(totalSize))
+                .body("hasNext", is(hasNext));
 
-        final ExtractableResponse<Response> result = MemberAcceptanceStep.멘토_회원가입_후_로그인을_진행한다(request).extract();
-        final long memberId = result.jsonPath().getLong("id");
-        final String accessToken = result.header(ACCESS_TOKEN_HEADER).split(" ")[1];
-        final String refreshToken = result.cookie(REFRESH_TOKEN_HEADER);
+        for (int i = 0; i < totalSize; i++) {
+            final String index = String.format("result[%d]", i);
+            final MentorFixture mentor = mentees.get(i);
+            final Long id = ids.get(i);
 
-        MemberAcceptanceStep.멘토_프로필을_완성시킨다(fixture, accessToken);
-        return new AuthMember(
-                memberId,
-                fixture.getName(),
-                fixture.getProfileImageUrl(),
-                new AuthToken(accessToken, refreshToken)
-        );
-    }
-
-    private static AuthMember createMentee(final MenteeFixture fixture) {
-        final SignUpMenteeRequest request = new SignUpMenteeRequest(
-                fixture.getPlatform().getProvider().getValue(),
-                fixture.getPlatform().getSocialId(),
-                fixture.getPlatform().getEmail().getValue(),
-                fixture.getName(),
-                fixture.getProfileImageUrl(),
-                fixture.getNationality().getCode(),
-                new LanguageRequest(
-                        fixture.getLanguages()
-                                .stream()
-                                .filter(it -> it.getType() == Language.Type.MAIN)
-                                .toList()
-                                .get(0)
-                                .getCategory()
-                                .getCode(),
-                        fixture.getLanguages()
-                                .stream()
-                                .filter(it -> it.getType() == Language.Type.SUB)
-                                .map(it -> it.getCategory().getCode())
-                                .toList()
-                ),
-                fixture.getInterest().getSchool(),
-                fixture.getInterest().getMajor()
-        );
-
-        final ExtractableResponse<Response> result = MemberAcceptanceStep.멘티_회원가입_후_로그인을_진행한다(request).extract();
-        final long memberId = result.jsonPath().getLong("id");
-        final String accessToken = result.header(ACCESS_TOKEN_HEADER).split(" ")[1];
-        final String refreshToken = result.cookie(REFRESH_TOKEN_HEADER);
-
-        MemberAcceptanceStep.멘티_프로필을_완성시킨다(fixture, accessToken);
-        return new AuthMember(
-                memberId,
-                fixture.getName(),
-                fixture.getProfileImageUrl(),
-                new AuthToken(accessToken, refreshToken)
-        );
+            response
+                    .body(index + ".id", is(id.intValue()))
+                    .body(index + ".name", is(mentor.getName()))
+                    .body(index + ".profileImageUrl", is(mentor.getProfileImageUrl()))
+                    .body(index + ".school", is(mentor.getUniversityProfile().getSchool()))
+                    .body(index + ".major", is(mentor.getUniversityProfile().getMajor()))
+                    .body(index + ".enteredIn", is(mentor.getUniversityProfile().getEnteredIn()));
+        }
     }
 }

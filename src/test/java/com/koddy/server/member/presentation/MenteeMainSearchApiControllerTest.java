@@ -2,7 +2,8 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
-import com.koddy.server.global.PageResponse;
+import com.koddy.server.global.query.PageResponse;
+import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.application.usecase.MenteeMainSearchUseCase;
 import com.koddy.server.member.application.usecase.query.response.MentorSimpleSearchProfile;
 import com.koddy.server.member.domain.model.mentee.Mentee;
@@ -62,31 +63,35 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
-            given(menteeMainSearchUseCase.getSuggestedMentors(mentee.getId(), 3)).willReturn(List.of(
-                    new MentorSimpleSearchProfile(
-                            3,
-                            "멘토3",
-                            "https://mentor3-url",
-                            "서울대학교",
-                            "컴퓨터공학부",
-                            19
+            given(menteeMainSearchUseCase.getSuggestedMentors(any())).willReturn(new PageResponse<>(
+                    List.of(
+                            new MentorSimpleSearchProfile(
+                                    3,
+                                    "멘토3",
+                                    "https://mentor3-url",
+                                    "서울대학교",
+                                    "컴퓨터공학부",
+                                    19
+                            ),
+                            new MentorSimpleSearchProfile(
+                                    2,
+                                    "멘토2",
+                                    "https://mentor2-url",
+                                    "연세대학교",
+                                    "컴퓨터공학부",
+                                    17
+                            ),
+                            new MentorSimpleSearchProfile(
+                                    1,
+                                    "멘토1",
+                                    "https://mentor1-url",
+                                    "고려대학교",
+                                    "컴퓨터공학부",
+                                    18
+                            )
                     ),
-                    new MentorSimpleSearchProfile(
-                            2,
-                            "멘토2",
-                            "https://mentor2-url",
-                            "연세대학교",
-                            "컴퓨터공학부",
-                            17
-                    ),
-                    new MentorSimpleSearchProfile(
-                            1,
-                            "멘토1",
-                            "https://mentor1-url",
-                            "고려대학교",
-                            "컴퓨터공학부",
-                            18
-                    )
+                    5,
+                    true
             ));
 
             // when - then
@@ -103,7 +108,9 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
                                     body("result[].profileImageUrl", "프로필 이미지 URL"),
                                     body("result[].school", "학교"),
                                     body("result[].major", "전공"),
-                                    body("result[].enteredIn", "학번")
+                                    body("result[].enteredIn", "학번"),
+                                    body("totalCount", "전체 데이터 개수"),
+                                    body("hasNext", "다음 페이지 존재 여부")
                             )
                     ))
             );
@@ -119,7 +126,7 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
         @DisplayName("멘토들을 조건에 따라 둘러본다")
         void success() {
             // given
-            given(menteeMainSearchUseCase.getMentorsByCondition(any())).willReturn(new PageResponse<>(
+            given(menteeMainSearchUseCase.getMentorsByCondition(any())).willReturn(new SliceResponse<>(
                     List.of(
                             new MentorSimpleSearchProfile(
                                     3,
@@ -161,7 +168,7 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
                     status().isOk(),
                     successDocs("MemberApi/Mentee/MainSearch/Mentors", createHttpSpecSnippets(
                             queryParameters(
-                                    query("languages", "선택한 언어", "국가 코드 기반 & 콤마(,) 기준 분리", false),
+                                    query("languages", "선택한 언어", "국가 코드 기반 (KR EN CN JP VN)", false),
                                     query("page", "페이지", "1부터 시작", true)
                             ),
                             responseFields(

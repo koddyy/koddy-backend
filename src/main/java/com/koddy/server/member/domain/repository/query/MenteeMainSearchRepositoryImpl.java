@@ -5,9 +5,12 @@ import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.query.spec.SearchMentorCondition;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,8 +27,8 @@ public class MenteeMainSearchRepositoryImpl implements MenteeMainSearchRepositor
     private final JPAQueryFactory query;
 
     @Override
-    public List<Mentor> fetchSuggestedMentors(final long menteeId, final int limit) {
-        return query
+    public Page<Mentor> fetchSuggestedMentors(final long menteeId, final int limit) {
+        final List<Mentor> result = query
                 .select(mentor)
                 .from(coffeeChat)
                 .innerJoin(mentor).on(mentor.id.eq(coffeeChat.sourceMemberId))
@@ -36,6 +39,18 @@ public class MenteeMainSearchRepositoryImpl implements MenteeMainSearchRepositor
                 .limit(limit)
                 .orderBy(coffeeChat.id.desc())
                 .fetch();
+
+        final Long totalCount = query
+                .select(mentor.id.count())
+                .from(coffeeChat)
+                .innerJoin(mentor).on(mentor.id.eq(coffeeChat.sourceMemberId))
+                .where(
+                        coffeeChat.targetMemberId.eq(menteeId),
+                        coffeeChat.status.eq(APPLY)
+                )
+                .fetchOne();
+
+        return PageableExecutionUtils.getPage(result, PageRequest.of(0, limit), () -> totalCount);
     }
 
     @Override
@@ -48,20 +63,13 @@ public class MenteeMainSearchRepositoryImpl implements MenteeMainSearchRepositor
                 .where(mentor.id.in(filteringMentorIds))
                 .orderBy(mentor.id.desc())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-        final Long totalCount = query
-                .select(mentor.id.count())
-                .from(mentor)
-                .where(mentor.id.in(filteringMentorIds))
-                .where()
-                .fetchOne();
-
         return new SliceImpl<>(
-                result,
+                result.stream().limit(pageable.getPageSize()).toList(),
                 pageable,
-                hasNext(pageable, result.size(), totalCount)
+                result.size() > pageable.getPageSize()
         );
     }
 
@@ -85,16 +93,5 @@ public class MenteeMainSearchRepositoryImpl implements MenteeMainSearchRepositor
                 .from(availableLanguage)
                 .orderBy(availableLanguage.member.id.desc())
                 .fetch();
-    }
-
-    private boolean hasNext(
-            final Pageable pageable,
-            final int contentSize,
-            final Long totalCount
-    ) {
-        if (contentSize == pageable.getPageSize()) {
-            return (long) contentSize * (pageable.getPageNumber() + 1) != totalCount;
-        }
-        return false;
     }
 }

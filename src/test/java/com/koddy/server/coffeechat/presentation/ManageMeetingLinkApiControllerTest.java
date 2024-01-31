@@ -69,12 +69,12 @@ class ManageMeetingLinkApiControllerTest extends ControllerTest {
                                     path("provider", "OAuth & Link Provider", "zoom", true)
                             ),
                             requestFields(
-                                    body("authorizationCode", "Authorization Code", "Authorization Code Redirect 응답 시 QueryParam으로 넘어오는 Code 값", true),
-                                    body("redirectUri", "Redirect Uri", "Authorization Code 요청 시 redirectUri와 반드시 동일한 값", true),
-                                    body("state", "State 값", "Authorization Code Redirect 응답 시 QueryParam으로 넘어오는 State 값", true),
+                                    body("authorizationCode", "Authorization Code", "QueryParam -> code", true),
+                                    body("redirectUri", "Redirect Uri", "Authorization Code 요청 URI와 동일 값", true),
+                                    body("state", "State 값", "QueryParam -> state", true),
                                     body("topic", "회의 제목", true),
-                                    body("start", "회의 시작 시간", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true),
-                                    body("end", "회의 종료 시간", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true)
+                                    body("start", "회의 시작 시간", "[KST] yyyy-MM-ddTHH:mm:ss" + ENTER + "-> 시간 = 00:00:00 ~ 23:59:59", true),
+                                    body("end", "회의 종료 시간", "[KST] yyyy-MM-ddTHH:mm:ss" + ENTER + "-> 시간 = 00:00:00 ~ 23:59:59", true)
                             )
                     ))
             );
@@ -102,12 +102,12 @@ class ManageMeetingLinkApiControllerTest extends ControllerTest {
                                     path("provider", "OAuth & Link Provider", "zoom", true)
                             ),
                             requestFields(
-                                    body("authorizationCode", "Authorization Code", "Authorization Code Redirect 응답 시 QueryParam으로 넘어오는 Code 값", true),
-                                    body("redirectUri", "Redirect Uri", "Authorization Code 요청 시 redirectUri와 반드시 동일한 값", true),
-                                    body("state", "State 값", "Authorization Code Redirect 응답 시 QueryParam으로 넘어오는 State 값", true),
+                                    body("authorizationCode", "Authorization Code", "QueryParam -> code", true),
+                                    body("redirectUri", "Redirect Uri", "Authorization Code 요청 URI와 동일 값", true),
+                                    body("state", "State 값", "QueryParam -> state", true),
                                     body("topic", "회의 제목", true),
-                                    body("start", "회의 시작 시간", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true),
-                                    body("end", "회의 종료 시간", "KST -> yyyy-MM-ddTHH:mm:ss (00:00:00 ~ 23:59:59)", true)
+                                    body("start", "회의 시작 시간", "[KST] yyyy-MM-ddTHH:mm:ss" + ENTER + "-> 시간 = 00:00:00 ~ 23:59:59", true),
+                                    body("end", "회의 종료 시간", "[KST] yyyy-MM-ddTHH:mm:ss" + ENTER + "-> 시간 = 00:00:00 ~ 23:59:59", true)
                             ),
                             responseFields(
                                     body("id", "미팅 ID"),

@@ -1,6 +1,7 @@
 package com.koddy.server.member.application.usecase.query.response;
 
 import com.koddy.server.member.domain.model.mentor.Mentor;
+import com.koddy.server.member.domain.model.response.LanguageResponse;
 
 public record MentorBasicProfile(
         long id,

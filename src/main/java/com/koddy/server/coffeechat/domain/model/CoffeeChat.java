@@ -18,10 +18,12 @@ import lombok.NoArgsConstructor;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.COMPLETE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_APPROVE_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_CANCEL_STATUS;
+import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_COMPLETE_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_FINALLY_DECIDE_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_REJECT_STATUS;
 import static jakarta.persistence.EnumType.STRING;
@@ -97,7 +99,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         this.strategy = strategy;
     }
 
-    public static CoffeeChat applyCoffeeChat(
+    public static CoffeeChat apply(
             final Mentee mentee,
             final Mentor mentor,
             final String applyReason,
@@ -117,7 +119,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         );
     }
 
-    public static CoffeeChat suggestCoffeeChat(final Mentor mentor, final Mentee mentee, final String applyReason) {
+    public static CoffeeChat suggest(final Mentor mentor, final Mentee mentee, final String applyReason) {
         return new CoffeeChat(
                 mentor.getId(),
                 mentee.getId(),
@@ -129,6 +131,14 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
                 null,
                 null
         );
+    }
+
+    public void cancel() {
+        if (this.status != APPLY) {
+            throw new CoffeeChatException(CANNOT_CANCEL_STATUS);
+        }
+
+        this.status = CANCEL;
     }
 
     public void rejectFromMenteeApply(final String rejectReason) {
@@ -187,12 +197,12 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         this.status = APPROVE;
     }
 
-    public void cancel() {
-        if (this.status != APPLY) {
-            throw new CoffeeChatException(CANNOT_CANCEL_STATUS);
+    public void complete() {
+        if (this.status != APPROVE) {
+            throw new CoffeeChatException(CANNOT_COMPLETE_STATUS);
         }
 
-        this.status = CANCEL;
+        this.status = COMPLETE;
     }
 
     public boolean isReservationIncluded(final Reservation target) {

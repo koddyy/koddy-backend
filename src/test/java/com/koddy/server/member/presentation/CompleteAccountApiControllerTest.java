@@ -75,14 +75,14 @@ class CompleteAccountApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("introduction", "자기소개", false),
                                     body("period", "멘토링 시간 관련 설정", false),
-                                    body("period.startDate", "멘토링 시작 날짜", "KST", false),
-                                    body("period.endDate", "멘토링 종료 날짜", "KST", false),
+                                    body("period.startDate", "멘토링 시작 날짜", "[KST] yyyy-MM-dd", false),
+                                    body("period.endDate", "멘토링 종료 날짜", "[KST] yyyy-MM-dd", false),
                                     body("schedules", "멘토링 스케줄", false),
                                     body("schedules[].dayOfWeek", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST -> 0 ~ 23", false),
-                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST -> 0 ~ 59", false),
-                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST -> 0 ~ 23", false),
-                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST -> 0 ~ 59", false)
+                                    body("schedules[].start.hour", "시작 시간 (Hour)", "0 ~ 23", false),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)", "0 ~ 59", false),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)", "0 ~ 23", false),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)", "0 ~ 59", false)
                             )
                     ))
             );
@@ -105,14 +105,14 @@ class CompleteAccountApiControllerTest extends ControllerTest {
                             requestFields(
                                     body("introduction", "자기소개", false),
                                     body("period", "멘토링 시간 관련 설정", false),
-                                    body("period.startDate", "멘토링 시작 날짜", "KST", false),
-                                    body("period.endDate", "멘토링 종료 날짜", "KST", false),
+                                    body("period.startDate", "멘토링 시작 날짜", "[KST] yyyy-MM-dd", false),
+                                    body("period.endDate", "멘토링 종료 날짜", "[KST] yyyy-MM-dd", false),
                                     body("schedules", "멘토링 스케줄", false),
                                     body("schedules[].dayOfWeek", "날짜", "월 화 수 목 금 토 일", false),
-                                    body("schedules[].start.hour", "시작 시간 (Hour)", "KST -> 0 ~ 23", false),
-                                    body("schedules[].start.minute", "시작 시간 (Minute)", "KST -> 0 ~ 59", false),
-                                    body("schedules[].end.hour", "종료 시간 (Hour)", "KST -> 0 ~ 23", false),
-                                    body("schedules[].end.minute", "종료 시간 (Minute)", "KST -> 0 ~ 59", false)
+                                    body("schedules[].start.hour", "시작 시간 (Hour)", "0 ~ 23", false),
+                                    body("schedules[].start.minute", "시작 시간 (Minute)", "0 ~ 59", false),
+                                    body("schedules[].end.hour", "종료 시간 (Hour)", "0 ~ 23", false),
+                                    body("schedules[].end.minute", "종료 시간 (Minute)", "0 ~ 59", false)
                             )
                     ))
             );

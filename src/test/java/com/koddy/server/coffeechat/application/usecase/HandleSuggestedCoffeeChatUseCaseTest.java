@@ -47,7 +47,7 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
     @DisplayName("멘토의 커피챗 제안을 거절한다")
     void reject() {
         // given
-        final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason).apply(1L);
+        final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason).apply(1L);
 
         final String rejectReason = "거절...";
         final RejectSuggestedCoffeeChatCommand command = new RejectSuggestedCoffeeChatCommand(coffeeChat.getId(), rejectReason);
@@ -76,7 +76,7 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
     @DisplayName("멘토의 커피챗 제안을 1차 수락한다 (멘토 최종 수락 대기)")
     void pending() {
         // given
-        final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason).apply(1L);
+        final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason).apply(1L);
 
         final String question = "질문..";
         final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));

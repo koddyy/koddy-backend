@@ -2,7 +2,8 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
-import com.koddy.server.global.PageResponse;
+import com.koddy.server.global.query.PageResponse;
+import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.application.usecase.MentorMainSearchUseCase;
 import com.koddy.server.member.application.usecase.query.response.MenteeSimpleSearchProfile;
 import com.koddy.server.member.domain.model.mentee.Mentee;
@@ -62,31 +63,35 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
-            given(mentorMainSearchUseCase.getAppliedMentees(mentor.getId(), 3)).willReturn(List.of(
-                    new MenteeSimpleSearchProfile(
-                            3,
-                            "멘티3",
-                            "https://mentee3-url",
-                            "EN",
-                            "서울대학교",
-                            "컴퓨터공학부"
+            given(mentorMainSearchUseCase.getAppliedMentees(any())).willReturn(new PageResponse<>(
+                    List.of(
+                            new MenteeSimpleSearchProfile(
+                                    3,
+                                    "멘티3",
+                                    "https://mentee3-url",
+                                    "EN",
+                                    "서울대학교",
+                                    "컴퓨터공학부"
+                            ),
+                            new MenteeSimpleSearchProfile(
+                                    2,
+                                    "멘티2",
+                                    "https://mentee2-url",
+                                    "JP",
+                                    "연세대학교",
+                                    "컴퓨터공학부"
+                            ),
+                            new MenteeSimpleSearchProfile(
+                                    1,
+                                    "멘티1",
+                                    "https://mentee1-url",
+                                    "CN",
+                                    "고려대학교",
+                                    "컴퓨터공학부"
+                            )
                     ),
-                    new MenteeSimpleSearchProfile(
-                            2,
-                            "멘티2",
-                            "https://mentee2-url",
-                            "JP",
-                            "연세대학교",
-                            "컴퓨터공학부"
-                    ),
-                    new MenteeSimpleSearchProfile(
-                            1,
-                            "멘티1",
-                            "https://mentee1-url",
-                            "CN",
-                            "고려대학교",
-                            "컴퓨터공학부"
-                    )
+                    5,
+                    true
             ));
 
             // when - then
@@ -101,9 +106,11 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
                                     body("result[].id", "멘티 ID(PK)"),
                                     body("result[].name", "이름"),
                                     body("result[].profileImageUrl", "프로필 이미지 URL"),
-                                    body("result[].nationality", "국적"),
+                                    body("result[].nationality", "국적", "KR EN CN JP VN ETC"),
                                     body("result[].interestSchool", "관심있는 학교"),
-                                    body("result[].interestMajor", "관심있는 전공")
+                                    body("result[].interestMajor", "관심있는 전공"),
+                                    body("totalCount", "전체 데이터 개수"),
+                                    body("hasNext", "다음 페이지 존재 여부")
                             )
                     ))
             );
@@ -119,7 +126,7 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
         @DisplayName("멘티들을 조건에 따라 둘러본다")
         void success() {
             // given
-            given(mentorMainSearchUseCase.getMenteesByCondition(any())).willReturn(new PageResponse<>(
+            given(mentorMainSearchUseCase.getMenteesByCondition(any())).willReturn(new SliceResponse<>(
                     List.of(
                             new MenteeSimpleSearchProfile(
                                     3,
@@ -162,15 +169,15 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
                     status().isOk(),
                     successDocs("MemberApi/Mentor/MainSearch/Mentees", createHttpSpecSnippets(
                             queryParameters(
-                                    query("nationalities", "선택한 국적", "국가 코드 기반 & 콤마(,) 기준 분리", false),
-                                    query("languages", "선택한 언어", "국가 코드 기반 & 콤마(,) 기준 분리", false),
+                                    query("nationalities", "선택한 국적", "국가 코드 기반 (KR EN CN JP VN ETC)", false),
+                                    query("languages", "선택한 언어", "국가 코드 기반 (KR EN CN JP VN)", false),
                                     query("page", "페이지", "1부터 시작", true)
                             ),
                             responseFields(
                                     body("result[].id", "멘티 ID(PK)"),
                                     body("result[].name", "이름"),
                                     body("result[].profileImageUrl", "프로필 이미지 URL"),
-                                    body("result[].nationality", "국적"),
+                                    body("result[].nationality", "국적", "KR EN CN JP VN ETC"),
                                     body("result[].interestSchool", "관심있는 학교"),
                                     body("result[].interestMajor", "관심있는 전공"),
                                     body("hasNext", "다음 스크롤 존재 여부")

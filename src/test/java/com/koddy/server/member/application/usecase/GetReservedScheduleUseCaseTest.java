@@ -6,9 +6,9 @@ import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.application.usecase.query.GetReservedSchedule;
 import com.koddy.server.member.application.usecase.query.response.ReservedSchedule;
-import com.koddy.server.member.application.usecase.query.response.ScheduleResponse;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
+import com.koddy.server.member.domain.model.response.ScheduleResponse;
 import com.koddy.server.member.domain.repository.MentorRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,9 +45,9 @@ class GetReservedScheduleUseCaseTest extends UnitTest {
         final GetReservedSchedule query = new GetReservedSchedule(mentor.getId(), 2024, 2);
         given(mentorRepository.getByIdWithSchedules(query.mentorId())).willReturn(mentor);
 
-        final CoffeeChat coffeeChatA = CoffeeChat.suggestCoffeeChat(mentor, menteeA, "제안..").apply(1L);
-        final CoffeeChat coffeeChatB = CoffeeChat.suggestCoffeeChat(mentor, menteeB, "제안..").apply(2L);
-        final CoffeeChat coffeeChatC = CoffeeChat.suggestCoffeeChat(mentor, menteeC, "제안..").apply(3L);
+        final CoffeeChat coffeeChatA = CoffeeChat.suggest(mentor, menteeA, "제안..").apply(1L);
+        final CoffeeChat coffeeChatB = CoffeeChat.suggest(mentor, menteeB, "제안..").apply(2L);
+        final CoffeeChat coffeeChatC = CoffeeChat.suggest(mentor, menteeC, "제안..").apply(3L);
         coffeeChatA.rejectFromMentorSuggest("거절..");
         coffeeChatB.pendingFromMentorSuggest(
                 "질문..",

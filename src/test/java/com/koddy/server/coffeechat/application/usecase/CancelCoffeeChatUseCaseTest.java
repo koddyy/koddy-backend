@@ -37,7 +37,7 @@ class CancelCoffeeChatUseCaseTest extends UnitTest {
         // given
         final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
         final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
-        final CoffeeChat coffeeChat = CoffeeChat.applyCoffeeChat(mentee, mentor, applyReason, start, end).apply(1L);
+        final CoffeeChat coffeeChat = CoffeeChat.apply(mentee, mentor, applyReason, start, end).apply(1L);
 
         final CancelCoffeeChatCommand command = new CancelCoffeeChatCommand(mentee.getId(), coffeeChat.getId());
         given(coffeeChatRepository.getAppliedOrSuggestedCoffeeChat(command.coffeeChatId(), command.memberId())).willReturn(coffeeChat);
@@ -63,7 +63,7 @@ class CancelCoffeeChatUseCaseTest extends UnitTest {
     @DisplayName("멘토는 자신이 제안한 커피챗을 취소한다")
     void cancelSuggestedCoffeeChat() {
         // given
-        final CoffeeChat coffeeChat = CoffeeChat.suggestCoffeeChat(mentor, mentee, applyReason).apply(1L);
+        final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason).apply(1L);
 
         final CancelCoffeeChatCommand command = new CancelCoffeeChatCommand(mentor.getId(), coffeeChat.getId());
         given(coffeeChatRepository.getAppliedOrSuggestedCoffeeChat(command.coffeeChatId(), command.memberId())).willReturn(coffeeChat);
