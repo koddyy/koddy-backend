@@ -1,6 +1,7 @@
 package com.koddy.server.member.domain.repository;
 
 import com.koddy.server.global.annotation.KoddyWritableTransactional;
+import com.koddy.server.member.domain.model.Email;
 import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.model.Role;
 import com.koddy.server.member.exception.MemberException;
@@ -56,4 +57,6 @@ public interface MemberRepository extends JpaRepository<Member<?>, Long> {
     boolean existsByPlatformSocialId(final String socialId);
 
     Optional<Member> findByPlatformSocialId(final String socialId);
+
+    Optional<Member> findByPlatformEmail(final Email email);
 }

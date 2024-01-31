@@ -79,6 +79,9 @@ spring:
           starttls:
             enable: true
 
+account:
+  dummy: ${TEST_ACCOUNT_PASSWORD:test-account-password}
+
 mail:
   auth:
     ttl: 600 # 초 단위 (기본 10분)
