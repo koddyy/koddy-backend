@@ -157,7 +157,7 @@ class MenteeCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                                             "status",
                                             "커피챗 상태",
                                             "- 전체 = 안보내도됨" + ENTER
-                                                    + "- 제안 = apply" + ENTER
+                                                    + "- 제안 = suggest" + ENTER
                                                     + "- 수락 = pending" + ENTER
                                                     + "- 예정 = approve" + ENTER
                                                     + "- 완료 = complete" + ENTER
@@ -214,7 +214,7 @@ class MenteeCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                                             "status",
                                             "커피챗 상태",
                                             "- 전체 = 안보내도됨" + ENTER
-                                                    + "- 제안 = apply" + ENTER
+                                                    + "- 제안 = suggest" + ENTER
                                                     + "- 수락 = pending" + ENTER
                                                     + "- 예정 = approve" + ENTER
                                                     + "- 완료 = complete" + ENTER

@@ -3,6 +3,7 @@ package com.koddy.server.member.domain.repository.query;
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.common.RepositoryTest;
+import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow;
 import com.koddy.server.common.fixture.MentorFixture;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -47,18 +48,18 @@ class MenteeMainSearchRepositoryFetchSuggestedMentorsTest extends RepositoryTest
 
     @Test
     @DisplayName("멘티 자신에게 커피챗을 제안한 멘토를 limit 개수만큼 최근에 신청한 순서대로 조회한다")
-    void findAppliedMentees() {
+    void fetchSuggestedMentors() {
         // given
-        final CoffeeChat coffeeChat0 = suggest(mentors[0], mentee);
-        final CoffeeChat coffeeChat1 = suggest(mentors[1], mentee);
-        final CoffeeChat coffeeChat2 = suggest(mentors[2], mentee);
-        final CoffeeChat coffeeChat3 = suggest(mentors[3], mentee);
-        final CoffeeChat coffeeChat4 = suggest(mentors[4], mentee);
-        final CoffeeChat coffeeChat5 = suggest(mentors[5], mentee);
-        final CoffeeChat coffeeChat6 = suggest(mentors[6], mentee);
-        final CoffeeChat coffeeChat7 = suggest(mentors[7], mentee);
-        final CoffeeChat coffeeChat8 = suggest(mentors[8], mentee);
-        final CoffeeChat coffeeChat9 = suggest(mentors[9], mentee);
+        final CoffeeChat coffeeChat0 = coffeeChatRepository.save(MentorFlow.suggest(mentors[0], mentee));
+        final CoffeeChat coffeeChat1 = coffeeChatRepository.save(MentorFlow.suggest(mentors[1], mentee));
+        final CoffeeChat coffeeChat2 = coffeeChatRepository.save(MentorFlow.suggest(mentors[2], mentee));
+        final CoffeeChat coffeeChat3 = coffeeChatRepository.save(MentorFlow.suggest(mentors[3], mentee));
+        final CoffeeChat coffeeChat4 = coffeeChatRepository.save(MentorFlow.suggest(mentors[4], mentee));
+        final CoffeeChat coffeeChat5 = coffeeChatRepository.save(MentorFlow.suggest(mentors[5], mentee));
+        final CoffeeChat coffeeChat6 = coffeeChatRepository.save(MentorFlow.suggest(mentors[6], mentee));
+        final CoffeeChat coffeeChat7 = coffeeChatRepository.save(MentorFlow.suggest(mentors[7], mentee));
+        final CoffeeChat coffeeChat8 = coffeeChatRepository.save(MentorFlow.suggest(mentors[8], mentee));
+        final CoffeeChat coffeeChat9 = coffeeChatRepository.save(MentorFlow.suggest(mentors[9], mentee));
 
         /* limit별 조회 */
         final Page<Mentor> result1 = sut.fetchSuggestedMentors(mentee.getId(), 3);
@@ -112,9 +113,5 @@ class MenteeMainSearchRepositoryFetchSuggestedMentorsTest extends RepositoryTest
                 () -> assertThat(result8.getTotalElements()).isEqualTo(6),
                 () -> assertThat(result8.getContent()).containsExactly(mentors[8], mentors[6], mentors[4], mentors[2], mentors[1], mentors[0])
         );
-    }
-
-    private CoffeeChat suggest(final Mentor mentor, final Mentee mentee) {
-        return coffeeChatRepository.save(CoffeeChat.suggest(mentor, mentee, "신청.."));
     }
 }

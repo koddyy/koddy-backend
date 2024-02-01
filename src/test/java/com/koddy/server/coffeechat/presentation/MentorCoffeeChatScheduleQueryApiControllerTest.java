@@ -53,7 +53,7 @@ class MentorCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
             // when - then
             failedExecute(
                     getRequestWithAccessToken(BASE_URL, Map.of(
-                            "status", "apply",
+                            "status", "suggest",
                             "page", "1"
                     )),
                     status().isForbidden(),
@@ -64,7 +64,7 @@ class MentorCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                                             "status",
                                             "커피챗 상태",
                                             "- 전체 = 안보내도됨" + ENTER
-                                                    + "- 제안 = apply" + ENTER
+                                                    + "- 제안 = suggest" + ENTER
                                                     + "- 수락 = pending" + ENTER
                                                     + "- 예정 = approve" + ENTER
                                                     + "- 완료 = complete" + ENTER
@@ -78,7 +78,7 @@ class MentorCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
         }
 
         @Test
-        @DisplayName("멘티가 신청한 커피챗을 상태별로 조회한다")
+        @DisplayName("멘토가 제안한 커피챗을 상태별로 조회한다")
         void success() {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
@@ -98,7 +98,7 @@ class MentorCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
             // when - then
             successfulExecute(
                     getRequestWithAccessToken(BASE_URL, Map.of(
-                            "status", "apply",
+                            "status", "suggest",
                             "page", "1"
                     )),
                     status().isOk(),
@@ -108,7 +108,7 @@ class MentorCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                                             "status",
                                             "커피챗 상태",
                                             "- 전체 = 안보내도됨" + ENTER
-                                                    + "- 제안 = apply" + ENTER
+                                                    + "- 제안 = suggest" + ENTER
                                                     + "- 수락 = pending" + ENTER
                                                     + "- 예정 = approve" + ENTER
                                                     + "- 완료 = complete" + ENTER

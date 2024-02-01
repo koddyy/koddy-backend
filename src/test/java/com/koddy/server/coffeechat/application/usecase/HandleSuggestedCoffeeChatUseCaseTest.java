@@ -51,14 +51,14 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
 
         final String rejectReason = "거절...";
         final RejectSuggestedCoffeeChatCommand command = new RejectSuggestedCoffeeChatCommand(coffeeChat.getId(), rejectReason);
-        given(coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId())).willReturn(coffeeChat);
+        given(coffeeChatRepository.getSuggestedCoffeeChat(command.coffeeChatId())).willReturn(coffeeChat);
 
         // when
         sut.reject(command);
 
         // then
         assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getAppliedCoffeeChat(command.coffeeChatId()),
+                () -> verify(coffeeChatRepository, times(1)).getSuggestedCoffeeChat(command.coffeeChatId()),
                 () -> verify(mentorRepository, times(0)).getByIdWithSchedules(coffeeChat.getSourceMemberId()),
                 () -> verify(reservationAvailabilityChecker, times(0)).check(any(), any(), any()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
@@ -82,7 +82,7 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
         final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
         final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
         final PendingSuggestedCoffeeChatCommand command = new PendingSuggestedCoffeeChatCommand(coffeeChat.getId(), question, start, end);
-        given(coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId())).willReturn(coffeeChat);
+        given(coffeeChatRepository.getSuggestedCoffeeChat(command.coffeeChatId())).willReturn(coffeeChat);
         given(mentorRepository.getByIdWithSchedules(coffeeChat.getSourceMemberId())).willReturn(mentor);
         doNothing()
                 .when(reservationAvailabilityChecker)
@@ -93,7 +93,7 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
 
         // then
         assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getAppliedCoffeeChat(command.coffeeChatId()),
+                () -> verify(coffeeChatRepository, times(1)).getSuggestedCoffeeChat(command.coffeeChatId()),
                 () -> verify(mentorRepository, times(1)).getByIdWithSchedules(coffeeChat.getSourceMemberId()),
                 () -> verify(reservationAvailabilityChecker, times(1)).check(mentor, command.start(), command.end()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),

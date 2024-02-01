@@ -20,13 +20,13 @@ public class HandleSuggestedCoffeeChatUseCase {
 
     @KoddyWritableTransactional
     public void reject(final RejectSuggestedCoffeeChatCommand command) {
-        final CoffeeChat coffeeChat = coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId());
+        final CoffeeChat coffeeChat = coffeeChatRepository.getSuggestedCoffeeChat(command.coffeeChatId());
         coffeeChat.rejectFromMentorSuggest(command.rejectReason());
     }
 
     @KoddyWritableTransactional
     public void pending(final PendingSuggestedCoffeeChatCommand command) {
-        final CoffeeChat coffeeChat = coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId());
+        final CoffeeChat coffeeChat = coffeeChatRepository.getSuggestedCoffeeChat(command.coffeeChatId());
         final Mentor mentor = mentorRepository.getByIdWithSchedules(coffeeChat.getSourceMemberId());
 
         reservationAvailabilityChecker.check(mentor, command.start(), command.end());

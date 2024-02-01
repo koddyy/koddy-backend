@@ -13,9 +13,11 @@ import java.util.stream.Stream;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.SUGGEST;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.APPLIED_COFFEE_CHAT_NOT_FOUND;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.PENDING_COFFEE_CHAT_NOT_FOUND;
+import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.SUGGESTED_COFFEE_CHAT_NOT_FOUND;
 
 public interface CoffeeChatRepository extends JpaRepository<CoffeeChat, Long> {
     Optional<CoffeeChat> findByIdAndStatus(final Long id, final CoffeeChatStatus status);
@@ -25,15 +27,24 @@ public interface CoffeeChatRepository extends JpaRepository<CoffeeChat, Long> {
                 .orElseThrow(() -> new CoffeeChatException(APPLIED_COFFEE_CHAT_NOT_FOUND));
     }
 
+    default CoffeeChat getSuggestedCoffeeChat(final Long id) {
+        return findByIdAndStatus(id, SUGGEST)
+                .orElseThrow(() -> new CoffeeChatException(SUGGESTED_COFFEE_CHAT_NOT_FOUND));
+    }
+
     default CoffeeChat getPendingCoffeeChat(final Long id) {
         return findByIdAndStatus(id, PENDING)
                 .orElseThrow(() -> new CoffeeChatException(PENDING_COFFEE_CHAT_NOT_FOUND));
     }
 
-    Optional<CoffeeChat> findByIdAndSourceMemberIdAndStatus(final Long id, final Long sourceMemberId, final CoffeeChatStatus status);
+    Optional<CoffeeChat> findByIdAndSourceMemberIdAndStatusIn(
+            final Long id,
+            final Long sourceMemberId,
+            final List<CoffeeChatStatus> status
+    );
 
     default CoffeeChat getAppliedOrSuggestedCoffeeChat(final Long id, final Long sourceMemberId) {
-        return findByIdAndSourceMemberIdAndStatus(id, sourceMemberId, APPLY)
+        return findByIdAndSourceMemberIdAndStatusIn(id, sourceMemberId, List.of(APPLY, SUGGEST))
                 .orElseThrow(() -> new CoffeeChatException(APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND));
     }
 

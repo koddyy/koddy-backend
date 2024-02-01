@@ -21,15 +21,15 @@ public class CreateCoffeeChatUseCase {
     private final ReservationAvailabilityChecker reservationAvailabilityChecker;
     private final CoffeeChatRepository coffeeChatRepository;
 
-    public Long suggestCoffeeChat(final MentorSuggestCoffeeChatCommand command) {
+    @KoddyWritableTransactional
+    public long suggestCoffeeChat(final MentorSuggestCoffeeChatCommand command) {
         final Mentor mentor = mentorRepository.getById(command.mentorId());
         final Mentee mentee = menteeRepository.getById(command.menteeId());
-
         return coffeeChatRepository.save(CoffeeChat.suggest(mentor, mentee, command.applyReason())).getId();
     }
 
     @KoddyWritableTransactional
-    public Long applyCoffeeChat(final MenteeApplyCoffeeChatCommand command) {
+    public long applyCoffeeChat(final MenteeApplyCoffeeChatCommand command) {
         final Mentee mentee = menteeRepository.getById(command.menteeId());
         final Mentor mentor = mentorRepository.getById(command.mentorId());
 
