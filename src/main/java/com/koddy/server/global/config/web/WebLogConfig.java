@@ -39,7 +39,8 @@ public class WebLogConfig {
                 "/error*",
                 "/api/swagger*",
                 "/api-docs*",
-                "/actuator*"
+                "/api/actuator*",
+                "/api/health"
         ));
         registrationBean.addUrlPatterns("/api/*");
         registrationBean.setOrder(3);
