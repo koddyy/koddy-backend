@@ -4,10 +4,8 @@ import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow;
 import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow;
-import com.koddy.server.common.fixture.StrategyFixture;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,11 +18,13 @@ import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.COMPLETE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.SUGGEST;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_CANCEL_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_COMPLETE_STATUS;
 import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
+import static com.koddy.server.common.fixture.StrategyFixture.KAKAO_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -33,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class CoffeeChatTest extends UnitTest {
     private final Mentee mentee = MENTEE_1.toDomain().apply(1L);
     private final Mentor mentor = MENTOR_1.toDomain().apply(2L);
-    private final String applyReason = "신청 이유...";
 
     @Nested
     @DisplayName("CoffeeChat 초기 생성")
@@ -42,20 +41,18 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("멘티 -> 멘토에게 커피챗을 신청한다")
         void applyCoffeeChat() {
             // when
-            final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
-            final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
-            final CoffeeChat coffeeChat = CoffeeChat.apply(mentee, mentor, applyReason, start, end);
+            final CoffeeChat coffeeChat = MenteeFlow.apply(월요일_1주차_20_00_시작, mentee, mentor);
 
             // then
             assertAll(
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
-                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPLY),
-                    () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
-                    () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
+                    () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
+                    () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
             );
         }
@@ -64,16 +61,16 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("멘토 -> 멘티에게 커피챗을 제안한다")
         void suggestCoffeeChat() {
             // when
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason);
+            final CoffeeChat coffeeChat = MentorFlow.suggest(mentor, mentee);
 
             // then
             assertAll(
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
-                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
-                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPLY),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(SUGGEST),
                     () -> assertThat(coffeeChat.getStart()).isNull(),
                     () -> assertThat(coffeeChat.getEnd()).isNull(),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
@@ -84,29 +81,26 @@ class CoffeeChatTest extends UnitTest {
     @Nested
     @DisplayName("멘티의 커피챗 신청에 대한 처리")
     class FromMenteeApply {
-        private final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
-        private final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
-
         @Test
         @DisplayName("거절한다")
         void reject() {
             // given
-            final CoffeeChat coffeeChat = CoffeeChat.apply(mentee, mentor, applyReason, start, end);
-            final String rejectReason = "거절..";
+            final CoffeeChat coffeeChat = MenteeFlow.apply(월요일_1주차_20_00_시작, mentee, mentor);
 
             // when
+            final String rejectReason = "거절..";
             coffeeChat.rejectFromMenteeApply(rejectReason);
 
             // then
             assertAll(
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
-                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(rejectReason),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(REJECT),
-                    () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
-                    () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
+                    () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
+                    () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
             );
         }
@@ -115,8 +109,8 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("수락한다")
         void approve() {
             // given
-            final CoffeeChat coffeeChat = CoffeeChat.apply(mentee, mentor, applyReason, start, end);
-            final Strategy strategy = StrategyFixture.KAKAO_ID.toDomain();
+            final CoffeeChat coffeeChat = MenteeFlow.apply(월요일_1주차_20_00_시작, mentee, mentor);
+            final Strategy strategy = KAKAO_ID.toDomain();
 
             // when
             coffeeChat.approveFromMenteeApply(strategy);
@@ -125,12 +119,12 @@ class CoffeeChatTest extends UnitTest {
             assertAll(
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
-                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPROVE),
-                    () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
-                    () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
+                    () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
+                    () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                     () -> assertThat(coffeeChat.getStrategy()).isEqualTo(strategy)
             );
         }
@@ -143,17 +137,17 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("거절한다")
         void reject() {
             // given
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason);
-            final String rejectReason = "거절..";
+            final CoffeeChat coffeeChat = MentorFlow.suggest(mentor, mentee);
 
             // when
+            final String rejectReason = "거절..";
             coffeeChat.rejectFromMentorSuggest(rejectReason);
 
             // then
             assertAll(
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
-                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(rejectReason),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(REJECT),
@@ -167,24 +161,24 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("1차 수락한다 (멘토 최종 수락 대기)")
         void pending() {
             // given
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason);
-            final String question = "질문..";
-            final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
-            final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
+            final CoffeeChat coffeeChat = MentorFlow.suggest(mentor, mentee);
 
             // when
-            coffeeChat.pendingFromMentorSuggest(question, start, end);
+            final String question = "질문..";
+            final LocalDateTime start = 월요일_1주차_20_00_시작.getStart();
+            final LocalDateTime end = 월요일_1주차_20_00_시작.getEnd();
+            coffeeChat.pendingFromMentorSuggest(question, new Reservation(start), new Reservation(end));
 
             // then
             assertAll(
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
-                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isEqualTo(question),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(PENDING),
-                    () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
-                    () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
+                    () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(start),
+                    () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(end),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
             );
         }
@@ -193,37 +187,26 @@ class CoffeeChatTest extends UnitTest {
     @Nested
     @DisplayName("최종 결정 대기 상태인 CoffeeChat에 대한 멘토의 결정")
     class PendingCoffeeChat {
-        private final String question = "질문..";
-        private final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
-        private final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
-
-        private CoffeeChat coffeeChat;
-
-        @BeforeEach
-        void setUp() {
-            coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason);
-            coffeeChat.pendingFromMentorSuggest(question, start, end);
-        }
-
         @Test
         @DisplayName("거절한다")
         void reject() {
             // given
-            final String rejectReason = "거절...";
+            final CoffeeChat coffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee);
 
             // when
+            final String rejectReason = "거절...";
             coffeeChat.rejectPendingCoffeeChat(rejectReason);
 
             // then
             assertAll(
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
-                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
-                    () -> assertThat(coffeeChat.getQuestion()).isEqualTo(question),
+                    () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
+                    () -> assertThat(coffeeChat.getQuestion()).isNotNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(rejectReason),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(REJECT),
-                    () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
-                    () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
+                    () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
+                    () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
             );
         }
@@ -232,21 +215,22 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("수락한다")
         void approve() {
             // given
-            final Strategy strategy = StrategyFixture.KAKAO_ID.toDomain();
+            final CoffeeChat coffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee);
 
             // when
+            final Strategy strategy = KAKAO_ID.toDomain();
             coffeeChat.approvePendingCoffeeChat(strategy);
 
             // then
             assertAll(
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
-                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
-                    () -> assertThat(coffeeChat.getQuestion()).isEqualTo(question),
+                    () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
+                    () -> assertThat(coffeeChat.getQuestion()).isNotNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPROVE),
-                    () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
-                    () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
+                    () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
+                    () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                     () -> assertThat(coffeeChat.getStrategy()).isEqualTo(strategy)
             );
         }
@@ -255,18 +239,12 @@ class CoffeeChatTest extends UnitTest {
     @Nested
     @DisplayName("신청/제안한 커피챗 취소")
     class Cancel {
-        private final String question = "질문..";
-        private final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 1, 9, 0));
-        private final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 1, 10, 0));
-
         @Test
-        @DisplayName("APPLY 상태가 아니면 취소가 불가능하다")
+        @DisplayName("멘티(APPLY) & 멘토(SUGGESET) 상태가 아니면 취소가 불가능하다")
         void throwExceptionByCannotCancelStatus() {
             // given
-            final CoffeeChat applyCoffeeChat = CoffeeChat.apply(mentee, mentor, applyReason, start, end);
-            final CoffeeChat suggestCoffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason);
-            applyCoffeeChat.approveFromMenteeApply(StrategyFixture.KAKAO_ID.toDomain());
-            suggestCoffeeChat.pendingFromMentorSuggest(question, start, end);
+            final CoffeeChat applyCoffeeChat = MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor);
+            final CoffeeChat suggestCoffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee);
 
             // when - then
             assertAll(
@@ -283,7 +261,7 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("멘티는 자신이 신청한 커피챗을 취소한다")
         void cancelAppliedCoffeeChat() {
             // given
-            final CoffeeChat coffeeChat = CoffeeChat.apply(mentee, mentor, applyReason, start, end);
+            final CoffeeChat coffeeChat = MenteeFlow.apply(월요일_1주차_20_00_시작, mentee, mentor);
 
             // when
             coffeeChat.cancel();
@@ -292,12 +270,12 @@ class CoffeeChatTest extends UnitTest {
             assertAll(
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
-                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(CANCEL),
-                    () -> assertThat(coffeeChat.getStart()).isEqualTo(start),
-                    () -> assertThat(coffeeChat.getEnd()).isEqualTo(end),
+                    () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
+                    () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
             );
         }
@@ -306,7 +284,7 @@ class CoffeeChatTest extends UnitTest {
         @DisplayName("멘토는 자신이 제안한 커피챗을 취소한다")
         void cancelSuggestedCoffeeChat() {
             // given
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason);
+            final CoffeeChat coffeeChat = MentorFlow.suggest(mentor, mentee);
 
             // when
             coffeeChat.cancel();
@@ -315,7 +293,7 @@ class CoffeeChatTest extends UnitTest {
             assertAll(
                     () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
-                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
+                    () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(CANCEL),
@@ -369,38 +347,21 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getStrategy()).isEqualTo(월요일_1주차_20_00_시작.getStrategy())
             );
         }
-
-        @Test
-        @DisplayName("멘토는 자신이 제안한 커피챗을 취소한다")
-        void cancelSuggestedCoffeeChat() {
-            // given
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, applyReason);
-
-            // when
-            coffeeChat.cancel();
-
-            // then
-            assertAll(
-                    () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
-                    () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
-                    () -> assertThat(coffeeChat.getApplyReason()).isEqualTo(applyReason),
-                    () -> assertThat(coffeeChat.getQuestion()).isNull(),
-                    () -> assertThat(coffeeChat.getRejectReason()).isNull(),
-                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(CANCEL),
-                    () -> assertThat(coffeeChat.getStart()).isNull(),
-                    () -> assertThat(coffeeChat.getEnd()).isNull(),
-                    () -> assertThat(coffeeChat.getStrategy()).isNull()
-            );
-        }
     }
 
     @Test
     @DisplayName("CoffeeChat의 Reservation[start, end]와 비교 대상 Reservation의 시간대가 겹치는지 확인한다")
     void isReservationIncluded() {
         // given
-        final Reservation start = new Reservation(LocalDateTime.of(2024, 2, 2, 18, 0));
-        final Reservation end = new Reservation(LocalDateTime.of(2024, 2, 2, 18, 30));
-        final CoffeeChat coffeeChat = CoffeeChat.apply(mentee, mentor, applyReason, start, end);
+        final LocalDateTime start = LocalDateTime.of(2024, 2, 2, 18, 0);
+        final LocalDateTime end = LocalDateTime.of(2024, 2, 2, 18, 30);
+        final CoffeeChat coffeeChat = CoffeeChat.apply(
+                mentee,
+                mentor,
+                "신청..",
+                new Reservation(start),
+                new Reservation(end)
+        );
 
         // when
         final boolean actual1 = coffeeChat.isReservationIncluded(new Reservation(LocalDateTime.of(2024, 2, 1, 18, 20)));

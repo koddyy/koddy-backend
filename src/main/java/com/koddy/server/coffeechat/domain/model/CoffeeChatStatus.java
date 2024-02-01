@@ -12,6 +12,7 @@ import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.INVA
 @RequiredArgsConstructor
 public enum CoffeeChatStatus {
     APPLY("신청", "apply"),
+    SUGGEST("제안", "suggest"),
     CANCEL("취소", "cancel"),
     REJECT("거절", "reject"),
     PENDING("1차 수락", "pending"),
