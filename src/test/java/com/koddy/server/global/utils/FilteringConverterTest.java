@@ -60,7 +60,7 @@ class FilteringConverterTest extends UnitTest {
     @DisplayName("N개의 커피챗 상태 데이터를 List<CoffeeChatStatus> 도메인으로 변환한다")
     void convertToCoffeeChatStatus() {
         // given
-        final String value = "apply,cancel,reject,pending,approve,complete";
+        final String value = "APPLY,CANCEL,REJECT,PENDING,APPROVE,COMPLETE";
 
         // when
         final List<CoffeeChatStatus> result = FilteringConverter.convertToCoffeeChatStatus(value);

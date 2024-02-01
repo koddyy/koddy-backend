@@ -1,9 +1,9 @@
 package com.koddy.server.member.domain.repository.query;
 
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
-import com.koddy.server.coffeechat.domain.model.Reservation;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.common.RepositoryTest;
+import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow;
 import com.koddy.server.common.fixture.MenteeFixture;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -15,10 +15,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.koddy.server.common.fixture.CoffeeChatFixture.수요일_1주차_20_00_시작;
+import static com.koddy.server.common.fixture.CoffeeChatFixture.수요일_1주차_21_00_시작;
+import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작;
+import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_21_00_시작;
+import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_2주차_20_00_시작;
+import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_2주차_21_00_시작;
+import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_3주차_20_00_시작;
+import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_3주차_21_00_시작;
+import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_4주차_20_00_시작;
+import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_4주차_21_00_시작;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -51,18 +60,16 @@ class MentorMainSearchRepositoryFetchAppliedMenteesTest extends RepositoryTest {
     @DisplayName("멘토 자신에게 커피챗을 신청한 멘티를 limit 개수만큼 최근에 신청한 순서대로 조회한다")
     void findAppliedMentees() {
         // given
-        final LocalDateTime time = LocalDateTime.of(2024, 2, 1, 15, 0);
-
-        final CoffeeChat coffeeChat0 = apply(mentees[0], mentor, time, time.plusMinutes(30));
-        final CoffeeChat coffeeChat1 = apply(mentees[1], mentor, time.plusMinutes(30), time.plusMinutes(60));
-        final CoffeeChat coffeeChat2 = apply(mentees[2], mentor, time.plusMinutes(60), time.plusMinutes(90));
-        final CoffeeChat coffeeChat3 = apply(mentees[3], mentor, time.plusMinutes(90), time.plusMinutes(120));
-        final CoffeeChat coffeeChat4 = apply(mentees[4], mentor, time.plusMinutes(120), time.plusMinutes(150));
-        final CoffeeChat coffeeChat5 = apply(mentees[5], mentor, time.plusMinutes(150), time.plusMinutes(180));
-        final CoffeeChat coffeeChat6 = apply(mentees[6], mentor, time.plusMinutes(180), time.plusMinutes(210));
-        final CoffeeChat coffeeChat7 = apply(mentees[7], mentor, time.plusMinutes(210), time.plusMinutes(240));
-        final CoffeeChat coffeeChat8 = apply(mentees[8], mentor, time.plusMinutes(240), time.plusMinutes(270));
-        final CoffeeChat coffeeChat9 = apply(mentees[9], mentor, time.plusMinutes(270), time.plusMinutes(300));
+        final CoffeeChat coffeeChat0 = coffeeChatRepository.save(MenteeFlow.apply(월요일_1주차_20_00_시작, mentees[0], mentor));
+        final CoffeeChat coffeeChat1 = coffeeChatRepository.save(MenteeFlow.apply(월요일_1주차_21_00_시작, mentees[1], mentor));
+        final CoffeeChat coffeeChat2 = coffeeChatRepository.save(MenteeFlow.apply(월요일_2주차_20_00_시작, mentees[2], mentor));
+        final CoffeeChat coffeeChat3 = coffeeChatRepository.save(MenteeFlow.apply(월요일_2주차_21_00_시작, mentees[3], mentor));
+        final CoffeeChat coffeeChat4 = coffeeChatRepository.save(MenteeFlow.apply(월요일_3주차_20_00_시작, mentees[4], mentor));
+        final CoffeeChat coffeeChat5 = coffeeChatRepository.save(MenteeFlow.apply(월요일_3주차_21_00_시작, mentees[5], mentor));
+        final CoffeeChat coffeeChat6 = coffeeChatRepository.save(MenteeFlow.apply(월요일_4주차_20_00_시작, mentees[6], mentor));
+        final CoffeeChat coffeeChat7 = coffeeChatRepository.save(MenteeFlow.apply(월요일_4주차_21_00_시작, mentees[7], mentor));
+        final CoffeeChat coffeeChat8 = coffeeChatRepository.save(MenteeFlow.apply(수요일_1주차_20_00_시작, mentees[8], mentor));
+        final CoffeeChat coffeeChat9 = coffeeChatRepository.save(MenteeFlow.apply(수요일_1주차_21_00_시작, mentees[9], mentor));
 
         /* limit별 조회 */
         final Page<Mentee> result1 = sut.fetchAppliedMentees(mentor.getId(), 3);
@@ -116,15 +123,5 @@ class MentorMainSearchRepositoryFetchAppliedMenteesTest extends RepositoryTest {
                 () -> assertThat(result8.getTotalElements()).isEqualTo(6),
                 () -> assertThat(result8.getContent()).containsExactly(mentees[8], mentees[6], mentees[4], mentees[2], mentees[1], mentees[0])
         );
-    }
-
-    private CoffeeChat apply(final Mentee mentee, final Mentor mentor, final LocalDateTime start, final LocalDateTime end) {
-        return coffeeChatRepository.save(CoffeeChat.apply(
-                mentee,
-                mentor,
-                "신청..",
-                new Reservation(start),
-                new Reservation(end)
-        ));
     }
 }

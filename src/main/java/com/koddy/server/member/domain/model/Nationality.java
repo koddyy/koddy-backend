@@ -24,7 +24,7 @@ public enum Nationality {
 
     public static Nationality from(final String code) {
         return Arrays.stream(values())
-                .filter(it -> it.code.equals(code))
+                .filter(it -> it.code.equalsIgnoreCase(code))
                 .findFirst()
                 .orElseThrow(() -> new MemberException(INVALID_NATIONALITY));
     }
