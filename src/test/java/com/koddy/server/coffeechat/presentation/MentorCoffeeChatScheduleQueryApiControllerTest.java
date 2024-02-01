@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Map;
 
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.SUGGEST;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.body;
@@ -85,7 +85,7 @@ class MentorCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
             given(getMentorCoffeeChatScheduleUseCase.getSuggestedCoffeeChats(any())).willReturn(new SliceResponse<>(
                     List.of(new MentorCoffeeChatScheduleData(
                             1L,
-                            APPLY.getValue(),
+                            SUGGEST.getValue(),
                             mentee.getId(),
                             mentee.getName(),
                             mentee.getProfileImageUrl(),
