@@ -47,7 +47,7 @@ public class Language {
 
         public static Category from(final String code) {
             return Arrays.stream(values())
-                    .filter(it -> it.code.equals(code))
+                    .filter(it -> it.code.equalsIgnoreCase(code))
                     .findFirst()
                     .orElseThrow(() -> new MemberException(INVALID_LANGUAGE_CATEGORY));
         }

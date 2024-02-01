@@ -1,9 +1,9 @@
 package com.koddy.server.member.application.usecase;
 
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
-import com.koddy.server.coffeechat.domain.model.Reservation;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.common.UnitTest;
+import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow;
 import com.koddy.server.member.application.usecase.query.GetReservedSchedule;
 import com.koddy.server.member.application.usecase.query.response.ReservedSchedule;
 import com.koddy.server.member.domain.model.mentee.Mentee;
@@ -45,20 +45,12 @@ class GetReservedScheduleUseCaseTest extends UnitTest {
         final GetReservedSchedule query = new GetReservedSchedule(mentor.getId(), 2024, 2);
         given(mentorRepository.getByIdWithSchedules(query.mentorId())).willReturn(mentor);
 
-        final CoffeeChat coffeeChatA = CoffeeChat.suggest(mentor, menteeA, "제안..").apply(1L);
-        final CoffeeChat coffeeChatB = CoffeeChat.suggest(mentor, menteeB, "제안..").apply(2L);
-        final CoffeeChat coffeeChatC = CoffeeChat.suggest(mentor, menteeC, "제안..").apply(3L);
-        coffeeChatA.rejectFromMentorSuggest("거절..");
-        coffeeChatB.pendingFromMentorSuggest(
-                "질문..",
-                new Reservation(LocalDateTime.of(2024, 2, 18, 18, 0)),
-                new Reservation(LocalDateTime.of(2024, 2, 18, 18, 30))
-        );
-        coffeeChatC.pendingFromMentorSuggest(
-                "질문..",
-                new Reservation(LocalDateTime.of(2024, 2, 15, 18, 0)),
-                new Reservation(LocalDateTime.of(2024, 2, 15, 18, 30))
-        );
+        final LocalDateTime startB = LocalDateTime.of(2024, 2, 18, 18, 0);
+        final LocalDateTime startC = LocalDateTime.of(2024, 2, 15, 18, 0);
+
+        final CoffeeChat coffeeChatA = MentorFlow.suggestAndReject(mentor, menteeA).apply(1L);
+        final CoffeeChat coffeeChatB = MentorFlow.suggestAndPending(startB, startB.plusMinutes(30), mentor, menteeB).apply(2L);
+        final CoffeeChat coffeeChatC = MentorFlow.suggestAndPending(startC, startC.plusMinutes(30), mentor, menteeC).apply(2L);
         given(coffeeChatRepository.getReservedCoffeeChat(query.mentorId(), query.year(), query.month())).willReturn(List.of(coffeeChatC, coffeeChatB));
 
         // when

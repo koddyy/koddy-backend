@@ -53,7 +53,7 @@ class MentorCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
             // when - then
             failedExecute(
                     getRequestWithAccessToken(BASE_URL, Map.of(
-                            "status", "suggest",
+                            "status", "SUGGEST",
                             "page", "1"
                     )),
                     status().isForbidden(),
@@ -64,11 +64,11 @@ class MentorCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                                             "status",
                                             "커피챗 상태",
                                             "- 전체 = 안보내도됨" + ENTER
-                                                    + "- 제안 = suggest" + ENTER
-                                                    + "- 수락 = pending" + ENTER
-                                                    + "- 예정 = approve" + ENTER
-                                                    + "- 완료 = complete" + ENTER
-                                                    + "- 취소 = cancel,reject" + ENTER,
+                                                    + "- 제안 = SUGGEST" + ENTER
+                                                    + "- 수락 = PENDING" + ENTER
+                                                    + "- 예정 = APPROVE" + ENTER
+                                                    + "- 완료 = COMPLETE" + ENTER
+                                                    + "- 취소 = CANCEL,REJECT" + ENTER,
                                             false
                                     ),
                                     query("page", "페이지", "1부터 시작", true)
@@ -98,7 +98,7 @@ class MentorCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
             // when - then
             successfulExecute(
                     getRequestWithAccessToken(BASE_URL, Map.of(
-                            "status", "suggest",
+                            "status", "SUGGEST",
                             "page", "1"
                     )),
                     status().isOk(),
@@ -108,11 +108,11 @@ class MentorCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                                             "status",
                                             "커피챗 상태",
                                             "- 전체 = 안보내도됨" + ENTER
-                                                    + "- 제안 = suggest" + ENTER
-                                                    + "- 수락 = pending" + ENTER
-                                                    + "- 예정 = approve" + ENTER
-                                                    + "- 완료 = complete" + ENTER
-                                                    + "- 취소 = cancel,reject" + ENTER,
+                                                    + "- 제안 = SUGGEST" + ENTER
+                                                    + "- 수락 = PENDING" + ENTER
+                                                    + "- 예정 = APPROVE" + ENTER
+                                                    + "- 완료 = COMPLETE" + ENTER
+                                                    + "- 취소 = CANCEL,REJECT" + ENTER,
                                             false
                                     ),
                                     query("page", "페이지", "1부터 시작", true)
@@ -146,7 +146,7 @@ class MentorCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
             // when - then
             failedExecute(
                     getRequestWithAccessToken(BASE_URL, Map.of(
-                            "status", "cancel,reject",
+                            "status", "CANCEL,REJECT",
                             "page", "1"
                     )),
                     status().isForbidden(),
@@ -157,10 +157,10 @@ class MentorCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                                             "status",
                                             "커피챗 상태",
                                             "- 전체 = 안보내도됨" + ENTER
-                                                    + "- 신청 = apply" + ENTER
-                                                    + "- 예정 = approve" + ENTER
-                                                    + "- 완료 = complete" + ENTER
-                                                    + "- 취소 = cancel,reject" + ENTER,
+                                                    + "- 신청 = APPLY" + ENTER
+                                                    + "- 예정 = APPROVE" + ENTER
+                                                    + "- 완료 = COMPLETE" + ENTER
+                                                    + "- 취소 = CANCEL,REJECT" + ENTER,
                                             false
                                     ),
                                     query("page", "페이지", "1부터 시작", true)
@@ -201,7 +201,7 @@ class MentorCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
             // when - then
             successfulExecute(
                     getRequestWithAccessToken(BASE_URL, Map.of(
-                            "status", "cancel,reject",
+                            "status", "CANCEL,REJECT",
                             "page", "1"
                     )),
                     status().isOk(),
@@ -211,10 +211,10 @@ class MentorCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                                             "status",
                                             "커피챗 상태",
                                             "- 전체 = 안보내도됨" + ENTER
-                                                    + "- 신청 = apply" + ENTER
-                                                    + "- 예정 = approve" + ENTER
-                                                    + "- 완료 = complete" + ENTER
-                                                    + "- 취소 = cancel,reject" + ENTER,
+                                                    + "- 신청 = APPLY" + ENTER
+                                                    + "- 예정 = APPROVE" + ENTER
+                                                    + "- 완료 = COMPLETE" + ENTER
+                                                    + "- 취소 = CANCEL,REJECT" + ENTER,
                                             false
                                     ),
                                     query("page", "페이지", "1부터 시작", true)
