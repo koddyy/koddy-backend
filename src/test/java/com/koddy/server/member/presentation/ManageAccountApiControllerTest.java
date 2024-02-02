@@ -179,7 +179,7 @@ class ManageAccountApiControllerTest extends ControllerTest {
             applyToken(true, mentor.getId(), mentor.getRole());
             doNothing()
                     .when(deleteMemberUseCase)
-                    .invoke(any());
+                    .invoke(mentor.getId());
 
             // when - then
             successfulExecute(

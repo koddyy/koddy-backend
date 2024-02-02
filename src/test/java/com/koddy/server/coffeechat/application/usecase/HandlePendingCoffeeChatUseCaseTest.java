@@ -43,15 +43,15 @@ class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
         final LocalDateTime start = LocalDateTime.of(2024, 2, 1, 9, 0);
         final CoffeeChat coffeeChat = CoffeeChatFixture.MentorFlow.suggestAndPending(start, start.plusMinutes(30), mentor, mentee).apply(1L);
 
-        final RejectPendingCoffeeChatCommand command = new RejectPendingCoffeeChatCommand(coffeeChat.getId(), "거절...");
-        given(coffeeChatRepository.getPendingCoffeeChat(command.coffeeChatId())).willReturn(coffeeChat);
+        final RejectPendingCoffeeChatCommand command = new RejectPendingCoffeeChatCommand(mentor.getId(), coffeeChat.getId(), "거절...");
+        given(coffeeChatRepository.getMenteePendingCoffeeChat(command.coffeeChatId(), command.mentorId())).willReturn(coffeeChat);
 
         // when
         sut.reject(command);
 
         // then
         assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getPendingCoffeeChat(command.coffeeChatId()),
+                () -> verify(coffeeChatRepository, times(1)).getMenteePendingCoffeeChat(command.coffeeChatId(), command.mentorId()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
@@ -71,15 +71,20 @@ class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
         final LocalDateTime start = LocalDateTime.of(2024, 2, 1, 9, 0);
         final CoffeeChat coffeeChat = CoffeeChatFixture.MentorFlow.suggestAndPending(start, start.plusMinutes(30), mentor, mentee).apply(1L);
 
-        final ApprovePendingCoffeeChatCommand command = new ApprovePendingCoffeeChatCommand(coffeeChat.getId(), Strategy.Type.from("kakao"), "sjiwon");
-        given(coffeeChatRepository.getPendingCoffeeChat(command.coffeeChatId())).willReturn(coffeeChat);
+        final ApprovePendingCoffeeChatCommand command = new ApprovePendingCoffeeChatCommand(
+                mentor.getId(),
+                coffeeChat.getId(),
+                Strategy.Type.KAKAO_ID,
+                "sjiwon"
+        );
+        given(coffeeChatRepository.getMenteePendingCoffeeChat(command.coffeeChatId(), command.mentorId())).willReturn(coffeeChat);
 
         // when
         sut.approve(command);
 
         // then
         assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getPendingCoffeeChat(command.coffeeChatId()),
+                () -> verify(coffeeChatRepository, times(1)).getMenteePendingCoffeeChat(command.coffeeChatId(), command.mentorId()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),

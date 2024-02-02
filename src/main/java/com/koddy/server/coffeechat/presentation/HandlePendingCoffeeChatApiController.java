@@ -36,7 +36,11 @@ public class HandlePendingCoffeeChatApiController {
             @PathVariable final Long coffeeChatId,
             @RequestBody @Valid final RejectPendingCoffeeChatRequest request
     ) {
-        handlePendingCoffeeChatUseCase.reject(new RejectPendingCoffeeChatCommand(coffeeChatId, request.rejectReason()));
+        handlePendingCoffeeChatUseCase.reject(new RejectPendingCoffeeChatCommand(
+                authenticated.id(),
+                coffeeChatId,
+                request.rejectReason()
+        ));
         return ResponseEntity.noContent().build();
     }
 
@@ -49,6 +53,7 @@ public class HandlePendingCoffeeChatApiController {
             @RequestBody @Valid final ApprovePendingCoffeeChatRequest request
     ) {
         handlePendingCoffeeChatUseCase.approve(new ApprovePendingCoffeeChatCommand(
+                authenticated.id(),
                 coffeeChatId,
                 request.toStrategyType(),
                 request.chatValue()

@@ -1,7 +1,7 @@
 package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
-import com.koddy.server.coffeechat.application.usecase.HandleAppliedCoffeeChatUseCase;
+import com.koddy.server.coffeechat.application.usecase.HandleMenteeAppliedCoffeeChatUseCase;
 import com.koddy.server.coffeechat.application.usecase.command.ApproveAppliedCoffeeChatCommand;
 import com.koddy.server.coffeechat.application.usecase.command.RejectAppliedCoffeeChatCommand;
 import com.koddy.server.coffeechat.presentation.dto.request.ApproveAppliedCoffeeChatRequest;
@@ -26,7 +26,7 @@ import static com.koddy.server.member.domain.model.Role.MENTOR;
 @RequiredArgsConstructor
 @RequestMapping("/api/coffeechats/applied")
 public class HandleAppliedCoffeeChatApiController {
-    private final HandleAppliedCoffeeChatUseCase handleAppliedCoffeeChatUseCase;
+    private final HandleMenteeAppliedCoffeeChatUseCase handleMenteeAppliedCoffeeChatUseCase;
 
     @Operation(summary = "멘티가 신청한 커피챗 거절 Endpoint")
     @PatchMapping("/reject/{coffeeChatId}")
@@ -36,7 +36,11 @@ public class HandleAppliedCoffeeChatApiController {
             @PathVariable final Long coffeeChatId,
             @RequestBody @Valid final RejectAppliedCoffeeChatRequest request
     ) {
-        handleAppliedCoffeeChatUseCase.reject(new RejectAppliedCoffeeChatCommand(coffeeChatId, request.rejectReason()));
+        handleMenteeAppliedCoffeeChatUseCase.reject(new RejectAppliedCoffeeChatCommand(
+                authenticated.id(),
+                coffeeChatId,
+                request.rejectReason()
+        ));
         return ResponseEntity.noContent().build();
     }
 
@@ -48,7 +52,8 @@ public class HandleAppliedCoffeeChatApiController {
             @PathVariable final Long coffeeChatId,
             @RequestBody @Valid final ApproveAppliedCoffeeChatRequest request
     ) {
-        handleAppliedCoffeeChatUseCase.approve(new ApproveAppliedCoffeeChatCommand(
+        handleMenteeAppliedCoffeeChatUseCase.approve(new ApproveAppliedCoffeeChatCommand(
+                authenticated.id(),
                 coffeeChatId,
                 request.toStrategyType(),
                 request.chatValue()

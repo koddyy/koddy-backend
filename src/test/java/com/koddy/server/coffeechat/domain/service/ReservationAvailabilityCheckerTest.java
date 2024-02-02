@@ -118,6 +118,46 @@ class ReservationAvailabilityCheckerTest extends UnitTest {
     }
 
     @Test
+    @DisplayName("멘토링 진행 시간이 멘토가 정한 TimeUnit이랑 일치하지 않으면 예외가 발생한다")
+    void throwExceptionByNotAllowedTimeUnit() {
+        // given
+        final MentoringPeriod mentoringPeriod = MentoringPeriod.of(
+                LocalDate.of(2024, 2, 1),
+                LocalDate.of(2024, 3, 1)
+        );
+        final LocalTime time = LocalTime.of(19, 0);
+        final List<Timeline> timelines = List.of(
+                Timeline.of(TUE, time, time.plusHours(3)),
+                Timeline.of(WED, time, time.plusHours(3)),
+                Timeline.of(THU, time, time.plusHours(3)),
+                Timeline.of(FRI, time, time.plusHours(3))
+        );
+        final Mentor mentor = MENTOR_1.toDomainWithMentoringInfo(mentoringPeriod, timelines).apply(2L);
+
+        // when - then
+        final LocalDateTime start = LocalDateTime.of(2024, 2, 5, 18, 0);
+
+        assertAll(
+                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(start), new Reservation(start.plusMinutes(10))))
+                        .isInstanceOf(MemberException.class)
+                        .hasMessage(CANNOT_RESERVATION.getMessage()),
+                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(start), new Reservation(start.plusMinutes(20))))
+                        .isInstanceOf(MemberException.class)
+                        .hasMessage(CANNOT_RESERVATION.getMessage()),
+                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(start), new Reservation(start.plusMinutes(29))))
+                        .isInstanceOf(MemberException.class)
+                        .hasMessage(CANNOT_RESERVATION.getMessage()),
+                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(start), new Reservation(start.plusMinutes(31))))
+                        .isInstanceOf(MemberException.class)
+                        .hasMessage(CANNOT_RESERVATION.getMessage()),
+                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(start), new Reservation(start.plusMinutes(40))))
+                        .isInstanceOf(MemberException.class)
+                        .hasMessage(CANNOT_RESERVATION.getMessage()),
+                () -> verify(coffeeChatRepository, times(0)).getReservedCoffeeChat(mentor.getId(), 2024, 2)
+        );
+    }
+
+    @Test
     @DisplayName("이미 예약된 CoffeeChat 시간대와 겹치면 예외가 발생한다")
     void throwExceptionByCoffeeChatReservationTimeIncluded() {
         // given

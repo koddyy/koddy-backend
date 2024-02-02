@@ -29,12 +29,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@DisplayName("CoffeeChat -> HandleSuggestedCoffeeChatUseCase 테스트")
-class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
+@DisplayName("CoffeeChat -> HandleMentorSuggestedCoffeeChatUseCase 테스트")
+class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final ReservationAvailabilityChecker reservationAvailabilityChecker = mock(ReservationAvailabilityChecker.class);
-    private final HandleSuggestedCoffeeChatUseCase sut = new HandleSuggestedCoffeeChatUseCase(
+    private final HandleMentorSuggestedCoffeeChatUseCase sut = new HandleMentorSuggestedCoffeeChatUseCase(
             coffeeChatRepository,
             mentorRepository,
             reservationAvailabilityChecker
@@ -49,15 +49,15 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
         // given
         final CoffeeChat coffeeChat = MentorFlow.suggest(mentor, mentee).apply(1L);
 
-        final RejectSuggestedCoffeeChatCommand command = new RejectSuggestedCoffeeChatCommand(coffeeChat.getId(), "거절...");
-        given(coffeeChatRepository.getSuggestedCoffeeChat(command.coffeeChatId())).willReturn(coffeeChat);
+        final RejectSuggestedCoffeeChatCommand command = new RejectSuggestedCoffeeChatCommand(mentee.getId(), coffeeChat.getId(), "거절...");
+        given(coffeeChatRepository.getMentorSuggestedCoffeeChat(command.coffeeChatId(), command.menteeId())).willReturn(coffeeChat);
 
         // when
         sut.reject(command);
 
         // then
         assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getSuggestedCoffeeChat(command.coffeeChatId()),
+                () -> verify(coffeeChatRepository, times(1)).getMentorSuggestedCoffeeChat(command.coffeeChatId(), command.menteeId()),
                 () -> verify(mentorRepository, times(0)).getByIdWithSchedules(coffeeChat.getSourceMemberId()),
                 () -> verify(reservationAvailabilityChecker, times(0)).check(any(), any(), any()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
@@ -79,12 +79,13 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
 
         final LocalDateTime start = LocalDateTime.of(2024, 2, 1, 10, 0);
         final PendingSuggestedCoffeeChatCommand command = new PendingSuggestedCoffeeChatCommand(
+                mentee.getId(),
                 coffeeChat.getId(),
                 "질문..",
                 new Reservation(start),
                 new Reservation(start.plusMinutes(30))
         );
-        given(coffeeChatRepository.getSuggestedCoffeeChat(command.coffeeChatId())).willReturn(coffeeChat);
+        given(coffeeChatRepository.getMentorSuggestedCoffeeChat(command.coffeeChatId(), command.menteeId())).willReturn(coffeeChat);
         given(mentorRepository.getByIdWithSchedules(coffeeChat.getSourceMemberId())).willReturn(mentor);
         doNothing()
                 .when(reservationAvailabilityChecker)
@@ -95,7 +96,7 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
 
         // then
         assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getSuggestedCoffeeChat(command.coffeeChatId()),
+                () -> verify(coffeeChatRepository, times(1)).getMentorSuggestedCoffeeChat(command.coffeeChatId(), command.menteeId()),
                 () -> verify(mentorRepository, times(1)).getByIdWithSchedules(coffeeChat.getSourceMemberId()),
                 () -> verify(reservationAvailabilityChecker, times(1)).check(mentor, command.start(), command.end()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),

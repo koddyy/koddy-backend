@@ -22,6 +22,7 @@ import java.util.List;
 import static com.koddy.server.member.domain.model.Nationality.KOREA;
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 import static com.koddy.server.member.exception.MemberExceptionCode.CANNOT_RESERVATION;
+import static com.koddy.server.member.exception.MemberExceptionCode.MENTOR_NOT_FILL_IN_SCHEDULE;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static lombok.AccessLevel.PROTECTED;
@@ -111,14 +112,18 @@ public class Mentor extends Member<Mentor> {
 
     public void validateReservationData(final Reservation start, final Reservation end) {
         if (mentoringPeriod == null || schedules.isEmpty()) {
-            throw new MemberException(CANNOT_RESERVATION);
+            throw new MemberException(MENTOR_NOT_FILL_IN_SCHEDULE);
         }
 
         if (isOutOfDate(start)) {
             throw new MemberException(CANNOT_RESERVATION);
         }
 
-        if (notAllowedTime(start, end)) {
+        if (nowAllowedTimeUnit(start, end)) {
+            throw new MemberException(CANNOT_RESERVATION);
+        }
+
+        if (notAllowedSchedule(start, end)) {
             throw new MemberException(CANNOT_RESERVATION);
         }
     }
@@ -127,7 +132,11 @@ public class Mentor extends Member<Mentor> {
         return !mentoringPeriod.isDateIncluded(start.toLocalDate());
     }
 
-    private boolean notAllowedTime(final Reservation start, final Reservation end) {
+    private boolean nowAllowedTimeUnit(final Reservation start, final Reservation end) {
+        return !mentoringPeriod.allowedTimeUnit(start.toLocalDateTime(), end.toLocalDateTime());
+    }
+
+    private boolean notAllowedSchedule(final Reservation start, final Reservation end) {
         final DayOfWeek dayOfWeek = DayOfWeek.of(start.getYear(), start.getMonth(), start.getDay());
 
         final List<Timeline> filteringWithStart = schedules.stream()

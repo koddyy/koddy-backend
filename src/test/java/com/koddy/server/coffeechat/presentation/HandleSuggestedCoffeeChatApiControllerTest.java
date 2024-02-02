@@ -1,7 +1,7 @@
 package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.auth.exception.AuthExceptionCode;
-import com.koddy.server.coffeechat.application.usecase.HandleSuggestedCoffeeChatUseCase;
+import com.koddy.server.coffeechat.application.usecase.HandleMentorSuggestedCoffeeChatUseCase;
 import com.koddy.server.coffeechat.presentation.dto.request.PendingSuggestedCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.RejectSuggestedCoffeeChatRequest;
 import com.koddy.server.common.ControllerTest;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("CoffeeChat -> HandleSuggestedCoffeeChatApiController 테스트")
 class HandleSuggestedCoffeeChatApiControllerTest extends ControllerTest {
     @Autowired
-    private HandleSuggestedCoffeeChatUseCase handleSuggestedCoffeeChatUseCase;
+    private HandleMentorSuggestedCoffeeChatUseCase handleMentorSuggestedCoffeeChatUseCase;
 
     private static final Long COFFEE_CHAT_ID = 1L;
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
@@ -74,7 +74,7 @@ class HandleSuggestedCoffeeChatApiControllerTest extends ControllerTest {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
             doNothing()
-                    .when(handleSuggestedCoffeeChatUseCase)
+                    .when(handleMentorSuggestedCoffeeChatUseCase)
                     .reject(any());
 
             // when - then
@@ -133,7 +133,7 @@ class HandleSuggestedCoffeeChatApiControllerTest extends ControllerTest {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
             doThrow(new MemberException(CANNOT_RESERVATION))
-                    .when(handleSuggestedCoffeeChatUseCase)
+                    .when(handleMentorSuggestedCoffeeChatUseCase)
                     .pending(any());
 
             // when - then
@@ -160,7 +160,7 @@ class HandleSuggestedCoffeeChatApiControllerTest extends ControllerTest {
             // given
             applyToken(true, mentee.getId(), mentee.getRole());
             doNothing()
-                    .when(handleSuggestedCoffeeChatUseCase)
+                    .when(handleMentorSuggestedCoffeeChatUseCase)
                     .pending(any());
 
             // when - then

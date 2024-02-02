@@ -30,6 +30,7 @@ import static com.koddy.server.member.domain.model.mentor.DayOfWeek.TUE;
 import static com.koddy.server.member.domain.model.mentor.DayOfWeek.WED;
 import static com.koddy.server.member.exception.MemberExceptionCode.CANNOT_RESERVATION;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
+import static com.koddy.server.member.exception.MemberExceptionCode.MENTOR_NOT_FILL_IN_SCHEDULE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -281,11 +282,11 @@ class MentorTest extends UnitTest {
             final LocalDateTime target = LocalDateTime.of(2024, 2, 5, 18, 0);
             assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target), new Reservation(target.plusMinutes(30))))
                     .isInstanceOf(MemberException.class)
-                    .hasMessage(CANNOT_RESERVATION.getMessage());
+                    .hasMessage(MENTOR_NOT_FILL_IN_SCHEDULE.getMessage());
         }
 
         @Test
-        @DisplayName("예약 날짜가 멘토링 진행 기간에 포함되지 않으면 예외가 발생한다 -> MentoringPeriod")
+        @DisplayName("예약 날짜가 멘토링 진행 기간에 포함되지 않으면 예외가 발생한다 -> MentoringPeriod[startDate & endDate]")
         void throwExceptionByOutOfDate() {
             // given
             final MentoringPeriod mentoringPeriod = MentoringPeriod.of(
@@ -309,8 +310,40 @@ class MentorTest extends UnitTest {
         }
 
         @Test
+        @DisplayName("멘토링 진행 시간이 멘토가 정한 TimeUnit이랑 일치하지 않으면 예외가 발생한다 -> MentoringPeriod[TimeUnit]")
+        void throwExceptionByNotAllowedTimeUnit() {
+            // given
+            final MentoringPeriod mentoringPeriod = MentoringPeriod.of(
+                    LocalDate.of(2024, 2, 6),
+                    LocalDate.of(2024, 3, 1)
+            );
+            final Mentor mentor = MENTOR_1.toDomainWithMentoringInfo(mentoringPeriod, MENTOR_1.getTimelines()); // TODO default = 30
+
+            // when - then
+            final LocalDateTime start = LocalDateTime.of(2024, 2, 5, 18, 0);
+
+            assertAll(
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(start), new Reservation(start.plusMinutes(10))))
+                            .isInstanceOf(MemberException.class)
+                            .hasMessage(CANNOT_RESERVATION.getMessage()),
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(start), new Reservation(start.plusMinutes(20))))
+                            .isInstanceOf(MemberException.class)
+                            .hasMessage(CANNOT_RESERVATION.getMessage()),
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(start), new Reservation(start.plusMinutes(29))))
+                            .isInstanceOf(MemberException.class)
+                            .hasMessage(CANNOT_RESERVATION.getMessage()),
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(start), new Reservation(start.plusMinutes(31))))
+                            .isInstanceOf(MemberException.class)
+                            .hasMessage(CANNOT_RESERVATION.getMessage()),
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(start), new Reservation(start.plusMinutes(40))))
+                            .isInstanceOf(MemberException.class)
+                            .hasMessage(CANNOT_RESERVATION.getMessage())
+            );
+        }
+
+        @Test
         @DisplayName("예약 날짜가 멘토링 가능 시간에 포함되지 않으면 예외가 발생한다 -> Mentor-Schedule-Timeline")
-        void throwExceptionByNotAllowedTime() {
+        void throwExceptionByNotAllowedSchedule() {
             // given
             final MentoringPeriod mentoringPeriod = MentoringPeriod.of(
                     LocalDate.of(2024, 2, 1),

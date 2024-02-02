@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static com.koddy.server.member.domain.model.mentor.MentoringPeriod.TimeUnit.HALF_HOUR;
 import static com.koddy.server.member.exception.MemberExceptionCode.SCHEDULE_PERIOD_TIME_MUST_ALIGN;
@@ -78,6 +79,27 @@ class MentoringPeriodTest extends UnitTest {
                 () -> assertThat(actual2).isTrue(),
                 () -> assertThat(actual3).isTrue(),
                 () -> assertThat(actual4).isFalse()
+        );
+    }
+
+    @Test
+    @DisplayName("멘토링 진행 시간이 멘토의 TimeUnit이랑 일치하는지 확인한다")
+    void allowedTimeUnit() {
+        // given
+        final LocalDate startDate = LocalDate.of(2024, 2, 1);
+        final LocalDate endDate = LocalDate.of(2024, 3, 1);
+        final MentoringPeriod mentoringPeriod = MentoringPeriod.of(startDate, endDate); // TODO default = 30
+
+        // when
+        final LocalDateTime standard = LocalDateTime.of(2024, 2, 15, 18, 0);
+
+        final boolean actual1 = mentoringPeriod.allowedTimeUnit(standard, standard.plusMinutes(30));
+        final boolean actual2 = mentoringPeriod.allowedTimeUnit(standard, standard.plusMinutes(60));
+
+        // then
+        assertAll(
+                () -> assertThat(actual1).isTrue(),
+                () -> assertThat(actual2).isFalse()
         );
     }
 }

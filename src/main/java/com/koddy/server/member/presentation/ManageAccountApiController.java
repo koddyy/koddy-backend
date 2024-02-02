@@ -7,7 +7,6 @@ import com.koddy.server.auth.utils.TokenResponseWriter;
 import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.member.application.usecase.DeleteMemberUseCase;
 import com.koddy.server.member.application.usecase.SignUpUsecase;
-import com.koddy.server.member.application.usecase.command.DeleteMemberCommand;
 import com.koddy.server.member.application.usecase.command.SignUpMenteeCommand;
 import com.koddy.server.member.application.usecase.command.SignUpMentorCommand;
 import com.koddy.server.member.presentation.dto.request.SignUpMenteeRequest;
@@ -81,7 +80,7 @@ public class ManageAccountApiController {
     public ResponseEntity<Void> delete(
             @Auth final Authenticated authenticated
     ) {
-        deleteMemberUseCase.invoke(new DeleteMemberCommand(authenticated.id()));
+        deleteMemberUseCase.invoke(authenticated.id());
         return ResponseEntity.noContent().build();
     }
 }

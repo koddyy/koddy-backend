@@ -1,7 +1,7 @@
 package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
-import com.koddy.server.coffeechat.application.usecase.HandleSuggestedCoffeeChatUseCase;
+import com.koddy.server.coffeechat.application.usecase.HandleMentorSuggestedCoffeeChatUseCase;
 import com.koddy.server.coffeechat.application.usecase.command.PendingSuggestedCoffeeChatCommand;
 import com.koddy.server.coffeechat.application.usecase.command.RejectSuggestedCoffeeChatCommand;
 import com.koddy.server.coffeechat.presentation.dto.request.PendingSuggestedCoffeeChatRequest;
@@ -26,7 +26,7 @@ import static com.koddy.server.member.domain.model.Role.MENTEE;
 @RequiredArgsConstructor
 @RequestMapping("/api/coffeechats/suggested")
 public class HandleSuggestedCoffeeChatApiController {
-    private final HandleSuggestedCoffeeChatUseCase handleSuggestedCoffeeChatUseCase;
+    private final HandleMentorSuggestedCoffeeChatUseCase handleMentorSuggestedCoffeeChatUseCase;
 
     @Operation(summary = "멘토가 제안한 커피챗 거절 Endpoint")
     @PatchMapping("/reject/{coffeeChatId}")
@@ -36,7 +36,11 @@ public class HandleSuggestedCoffeeChatApiController {
             @PathVariable final Long coffeeChatId,
             @RequestBody @Valid final RejectSuggestedCoffeeChatRequest request
     ) {
-        handleSuggestedCoffeeChatUseCase.reject(new RejectSuggestedCoffeeChatCommand(coffeeChatId, request.rejectReason()));
+        handleMentorSuggestedCoffeeChatUseCase.reject(new RejectSuggestedCoffeeChatCommand(
+                authenticated.id(),
+                coffeeChatId,
+                request.rejectReason()
+        ));
         return ResponseEntity.noContent().build();
     }
 
@@ -48,7 +52,8 @@ public class HandleSuggestedCoffeeChatApiController {
             @PathVariable final Long coffeeChatId,
             @RequestBody @Valid final PendingSuggestedCoffeeChatRequest request
     ) {
-        handleSuggestedCoffeeChatUseCase.pending(new PendingSuggestedCoffeeChatCommand(
+        handleMentorSuggestedCoffeeChatUseCase.pending(new PendingSuggestedCoffeeChatCommand(
+                authenticated.id(),
                 coffeeChatId,
                 request.question(),
                 request.toReservationStart(),

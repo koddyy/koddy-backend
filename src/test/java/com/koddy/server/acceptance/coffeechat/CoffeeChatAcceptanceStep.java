@@ -59,11 +59,12 @@ public class CoffeeChatAcceptanceStep {
             final String accessToken
     ) {
         final String uri = UriComponentsBuilder
-                .fromPath("/api/coffeechats/suggest/{menteeId}")
-                .build(menteeId)
+                .fromPath("/api/coffeechats/suggest")
+                .build()
+                .toUri()
                 .getPath();
 
-        final MentorSuggestCoffeeChatRequest request = new MentorSuggestCoffeeChatRequest("신청 이유...");
+        final MentorSuggestCoffeeChatRequest request = new MentorSuggestCoffeeChatRequest(menteeId, "제안 이유...");
 
         return postRequestWithAccessToken(uri, request, accessToken);
     }
@@ -73,11 +74,12 @@ public class CoffeeChatAcceptanceStep {
             final String accessToken
     ) {
         final String uri = UriComponentsBuilder
-                .fromPath("/api/coffeechats/suggest/{menteeId}")
-                .build(menteeId)
+                .fromPath("/api/coffeechats/suggest")
+                .build()
+                .toUri()
                 .getPath();
 
-        final MentorSuggestCoffeeChatRequest request = new MentorSuggestCoffeeChatRequest("신청 이유...");
+        final MentorSuggestCoffeeChatRequest request = new MentorSuggestCoffeeChatRequest(menteeId, "제안 이유...");
 
         return postRequestWithAccessToken(uri, request, accessToken)
                 .extract()
@@ -92,11 +94,17 @@ public class CoffeeChatAcceptanceStep {
             final String accessToken
     ) {
         final String uri = UriComponentsBuilder
-                .fromPath("/api/coffeechats/apply/{mentorId}")
-                .build(mentorId)
+                .fromPath("/api/coffeechats/apply")
+                .build()
+                .toUri()
                 .getPath();
 
-        final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest("신청 이유...", start.toString(), end.toString());
+        final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest(
+                mentorId,
+                "신청 이유...",
+                start.toString(),
+                end.toString()
+        );
 
         return postRequestWithAccessToken(uri, request, accessToken);
     }
@@ -108,11 +116,17 @@ public class CoffeeChatAcceptanceStep {
             final String accessToken
     ) {
         final String uri = UriComponentsBuilder
-                .fromPath("/api/coffeechats/apply/{mentorId}")
-                .build(mentorId)
+                .fromPath("/api/coffeechats/apply")
+                .build()
+                .toUri()
                 .getPath();
 
-        final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest("신청 이유...", start.toString(), end.toString());
+        final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest(
+                mentorId,
+                "신청 이유...",
+                start.toString(),
+                end.toString()
+        );
 
         return postRequestWithAccessToken(uri, request, accessToken)
                 .extract()

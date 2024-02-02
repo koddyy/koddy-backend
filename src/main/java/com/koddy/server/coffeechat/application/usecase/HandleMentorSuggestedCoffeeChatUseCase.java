@@ -13,20 +13,20 @@ import lombok.RequiredArgsConstructor;
 
 @UseCase
 @RequiredArgsConstructor
-public class HandleSuggestedCoffeeChatUseCase {
+public class HandleMentorSuggestedCoffeeChatUseCase {
     private final CoffeeChatRepository coffeeChatRepository;
     private final MentorRepository mentorRepository;
     private final ReservationAvailabilityChecker reservationAvailabilityChecker;
 
     @KoddyWritableTransactional
     public void reject(final RejectSuggestedCoffeeChatCommand command) {
-        final CoffeeChat coffeeChat = coffeeChatRepository.getSuggestedCoffeeChat(command.coffeeChatId());
+        final CoffeeChat coffeeChat = coffeeChatRepository.getMentorSuggestedCoffeeChat(command.coffeeChatId(), command.menteeId());
         coffeeChat.rejectFromMentorSuggest(command.rejectReason());
     }
 
     @KoddyWritableTransactional
     public void pending(final PendingSuggestedCoffeeChatCommand command) {
-        final CoffeeChat coffeeChat = coffeeChatRepository.getSuggestedCoffeeChat(command.coffeeChatId());
+        final CoffeeChat coffeeChat = coffeeChatRepository.getMentorSuggestedCoffeeChat(command.coffeeChatId(), command.menteeId());
         final Mentor mentor = mentorRepository.getByIdWithSchedules(coffeeChat.getSourceMemberId());
 
         reservationAvailabilityChecker.check(mentor, command.start(), command.end());

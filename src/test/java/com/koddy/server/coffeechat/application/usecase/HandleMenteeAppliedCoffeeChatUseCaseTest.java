@@ -27,11 +27,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@DisplayName("CoffeeChat -> HandleAppliedCoffeeChatUseCase 테스트")
-class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
+@DisplayName("CoffeeChat -> HandleMenteeAppliedCoffeeChatUseCase 테스트")
+class HandleMenteeAppliedCoffeeChatUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
     private final Encryptor encryptor = getEncryptor();
-    private final HandleAppliedCoffeeChatUseCase sut = new HandleAppliedCoffeeChatUseCase(coffeeChatRepository, encryptor);
+    private final HandleMenteeAppliedCoffeeChatUseCase sut = new HandleMenteeAppliedCoffeeChatUseCase(coffeeChatRepository, encryptor);
 
     private final Mentee mentee = MENTEE_1.toDomain().apply(1L);
     private final Mentor mentor = MENTOR_1.toDomain().apply(2L);
@@ -43,15 +43,15 @@ class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
         final LocalDateTime start = LocalDateTime.of(2024, 2, 1, 9, 0);
         final CoffeeChat coffeeChat = CoffeeChatFixture.MenteeFlow.apply(start, start.plusMinutes(30), mentee, mentor).apply(1L);
 
-        final RejectAppliedCoffeeChatCommand command = new RejectAppliedCoffeeChatCommand(coffeeChat.getId(), "거절...");
-        given(coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId())).willReturn(coffeeChat);
+        final RejectAppliedCoffeeChatCommand command = new RejectAppliedCoffeeChatCommand(mentor.getId(), coffeeChat.getId(), "거절...");
+        given(coffeeChatRepository.getMenteeAppliedCoffeeChat(command.coffeeChatId(), command.mentorId())).willReturn(coffeeChat);
 
         // when
         sut.reject(command);
 
         // then
         assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getAppliedCoffeeChat(command.coffeeChatId()),
+                () -> verify(coffeeChatRepository, times(1)).getMenteeAppliedCoffeeChat(command.coffeeChatId(), command.mentorId()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
@@ -70,15 +70,20 @@ class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
         final LocalDateTime start = LocalDateTime.of(2024, 2, 1, 9, 0);
         final CoffeeChat coffeeChat = CoffeeChatFixture.MenteeFlow.apply(start, start.plusMinutes(30), mentee, mentor).apply(1L);
 
-        final ApproveAppliedCoffeeChatCommand command = new ApproveAppliedCoffeeChatCommand(coffeeChat.getId(), Strategy.Type.from("kakao"), "sjiwon");
-        given(coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId())).willReturn(coffeeChat);
+        final ApproveAppliedCoffeeChatCommand command = new ApproveAppliedCoffeeChatCommand(
+                mentor.getId(),
+                coffeeChat.getId(),
+                Strategy.Type.KAKAO_ID,
+                "sjiwon"
+        );
+        given(coffeeChatRepository.getMenteeAppliedCoffeeChat(command.coffeeChatId(), command.mentorId())).willReturn(coffeeChat);
 
         // when
         sut.approve(command);
 
         // then
         assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getAppliedCoffeeChat(command.coffeeChatId()),
+                () -> verify(coffeeChatRepository, times(1)).getMenteeAppliedCoffeeChat(command.coffeeChatId(), command.mentorId()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
