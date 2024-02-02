@@ -27,11 +27,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@DisplayName("CoffeeChat -> HandleAppliedCoffeeChatUseCase 테스트")
-class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
+@DisplayName("CoffeeChat -> HandleMenteeAppliedCoffeeChatUseCase 테스트")
+class HandleMenteeAppliedCoffeeChatUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
     private final Encryptor encryptor = getEncryptor();
-    private final HandleAppliedCoffeeChatUseCase sut = new HandleAppliedCoffeeChatUseCase(coffeeChatRepository, encryptor);
+    private final HandleMenteeAppliedCoffeeChatUseCase sut = new HandleMenteeAppliedCoffeeChatUseCase(coffeeChatRepository, encryptor);
 
     private final Mentee mentee = MENTEE_1.toDomain().apply(1L);
     private final Mentor mentor = MENTOR_1.toDomain().apply(2L);

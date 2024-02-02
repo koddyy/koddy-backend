@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @UseCase
 @RequiredArgsConstructor
-public class HandleAppliedCoffeeChatUseCase {
+public class HandleMenteeAppliedCoffeeChatUseCase {
     private final CoffeeChatRepository coffeeChatRepository;
     private final Encryptor encryptor;
 

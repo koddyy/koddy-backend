@@ -1,7 +1,7 @@
 package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.auth.exception.AuthExceptionCode;
-import com.koddy.server.coffeechat.application.usecase.HandleAppliedCoffeeChatUseCase;
+import com.koddy.server.coffeechat.application.usecase.HandleMenteeAppliedCoffeeChatUseCase;
 import com.koddy.server.coffeechat.presentation.dto.request.ApproveAppliedCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.RejectAppliedCoffeeChatRequest;
 import com.koddy.server.common.ControllerTest;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("CoffeeChat -> HandleAppliedCoffeeChatApiController 테스트")
 class HandleAppliedCoffeeChatApiControllerTest extends ControllerTest {
     @Autowired
-    private HandleAppliedCoffeeChatUseCase handleAppliedCoffeeChatUseCase;
+    private HandleMenteeAppliedCoffeeChatUseCase handleMenteeAppliedCoffeeChatUseCase;
 
     private static final Long COFFEE_CHAT_ID = 1L;
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
@@ -69,7 +69,7 @@ class HandleAppliedCoffeeChatApiControllerTest extends ControllerTest {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
             doNothing()
-                    .when(handleAppliedCoffeeChatUseCase)
+                    .when(handleMenteeAppliedCoffeeChatUseCase)
                     .reject(any());
 
             // when - then
@@ -126,7 +126,7 @@ class HandleAppliedCoffeeChatApiControllerTest extends ControllerTest {
             // given
             applyToken(true, mentor.getId(), mentor.getRole());
             doNothing()
-                    .when(handleAppliedCoffeeChatUseCase)
+                    .when(handleMenteeAppliedCoffeeChatUseCase)
                     .approve(any());
 
             // when - then

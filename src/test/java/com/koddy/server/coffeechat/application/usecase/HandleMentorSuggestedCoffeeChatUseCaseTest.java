@@ -29,12 +29,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@DisplayName("CoffeeChat -> HandleSuggestedCoffeeChatUseCase 테스트")
-class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
+@DisplayName("CoffeeChat -> HandleMentorSuggestedCoffeeChatUseCase 테스트")
+class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final ReservationAvailabilityChecker reservationAvailabilityChecker = mock(ReservationAvailabilityChecker.class);
-    private final HandleSuggestedCoffeeChatUseCase sut = new HandleSuggestedCoffeeChatUseCase(
+    private final HandleMentorSuggestedCoffeeChatUseCase sut = new HandleMentorSuggestedCoffeeChatUseCase(
             coffeeChatRepository,
             mentorRepository,
             reservationAvailabilityChecker
