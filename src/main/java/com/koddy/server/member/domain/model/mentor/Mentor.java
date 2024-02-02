@@ -119,7 +119,11 @@ public class Mentor extends Member<Mentor> {
             throw new MemberException(CANNOT_RESERVATION);
         }
 
-        if (notAllowedTime(start, end)) {
+        if (nowAllowedTimeUnit(start, end)) {
+            throw new MemberException(CANNOT_RESERVATION);
+        }
+
+        if (notAllowedSchedule(start, end)) {
             throw new MemberException(CANNOT_RESERVATION);
         }
     }
@@ -128,7 +132,11 @@ public class Mentor extends Member<Mentor> {
         return !mentoringPeriod.isDateIncluded(start.toLocalDate());
     }
 
-    private boolean notAllowedTime(final Reservation start, final Reservation end) {
+    private boolean nowAllowedTimeUnit(final Reservation start, final Reservation end) {
+        return !mentoringPeriod.allowedTimeUnit(start.toLocalDateTime(), end.toLocalDateTime());
+    }
+
+    private boolean notAllowedSchedule(final Reservation start, final Reservation end) {
         final DayOfWeek dayOfWeek = DayOfWeek.of(start.getYear(), start.getMonth(), start.getDay());
 
         final List<Timeline> filteringWithStart = schedules.stream()

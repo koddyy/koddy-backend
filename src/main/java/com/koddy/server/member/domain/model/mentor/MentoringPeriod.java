@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 import static com.koddy.server.member.domain.model.mentor.MentoringPeriod.TimeUnit.HALF_HOUR;
@@ -59,6 +61,11 @@ public class MentoringPeriod {
 
     public boolean isDateIncluded(final LocalDate date) {
         return !date.isBefore(startDate) && !date.isAfter(endDate);
+    }
+
+    public boolean allowedTimeUnit(final LocalDateTime start, final LocalDateTime end) {
+        final long requestDuration = ChronoUnit.MINUTES.between(start, end);
+        return timeUnit.getValue() == requestDuration;
     }
 
     @Getter
