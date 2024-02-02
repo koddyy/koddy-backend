@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,32 +30,30 @@ public class CreateCoffeeChatApiController {
     private final CreateCoffeeChatUseCase createCoffeeChatUseCase;
 
     @Operation(summary = "멘토 -> 멘티 커피챗 제안 Endpoint")
-    @PostMapping("/suggest/{menteeId}")
+    @PostMapping("/suggest")
     @AccessControl(role = MENTOR)
     public ResponseEntity<CreateCoffeeChatResponse> suggestCoffeeChat(
             @Auth final Authenticated authenticated,
-            @PathVariable final Long menteeId,
             @RequestBody @Valid final MentorSuggestCoffeeChatRequest request
     ) {
         final long coffeeChatId = createCoffeeChatUseCase.suggestCoffeeChat(new MentorSuggestCoffeeChatCommand(
                 authenticated.id(),
-                menteeId,
+                request.menteeId(),
                 request.applyReason()
         ));
         return ResponseEntity.ok(new CreateCoffeeChatResponse(coffeeChatId));
     }
 
     @Operation(summary = "멘티 -> 멘토 커피챗 신청 Endpoint")
-    @PostMapping("/apply/{mentorId}")
+    @PostMapping("/apply")
     @AccessControl(role = MENTEE)
     public ResponseEntity<CreateCoffeeChatResponse> applyCoffeeChat(
             @Auth final Authenticated authenticated,
-            @PathVariable final Long mentorId,
             @RequestBody @Valid final MenteeApplyCoffeeChatRequest request
     ) {
         final long coffeeChatId = createCoffeeChatUseCase.applyCoffeeChat(new MenteeApplyCoffeeChatCommand(
                 authenticated.id(),
-                mentorId,
+                request.mentorId(),
                 request.applyReason(),
                 request.toReservationStart(),
                 request.toReservationEnd()

@@ -20,21 +20,40 @@ import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.PEND
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.SUGGESTED_COFFEE_CHAT_NOT_FOUND;
 
 public interface CoffeeChatRepository extends JpaRepository<CoffeeChat, Long> {
-    Optional<CoffeeChat> findByIdAndStatus(final Long id, final CoffeeChatStatus status);
+    Optional<CoffeeChat> findByIdAndSourceMemberIdAndStatus(
+            final Long id,
+            final Long sourceMemberId,
+            final CoffeeChatStatus status
+    );
 
-    default CoffeeChat getAppliedCoffeeChat(final Long id) {
-        return findByIdAndStatus(id, APPLY)
+    Optional<CoffeeChat> findByIdAndTargetMemberIdAndStatus(
+            final Long id,
+            final Long targetMemberId,
+            final CoffeeChatStatus status
+    );
+
+    /**
+     * 멘토(Target) 기준 -> 멘티(Source)가 신청한 커피챗
+     */
+    default CoffeeChat getMenteeAppliedCoffeeChat(final Long id, final Long mentorId) {
+        return findByIdAndTargetMemberIdAndStatus(id, mentorId, APPLY)
                 .orElseThrow(() -> new CoffeeChatException(APPLIED_COFFEE_CHAT_NOT_FOUND));
     }
 
-    default CoffeeChat getSuggestedCoffeeChat(final Long id) {
-        return findByIdAndStatus(id, SUGGEST)
-                .orElseThrow(() -> new CoffeeChatException(SUGGESTED_COFFEE_CHAT_NOT_FOUND));
+    /**
+     * 멘토(Source) 기준 -> 멘토(Source)가 제안 & 멘티(Target)가 1차 수락한 커피챗
+     */
+    default CoffeeChat getMenteePendingCoffeeChat(final Long id, final Long mentorId) {
+        return findByIdAndSourceMemberIdAndStatus(id, mentorId, PENDING)
+                .orElseThrow(() -> new CoffeeChatException(PENDING_COFFEE_CHAT_NOT_FOUND));
     }
 
-    default CoffeeChat getPendingCoffeeChat(final Long id) {
-        return findByIdAndStatus(id, PENDING)
-                .orElseThrow(() -> new CoffeeChatException(PENDING_COFFEE_CHAT_NOT_FOUND));
+    /**
+     * 멘티(Target) 기준 -> 멘토(Source)가 제안한 커피챗
+     */
+    default CoffeeChat getMentorSuggestedCoffeeChat(final Long id, final Long menteeId) {
+        return findByIdAndTargetMemberIdAndStatus(id, menteeId, SUGGEST)
+                .orElseThrow(() -> new CoffeeChatException(SUGGESTED_COFFEE_CHAT_NOT_FOUND));
     }
 
     Optional<CoffeeChat> findByIdAndSourceMemberIdAndStatusIn(

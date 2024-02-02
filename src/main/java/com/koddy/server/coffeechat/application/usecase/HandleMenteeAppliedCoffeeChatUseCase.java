@@ -18,13 +18,13 @@ public class HandleMenteeAppliedCoffeeChatUseCase {
 
     @KoddyWritableTransactional
     public void reject(final RejectAppliedCoffeeChatCommand command) {
-        final CoffeeChat coffeeChat = coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId());
+        final CoffeeChat coffeeChat = coffeeChatRepository.getMenteeAppliedCoffeeChat(command.coffeeChatId(), command.mentorId());
         coffeeChat.rejectFromMenteeApply(command.rejectReason());
     }
 
     @KoddyWritableTransactional
     public void approve(final ApproveAppliedCoffeeChatCommand command) {
-        final CoffeeChat coffeeChat = coffeeChatRepository.getAppliedCoffeeChat(command.coffeeChatId());
+        final CoffeeChat coffeeChat = coffeeChatRepository.getMenteeAppliedCoffeeChat(command.coffeeChatId(), command.mentorId());
         coffeeChat.approveFromMenteeApply(Strategy.of(command.type(), command.value(), encryptor));
     }
 }
