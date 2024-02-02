@@ -30,6 +30,7 @@ import static com.koddy.server.member.domain.model.mentor.DayOfWeek.TUE;
 import static com.koddy.server.member.domain.model.mentor.DayOfWeek.WED;
 import static com.koddy.server.member.exception.MemberExceptionCode.CANNOT_RESERVATION;
 import static com.koddy.server.member.exception.MemberExceptionCode.MAIN_LANGUAGE_MUST_BE_ONLY_ONE;
+import static com.koddy.server.member.exception.MemberExceptionCode.MENTOR_NOT_FILL_IN_SCHEDULE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -281,7 +282,7 @@ class MentorTest extends UnitTest {
             final LocalDateTime target = LocalDateTime.of(2024, 2, 5, 18, 0);
             assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target), new Reservation(target.plusMinutes(30))))
                     .isInstanceOf(MemberException.class)
-                    .hasMessage(CANNOT_RESERVATION.getMessage());
+                    .hasMessage(MENTOR_NOT_FILL_IN_SCHEDULE.getMessage());
         }
 
         @Test

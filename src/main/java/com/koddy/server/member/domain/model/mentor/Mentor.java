@@ -22,6 +22,7 @@ import java.util.List;
 import static com.koddy.server.member.domain.model.Nationality.KOREA;
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 import static com.koddy.server.member.exception.MemberExceptionCode.CANNOT_RESERVATION;
+import static com.koddy.server.member.exception.MemberExceptionCode.MENTOR_NOT_FILL_IN_SCHEDULE;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static lombok.AccessLevel.PROTECTED;
@@ -111,7 +112,7 @@ public class Mentor extends Member<Mentor> {
 
     public void validateReservationData(final Reservation start, final Reservation end) {
         if (mentoringPeriod == null || schedules.isEmpty()) {
-            throw new MemberException(CANNOT_RESERVATION);
+            throw new MemberException(MENTOR_NOT_FILL_IN_SCHEDULE);
         }
 
         if (isOutOfDate(start)) {
