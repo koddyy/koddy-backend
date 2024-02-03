@@ -43,27 +43,18 @@ include::{snippets}/CoffeeChatApi/MeetingLink/Delete/Success/http-response.adoc[
 
 === 멘티의 신청 = APPLY
 
-TIP: 1. 실패 (이미 예약되었거나 멘토링이 가능하지 않은 날짜)
-
-*HTTP Request*
-
-include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Failure/Case2/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Failure/Case2/path-parameters.adoc[]
-include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Failure/Case2/request-fields.adoc[]
-
-*HTTP Response*
-
-include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Failure/Case2/http-response.adoc[]
-
-TIP: 2. 성공
-
 *HTTP Request*
 
 include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/path-parameters.adoc[]
 include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/request-fields.adoc[]
 
 *HTTP Response*
+
+NOTE: 1. 실패 (이미 예약되었거나 멘토링이 가능하지 않은 날짜)
+
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Failure/Case2/http-response.adoc[]
+
+NOTE: 2. 성공
 
 include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/http-response.adoc[]
 
@@ -72,7 +63,6 @@ include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/http-resp
 *HTTP Request*
 
 include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/path-parameters.adoc[]
 include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/request-fields.adoc[]
 
 *HTTP Response*
@@ -134,20 +124,6 @@ include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Reject/Success/htt
 
 ==== 1차 수락 = PENDING
 
-TIP: 1. 실패 (이미 예약되었거나 멘토링이 가능하지 않은 날짜)
-
-*HTTP Request*
-
-include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Failure/Case2/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Failure/Case2/path-parameters.adoc[]
-include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Failure/Case2/request-fields.adoc[]
-
-*HTTP Response*
-
-include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Failure/Case2/http-response.adoc[]
-
-TIP: 2. 성공
-
 *HTTP Request*
 
 include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/http-request.adoc[]
@@ -155,6 +131,12 @@ include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/pa
 include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/request-fields.adoc[]
 
 *HTTP Response*
+
+NOTE: 1. 실패 (이미 예약되었거나 멘토링이 가능하지 않은 날짜)
+
+include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Failure/Case2/http-response.adoc[]
+
+NOTE: 2. 성공
 
 include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/http-response.adoc[]
 
