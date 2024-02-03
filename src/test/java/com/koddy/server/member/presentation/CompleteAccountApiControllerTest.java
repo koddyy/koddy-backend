@@ -64,7 +64,7 @@ class CompleteAccountApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
 
             // when - then
             failedExecute(
@@ -92,7 +92,7 @@ class CompleteAccountApiControllerTest extends ControllerTest {
         @DisplayName("멘토 프로필을 완성한다")
         void success() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
             doNothing()
                     .when(completeProfileUseCase)
                     .completeMentor(any());
@@ -129,7 +129,7 @@ class CompleteAccountApiControllerTest extends ControllerTest {
         @DisplayName("멘티가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
 
             // when - then
             failedExecute(
@@ -148,7 +148,7 @@ class CompleteAccountApiControllerTest extends ControllerTest {
         @DisplayName("멘티 프로필을 완성한다")
         void success() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
             doNothing()
                     .when(completeProfileUseCase)
                     .completeMentee(any());

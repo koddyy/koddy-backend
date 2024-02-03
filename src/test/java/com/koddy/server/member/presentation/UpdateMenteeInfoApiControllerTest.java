@@ -59,7 +59,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
         @DisplayName("멘티가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
 
             // when - then
             failedExecute(
@@ -86,7 +86,7 @@ class UpdateMenteeInfoApiControllerTest extends ControllerTest {
         @DisplayName("멘티 기본정보를 수정한다")
         void success() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
             doNothing()
                     .when(updateMenteeInfoUseCase)
                     .updateBasicInfo(any());

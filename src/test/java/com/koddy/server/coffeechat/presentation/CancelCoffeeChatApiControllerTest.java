@@ -34,7 +34,7 @@ class CancelCoffeeChatApiControllerTest extends ControllerTest {
         @DisplayName("신청/제안한 커피챗을 취소한다")
         void success() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
             doNothing()
                     .when(cancelCoffeeChatUseCase)
                     .invoke(any());

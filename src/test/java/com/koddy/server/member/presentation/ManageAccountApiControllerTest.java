@@ -176,7 +176,7 @@ class ManageAccountApiControllerTest extends ControllerTest {
         @DisplayName("서비스를 탙퇴한다")
         void success() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
             doNothing()
                     .when(deleteMemberUseCase)
                     .invoke(mentor.getId());

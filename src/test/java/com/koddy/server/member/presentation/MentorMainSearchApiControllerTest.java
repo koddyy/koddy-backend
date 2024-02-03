@@ -47,7 +47,7 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
 
             // when - then
             failedExecute(
@@ -62,7 +62,7 @@ class MentorMainSearchApiControllerTest extends ControllerTest {
         @DisplayName("멘토 자신에게 커피챗을 신청한 멘티들을 최신순 기준으로 조회한다")
         void success() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
             given(mentorMainSearchUseCase.getAppliedMentees(any())).willReturn(new PageResponse<>(
                     List.of(
                             new MenteeSimpleSearchProfile(
