@@ -1,6 +1,6 @@
 package com.koddy.server.global.config.web;
 
-import com.koddy.server.auth.utils.TokenProvider;
+import com.koddy.server.auth.domain.service.TokenProvider;
 import com.koddy.server.global.annotation.AuthArgumentResolver;
 import com.koddy.server.global.annotation.ExtractTokenArgumentResolver;
 import lombok.RequiredArgsConstructor;

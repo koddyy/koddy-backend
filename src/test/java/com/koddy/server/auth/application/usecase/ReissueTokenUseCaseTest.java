@@ -3,8 +3,8 @@ package com.koddy.server.auth.application.usecase;
 import com.koddy.server.auth.application.usecase.command.ReissueTokenCommand;
 import com.koddy.server.auth.domain.model.AuthToken;
 import com.koddy.server.auth.domain.service.TokenIssuer;
+import com.koddy.server.auth.domain.service.TokenProvider;
 import com.koddy.server.auth.exception.AuthException;
-import com.koddy.server.auth.utils.TokenProvider;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.repository.MemberRepository;
@@ -62,7 +62,7 @@ class ReissueTokenUseCaseTest extends UnitTest {
         given(tokenIssuer.isMemberRefreshToken(member.getId(), command.refreshToken())).willReturn(true);
 
         final AuthToken authToken = new AuthToken(ACCESS_TOKEN, REFRESH_TOKEN);
-        given(tokenIssuer.reissueAuthorityToken(member.getId())).willReturn(authToken);
+        given(tokenIssuer.reissueAuthorityToken(member.getId(), member.getAuthority())).willReturn(authToken);
 
         // when
         final AuthToken result = sut.invoke(command);

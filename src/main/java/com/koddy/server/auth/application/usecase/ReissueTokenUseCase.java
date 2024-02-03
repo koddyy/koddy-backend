@@ -3,8 +3,8 @@ package com.koddy.server.auth.application.usecase;
 import com.koddy.server.auth.application.usecase.command.ReissueTokenCommand;
 import com.koddy.server.auth.domain.model.AuthToken;
 import com.koddy.server.auth.domain.service.TokenIssuer;
+import com.koddy.server.auth.domain.service.TokenProvider;
 import com.koddy.server.auth.exception.AuthException;
-import com.koddy.server.auth.utils.TokenProvider;
 import com.koddy.server.global.annotation.UseCase;
 import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.repository.MemberRepository;
@@ -22,7 +22,7 @@ public class ReissueTokenUseCase {
     public AuthToken invoke(final ReissueTokenCommand command) {
         final Member<?> member = getMember(command.refreshToken());
         validateMemberToken(member.getId(), command.refreshToken());
-        return tokenIssuer.reissueAuthorityToken(member.getId());
+        return tokenIssuer.reissueAuthorityToken(member.getId(), member.getAuthority());
     }
 
     private Member<?> getMember(final String refreshToken) {

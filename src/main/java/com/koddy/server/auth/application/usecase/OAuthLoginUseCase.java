@@ -22,7 +22,7 @@ public class OAuthLoginUseCase {
     public AuthMember invoke(final OAuthLoginCommand command) {
         final OAuthUserResponse oAuthUser = oAuthLoginProcessor.login(command.provider(), command.code(), command.redirectUrl(), command.state());
         final Member<?> member = getMemberBySocialId(oAuthUser);
-        final AuthToken authToken = tokenIssuer.provideAuthorityToken(member.getId());
+        final AuthToken authToken = tokenIssuer.provideAuthorityToken(member.getId(), member.getAuthority());
         return new AuthMember(member, authToken);
     }
 

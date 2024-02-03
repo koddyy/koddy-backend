@@ -1,8 +1,8 @@
 package com.koddy.server.global.annotation;
 
 import com.koddy.server.auth.domain.model.TokenType;
+import com.koddy.server.auth.domain.service.TokenProvider;
 import com.koddy.server.auth.exception.AuthException;
-import com.koddy.server.auth.utils.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
