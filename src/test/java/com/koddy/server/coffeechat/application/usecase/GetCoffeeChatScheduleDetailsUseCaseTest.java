@@ -1,14 +1,14 @@
-package com.koddy.server.coffeechat.domain.service;
+package com.koddy.server.coffeechat.application.usecase;
 
 import com.koddy.server.auth.domain.model.Authenticated;
+import com.koddy.server.coffeechat.application.usecase.query.GetCoffeeChatScheduleDetails;
 import com.koddy.server.coffeechat.application.usecase.query.response.MenteeCoffeeChatScheduleDetails;
 import com.koddy.server.coffeechat.application.usecase.query.response.MentorCoffeeChatScheduleDetails;
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.model.response.CoffeeChatScheduleDetails;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.common.UnitTest;
-import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow;
-import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow;
+import com.koddy.server.common.fixture.CoffeeChatFixture;
 import com.koddy.server.global.utils.encrypt.Encryptor;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -29,12 +29,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-@DisplayName("CoffeeChat -> CoffeeChatScheduleConverter 테스트")
-class CoffeeChatScheduleConverterTest extends UnitTest {
+@DisplayName("CoffeeChat -> GetCoffeeChatScheduleDetailsUseCase 테스트")
+class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
     private final MemberRepository memberRepository = mock(MemberRepository.class);
     private final Encryptor encryptor = getEncryptor();
-    private final CoffeeChatScheduleConverter sut = new CoffeeChatScheduleConverter(
+    private final GetCoffeeChatScheduleDetailsUseCase sut = new GetCoffeeChatScheduleDetailsUseCase(
             coffeeChatRepository,
             memberRepository,
             encryptor
@@ -47,17 +47,17 @@ class CoffeeChatScheduleConverterTest extends UnitTest {
     @DisplayName("멘토 내 일정의 커피챗 상세 정보를 조회한다")
     void convertForMentor() {
         // given
-        final CoffeeChat coffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L);
+        final CoffeeChat coffeeChat = CoffeeChatFixture.MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L);
 
         given(coffeeChatRepository.getById(coffeeChat.getId())).willReturn(coffeeChat);
         given(memberRepository.getById(coffeeChat.getSourceMemberId())).willReturn(mentor);
         given(memberRepository.getById(coffeeChat.getTargetMemberId())).willReturn(mentee);
 
         // when
-        final CoffeeChatScheduleDetails result = sut.execute(
+        final CoffeeChatScheduleDetails result = sut.invoke(new GetCoffeeChatScheduleDetails(
                 new Authenticated(mentor.getId(), mentor.getAuthority()),
                 coffeeChat.getId()
-        );
+        ));
 
         // then
         assertAll(
@@ -93,17 +93,17 @@ class CoffeeChatScheduleConverterTest extends UnitTest {
     @DisplayName("멘티 내 일정의 커피챗 상세 정보를 조회한다")
     void convertForMentee() {
         // given
-        final CoffeeChat coffeeChat = MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor).apply(1L);
+        final CoffeeChat coffeeChat = CoffeeChatFixture.MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor).apply(1L);
 
         given(coffeeChatRepository.getById(coffeeChat.getId())).willReturn(coffeeChat);
         given(memberRepository.getById(coffeeChat.getSourceMemberId())).willReturn(mentee);
         given(memberRepository.getById(coffeeChat.getTargetMemberId())).willReturn(mentor);
 
         // when
-        final CoffeeChatScheduleDetails result = sut.execute(
+        final CoffeeChatScheduleDetails result = sut.invoke(new GetCoffeeChatScheduleDetails(
                 new Authenticated(mentee.getId(), mentee.getAuthority()),
                 coffeeChat.getId()
-        );
+        ));
 
         // then
         assertAll(
@@ -137,19 +137,19 @@ class CoffeeChatScheduleConverterTest extends UnitTest {
 
     @Test
     @DisplayName("커피챗 상세 정보를 조회한다 [동일 커피챗 -> 멘토 입장 & 멘티 입장]")
-    void execute() {
+    void invoke() {
         // given
-        final CoffeeChat coffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L);
+        final CoffeeChat coffeeChat = CoffeeChatFixture.MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L);
 
         given(coffeeChatRepository.getById(coffeeChat.getId())).willReturn(coffeeChat);
         given(memberRepository.getById(coffeeChat.getSourceMemberId())).willReturn(mentor);
         given(memberRepository.getById(coffeeChat.getTargetMemberId())).willReturn(mentee);
 
         /* 멘토 입장 */
-        final CoffeeChatScheduleDetails mentorResult = sut.execute(
+        final CoffeeChatScheduleDetails mentorResult = sut.invoke(new GetCoffeeChatScheduleDetails(
                 new Authenticated(mentor.getId(), mentor.getAuthority()),
                 coffeeChat.getId()
-        );
+        ));
         assertAll(
                 () -> assertThat(mentorResult).isInstanceOf(MentorCoffeeChatScheduleDetails.class),
                 () -> {
@@ -179,10 +179,10 @@ class CoffeeChatScheduleConverterTest extends UnitTest {
         );
 
         /* 멘티 입장 */
-        final CoffeeChatScheduleDetails menteeResult = sut.execute(
+        final CoffeeChatScheduleDetails menteeResult = sut.invoke(new GetCoffeeChatScheduleDetails(
                 new Authenticated(mentee.getId(), mentee.getAuthority()),
                 coffeeChat.getId()
-        );
+        ));
         assertAll(
                 () -> assertThat(menteeResult).isInstanceOf(MenteeCoffeeChatScheduleDetails.class),
                 () -> {
