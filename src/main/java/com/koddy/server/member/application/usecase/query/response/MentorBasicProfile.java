@@ -13,7 +13,7 @@ public record MentorBasicProfile(
         String major,
         int enteredIn
 ) {
-    public static MentorBasicProfile of(final Mentor mentor) {
+    public static MentorBasicProfile from(final Mentor mentor) {
         return new MentorBasicProfile(
                 mentor.getId(),
                 mentor.getName(),

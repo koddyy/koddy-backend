@@ -28,7 +28,7 @@ public class MenteeMainSearchUseCase {
         final Page<Mentor> result = menteeMainSearchRepository.fetchSuggestedMentors(query.menteeId(), query.limit());
         return new PageResponse<>(
                 result.stream()
-                        .map(MentorSimpleSearchProfile::of)
+                        .map(MentorSimpleSearchProfile::from)
                         .toList(),
                 result.getTotalElements(),
                 result.hasNext()
@@ -44,7 +44,7 @@ public class MenteeMainSearchUseCase {
         return new SliceResponse<>(
                 result.getContent()
                         .stream()
-                        .map(MentorSimpleSearchProfile::of)
+                        .map(MentorSimpleSearchProfile::from)
                         .toList(),
                 result.hasNext()
         );

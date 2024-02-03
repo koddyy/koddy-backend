@@ -8,7 +8,7 @@ import java.util.UUID;
 public class DefaultBucketFileNameGenerator implements BucketFileNameGenerator {
     @Override
     public String get(final String fileName) {
-        final FileExtension extension = FileExtension.getExtensionViaFimeName(fileName);
+        final FileExtension extension = FileExtension.from(fileName);
         return UUID.randomUUID() + extension.getValue();
     }
 }

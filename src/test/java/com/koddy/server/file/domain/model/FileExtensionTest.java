@@ -23,7 +23,7 @@ class FileExtensionTest extends UnitTest {
         @ValueSource(strings = {"hello.gif", "hello.mp3", "hello.xls", "hello.alz"})
         @DisplayName("제공하지 않는 파일의 확장자면 예외가 발생한다")
         void throwExceptionByInvalidFileExtension(final String fileName) {
-            assertThatThrownBy(() -> FileExtension.getExtensionViaFimeName(fileName))
+            assertThatThrownBy(() -> FileExtension.from(fileName))
                     .isInstanceOf(FileException.class)
                     .hasMessage(INVALID_FILE_EXTENSION.getMessage());
         }
@@ -40,7 +40,7 @@ class FileExtensionTest extends UnitTest {
         )
         @DisplayName("파일 확장자에 대한 FileExtension을 얻는다")
         void success(final String fileName, final FileExtension extension) {
-            assertThat(FileExtension.getExtensionViaFimeName(fileName)).isEqualTo(extension);
+            assertThat(FileExtension.from(fileName)).isEqualTo(extension);
         }
     }
 

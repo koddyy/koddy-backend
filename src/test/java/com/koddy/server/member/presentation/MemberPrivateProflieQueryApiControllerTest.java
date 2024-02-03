@@ -40,7 +40,7 @@ class MemberPrivateProflieQueryApiControllerTest extends ControllerTest {
         void getMentorProfile() {
             // given
             applyToken(true, mentor);
-            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorPrivateProfile.of(mentor));
+            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorPrivateProfile.from(mentor));
 
             // when - then
             successfulExecute(
@@ -82,7 +82,7 @@ class MemberPrivateProflieQueryApiControllerTest extends ControllerTest {
         void getMenteeProfile() {
             // given
             applyToken(true, mentee);
-            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteePrivateProfile.of(mentee));
+            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteePrivateProfile.from(mentee));
 
             // when - then
             successfulExecute(
@@ -134,7 +134,7 @@ class MemberPrivateProflieQueryApiControllerTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentor);
-            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorPrivateProfile.of(mentor));
+            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorPrivateProfile.from(mentor));
 
             // when - then
             successfulExecute(
@@ -197,7 +197,7 @@ class MemberPrivateProflieQueryApiControllerTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentee);
-            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteePrivateProfile.of(mentee));
+            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteePrivateProfile.from(mentee));
 
             // when - then
             successfulExecute(

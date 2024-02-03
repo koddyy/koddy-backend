@@ -24,7 +24,7 @@ public record MentorPrivateProfile(
         String role,
         boolean profileComplete
 ) implements MemberPrivateProfile {
-    public static MentorPrivateProfile of(final Mentor mentor) {
+    public static MentorPrivateProfile from(final Mentor mentor) {
         return new MentorPrivateProfile(
                 mentor.getId(),
                 mentor.getPlatform().getEmail().getValue(),
@@ -37,10 +37,10 @@ public record MentorPrivateProfile(
                 mentor.getUniversityProfile().getMajor(),
                 mentor.getUniversityProfile().getEnteredIn(),
                 mentor.isAuthenticated(),
-                MentoringPeriodResponse.of(mentor.getMentoringPeriod()),
+                MentoringPeriodResponse.from(mentor.getMentoringPeriod()),
                 mentor.getSchedules()
                         .stream()
-                        .map(it -> ScheduleResponse.of(it.getTimeline()))
+                        .map(it -> ScheduleResponse.from(it.getTimeline()))
                         .toList(),
                 "mentor",
                 mentor.isProfileComplete()

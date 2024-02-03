@@ -19,7 +19,7 @@ public record ScheduleResponse(
     ) {
     }
 
-    public static ScheduleResponse of(final Timeline timeline) {
+    public static ScheduleResponse from(final Timeline timeline) {
         return new ScheduleResponse(
                 timeline.getDayOfWeek().getKor(),
                 new ScheduleResponse.Start(timeline.getStartTime().getHour(), timeline.getStartTime().getMinute()),

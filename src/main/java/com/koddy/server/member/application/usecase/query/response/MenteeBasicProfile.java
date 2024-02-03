@@ -13,7 +13,7 @@ public record MenteeBasicProfile(
         String interestSchool,
         String interestMajor
 ) {
-    public static MenteeBasicProfile of(final Mentee mentee) {
+    public static MenteeBasicProfile from(final Mentee mentee) {
         return new MenteeBasicProfile(
                 mentee.getId(),
                 mentee.getName(),

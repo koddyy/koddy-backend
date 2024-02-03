@@ -17,7 +17,7 @@ public record MentorCoffeeChatScheduleDetails(
             final Encryptor encryptor
     ) {
         return new MentorCoffeeChatScheduleDetails(
-                MenteeDetails.of(mentee),
+                MenteeDetails.from(mentee),
                 CoffeeChatDetails.of(coffeeChat, encryptor)
         );
     }
