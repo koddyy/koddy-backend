@@ -19,8 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-@DisplayName("Auth -> RequestTokenExtractor 테스트")
-class RequestTokenExtractorTest extends UnitTest {
+@DisplayName("Auth -> TokenExtractor 테스트")
+class TokenExtractorTest extends UnitTest {
     private final HttpServletRequest request = mock(HttpServletRequest.class);
 
     @Nested
@@ -33,7 +33,7 @@ class RequestTokenExtractorTest extends UnitTest {
             given(request.getHeader(ACCESS_TOKEN_HEADER)).willReturn(null);
 
             // when
-            final Optional<String> token = RequestTokenExtractor.extractAccessToken(request);
+            final Optional<String> token = TokenExtractor.extractAccessToken(request);
 
             // then
             assertThat(token).isEmpty();
@@ -46,7 +46,7 @@ class RequestTokenExtractorTest extends UnitTest {
             given(request.getHeader(ACCESS_TOKEN_HEADER)).willReturn(TOKEN_TYPE);
 
             // when
-            final Optional<String> token = RequestTokenExtractor.extractAccessToken(request);
+            final Optional<String> token = TokenExtractor.extractAccessToken(request);
 
             // then
             assertThat(token).isEmpty();
@@ -59,7 +59,7 @@ class RequestTokenExtractorTest extends UnitTest {
             given(request.getHeader(ACCESS_TOKEN_HEADER)).willReturn(String.join(" ", TOKEN_TYPE, ACCESS_TOKEN));
 
             // when
-            final Optional<String> token = RequestTokenExtractor.extractAccessToken(request);
+            final Optional<String> token = TokenExtractor.extractAccessToken(request);
 
             // then
             assertAll(
@@ -79,7 +79,7 @@ class RequestTokenExtractorTest extends UnitTest {
             given(request.getCookies()).willReturn(new Cookie[0]);
 
             // when
-            final Optional<String> token = RequestTokenExtractor.extractRefreshToken(request);
+            final Optional<String> token = TokenExtractor.extractRefreshToken(request);
 
             // then
             assertThat(token).isEmpty();
@@ -92,7 +92,7 @@ class RequestTokenExtractorTest extends UnitTest {
             given(request.getCookies()).willReturn(new Cookie[]{new Cookie(REFRESH_TOKEN_HEADER, REFRESH_TOKEN)});
 
             // when
-            final Optional<String> token = RequestTokenExtractor.extractRefreshToken(request);
+            final Optional<String> token = TokenExtractor.extractRefreshToken(request);
 
             // then
             assertAll(

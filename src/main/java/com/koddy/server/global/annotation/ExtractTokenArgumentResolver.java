@@ -12,8 +12,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION;
-import static com.koddy.server.auth.utils.RequestTokenExtractor.extractAccessToken;
-import static com.koddy.server.auth.utils.RequestTokenExtractor.extractRefreshToken;
+import static com.koddy.server.auth.utils.TokenExtractor.extractAccessToken;
+import static com.koddy.server.auth.utils.TokenExtractor.extractRefreshToken;
 
 @RequiredArgsConstructor
 public class ExtractTokenArgumentResolver implements HandlerMethodArgumentResolver {

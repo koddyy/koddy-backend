@@ -34,7 +34,7 @@ public class LoggingAspect {
             && !execution(* com.koddy.server..*Properties.*(..))
             && !execution(* com.koddy.server..*TokenProvider.*(..))
             && !execution(* com.koddy.server..*TokenResponseWriter.*(..))
-            && !execution(* com.koddy.server..*RequestTokenExtractor.*(..))
+            && !execution(* com.koddy.server..*TokenExtractor.*(..))
             """)
     private void excludeComponent() {
     }

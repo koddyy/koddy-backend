@@ -14,7 +14,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import static com.koddy.server.auth.domain.model.Authenticated.SESSION_KEY;
 import static com.koddy.server.auth.exception.AuthExceptionCode.AUTH_REQUIRED;
-import static com.koddy.server.auth.utils.RequestTokenExtractor.extractAccessToken;
+import static com.koddy.server.auth.utils.TokenExtractor.extractAccessToken;
 
 @RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
