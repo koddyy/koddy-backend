@@ -86,8 +86,8 @@ class ManageAccountApiControllerTest extends ControllerTest {
                                     body("name", "이름", true),
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("languages", "사용 가능한 언어", "KR EN CN JP VN", true),
-                                    body("languages.main", "메인 언어 (코드 기반)", "1개", true),
-                                    body("languages.sub[]", "서브 언어 (코드 기반)", "0..N개", false),
+                                    body("languages.main", "메인 언어", "1개", true),
+                                    body("languages.sub[]", "서브 언어", "0..N개", false),
                                     body("school", "학교", true),
                                     body("major", "전공", true),
                                     body("enteredIn", "학번", true)
@@ -145,8 +145,8 @@ class ManageAccountApiControllerTest extends ControllerTest {
                                     body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("nationality", "국적", "KR EN CN JP VN ETC", true),
                                     body("languages", "사용 가능한 언어", "KR EN CN JP VN", true),
-                                    body("languages.main", "메인 언어 (코드 기반)", "1개", true),
-                                    body("languages.sub[]", "서브 언어 (코드 기반)", "0..N개", false),
+                                    body("languages.main", "메인 언어", "1개", true),
+                                    body("languages.sub[]", "서브 언어", "0..N개", false),
                                     body("interestSchool", "관심있는 학교", true),
                                     body("interestMajor", "관심있는 전공", true)
                             ),
