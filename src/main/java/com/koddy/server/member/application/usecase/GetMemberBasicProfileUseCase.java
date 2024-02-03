@@ -19,12 +19,12 @@ public class GetMemberBasicProfileUseCase {
     @KoddyReadOnlyTransactional
     public MentorBasicProfile getMentorProfile(final long mentorId) {
         final Mentor mentor = mentorRepository.getProfile(mentorId);
-        return MentorBasicProfile.of(mentor);
+        return MentorBasicProfile.from(mentor);
     }
 
     @KoddyReadOnlyTransactional
     public MenteeBasicProfile getMenteeProfile(final long menteeId) {
         final Mentee mentee = menteeRepository.getProfile(menteeId);
-        return MenteeBasicProfile.of(mentee);
+        return MenteeBasicProfile.from(mentee);
     }
 }

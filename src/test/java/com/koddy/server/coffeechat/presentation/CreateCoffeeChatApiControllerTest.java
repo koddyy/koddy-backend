@@ -49,7 +49,7 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
 
             // when - then
             failedExecute(
@@ -69,7 +69,7 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 멘티에게 커피챗을 제안한다")
         void success() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
             given(createCoffeeChatUseCase.suggestCoffeeChat(any())).willReturn(1L);
 
             // when - then
@@ -104,7 +104,7 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
         @DisplayName("멘티가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
 
             // when - then
             failedExecute(
@@ -126,7 +126,7 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
         @DisplayName("이미 예약되었거나 멘토링이 가능하지 않은 날짜면 예외가 발생한다")
         void throwExceptionByCannotReservation() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
             doThrow(new MemberException(CANNOT_RESERVATION))
                     .when(createCoffeeChatUseCase)
                     .applyCoffeeChat(any());
@@ -151,7 +151,7 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
         @DisplayName("멘티가 멘토에게 커피챗을 신청한다")
         void success() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
             given(createCoffeeChatUseCase.applyCoffeeChat(any())).willReturn(1L);
 
             // when - then

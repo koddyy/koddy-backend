@@ -1,4 +1,4 @@
-package com.koddy.server.auth.utils;
+package com.koddy.server.auth.domain.service;
 
 import com.koddy.server.auth.exception.AuthException;
 import io.jsonwebtoken.Claims;

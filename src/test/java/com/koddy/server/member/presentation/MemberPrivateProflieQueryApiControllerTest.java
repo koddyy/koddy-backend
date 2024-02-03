@@ -39,8 +39,8 @@ class MemberPrivateProflieQueryApiControllerTest extends ControllerTest {
         @DisplayName("멘토 마이페이지 프로필을 조회한다")
         void getMentorProfile() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
-            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorPrivateProfile.of(mentor));
+            applyToken(true, mentor);
+            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorPrivateProfile.from(mentor));
 
             // when - then
             successfulExecute(
@@ -81,8 +81,8 @@ class MemberPrivateProflieQueryApiControllerTest extends ControllerTest {
         @DisplayName("멘티 마이페이지 프로필을 조회한다")
         void getMenteeProfile() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
-            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteePrivateProfile.of(mentee));
+            applyToken(true, mentee);
+            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteePrivateProfile.from(mentee));
 
             // when - then
             successfulExecute(
@@ -118,7 +118,7 @@ class MemberPrivateProflieQueryApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
 
             // when - then
             failedExecute(
@@ -133,8 +133,8 @@ class MemberPrivateProflieQueryApiControllerTest extends ControllerTest {
         @DisplayName("멘토 마이페이지 프로필 정보를 조회한다")
         void success() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
-            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorPrivateProfile.of(mentor));
+            applyToken(true, mentor);
+            given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorPrivateProfile.from(mentor));
 
             // when - then
             successfulExecute(
@@ -181,7 +181,7 @@ class MemberPrivateProflieQueryApiControllerTest extends ControllerTest {
         @DisplayName("멘티가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
 
             // when - then
             failedExecute(
@@ -196,8 +196,8 @@ class MemberPrivateProflieQueryApiControllerTest extends ControllerTest {
         @DisplayName("멘티 마이페이지 프로필 정보를 조회한다")
         void success() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
-            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteePrivateProfile.of(mentee));
+            applyToken(true, mentee);
+            given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteePrivateProfile.from(mentee));
 
             // when - then
             successfulExecute(

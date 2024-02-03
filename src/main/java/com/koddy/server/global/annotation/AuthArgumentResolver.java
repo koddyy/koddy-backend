@@ -1,8 +1,8 @@
 package com.koddy.server.global.annotation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
+import com.koddy.server.auth.domain.service.TokenProvider;
 import com.koddy.server.auth.exception.AuthException;
-import com.koddy.server.auth.utils.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import static com.koddy.server.auth.domain.model.Authenticated.SESSION_KEY;
 import static com.koddy.server.auth.exception.AuthExceptionCode.AUTH_REQUIRED;
-import static com.koddy.server.auth.utils.RequestTokenExtractor.extractAccessToken;
+import static com.koddy.server.auth.utils.TokenExtractor.extractAccessToken;
 
 @RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {

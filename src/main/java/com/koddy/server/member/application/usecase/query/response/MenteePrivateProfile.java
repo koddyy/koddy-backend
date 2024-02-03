@@ -16,7 +16,7 @@ public record MenteePrivateProfile(
         String role,
         boolean profileComplete
 ) implements MemberPrivateProfile {
-    public static MenteePrivateProfile of(final Mentee mentee) {
+    public static MenteePrivateProfile from(final Mentee mentee) {
         return new MenteePrivateProfile(
                 mentee.getId(),
                 mentee.getPlatform().getEmail().getValue(),

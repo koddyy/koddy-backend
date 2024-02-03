@@ -1,0 +1,64 @@
+= ## 인증/로그아웃/토큰 관련 API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+
+== OAuth 인증 과정
+
+=== 1. OAuth Link
+
+*HTTP Request*
+
+include::{snippets}/OAuthApi/Access/Success/http-request.adoc[]
+include::{snippets}/OAuthApi/Access/Success/path-parameters.adoc[]
+include::{snippets}/OAuthApi/Access/Success/query-parameters.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/OAuthApi/Access/Failure/http-response.adoc[]
+include::{snippets}/OAuthApi/Access/Success/http-response.adoc[]
+include::{snippets}/OAuthApi/Access/Success/response-fields.adoc[]
+
+=== 2. 인증 진행
+
+*HTTP Request*
+
+include::{snippets}/OAuthApi/Login/Success/http-request.adoc[]
+include::{snippets}/OAuthApi/Login/Success/path-parameters.adoc[]
+include::{snippets}/OAuthApi/Login/Success/request-fields.adoc[]
+
+*HTTP Response*
+
+NOTE: DB에 사용자가 없는 경우 >> 회원가입 진행
+
+include::{snippets}/OAuthApi/Login/Failure/http-response.adoc[]
+include::{snippets}/OAuthApi/Login/Failure/response-fields.adoc[]
+
+NOTE: DB에 사용자가 존재 >> 로그인 완료
+
+include::{snippets}/OAuthApi/Login/Success/http-response.adoc[]
+include::{snippets}/OAuthApi/Login/Success/response-fields.adoc[]
+
+== 로그아웃 (AccessToken)
+
+*HTTP Request*
+
+include::{snippets}/OAuthApi/Logout/http-request.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/OAuthApi/Logout/http-response.adoc[]
+
+== 토큰 재발급 (RefreshToken)
+
+*HTTP Request*
+
+include::{snippets}/TokenReissueApi/Success/http-request.adoc[]
+include::{snippets}/TokenReissueApi/Success/request-cookies.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/TokenReissueApi/Failure/http-response.adoc[]
+include::{snippets}/TokenReissueApi/Success/http-response.adoc[]

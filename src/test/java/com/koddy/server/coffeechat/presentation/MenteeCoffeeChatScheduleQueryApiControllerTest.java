@@ -48,7 +48,7 @@ class MenteeCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
         @DisplayName("멘티가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
 
             // when - then
             failedExecute(
@@ -80,7 +80,7 @@ class MenteeCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
         @DisplayName("멘티가 신청한 커피챗을 상태별로 조회한다")
         void success() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
             given(getMenteeCoffeeChatScheduleUseCase.getAppliedCoffeeChats(any())).willReturn(new SliceResponse<>(
                     List.of(new MenteeCoffeeChatScheduleData(
                             1L,
@@ -141,7 +141,7 @@ class MenteeCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
         @DisplayName("멘티가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
 
             // when - then
             failedExecute(
@@ -174,7 +174,7 @@ class MenteeCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
         @DisplayName("멘티가 제안받은 커피챗을 상태별로 조회한다")
         void success() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
             given(getMenteeCoffeeChatScheduleUseCase.getSuggestedCoffeeChats(any())).willReturn(new SliceResponse<>(
                     List.of(
                             new MenteeCoffeeChatScheduleData(

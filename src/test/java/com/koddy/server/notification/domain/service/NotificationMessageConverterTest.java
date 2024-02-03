@@ -18,7 +18,7 @@ class NotificationMessageConverterTest extends UnitTest {
     @DisplayName("NotificationMessage 데이터를 String 메시지로 변환한다")
     void toFlatMessage() {
         // given
-        final NotificationMessage messageA = NotificationMessage.of("사용자A");
+        final NotificationMessage messageA = NotificationMessage.from("사용자A");
         final NotificationMessage messageB = NotificationMessage.of("사용자B", "거절..");
 
         // when

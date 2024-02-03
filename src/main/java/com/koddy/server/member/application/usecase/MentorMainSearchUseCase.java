@@ -28,7 +28,7 @@ public class MentorMainSearchUseCase {
         final Page<Mentee> result = mentorMainSearchRepository.fetchAppliedMentees(query.mentorId(), query.limit());
         return new PageResponse<>(
                 result.stream()
-                        .map(MenteeSimpleSearchProfile::of)
+                        .map(MenteeSimpleSearchProfile::from)
                         .toList(),
                 result.getTotalElements(),
                 result.hasNext()
@@ -44,7 +44,7 @@ public class MentorMainSearchUseCase {
         return new SliceResponse<>(
                 result.getContent()
                         .stream()
-                        .map(MenteeSimpleSearchProfile::of)
+                        .map(MenteeSimpleSearchProfile::from)
                         .toList(),
                 result.hasNext()
         );

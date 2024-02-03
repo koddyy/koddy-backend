@@ -45,7 +45,7 @@ class HandlePendingCoffeeChatApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
 
             // when - then
             failedExecute(
@@ -67,7 +67,7 @@ class HandlePendingCoffeeChatApiControllerTest extends ControllerTest {
         @DisplayName("멘토는 Pending 상태인 커피챗에 대해서 최종 거절한다")
         void success() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
             doNothing()
                     .when(handlePendingCoffeeChatUseCase)
                     .reject(any());
@@ -101,7 +101,7 @@ class HandlePendingCoffeeChatApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
 
             // when - then
             failedExecute(
@@ -124,7 +124,7 @@ class HandlePendingCoffeeChatApiControllerTest extends ControllerTest {
         @DisplayName("멘토는 Pending 상태인 커피챗에 대해서 최종 수락한다")
         void success() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
             doNothing()
                     .when(handlePendingCoffeeChatUseCase)
                     .approve(any());

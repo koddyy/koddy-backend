@@ -14,7 +14,7 @@ import static com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER;
 import static com.koddy.server.auth.domain.model.AuthToken.TOKEN_TYPE;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class RequestTokenExtractor {
+public class TokenExtractor {
     public static Optional<String> extractAccessToken(final HttpServletRequest request) {
         final String token = request.getHeader(ACCESS_TOKEN_HEADER);
         if (isEmptyToken(token)) {

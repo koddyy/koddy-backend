@@ -57,7 +57,7 @@ class ManageMeetingLinkApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
 
             // when - then
             failedExecute(
@@ -84,7 +84,7 @@ class ManageMeetingLinkApiControllerTest extends ControllerTest {
         @DisplayName("커피챗 링크를 생성한다")
         void success() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
             given(manageMeetingLinkUseCase.create(any())).willReturn(new ZoomMeetingLinkResponse(
                     "88141392261",
                     "sjiwon4491@gmail.com",
@@ -130,7 +130,7 @@ class ManageMeetingLinkApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
 
             // when - then
             failedExecute(
@@ -150,7 +150,7 @@ class ManageMeetingLinkApiControllerTest extends ControllerTest {
         @DisplayName("생성한 커피챗 링크를 삭제한다")
         void success() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
             doNothing()
                     .when(manageMeetingLinkUseCase)
                     .delete(any());

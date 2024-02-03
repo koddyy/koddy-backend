@@ -8,7 +8,7 @@ public record MentoringPeriodResponse(
         LocalDate startDate,
         LocalDate endDate
 ) {
-    public static MentoringPeriodResponse of(final MentoringPeriod mentoringPeriod) {
+    public static MentoringPeriodResponse from(final MentoringPeriod mentoringPeriod) {
         if (mentoringPeriod == null) {
             return null;
         }

@@ -16,10 +16,16 @@ import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.SUGGEST;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.APPLIED_COFFEE_CHAT_NOT_FOUND;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND;
+import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.COFFEE_CHAT_NOT_FOUND;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.PENDING_COFFEE_CHAT_NOT_FOUND;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.SUGGESTED_COFFEE_CHAT_NOT_FOUND;
 
 public interface CoffeeChatRepository extends JpaRepository<CoffeeChat, Long> {
+    default CoffeeChat getById(final Long id) {
+        return findById(id)
+                .orElseThrow(() -> new CoffeeChatException(COFFEE_CHAT_NOT_FOUND));
+    }
+
     Optional<CoffeeChat> findByIdAndSourceMemberIdAndStatus(
             final Long id,
             final Long sourceMemberId,

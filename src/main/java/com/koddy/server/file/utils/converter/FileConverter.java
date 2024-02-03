@@ -18,7 +18,7 @@ public class FileConverter {
             return new RawFileData(
                     fileName,
                     file.getContentType(),
-                    FileExtension.getExtensionViaFimeName(fileName),
+                    FileExtension.from(fileName),
                     file.getInputStream()
             );
         } catch (final IOException e) {

@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -58,7 +59,7 @@ class SignUpUsecaseTest extends UnitTest {
                             .hasMessage(ACCOUNT_ALREADY_EXISTS.getMessage()),
                     () -> verify(memberRepository, times(1)).existsByPlatformSocialId(command.platform().getSocialId()),
                     () -> verify(memberRepository, times(0)).save(any(Mentor.class)),
-                    () -> verify(tokenIssuer, times(0)).provideAuthorityToken(anyLong())
+                    () -> verify(tokenIssuer, times(0)).provideAuthorityToken(anyLong(), anyString())
             );
         }
 
@@ -79,7 +80,7 @@ class SignUpUsecaseTest extends UnitTest {
             given(memberRepository.save(any(Mentor.class))).willReturn(mentor);
 
             final AuthToken authToken = new AuthToken(ACCESS_TOKEN, REFRESH_TOKEN);
-            given(tokenIssuer.provideAuthorityToken(mentor.getId())).willReturn(authToken);
+            given(tokenIssuer.provideAuthorityToken(mentor.getId(), mentor.getAuthority())).willReturn(authToken);
 
             // when
             final AuthMember authMember = sut.signUpMentor(command);
@@ -88,7 +89,7 @@ class SignUpUsecaseTest extends UnitTest {
             assertAll(
                     () -> verify(memberRepository, times(1)).existsByPlatformSocialId(command.platform().getSocialId()),
                     () -> verify(memberRepository, times(1)).save(any(Mentor.class)),
-                    () -> verify(tokenIssuer, times(1)).provideAuthorityToken(mentor.getId()),
+                    () -> verify(tokenIssuer, times(1)).provideAuthorityToken(mentor.getId(), mentor.getAuthority()),
                     () -> assertThat(authMember.id()).isEqualTo(mentor.getId()),
                     () -> assertThat(authMember.name()).isEqualTo(mentor.getName()),
                     () -> assertThat(authMember.profileImageUrl()).isEqualTo(mentor.getProfileImageUrl()),
@@ -122,7 +123,7 @@ class SignUpUsecaseTest extends UnitTest {
                             .hasMessage(ACCOUNT_ALREADY_EXISTS.getMessage()),
                     () -> verify(memberRepository, times(1)).existsByPlatformSocialId(command.platform().getSocialId()),
                     () -> verify(memberRepository, times(0)).save(any(Mentee.class)),
-                    () -> verify(tokenIssuer, times(0)).provideAuthorityToken(anyLong())
+                    () -> verify(tokenIssuer, times(0)).provideAuthorityToken(anyLong(), anyString())
             );
         }
 
@@ -144,7 +145,7 @@ class SignUpUsecaseTest extends UnitTest {
             given(memberRepository.save(any(Mentee.class))).willReturn(mentee);
 
             final AuthToken authToken = new AuthToken(ACCESS_TOKEN, REFRESH_TOKEN);
-            given(tokenIssuer.provideAuthorityToken(mentee.getId())).willReturn(authToken);
+            given(tokenIssuer.provideAuthorityToken(mentee.getId(), mentee.getAuthority())).willReturn(authToken);
 
             // when
             final AuthMember authMember = sut.signUpMentee(command);
@@ -153,7 +154,7 @@ class SignUpUsecaseTest extends UnitTest {
             assertAll(
                     () -> verify(memberRepository, times(1)).existsByPlatformSocialId(command.platform().getSocialId()),
                     () -> verify(memberRepository, times(1)).save(any(Mentee.class)),
-                    () -> verify(tokenIssuer, times(1)).provideAuthorityToken(mentee.getId()),
+                    () -> verify(tokenIssuer, times(1)).provideAuthorityToken(mentee.getId(), mentee.getAuthority()),
                     () -> assertThat(authMember.id()).isEqualTo(mentee.getId()),
                     () -> assertThat(authMember.name()).isEqualTo(mentee.getName()),
                     () -> assertThat(authMember.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),

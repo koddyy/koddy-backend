@@ -2,10 +2,8 @@ package com.koddy.server.auth.domain.service;
 
 import com.koddy.server.auth.application.adapter.TokenStore;
 import com.koddy.server.auth.domain.model.AuthToken;
-import com.koddy.server.auth.utils.TokenProvider;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.domain.model.Member;
-import com.koddy.server.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -21,10 +19,9 @@ import static org.mockito.Mockito.verify;
 
 @DisplayName("Auth -> TokenIssuer 테스트")
 public class TokenIssuerTest extends UnitTest {
-    private final MemberRepository memberRepository = mock(MemberRepository.class);
     private final TokenProvider tokenProvider = mock(TokenProvider.class);
     private final TokenStore tokenStore = mock(TokenStore.class);
-    private final TokenIssuer sut = new TokenIssuer(memberRepository, tokenProvider, tokenStore);
+    private final TokenIssuer sut = new TokenIssuer(tokenProvider, tokenStore);
 
     private final Member<?> member = MENTOR_1.toDomain().apply(1L);
 
@@ -32,16 +29,14 @@ public class TokenIssuerTest extends UnitTest {
     @DisplayName("AuthToken[Access + Refresh]을 제공한다")
     void provideAuthorityToken() {
         // given
-        given(memberRepository.getById(member.getId())).willReturn(member);
         given(tokenProvider.createAccessToken(member.getId(), member.getAuthority())).willReturn(ACCESS_TOKEN);
         given(tokenProvider.createRefreshToken(member.getId())).willReturn(REFRESH_TOKEN);
 
         // when
-        final AuthToken authToken = sut.provideAuthorityToken(member.getId());
+        final AuthToken authToken = sut.provideAuthorityToken(member.getId(), member.getAuthority());
 
         // then
         assertAll(
-                () -> verify(memberRepository, times(1)).getById(member.getId()),
                 () -> verify(tokenProvider, times(1)).createAccessToken(member.getId(), member.getAuthority()),
                 () -> verify(tokenProvider, times(1)).createRefreshToken(member.getId()),
                 () -> verify(tokenStore, times(1)).synchronizeRefreshToken(member.getId(), REFRESH_TOKEN),
@@ -54,16 +49,14 @@ public class TokenIssuerTest extends UnitTest {
     @DisplayName("AuthToken[Access + Refresh]을 재발급한다")
     void reissueAuthorityToken() {
         // given
-        given(memberRepository.getById(member.getId())).willReturn(member);
         given(tokenProvider.createAccessToken(member.getId(), member.getAuthority())).willReturn(ACCESS_TOKEN);
         given(tokenProvider.createRefreshToken(member.getId())).willReturn(REFRESH_TOKEN);
 
         // when
-        final AuthToken authToken = sut.reissueAuthorityToken(member.getId());
+        final AuthToken authToken = sut.reissueAuthorityToken(member.getId(), member.getAuthority());
 
         // then
         assertAll(
-                () -> verify(memberRepository, times(1)).getById(member.getId()),
                 () -> verify(tokenProvider, times(1)).createAccessToken(member.getId(), member.getAuthority()),
                 () -> verify(tokenProvider, times(1)).createRefreshToken(member.getId()),
                 () -> verify(tokenStore, times(1)).updateRefreshToken(member.getId(), REFRESH_TOKEN),

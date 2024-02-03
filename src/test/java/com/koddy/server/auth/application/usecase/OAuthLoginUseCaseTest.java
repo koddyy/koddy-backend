@@ -61,7 +61,7 @@ class OAuthLoginUseCaseTest extends UnitTest {
             assertAll(
                     () -> verify(oAuthLoginProcessor, times(1)).login(GOOGLE, AUTHORIZATION_CODE, REDIRECT_URI, STATE),
                     () -> verify(memberRepository, times(1)).findByPlatformSocialId(googleUserResponse.id()),
-                    () -> verify(tokenIssuer, times(0)).provideAuthorityToken(member.getId()),
+                    () -> verify(tokenIssuer, times(0)).provideAuthorityToken(member.getId(), member.getAuthority()),
                     () -> assertThat(exception.getResponse())
                             .usingRecursiveComparison()
                             .isEqualTo(googleUserResponse)
@@ -76,7 +76,7 @@ class OAuthLoginUseCaseTest extends UnitTest {
             given(memberRepository.findByPlatformSocialId(googleUserResponse.id())).willReturn(Optional.of(member));
 
             final AuthToken authToken = new AuthToken(ACCESS_TOKEN, REFRESH_TOKEN);
-            given(tokenIssuer.provideAuthorityToken(member.getId())).willReturn(authToken);
+            given(tokenIssuer.provideAuthorityToken(member.getId(), member.getAuthority())).willReturn(authToken);
 
             // when
             final AuthMember response = sut.invoke(command);
@@ -85,7 +85,7 @@ class OAuthLoginUseCaseTest extends UnitTest {
             assertAll(
                     () -> verify(oAuthLoginProcessor, times(1)).login(GOOGLE, AUTHORIZATION_CODE, REDIRECT_URI, STATE),
                     () -> verify(memberRepository, times(1)).findByPlatformSocialId(googleUserResponse.id()),
-                    () -> verify(tokenIssuer, times(1)).provideAuthorityToken(member.getId()),
+                    () -> verify(tokenIssuer, times(1)).provideAuthorityToken(member.getId(), member.getAuthority()),
                     () -> assertThat(response.id()).isEqualTo(member.getId()),
                     () -> assertThat(response.name()).isEqualTo(member.getName()),
                     () -> assertThat(response.profileImageUrl()).isEqualTo(member.getProfileImageUrl()),

@@ -10,7 +10,7 @@ public record MentorSimpleSearchProfile(
         String major,
         int enteredIn
 ) {
-    public static MentorSimpleSearchProfile of(final Mentor mentor) {
+    public static MentorSimpleSearchProfile from(final Mentor mentor) {
         return new MentorSimpleSearchProfile(
                 mentor.getId(),
                 mentor.getName(),

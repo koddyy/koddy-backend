@@ -26,10 +26,10 @@ public record ReservedSchedule(
 
     public static ReservedSchedule of(final Mentor mentor, final List<CoffeeChat> reservedCoffeeChat) {
         return new ReservedSchedule(
-                MentoringPeriodResponse.of(mentor.getMentoringPeriod()),
+                MentoringPeriodResponse.from(mentor.getMentoringPeriod()),
                 mentor.getSchedules()
                         .stream()
-                        .map(it -> ScheduleResponse.of(it.getTimeline()))
+                        .map(it -> ScheduleResponse.from(it.getTimeline()))
                         .toList(),
                 mentor.getMentoringTimeUnit(),
                 reservedCoffeeChat.stream()

@@ -1,0 +1,261 @@
+= ## 사용자 관련 API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+
+== 회원가입 + 로그인 처리
+
+=== 멘토
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/SignUp/Mentor/http-request.adoc[]
+include::{snippets}/MemberApi/SignUp/Mentor/request-fields.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/SignUp/Mentor/http-response.adoc[]
+include::{snippets}/MemberApi/SignUp/Mentor/response-fields.adoc[]
+
+=== 멘티
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/SignUp/Mentee/http-request.adoc[]
+include::{snippets}/MemberApi/SignUp/Mentee/request-fields.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/SignUp/Mentee/http-response.adoc[]
+include::{snippets}/MemberApi/SignUp/Mentee/response-fields.adoc[]
+
+== 탈퇴 (AccessToken)
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/Delete/http-request.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/Delete/http-response.adoc[]
+
+== 프로필 완성 (AccessToken)
+
+=== 멘토
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/Complete/Mentor/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Complete/Mentor/Success/request-fields.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/Complete/Mentor/Success/http-response.adoc[]
+
+=== 멘티
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/Complete/Mentee/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Complete/Mentee/Success/request-fields.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/Complete/Mentee/Success/http-response.adoc[]
+
+== 정보 수정 (AccessToken)
+
+=== 멘토
+
+==== 기본 정보
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/Update/Mentor/BasicInfo/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Update/Mentor/BasicInfo/Success/request-fields.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/Update/Mentor/BasicInfo/Success/http-response.adoc[]
+
+==== 스케줄
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/Update/Mentor/Schedule/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Update/Mentor/Schedule/Success/request-fields.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/Update/Mentor/Schedule/Success/http-response.adoc[]
+
+=== 멘티
+
+==== 기본 정보
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/request-fields.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/http-response.adoc[]
+
+== 멘토 학교 인증 (AccessToken + Mentor)
+
+=== 메일 인증 시도
+
+NOTE: 3회 이상 시도하면 10분동안 메일 발송 밴
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Success/request-fields.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Failure/Case2/http-response.adoc[]
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Success/http-response.adoc[]
+
+=== 메일 인증번호 확인
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Confirm/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Confirm/Success/request-fields.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Confirm/Failure/Case2/http-response.adoc[]
+include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Confirm/Success/http-response.adoc[]
+
+=== 증명자료 인증 시도
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/Mentor/UnivAuth/ProofData/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Mentor/UnivAuth/ProofData/Success/request-fields.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/Mentor/UnivAuth/ProofData/Success/http-response.adoc[]
+
+== 멘토의 예약된 스케줄 조회 (AccessToken)
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/MentorReservedSchedule/http-request.adoc[]
+include::{snippets}/MemberApi/MentorReservedSchedule/path-parameters.adoc[]
+include::{snippets}/MemberApi/MentorReservedSchedule/query-parameters.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/MentorReservedSchedule/http-response.adoc[]
+include::{snippets}/MemberApi/MentorReservedSchedule/response-fields.adoc[]
+
+== 마이페이지[Private] 프로필 조회 (AccessToken)
+
+=== 멘토
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/PrivateProfile/Mix/Mentor/http-request.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/PrivateProfile/Mix/Mentor/http-response.adoc[]
+include::{snippets}/MemberApi/PrivateProfile/Mix/Mentor/response-fields.adoc[]
+
+=== 멘티
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/PrivateProfile/Mix/Mentee/http-request.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/PrivateProfile/Mix/Mentee/http-response.adoc[]
+include::{snippets}/MemberApi/PrivateProfile/Mix/Mentee/response-fields.adoc[]
+
+== 공개[Public] 프로필 조회
+
+=== 멘토
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/PublicProfile/Mentor/http-request.adoc[]
+include::{snippets}/MemberApi/PublicProfile/Mentor/path-parameters.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/PublicProfile/Mentor/http-response.adoc[]
+include::{snippets}/MemberApi/PublicProfile/Mentor/response-fields.adoc[]
+
+=== 멘티
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/PublicProfile/Mentee/http-request.adoc[]
+include::{snippets}/MemberApi/PublicProfile/Mentee/path-parameters.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/PublicProfile/Mentee/http-response.adoc[]
+include::{snippets}/MemberApi/PublicProfile/Mentee/response-fields.adoc[]
+
+== 메인 홈 조회
+
+=== 멘토
+
+==== 커피챗 신청한 멘티 (AccessToken)
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/Mentor/MainSearch/AppliedMentees/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Mentor/MainSearch/AppliedMentees/Success/query-parameters.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/Mentor/MainSearch/AppliedMentees/Success/http-response.adoc[]
+include::{snippets}/MemberApi/Mentor/MainSearch/AppliedMentees/Success/response-fields.adoc[]
+
+==== 멘티 둘러보기
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/Mentor/MainSearch/Mentees/http-request.adoc[]
+include::{snippets}/MemberApi/Mentor/MainSearch/Mentees/query-parameters.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/Mentor/MainSearch/Mentees/http-response.adoc[]
+include::{snippets}/MemberApi/Mentor/MainSearch/Mentees/response-fields.adoc[]
+
+=== 멘티
+
+==== 커피챗 제안한 멘토 (AccessToken)
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/Mentee/MainSearch/SuggestedMentors/Success/http-request.adoc[]
+include::{snippets}/MemberApi/Mentee/MainSearch/SuggestedMentors/Success/query-parameters.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/Mentee/MainSearch/SuggestedMentors/Success/http-response.adoc[]
+include::{snippets}/MemberApi/Mentee/MainSearch/SuggestedMentors/Success/response-fields.adoc[]
+
+==== 멘토 둘러보기
+
+*HTTP Request*
+
+include::{snippets}/MemberApi/Mentee/MainSearch/Mentors/http-request.adoc[]
+include::{snippets}/MemberApi/Mentee/MainSearch/Mentors/query-parameters.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/MemberApi/Mentee/MainSearch/Mentors/http-response.adoc[]
+include::{snippets}/MemberApi/Mentee/MainSearch/Mentors/response-fields.adoc[]

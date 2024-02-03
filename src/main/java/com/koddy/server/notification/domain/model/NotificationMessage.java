@@ -4,7 +4,7 @@ public record NotificationMessage(
         String from,
         String rejectReason
 ) {
-    public static NotificationMessage of(final String from) {
+    public static NotificationMessage from(final String from) {
         return new NotificationMessage(from, null);
     }
 

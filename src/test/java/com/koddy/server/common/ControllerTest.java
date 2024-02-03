@@ -2,15 +2,15 @@ package com.koddy.server.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.koddy.server.auth.domain.service.TokenProvider;
 import com.koddy.server.auth.exception.AuthException;
-import com.koddy.server.auth.utils.TokenProvider;
 import com.koddy.server.common.config.MockAllUseCaseBeanFactoryPostProcessor;
 import com.koddy.server.common.config.ResetMockTestExecutionListener;
 import com.koddy.server.common.config.TestAopConfig;
 import com.koddy.server.common.config.TestWebBeanConfig;
 import com.koddy.server.global.base.KoddyExceptionCode;
 import com.koddy.server.global.exception.alert.SlackAlertManager;
-import com.koddy.server.member.domain.model.Role;
+import com.koddy.server.member.domain.model.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -542,7 +542,7 @@ public abstract class ControllerTest {
         };
     }
 
-    protected void applyToken(final boolean isValid, final Long payloadId, final Role role) {
+    protected void applyToken(final boolean isValid, final Member<?> member) {
         if (isValid) {
             doNothing()
                     .when(tokenProvider)
@@ -552,7 +552,7 @@ public abstract class ControllerTest {
                     .when(tokenProvider)
                     .validateToken(anyString());
         }
-        given(tokenProvider.getId(anyString())).willReturn(payloadId);
-        given(tokenProvider.getAuthority(anyString())).willReturn(role.getAuthority());
+        given(tokenProvider.getId(anyString())).willReturn(member.getId());
+        given(tokenProvider.getAuthority(anyString())).willReturn(member.getAuthority());
     }
 }

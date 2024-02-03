@@ -23,7 +23,7 @@ public enum FileExtension {
 
     private final String value;
 
-    public static FileExtension getExtensionViaFimeName(final String fileName) {
+    public static FileExtension from(final String fileName) {
         return Arrays.stream(values())
                 .filter(it -> it.value.equals(extractFileExtension(fileName)))
                 .findFirst()

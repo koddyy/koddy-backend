@@ -39,7 +39,7 @@ class MemberBasicProflieQueryApiControllerTest extends ControllerTest {
         @DisplayName("멘토 기본 프로필 정보를 조회한다")
         void success() {
             // given
-            given(getMemberBasicProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorBasicProfile.of(mentor));
+            given(getMemberBasicProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorBasicProfile.from(mentor));
 
             // when - then
             successfulExecute(
@@ -75,7 +75,7 @@ class MemberBasicProflieQueryApiControllerTest extends ControllerTest {
         @DisplayName("멘티 기본 프로필 정보를 조회한다")
         void success() {
             // given
-            given(getMemberBasicProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteeBasicProfile.of(mentee));
+            given(getMemberBasicProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteeBasicProfile.from(mentee));
 
             // when - then
             successfulExecute(

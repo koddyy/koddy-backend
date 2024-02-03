@@ -41,7 +41,7 @@ public class SignUpUsecase {
     }
 
     private AuthMember provideAuthMember(final Member<?> member) {
-        final AuthToken authToken = tokenIssuer.provideAuthorityToken(member.getId());
+        final AuthToken authToken = tokenIssuer.provideAuthorityToken(member.getId(), member.getAuthority());
         return new AuthMember(member, authToken);
     }
 }

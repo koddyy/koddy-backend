@@ -49,7 +49,7 @@ class MentorScheduleQueryApiControllerTest extends ControllerTest {
         @DisplayName("특정 Year-Month에 대해서 멘토의 예약된 스케줄을 조회한다")
         void success() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
             given(getReservedScheduleUseCase.invoke(any())).willReturn(new ReservedSchedule(
                     new MentoringPeriodResponse(
                             LocalDate.of(2024, 1, 1),
@@ -99,7 +99,7 @@ class MentorScheduleQueryApiControllerTest extends ControllerTest {
                             "month", "2"
                     )),
                     status().isOk(),
-                    successDocsWithAccessToken("MemberApi/Mentor/ReservedSchedule", createHttpSpecSnippets(
+                    successDocsWithAccessToken("MemberApi/MentorReservedSchedule", createHttpSpecSnippets(
                             pathParameters(
                                     path("mentorId", "멘토 ID(PK)", true)
                             ),

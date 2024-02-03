@@ -65,7 +65,7 @@ class GetReservedScheduleUseCaseTest extends UnitTest {
                 () -> assertThat(result.schedules()).containsExactlyInAnyOrderElementsOf(
                         mentor.getSchedules()
                                 .stream()
-                                .map(it -> ScheduleResponse.of(it.getTimeline()))
+                                .map(it -> ScheduleResponse.from(it.getTimeline()))
                                 .toList()
                 ),
                 () -> assertThat(result.timeUnit()).isEqualTo(mentor.getMentoringTimeUnit()),

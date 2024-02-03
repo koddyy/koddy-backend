@@ -30,7 +30,7 @@ public class DummyAccountLoginService {
             throw new MemberException(MEMBER_NOT_FOUND);
         }
 
-        final AuthToken authToken = tokenIssuer.provideAuthorityToken(member.getId());
+        final AuthToken authToken = tokenIssuer.provideAuthorityToken(member.getId(), member.getAuthority());
         return new AuthMember(member, authToken);
     }
 }

@@ -48,7 +48,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
 
             // when - then
             failedExecute(
@@ -67,7 +67,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("파악할 수 없는 대학교 도메인은 임시적으로 인증이 불가능하다")
         void throwExceptionByInvalidUnivDomain() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
 
             // when - then
             failedExecute(
@@ -86,7 +86,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("학교 인증을 메일로 시도한다")
         void success() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
             doNothing()
                     .when(authenticationMentorUnivUseCase)
                     .authWithMail(any());
@@ -117,7 +117,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
 
             // when - then
             failedExecute(
@@ -137,7 +137,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("인증번호가 일치하지 않으면 실패한다")
         void throwExceptionByInvalidAuthCode() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
             doThrow(new AuthException(INVALID_AUTH_CODE))
                     .when(authenticationMentorUnivUseCase)
                     .confirmMailAuthCode(any());
@@ -160,7 +160,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("학교 메일로 받은 인증번호를 확인한다")
         void success() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
             doNothing()
                     .when(authenticationMentorUnivUseCase)
                     .confirmMailAuthCode(any());
@@ -189,7 +189,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
 
             // when - then
             failedExecute(
@@ -208,7 +208,7 @@ class AuthenticationMentorUnivApiControllerTest extends ControllerTest {
         @DisplayName("학교 인증을 증명 자료로 시도한다")
         void success() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
             doNothing()
                     .when(authenticationMentorUnivUseCase)
                     .authWithProofData(any());

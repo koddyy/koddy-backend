@@ -10,7 +10,7 @@ public record MenteeSimpleSearchProfile(
         String interestSchool,
         String interestMajor
 ) {
-    public static MenteeSimpleSearchProfile of(final Mentee mentee) {
+    public static MenteeSimpleSearchProfile from(final Mentee mentee) {
         return new MenteeSimpleSearchProfile(
                 mentee.getId(),
                 mentee.getName(),

@@ -65,7 +65,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
 
             // when - then
             failedExecute(
@@ -92,7 +92,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
         @DisplayName("멘토 기본정보를 수정한다")
         void success() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
             doNothing()
                     .when(updateMentorInfoUseCase)
                     .updateBasicInfo(any());
@@ -137,7 +137,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
         @DisplayName("멘토가 아니면 권한이 없다")
         void throwExceptionByInvalidPermission() {
             // given
-            applyToken(true, mentee.getId(), mentee.getRole());
+            applyToken(true, mentee);
 
             // when - then
             failedExecute(
@@ -164,7 +164,7 @@ class UpdateMentorInfoApiControllerTest extends ControllerTest {
         @DisplayName("멘토 스케줄을 수정한다")
         void success() {
             // given
-            applyToken(true, mentor.getId(), mentor.getRole());
+            applyToken(true, mentor);
             doNothing()
                     .when(updateMentorInfoUseCase)
                     .updateSchedule(any());
