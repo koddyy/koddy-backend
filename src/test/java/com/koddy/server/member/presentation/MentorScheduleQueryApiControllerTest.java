@@ -99,7 +99,7 @@ class MentorScheduleQueryApiControllerTest extends ControllerTest {
                             "month", "2"
                     )),
                     status().isOk(),
-                    successDocsWithAccessToken("MemberApi/Mentor/ReservedSchedule", createHttpSpecSnippets(
+                    successDocsWithAccessToken("MemberApi/MentorReservedSchedule", createHttpSpecSnippets(
                             pathParameters(
                                     path("mentorId", "멘토 ID(PK)", true)
                             ),
