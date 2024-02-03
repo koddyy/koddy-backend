@@ -528,7 +528,7 @@ include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Approve/Success/ht
 
 == 커피챗 스케줄 조회
 
-=== 멘토 스케줄 (Mentor)
+=== 멘토 (Mentor)
 
 ==== 제안한 스케줄 상태별 조회
 
@@ -554,7 +554,7 @@ include::{snippets}/CoffeeChatApi/Schedule/Mentor/Applied/Success/query-paramete
 include::{snippets}/CoffeeChatApi/Schedule/Mentor/Applied/Success/http-response.adoc[]
 include::{snippets}/CoffeeChatApi/Schedule/Mentor/Applied/Success/response-fields.adoc[]
 
-=== 멘티 스케줄 (Mentee)
+=== 멘티 (Mentee)
 
 ==== 신청한 스케줄 상태별 조회
 
@@ -579,3 +579,29 @@ include::{snippets}/CoffeeChatApi/Schedule/Mentee/Suggested/Success/query-parame
 
 include::{snippets}/CoffeeChatApi/Schedule/Mentee/Suggested/Success/http-response.adoc[]
 include::{snippets}/CoffeeChatApi/Schedule/Mentee/Suggested/Success/response-fields.adoc[]
+
+== 커피챗 스케줄 상세 조회
+
+=== 멘토 (Mentor)
+
+> HTTP Request
+
+include::{snippets}/CoffeeChatApi/ScheduleDetails/Mentor/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/ScheduleDetails/Mentor/path-parameters.adoc[]
+
+> HTTP Response
+
+include::{snippets}/CoffeeChatApi/ScheduleDetails/Mentor/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/ScheduleDetails/Mentor/response-fields.adoc[]
+
+=== 멘티 (Mentee)
+
+> HTTP Request
+
+include::{snippets}/CoffeeChatApi/ScheduleDetails/Mentee/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/ScheduleDetails/Mentee/path-parameters.adoc[]
+
+> HTTP Response
+
+include::{snippets}/CoffeeChatApi/ScheduleDetails/Mentee/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/ScheduleDetails/Mentee/response-fields.adoc[]
