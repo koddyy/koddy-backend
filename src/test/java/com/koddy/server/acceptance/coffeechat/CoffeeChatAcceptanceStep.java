@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.time.LocalDateTime;
 
 import static com.koddy.server.acceptance.CommonRequestFixture.deleteRequestWithAccessToken;
+import static com.koddy.server.acceptance.CommonRequestFixture.getRequestWithAccessToken;
 import static com.koddy.server.acceptance.CommonRequestFixture.patchRequestWithAccessToken;
 import static com.koddy.server.acceptance.CommonRequestFixture.postRequestWithAccessToken;
 import static com.koddy.server.common.fixture.OAuthFixture.GOOGLE_MENTOR_1;
@@ -225,15 +226,21 @@ public class CoffeeChatAcceptanceStep {
         return patchRequestWithAccessToken(uri, request, accessToken);
     }
 
-    public static ValidatableResponse 신청_제안한_커피챗을_취소한다(
-            final long coffeeChatId,
-            final String accessToken
-    ) {
+    public static ValidatableResponse 신청_제안한_커피챗을_취소한다(final long coffeeChatId, final String accessToken) {
         final String uri = UriComponentsBuilder
                 .fromPath("/api/coffeechats/cancel/{coffeeChatId}")
                 .build(coffeeChatId)
                 .getPath();
 
         return deleteRequestWithAccessToken(uri, accessToken);
+    }
+
+    public static ValidatableResponse 내_일정_커피챗_상세_조회를_진행한다(final long coffeeChatId, final String accessToken) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/coffeechats/{coffeeChatId}")
+                .build(coffeeChatId)
+                .getPath();
+
+        return getRequestWithAccessToken(uri, accessToken);
     }
 }
