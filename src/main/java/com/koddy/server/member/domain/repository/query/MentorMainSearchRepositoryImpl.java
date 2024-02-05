@@ -3,6 +3,8 @@ package com.koddy.server.member.domain.repository.query;
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
 import com.koddy.server.member.domain.model.Nationality;
 import com.koddy.server.member.domain.model.mentee.Mentee;
+import com.koddy.server.member.domain.repository.query.response.AppliedCoffeeChatsByMentee;
+import com.koddy.server.member.domain.repository.query.response.QAppliedCoffeeChatsByMentee;
 import com.koddy.server.member.domain.repository.query.spec.SearchMenteeCondition;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
@@ -31,9 +33,16 @@ public class MentorMainSearchRepositoryImpl implements MentorMainSearchRepositor
     private final JPAQueryFactory query;
 
     @Override
-    public Page<Mentee> fetchAppliedMentees(final long mentorId, final int limit) {
-        final List<Mentee> result = query
-                .select(mentee)
+    public Page<AppliedCoffeeChatsByMentee> fetchAppliedMentees(final long mentorId, final int limit) {
+        final List<AppliedCoffeeChatsByMentee> result = query
+                .select(new QAppliedCoffeeChatsByMentee(
+                        coffeeChat.id,
+                        mentee.id,
+                        mentee.name,
+                        mentee.profileImageUrl,
+                        mentee.nationality,
+                        mentee.interest
+                ))
                 .from(coffeeChat)
                 .innerJoin(mentee).on(mentee.id.eq(coffeeChat.sourceMemberId))
                 .where(
@@ -45,7 +54,7 @@ public class MentorMainSearchRepositoryImpl implements MentorMainSearchRepositor
                 .fetch();
 
         final Long totalCount = query
-                .select(mentee.id.count())
+                .select(coffeeChat.id.count())
                 .from(coffeeChat)
                 .innerJoin(mentee).on(mentee.id.eq(coffeeChat.sourceMemberId))
                 .where(
