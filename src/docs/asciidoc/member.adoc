@@ -210,7 +210,7 @@ include::{snippets}/MemberApi/PublicProfile/Mentee/response-fields.adoc[]
 
 === 멘토
 
-==== 커피챗 신청한 멘티 (AccessToken)
+==== 멘티로부터 신청온 커피챗 (AccessToken)
 
 *HTTP Request*
 
@@ -236,7 +236,7 @@ include::{snippets}/MemberApi/Mentor/MainSearch/Mentees/response-fields.adoc[]
 
 === 멘티
 
-==== 커피챗 제안한 멘토 (AccessToken)
+==== 멘토로부터 제안온 커피챗 (AccessToken)
 
 *HTTP Request*
 
