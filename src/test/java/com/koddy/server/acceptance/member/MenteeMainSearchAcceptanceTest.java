@@ -46,7 +46,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
 @ExtendWith(DatabaseCleanerAllCallbackExtension.class)
-@DisplayName("[Acceptance Test] 멘티 메인 홈 조회 - 커피챗 제안한 멘토, 멘토 둘러보기")
+@DisplayName("[Acceptance Test] 멘티 메인 홈 조회 - 제안온 커피챗, 멘토 둘러보기")
 public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
     private static AuthMember mentee;
     private static final AuthMember[] mentors = new AuthMember[20];
@@ -62,7 +62,7 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
     }
 
     @Nested
-    @DisplayName("커피챗 제안한 멘토 조회 API")
+    @DisplayName("멘토로부터 제안온 커피챗 조회 API")
     class GetSuggestedMentors {
         @Test
         @DisplayName("멘티가 아니면 권한이 없다")
@@ -74,7 +74,7 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
         }
 
         @Test
-        @DisplayName("커피챗을 제안한 멘토들을 조회한다 [Limit 3]")
+        @DisplayName("멘토로부터 제안온 커피챗을 조회한다 [Limit 3]")
         void success() {
             final long coffeeChatId1 = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentors[0].token().accessToken());
             final long coffeeChatId2 = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentors[1].token().accessToken());
@@ -87,8 +87,9 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
                     .statusCode(OK.value());
             assertMenteesMatch(
                     response1,
-                    List.of(MENTOR_5, MENTOR_4, MENTOR_3),
+                    List.of(coffeeChatId5, coffeeChatId4, coffeeChatId3),
                     List.of(mentors[4].id(), mentors[3].id(), mentors[2].id()),
+                    List.of(MENTOR_5, MENTOR_4, MENTOR_3),
                     5L,
                     true
             );
@@ -101,8 +102,9 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
                     .statusCode(OK.value());
             assertMenteesMatch(
                     response2,
-                    List.of(MENTOR_5, MENTOR_3, MENTOR_1),
+                    List.of(coffeeChatId5, coffeeChatId3, coffeeChatId1),
                     List.of(mentors[4].id(), mentors[2].id(), mentors[0].id()),
+                    List.of(MENTOR_5, MENTOR_3, MENTOR_1),
                     3L,
                     false
             );
@@ -122,12 +124,12 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
             assertMenteesMatch(
                     response1,
                     List.of(
-                            MENTOR_20, MENTOR_19, MENTOR_18, MENTOR_17, MENTOR_16,
-                            MENTOR_15, MENTOR_14, MENTOR_13, MENTOR_12, MENTOR_11
-                    ),
-                    List.of(
                             mentors[19].id(), mentors[18].id(), mentors[17].id(), mentors[16].id(), mentors[15].id(),
                             mentors[14].id(), mentors[13].id(), mentors[12].id(), mentors[11].id(), mentors[10].id()
+                    ),
+                    List.of(
+                            MENTOR_20, MENTOR_19, MENTOR_18, MENTOR_17, MENTOR_16,
+                            MENTOR_15, MENTOR_14, MENTOR_13, MENTOR_12, MENTOR_11
                     ),
                     true
             );
@@ -136,12 +138,12 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
             assertMenteesMatch(
                     response2,
                     List.of(
-                            MENTOR_10, MENTOR_9, MENTOR_8, MENTOR_7, MENTOR_6,
-                            MENTOR_5, MENTOR_4, MENTOR_3, MENTOR_2, MENTOR_1
-                    ),
-                    List.of(
                             mentors[9].id(), mentors[8].id(), mentors[7].id(), mentors[6].id(), mentors[5].id(),
                             mentors[4].id(), mentors[3].id(), mentors[2].id(), mentors[1].id(), mentors[0].id()
+                    ),
+                    List.of(
+                            MENTOR_10, MENTOR_9, MENTOR_8, MENTOR_7, MENTOR_6,
+                            MENTOR_5, MENTOR_4, MENTOR_3, MENTOR_2, MENTOR_1
                     ),
                     false
             );
@@ -151,12 +153,12 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
             assertMenteesMatch(
                     response3,
                     List.of(
-                            MENTOR_19, MENTOR_17, MENTOR_15, MENTOR_13, MENTOR_11,
-                            MENTOR_9, MENTOR_7, MENTOR_5, MENTOR_3, MENTOR_1
-                    ),
-                    List.of(
                             mentors[18].id(), mentors[16].id(), mentors[14].id(), mentors[12].id(), mentors[10].id(),
                             mentors[8].id(), mentors[6].id(), mentors[4].id(), mentors[2].id(), mentors[0].id()
+                    ),
+                    List.of(
+                            MENTOR_19, MENTOR_17, MENTOR_15, MENTOR_13, MENTOR_11,
+                            MENTOR_9, MENTOR_7, MENTOR_5, MENTOR_3, MENTOR_1
                     ),
                     false
             );
@@ -173,12 +175,12 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
             assertMenteesMatch(
                     response5,
                     List.of(
-                            MENTOR_20, MENTOR_18, MENTOR_16, MENTOR_14, MENTOR_12,
-                            MENTOR_10, MENTOR_8, MENTOR_6, MENTOR_4, MENTOR_2
-                    ),
-                    List.of(
                             mentors[19].id(), mentors[17].id(), mentors[15].id(), mentors[13].id(), mentors[11].id(),
                             mentors[9].id(), mentors[7].id(), mentors[5].id(), mentors[3].id(), mentors[1].id()
+                    ),
+                    List.of(
+                            MENTOR_20, MENTOR_18, MENTOR_16, MENTOR_14, MENTOR_12,
+                            MENTOR_10, MENTOR_8, MENTOR_6, MENTOR_4, MENTOR_2
                     ),
                     false
             );
@@ -195,12 +197,13 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
 
     private void assertMenteesMatch(
             final ValidatableResponse response,
-            final List<MentorFixture> mentees,
-            final List<Long> ids,
+            final List<Long> coffeeChatIds,
+            final List<Long> mentorIds,
+            final List<MentorFixture> mentors,
             final Long totalCount,
             final boolean hasNext
     ) {
-        final int totalSize = mentees.size();
+        final int totalSize = coffeeChatIds.size();
         response
                 .body("result", hasSize(totalSize))
                 .body("totalCount", is(totalCount.intValue()))
@@ -208,11 +211,13 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
 
         for (int i = 0; i < totalSize; i++) {
             final String index = String.format("result[%d]", i);
-            final MentorFixture mentor = mentees.get(i);
-            final Long id = ids.get(i);
+            final Long coffeeChatId = coffeeChatIds.get(i);
+            final Long mentorId = mentorIds.get(i);
+            final MentorFixture mentor = mentors.get(i);
 
             response
-                    .body(index + ".id", is(id.intValue()))
+                    .body(index + ".coffeeChatId", is(coffeeChatId.intValue()))
+                    .body(index + ".mentorId", is(mentorId.intValue()))
                     .body(index + ".name", is(mentor.getName()))
                     .body(index + ".profileImageUrl", is(mentor.getProfileImageUrl()))
                     .body(index + ".school", is(mentor.getUniversityProfile().getSchool()))
@@ -223,22 +228,22 @@ public class MenteeMainSearchAcceptanceTest extends AcceptanceTest {
 
     private void assertMenteesMatch(
             final ValidatableResponse response,
-            final List<MentorFixture> mentees,
-            final List<Long> ids,
+            final List<Long> mentorIds,
+            final List<MentorFixture> mentors,
             final boolean hasNext
     ) {
-        final int totalSize = mentees.size();
+        final int totalSize = mentors.size();
         response
                 .body("result", hasSize(totalSize))
                 .body("hasNext", is(hasNext));
 
         for (int i = 0; i < totalSize; i++) {
             final String index = String.format("result[%d]", i);
-            final MentorFixture mentor = mentees.get(i);
-            final Long id = ids.get(i);
+            final Long mentorId = mentorIds.get(i);
+            final MentorFixture mentor = mentors.get(i);
 
             response
-                    .body(index + ".id", is(id.intValue()))
+                    .body(index + ".id", is(mentorId.intValue()))
                     .body(index + ".name", is(mentor.getName()))
                     .body(index + ".profileImageUrl", is(mentor.getProfileImageUrl()))
                     .body(index + ".school", is(mentor.getUniversityProfile().getSchool()))

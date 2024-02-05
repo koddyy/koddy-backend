@@ -8,8 +8,10 @@ import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.application.usecase.query.GetMentorsByCondition;
 import com.koddy.server.member.application.usecase.query.GetSuggestedMentors;
 import com.koddy.server.member.application.usecase.query.response.MentorSimpleSearchProfile;
+import com.koddy.server.member.application.usecase.query.response.SuggestedCoffeeChatsByMentorResponse;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.query.MenteeMainSearchRepository;
+import com.koddy.server.member.domain.repository.query.response.SuggestedCoffeeChatsByMentor;
 import com.koddy.server.member.domain.repository.query.spec.SearchMentorCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,11 +26,12 @@ public class MenteeMainSearchUseCase {
     private final MenteeMainSearchRepository menteeMainSearchRepository;
 
     @KoddyReadOnlyTransactional
-    public PageResponse<List<MentorSimpleSearchProfile>> getSuggestedMentors(final GetSuggestedMentors query) {
-        final Page<Mentor> result = menteeMainSearchRepository.fetchSuggestedMentors(query.menteeId(), query.limit());
+    public PageResponse<List<SuggestedCoffeeChatsByMentorResponse>> getSuggestedMentors(final GetSuggestedMentors query) {
+        final Page<SuggestedCoffeeChatsByMentor> result = menteeMainSearchRepository.fetchSuggestedMentors(query.menteeId(), query.limit());
         return new PageResponse<>(
-                result.stream()
-                        .map(MentorSimpleSearchProfile::from)
+                result.getContent()
+                        .stream()
+                        .map(SuggestedCoffeeChatsByMentorResponse::from)
                         .toList(),
                 result.getTotalElements(),
                 result.hasNext()
