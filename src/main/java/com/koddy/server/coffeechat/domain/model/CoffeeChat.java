@@ -15,13 +15,14 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.COMPLETE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.SUGGEST;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_APPROVE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_APPROVE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_APPROVE_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_CANCEL_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_COMPLETE_STATUS;
@@ -113,7 +114,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
                 applyReason,
                 null,
                 null,
-                APPLY,
+                MENTEE_APPLY,
                 start,
                 end,
                 null
@@ -127,83 +128,107 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
                 applyReason,
                 null,
                 null,
-                SUGGEST,
+                MENTOR_SUGGEST,
                 null,
                 null,
                 null
         );
     }
 
-    public void cancel() {
-        if (this.status != APPLY && this.status != SUGGEST) {
+    /**
+     * 멘티 신청 커피챗 or 멘토 제안 커피챗을 취소 (Self)
+     */
+    public void cancel(final CoffeeChatStatus status) {
+        if (this.status != MENTEE_APPLY && this.status != MENTOR_SUGGEST) {
             throw new CoffeeChatException(CANNOT_CANCEL_STATUS);
         }
 
-        this.status = CANCEL;
+        this.status = status;
     }
 
+    /**
+     * 멘티의 신청 -> 멘토가 거절
+     */
     public void rejectFromMenteeApply(final String rejectReason) {
-        if (this.status != APPLY) {
+        if (this.status != MENTEE_APPLY) {
             throw new CoffeeChatException(CANNOT_REJECT_STATUS);
         }
 
         this.rejectReason = rejectReason;
-        this.status = REJECT;
+        this.status = MENTOR_REJECT;
     }
 
+    /**
+     * 멘티의 신청 -> 멘토가 수락
+     */
     public void approveFromMenteeApply(final Strategy strategy) {
-        if (this.status != APPLY) {
+        if (this.status != MENTEE_APPLY) {
             throw new CoffeeChatException(CANNOT_APPROVE_STATUS);
         }
 
         this.strategy = strategy;
-        this.status = APPROVE;
+        this.status = MENTOR_APPROVE;
     }
 
+    /**
+     * 멘토의 제안 -> 멘티가 거절
+     */
     public void rejectFromMentorSuggest(final String rejectReason) {
-        if (this.status != SUGGEST) {
+        if (this.status != MENTOR_SUGGEST) {
             throw new CoffeeChatException(CANNOT_REJECT_STATUS);
         }
 
         this.rejectReason = rejectReason;
-        this.status = REJECT;
+        this.status = MENTEE_REJECT;
     }
 
+    /**
+     * 멘토의 제안 -> 멘티의 1차 수락
+     */
     public void pendingFromMentorSuggest(final String question, final Reservation start, final Reservation end) {
-        if (this.status != SUGGEST) {
+        if (this.status != MENTOR_SUGGEST) {
             throw new CoffeeChatException(CANNOT_APPROVE_STATUS);
         }
 
         this.question = question;
         this.start = start;
         this.end = end;
-        this.status = PENDING;
+        this.status = MENTEE_PENDING;
     }
 
+    /**
+     * 멘토의 제안 & 멘티의 1차 수락 -> 멘토가 최종 거절
+     */
     public void rejectPendingCoffeeChat(final String rejectReason) {
-        if (this.status != PENDING) {
+        if (this.status != MENTEE_PENDING) {
             throw new CoffeeChatException(CANNOT_FINALLY_DECIDE_STATUS);
         }
 
         this.rejectReason = rejectReason;
-        this.status = REJECT;
+        this.status = MENTOR_FINALLY_REJECT;
     }
 
+    /**
+     * 멘토의 제안 & 멘티의 1차 수락 -> 멘토가 최종 수락
+     */
     public void approvePendingCoffeeChat(final Strategy strategy) {
-        if (this.status != PENDING) {
+        if (this.status != MENTEE_PENDING) {
             throw new CoffeeChatException(CANNOT_FINALLY_DECIDE_STATUS);
         }
 
         this.strategy = strategy;
-        this.status = APPROVE;
+        this.status = MENTOR_FINALLY_APPROVE;
     }
 
-    public void complete() {
-        if (this.status != APPROVE) {
+    /**
+     * 멘티 신청 커피챗 or 멘토 제안 커피챗 진행을 완료했을 경우
+     */
+    public void complete(final CoffeeChatStatus status) {
+        if (this.status != MENTOR_APPROVE && this.status != MENTOR_FINALLY_APPROVE) {
             throw new CoffeeChatException(CANNOT_COMPLETE_STATUS);
         }
 
-        this.status = COMPLETE;
+        this.status = status;
     }
 
     public boolean isReservationIncluded(final Reservation target) {
