@@ -24,7 +24,9 @@ public class AuthenticationMentorUnivUseCase {
     @KoddyWritableTransactional
     public void authWithMail(final AuthenticationWithMailCommand command) {
         final Mentor mentor = mentorRepository.getById(command.mentorId());
-        final String authCode = authenticationProcessor.storeAuthCode(createAuthKey(command.schoolMail()));
+        final String authkey = createAuthKey(mentor.getId(), command.schoolMail());
+        final String authCode = authenticationProcessor.storeAuthCode(authkey);
+
         eventPublisher.publishEvent(new MailAuthenticatedEvent(mentor.getId(), command.schoolMail(), authCode));
         mentor.authWithMail(command.schoolMail());
     }
@@ -32,14 +34,15 @@ public class AuthenticationMentorUnivUseCase {
     @KoddyWritableTransactional
     public void confirmMailAuthCode(final AuthenticationConfirmWithMailCommand command) {
         final Mentor mentor = mentorRepository.getById(command.mentorId());
-        final String authKey = createAuthKey(command.schoolMail());
+        final String authKey = createAuthKey(mentor.getId(), command.schoolMail());
+
         authenticationProcessor.verifyAuthCode(authKey, command.authCode());
         authenticationProcessor.deleteAuthCode(authKey);
         mentor.authComplete();
     }
 
-    private String createAuthKey(final String email) {
-        return authKeyGenerator.get("MENTOR-MAIL-AUTH:%s", email);
+    private String createAuthKey(final long memberId, final String email) {
+        return authKeyGenerator.get("MENTOR-MAIL-AUTH:%d:%s", memberId, email);
     }
 
     @KoddyWritableTransactional

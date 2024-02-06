@@ -32,7 +32,7 @@ import static org.mockito.Mockito.verify;
 
 @DisplayName("Member -> AuthenticationMentorUnivUseCase 테스트")
 class AuthenticationMentorUnivUseCaseTest extends UnitTest {
-    private static final String AUTH_KEY_PREFIX = "MENTOR-MAIL-AUTH:%s";
+    private static final String AUTH_KEY_PREFIX = "MENTOR-MAIL-AUTH:%d:%s";
     private static final String AUTH_CODE = "123456";
 
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
@@ -65,7 +65,7 @@ class AuthenticationMentorUnivUseCaseTest extends UnitTest {
             // then
             assertAll(
                     () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
-                    () -> verify(authenticationProcessor, times(1)).storeAuthCode(getAuthKey(schoolMail)),
+                    () -> verify(authenticationProcessor, times(1)).storeAuthCode(getAuthKey(mentor.getId(), schoolMail)),
                     () -> verify(eventPublisher, times(1)).publishEvent(any(MailAuthenticatedEvent.class)),
                     () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isEqualTo(schoolMail),
                     () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
@@ -94,7 +94,7 @@ class AuthenticationMentorUnivUseCaseTest extends UnitTest {
             given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
             doThrow(new AuthException(INVALID_AUTH_CODE))
                     .when(authenticationProcessor)
-                    .verifyAuthCode(getAuthKey(schoolMail), command.authCode());
+                    .verifyAuthCode(getAuthKey(mentor.getId(), schoolMail), command.authCode());
 
             // when - then
             assertThatThrownBy(() -> sut.confirmMailAuthCode(command))
@@ -103,8 +103,8 @@ class AuthenticationMentorUnivUseCaseTest extends UnitTest {
 
             assertAll(
                     () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
-                    () -> verify(authenticationProcessor, times(1)).verifyAuthCode(getAuthKey(schoolMail), command.authCode()),
-                    () -> verify(authenticationProcessor, times(0)).deleteAuthCode(getAuthKey(schoolMail)),
+                    () -> verify(authenticationProcessor, times(1)).verifyAuthCode(getAuthKey(mentor.getId(), schoolMail), command.authCode()),
+                    () -> verify(authenticationProcessor, times(0)).deleteAuthCode(getAuthKey(mentor.getId(), schoolMail)),
                     () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isEqualTo(schoolMail),
                     () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
                     () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(ATTEMPT)
@@ -128,7 +128,7 @@ class AuthenticationMentorUnivUseCaseTest extends UnitTest {
             given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
             doNothing()
                     .when(authenticationProcessor)
-                    .verifyAuthCode(getAuthKey(schoolMail), command.authCode());
+                    .verifyAuthCode(getAuthKey(mentor.getId(), schoolMail), command.authCode());
 
             // when
             sut.confirmMailAuthCode(command);
@@ -136,8 +136,8 @@ class AuthenticationMentorUnivUseCaseTest extends UnitTest {
             // then
             assertAll(
                     () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
-                    () -> verify(authenticationProcessor, times(1)).verifyAuthCode(getAuthKey(schoolMail), command.authCode()),
-                    () -> verify(authenticationProcessor, times(1)).deleteAuthCode(getAuthKey(schoolMail)),
+                    () -> verify(authenticationProcessor, times(1)).verifyAuthCode(getAuthKey(mentor.getId(), schoolMail), command.authCode()),
+                    () -> verify(authenticationProcessor, times(1)).deleteAuthCode(getAuthKey(mentor.getId(), schoolMail)),
                     () -> assertThat(mentor.getUniversityAuthentication().getSchoolMail()).isEqualTo(schoolMail),
                     () -> assertThat(mentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
                     () -> assertThat(mentor.getUniversityAuthentication().getStatus()).isEqualTo(SUCCESS)
@@ -170,7 +170,7 @@ class AuthenticationMentorUnivUseCaseTest extends UnitTest {
         }
     }
 
-    private String getAuthKey(final String schoolMail) {
-        return String.format(AUTH_KEY_PREFIX, schoolMail);
+    private String getAuthKey(final long memberId, final String schoolMail) {
+        return String.format(AUTH_KEY_PREFIX, memberId, schoolMail);
     }
 }
