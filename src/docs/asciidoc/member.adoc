@@ -1,4 +1,4 @@
-= ## 사용자 관련 API
+= [사용자 관련 기능]
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -31,7 +31,7 @@ include::{snippets}/MemberApi/SignUp/Mentee/request-fields.adoc[]
 include::{snippets}/MemberApi/SignUp/Mentee/http-response.adoc[]
 include::{snippets}/MemberApi/SignUp/Mentee/response-fields.adoc[]
 
-== 탈퇴 (AccessToken)
+== 탈퇴
 
 *HTTP Request*
 
@@ -41,7 +41,7 @@ include::{snippets}/MemberApi/Delete/http-request.adoc[]
 
 include::{snippets}/MemberApi/Delete/http-response.adoc[]
 
-== 프로필 완성 (AccessToken)
+== 프로필 완성
 
 === 멘토
 
@@ -65,7 +65,7 @@ include::{snippets}/MemberApi/Complete/Mentee/Success/request-fields.adoc[]
 
 include::{snippets}/MemberApi/Complete/Mentee/Success/http-response.adoc[]
 
-== 정보 수정 (AccessToken)
+== 정보 수정
 
 === 멘토
 
@@ -104,7 +104,9 @@ include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/request-fields.ado
 
 include::{snippets}/MemberApi/Update/Mentee/BasicInfo/Success/http-response.adoc[]
 
-== 멘토 학교 인증 (AccessToken + Mentor)
+== 멘토 학교 인증
+
+IMPORTANT: 멘토만 접근 가능한 API
 
 === 메일 인증 시도
 
@@ -143,7 +145,7 @@ include::{snippets}/MemberApi/Mentor/UnivAuth/ProofData/Success/request-fields.a
 
 include::{snippets}/MemberApi/Mentor/UnivAuth/ProofData/Success/http-response.adoc[]
 
-== 멘토의 예약된 스케줄 조회 (AccessToken)
+== 멘토의 예약된 스케줄 조회
 
 *HTTP Request*
 
@@ -156,7 +158,7 @@ include::{snippets}/MemberApi/MentorReservedSchedule/query-parameters.adoc[]
 include::{snippets}/MemberApi/MentorReservedSchedule/http-response.adoc[]
 include::{snippets}/MemberApi/MentorReservedSchedule/response-fields.adoc[]
 
-== 마이페이지[Private] 프로필 조회 (AccessToken)
+== 마이페이지[Private] 프로필 조회
 
 === 멘토
 
@@ -210,7 +212,7 @@ include::{snippets}/MemberApi/PublicProfile/Mentee/response-fields.adoc[]
 
 === 멘토
 
-==== 커피챗 신청한 멘티 (AccessToken)
+==== 멘티로부터 신청온 커피챗
 
 *HTTP Request*
 
@@ -236,7 +238,7 @@ include::{snippets}/MemberApi/Mentor/MainSearch/Mentees/response-fields.adoc[]
 
 === 멘티
 
-==== 커피챗 제안한 멘토 (AccessToken)
+==== 멘토로부터 제안온 커피챗
 
 *HTTP Request*
 

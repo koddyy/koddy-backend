@@ -7,6 +7,7 @@ import com.koddy.server.global.query.PageResponse;
 import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.application.usecase.MentorMainSearchUseCase;
 import com.koddy.server.member.application.usecase.query.GetAppliedMentees;
+import com.koddy.server.member.application.usecase.query.response.AppliedCoffeeChatsByMenteeResponse;
 import com.koddy.server.member.application.usecase.query.response.MenteeSimpleSearchProfile;
 import com.koddy.server.member.presentation.dto.request.GetMenteesByConditionRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,21 +25,21 @@ import java.util.List;
 
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 
-@Tag(name = "2-9. 커피챗 신청한 멘티, 멘티 둘러보기 조회 API")
+@Tag(name = "2-9. 신청온 커피챗, 멘티 둘러보기 조회 API")
 @RestController
 @RequestMapping("/api/mentees")
 @RequiredArgsConstructor
 public class MentorMainSearchApiController {
     private final MentorMainSearchUseCase mentorMainSearchUseCase;
 
-    @Operation(summary = "커피챗 신청한 멘티 조회 Endpoint (멘토 전용)")
+    @Operation(summary = "멘티로부터 신청온 커피챗 조회 Endpoint (멘토 전용)")
     @GetMapping("/applied-coffeechats")
     @AccessControl(role = MENTOR)
-    public ResponseEntity<PageResponse<List<MenteeSimpleSearchProfile>>> getAppliedMentees(
+    public ResponseEntity<PageResponse<List<AppliedCoffeeChatsByMenteeResponse>>> getAppliedMentees(
             @Auth final Authenticated authenticated,
             @RequestParam(defaultValue = "3") final int limit
     ) {
-        final PageResponse<List<MenteeSimpleSearchProfile>> result = mentorMainSearchUseCase.getAppliedMentees(
+        final PageResponse<List<AppliedCoffeeChatsByMenteeResponse>> result = mentorMainSearchUseCase.getAppliedMentees(
                 new GetAppliedMentees(authenticated.id(), limit)
         );
         return ResponseEntity.ok(result);

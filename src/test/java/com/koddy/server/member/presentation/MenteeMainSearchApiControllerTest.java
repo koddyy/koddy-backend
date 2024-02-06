@@ -6,6 +6,7 @@ import com.koddy.server.global.query.PageResponse;
 import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.application.usecase.MenteeMainSearchUseCase;
 import com.koddy.server.member.application.usecase.query.response.MentorSimpleSearchProfile;
+import com.koddy.server.member.application.usecase.query.response.SuggestedCoffeeChatsByMentorResponse;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;
@@ -65,7 +66,8 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
             applyToken(true, mentee);
             given(menteeMainSearchUseCase.getSuggestedMentors(any())).willReturn(new PageResponse<>(
                     List.of(
-                            new MentorSimpleSearchProfile(
+                            new SuggestedCoffeeChatsByMentorResponse(
+                                    3,
                                     3,
                                     "멘토3",
                                     "https://mentor3-url",
@@ -73,7 +75,8 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
                                     "컴퓨터공학부",
                                     19
                             ),
-                            new MentorSimpleSearchProfile(
+                            new SuggestedCoffeeChatsByMentorResponse(
+                                    2,
                                     2,
                                     "멘토2",
                                     "https://mentor2-url",
@@ -81,7 +84,8 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
                                     "컴퓨터공학부",
                                     17
                             ),
-                            new MentorSimpleSearchProfile(
+                            new SuggestedCoffeeChatsByMentorResponse(
+                                    1,
                                     1,
                                     "멘토1",
                                     "https://mentor1-url",
@@ -103,7 +107,8 @@ class MenteeMainSearchApiControllerTest extends ControllerTest {
                                     query("limit", "데이터 Limit 개수", "안넘어오면 기본 3", false)
                             ),
                             responseFields(
-                                    body("result[].id", "멘토 ID(PK)"),
+                                    body("result[].coffeeChatId", "커피챗 ID(PK)"),
+                                    body("result[].mentorId", "멘토 ID(PK)"),
                                     body("result[].name", "이름"),
                                     body("result[].profileImageUrl", "프로필 이미지 URL"),
                                     body("result[].school", "학교"),

@@ -38,7 +38,7 @@ class AuthenticationMentorUnivUseCaseIntegrateTest extends IntegrateTest {
     @Autowired
     private RedisOperator<String, String> redisOperator;
 
-    private static final String AUTH_KEY_PREFIX = "MENTOR-MAIL-AUTH:%s";
+    private static final String AUTH_KEY_PREFIX = "MENTOR-MAIL-AUTH:%d:%s";
     private static final String AUTH_CODE = "123456";
 
     @TestConfiguration
@@ -80,7 +80,7 @@ class AuthenticationMentorUnivUseCaseIntegrateTest extends IntegrateTest {
                     () -> assertThat(findMentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
                     () -> assertThat(findMentor.getUniversityAuthentication().getStatus()).isEqualTo(ATTEMPT),
                     () -> {
-                        final String authKey = getAuthKey(command.schoolMail());
+                        final String authKey = getAuthKey(mentor.getId(), command.schoolMail());
                         assertThat(redisOperator.get(authKey)).isEqualTo(AUTH_CODE);
                     }
             );
@@ -115,7 +115,7 @@ class AuthenticationMentorUnivUseCaseIntegrateTest extends IntegrateTest {
                     () -> assertThat(findMentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
                     () -> assertThat(findMentor.getUniversityAuthentication().getStatus()).isEqualTo(ATTEMPT),
                     () -> {
-                        final String authKey = getAuthKey(command.schoolMail());
+                        final String authKey = getAuthKey(mentor.getId(), command.schoolMail());
                         assertThat(redisOperator.get(authKey)).isEqualTo(AUTH_CODE);
                     }
             );
@@ -145,7 +145,7 @@ class AuthenticationMentorUnivUseCaseIntegrateTest extends IntegrateTest {
                     () -> assertThat(findMentor.getUniversityAuthentication().getProofDataUploadUrl()).isNull(),
                     () -> assertThat(findMentor.getUniversityAuthentication().getStatus()).isEqualTo(SUCCESS),
                     () -> {
-                        final String authKey = getAuthKey(command.schoolMail());
+                        final String authKey = getAuthKey(mentor.getId(), command.schoolMail());
                         assertThat(redisOperator.get(authKey)).isNull(); // 인증성공하면 바로 제거
                     }
             );
@@ -175,7 +175,7 @@ class AuthenticationMentorUnivUseCaseIntegrateTest extends IntegrateTest {
         }
     }
 
-    private String getAuthKey(final String schoolMail) {
-        return String.format(AUTH_KEY_PREFIX, schoolMail);
+    private String getAuthKey(final long memberId, final String schoolMail) {
+        return String.format(AUTH_KEY_PREFIX, memberId, schoolMail);
     }
 }
