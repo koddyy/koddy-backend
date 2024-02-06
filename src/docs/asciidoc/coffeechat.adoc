@@ -1,15 +1,17 @@
-= ## 커피챗 관련 API
+= [커피챗 관련 기능]
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
 :toclevels: 3
 
-== 줌 링크 자동 생성/삭제 (AccessToken + Mentor)
+== 줌 링크 자동 생성/삭제
 
-NOTE: OAuth 인증 후 진행되는 흐름
+IMPORTANT: 멘토만 접근 가능한 API
 
 === 생성
+
+NOTE: OAuth 인증 후 [code, authorizationCode, state] 값을 얻은 후 진행
 
 *HTTP Request*
 
@@ -39,7 +41,7 @@ include::{snippets}/CoffeeChatApi/MeetingLink/Delete/Success/path-parameters.ado
 
 include::{snippets}/CoffeeChatApi/MeetingLink/Delete/Success/http-response.adoc[]
 
-== 커피챗 신청/제안 (AccessToken)
+== 커피챗 신청/제안
 
 === 멘티의 신청 = APPLY
 
@@ -69,7 +71,7 @@ include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/request
 
 include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/http-response.adoc[]
 
-== 신청/제안한 커피챗 취소 (AccessToken)
+== 신청/제안한 커피챗 취소
 
 *HTTP Request*
 
@@ -80,11 +82,13 @@ include::{snippets}/CoffeeChatApi/LifeCycle/Cancel/path-parameters.adoc[]
 
 include::{snippets}/CoffeeChatApi/LifeCycle/Cancel/http-response.adoc[]
 
-== 신청/제안된 커피챗 처리 (AccessToken)
+== 신청/제안된 커피챗 처리
 
-=== 멘티가 신청한 커피챗 처리 (Mentor)
+=== 멘티가 신청한 커피챗 처리
 
-==== 거절 = REJECT
+IMPORTANT: 멘토만 접근 가능한 API
+
+==== 거절(REJECT)
 
 *HTTP Request*
 
@@ -96,7 +100,7 @@ include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Success/reque
 
 include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Success/http-response.adoc[]
 
-==== 승인 = APPROVE
+==== 승인(APPROVE)
 
 *HTTP Request*
 
@@ -108,9 +112,11 @@ include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Approve/Success/requ
 
 include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Approve/Success/http-response.adoc[]
 
-=== 멘토가 제안한 커피챗 처리 (Mentee)
+=== 멘토가 제안한 커피챗 처리
 
-==== 거절 = REJECT
+IMPORTANT: 멘티만 접근 가능한 API
+
+==== 거절(REJECT)
 
 *HTTP Request*
 
@@ -122,7 +128,7 @@ include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Reject/Success/req
 
 include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Reject/Success/http-response.adoc[]
 
-==== 1차 수락 = PENDING
+==== 1차 수락(PENDING)
 
 *HTTP Request*
 
@@ -140,9 +146,11 @@ NOTE: 2. 성공
 
 include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/http-response.adoc[]
 
-=== Pending 상태인 커피챗에 대한 멘토의 최종 결정
+=== PENDING 커피챗에 대한 처리
 
-==== 최종 거절 = REJECT
+IMPORTANT: 멘토만 접근 가능한 API
+
+==== 최종 거절(REJECT)
 
 *HTTP Request*
 
@@ -154,7 +162,7 @@ include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Reject/Success/req
 
 include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Reject/Success/http-response.adoc[]
 
-==== 최종 수락 = APPROVE
+==== 최종 수락(APPROVE)
 
 *HTTP Request*
 
@@ -166,7 +174,7 @@ include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Approve/Success/re
 
 include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Approve/Success/http-response.adoc[]
 
-== 커피챗 스케줄 조회 (AccessToken)
+== 커피챗 스케줄 조회
 
 === 멘토
 
@@ -220,7 +228,7 @@ include::{snippets}/CoffeeChatApi/Schedule/Mentee/Suggested/Success/query-parame
 include::{snippets}/CoffeeChatApi/Schedule/Mentee/Suggested/Success/http-response.adoc[]
 include::{snippets}/CoffeeChatApi/Schedule/Mentee/Suggested/Success/response-fields.adoc[]
 
-== 커피챗 스케줄 상세 조회 (AccessToken)
+== 커피챗 스케줄 상세 조회
 
 === 멘토
 

@@ -1,4 +1,4 @@
-= ## 인증/로그아웃/토큰 관련 API
+= [인증/로그아웃/토큰 관련 기능]
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -41,7 +41,7 @@ NOTE: DB에 사용자가 존재 >> 로그인 완료
 include::{snippets}/OAuthApi/Login/Success/http-response.adoc[]
 include::{snippets}/OAuthApi/Login/Success/response-fields.adoc[]
 
-== 로그아웃 (AccessToken)
+== 로그아웃
 
 *HTTP Request*
 
@@ -51,7 +51,7 @@ include::{snippets}/OAuthApi/Logout/http-request.adoc[]
 
 include::{snippets}/OAuthApi/Logout/http-response.adoc[]
 
-== 토큰 재발급 (RefreshToken)
+== 토큰 재발급
 
 *HTTP Request*
 
