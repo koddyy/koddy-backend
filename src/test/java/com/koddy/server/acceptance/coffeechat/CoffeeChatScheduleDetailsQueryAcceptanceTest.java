@@ -26,12 +26,16 @@ import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.�
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘티가_멘토의_커피챗_제안을_1차_수락한다;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘티가_멘토의_커피챗_제안을_거절한다;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.신청_제안한_커피챗을_취소한다;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.SUGGEST;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_APPROVE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_APPROVE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
 import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
@@ -71,7 +75,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(APPLY.getValue()))
+                    .body("coffeeChat.status", is(MENTEE_APPLY.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", nullValue())
                     .body("coffeeChat.rejectReason", nullValue())
@@ -84,7 +88,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
             menteeResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(APPLY.getValue()))
+                    .body("coffeeChat.status", is(MENTEE_APPLY.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", nullValue())
                     .body("coffeeChat.rejectReason", nullValue())
@@ -104,7 +108,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(CANCEL.getValue()))
+                    .body("coffeeChat.status", is(MENTEE_CANCEL.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", nullValue())
                     .body("coffeeChat.rejectReason", nullValue())
@@ -117,7 +121,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
             menteeResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(CANCEL.getValue()))
+                    .body("coffeeChat.status", is(MENTEE_CANCEL.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", nullValue())
                     .body("coffeeChat.rejectReason", nullValue())
@@ -137,7 +141,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(APPROVE.getValue()))
+                    .body("coffeeChat.status", is(MENTOR_APPROVE.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", nullValue())
                     .body("coffeeChat.rejectReason", nullValue())
@@ -150,7 +154,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
             menteeResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(APPROVE.getValue()))
+                    .body("coffeeChat.status", is(MENTOR_APPROVE.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", nullValue())
                     .body("coffeeChat.rejectReason", nullValue())
@@ -170,7 +174,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(REJECT.getValue()))
+                    .body("coffeeChat.status", is(MENTOR_REJECT.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", nullValue())
                     .body("coffeeChat.rejectReason", is("거절.."))
@@ -183,7 +187,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
             menteeResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(REJECT.getValue()))
+                    .body("coffeeChat.status", is(MENTOR_REJECT.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", nullValue())
                     .body("coffeeChat.rejectReason", is("거절.."))
@@ -206,7 +210,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(SUGGEST.getValue()))
+                    .body("coffeeChat.status", is(MENTOR_SUGGEST.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", nullValue())
                     .body("coffeeChat.rejectReason", nullValue())
@@ -219,7 +223,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
             menteeResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(SUGGEST.getValue()))
+                    .body("coffeeChat.status", is(MENTOR_SUGGEST.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", nullValue())
                     .body("coffeeChat.rejectReason", nullValue())
@@ -239,7 +243,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(CANCEL.getValue()))
+                    .body("coffeeChat.status", is(MENTOR_CANCEL.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", nullValue())
                     .body("coffeeChat.rejectReason", nullValue())
@@ -252,7 +256,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
             menteeResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(CANCEL.getValue()))
+                    .body("coffeeChat.status", is(MENTOR_CANCEL.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", nullValue())
                     .body("coffeeChat.rejectReason", nullValue())
@@ -272,7 +276,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(PENDING.getValue()))
+                    .body("coffeeChat.status", is(MENTEE_PENDING.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", notNullValue(String.class))
                     .body("coffeeChat.rejectReason", nullValue())
@@ -285,7 +289,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
             menteeResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(PENDING.getValue()))
+                    .body("coffeeChat.status", is(MENTEE_PENDING.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", notNullValue(String.class))
                     .body("coffeeChat.rejectReason", nullValue())
@@ -305,7 +309,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(REJECT.getValue()))
+                    .body("coffeeChat.status", is(MENTEE_REJECT.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", nullValue())
                     .body("coffeeChat.rejectReason", notNullValue(String.class))
@@ -318,7 +322,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
             menteeResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(REJECT.getValue()))
+                    .body("coffeeChat.status", is(MENTEE_REJECT.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", nullValue())
                     .body("coffeeChat.rejectReason", notNullValue(String.class))
@@ -339,7 +343,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(APPROVE.getValue()))
+                    .body("coffeeChat.status", is(MENTOR_FINALLY_APPROVE.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", notNullValue(String.class))
                     .body("coffeeChat.rejectReason", nullValue())
@@ -352,7 +356,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
             menteeResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(APPROVE.getValue()))
+                    .body("coffeeChat.status", is(MENTOR_FINALLY_APPROVE.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", notNullValue(String.class))
                     .body("coffeeChat.rejectReason", nullValue())
@@ -373,7 +377,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(REJECT.getValue()))
+                    .body("coffeeChat.status", is(MENTOR_FINALLY_REJECT.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", notNullValue(String.class))
                     .body("coffeeChat.rejectReason", notNullValue(String.class))
@@ -386,7 +390,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
             menteeResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(REJECT.getValue()))
+                    .body("coffeeChat.status", is(MENTOR_FINALLY_REJECT.getValue()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.question", notNullValue(String.class))
                     .body("coffeeChat.rejectReason", notNullValue(String.class))

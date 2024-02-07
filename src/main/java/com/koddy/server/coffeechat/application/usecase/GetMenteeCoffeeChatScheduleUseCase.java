@@ -3,7 +3,8 @@ package com.koddy.server.coffeechat.application.usecase;
 import com.koddy.server.coffeechat.application.usecase.query.GetMenteeCoffeeChats;
 import com.koddy.server.coffeechat.domain.repository.query.MenteeCoffeeChatScheduleQueryRepository;
 import com.koddy.server.coffeechat.domain.repository.query.response.MenteeCoffeeChatScheduleData;
-import com.koddy.server.coffeechat.domain.repository.query.spec.MenteeCoffeeChatQueryCondition;
+import com.koddy.server.coffeechat.domain.repository.query.spec.AppliedCoffeeChatQueryCondition;
+import com.koddy.server.coffeechat.domain.repository.query.spec.SuggestedCoffeeChatQueryCondition;
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
 import com.koddy.server.global.annotation.UseCase;
 import com.koddy.server.global.query.PageCreator;
@@ -21,7 +22,7 @@ public class GetMenteeCoffeeChatScheduleUseCase {
 
     @KoddyReadOnlyTransactional
     public SliceResponse<List<MenteeCoffeeChatScheduleData>> getAppliedCoffeeChats(final GetMenteeCoffeeChats query) {
-        final MenteeCoffeeChatQueryCondition condition = query.toCondition();
+        final AppliedCoffeeChatQueryCondition condition = new AppliedCoffeeChatQueryCondition(query.menteeId(), query.status());
         final Pageable pageable = PageCreator.create(query.page());
         final Slice<MenteeCoffeeChatScheduleData> result = menteeCoffeeChatScheduleQueryRepository.fetchAppliedCoffeeChatsByCondition(condition, pageable);
         return new SliceResponse<>(result.getContent(), result.hasNext());
@@ -29,7 +30,7 @@ public class GetMenteeCoffeeChatScheduleUseCase {
 
     @KoddyReadOnlyTransactional
     public SliceResponse<List<MenteeCoffeeChatScheduleData>> getSuggestedCoffeeChats(final GetMenteeCoffeeChats query) {
-        final MenteeCoffeeChatQueryCondition condition = query.toCondition();
+        final SuggestedCoffeeChatQueryCondition condition = new SuggestedCoffeeChatQueryCondition(query.menteeId(), query.status());
         final Pageable pageable = PageCreator.create(query.page());
         final Slice<MenteeCoffeeChatScheduleData> result = menteeCoffeeChatScheduleQueryRepository.fetchSuggestedCoffeeChatsByCondition(condition, pageable);
         return new SliceResponse<>(result.getContent(), result.hasNext());

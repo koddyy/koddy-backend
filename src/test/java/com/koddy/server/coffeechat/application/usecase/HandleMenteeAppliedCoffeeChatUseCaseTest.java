@@ -15,8 +15,8 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_APPROVE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.EncryptorFactory.getEncryptor;
@@ -56,7 +56,7 @@ class HandleMenteeAppliedCoffeeChatUseCaseTest extends UnitTest {
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                 () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(command.rejectReason()),
-                () -> assertThat(coffeeChat.getStatus()).isEqualTo(REJECT),
+                () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_REJECT),
                 () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(start),
                 () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(start.plusMinutes(30)),
                 () -> assertThat(coffeeChat.getStrategy()).isNull()
@@ -88,7 +88,7 @@ class HandleMenteeAppliedCoffeeChatUseCaseTest extends UnitTest {
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                 () -> assertThat(coffeeChat.getRejectReason()).isNull(),
-                () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPROVE),
+                () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_APPROVE),
                 () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(start),
                 () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(start.plusMinutes(30)),
                 () -> assertThat(coffeeChat.getStrategy().getType()).isEqualTo(command.type()),

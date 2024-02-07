@@ -4,7 +4,8 @@ import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.coffeechat.application.usecase.GetMentorCoffeeChatScheduleUseCase;
 import com.koddy.server.coffeechat.application.usecase.query.GetMentorCoffeeChats;
 import com.koddy.server.coffeechat.domain.repository.query.response.MentorCoffeeChatScheduleData;
-import com.koddy.server.coffeechat.presentation.dto.request.GetCoffeeChatScheduleRequest;
+import com.koddy.server.coffeechat.presentation.dto.request.GetAppliedCoffeeChatScheduleRequest;
+import com.koddy.server.coffeechat.presentation.dto.request.GetSuggestedCoffeeChatScheduleRequest;
 import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.aop.AccessControl;
 import com.koddy.server.global.query.SliceResponse;
@@ -34,7 +35,7 @@ public class MentorCoffeeChatScheduleQueryApiController {
     @AccessControl(role = MENTOR)
     public ResponseEntity<SliceResponse<List<MentorCoffeeChatScheduleData>>> getAppliedCoffeeChats(
             @Auth final Authenticated authenticated,
-            @ModelAttribute @Valid final GetCoffeeChatScheduleRequest request
+            @ModelAttribute @Valid final GetSuggestedCoffeeChatScheduleRequest request
     ) {
         final SliceResponse<List<MentorCoffeeChatScheduleData>> result = getMentorCoffeeChatScheduleUseCase.getSuggestedCoffeeChats(
                 new GetMentorCoffeeChats(
@@ -51,7 +52,7 @@ public class MentorCoffeeChatScheduleQueryApiController {
     @AccessControl(role = MENTOR)
     public ResponseEntity<SliceResponse<List<MentorCoffeeChatScheduleData>>> getSuggestedCoffeeChats(
             @Auth final Authenticated authenticated,
-            @ModelAttribute @Valid final GetCoffeeChatScheduleRequest request
+            @ModelAttribute @Valid final GetAppliedCoffeeChatScheduleRequest request
     ) {
         final SliceResponse<List<MentorCoffeeChatScheduleData>> result = getMentorCoffeeChatScheduleUseCase.getAppliedCoffeeChats(
                 new GetMentorCoffeeChats(

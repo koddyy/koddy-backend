@@ -3,7 +3,8 @@ package com.koddy.server.coffeechat.domain.repository.query;
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus;
 import com.koddy.server.coffeechat.domain.repository.query.response.MentorCoffeeChatScheduleData;
 import com.koddy.server.coffeechat.domain.repository.query.response.QMentorCoffeeChatScheduleData;
-import com.koddy.server.coffeechat.domain.repository.query.spec.MentorCoffeeChatQueryCondition;
+import com.koddy.server.coffeechat.domain.repository.query.spec.AppliedCoffeeChatQueryCondition;
+import com.koddy.server.coffeechat.domain.repository.query.spec.SuggestedCoffeeChatQueryCondition;
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -27,7 +28,7 @@ public class MentorCoffeeChatScheduleQueryRepositoryImpl implements MentorCoffee
 
     @Override
     public Slice<MentorCoffeeChatScheduleData> fetchSuggestedCoffeeChatsByCondition(
-            final MentorCoffeeChatQueryCondition condition,
+            final SuggestedCoffeeChatQueryCondition condition,
             final Pageable pageable
     ) {
         final List<MentorCoffeeChatScheduleData> result = query
@@ -42,7 +43,7 @@ public class MentorCoffeeChatScheduleQueryRepositoryImpl implements MentorCoffee
                 .from(coffeeChat)
                 .innerJoin(mentee).on(mentee.id.eq(coffeeChat.targetMemberId))
                 .where(
-                        coffeeChat.sourceMemberId.eq(condition.mentorId()),
+                        coffeeChat.sourceMemberId.eq(condition.memberId()),
                         statusIn(condition.status())
                 )
                 .orderBy(coffeeChat.lastModifiedAt.desc(), coffeeChat.id.desc())
@@ -59,7 +60,7 @@ public class MentorCoffeeChatScheduleQueryRepositoryImpl implements MentorCoffee
 
     @Override
     public Slice<MentorCoffeeChatScheduleData> fetchAppliedCoffeeChatsByCondition(
-            final MentorCoffeeChatQueryCondition condition,
+            final AppliedCoffeeChatQueryCondition condition,
             final Pageable pageable
     ) {
         final List<MentorCoffeeChatScheduleData> result = query
@@ -74,7 +75,7 @@ public class MentorCoffeeChatScheduleQueryRepositoryImpl implements MentorCoffee
                 .from(coffeeChat)
                 .innerJoin(mentee).on(mentee.id.eq(coffeeChat.sourceMemberId))
                 .where(
-                        coffeeChat.targetMemberId.eq(condition.mentorId()),
+                        coffeeChat.targetMemberId.eq(condition.memberId()),
                         statusIn(condition.status())
                 )
                 .orderBy(coffeeChat.lastModifiedAt.desc(), coffeeChat.id.desc())
