@@ -16,8 +16,8 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_REJECT;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -64,7 +64,7 @@ class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                 () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(command.rejectReason()),
-                () -> assertThat(coffeeChat.getStatus()).isEqualTo(REJECT),
+                () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_REJECT),
                 () -> assertThat(coffeeChat.getStart()).isNull(),
                 () -> assertThat(coffeeChat.getEnd()).isNull(),
                 () -> assertThat(coffeeChat.getStrategy()).isNull()
@@ -104,7 +104,7 @@ class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
                 () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                 () -> assertThat(coffeeChat.getQuestion()).isEqualTo(command.question()),
                 () -> assertThat(coffeeChat.getRejectReason()).isNull(),
-                () -> assertThat(coffeeChat.getStatus()).isEqualTo(PENDING),
+                () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_PENDING),
                 () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(start),
                 () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(start.plusMinutes(30)),
                 () -> assertThat(coffeeChat.getStrategy()).isNull()

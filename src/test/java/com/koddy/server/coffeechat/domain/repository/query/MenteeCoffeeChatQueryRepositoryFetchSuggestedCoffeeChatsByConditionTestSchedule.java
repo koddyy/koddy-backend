@@ -3,7 +3,7 @@ package com.koddy.server.coffeechat.domain.repository.query;
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.coffeechat.domain.repository.query.response.MenteeCoffeeChatScheduleData;
-import com.koddy.server.coffeechat.domain.repository.query.spec.MenteeCoffeeChatQueryCondition;
+import com.koddy.server.coffeechat.domain.repository.query.spec.SuggestedCoffeeChatQueryCondition;
 import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,12 +14,13 @@ import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.COMPLETE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.SUGGEST;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_APPROVE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE;
 import static com.koddy.server.common.fixture.CoffeeChatFixture.수요일_3주차_20_00_시작;
 import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_2주차_20_00_시작;
 import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_3주차_20_00_시작;
@@ -74,7 +75,7 @@ class MenteeCoffeeChatQueryRepositoryFetchSuggestedCoffeeChatsByConditionTestSch
     @DisplayName("1. 멘티가 제안받은 커피챗에 대한 상태별 리스트에 포함된 멘토 정보를 조회한다 [전체 -> 상태 변경 최신순]")
     void recent() {
         // given
-        final MenteeCoffeeChatQueryCondition condition = new MenteeCoffeeChatQueryCondition(mentees[0].getId(), List.of());
+        final SuggestedCoffeeChatQueryCondition condition = new SuggestedCoffeeChatQueryCondition(mentees[0].getId(), List.of());
 
         /* 페이지 1 */
         final Slice<MenteeCoffeeChatScheduleData> result1 = sut.fetchSuggestedCoffeeChatsByCondition(condition, pageable1);
@@ -141,7 +142,7 @@ class MenteeCoffeeChatQueryRepositoryFetchSuggestedCoffeeChatsByConditionTestSch
     @DisplayName("2. 멘티가 제안받은 커피챗에 대한 상태별 리스트에 포함된 멘토 정보를 조회한다 [제안 -> SUGGEST]")
     void suggest() {
         // given
-        final MenteeCoffeeChatQueryCondition condition = new MenteeCoffeeChatQueryCondition(mentees[0].getId(), List.of(SUGGEST));
+        final SuggestedCoffeeChatQueryCondition condition = new SuggestedCoffeeChatQueryCondition(mentees[0].getId(), List.of(MENTOR_SUGGEST));
 
         /* 페이지 1 */
         final Slice<MenteeCoffeeChatScheduleData> result1 = sut.fetchSuggestedCoffeeChatsByCondition(condition, pageable1);
@@ -182,7 +183,7 @@ class MenteeCoffeeChatQueryRepositoryFetchSuggestedCoffeeChatsByConditionTestSch
     @DisplayName("3. 멘티가 제안받은 커피챗에 대한 상태별 리스트에 포함된 멘토 정보를 조회한다 [수락 -> PENDING]")
     void pending() {
         // given
-        final MenteeCoffeeChatQueryCondition condition = new MenteeCoffeeChatQueryCondition(mentees[0].getId(), List.of(PENDING));
+        final SuggestedCoffeeChatQueryCondition condition = new SuggestedCoffeeChatQueryCondition(mentees[0].getId(), List.of(MENTEE_PENDING));
 
         /* 페이지 1 */
         final Slice<MenteeCoffeeChatScheduleData> result1 = sut.fetchSuggestedCoffeeChatsByCondition(condition, pageable1);
@@ -215,7 +216,7 @@ class MenteeCoffeeChatQueryRepositoryFetchSuggestedCoffeeChatsByConditionTestSch
     @DisplayName("4. 멘티가 제안받은 커피챗에 대한 상태별 리스트에 포함된 멘토 정보를 조회한다 [예정 -> APPROVE]")
     void approve() {
         // given
-        final MenteeCoffeeChatQueryCondition condition = new MenteeCoffeeChatQueryCondition(mentees[0].getId(), List.of(APPROVE));
+        final SuggestedCoffeeChatQueryCondition condition = new SuggestedCoffeeChatQueryCondition(mentees[0].getId(), List.of(MENTOR_FINALLY_APPROVE));
 
         /* 페이지 1 */
         final Slice<MenteeCoffeeChatScheduleData> result1 = sut.fetchSuggestedCoffeeChatsByCondition(condition, pageable1);
@@ -248,7 +249,7 @@ class MenteeCoffeeChatQueryRepositoryFetchSuggestedCoffeeChatsByConditionTestSch
     @DisplayName("5. 멘티가 제안받은 커피챗에 대한 상태별 리스트에 포함된 멘토 정보를 조회한다 [완료 -> COMPLETE]")
     void complete() {
         // given
-        final MenteeCoffeeChatQueryCondition condition = new MenteeCoffeeChatQueryCondition(mentees[0].getId(), List.of(COMPLETE));
+        final SuggestedCoffeeChatQueryCondition condition = new SuggestedCoffeeChatQueryCondition(mentees[0].getId(), List.of(MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE));
 
         /* 페이지 1 */
         final Slice<MenteeCoffeeChatScheduleData> result1 = sut.fetchSuggestedCoffeeChatsByCondition(condition, pageable1);
@@ -277,7 +278,7 @@ class MenteeCoffeeChatQueryRepositoryFetchSuggestedCoffeeChatsByConditionTestSch
     @DisplayName("6. 멘티가 제안받은 커피챗에 대한 상태별 리스트에 포함된 멘토 정보를 조회한다 [취소 -> CANCEL or REJECT]")
     void cancelOrReject() {
         // given
-        final MenteeCoffeeChatQueryCondition condition = new MenteeCoffeeChatQueryCondition(mentees[0].getId(), List.of(CANCEL, REJECT));
+        final SuggestedCoffeeChatQueryCondition condition = new SuggestedCoffeeChatQueryCondition(mentees[0].getId(), List.of(MENTOR_CANCEL, MENTEE_REJECT, MENTOR_FINALLY_REJECT));
 
         /* 페이지 1 */
         final Slice<MenteeCoffeeChatScheduleData> result1 = sut.fetchSuggestedCoffeeChatsByCondition(condition, pageable1);

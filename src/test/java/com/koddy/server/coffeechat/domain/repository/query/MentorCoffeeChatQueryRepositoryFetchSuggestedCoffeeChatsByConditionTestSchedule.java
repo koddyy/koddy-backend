@@ -3,7 +3,7 @@ package com.koddy.server.coffeechat.domain.repository.query;
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.coffeechat.domain.repository.query.response.MentorCoffeeChatScheduleData;
-import com.koddy.server.coffeechat.domain.repository.query.spec.MentorCoffeeChatQueryCondition;
+import com.koddy.server.coffeechat.domain.repository.query.spec.SuggestedCoffeeChatQueryCondition;
 import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,12 +14,13 @@ import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.COMPLETE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.SUGGEST;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_APPROVE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE;
 import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작;
 import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_21_00_시작;
 import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_2주차_20_00_시작;
@@ -73,7 +74,7 @@ class MentorCoffeeChatQueryRepositoryFetchSuggestedCoffeeChatsByConditionTestSch
     @DisplayName("1. 멘토가 제안한 커피챗에 대한 상태별 리스트에 포함된 멘티 정보를 조회한다 [전체 -> 상태 변경 최신순]")
     void recent() {
         // given
-        final MentorCoffeeChatQueryCondition condition = new MentorCoffeeChatQueryCondition(mentors[0].getId(), null);
+        final SuggestedCoffeeChatQueryCondition condition = new SuggestedCoffeeChatQueryCondition(mentors[0].getId(), null);
 
         /* 페이지 1 */
         final Slice<MentorCoffeeChatScheduleData> result1 = sut.fetchSuggestedCoffeeChatsByCondition(condition, pageable1);
@@ -140,7 +141,7 @@ class MentorCoffeeChatQueryRepositoryFetchSuggestedCoffeeChatsByConditionTestSch
     @DisplayName("2. 멘토가 제안한 커피챗에 대한 상태별 리스트에 포함된 멘티 정보를 조회한다 [제안 -> SUGGEST]")
     void suggest() {
         // given
-        final MentorCoffeeChatQueryCondition condition = new MentorCoffeeChatQueryCondition(mentors[0].getId(), List.of(SUGGEST));
+        final SuggestedCoffeeChatQueryCondition condition = new SuggestedCoffeeChatQueryCondition(mentors[0].getId(), List.of(MENTOR_SUGGEST));
 
         /* 페이지 1 */
         final Slice<MentorCoffeeChatScheduleData> result1 = sut.fetchSuggestedCoffeeChatsByCondition(condition, pageable1);
@@ -178,10 +179,10 @@ class MentorCoffeeChatQueryRepositoryFetchSuggestedCoffeeChatsByConditionTestSch
     }
 
     @Test
-    @DisplayName("3. 멘토가 제안한 커피챗에 대한 상태별 리스트에 포함된 멘티 정보를 조회한다 [수락 -> PENDING]")
+    @DisplayName("3. 멘토가 제안한 커피챗에 대한 상태별 리스트에 포함된 멘티 정보를 조회한다 [1차 수락 -> PENDING]")
     void pending() {
         // given
-        final MentorCoffeeChatQueryCondition condition = new MentorCoffeeChatQueryCondition(mentors[0].getId(), List.of(PENDING));
+        final SuggestedCoffeeChatQueryCondition condition = new SuggestedCoffeeChatQueryCondition(mentors[0].getId(), List.of(MENTEE_PENDING));
 
         /* 페이지 1 */
         final Slice<MentorCoffeeChatScheduleData> result1 = sut.fetchSuggestedCoffeeChatsByCondition(condition, pageable1);
@@ -216,7 +217,7 @@ class MentorCoffeeChatQueryRepositoryFetchSuggestedCoffeeChatsByConditionTestSch
     @DisplayName("4. 멘토가 제안한 커피챗에 대한 상태별 리스트에 포함된 멘티 정보를 조회한다 [예정 -> APPROVE]")
     void approve() {
         // given
-        final MentorCoffeeChatQueryCondition condition = new MentorCoffeeChatQueryCondition(mentors[0].getId(), List.of(APPROVE));
+        final SuggestedCoffeeChatQueryCondition condition = new SuggestedCoffeeChatQueryCondition(mentors[0].getId(), List.of(MENTOR_FINALLY_APPROVE));
 
         /* 페이지 1 */
         final Slice<MentorCoffeeChatScheduleData> result1 = sut.fetchSuggestedCoffeeChatsByCondition(condition, pageable1);
@@ -245,7 +246,7 @@ class MentorCoffeeChatQueryRepositoryFetchSuggestedCoffeeChatsByConditionTestSch
     @DisplayName("5. 멘토가 제안한 커피챗에 대한 상태별 리스트에 포함된 멘티 정보를 조회한다 [완료 -> COMPLETE]")
     void complete() {
         // given
-        final MentorCoffeeChatQueryCondition condition = new MentorCoffeeChatQueryCondition(mentors[0].getId(), List.of(COMPLETE));
+        final SuggestedCoffeeChatQueryCondition condition = new SuggestedCoffeeChatQueryCondition(mentors[0].getId(), List.of(MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE));
 
         /* 페이지 1 */
         final Slice<MentorCoffeeChatScheduleData> result1 = sut.fetchSuggestedCoffeeChatsByCondition(condition, pageable1);
@@ -274,7 +275,7 @@ class MentorCoffeeChatQueryRepositoryFetchSuggestedCoffeeChatsByConditionTestSch
     @DisplayName("6. 멘토가 제안한 커피챗에 대한 상태별 리스트에 포함된 멘티 정보를 조회한다 [취소 -> CANCEL or REJECT]")
     void cancelOrReject() {
         // given
-        final MentorCoffeeChatQueryCondition condition = new MentorCoffeeChatQueryCondition(mentors[0].getId(), List.of(CANCEL, REJECT));
+        final SuggestedCoffeeChatQueryCondition condition = new SuggestedCoffeeChatQueryCondition(mentors[0].getId(), List.of(MENTOR_CANCEL, MENTEE_REJECT, MENTOR_FINALLY_REJECT));
 
         /* 페이지 1 */
         final Slice<MentorCoffeeChatScheduleData> result1 = sut.fetchSuggestedCoffeeChatsByCondition(condition, pageable1);

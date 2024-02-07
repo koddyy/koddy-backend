@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS coffee_chat
     id               BIGINT AUTO_INCREMENT PRIMARY KEY,
     source_member_id BIGINT      NOT NULL,
     target_member_id BIGINT      NOT NULL,
-    status           VARCHAR(30) NOT NULL,
+    status           VARCHAR(50) NOT NULL,
     apply_reason     TEXT        NOT NULL,
     question         TEXT        NULL,
     reject_reason    TEXT        NULL,

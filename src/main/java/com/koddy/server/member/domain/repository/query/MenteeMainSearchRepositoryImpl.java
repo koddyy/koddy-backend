@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.SUGGEST;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
 import static com.koddy.server.coffeechat.domain.model.QCoffeeChat.coffeeChat;
 import static com.koddy.server.member.domain.model.QAvailableLanguage.availableLanguage;
 import static com.koddy.server.member.domain.model.mentor.QMentor.mentor;
@@ -42,7 +42,7 @@ public class MenteeMainSearchRepositoryImpl implements MenteeMainSearchRepositor
                 .innerJoin(mentor).on(mentor.id.eq(coffeeChat.sourceMemberId))
                 .where(
                         coffeeChat.targetMemberId.eq(menteeId),
-                        coffeeChat.status.eq(SUGGEST)
+                        coffeeChat.status.eq(MENTOR_SUGGEST)
                 )
                 .limit(limit)
                 .orderBy(coffeeChat.id.desc())
@@ -54,7 +54,7 @@ public class MenteeMainSearchRepositoryImpl implements MenteeMainSearchRepositor
                 .innerJoin(mentor).on(mentor.id.eq(coffeeChat.sourceMemberId))
                 .where(
                         coffeeChat.targetMemberId.eq(menteeId),
-                        coffeeChat.status.eq(SUGGEST)
+                        coffeeChat.status.eq(MENTOR_SUGGEST)
                 )
                 .fetchOne();
 

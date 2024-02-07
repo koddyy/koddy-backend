@@ -12,13 +12,18 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.COMPLETE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.SUGGEST;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY_COFFEE_CHAT_COMPLETE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_APPROVE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_APPROVE;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_CANCEL_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_COMPLETE_STATUS;
 import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작;
@@ -50,7 +55,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
-                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPLY),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_APPLY),
                     () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
                     () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
@@ -70,7 +75,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
-                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(SUGGEST),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_SUGGEST),
                     () -> assertThat(coffeeChat.getStart()).isNull(),
                     () -> assertThat(coffeeChat.getEnd()).isNull(),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
@@ -98,7 +103,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(rejectReason),
-                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(REJECT),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_REJECT),
                     () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
                     () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
@@ -122,7 +127,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
-                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPROVE),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_APPROVE),
                     () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
                     () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                     () -> assertThat(coffeeChat.getStrategy()).isEqualTo(strategy)
@@ -150,7 +155,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(rejectReason),
-                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(REJECT),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_REJECT),
                     () -> assertThat(coffeeChat.getStart()).isNull(),
                     () -> assertThat(coffeeChat.getEnd()).isNull(),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
@@ -176,7 +181,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isEqualTo(question),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
-                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(PENDING),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_PENDING),
                     () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(start),
                     () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(end),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
@@ -204,7 +209,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNotNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(rejectReason),
-                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(REJECT),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_FINALLY_REJECT),
                     () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
                     () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
@@ -228,7 +233,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNotNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
-                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(APPROVE),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_FINALLY_APPROVE),
                     () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
                     () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                     () -> assertThat(coffeeChat.getStrategy()).isEqualTo(strategy)
@@ -248,10 +253,10 @@ class CoffeeChatTest extends UnitTest {
 
             // when - then
             assertAll(
-                    () -> assertThatThrownBy(applyCoffeeChat::cancel)
+                    () -> assertThatThrownBy(() -> applyCoffeeChat.cancel(MENTEE_CANCEL))
                             .isInstanceOf(CoffeeChatException.class)
                             .hasMessage(CANNOT_CANCEL_STATUS.getMessage()),
-                    () -> assertThatThrownBy(suggestCoffeeChat::cancel)
+                    () -> assertThatThrownBy(() -> suggestCoffeeChat.cancel(MENTOR_CANCEL))
                             .isInstanceOf(CoffeeChatException.class)
                             .hasMessage(CANNOT_CANCEL_STATUS.getMessage())
             );
@@ -264,7 +269,7 @@ class CoffeeChatTest extends UnitTest {
             final CoffeeChat coffeeChat = MenteeFlow.apply(월요일_1주차_20_00_시작, mentee, mentor).apply(1L);
 
             // when
-            coffeeChat.cancel();
+            coffeeChat.cancel(MENTEE_CANCEL);
 
             // then
             assertAll(
@@ -273,7 +278,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
-                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(CANCEL),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_CANCEL),
                     () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
                     () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
@@ -287,7 +292,7 @@ class CoffeeChatTest extends UnitTest {
             final CoffeeChat coffeeChat = MentorFlow.suggest(mentor, mentee).apply(1L);
 
             // when
-            coffeeChat.cancel();
+            coffeeChat.cancel(MENTOR_CANCEL);
 
             // then
             assertAll(
@@ -296,7 +301,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
-                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(CANCEL),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_CANCEL),
                     () -> assertThat(coffeeChat.getStart()).isNull(),
                     () -> assertThat(coffeeChat.getEnd()).isNull(),
                     () -> assertThat(coffeeChat.getStrategy()).isNull()
@@ -316,23 +321,23 @@ class CoffeeChatTest extends UnitTest {
 
             // when - then
             assertAll(
-                    () -> assertThatThrownBy(coffeeChatA::complete)
+                    () -> assertThatThrownBy(() -> coffeeChatA.complete(MENTEE_APPLY_COFFEE_CHAT_COMPLETE))
                             .isInstanceOf(CoffeeChatException.class)
                             .hasMessage(CANNOT_COMPLETE_STATUS.getMessage()),
-                    () -> assertThatThrownBy(coffeeChatB::complete)
+                    () -> assertThatThrownBy(() -> coffeeChatB.complete(MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE))
                             .isInstanceOf(CoffeeChatException.class)
                             .hasMessage(CANNOT_COMPLETE_STATUS.getMessage())
             );
         }
 
         @Test
-        @DisplayName("APPROVE 상태의 커피챗을 진행한 후 완료 상태로 갱신한다")
-        void success() {
+        @DisplayName("멘티가 신청한 APPROVE 상태의 커피챗을 진행한 후 완료 상태로 갱신한다")
+        void successMenteeApply() {
             // given
             final CoffeeChat coffeeChat = MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor).apply(1L);
 
             // when
-            coffeeChat.complete();
+            coffeeChat.complete(MENTEE_APPLY_COFFEE_CHAT_COMPLETE);
 
             // then
             assertAll(
@@ -341,7 +346,30 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                     () -> assertThat(coffeeChat.getQuestion()).isNull(),
                     () -> assertThat(coffeeChat.getRejectReason()).isNull(),
-                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(COMPLETE),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_APPLY_COFFEE_CHAT_COMPLETE),
+                    () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
+                    () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
+                    () -> assertThat(coffeeChat.getStrategy()).isEqualTo(월요일_1주차_20_00_시작.getStrategy())
+            );
+        }
+
+        @Test
+        @DisplayName("멘토가 제안한 APPROVE 상태의 커피챗을 진행한 후 완료 상태로 갱신한다")
+        void successMentorSuggest() {
+            // given
+            final CoffeeChat coffeeChat = MentorFlow.suggestAndFinallyApprove(월요일_1주차_20_00_시작, mentor, mentee).apply(2L);
+
+            // when
+            coffeeChat.complete(MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE);
+
+            // then
+            assertAll(
+                    () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
+                    () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
+                    () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
+                    () -> assertThat(coffeeChat.getQuestion()).isNotNull(),
+                    () -> assertThat(coffeeChat.getRejectReason()).isNull(),
+                    () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE),
                     () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
                     () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                     () -> assertThat(coffeeChat.getStrategy()).isEqualTo(월요일_1주차_20_00_시작.getStrategy())

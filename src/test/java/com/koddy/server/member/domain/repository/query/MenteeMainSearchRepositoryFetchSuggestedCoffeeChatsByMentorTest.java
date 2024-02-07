@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_CANCEL;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -122,10 +123,10 @@ class MenteeMainSearchRepositoryFetchSuggestedCoffeeChatsByMentorTest extends Re
         );
 
         /* cancel 후 limit별 조회 */
-        coffeeChat3.cancel();
-        coffeeChat5.cancel();
-        coffeeChat7.cancel();
-        coffeeChat9.cancel();
+        coffeeChat3.cancel(MENTOR_CANCEL);
+        coffeeChat5.cancel(MENTOR_CANCEL);
+        coffeeChat7.cancel(MENTOR_CANCEL);
+        coffeeChat9.cancel(MENTOR_CANCEL);
 
         final Page<SuggestedCoffeeChatsByMentor> result5 = sut.fetchSuggestedMentors(mentee.getId(), 3);
         final Page<SuggestedCoffeeChatsByMentor> result6 = sut.fetchSuggestedMentors(mentee.getId(), 5);

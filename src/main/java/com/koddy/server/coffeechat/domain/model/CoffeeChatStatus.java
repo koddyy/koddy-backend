@@ -43,4 +43,14 @@ public enum CoffeeChatStatus {
                 .findFirst()
                 .orElseThrow(() -> new CoffeeChatException(INVALID_COFFEECHAT_STATUS));
     }
+
+    public boolean isMenteeFlow() {
+        return Stream.of(MENTEE_APPLY, MENTEE_CANCEL, MENTOR_REJECT, MENTOR_APPROVE, MENTEE_APPLY_COFFEE_CHAT_COMPLETE)
+                .anyMatch(it -> it == this);
+    }
+
+    public boolean isMentorFlow() {
+        return Stream.of(MENTOR_SUGGEST, MENTOR_CANCEL, MENTEE_REJECT, MENTEE_PENDING, MENTOR_FINALLY_REJECT, MENTOR_FINALLY_APPROVE, MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE)
+                .anyMatch(it -> it == this);
+    }
 }

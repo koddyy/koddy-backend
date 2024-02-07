@@ -15,9 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Map;
 
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPLY;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_REJECT;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.body;
@@ -84,7 +85,7 @@ class MenteeCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
             given(getMenteeCoffeeChatScheduleUseCase.getAppliedCoffeeChats(any())).willReturn(new SliceResponse<>(
                     List.of(new MenteeCoffeeChatScheduleData(
                             1L,
-                            APPLY.getValue(),
+                            MENTEE_APPLY.getValue(),
                             mentor.getId(),
                             mentor.getName(),
                             mentor.getProfileImageUrl(),
@@ -178,8 +179,18 @@ class MenteeCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
             given(getMenteeCoffeeChatScheduleUseCase.getSuggestedCoffeeChats(any())).willReturn(new SliceResponse<>(
                     List.of(
                             new MenteeCoffeeChatScheduleData(
+                                    3L,
+                                    MENTOR_FINALLY_REJECT.getValue(),
+                                    mentor.getId(),
+                                    mentor.getName(),
+                                    mentor.getProfileImageUrl(),
+                                    mentor.getUniversityProfile().getSchool(),
+                                    mentor.getUniversityProfile().getMajor(),
+                                    mentor.getUniversityProfile().getEnteredIn()
+                            ),
+                            new MenteeCoffeeChatScheduleData(
                                     2L,
-                                    CANCEL.getValue(),
+                                    MENTEE_REJECT.getValue(),
                                     mentor.getId(),
                                     mentor.getName(),
                                     mentor.getProfileImageUrl(),
@@ -189,7 +200,7 @@ class MenteeCoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                             ),
                             new MenteeCoffeeChatScheduleData(
                                     1L,
-                                    REJECT.getValue(),
+                                    MENTOR_CANCEL.getValue(),
                                     mentor.getId(),
                                     mentor.getName(),
                                     mentor.getProfileImageUrl(),

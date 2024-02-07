@@ -16,8 +16,8 @@ import com.koddy.server.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.APPROVE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.PENDING;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_APPROVE;
 import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
@@ -76,7 +76,7 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
                             () -> assertThat(details.mentee().interestMajor()).isEqualTo(mentee.getInterest().getMajor()),
 
                             () -> assertThat(details.coffeeChat().id()).isEqualTo(coffeeChat.getId()),
-                            () -> assertThat(details.coffeeChat().status()).isEqualTo(PENDING.getValue()),
+                            () -> assertThat(details.coffeeChat().status()).isEqualTo(MENTEE_PENDING.getValue()),
                             () -> assertThat(details.coffeeChat().applyReason()).isNotNull(),
                             () -> assertThat(details.coffeeChat().question()).isNotNull(),
                             () -> assertThat(details.coffeeChat().rejectReason()).isNull(),
@@ -122,7 +122,7 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
                             () -> assertThat(details.mentor().enteredIn()).isEqualTo(mentor.getUniversityProfile().getEnteredIn()),
 
                             () -> assertThat(details.coffeeChat().id()).isEqualTo(coffeeChat.getId()),
-                            () -> assertThat(details.coffeeChat().status()).isEqualTo(APPROVE.getValue()),
+                            () -> assertThat(details.coffeeChat().status()).isEqualTo(MENTOR_APPROVE.getValue()),
                             () -> assertThat(details.coffeeChat().applyReason()).isNotNull(),
                             () -> assertThat(details.coffeeChat().question()).isNull(),
                             () -> assertThat(details.coffeeChat().rejectReason()).isNull(),
@@ -166,7 +166,7 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
                             () -> assertThat(details.mentee().interestMajor()).isEqualTo(mentee.getInterest().getMajor()),
 
                             () -> assertThat(details.coffeeChat().id()).isEqualTo(coffeeChat.getId()),
-                            () -> assertThat(details.coffeeChat().status()).isEqualTo(PENDING.getValue()),
+                            () -> assertThat(details.coffeeChat().status()).isEqualTo(MENTEE_PENDING.getValue()),
                             () -> assertThat(details.coffeeChat().applyReason()).isNotNull(),
                             () -> assertThat(details.coffeeChat().question()).isNotNull(),
                             () -> assertThat(details.coffeeChat().rejectReason()).isNull(),
@@ -199,7 +199,7 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
                             () -> assertThat(details.mentor().enteredIn()).isEqualTo(mentor.getUniversityProfile().getEnteredIn()),
 
                             () -> assertThat(details.coffeeChat().id()).isEqualTo(coffeeChat.getId()),
-                            () -> assertThat(details.coffeeChat().status()).isEqualTo(PENDING.getValue()),
+                            () -> assertThat(details.coffeeChat().status()).isEqualTo(MENTEE_PENDING.getValue()),
                             () -> assertThat(details.coffeeChat().applyReason()).isNotNull(),
                             () -> assertThat(details.coffeeChat().question()).isNotNull(),
                             () -> assertThat(details.coffeeChat().rejectReason()).isNull(),
