@@ -148,7 +148,7 @@ class MentorCoffeeChatQueryRepositoryFetchAppliedCoffeeChatsByConditionTestSched
     }
 
     @Test
-    @DisplayName("2. 멘토가 신청받은 커피챗에 대한 상태별 리스트에 포함된 멘티 정보를 조회한다 [신청 -> APPLY]")
+    @DisplayName("2. 멘토가 신청받은 커피챗에 대한 상태별 리스트에 포함된 멘티 정보를 조회한다 [신청 -> MENTEE_APPLY]")
     void apply() {
         // given
         final AppliedCoffeeChatQueryCondition condition = new AppliedCoffeeChatQueryCondition(mentors[0].getId(), List.of(MENTEE_APPLY));
@@ -200,7 +200,41 @@ class MentorCoffeeChatQueryRepositoryFetchAppliedCoffeeChatsByConditionTestSched
     }
 
     @Test
-    @DisplayName("3. 멘토가 신청받은 커피챗에 대한 상태별 리스트에 포함된 멘티 정보를 조회한다 [예정 -> APPROVE]")
+    @DisplayName("3. 멘토가 신청받은 커피챗에 대한 상태별 리스트에 포함된 멘티 정보를 조회한다 [취소 & 거절 -> MENTEE_CANCEL, MENTOR_REJECT]")
+    void cancelOrReject() {
+        // given
+        final AppliedCoffeeChatQueryCondition condition = new AppliedCoffeeChatQueryCondition(mentors[0].getId(), List.of(MENTEE_CANCEL, MENTOR_REJECT));
+
+        /* 페이지 1 */
+        final Slice<MentorCoffeeChatScheduleData> result1 = sut.fetchAppliedCoffeeChatsByCondition(condition, pageable1);
+        assertAll(
+                () -> assertThat(result1.hasNext()).isFalse(),
+                () -> assertThat(result1.getContent())
+                        .map(MentorCoffeeChatScheduleData::id)
+                        .containsExactly(coffeeChats[14].getId(), coffeeChats[13].getId(), coffeeChats[9].getId(), coffeeChats[1].getId()),
+                () -> assertThat(result1.getContent())
+                        .map(MentorCoffeeChatScheduleData::status)
+                        .containsExactly(
+                                coffeeChats[14].getStatus().getValue(),
+                                coffeeChats[13].getStatus().getValue(),
+                                coffeeChats[9].getStatus().getValue(),
+                                coffeeChats[1].getStatus().getValue()
+                        ),
+                () -> assertThat(result1.getContent())
+                        .map(MentorCoffeeChatScheduleData::menteeId)
+                        .containsExactly(mentees[14].getId(), mentees[13].getId(), mentees[9].getId(), mentees[1].getId())
+        );
+
+        /* 페이지 2 */
+        final Slice<MentorCoffeeChatScheduleData> result2 = sut.fetchAppliedCoffeeChatsByCondition(condition, pageable2);
+        assertAll(
+                () -> assertThat(result2.hasNext()).isFalse(),
+                () -> assertThat(result2.getContent()).isEmpty()
+        );
+    }
+
+    @Test
+    @DisplayName("4. 멘토가 신청받은 커피챗에 대한 상태별 리스트에 포함된 멘티 정보를 조회한다 [예정 -> MENTOR_APPROVE]")
     void approve() {
         // given
         final AppliedCoffeeChatQueryCondition condition = new AppliedCoffeeChatQueryCondition(mentors[0].getId(), List.of(MENTOR_APPROVE));
@@ -234,7 +268,7 @@ class MentorCoffeeChatQueryRepositoryFetchAppliedCoffeeChatsByConditionTestSched
     }
 
     @Test
-    @DisplayName("4. 멘토가 신청받은 커피챗에 대한 상태별 리스트에 포함된 멘티 정보를 조회한다 [완료 -> COMPLETE]")
+    @DisplayName("5. 멘토가 신청받은 커피챗에 대한 상태별 리스트에 포함된 멘티 정보를 조회한다 [완료 -> MENTEE_APPLY_COFFEE_CHAT_COMPLETE]")
     void complete() {
         // given
         final AppliedCoffeeChatQueryCondition condition = new AppliedCoffeeChatQueryCondition(mentors[0].getId(), List.of(MENTEE_APPLY_COFFEE_CHAT_COMPLETE));
@@ -252,40 +286,6 @@ class MentorCoffeeChatQueryRepositoryFetchAppliedCoffeeChatsByConditionTestSched
                 () -> assertThat(result1.getContent())
                         .map(MentorCoffeeChatScheduleData::menteeId)
                         .containsExactly(mentees[18].getId())
-        );
-
-        /* 페이지 2 */
-        final Slice<MentorCoffeeChatScheduleData> result2 = sut.fetchAppliedCoffeeChatsByCondition(condition, pageable2);
-        assertAll(
-                () -> assertThat(result2.hasNext()).isFalse(),
-                () -> assertThat(result2.getContent()).isEmpty()
-        );
-    }
-
-    @Test
-    @DisplayName("5. 멘토가 신청받은 커피챗에 대한 상태별 리스트에 포함된 멘티 정보를 조회한다 [취소 -> CANCEL or REJECT]")
-    void cancelOrReject() {
-        // given
-        final AppliedCoffeeChatQueryCondition condition = new AppliedCoffeeChatQueryCondition(mentors[0].getId(), List.of(MENTEE_CANCEL, MENTOR_REJECT));
-
-        /* 페이지 1 */
-        final Slice<MentorCoffeeChatScheduleData> result1 = sut.fetchAppliedCoffeeChatsByCondition(condition, pageable1);
-        assertAll(
-                () -> assertThat(result1.hasNext()).isFalse(),
-                () -> assertThat(result1.getContent())
-                        .map(MentorCoffeeChatScheduleData::id)
-                        .containsExactly(coffeeChats[14].getId(), coffeeChats[13].getId(), coffeeChats[9].getId(), coffeeChats[1].getId()),
-                () -> assertThat(result1.getContent())
-                        .map(MentorCoffeeChatScheduleData::status)
-                        .containsExactly(
-                                coffeeChats[14].getStatus().getValue(),
-                                coffeeChats[13].getStatus().getValue(),
-                                coffeeChats[9].getStatus().getValue(),
-                                coffeeChats[1].getStatus().getValue()
-                        ),
-                () -> assertThat(result1.getContent())
-                        .map(MentorCoffeeChatScheduleData::menteeId)
-                        .containsExactly(mentees[14].getId(), mentees[13].getId(), mentees[9].getId(), mentees[1].getId())
         );
 
         /* 페이지 2 */

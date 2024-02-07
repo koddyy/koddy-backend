@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("Member -> MenteeDeleter 테스트")
+@DisplayName("Member -> MenteeDeleter 테스트 [IntegrateTest]")
 class MenteeDeleterTest extends IntegrateTest {
     @Autowired
     private MenteeDeleter sut;

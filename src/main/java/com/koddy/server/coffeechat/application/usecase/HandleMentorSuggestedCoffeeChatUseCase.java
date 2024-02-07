@@ -29,7 +29,7 @@ public class HandleMentorSuggestedCoffeeChatUseCase {
         final CoffeeChat coffeeChat = coffeeChatRepository.getMentorSuggestedCoffeeChat(command.coffeeChatId(), command.menteeId());
         final Mentor mentor = mentorRepository.getByIdWithSchedules(coffeeChat.getSourceMemberId());
 
-        reservationAvailabilityChecker.check(mentor, command.start(), command.end());
-        coffeeChat.pendingFromMentorSuggest(command.question(), command.start(), command.end());
+        reservationAvailabilityChecker.check(mentor, command.reservation());
+        coffeeChat.pendingFromMentorSuggest(command.question(), command.reservation());
     }
 }

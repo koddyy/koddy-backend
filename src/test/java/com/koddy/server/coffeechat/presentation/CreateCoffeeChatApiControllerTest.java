@@ -40,7 +40,7 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
     private final String applyReason = "신청/제안 이유...";
 
     @Nested
-    @DisplayName("멘토 -> 멘티 커피챗 제안 API [POST /api/coffeechats/suggest")
+    @DisplayName("멘토 -> 멘티 커피챗 제안 API [POST /api/coffeechats/suggest]")
     class SuggestCoffeeChat {
         private static final String BASE_URL = "/api/coffeechats/suggest";
         private final MentorSuggestCoffeeChatRequest request = new MentorSuggestCoffeeChatRequest(mentee.getId(), applyReason);
@@ -90,7 +90,7 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
     }
 
     @Nested
-    @DisplayName("멘티 -> 멘토 커피챗 신청 API [POST /api/coffeechats/apply")
+    @DisplayName("멘티 -> 멘토 커피챗 신청 API [POST /api/coffeechats/apply]")
     class ApplyCoffeeChat {
         private static final String BASE_URL = "/api/coffeechats/apply";
         private final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest(

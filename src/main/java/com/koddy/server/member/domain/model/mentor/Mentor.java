@@ -110,44 +110,49 @@ public class Mentor extends Member<Mentor> {
         universityAuthentication.complete();
     }
 
-    public void validateReservationData(final Reservation start, final Reservation end) {
+    public void validateReservationData(final Reservation reservation) {
         if (mentoringPeriod == null || schedules.isEmpty()) {
             throw new MemberException(MENTOR_NOT_FILL_IN_SCHEDULE);
         }
 
-        if (isOutOfDate(start)) {
+        if (isOutOfDate(reservation)) {
             throw new MemberException(CANNOT_RESERVATION);
         }
 
-        if (nowAllowedTimeUnit(start, end)) {
+        if (nowAllowedTimeUnit(reservation)) {
             throw new MemberException(CANNOT_RESERVATION);
         }
 
-        if (notAllowedSchedule(start, end)) {
+        if (notAllowedSchedule(reservation)) {
             throw new MemberException(CANNOT_RESERVATION);
         }
     }
 
-    private boolean isOutOfDate(final Reservation start) {
-        return !mentoringPeriod.isDateIncluded(start.toLocalDate());
+    private boolean isOutOfDate(final Reservation reservation) {
+        return !mentoringPeriod.isDateIncluded(reservation.getStart().toLocalDate())
+                || !mentoringPeriod.isDateIncluded(reservation.getEnd().toLocalDate());
     }
 
-    private boolean nowAllowedTimeUnit(final Reservation start, final Reservation end) {
-        return !mentoringPeriod.allowedTimeUnit(start.toLocalDateTime(), end.toLocalDateTime());
+    private boolean nowAllowedTimeUnit(final Reservation reservation) {
+        return !mentoringPeriod.allowedTimeUnit(reservation.getStart(), reservation.getEnd());
     }
 
-    private boolean notAllowedSchedule(final Reservation start, final Reservation end) {
-        final DayOfWeek dayOfWeek = DayOfWeek.of(start.getYear(), start.getMonth(), start.getDay());
+    private boolean notAllowedSchedule(final Reservation reservation) {
+        final DayOfWeek dayOfWeek = DayOfWeek.of(
+                reservation.getStart().getYear(),
+                reservation.getStart().getMonthValue(),
+                reservation.getStart().getDayOfMonth()
+        );
 
         final List<Timeline> filteringWithStart = schedules.stream()
                 .map(Schedule::getTimeline)
                 .filter(it -> it.getDayOfWeek() == dayOfWeek)
-                .filter(it -> it.isTimeIncluded(start.getTime()))
+                .filter(it -> it.isTimeIncluded(reservation.getStart().toLocalTime()))
                 .toList();
         final List<Timeline> filteringWithEnd = schedules.stream()
                 .map(Schedule::getTimeline)
                 .filter(it -> it.getDayOfWeek() == dayOfWeek)
-                .filter(it -> it.isTimeIncluded(end.getTime()))
+                .filter(it -> it.isTimeIncluded(reservation.getEnd().toLocalTime()))
                 .toList();
         return filteringWithStart.isEmpty() || filteringWithEnd.isEmpty();
     }

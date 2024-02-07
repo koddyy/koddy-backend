@@ -33,13 +33,12 @@ public class CreateCoffeeChatUseCase {
         final Mentee mentee = menteeRepository.getById(command.menteeId());
         final Mentor mentor = mentorRepository.getById(command.mentorId());
 
-        reservationAvailabilityChecker.check(mentor, command.start(), command.end());
+        reservationAvailabilityChecker.check(mentor, command.reservation());
         return coffeeChatRepository.save(CoffeeChat.apply(
                 mentee,
                 mentor,
                 command.applyReason(),
-                command.start(),
-                command.end()
+                command.reservation()
         )).getId();
     }
 }

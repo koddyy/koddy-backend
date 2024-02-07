@@ -4,8 +4,6 @@ import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.global.base.BaseEntity;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -59,22 +57,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     private String rejectReason;
 
     @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "year", column = @Column(name = "start_year")),
-            @AttributeOverride(name = "month", column = @Column(name = "start_month")),
-            @AttributeOverride(name = "day", column = @Column(name = "start_day")),
-            @AttributeOverride(name = "time", column = @Column(name = "start_time"))
-    })
-    private Reservation start;
-
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "year", column = @Column(name = "end_year")),
-            @AttributeOverride(name = "month", column = @Column(name = "end_month")),
-            @AttributeOverride(name = "day", column = @Column(name = "end_day")),
-            @AttributeOverride(name = "time", column = @Column(name = "end_time"))
-    })
-    private Reservation end;
+    private Reservation reservation;
 
     @Embedded
     private Strategy strategy;
@@ -86,8 +69,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             final String question,
             final String rejectReason,
             final CoffeeChatStatus status,
-            final Reservation start,
-            final Reservation end,
+            final Reservation reservation,
             final Strategy strategy
     ) {
         this.sourceMemberId = sourceMemberId;
@@ -96,8 +78,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         this.question = question;
         this.rejectReason = rejectReason;
         this.status = status;
-        this.start = start;
-        this.end = end;
+        this.reservation = reservation;
         this.strategy = strategy;
     }
 
@@ -105,8 +86,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             final Mentee mentee,
             final Mentor mentor,
             final String applyReason,
-            final Reservation start,
-            final Reservation end
+            final Reservation reservation
     ) {
         return new CoffeeChat(
                 mentee.getId(),
@@ -115,8 +95,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
                 null,
                 null,
                 MENTEE_APPLY,
-                start,
-                end,
+                reservation,
                 null
         );
     }
@@ -129,7 +108,6 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
                 null,
                 null,
                 MENTOR_SUGGEST,
-                null,
                 null,
                 null
         );
@@ -185,14 +163,13 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     /**
      * 멘토의 제안 -> 멘티의 1차 수락
      */
-    public void pendingFromMentorSuggest(final String question, final Reservation start, final Reservation end) {
+    public void pendingFromMentorSuggest(final String question, final Reservation reservation) {
         if (this.status != MENTOR_SUGGEST) {
             throw new CoffeeChatException(CANNOT_APPROVE_STATUS);
         }
 
         this.question = question;
-        this.start = start;
-        this.end = end;
+        this.reservation = reservation;
         this.status = MENTEE_PENDING;
     }
 
@@ -231,12 +208,8 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         this.status = status;
     }
 
-    public boolean isReservationIncluded(final Reservation target) {
-        return start.isSameDate(target) && isReservationTimeIncluded(target)
-                || end.isSameDate(target) && isReservationTimeIncluded(target);
-    }
-
-    private boolean isReservationTimeIncluded(final Reservation target) {
-        return !target.getTime().isBefore(start.getTime()) && target.getTime().isBefore(end.getTime());
+    public boolean isRequestReservationIncludedSchedules(final Reservation target) {
+        return reservation.isDateTimeIncluded(target.getStart())
+                || reservation.isDateTimeIncluded(target.getEnd());
     }
 }

@@ -6,7 +6,6 @@ public record PendingSuggestedCoffeeChatCommand(
         long menteeId,
         long coffeeChatId,
         String question,
-        Reservation start,
-        Reservation end
+        Reservation reservation
 ) {
 }

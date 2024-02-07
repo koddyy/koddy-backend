@@ -55,8 +55,7 @@ public class CreateCoffeeChatApiController {
                 authenticated.id(),
                 request.mentorId(),
                 request.applyReason(),
-                request.toReservationStart(),
-                request.toReservationEnd()
+                request.toReservation()
         ));
         return ResponseEntity.ok(new CreateCoffeeChatResponse(coffeeChatId));
     }

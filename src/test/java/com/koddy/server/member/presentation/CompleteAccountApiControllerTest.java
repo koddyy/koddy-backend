@@ -120,7 +120,7 @@ class CompleteAccountApiControllerTest extends ControllerTest {
     }
 
     @Nested
-    @DisplayName("멘티 프로필 완성 API [POST /api/mentees/me/complete")
+    @DisplayName("멘티 프로필 완성 API [POST /api/mentees/me/complete]")
     class CompleteMentee {
         private static final String BASE_URL = "/api/mentees/me/complete";
         private final CompleteMenteeProfileRequest request = new CompleteMenteeProfileRequest(MENTEE_1.getIntroduction());

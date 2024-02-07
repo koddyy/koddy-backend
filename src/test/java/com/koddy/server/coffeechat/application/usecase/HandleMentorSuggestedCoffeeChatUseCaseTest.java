@@ -22,7 +22,6 @@ import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -58,15 +57,12 @@ class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
         // then
         assertAll(
                 () -> verify(coffeeChatRepository, times(1)).getMentorSuggestedCoffeeChat(command.coffeeChatId(), command.menteeId()),
-                () -> verify(mentorRepository, times(0)).getByIdWithSchedules(coffeeChat.getSourceMemberId()),
-                () -> verify(reservationAvailabilityChecker, times(0)).check(any(), any(), any()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                 () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(command.rejectReason()),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_REJECT),
-                () -> assertThat(coffeeChat.getStart()).isNull(),
-                () -> assertThat(coffeeChat.getEnd()).isNull(),
+                () -> assertThat(coffeeChat.getReservation()).isNull(),
                 () -> assertThat(coffeeChat.getStrategy()).isNull()
         );
     }
@@ -82,14 +78,13 @@ class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
                 mentee.getId(),
                 coffeeChat.getId(),
                 "질문..",
-                new Reservation(start),
-                new Reservation(start.plusMinutes(30))
+                Reservation.of(start, start.plusMinutes(30))
         );
         given(coffeeChatRepository.getMentorSuggestedCoffeeChat(command.coffeeChatId(), command.menteeId())).willReturn(coffeeChat);
         given(mentorRepository.getByIdWithSchedules(coffeeChat.getSourceMemberId())).willReturn(mentor);
         doNothing()
                 .when(reservationAvailabilityChecker)
-                .check(mentor, command.start(), command.end());
+                .check(mentor, command.reservation());
 
         // when
         sut.pending(command);
@@ -98,15 +93,15 @@ class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
         assertAll(
                 () -> verify(coffeeChatRepository, times(1)).getMentorSuggestedCoffeeChat(command.coffeeChatId(), command.menteeId()),
                 () -> verify(mentorRepository, times(1)).getByIdWithSchedules(coffeeChat.getSourceMemberId()),
-                () -> verify(reservationAvailabilityChecker, times(1)).check(mentor, command.start(), command.end()),
+                () -> verify(reservationAvailabilityChecker, times(1)).check(mentor, command.reservation()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                 () -> assertThat(coffeeChat.getQuestion()).isEqualTo(command.question()),
                 () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_PENDING),
-                () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(start),
-                () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(start.plusMinutes(30)),
+                () -> assertThat(coffeeChat.getReservation().getStart()).isEqualTo(start),
+                () -> assertThat(coffeeChat.getReservation().getEnd()).isEqualTo(start.plusMinutes(30)),
                 () -> assertThat(coffeeChat.getStrategy()).isNull()
         );
     }

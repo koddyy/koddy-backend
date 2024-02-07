@@ -2,7 +2,7 @@ package com.koddy.server.coffeechat.domain.service;
 
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.model.Reservation;
-import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
+import com.koddy.server.coffeechat.domain.repository.query.MentorReservedScheduleQueryRepository;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.exception.MemberException;
 import lombok.RequiredArgsConstructor;
@@ -15,31 +15,26 @@ import static com.koddy.server.member.exception.MemberExceptionCode.CANNOT_RESER
 @Component
 @RequiredArgsConstructor
 public class ReservationAvailabilityChecker {
-    private final CoffeeChatRepository coffeeChatRepository;
+    private final MentorReservedScheduleQueryRepository mentorReservedScheduleQueryRepository;
 
-    public void check(final Mentor mentor, final Reservation start, final Reservation end) {
-        mentor.validateReservationData(start, end);
-        validateAlreadyReservedTime(mentor, start, end);
+    public void check(final Mentor mentor, final Reservation reservation) {
+        mentor.validateReservationData(reservation);
+        validateAlreadyReservedTime(mentor, reservation);
     }
 
-    private void validateAlreadyReservedTime(final Mentor mentor, final Reservation start, final Reservation end) {
-        final List<CoffeeChat> reservedCoffeeChat = coffeeChatRepository.getReservedCoffeeChat(mentor.getId(), start.getYear(), start.getMonth());
-        if (alreadyReserved(reservedCoffeeChat, start, end)) {
+    private void validateAlreadyReservedTime(final Mentor mentor, final Reservation reservation) {
+        final List<CoffeeChat> reservedCoffeeChat = mentorReservedScheduleQueryRepository.fetchReservedCoffeeChat(
+                mentor.getId(),
+                reservation.getStart().getYear(),
+                reservation.getStart().getMonthValue()
+        );
+        if (alreadyReserved(reservedCoffeeChat, reservation)) {
             throw new MemberException(CANNOT_RESERVATION);
         }
     }
 
-    private boolean alreadyReserved(
-            final List<CoffeeChat> reservedCoffeeChat,
-            final Reservation start,
-            final Reservation end
-    ) {
-        final List<CoffeeChat> filteringWithStart = reservedCoffeeChat.stream()
-                .filter(it -> it.isReservationIncluded(start))
-                .toList();
-        final List<CoffeeChat> filteringWithEnd = reservedCoffeeChat.stream()
-                .filter(it -> it.isReservationIncluded(end))
-                .toList();
-        return !filteringWithStart.isEmpty() || !filteringWithEnd.isEmpty();
+    private boolean alreadyReserved(final List<CoffeeChat> reservedCoffeeChat, final Reservation reservation) {
+        return reservedCoffeeChat.stream()
+                .anyMatch(it -> it.isRequestReservationIncludedSchedules(reservation));
     }
 }

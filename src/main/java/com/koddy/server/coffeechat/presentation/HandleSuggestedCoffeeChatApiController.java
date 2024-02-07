@@ -56,8 +56,7 @@ public class HandleSuggestedCoffeeChatApiController {
                 authenticated.id(),
                 coffeeChatId,
                 request.question(),
-                request.toReservationStart(),
-                request.toReservationEnd()
+                request.toReservation()
         ));
         return ResponseEntity.noContent().build();
     }

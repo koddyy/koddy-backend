@@ -21,11 +21,7 @@ public record MenteeApplyCoffeeChatRequest(
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         String end
 ) {
-    public Reservation toReservationStart() {
-        return new Reservation(TimeUtils.toLocalDateTime(start));
-    }
-
-    public Reservation toReservationEnd() {
-        return new Reservation(TimeUtils.toLocalDateTime(end));
+    public Reservation toReservation() {
+        return Reservation.of(TimeUtils.toLocalDateTime(start), TimeUtils.toLocalDateTime(end));
     }
 }

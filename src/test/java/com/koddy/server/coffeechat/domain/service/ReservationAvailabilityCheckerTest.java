@@ -2,7 +2,7 @@ package com.koddy.server.coffeechat.domain.service;
 
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.model.Reservation;
-import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
+import com.koddy.server.coffeechat.domain.repository.query.MentorReservedScheduleQueryRepository;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow;
 import com.koddy.server.member.domain.model.mentee.Mentee;
@@ -35,8 +35,8 @@ import static org.mockito.Mockito.verify;
 
 @DisplayName("CoffeeChat -> ReservationAvailabilityChecker 테스트")
 class ReservationAvailabilityCheckerTest extends UnitTest {
-    private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
-    private final ReservationAvailabilityChecker sut = new ReservationAvailabilityChecker(coffeeChatRepository);
+    private final MentorReservedScheduleQueryRepository mentorReservedScheduleQueryRepository = mock(MentorReservedScheduleQueryRepository.class);
+    private final ReservationAvailabilityChecker sut = new ReservationAvailabilityChecker(mentorReservedScheduleQueryRepository);
 
     private final Mentee mentee = MENTEE_1.toDomain().apply(1L);
 
@@ -55,13 +55,13 @@ class ReservationAvailabilityCheckerTest extends UnitTest {
         final LocalDateTime target2 = LocalDateTime.of(2024, 3, 2, 18, 0);
 
         assertAll(
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target1), new Reservation(target1.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target1, target1.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target2), new Reservation(target2.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target2, target2.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> verify(coffeeChatRepository, times(0)).getReservedCoffeeChat(mentor.getId(), 2024, 2)
+                () -> verify(mentorReservedScheduleQueryRepository, times(0)).fetchReservedCoffeeChat(mentor.getId(), 2024, 2)
         );
     }
 
@@ -92,28 +92,28 @@ class ReservationAvailabilityCheckerTest extends UnitTest {
         final LocalDateTime target7 = LocalDateTime.of(2024, 2, 5, 22, 30);
 
         assertAll(
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target1), new Reservation(target1.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target1, target1.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target2), new Reservation(target2.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target2, target2.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target3), new Reservation(target3.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target3, target3.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target4), new Reservation(target4.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target4, target4.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target5), new Reservation(target5.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target5, target5.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target6), new Reservation(target6.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target6, target6.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target7), new Reservation(target7.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target7, target7.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> verify(coffeeChatRepository, times(0)).getReservedCoffeeChat(mentor.getId(), 2024, 2)
+                () -> verify(mentorReservedScheduleQueryRepository, times(0)).fetchReservedCoffeeChat(mentor.getId(), 2024, 2)
         );
     }
 
@@ -138,22 +138,22 @@ class ReservationAvailabilityCheckerTest extends UnitTest {
         final LocalDateTime start = LocalDateTime.of(2024, 2, 5, 18, 0);
 
         assertAll(
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(start), new Reservation(start.plusMinutes(10))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(start, start.plusMinutes(10))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(start), new Reservation(start.plusMinutes(20))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(start, start.plusMinutes(20))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(start), new Reservation(start.plusMinutes(29))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(start, start.plusMinutes(29))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(start), new Reservation(start.plusMinutes(31))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(start, start.plusMinutes(31))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(start), new Reservation(start.plusMinutes(40))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(start, start.plusMinutes(40))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> verify(coffeeChatRepository, times(0)).getReservedCoffeeChat(mentor.getId(), 2024, 2)
+                () -> verify(mentorReservedScheduleQueryRepository, times(0)).fetchReservedCoffeeChat(mentor.getId(), 2024, 2)
         );
     }
 
@@ -179,45 +179,45 @@ class ReservationAvailabilityCheckerTest extends UnitTest {
         final CoffeeChat coffeeChat1 = MenteeFlow.apply(start1, start1.plusHours(2), mentee, mentor).apply(1L);
         final CoffeeChat coffeeChat2 = MenteeFlow.apply(start2, start2.plusHours(2), mentee, mentor).apply(2L);
         final CoffeeChat coffeeChat3 = MenteeFlow.apply(start3, start3.plusHours(2), mentee, mentor).apply(3L);
-        given(coffeeChatRepository.getReservedCoffeeChat(mentor.getId(), 2024, 2)).willReturn(List.of(coffeeChat1, coffeeChat2, coffeeChat3));
+        given(mentorReservedScheduleQueryRepository.fetchReservedCoffeeChat(mentor.getId(), 2024, 2)).willReturn(List.of(coffeeChat1, coffeeChat2, coffeeChat3));
 
         // when - then
-        final LocalDateTime target1 = LocalDateTime.of(2024, 2, 6, 17, 30);
+        final LocalDateTime target1 = LocalDateTime.of(2024, 2, 6, 17, 50);
         final LocalDateTime target2 = LocalDateTime.of(2024, 2, 6, 18, 0);
         final LocalDateTime target3 = LocalDateTime.of(2024, 2, 6, 19, 50);
-        final LocalDateTime target4 = LocalDateTime.of(2024, 2, 7, 17, 30);
+        final LocalDateTime target4 = LocalDateTime.of(2024, 2, 7, 17, 50);
         final LocalDateTime target5 = LocalDateTime.of(2024, 2, 7, 18, 0);
         final LocalDateTime target6 = LocalDateTime.of(2024, 2, 7, 19, 50);
-        final LocalDateTime target7 = LocalDateTime.of(2024, 2, 8, 17, 30);
+        final LocalDateTime target7 = LocalDateTime.of(2024, 2, 8, 17, 50);
         final LocalDateTime target8 = LocalDateTime.of(2024, 2, 8, 18, 0);
         final LocalDateTime target9 = LocalDateTime.of(2024, 2, 8, 19, 50);
 
         assertAll(
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target1), new Reservation(target1.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target1, target1.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target2), new Reservation(target2.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target2, target2.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target3), new Reservation(target3.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target3, target3.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target4), new Reservation(target4.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target4, target4.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target5), new Reservation(target5.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target5, target5.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target6), new Reservation(target6.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target6, target6.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target7), new Reservation(target7.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target7, target7.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target8), new Reservation(target8.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target8, target8.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage()),
-                () -> assertThatThrownBy(() -> sut.check(mentor, new Reservation(target9), new Reservation(target9.plusMinutes(30))))
+                () -> assertThatThrownBy(() -> sut.check(mentor, Reservation.of(target9, target9.plusMinutes(30))))
                         .isInstanceOf(MemberException.class)
                         .hasMessage(CANNOT_RESERVATION.getMessage())
         );
@@ -245,7 +245,7 @@ class ReservationAvailabilityCheckerTest extends UnitTest {
         final CoffeeChat coffeeChat1 = MenteeFlow.apply(start1, start1.plusMinutes(30), mentee, mentor).apply(1L);
         final CoffeeChat coffeeChat2 = MenteeFlow.apply(start2, start2.plusMinutes(30), mentee, mentor).apply(2L);
         final CoffeeChat coffeeChat3 = MenteeFlow.apply(start3, start3.plusMinutes(30), mentee, mentor).apply(3L);
-        given(coffeeChatRepository.getReservedCoffeeChat(mentor.getId(), 2024, 2)).willReturn(List.of(coffeeChat1, coffeeChat2, coffeeChat3));
+        given(mentorReservedScheduleQueryRepository.fetchReservedCoffeeChat(mentor.getId(), 2024, 2)).willReturn(List.of(coffeeChat1, coffeeChat2, coffeeChat3));
 
         // when - then
         final LocalDateTime target1 = LocalDateTime.of(2024, 2, 6, 17, 0);
@@ -259,15 +259,15 @@ class ReservationAvailabilityCheckerTest extends UnitTest {
         final LocalDateTime target9 = LocalDateTime.of(2024, 2, 8, 20, 0);
 
         assertAll(
-                () -> assertDoesNotThrow(() -> sut.check(mentor, new Reservation(target1), new Reservation(target1.plusMinutes(30)))),
-                () -> assertDoesNotThrow(() -> sut.check(mentor, new Reservation(target2), new Reservation(target2.plusMinutes(30)))),
-                () -> assertDoesNotThrow(() -> sut.check(mentor, new Reservation(target3), new Reservation(target3.plusMinutes(30)))),
-                () -> assertDoesNotThrow(() -> sut.check(mentor, new Reservation(target4), new Reservation(target4.plusMinutes(30)))),
-                () -> assertDoesNotThrow(() -> sut.check(mentor, new Reservation(target5), new Reservation(target5.plusMinutes(30)))),
-                () -> assertDoesNotThrow(() -> sut.check(mentor, new Reservation(target6), new Reservation(target6.plusMinutes(30)))),
-                () -> assertDoesNotThrow(() -> sut.check(mentor, new Reservation(target7), new Reservation(target7.plusMinutes(30)))),
-                () -> assertDoesNotThrow(() -> sut.check(mentor, new Reservation(target8), new Reservation(target8.plusMinutes(30)))),
-                () -> assertDoesNotThrow(() -> sut.check(mentor, new Reservation(target9), new Reservation(target9.plusMinutes(30))))
+                () -> assertDoesNotThrow(() -> sut.check(mentor, Reservation.of(target1, target1.plusMinutes(30)))),
+                () -> assertDoesNotThrow(() -> sut.check(mentor, Reservation.of(target2, target2.plusMinutes(30)))),
+                () -> assertDoesNotThrow(() -> sut.check(mentor, Reservation.of(target3, target3.plusMinutes(30)))),
+                () -> assertDoesNotThrow(() -> sut.check(mentor, Reservation.of(target4, target4.plusMinutes(30)))),
+                () -> assertDoesNotThrow(() -> sut.check(mentor, Reservation.of(target5, target5.plusMinutes(30)))),
+                () -> assertDoesNotThrow(() -> sut.check(mentor, Reservation.of(target6, target6.plusMinutes(30)))),
+                () -> assertDoesNotThrow(() -> sut.check(mentor, Reservation.of(target7, target7.plusMinutes(30)))),
+                () -> assertDoesNotThrow(() -> sut.check(mentor, Reservation.of(target8, target8.plusMinutes(30)))),
+                () -> assertDoesNotThrow(() -> sut.check(mentor, Reservation.of(target9, target9.plusMinutes(30))))
         );
     }
 }
