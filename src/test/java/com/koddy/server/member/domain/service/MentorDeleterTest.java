@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("Member -> MentorDeleter 테스트")
+@DisplayName("Member -> MentorDeleter 테스트 [IntegrateTest]")
 class MentorDeleterTest extends IntegrateTest {
     @Autowired
     private MentorDeleter sut;

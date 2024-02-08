@@ -58,8 +58,8 @@ class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
                 () -> assertThat(coffeeChat.getQuestion()).isNotNull(),
                 () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(command.rejectReason()),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_FINALLY_REJECT),
-                () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(start),
-                () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(start.plusMinutes(30)),
+                () -> assertThat(coffeeChat.getReservation().getStart()).isEqualTo(start),
+                () -> assertThat(coffeeChat.getReservation().getEnd()).isEqualTo(start.plusMinutes(30)),
                 () -> assertThat(coffeeChat.getStrategy()).isNull()
         );
     }
@@ -91,8 +91,8 @@ class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
                 () -> assertThat(coffeeChat.getQuestion()).isNotNull(),
                 () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_FINALLY_APPROVE),
-                () -> assertThat(coffeeChat.getStart().toLocalDateTime()).isEqualTo(start),
-                () -> assertThat(coffeeChat.getEnd().toLocalDateTime()).isEqualTo(start.plusMinutes(30)),
+                () -> assertThat(coffeeChat.getReservation().getStart()).isEqualTo(start),
+                () -> assertThat(coffeeChat.getReservation().getEnd()).isEqualTo(start.plusMinutes(30)),
                 () -> assertThat(coffeeChat.getStrategy().getType()).isEqualTo(command.type()),
                 () -> assertThat(coffeeChat.getStrategy().getValue()).isNotEqualTo(command.value()),
                 () -> assertThat(encryptor.symmetricDecrypt(coffeeChat.getStrategy().getValue())).isEqualTo(command.value())

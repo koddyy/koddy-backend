@@ -19,8 +19,8 @@ public record ReservedSchedule(
             LocalDateTime start,
             LocalDateTime end
     ) {
-        public static Reserved of(final Reservation start, final Reservation end) {
-            return new Reserved(start.toLocalDateTime(), end.toLocalDateTime());
+        public static Reserved from(final Reservation reservation) {
+            return new Reserved(reservation.getStart(), reservation.getEnd());
         }
     }
 
@@ -33,7 +33,7 @@ public record ReservedSchedule(
                         .toList(),
                 mentor.getMentoringTimeUnit(),
                 reservedCoffeeChat.stream()
-                        .map(it -> ReservedSchedule.Reserved.of(it.getStart(), it.getEnd()))
+                        .map(it -> ReservedSchedule.Reserved.from(it.getReservation()))
                         .toList()
         );
     }

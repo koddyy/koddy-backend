@@ -6,7 +6,6 @@ public record MenteeApplyCoffeeChatCommand(
         long menteeId,
         long mentorId,
         String applyReason,
-        Reservation start,
-        Reservation end
+        Reservation reservation
 ) {
 }

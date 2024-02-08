@@ -67,7 +67,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
     @DisplayName("내 일정 커피챗 상세 조회를 진행한다 [MenteeFlow]")
     class GetCoffeeChatScheduleDetailsWithMenteeFlow {
         @Test
-        @DisplayName("1. APPLY 상태 커피챗 상세 조회")
+        @DisplayName("1. MENTEE_APPLY 상태 커피챗 상세 조회")
         void apply() {
             final long coffeeChatId = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(start, end, mentor.id(), mentee.token().accessToken());
 
@@ -99,7 +99,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
         }
 
         @Test
-        @DisplayName("2. CANCEL 상태 커피챗 상세 조회")
+        @DisplayName("2. MENTEE_CANCEL 상태 커피챗 상세 조회")
         void cancel() {
             final long coffeeChatId = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(start, end, mentor.id(), mentee.token().accessToken());
             신청_제안한_커피챗을_취소한다(coffeeChatId, mentee.token().accessToken());
@@ -132,7 +132,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
         }
 
         @Test
-        @DisplayName("3. APPROVE 상태 커피챗 상세 조회")
+        @DisplayName("3. MENTOR_APPROVE 상태 커피챗 상세 조회")
         void approve() {
             final long coffeeChatId = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(start, end, mentor.id(), mentee.token().accessToken());
             멘토가_멘티의_커피챗_신청을_수락한다(coffeeChatId, KAKAO_ID, mentor.token().accessToken());
@@ -165,7 +165,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
         }
 
         @Test
-        @DisplayName("4. REJECT 상태 커피챗 상세 조회")
+        @DisplayName("4. MENTOR_REJECT 상태 커피챗 상세 조회")
         void reject() {
             final long coffeeChatId = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(start, end, mentor.id(), mentee.token().accessToken());
             멘토가_멘티의_커피챗_신청을_거절한다(coffeeChatId, "거절..", mentor.token().accessToken());
@@ -202,7 +202,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
     @DisplayName("내 일정 커피챗 상세 조회를 진행한다 [MentorFlow]")
     class GetCoffeeChatScheduleDetailsWithMentorFlow {
         @Test
-        @DisplayName("1. SUGGEST 상태 커피챗 상세 조회")
+        @DisplayName("1. MENTOR_SUGGEST 상태 커피챗 상세 조회")
         void suggest() {
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
 
@@ -234,7 +234,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
         }
 
         @Test
-        @DisplayName("2. CANCEL 상태 커피챗 상세 조회")
+        @DisplayName("2. MENTOR_CANCEL 상태 커피챗 상세 조회")
         void cancel() {
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
             신청_제안한_커피챗을_취소한다(coffeeChatId, mentor.token().accessToken());
@@ -267,7 +267,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
         }
 
         @Test
-        @DisplayName("3. PENDING 상태 커피챗 상세 조회")
+        @DisplayName("3. MENTEE_PENDING 상태 커피챗 상세 조회")
         void pending() {
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
             멘티가_멘토의_커피챗_제안을_1차_수락한다(coffeeChatId, start, end, mentee.token().accessToken());
@@ -300,7 +300,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
         }
 
         @Test
-        @DisplayName("4. REJECT(1차) 상태 커피챗 상세 조회")
+        @DisplayName("4. MENTEE_REJECT(1차) 상태 커피챗 상세 조회")
         void reject() {
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
             멘티가_멘토의_커피챗_제안을_거절한다(coffeeChatId, "거절..", mentee.token().accessToken());
@@ -333,7 +333,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
         }
 
         @Test
-        @DisplayName("5. APPROVE 상태 커피챗 상세 조회")
+        @DisplayName("5. MENTOR_FINALLY_APPROVE 상태 커피챗 상세 조회")
         void finallyApprove() {
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
             멘티가_멘토의_커피챗_제안을_1차_수락한다(coffeeChatId, start, end, mentee.token().accessToken());
@@ -367,7 +367,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
         }
 
         @Test
-        @DisplayName("6. REJECT(최종) 상태 커피챗 상세 조회")
+        @DisplayName("6. MENTOR_FINALLY_REJECT(최종) 상태 커피챗 상세 조회")
         void finallyReject() {
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
             멘티가_멘토의_커피챗_제안을_1차_수락한다(coffeeChatId, start, end, mentee.token().accessToken());

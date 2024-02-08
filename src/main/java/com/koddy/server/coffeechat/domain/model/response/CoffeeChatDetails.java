@@ -23,8 +23,8 @@ public record CoffeeChatDetails(
                 coffeeChat.getApplyReason(),
                 (coffeeChat.getQuestion() != null) ? coffeeChat.getQuestion() : null,
                 (coffeeChat.getRejectReason() != null) ? coffeeChat.getRejectReason() : null,
-                (coffeeChat.getStart() != null) ? coffeeChat.getStart().toLocalDateTime() : null,
-                (coffeeChat.getEnd() != null) ? coffeeChat.getEnd().toLocalDateTime() : null,
+                (coffeeChat.getReservation() != null) ? coffeeChat.getReservation().getStart() : null,
+                (coffeeChat.getReservation() != null) ? coffeeChat.getReservation().getEnd() : null,
                 (coffeeChat.getStrategy() != null) ? coffeeChat.getStrategy().getType().getEng() : null,
                 (coffeeChat.getStrategy() != null) ? encryptor.symmetricDecrypt(coffeeChat.getStrategy().getValue()) : null
         );

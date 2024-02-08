@@ -149,8 +149,7 @@ public enum CoffeeChatFixture {
                     mentee,
                     mentor,
                     "신청..",
-                    new Reservation(fixture.start),
-                    new Reservation(fixture.end)
+                    Reservation.of(fixture.start, fixture.end)
             );
         }
 
@@ -159,8 +158,7 @@ public enum CoffeeChatFixture {
                     mentee,
                     mentor,
                     "신청..",
-                    new Reservation(start),
-                    new Reservation(end)
+                    Reservation.of(start, end)
             );
         }
 
@@ -169,8 +167,7 @@ public enum CoffeeChatFixture {
                     mentee,
                     mentor,
                     "신청..",
-                    new Reservation(fixture.start),
-                    new Reservation(fixture.end)
+                    Reservation.of(fixture.start, fixture.end)
             );
             coffeeChat.cancel(MENTEE_CANCEL);
             return coffeeChat;
@@ -181,8 +178,7 @@ public enum CoffeeChatFixture {
                     mentee,
                     mentor,
                     "신청..",
-                    new Reservation(start),
-                    new Reservation(end)
+                    Reservation.of(start, end)
             );
             coffeeChat.cancel(MENTEE_CANCEL);
             return coffeeChat;
@@ -193,8 +189,7 @@ public enum CoffeeChatFixture {
                     mentee,
                     mentor,
                     "신청..",
-                    new Reservation(fixture.start),
-                    new Reservation(fixture.end)
+                    Reservation.of(fixture.start, fixture.end)
             );
             coffeeChat.approveFromMenteeApply(fixture.strategy);
             return coffeeChat;
@@ -205,8 +200,7 @@ public enum CoffeeChatFixture {
                     mentee,
                     mentor,
                     "신청..",
-                    new Reservation(start),
-                    new Reservation(end)
+                    Reservation.of(start, end)
             );
             coffeeChat.approveFromMenteeApply(KAKAO_ID.toDomain());
             return coffeeChat;
@@ -217,8 +211,7 @@ public enum CoffeeChatFixture {
                     mentee,
                     mentor,
                     "신청..",
-                    new Reservation(fixture.start),
-                    new Reservation(fixture.end)
+                    Reservation.of(fixture.start, fixture.end)
             );
             coffeeChat.rejectFromMenteeApply("거절..");
             return coffeeChat;
@@ -229,8 +222,7 @@ public enum CoffeeChatFixture {
                     mentee,
                     mentor,
                     "신청..",
-                    new Reservation(start),
-                    new Reservation(end)
+                    Reservation.of(start, end)
             );
             coffeeChat.rejectFromMenteeApply("거절..");
             return coffeeChat;
@@ -241,8 +233,7 @@ public enum CoffeeChatFixture {
                     mentee,
                     mentor,
                     "신청..",
-                    new Reservation(fixture.start),
-                    new Reservation(fixture.end)
+                    Reservation.of(fixture.start, fixture.end)
             );
             coffeeChat.approveFromMenteeApply(fixture.strategy);
             coffeeChat.complete(MENTEE_APPLY_COFFEE_CHAT_COMPLETE);
@@ -254,8 +245,7 @@ public enum CoffeeChatFixture {
                     mentee,
                     mentor,
                     "신청..",
-                    new Reservation(start),
-                    new Reservation(end)
+                    Reservation.of(start, end)
             );
             coffeeChat.approveFromMenteeApply(KAKAO_ID.toDomain());
             coffeeChat.complete(MENTEE_APPLY_COFFEE_CHAT_COMPLETE);
@@ -276,13 +266,13 @@ public enum CoffeeChatFixture {
 
         public static CoffeeChat suggestAndPending(final CoffeeChatFixture fixture, final Mentor mentor, final Mentee mentee) {
             final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(fixture.start), new Reservation(fixture.end));
+            coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(fixture.start, fixture.end));
             return coffeeChat;
         }
 
         public static CoffeeChat suggestAndPending(final LocalDateTime start, final LocalDateTime end, final Mentor mentor, final Mentee mentee) {
             final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(start), new Reservation(end));
+            coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(start, end));
             return coffeeChat;
         }
 
@@ -294,35 +284,35 @@ public enum CoffeeChatFixture {
 
         public static CoffeeChat suggestAndFinallyApprove(final CoffeeChatFixture fixture, final Mentor mentor, final Mentee mentee) {
             final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(fixture.start), new Reservation(fixture.end));
+            coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(fixture.start, fixture.end));
             coffeeChat.approvePendingCoffeeChat(fixture.strategy);
             return coffeeChat;
         }
 
         public static CoffeeChat suggestAndFinallyApprove(final LocalDateTime start, final LocalDateTime end, final Mentor mentor, final Mentee mentee) {
             final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(start), new Reservation(end));
+            coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(start, end));
             coffeeChat.approvePendingCoffeeChat(KAKAO_ID.toDomain());
             return coffeeChat;
         }
 
         public static CoffeeChat suggestAndFinallyReject(final CoffeeChatFixture fixture, final Mentor mentor, final Mentee mentee) {
             final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(fixture.start), new Reservation(fixture.end));
+            coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(fixture.start, fixture.end));
             coffeeChat.rejectPendingCoffeeChat("거절..");
             return coffeeChat;
         }
 
         public static CoffeeChat suggestAndFinallyReject(final LocalDateTime start, final LocalDateTime end, final Mentor mentor, final Mentee mentee) {
             final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(start), new Reservation(end));
+            coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(start, end));
             coffeeChat.rejectPendingCoffeeChat("거절..");
             return coffeeChat;
         }
 
         public static CoffeeChat suggestAndComplete(final CoffeeChatFixture fixture, final Mentor mentor, final Mentee mentee) {
             final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(fixture.start), new Reservation(fixture.end));
+            coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(fixture.start, fixture.end));
             coffeeChat.approvePendingCoffeeChat(fixture.strategy);
             coffeeChat.complete(MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE);
             return coffeeChat;
@@ -330,7 +320,7 @@ public enum CoffeeChatFixture {
 
         public static CoffeeChat suggestAndComplete(final LocalDateTime start, final LocalDateTime end, final Mentor mentor, final Mentee mentee) {
             final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(start), new Reservation(end));
+            coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(start, end));
             coffeeChat.approvePendingCoffeeChat(KAKAO_ID.toDomain());
             coffeeChat.complete(MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE);
             return coffeeChat;
