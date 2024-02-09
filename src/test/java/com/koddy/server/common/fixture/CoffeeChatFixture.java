@@ -255,63 +255,63 @@ public enum CoffeeChatFixture {
 
     public static class MentorFlow {
         public static CoffeeChat suggest(final Mentor mentor, final Mentee mentee) {
-            return CoffeeChat.suggest(mentor, mentee, "신청..");
+            return CoffeeChat.suggest(mentor, mentee, "제안..");
         }
 
         public static CoffeeChat suggestAndCancel(final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
+            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
             coffeeChat.cancel(MENTOR_CANCEL);
             return coffeeChat;
         }
 
         public static CoffeeChat suggestAndPending(final CoffeeChatFixture fixture, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
+            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
             coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(fixture.start, fixture.end));
             return coffeeChat;
         }
 
         public static CoffeeChat suggestAndPending(final LocalDateTime start, final LocalDateTime end, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
+            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
             coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(start, end));
             return coffeeChat;
         }
 
         public static CoffeeChat suggestAndReject(final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
+            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
             coffeeChat.rejectFromMentorSuggest("거절..");
             return coffeeChat;
         }
 
         public static CoffeeChat suggestAndFinallyApprove(final CoffeeChatFixture fixture, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
+            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
             coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(fixture.start, fixture.end));
             coffeeChat.approvePendingCoffeeChat(fixture.strategy);
             return coffeeChat;
         }
 
         public static CoffeeChat suggestAndFinallyApprove(final LocalDateTime start, final LocalDateTime end, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
+            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
             coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(start, end));
             coffeeChat.approvePendingCoffeeChat(KAKAO_ID.toDomain());
             return coffeeChat;
         }
 
         public static CoffeeChat suggestAndFinallyReject(final CoffeeChatFixture fixture, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
+            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
             coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(fixture.start, fixture.end));
             coffeeChat.rejectPendingCoffeeChat("거절..");
             return coffeeChat;
         }
 
         public static CoffeeChat suggestAndFinallyReject(final LocalDateTime start, final LocalDateTime end, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
+            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
             coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(start, end));
             coffeeChat.rejectPendingCoffeeChat("거절..");
             return coffeeChat;
         }
 
         public static CoffeeChat suggestAndComplete(final CoffeeChatFixture fixture, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
+            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
             coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(fixture.start, fixture.end));
             coffeeChat.approvePendingCoffeeChat(fixture.strategy);
             coffeeChat.complete(MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE);
@@ -319,7 +319,7 @@ public enum CoffeeChatFixture {
         }
 
         public static CoffeeChat suggestAndComplete(final LocalDateTime start, final LocalDateTime end, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "신청..");
+            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
             coffeeChat.pendingFromMentorSuggest("질문..", Reservation.of(start, end));
             coffeeChat.approvePendingCoffeeChat(KAKAO_ID.toDomain());
             coffeeChat.complete(MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE);

@@ -53,9 +53,10 @@ class CancelCoffeeChatUseCaseTest extends UnitTest {
                 () -> verify(coffeeChatRepository, times(1)).getAppliedOrSuggestedCoffeeChat(command.coffeeChatId(), command.authenticated().id()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
-                () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
-                () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_CANCEL),
+                () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
+                () -> assertThat(coffeeChat.getSuggestReason()).isNull(),
+                () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                 () -> assertThat(coffeeChat.getReservation().getStart()).isEqualTo(start),
                 () -> assertThat(coffeeChat.getReservation().getEnd()).isEqualTo(start.plusMinutes(30)),
                 () -> assertThat(coffeeChat.getStrategy()).isNull()
@@ -79,9 +80,10 @@ class CancelCoffeeChatUseCaseTest extends UnitTest {
                 () -> verify(coffeeChatRepository, times(1)).getAppliedOrSuggestedCoffeeChat(command.coffeeChatId(), command.authenticated().id()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
-                () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
-                () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_CANCEL),
+                () -> assertThat(coffeeChat.getApplyReason()).isNull(),
+                () -> assertThat(coffeeChat.getSuggestReason()).isNotNull(),
+                () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                 () -> assertThat(coffeeChat.getReservation()).isNull(),
                 () -> assertThat(coffeeChat.getStrategy()).isNull()
         );

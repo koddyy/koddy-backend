@@ -59,9 +59,10 @@ class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
                 () -> verify(coffeeChatRepository, times(1)).getMentorSuggestedCoffeeChat(command.coffeeChatId(), command.menteeId()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
-                () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
-                () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(command.rejectReason()),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_REJECT),
+                () -> assertThat(coffeeChat.getApplyReason()).isNull(),
+                () -> assertThat(coffeeChat.getSuggestReason()).isNotNull(),
+                () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(command.rejectReason()),
                 () -> assertThat(coffeeChat.getReservation()).isNull(),
                 () -> assertThat(coffeeChat.getStrategy()).isNull()
         );
@@ -96,10 +97,11 @@ class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
                 () -> verify(reservationAvailabilityChecker, times(1)).check(mentor, command.reservation()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
-                () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
+                () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_PENDING),
+                () -> assertThat(coffeeChat.getApplyReason()).isNull(),
+                () -> assertThat(coffeeChat.getSuggestReason()).isNotNull(),
                 () -> assertThat(coffeeChat.getQuestion()).isEqualTo(command.question()),
                 () -> assertThat(coffeeChat.getRejectReason()).isNull(),
-                () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_PENDING),
                 () -> assertThat(coffeeChat.getReservation().getStart()).isEqualTo(start),
                 () -> assertThat(coffeeChat.getReservation().getEnd()).isEqualTo(start.plusMinutes(30)),
                 () -> assertThat(coffeeChat.getStrategy()).isNull()

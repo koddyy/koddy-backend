@@ -8,7 +8,8 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.model.response.CoffeeChatScheduleDetails;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.common.UnitTest;
-import com.koddy.server.common.fixture.CoffeeChatFixture;
+import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow;
+import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow;
 import com.koddy.server.global.utils.encrypt.Encryptor;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -47,7 +48,7 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
     @DisplayName("멘토 내 일정의 커피챗 상세 정보를 조회한다")
     void convertForMentor() {
         // given
-        final CoffeeChat coffeeChat = CoffeeChatFixture.MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L);
+        final CoffeeChat coffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L);
 
         given(coffeeChatRepository.getById(coffeeChat.getId())).willReturn(coffeeChat);
         given(memberRepository.getById(coffeeChat.getSourceMemberId())).willReturn(mentor);
@@ -77,7 +78,8 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
 
                             () -> assertThat(details.coffeeChat().id()).isEqualTo(coffeeChat.getId()),
                             () -> assertThat(details.coffeeChat().status()).isEqualTo(MENTEE_PENDING.getValue()),
-                            () -> assertThat(details.coffeeChat().applyReason()).isNotNull(),
+                            () -> assertThat(details.coffeeChat().applyReason()).isNull(),
+                            () -> assertThat(details.coffeeChat().suggestReason()).isNotNull(),
                             () -> assertThat(details.coffeeChat().question()).isNotNull(),
                             () -> assertThat(details.coffeeChat().rejectReason()).isNull(),
                             () -> assertThat(details.coffeeChat().start()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
@@ -93,7 +95,7 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
     @DisplayName("멘티 내 일정의 커피챗 상세 정보를 조회한다")
     void convertForMentee() {
         // given
-        final CoffeeChat coffeeChat = CoffeeChatFixture.MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor).apply(1L);
+        final CoffeeChat coffeeChat = MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor).apply(1L);
 
         given(coffeeChatRepository.getById(coffeeChat.getId())).willReturn(coffeeChat);
         given(memberRepository.getById(coffeeChat.getSourceMemberId())).willReturn(mentee);
@@ -124,6 +126,7 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
                             () -> assertThat(details.coffeeChat().id()).isEqualTo(coffeeChat.getId()),
                             () -> assertThat(details.coffeeChat().status()).isEqualTo(MENTOR_APPROVE.getValue()),
                             () -> assertThat(details.coffeeChat().applyReason()).isNotNull(),
+                            () -> assertThat(details.coffeeChat().suggestReason()).isNull(),
                             () -> assertThat(details.coffeeChat().question()).isNull(),
                             () -> assertThat(details.coffeeChat().rejectReason()).isNull(),
                             () -> assertThat(details.coffeeChat().start()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
@@ -139,7 +142,7 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
     @DisplayName("커피챗 상세 정보를 조회한다 [동일 커피챗 -> 멘토 입장 & 멘티 입장]")
     void invoke() {
         // given
-        final CoffeeChat coffeeChat = CoffeeChatFixture.MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L);
+        final CoffeeChat coffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L);
 
         given(coffeeChatRepository.getById(coffeeChat.getId())).willReturn(coffeeChat);
         given(memberRepository.getById(coffeeChat.getSourceMemberId())).willReturn(mentor);
@@ -167,7 +170,8 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
 
                             () -> assertThat(details.coffeeChat().id()).isEqualTo(coffeeChat.getId()),
                             () -> assertThat(details.coffeeChat().status()).isEqualTo(MENTEE_PENDING.getValue()),
-                            () -> assertThat(details.coffeeChat().applyReason()).isNotNull(),
+                            () -> assertThat(details.coffeeChat().applyReason()).isNull(),
+                            () -> assertThat(details.coffeeChat().suggestReason()).isNotNull(),
                             () -> assertThat(details.coffeeChat().question()).isNotNull(),
                             () -> assertThat(details.coffeeChat().rejectReason()).isNull(),
                             () -> assertThat(details.coffeeChat().start()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
@@ -200,7 +204,8 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
 
                             () -> assertThat(details.coffeeChat().id()).isEqualTo(coffeeChat.getId()),
                             () -> assertThat(details.coffeeChat().status()).isEqualTo(MENTEE_PENDING.getValue()),
-                            () -> assertThat(details.coffeeChat().applyReason()).isNotNull(),
+                            () -> assertThat(details.coffeeChat().applyReason()).isNull(),
+                            () -> assertThat(details.coffeeChat().suggestReason()).isNotNull(),
                             () -> assertThat(details.coffeeChat().question()).isNotNull(),
                             () -> assertThat(details.coffeeChat().rejectReason()).isNull(),
                             () -> assertThat(details.coffeeChat().start()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
