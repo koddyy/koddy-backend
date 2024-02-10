@@ -63,8 +63,7 @@ public class OAuthAcceptanceTest extends AcceptanceTest {
                     .header(SET_COOKIE, notNullValue(String.class))
                     .cookie(REFRESH_TOKEN_HEADER, notNullValue(String.class))
                     .body("id", notNullValue(Long.class))
-                    .body("name", is(MENTOR_1.getName()))
-                    .body("profileImageUrl", is(MENTOR_1.getProfileImageUrl()));
+                    .body("name", is(MENTOR_1.getName()));
         }
     }
 

@@ -41,15 +41,14 @@ public class ManageAccountApiController {
         final AuthMember authMember = signUpUsecase.signUpMentor(new SignUpMentorCommand(
                 request.toSocialPlatform(),
                 request.name(),
-                request.profileImageUrl(),
                 request.toLanguages(),
                 request.toUniversityProfile()
         ));
         tokenResponseWriter.applyToken(response, authMember.token());
+
         return ResponseEntity.ok(new LoginResponse(
                 authMember.id(),
-                authMember.name(),
-                authMember.profileImageUrl()
+                authMember.name()
         ));
     }
 
@@ -62,16 +61,15 @@ public class ManageAccountApiController {
         final AuthMember authMember = signUpUsecase.signUpMentee(new SignUpMenteeCommand(
                 request.toSocialPlatform(),
                 request.name(),
-                request.profileImageUrl(),
                 request.toNationality(),
                 request.toLanguages(),
                 request.toInterest()
         ));
         tokenResponseWriter.applyToken(response, authMember.token());
+
         return ResponseEntity.ok(new LoginResponse(
                 authMember.id(),
-                authMember.name(),
-                authMember.profileImageUrl()
+                authMember.name()
         ));
     }
 

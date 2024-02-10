@@ -49,7 +49,6 @@ public class MemberAcceptanceStep {
                 fixture.getPlatform().getSocialId(),
                 fixture.getPlatform().getEmail().getValue(),
                 fixture.getName(),
-                fixture.getProfileImageUrl(),
                 new LanguageRequest(
                         fixture.getLanguages()
                                 .stream()
@@ -94,7 +93,6 @@ public class MemberAcceptanceStep {
                 fixture.getPlatform().getSocialId(),
                 fixture.getPlatform().getEmail().getValue(),
                 fixture.getName(),
-                fixture.getProfileImageUrl(),
                 fixture.getNationality().getCode(),
                 new LanguageRequest(
                         fixture.getLanguages()
@@ -136,6 +134,7 @@ public class MemberAcceptanceStep {
 
         final CompleteMentorProfileRequest request = new CompleteMentorProfileRequest(
                 fixture.getIntroduction(),
+                fixture.getProfileImageUrl(),
                 new MentoringPeriodRequest(
                         fixture.getMentoringPeriod().getStartDate(),
                         fixture.getMentoringPeriod().getEndDate()
@@ -166,7 +165,10 @@ public class MemberAcceptanceStep {
                 .toUri()
                 .getPath();
 
-        final CompleteMenteeProfileRequest request = new CompleteMenteeProfileRequest(fixture.getIntroduction());
+        final CompleteMenteeProfileRequest request = new CompleteMenteeProfileRequest(
+                fixture.getIntroduction(),
+                fixture.getProfileImageUrl()
+        );
 
         return patchRequestWithAccessToken(uri, request, accessToken);
     }

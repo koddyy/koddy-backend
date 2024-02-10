@@ -48,20 +48,26 @@ public class Mentor extends Member<Mentor> {
     public Mentor(
             final SocialPlatform platform,
             final String name,
-            final String profileImageUrl,
             final List<Language> languages,
             final UniversityProfile universityProfile
     ) {
-        super(platform, name, profileImageUrl, KOREA, MENTOR, languages);
+        super(
+                platform,
+                name,
+                KOREA,
+                MENTOR,
+                languages
+        );
         this.universityProfile = universityProfile;
     }
 
     public void completeInfo(
             final String introduction,
+            final String profileImageUrl,
             final MentoringPeriod mentoringPeriod,
             final List<Timeline> timelines
     ) {
-        super.completeInfo(introduction);
+        super.completeInfo(introduction, profileImageUrl);
         this.mentoringPeriod = mentoringPeriod;
         applySchedules(timelines);
         super.checkProfileCompleted();
@@ -160,6 +166,7 @@ public class Mentor extends Member<Mentor> {
     @Override
     public boolean isProfileComplete() {
         return StringUtils.hasText(introduction)
+                && StringUtils.hasText(profileImageUrl)
                 && mentoringPeriod != null
                 && !CollectionUtils.isEmpty(schedules);
     }

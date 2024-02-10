@@ -8,6 +8,7 @@ import java.util.List;
 
 public record CompleteMentorProfileRequest(
         String introduction,
+        String profileImageUrl,
         MentoringPeriodRequest period,
         List<MentorScheduleRequest> schedules
 ) {

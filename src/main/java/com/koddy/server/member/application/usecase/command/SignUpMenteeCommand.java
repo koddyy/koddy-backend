@@ -11,7 +11,6 @@ import java.util.List;
 public record SignUpMenteeCommand(
         SocialPlatform platform,
         String name,
-        String profileImageUrl,
         Nationality nationality,
         List<Language> languages,
         Interest interest
@@ -20,7 +19,6 @@ public record SignUpMenteeCommand(
         return new Mentee(
                 platform,
                 name,
-                profileImageUrl,
                 nationality,
                 languages,
                 interest

@@ -163,20 +163,20 @@ public enum MentorFixture {
     private final List<Timeline> timelines;
 
     public Mentor toDomain() {
-        final Mentor mentor = new Mentor(platform, name, profileImageUrl, languages, universityProfile);
-        mentor.completeInfo(introduction, mentoringPeriod, timelines);
+        final Mentor mentor = new Mentor(platform, name, languages, universityProfile);
+        mentor.completeInfo(introduction, profileImageUrl, mentoringPeriod, timelines);
         return mentor;
     }
 
     public Mentor toDomainWithLanguages(final List<Language> languages) {
-        final Mentor mentor = new Mentor(platform, name, profileImageUrl, languages, universityProfile);
-        mentor.completeInfo(introduction, mentoringPeriod, timelines);
+        final Mentor mentor = new Mentor(platform, name, languages, universityProfile);
+        mentor.completeInfo(introduction, profileImageUrl, mentoringPeriod, timelines);
         return mentor;
     }
 
     public Mentor toDomainWithMentoringInfo(final MentoringPeriod mentoringPeriod, final List<Timeline> timelines) {
-        final Mentor mentor = new Mentor(platform, name, profileImageUrl, languages, universityProfile);
-        mentor.completeInfo(introduction, mentoringPeriod, timelines);
+        final Mentor mentor = new Mentor(platform, name, languages, universityProfile);
+        mentor.completeInfo(introduction, profileImageUrl, mentoringPeriod, timelines);
         return mentor;
     }
 
@@ -185,8 +185,8 @@ public enum MentorFixture {
             final MentoringPeriod mentoringPeriod,
             final List<Timeline> timelines
     ) {
-        final Mentor mentor = new Mentor(platform, name, profileImageUrl, languages, universityProfile);
-        mentor.completeInfo(introduction, mentoringPeriod, timelines);
+        final Mentor mentor = new Mentor(platform, name, languages, universityProfile);
+        mentor.completeInfo(introduction, profileImageUrl, mentoringPeriod, timelines);
         return mentor;
     }
 
@@ -244,7 +244,6 @@ public enum MentorFixture {
         return new AuthMember(
                 memberId,
                 this.name,
-                this.profileImageUrl,
                 new AuthToken(accessToken, refreshToken)
         );
     }
@@ -260,7 +259,6 @@ public enum MentorFixture {
         return new AuthMember(
                 memberId,
                 this.name,
-                this.profileImageUrl,
                 new AuthToken(accessToken, refreshToken)
         );
     }

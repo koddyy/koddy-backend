@@ -60,7 +60,6 @@ class ManageAccountApiControllerTest extends ControllerTest {
                     MENTOR_1.getPlatform().getSocialId(),
                     MENTOR_1.getPlatform().getEmail().getValue(),
                     MENTOR_1.getName(),
-                    MENTOR_1.getProfileImageUrl(),
                     new LanguageRequest(
                             Language.Category.KR.getCode(),
                             List.of(
@@ -84,7 +83,6 @@ class ManageAccountApiControllerTest extends ControllerTest {
                                     body("socialId", "소셜 플랫폼 고유 ID", "서버에서 응답한 socialId 그대로 포함", true),
                                     body("email", "이메일", true),
                                     body("name", "이름", true),
-                                    body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("languages", "사용 가능한 언어", "KR EN CN JP VN", true),
                                     body("languages.main", "메인 언어", "1개", true),
                                     body("languages.sub[]", "서브 언어", "0..N개", false),
@@ -100,8 +98,7 @@ class ManageAccountApiControllerTest extends ControllerTest {
                             ),
                             responseFields(
                                     body("id", "사용자 ID(PK)"),
-                                    body("name", "사용자 이름"),
-                                    body("profileImageUrl", "사용자 프로필 이미지")
+                                    body("name", "사용자 이름")
                             )
                     ))
             );
@@ -125,7 +122,6 @@ class ManageAccountApiControllerTest extends ControllerTest {
                     MENTEE_1.getPlatform().getSocialId(),
                     MENTEE_1.getPlatform().getEmail().getValue(),
                     MENTEE_1.getName(),
-                    MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getNationality().getCode(),
                     new LanguageRequest(Language.Category.KR.getCode(), List.of()),
                     MENTEE_1.getInterest().getSchool(),
@@ -142,7 +138,6 @@ class ManageAccountApiControllerTest extends ControllerTest {
                                     body("socialId", "소셜 플랫폼 고유 ID", "서버에서 응답한 socialId 그대로 포함", true),
                                     body("email", "이메일", true),
                                     body("name", "이름", true),
-                                    body("profileImageUrl", "프로필 이미지 URL", true),
                                     body("nationality", "국적", "KR EN CN JP VN ETC", true),
                                     body("languages", "사용 가능한 언어", "KR EN CN JP VN", true),
                                     body("languages.main", "메인 언어", "1개", true),
@@ -158,8 +153,7 @@ class ManageAccountApiControllerTest extends ControllerTest {
                             ),
                             responseFields(
                                     body("id", "사용자 ID(PK)"),
-                                    body("name", "사용자 이름"),
-                                    body("profileImageUrl", "사용자 프로필 이미지")
+                                    body("name", "사용자 이름")
                             )
                     ))
             );

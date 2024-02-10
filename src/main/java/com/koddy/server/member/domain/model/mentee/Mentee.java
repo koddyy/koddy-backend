@@ -30,17 +30,25 @@ public class Mentee extends Member<Mentee> {
     public Mentee(
             final SocialPlatform platform,
             final String name,
-            final String profileImageUrl,
             final Nationality nationality,
             final List<Language> languages,
             final Interest interest
     ) {
-        super(platform, name, profileImageUrl, nationality, MENTEE, languages);
+        super(
+                platform,
+                name,
+                nationality,
+                MENTEE,
+                languages
+        );
         this.interest = interest;
     }
 
-    public void completeInfo(final String introduction) {
-        super.completeInfo(introduction);
+    public void completeInfo(
+            final String introduction,
+            final String profileImageUrl
+    ) {
+        super.completeInfo(introduction, profileImageUrl);
         super.checkProfileCompleted();
     }
 
@@ -60,6 +68,7 @@ public class Mentee extends Member<Mentee> {
 
     @Override
     public boolean isProfileComplete() {
-        return StringUtils.hasText(introduction);
+        return StringUtils.hasText(introduction)
+                && StringUtils.hasText(profileImageUrl);
     }
 }

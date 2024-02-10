@@ -40,6 +40,7 @@ class CompleteAccountApiControllerTest extends ControllerTest {
         private static final String BASE_URL = "/api/mentors/me/complete";
         private final CompleteMentorProfileRequest request = new CompleteMentorProfileRequest(
                 MENTOR_1.getIntroduction(),
+                MENTOR_1.getProfileImageUrl(),
                 new MentoringPeriodRequest(
                         MENTOR_1.getMentoringPeriod().getStartDate(),
                         MENTOR_1.getMentoringPeriod().getEndDate()
@@ -74,6 +75,7 @@ class CompleteAccountApiControllerTest extends ControllerTest {
                     failureDocsWithAccessToken("MemberApi/Complete/Mentor/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("introduction", "자기소개", false),
+                                    body("profileImageUrl", "프로필 이미지", false),
                                     body("period", "멘토링 시간 관련 설정", false),
                                     body("period.startDate", "멘토링 시작 날짜", "[KST] yyyy-MM-dd", false),
                                     body("period.endDate", "멘토링 종료 날짜", "[KST] yyyy-MM-dd", false),
@@ -104,6 +106,7 @@ class CompleteAccountApiControllerTest extends ControllerTest {
                     successDocsWithAccessToken("MemberApi/Complete/Mentor/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("introduction", "자기소개", false),
+                                    body("profileImageUrl", "프로필 이미지", false),
                                     body("period", "멘토링 시간 관련 설정", false),
                                     body("period.startDate", "멘토링 시작 날짜", "[KST] yyyy-MM-dd", false),
                                     body("period.endDate", "멘토링 종료 날짜", "[KST] yyyy-MM-dd", false),
@@ -123,7 +126,10 @@ class CompleteAccountApiControllerTest extends ControllerTest {
     @DisplayName("멘티 프로필 완성 API [POST /api/mentees/me/complete]")
     class CompleteMentee {
         private static final String BASE_URL = "/api/mentees/me/complete";
-        private final CompleteMenteeProfileRequest request = new CompleteMenteeProfileRequest(MENTEE_1.getIntroduction());
+        private final CompleteMenteeProfileRequest request = new CompleteMenteeProfileRequest(
+                MENTEE_1.getIntroduction(),
+                MENTEE_1.getProfileImageUrl()
+        );
 
         @Test
         @DisplayName("멘티가 아니면 권한이 없다")
@@ -138,7 +144,8 @@ class CompleteAccountApiControllerTest extends ControllerTest {
                     ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
                     failureDocsWithAccessToken("MemberApi/Complete/Mentee/Failure", createHttpSpecSnippets(
                             requestFields(
-                                    body("introduction", "자기소개", false)
+                                    body("introduction", "자기소개", false),
+                                    body("profileImageUrl", "프로필 이미지", false)
                             )
                     ))
             );
@@ -159,7 +166,8 @@ class CompleteAccountApiControllerTest extends ControllerTest {
                     status().isNoContent(),
                     successDocsWithAccessToken("MemberApi/Complete/Mentee/Success", createHttpSpecSnippets(
                             requestFields(
-                                    body("introduction", "자기소개", false)
+                                    body("introduction", "자기소개", false),
+                                    body("profileImageUrl", "프로필 이미지", false)
                             )
                     ))
             );

@@ -55,7 +55,6 @@ class MentorTest extends UnitTest {
             assertThatThrownBy(() -> new Mentor(
                     MENTOR_1.getPlatform(),
                     MENTOR_1.name(),
-                    MENTOR_1.getProfileImageUrl(),
                     languages,
                     MENTOR_1.getUniversityProfile()
             ))
@@ -70,7 +69,6 @@ class MentorTest extends UnitTest {
             final Mentor mentor = new Mentor(
                     MENTOR_1.getPlatform(),
                     MENTOR_1.getName(),
-                    MENTOR_1.getProfileImageUrl(),
                     MENTOR_1.getLanguages(),
                     MENTOR_1.getUniversityProfile()
             );
@@ -83,7 +81,6 @@ class MentorTest extends UnitTest {
                     () -> assertThat(mentor.getPlatform().getEmail().getValue()).isEqualTo(MENTOR_1.getPlatform().getEmail().getValue()),
                     () -> assertThat(mentor.getName()).isEqualTo(MENTOR_1.getName()),
                     () -> assertThat(mentor.getNationality()).isEqualTo(KOREA),
-                    () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(MENTOR_1.getProfileImageUrl()),
                     () -> assertThat(mentor.getStatus()).isEqualTo(ACTIVE),
                     () -> assertThat(mentor.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTOR_1.getLanguages()),
                     () -> assertThat(mentor.getRole()).isEqualTo(MENTOR),
@@ -93,6 +90,7 @@ class MentorTest extends UnitTest {
 
                     // Optional
                     () -> assertThat(mentor.getIntroduction()).isNull(),
+                    () -> assertThat(mentor.getProfileImageUrl()).isNull(),
                     () -> assertThat(mentor.getUniversityAuthentication()).isNull(),
                     () -> assertThat(mentor.getMentoringPeriod()).isNull(),
                     () -> assertThat(mentor.getSchedules()).isEmpty(),
@@ -104,7 +102,7 @@ class MentorTest extends UnitTest {
     }
 
     @Test
-    @DisplayName("Mentor 프로필이 완성되었는지 확인한다 (자기소개, 멘토링 기간, 스케줄)")
+    @DisplayName("Mentor 프로필이 완성되었는지 확인한다 [자기소개 & 프로필 이미지 & 멘토링 기간 & 스케줄]")
     void isProfileComplete() {
         /* mentorA 완성 */
         final Mentor mentorA = MENTOR_1.toDomain();
@@ -114,32 +112,45 @@ class MentorTest extends UnitTest {
         final Mentor mentorB = new Mentor(
                 MENTOR_2.getPlatform(),
                 MENTOR_2.getName(),
-                MENTOR_2.getProfileImageUrl(),
                 MENTOR_2.getLanguages(),
                 MENTOR_2.getUniversityProfile()
         );
         assertThat(mentorB.isProfileComplete()).isFalse();
 
         /* mentorB 프로필 완성 */
-        mentorB.completeInfo(MENTOR_2.getIntroduction(), MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain(), TimelineFixture.allDays());
+        mentorB.completeInfo(
+                MENTOR_2.getIntroduction(),
+                MENTOR_2.getProfileImageUrl(),
+                MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain(),
+                TimelineFixture.allDays()
+        );
         assertThat(mentorB.isProfileComplete()).isTrue();
 
         /* mentorC 1차 회원가입 */
         final Mentor mentorC = new Mentor(
                 MENTOR_3.getPlatform(),
                 MENTOR_3.getName(),
-                MENTOR_3.getProfileImageUrl(),
                 MENTOR_3.getLanguages(),
                 MENTOR_3.getUniversityProfile()
         );
         assertThat(mentorC.isProfileComplete()).isFalse();
 
         /* mentorC 자기소개 기입 */
-        mentorC.completeInfo(MENTOR_3.getIntroduction(), null, List.of());
+        mentorC.completeInfo(
+                MENTOR_3.getIntroduction(),
+                MENTOR_3.getProfileImageUrl(),
+                null,
+                List.of()
+        );
         assertThat(mentorC.isProfileComplete()).isFalse();
 
         /* mentorC 멘토링 스케줄 */
-        mentorC.completeInfo(MENTOR_3.getIntroduction(), MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain(), TimelineFixture.allDays());
+        mentorC.completeInfo(
+                MENTOR_3.getIntroduction(),
+                MENTOR_3.getProfileImageUrl(),
+                MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain(),
+                TimelineFixture.allDays()
+        );
         assertThat(mentorC.isProfileComplete()).isTrue();
     }
 
@@ -273,7 +284,6 @@ class MentorTest extends UnitTest {
             final Mentor mentor = new Mentor(
                     MENTOR_1.getPlatform(),
                     MENTOR_1.getName(),
-                    MENTOR_1.getProfileImageUrl(),
                     MENTOR_1.getLanguages(),
                     MENTOR_1.getUniversityProfile()
             );

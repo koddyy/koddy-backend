@@ -19,12 +19,17 @@ public class CompleteProfileUseCase {
     @KoddyWritableTransactional
     public void completeMentor(final CompleteMentorProfileCommand command) {
         final Mentor mentor = mentorRepository.getById(command.mentorId());
-        mentor.completeInfo(command.introduction(), command.mentoringPeriod(), command.timelines());
+        mentor.completeInfo(
+                command.introduction(),
+                command.profileImageUrl(),
+                command.mentoringPeriod(),
+                command.timelines()
+        );
     }
 
     @KoddyWritableTransactional
     public void completeMentee(final CompleteMenteeProfileCommand command) {
         final Mentee mentee = menteeRepository.getById(command.menteeId());
-        mentee.completeInfo(command.introduction());
+        mentee.completeInfo(command.introduction(), command.profileImageUrl());
     }
 }

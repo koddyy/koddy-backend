@@ -25,9 +25,6 @@ public record SignUpMentorRequest(
         @NotBlank(message = "이름은 필수입니다.")
         String name,
 
-        @NotBlank(message = "프로필 이미지 URL은 필수입니다.")
-        String profileImageUrl,
-
         @NotNull(message = "사용 가능한 언어를 선택해주세요.")
         LanguageRequest languages,
 

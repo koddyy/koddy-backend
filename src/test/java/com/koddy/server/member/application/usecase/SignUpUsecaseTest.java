@@ -39,17 +39,17 @@ class SignUpUsecaseTest extends UnitTest {
     @Nested
     @DisplayName("멘토 회원가입 + 로그인")
     class SignUpMentor {
+        private final SignUpMentorCommand command = new SignUpMentorCommand(
+                MENTOR_1.getPlatform(),
+                MENTOR_1.getName(),
+                MENTOR_1.getLanguages(),
+                MENTOR_1.getUniversityProfile()
+        );
+
         @Test
         @DisplayName("이메일에 해당하는 계정이 있으면 회원가입이 불가능하다")
         void throwExceptionByAccountAlreadyExists() {
             // given
-            final SignUpMentorCommand command = new SignUpMentorCommand(
-                    MENTOR_1.getPlatform(),
-                    MENTOR_1.getName(),
-                    MENTOR_1.getProfileImageUrl(),
-                    MENTOR_1.getLanguages(),
-                    MENTOR_1.getUniversityProfile()
-            );
             given(memberRepository.existsByPlatformSocialId(command.platform().getSocialId())).willReturn(true);
 
             // when - then
@@ -67,13 +67,6 @@ class SignUpUsecaseTest extends UnitTest {
         @DisplayName("멘토 회원가입 후 바로 로그인 처리를 진행한다")
         void success() {
             // given
-            final SignUpMentorCommand command = new SignUpMentorCommand(
-                    MENTOR_1.getPlatform(),
-                    MENTOR_1.getName(),
-                    MENTOR_1.getProfileImageUrl(),
-                    MENTOR_1.getLanguages(),
-                    MENTOR_1.getUniversityProfile()
-            );
             given(memberRepository.existsByPlatformSocialId(command.platform().getSocialId())).willReturn(false);
 
             final Mentor mentor = MENTOR_1.toDomain().apply(1L);
@@ -92,7 +85,6 @@ class SignUpUsecaseTest extends UnitTest {
                     () -> verify(tokenIssuer, times(1)).provideAuthorityToken(mentor.getId(), mentor.getAuthority()),
                     () -> assertThat(authMember.id()).isEqualTo(mentor.getId()),
                     () -> assertThat(authMember.name()).isEqualTo(mentor.getName()),
-                    () -> assertThat(authMember.profileImageUrl()).isEqualTo(mentor.getProfileImageUrl()),
                     () -> assertThat(authMember.token().accessToken()).isEqualTo(ACCESS_TOKEN),
                     () -> assertThat(authMember.token().refreshToken()).isEqualTo(REFRESH_TOKEN)
             );
@@ -102,18 +94,18 @@ class SignUpUsecaseTest extends UnitTest {
     @Nested
     @DisplayName("멘티 회원가입 + 로그인")
     class SignUpMentee {
+        private final SignUpMenteeCommand command = new SignUpMenteeCommand(
+                MENTEE_1.getPlatform(),
+                MENTEE_1.getName(),
+                MENTEE_1.getNationality(),
+                MENTEE_1.getLanguages(),
+                MENTEE_1.getInterest()
+        );
+
         @Test
         @DisplayName("이메일에 해당하는 계정이 있으면 회원가입이 불가능하다")
         void throwExceptionByAccountAlreadyExists() {
             // given
-            final SignUpMenteeCommand command = new SignUpMenteeCommand(
-                    MENTEE_1.getPlatform(),
-                    MENTEE_1.getName(),
-                    MENTEE_1.getProfileImageUrl(),
-                    MENTEE_1.getNationality(),
-                    MENTEE_1.getLanguages(),
-                    MENTEE_1.getInterest()
-            );
             given(memberRepository.existsByPlatformSocialId(command.platform().getSocialId())).willReturn(true);
 
             // when - then
@@ -131,14 +123,6 @@ class SignUpUsecaseTest extends UnitTest {
         @DisplayName("멘티 회원가입 후 바로 로그인 처리를 진행한다")
         void success() {
             // given
-            final SignUpMenteeCommand command = new SignUpMenteeCommand(
-                    MENTEE_1.getPlatform(),
-                    MENTEE_1.getName(),
-                    MENTEE_1.getProfileImageUrl(),
-                    MENTEE_1.getNationality(),
-                    MENTEE_1.getLanguages(),
-                    MENTEE_1.getInterest()
-            );
             given(memberRepository.existsByPlatformSocialId(command.platform().getSocialId())).willReturn(false);
 
             final Mentee mentee = MENTEE_1.toDomain().apply(1L);
@@ -157,7 +141,6 @@ class SignUpUsecaseTest extends UnitTest {
                     () -> verify(tokenIssuer, times(1)).provideAuthorityToken(mentee.getId(), mentee.getAuthority()),
                     () -> assertThat(authMember.id()).isEqualTo(mentee.getId()),
                     () -> assertThat(authMember.name()).isEqualTo(mentee.getName()),
-                    () -> assertThat(authMember.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),
                     () -> assertThat(authMember.token().accessToken()).isEqualTo(ACCESS_TOKEN),
                     () -> assertThat(authMember.token().refreshToken()).isEqualTo(REFRESH_TOKEN)
             );

@@ -40,14 +40,13 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
     @DisplayName("멘토 프로필 조회")
     class GetMentorProfile {
         @Test
-        @DisplayName("멘토 프로필을 조회한다 (미완성 - 자기소개, 멘토링 기간, 스케줄)")
+        @DisplayName("멘토 프로필을 조회한다 (미완성 -> 자기소개 & 프로필 이미지 & 멘토링 기간 & 스케줄)")
         void uncomplete() {
             // given
             final List<Language> languages = List.of(KR_MAIN.toDomain());
             final Mentor mentor = new Mentor(
                     MENTOR_1.getPlatform(),
                     MENTOR_1.getName(),
-                    MENTOR_1.getProfileImageUrl(),
                     languages,
                     MENTOR_1.getUniversityProfile()
             ).apply(1L);
@@ -62,7 +61,6 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
                     () -> assertThat(mentorProfile.id()).isEqualTo(mentor.getId()),
                     () -> assertThat(mentorProfile.email()).isEqualTo(mentor.getPlatform().getEmail().getValue()),
                     () -> assertThat(mentorProfile.name()).isEqualTo(mentor.getName()),
-                    () -> assertThat(mentorProfile.profileImageUrl()).isEqualTo(mentor.getProfileImageUrl()),
                     () -> assertThat(mentorProfile.nationality()).isEqualTo(mentor.getNationality().getCode()),
                     () -> assertThat(mentorProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
                     () -> assertThat(mentorProfile.languages().sub()).isEmpty(),
@@ -73,6 +71,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
 
                     // Optional
                     () -> assertThat(mentorProfile.introduction()).isNull(),
+                    () -> assertThat(mentorProfile.profileImageUrl()).isNull(),
                     () -> assertThat(mentorProfile.period()).isNull(),
                     () -> assertThat(mentorProfile.schedules()).isEmpty(),
 
@@ -101,7 +100,6 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
                     () -> assertThat(mentorProfile.id()).isEqualTo(mentor.getId()),
                     () -> assertThat(mentorProfile.email()).isEqualTo(mentor.getPlatform().getEmail().getValue()),
                     () -> assertThat(mentorProfile.name()).isEqualTo(mentor.getName()),
-                    () -> assertThat(mentorProfile.profileImageUrl()).isEqualTo(mentor.getProfileImageUrl()),
                     () -> assertThat(mentorProfile.nationality()).isEqualTo(mentor.getNationality().getCode()),
                     () -> assertThat(mentorProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
                     () -> assertThat(mentorProfile.languages().sub()).isEmpty(),
@@ -112,6 +110,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
 
                     // Optional
                     () -> assertThat(mentorProfile.introduction()).isEqualTo(mentor.getIntroduction()),
+                    () -> assertThat(mentorProfile.profileImageUrl()).isEqualTo(mentor.getProfileImageUrl()),
                     () -> assertThat(mentorProfile.period().startDate()).isEqualTo(period.getStartDate()),
                     () -> assertThat(mentorProfile.period().endDate()).isEqualTo(period.getEndDate()),
                     () -> assertThat(mentorProfile.schedules())
@@ -142,14 +141,13 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
     @DisplayName("멘티 프로필 조회")
     class GetMenteeProfile {
         @Test
-        @DisplayName("멘티 프로필을 조회한다 (미완성 - 자기소개)")
+        @DisplayName("멘티 프로필을 조회한다 (미완성 - 자기소개 & 프로필 이미지)")
         void uncomplete() {
             // given
             final List<Language> languages = List.of(KR_MAIN.toDomain(), EN_SUB.toDomain(), JP_SUB.toDomain());
             final Mentee mentee = new Mentee(
                     MENTEE_1.getPlatform(),
                     MENTEE_1.getName(),
-                    MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getNationality(),
                     languages,
                     MENTEE_1.getInterest()
@@ -165,7 +163,6 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
                     () -> assertThat(menteeProfile.id()).isEqualTo(mentee.getId()),
                     () -> assertThat(menteeProfile.email()).isEqualTo(mentee.getPlatform().getEmail().getValue()),
                     () -> assertThat(menteeProfile.name()).isEqualTo(mentee.getName()),
-                    () -> assertThat(menteeProfile.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),
                     () -> assertThat(menteeProfile.nationality()).isEqualTo(mentee.getNationality().getCode()),
                     () -> assertThat(menteeProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
                     () -> assertThat(menteeProfile.languages().sub()).containsExactlyInAnyOrder(
@@ -177,6 +174,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
 
                     // Optional
                     () -> assertThat(menteeProfile.introduction()).isNull(),
+                    () -> assertThat(menteeProfile.profileImageUrl()).isNull(),
 
                     // isCompleted
                     () -> assertThat(menteeProfile.profileComplete()).isFalse()
@@ -200,7 +198,6 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
                     () -> assertThat(menteeProfile.id()).isEqualTo(mentee.getId()),
                     () -> assertThat(menteeProfile.email()).isEqualTo(mentee.getPlatform().getEmail().getValue()),
                     () -> assertThat(menteeProfile.name()).isEqualTo(mentee.getName()),
-                    () -> assertThat(menteeProfile.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),
                     () -> assertThat(menteeProfile.nationality()).isEqualTo(mentee.getNationality().getCode()),
                     () -> assertThat(menteeProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
                     () -> assertThat(menteeProfile.languages().sub()).containsExactlyInAnyOrder(
@@ -212,6 +209,7 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
 
                     // Optional
                     () -> assertThat(menteeProfile.introduction()).isEqualTo(mentee.getIntroduction()),
+                    () -> assertThat(menteeProfile.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),
 
                     // isCompleted
                     () -> assertThat(menteeProfile.profileComplete()).isTrue()
