@@ -59,7 +59,7 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
                     failureDocsWithAccessToken("CoffeeChatApi/LifeCycle/Create/MentorSuggest/Failure", createHttpSpecSnippets(
                             requestFields(
                                     body("menteeId", "멘티 ID(PK)", true),
-                                    body("applyReason", "커피챗 제안 이유", true)
+                                    body("suggestReason", "커피챗 제안 이유", true)
                             )
                     ))
             );
@@ -79,7 +79,7 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
                     successDocsWithAccessToken("CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success", createHttpSpecSnippets(
                             requestFields(
                                     body("menteeId", "멘티 ID(PK)", true),
-                                    body("applyReason", "커피챗 제안 이유", true)
+                                    body("suggestReason", "커피챗 제안 이유", true)
                             ),
                             responseFields(
                                     body("coffeeChatId", "커피챗 ID(PK)")

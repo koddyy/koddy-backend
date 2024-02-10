@@ -39,7 +39,7 @@ public class CreateCoffeeChatApiController {
         final long coffeeChatId = createCoffeeChatUseCase.suggestCoffeeChat(new MentorSuggestCoffeeChatCommand(
                 authenticated.id(),
                 request.menteeId(),
-                request.applyReason()
+                request.suggestReason()
         ));
         return ResponseEntity.ok(new CreateCoffeeChatResponse(coffeeChatId));
     }

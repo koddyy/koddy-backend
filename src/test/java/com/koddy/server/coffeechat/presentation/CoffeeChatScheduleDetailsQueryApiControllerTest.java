@@ -77,7 +77,8 @@ class CoffeeChatScheduleDetailsQueryApiControllerTest extends ControllerTest {
 
                                     body("coffeeChat.id", "커피챗 ID(PK)"),
                                     body("coffeeChat.status", "커피챗 상태"),
-                                    body("coffeeChat.applyReason", "신청/제안 이유"),
+                                    body("coffeeChat.applyReason", "신청 이유"),
+                                    body("coffeeChat.suggestReason", "제안 이유"),
                                     body("coffeeChat.question", "궁금한 점", "Nullable"),
                                     body("coffeeChat.rejectReason", "거절 사유", "Nullable"),
                                     body("coffeeChat.start", "시작 날짜", "Nullable"),
@@ -123,7 +124,8 @@ class CoffeeChatScheduleDetailsQueryApiControllerTest extends ControllerTest {
 
                                     body("coffeeChat.id", "커피챗 ID(PK)"),
                                     body("coffeeChat.status", "커피챗 상태"),
-                                    body("coffeeChat.applyReason", "신청/제안 이유"),
+                                    body("coffeeChat.applyReason", "신청 이유"),
+                                    body("coffeeChat.suggestReason", "제안 이유"),
                                     body("coffeeChat.question", "궁금한 점", "Nullable"),
                                     body("coffeeChat.rejectReason", "거절 사유", "Nullable"),
                                     body("coffeeChat.start", "시작 날짜", "Nullable"),

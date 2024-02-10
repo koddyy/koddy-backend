@@ -45,8 +45,12 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     private CoffeeChatStatus status;
 
     @Lob
-    @Column(name = "apply_reason", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "apply_reason", columnDefinition = "TEXT")
     private String applyReason;
+
+    @Lob
+    @Column(name = "suggest_reason", columnDefinition = "TEXT")
+    private String suggestReason;
 
     @Lob
     @Column(name = "question", columnDefinition = "TEXT")
@@ -65,19 +69,21 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     private CoffeeChat(
             final Long sourceMemberId,
             final Long targetMemberId,
+            final CoffeeChatStatus status,
             final String applyReason,
+            final String suggestReason,
             final String question,
             final String rejectReason,
-            final CoffeeChatStatus status,
             final Reservation reservation,
             final Strategy strategy
     ) {
         this.sourceMemberId = sourceMemberId;
         this.targetMemberId = targetMemberId;
+        this.status = status;
         this.applyReason = applyReason;
+        this.suggestReason = suggestReason;
         this.question = question;
         this.rejectReason = rejectReason;
-        this.status = status;
         this.reservation = reservation;
         this.strategy = strategy;
     }
@@ -91,23 +97,29 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         return new CoffeeChat(
                 mentee.getId(),
                 mentor.getId(),
+                MENTEE_APPLY,
                 applyReason,
                 null,
                 null,
-                MENTEE_APPLY,
+                null,
                 reservation,
                 null
         );
     }
 
-    public static CoffeeChat suggest(final Mentor mentor, final Mentee mentee, final String applyReason) {
+    public static CoffeeChat suggest(
+            final Mentor mentor,
+            final Mentee mentee,
+            final String suggestReason
+    ) {
         return new CoffeeChat(
                 mentor.getId(),
                 mentee.getId(),
-                applyReason,
-                null,
-                null,
                 MENTOR_SUGGEST,
+                null,
+                suggestReason,
+                null,
+                null,
                 null,
                 null
         );

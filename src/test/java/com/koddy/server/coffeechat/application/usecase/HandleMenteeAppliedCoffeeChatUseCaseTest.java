@@ -6,7 +6,7 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.model.Strategy;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.common.UnitTest;
-import com.koddy.server.common.fixture.CoffeeChatFixture;
+import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow;
 import com.koddy.server.global.utils.encrypt.Encryptor;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -41,7 +41,7 @@ class HandleMenteeAppliedCoffeeChatUseCaseTest extends UnitTest {
     void reject() {
         // given
         final LocalDateTime start = LocalDateTime.of(2024, 2, 1, 9, 0);
-        final CoffeeChat coffeeChat = CoffeeChatFixture.MenteeFlow.apply(start, start.plusMinutes(30), mentee, mentor).apply(1L);
+        final CoffeeChat coffeeChat = MenteeFlow.apply(start, start.plusMinutes(30), mentee, mentor).apply(1L);
 
         final RejectAppliedCoffeeChatCommand command = new RejectAppliedCoffeeChatCommand(mentor.getId(), coffeeChat.getId(), "거절...");
         given(coffeeChatRepository.getMenteeAppliedCoffeeChat(command.coffeeChatId(), command.mentorId())).willReturn(coffeeChat);
@@ -54,9 +54,10 @@ class HandleMenteeAppliedCoffeeChatUseCaseTest extends UnitTest {
                 () -> verify(coffeeChatRepository, times(1)).getMenteeAppliedCoffeeChat(command.coffeeChatId(), command.mentorId()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
-                () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
-                () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(command.rejectReason()),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_REJECT),
+                () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
+                () -> assertThat(coffeeChat.getSuggestReason()).isNull(),
+                () -> assertThat(coffeeChat.getRejectReason()).isEqualTo(command.rejectReason()),
                 () -> assertThat(coffeeChat.getReservation().getStart()).isEqualTo(start),
                 () -> assertThat(coffeeChat.getReservation().getEnd()).isEqualTo(start.plusMinutes(30)),
                 () -> assertThat(coffeeChat.getStrategy()).isNull()
@@ -68,7 +69,7 @@ class HandleMenteeAppliedCoffeeChatUseCaseTest extends UnitTest {
     void approve() {
         // given
         final LocalDateTime start = LocalDateTime.of(2024, 2, 1, 9, 0);
-        final CoffeeChat coffeeChat = CoffeeChatFixture.MenteeFlow.apply(start, start.plusMinutes(30), mentee, mentor).apply(1L);
+        final CoffeeChat coffeeChat = MenteeFlow.apply(start, start.plusMinutes(30), mentee, mentor).apply(1L);
 
         final ApproveAppliedCoffeeChatCommand command = new ApproveAppliedCoffeeChatCommand(
                 mentor.getId(),
@@ -86,9 +87,10 @@ class HandleMenteeAppliedCoffeeChatUseCaseTest extends UnitTest {
                 () -> verify(coffeeChatRepository, times(1)).getMenteeAppliedCoffeeChat(command.coffeeChatId(), command.mentorId()),
                 () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
-                () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
-                () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_APPROVE),
+                () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
+                () -> assertThat(coffeeChat.getSuggestReason()).isNull(),
+                () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                 () -> assertThat(coffeeChat.getReservation().getStart()).isEqualTo(start),
                 () -> assertThat(coffeeChat.getReservation().getEnd()).isEqualTo(start.plusMinutes(30)),
                 () -> assertThat(coffeeChat.getStrategy().getType()).isEqualTo(command.type()),

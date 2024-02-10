@@ -25,7 +25,7 @@ public class CreateCoffeeChatUseCase {
     public long suggestCoffeeChat(final MentorSuggestCoffeeChatCommand command) {
         final Mentor mentor = mentorRepository.getById(command.mentorId());
         final Mentee mentee = menteeRepository.getById(command.menteeId());
-        return coffeeChatRepository.save(CoffeeChat.suggest(mentor, mentee, command.applyReason())).getId();
+        return coffeeChatRepository.save(CoffeeChat.suggest(mentor, mentee, command.suggestReason())).getId();
     }
 
     @KoddyWritableTransactional
