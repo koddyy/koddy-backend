@@ -39,8 +39,8 @@ class MenteeTest extends UnitTest {
             assertThatThrownBy(() -> new Mentee(
                     MENTEE_1.getPlatform(),
                     MENTEE_1.name(),
-                    MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getNationality(),
+                    MENTEE_1.getProfileImageUrl(),
                     languages,
                     MENTEE_1.getInterest()
             ))
@@ -54,8 +54,8 @@ class MenteeTest extends UnitTest {
             final Mentee mentee = new Mentee(
                     MENTEE_1.getPlatform(),
                     MENTEE_1.getName(),
-                    MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getNationality(),
+                    MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getLanguages(),
                     MENTEE_1.getInterest()
             );
@@ -94,8 +94,8 @@ class MenteeTest extends UnitTest {
         final Mentee menteeB = new Mentee(
                 MENTEE_2.getPlatform(),
                 MENTEE_2.getName(),
-                MENTEE_2.getProfileImageUrl(),
                 MENTEE_2.getNationality(),
+                MENTEE_2.getProfileImageUrl(),
                 MENTEE_2.getLanguages(),
                 MENTEE_2.getInterest()
         );

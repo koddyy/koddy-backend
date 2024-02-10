@@ -149,8 +149,8 @@ class GetMemberPrivateProfileUseCaseTest extends UnitTest {
             final Mentee mentee = new Mentee(
                     MENTEE_1.getPlatform(),
                     MENTEE_1.getName(),
-                    MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getNationality(),
+                    MENTEE_1.getProfileImageUrl(),
                     languages,
                     MENTEE_1.getInterest()
             ).apply(1L);

@@ -62,8 +62,8 @@ public class ManageAccountApiController {
         final AuthMember authMember = signUpUsecase.signUpMentee(new SignUpMenteeCommand(
                 request.toSocialPlatform(),
                 request.name(),
-                request.profileImageUrl(),
                 request.toNationality(),
+                request.profileImageUrl(),
                 request.toLanguages(),
                 request.toInterest()
         ));

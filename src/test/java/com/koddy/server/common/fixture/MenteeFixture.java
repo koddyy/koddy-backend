@@ -146,13 +146,13 @@ public enum MenteeFixture {
     private final Interest interest;
 
     public Mentee toDomain() {
-        final Mentee mentee = new Mentee(platform, name, profileImageUrl, nationality, languages, interest);
+        final Mentee mentee = new Mentee(platform, name, nationality, profileImageUrl, languages, interest);
         mentee.completeInfo(introduction);
         return mentee;
     }
 
     public Mentee toDomainWithLanguages(final List<Language> languages) {
-        final Mentee mentee = new Mentee(platform, name, profileImageUrl, nationality, languages, interest);
+        final Mentee mentee = new Mentee(platform, name, nationality, profileImageUrl, languages, interest);
         mentee.completeInfo(introduction);
         return mentee;
     }

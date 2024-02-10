@@ -30,12 +30,19 @@ public class Mentee extends Member<Mentee> {
     public Mentee(
             final SocialPlatform platform,
             final String name,
-            final String profileImageUrl,
             final Nationality nationality,
+            final String profileImageUrl,
             final List<Language> languages,
             final Interest interest
     ) {
-        super(platform, name, profileImageUrl, nationality, MENTEE, languages);
+        super(
+                platform,
+                name,
+                nationality,
+                profileImageUrl,
+                MENTEE,
+                languages
+        );
         this.interest = interest;
     }
 

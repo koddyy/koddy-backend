@@ -42,9 +42,6 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     @Column(name = "name", nullable = false)
     protected String name;
 
-    @Column(name = "profile_image_url", nullable = false)
-    protected String profileImageUrl;
-
     @Enumerated(STRING)
     @Column(name = "nationality", nullable = false, columnDefinition = "VARCHAR(50)")
     protected Nationality nationality;
@@ -52,6 +49,9 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     @Lob
     @Column(name = "introduction", columnDefinition = "TEXT")
     protected String introduction;
+
+    @Column(name = "profile_image_url")
+    protected String profileImageUrl;
 
     @Column(name = "profile_complete", nullable = false, columnDefinition = "TINYINT")
     protected boolean profileComplete;
@@ -70,15 +70,15 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
     protected Member(
             final SocialPlatform platform,
             final String name,
-            final String profileImageUrl,
             final Nationality nationality,
+            final String profileImageUrl,
             final Role role,
             final List<Language> languages
     ) {
         this.platform = platform;
         this.name = name;
-        this.profileImageUrl = profileImageUrl;
         this.nationality = nationality;
+        this.profileImageUrl = profileImageUrl;
         this.role = role;
         this.profileComplete = false;
         this.status = ACTIVE;
@@ -117,10 +117,6 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         this.introduction = introduction;
     }
 
-    protected void checkProfileCompleted() {
-        profileComplete = isProfileComplete();
-    }
-
     protected void updateBasicInfo(
             final String name,
             final Nationality nationality,
@@ -133,6 +129,10 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         this.profileImageUrl = profileImageUrl;
         this.introduction = introduction;
         applyLanguages(languages);
+    }
+
+    protected void checkProfileCompleted() {
+        profileComplete = isProfileComplete();
     }
 
     public void syncEmail(final Email email) {
