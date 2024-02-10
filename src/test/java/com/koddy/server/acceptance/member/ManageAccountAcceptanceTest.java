@@ -33,8 +33,7 @@ public class ManageAccountAcceptanceTest extends AcceptanceTest {
                     .header(ACCESS_TOKEN_HEADER, notNullValue(String.class))
                     .cookie(REFRESH_TOKEN_HEADER, notNullValue(String.class))
                     .body("id", notNullValue(Long.class))
-                    .body("name", is(MENTOR_1.getName()))
-                    .body("profileImageUrl", is(MENTOR_1.getProfileImageUrl()));
+                    .body("name", is(MENTOR_1.getName()));
         }
 
         @Test
@@ -45,8 +44,7 @@ public class ManageAccountAcceptanceTest extends AcceptanceTest {
                     .header(ACCESS_TOKEN_HEADER, notNullValue(String.class))
                     .cookie(REFRESH_TOKEN_HEADER, notNullValue(String.class))
                     .body("id", notNullValue(Long.class))
-                    .body("name", is(MENTEE_1.getName()))
-                    .body("profileImageUrl", is(MENTEE_1.getProfileImageUrl()));
+                    .body("name", is(MENTEE_1.getName()));
         }
     }
 

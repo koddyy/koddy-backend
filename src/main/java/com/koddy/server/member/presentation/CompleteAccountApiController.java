@@ -38,6 +38,7 @@ public class CompleteAccountApiController {
         completeProfileUseCase.completeMentor(new CompleteMentorProfileCommand(
                 authenticated.id(),
                 request.introduction(),
+                request.profileImageUrl(),
                 request.toPeriod(),
                 request.toSchedules()
         ));
@@ -53,7 +54,8 @@ public class CompleteAccountApiController {
     ) {
         completeProfileUseCase.completeMentee(new CompleteMenteeProfileCommand(
                 authenticated.id(),
-                request.introduction()
+                request.introduction(),
+                request.profileImageUrl()
         ));
         return ResponseEntity.noContent().build();
     }

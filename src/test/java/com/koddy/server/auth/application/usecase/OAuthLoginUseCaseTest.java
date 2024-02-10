@@ -88,7 +88,6 @@ class OAuthLoginUseCaseTest extends UnitTest {
                     () -> verify(tokenIssuer, times(1)).provideAuthorityToken(member.getId(), member.getAuthority()),
                     () -> assertThat(response.id()).isEqualTo(member.getId()),
                     () -> assertThat(response.name()).isEqualTo(member.getName()),
-                    () -> assertThat(response.profileImageUrl()).isEqualTo(member.getProfileImageUrl()),
                     () -> assertThat(response.token().accessToken()).isEqualTo(authToken.accessToken()),
                     () -> assertThat(response.token().refreshToken()).isEqualTo(authToken.refreshToken())
             );

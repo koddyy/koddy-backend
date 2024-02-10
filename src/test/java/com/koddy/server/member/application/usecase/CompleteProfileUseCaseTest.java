@@ -35,12 +35,12 @@ class CompleteProfileUseCaseTest extends UnitTest {
         final Mentor mentor = new Mentor(
                 MENTOR_1.getPlatform(),
                 MENTOR_1.getName(),
-                MENTOR_1.getProfileImageUrl(),
                 MENTOR_1.getLanguages(),
                 MENTOR_1.getUniversityProfile()
         ).apply(1L);
         assertAll(
                 () -> assertThat(mentor.getIntroduction()).isNull(),
+                () -> assertThat(mentor.getProfileImageUrl()).isNull(),
                 () -> assertThat(mentor.getMentoringPeriod()).isNull(),
                 () -> assertThat(mentor.getSchedules()).isEmpty(),
                 () -> assertThat(mentor.isProfileComplete()).isFalse()
@@ -49,6 +49,7 @@ class CompleteProfileUseCaseTest extends UnitTest {
         final CompleteMentorProfileCommand command = new CompleteMentorProfileCommand(
                 mentor.getId(),
                 MENTOR_1.getIntroduction(),
+                MENTOR_1.getProfileImageUrl(),
                 MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain(),
                 TimelineFixture.월_수_금()
         );
@@ -61,7 +62,8 @@ class CompleteProfileUseCaseTest extends UnitTest {
         assertAll(
                 () -> verify(mentorRepository, times(1)).getById(command.mentorId()),
                 () -> verify(menteeRepository, times(0)).getById(anyLong()),
-                () -> assertThat(mentor.getIntroduction()).isNotNull(),
+                () -> assertThat(mentor.getIntroduction()).isEqualTo(command.introduction()),
+                () -> assertThat(mentor.getProfileImageUrl()).isEqualTo(command.profileImageUrl()),
                 () -> assertThat(mentor.getMentoringPeriod()).isEqualTo(command.mentoringPeriod()),
                 () -> assertThat(mentor.getSchedules()).hasSize(TimelineFixture.월_수_금().size()),
                 () -> assertThat(mentor.isProfileComplete()).isTrue()
@@ -76,16 +78,20 @@ class CompleteProfileUseCaseTest extends UnitTest {
                 MENTEE_1.getPlatform(),
                 MENTEE_1.getName(),
                 MENTEE_1.getNationality(),
-                MENTEE_1.getProfileImageUrl(),
                 MENTEE_1.getLanguages(),
                 MENTEE_1.getInterest()
         ).apply(1L);
         assertAll(
                 () -> assertThat(mentee.getIntroduction()).isNull(),
+                () -> assertThat(mentee.getProfileImageUrl()).isNull(),
                 () -> assertThat(mentee.isProfileComplete()).isFalse()
         );
 
-        final CompleteMenteeProfileCommand command = new CompleteMenteeProfileCommand(mentee.getId(), MENTEE_1.getIntroduction());
+        final CompleteMenteeProfileCommand command = new CompleteMenteeProfileCommand(
+                mentee.getId(),
+                MENTEE_1.getIntroduction(),
+                MENTEE_1.getProfileImageUrl()
+        );
         given(menteeRepository.getById(command.menteeId())).willReturn(mentee);
 
         // when
@@ -95,7 +101,8 @@ class CompleteProfileUseCaseTest extends UnitTest {
         assertAll(
                 () -> verify(mentorRepository, times(0)).getById(anyLong()),
                 () -> verify(menteeRepository, times(1)).getById(command.menteeId()),
-                () -> assertThat(mentee.getIntroduction()).isNotNull(),
+                () -> assertThat(mentee.getIntroduction()).isEqualTo(command.introduction()),
+                () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(command.profileImageUrl()),
                 () -> assertThat(mentee.isProfileComplete()).isTrue()
         );
     }

@@ -178,8 +178,7 @@ class OAuthApiControllerTest extends ControllerTest {
                             ),
                             responseFields(
                                     body("id", "사용자 ID(PK)"),
-                                    body("name", "사용자 이름"),
-                                    body("profileImageUrl", "사용자 프로필 이미지")
+                                    body("name", "사용자 이름")
                             )
                     ))
             );

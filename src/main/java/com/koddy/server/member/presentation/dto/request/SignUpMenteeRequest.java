@@ -26,9 +26,6 @@ public record SignUpMenteeRequest(
         @NotBlank(message = "이름은 필수입니다.")
         String name,
 
-        @NotBlank(message = "프로필 이미지 URL은 필수입니다.")
-        String profileImageUrl,
-
         @NotBlank(message = "국적은 필수입니다.")
         String nationality,
 

@@ -42,7 +42,6 @@ class SignUpUsecaseTest extends UnitTest {
         private final SignUpMentorCommand command = new SignUpMentorCommand(
                 MENTOR_1.getPlatform(),
                 MENTOR_1.getName(),
-                MENTOR_1.getProfileImageUrl(),
                 MENTOR_1.getLanguages(),
                 MENTOR_1.getUniversityProfile()
         );
@@ -86,7 +85,6 @@ class SignUpUsecaseTest extends UnitTest {
                     () -> verify(tokenIssuer, times(1)).provideAuthorityToken(mentor.getId(), mentor.getAuthority()),
                     () -> assertThat(authMember.id()).isEqualTo(mentor.getId()),
                     () -> assertThat(authMember.name()).isEqualTo(mentor.getName()),
-                    () -> assertThat(authMember.profileImageUrl()).isEqualTo(mentor.getProfileImageUrl()),
                     () -> assertThat(authMember.token().accessToken()).isEqualTo(ACCESS_TOKEN),
                     () -> assertThat(authMember.token().refreshToken()).isEqualTo(REFRESH_TOKEN)
             );
@@ -100,7 +98,6 @@ class SignUpUsecaseTest extends UnitTest {
                 MENTEE_1.getPlatform(),
                 MENTEE_1.getName(),
                 MENTEE_1.getNationality(),
-                MENTEE_1.getProfileImageUrl(),
                 MENTEE_1.getLanguages(),
                 MENTEE_1.getInterest()
         );
@@ -144,7 +141,6 @@ class SignUpUsecaseTest extends UnitTest {
                     () -> verify(tokenIssuer, times(1)).provideAuthorityToken(mentee.getId(), mentee.getAuthority()),
                     () -> assertThat(authMember.id()).isEqualTo(mentee.getId()),
                     () -> assertThat(authMember.name()).isEqualTo(mentee.getName()),
-                    () -> assertThat(authMember.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),
                     () -> assertThat(authMember.token().accessToken()).isEqualTo(ACCESS_TOKEN),
                     () -> assertThat(authMember.token().refreshToken()).isEqualTo(REFRESH_TOKEN)
             );

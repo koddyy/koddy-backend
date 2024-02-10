@@ -46,7 +46,6 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
             final Mentor mentor = new Mentor(
                     MENTOR_1.getPlatform(),
                     MENTOR_1.getName(),
-                    MENTOR_1.getProfileImageUrl(),
                     languages,
                     MENTOR_1.getUniversityProfile()
             ).apply(1L);
@@ -60,7 +59,6 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
                     // Required
                     () -> assertThat(mentorProfile.id()).isEqualTo(mentor.getId()),
                     () -> assertThat(mentorProfile.name()).isEqualTo(mentor.getName()),
-                    () -> assertThat(mentorProfile.profileImageUrl()).isEqualTo(mentor.getProfileImageUrl()),
                     () -> assertThat(mentorProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
                     () -> assertThat(mentorProfile.languages().sub()).isEmpty(),
                     () -> assertThat(mentorProfile.school()).isEqualTo(mentor.getUniversityProfile().getSchool()),
@@ -68,7 +66,8 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
                     () -> assertThat(mentorProfile.enteredIn()).isEqualTo(mentor.getUniversityProfile().getEnteredIn()),
 
                     // Optional
-                    () -> assertThat(mentorProfile.introduction()).isNull()
+                    () -> assertThat(mentorProfile.introduction()).isNull(),
+                    () -> assertThat(mentorProfile.profileImageUrl()).isNull()
             );
         }
 
@@ -91,7 +90,6 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
                     // Required
                     () -> assertThat(mentorProfile.id()).isEqualTo(mentor.getId()),
                     () -> assertThat(mentorProfile.name()).isEqualTo(mentor.getName()),
-                    () -> assertThat(mentorProfile.profileImageUrl()).isEqualTo(mentor.getProfileImageUrl()),
                     () -> assertThat(mentorProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
                     () -> assertThat(mentorProfile.languages().sub()).isEmpty(),
                     () -> assertThat(mentorProfile.school()).isEqualTo(mentor.getUniversityProfile().getSchool()),
@@ -99,7 +97,8 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
                     () -> assertThat(mentorProfile.enteredIn()).isEqualTo(mentor.getUniversityProfile().getEnteredIn()),
 
                     // Optional
-                    () -> assertThat(mentorProfile.introduction()).isEqualTo(mentor.getIntroduction())
+                    () -> assertThat(mentorProfile.introduction()).isEqualTo(mentor.getIntroduction()),
+                    () -> assertThat(mentorProfile.profileImageUrl()).isEqualTo(mentor.getProfileImageUrl())
             );
         }
     }
@@ -116,7 +115,6 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
                     MENTEE_1.getPlatform(),
                     MENTEE_1.getName(),
                     MENTEE_1.getNationality(),
-                    MENTEE_1.getProfileImageUrl(),
                     languages,
                     MENTEE_1.getInterest()
             ).apply(1L);
@@ -130,7 +128,6 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
                     // Required
                     () -> assertThat(menteeProfile.id()).isEqualTo(mentee.getId()),
                     () -> assertThat(menteeProfile.name()).isEqualTo(mentee.getName()),
-                    () -> assertThat(menteeProfile.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),
                     () -> assertThat(menteeProfile.nationality()).isEqualTo(mentee.getNationality().getCode()),
                     () -> assertThat(menteeProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
                     () -> assertThat(menteeProfile.languages().sub()).containsExactlyInAnyOrder(
@@ -141,7 +138,8 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
                     () -> assertThat(menteeProfile.interestMajor()).isEqualTo(mentee.getInterest().getMajor()),
 
                     // Optional
-                    () -> assertThat(menteeProfile.introduction()).isNull()
+                    () -> assertThat(menteeProfile.introduction()).isNull(),
+                    () -> assertThat(menteeProfile.profileImageUrl()).isNull()
             );
         }
 
@@ -161,7 +159,6 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
                     // Required
                     () -> assertThat(menteeProfile.id()).isEqualTo(mentee.getId()),
                     () -> assertThat(menteeProfile.name()).isEqualTo(mentee.getName()),
-                    () -> assertThat(menteeProfile.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl()),
                     () -> assertThat(menteeProfile.nationality()).isEqualTo(mentee.getNationality().getCode()),
                     () -> assertThat(menteeProfile.languages().main()).isEqualTo(KR_MAIN.getCategory().getCode()),
                     () -> assertThat(menteeProfile.languages().sub()).containsExactlyInAnyOrder(
@@ -172,7 +169,8 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
                     () -> assertThat(menteeProfile.interestMajor()).isEqualTo(mentee.getInterest().getMajor()),
 
                     // Optional
-                    () -> assertThat(menteeProfile.introduction()).isEqualTo(mentee.getIntroduction())
+                    () -> assertThat(menteeProfile.introduction()).isEqualTo(mentee.getIntroduction()),
+                    () -> assertThat(menteeProfile.profileImageUrl()).isEqualTo(mentee.getProfileImageUrl())
             );
         }
     }

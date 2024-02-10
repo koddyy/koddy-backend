@@ -10,7 +10,6 @@ import java.util.List;
 public record SignUpMentorCommand(
         SocialPlatform platform,
         String name,
-        String profileImageUrl,
         List<Language> languages,
         UniversityProfile universityProfile
 ) {
@@ -18,7 +17,6 @@ public record SignUpMentorCommand(
         return new Mentor(
                 platform,
                 name,
-                profileImageUrl,
                 languages,
                 universityProfile
         );

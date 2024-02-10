@@ -8,6 +8,7 @@ import java.util.List;
 public record CompleteMentorProfileCommand(
         long mentorId,
         String introduction,
+        String profileImageUrl,
         MentoringPeriod mentoringPeriod,
         List<Timeline> timelines
 ) {

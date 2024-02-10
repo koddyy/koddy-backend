@@ -12,7 +12,6 @@ public record SignUpMenteeCommand(
         SocialPlatform platform,
         String name,
         Nationality nationality,
-        String profileImageUrl,
         List<Language> languages,
         Interest interest
 ) {
@@ -21,7 +20,6 @@ public record SignUpMenteeCommand(
                 platform,
                 name,
                 nationality,
-                profileImageUrl,
                 languages,
                 interest
         );

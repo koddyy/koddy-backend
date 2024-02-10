@@ -71,14 +71,12 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
             final SocialPlatform platform,
             final String name,
             final Nationality nationality,
-            final String profileImageUrl,
             final Role role,
             final List<Language> languages
     ) {
         this.platform = platform;
         this.name = name;
         this.nationality = nationality;
-        this.profileImageUrl = profileImageUrl;
         this.role = role;
         this.profileComplete = false;
         this.status = ACTIVE;
@@ -113,8 +111,12 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         }
     }
 
-    protected void completeInfo(final String introduction) {
+    protected void completeInfo(
+            final String introduction,
+            final String profileImageUrl
+    ) {
         this.introduction = introduction;
+        this.profileImageUrl = profileImageUrl;
     }
 
     protected void updateBasicInfo(

@@ -40,7 +40,6 @@ class MenteeTest extends UnitTest {
                     MENTEE_1.getPlatform(),
                     MENTEE_1.name(),
                     MENTEE_1.getNationality(),
-                    MENTEE_1.getProfileImageUrl(),
                     languages,
                     MENTEE_1.getInterest()
             ))
@@ -55,7 +54,6 @@ class MenteeTest extends UnitTest {
                     MENTEE_1.getPlatform(),
                     MENTEE_1.getName(),
                     MENTEE_1.getNationality(),
-                    MENTEE_1.getProfileImageUrl(),
                     MENTEE_1.getLanguages(),
                     MENTEE_1.getInterest()
             );
@@ -67,7 +65,6 @@ class MenteeTest extends UnitTest {
                     () -> assertThat(mentee.getPlatform().getEmail().getValue()).isEqualTo(MENTEE_1.getPlatform().getEmail().getValue()),
                     () -> assertThat(mentee.getName()).isEqualTo(MENTEE_1.getName()),
                     () -> assertThat(mentee.getNationality()).isEqualTo(MENTEE_1.getNationality()),
-                    () -> assertThat(mentee.getProfileImageUrl()).isEqualTo(MENTEE_1.getProfileImageUrl()),
                     () -> assertThat(mentee.getStatus()).isEqualTo(ACTIVE),
                     () -> assertThat(mentee.getLanguages()).containsExactlyInAnyOrderElementsOf(MENTEE_1.getLanguages()),
                     () -> assertThat(mentee.getRole()).isEqualTo(MENTEE),
@@ -76,6 +73,7 @@ class MenteeTest extends UnitTest {
 
                     // Optional
                     () -> assertThat(mentee.getIntroduction()).isNull(),
+                    () -> assertThat(mentee.getProfileImageUrl()).isNull(),
 
                     // isCompleted
                     () -> assertThat(mentee.isProfileComplete()).isFalse()
@@ -84,7 +82,7 @@ class MenteeTest extends UnitTest {
     }
 
     @Test
-    @DisplayName("Mentee 프로필이 완성되었는지 확인한다 (자기소개)")
+    @DisplayName("Mentee 프로필이 완성되었는지 확인한다 [자기소개 & 프로필 이미지]")
     void isProfileComplete() {
         /* menteeA 완성 */
         final Mentee menteeA = MENTEE_1.toDomain();
@@ -95,14 +93,13 @@ class MenteeTest extends UnitTest {
                 MENTEE_2.getPlatform(),
                 MENTEE_2.getName(),
                 MENTEE_2.getNationality(),
-                MENTEE_2.getProfileImageUrl(),
                 MENTEE_2.getLanguages(),
                 MENTEE_2.getInterest()
         );
         assertThat(menteeB.isProfileComplete()).isFalse();
 
         /* menteeB 프로필 완성 */
-        menteeB.completeInfo(MENTEE_2.getIntroduction());
+        menteeB.completeInfo(MENTEE_2.getIntroduction(), MENTEE_2.getProfileImageUrl());
         assertThat(menteeB.isProfileComplete()).isTrue();
 
         /* menteeC 완성 */
@@ -110,7 +107,7 @@ class MenteeTest extends UnitTest {
         assertThat(menteeC.isProfileComplete()).isTrue();
 
         /* menteeC 미완성 진행 */
-        menteeC.completeInfo(null);
+        menteeC.completeInfo(null, MENTEE_3.getProfileImageUrl());
         assertThat(menteeC.isProfileComplete()).isFalse();
     }
 
