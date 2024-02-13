@@ -25,7 +25,7 @@ public record MenteeCoffeeChatScheduleData(
     ) {
         this(
                 id,
-                status.getValue(),
+                status.name(),
                 mentorId,
                 name,
                 profileImageUrl,
