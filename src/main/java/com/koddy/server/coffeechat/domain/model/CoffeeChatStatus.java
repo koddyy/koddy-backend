@@ -31,26 +31,50 @@ public enum CoffeeChatStatus {
     private final String value;
 
     public static CoffeeChatStatus fromMenteeFlow(final String value) {
-        return Stream.of(MENTEE_APPLY, MENTEE_CANCEL, MENTOR_REJECT, MENTOR_APPROVE, MENTEE_APPLY_COFFEE_CHAT_COMPLETE)
-                .filter(it -> it.value.equalsIgnoreCase(value))
+        return Stream.of(
+                        MENTEE_APPLY,
+                        MENTEE_CANCEL,
+                        MENTOR_REJECT,
+                        MENTOR_APPROVE,
+                        MENTEE_APPLY_COFFEE_CHAT_COMPLETE
+                ).filter(it -> it.value.equalsIgnoreCase(value))
                 .findFirst()
                 .orElseThrow(() -> new CoffeeChatException(INVALID_COFFEECHAT_STATUS));
     }
 
     public static CoffeeChatStatus fromMentorFlow(final String value) {
-        return Stream.of(MENTOR_SUGGEST, MENTOR_CANCEL, MENTEE_REJECT, MENTEE_PENDING, MENTOR_FINALLY_REJECT, MENTOR_FINALLY_APPROVE, MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE)
-                .filter(it -> it.value.equalsIgnoreCase(value))
+        return Stream.of(
+                        MENTOR_SUGGEST,
+                        MENTOR_CANCEL,
+                        MENTEE_REJECT,
+                        MENTEE_PENDING,
+                        MENTOR_FINALLY_REJECT,
+                        MENTOR_FINALLY_APPROVE,
+                        MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
+                ).filter(it -> it.value.equalsIgnoreCase(value))
                 .findFirst()
                 .orElseThrow(() -> new CoffeeChatException(INVALID_COFFEECHAT_STATUS));
     }
 
     public boolean isMenteeFlow() {
-        return Stream.of(MENTEE_APPLY, MENTEE_CANCEL, MENTOR_REJECT, MENTOR_APPROVE, MENTEE_APPLY_COFFEE_CHAT_COMPLETE)
-                .anyMatch(it -> it == this);
+        return Stream.of(
+                MENTEE_APPLY,
+                MENTEE_CANCEL,
+                MENTOR_REJECT,
+                MENTOR_APPROVE,
+                MENTEE_APPLY_COFFEE_CHAT_COMPLETE
+        ).anyMatch(it -> it == this);
     }
 
     public boolean isMentorFlow() {
-        return Stream.of(MENTOR_SUGGEST, MENTOR_CANCEL, MENTEE_REJECT, MENTEE_PENDING, MENTOR_FINALLY_REJECT, MENTOR_FINALLY_APPROVE, MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE)
-                .anyMatch(it -> it == this);
+        return Stream.of(
+                MENTOR_SUGGEST,
+                MENTOR_CANCEL,
+                MENTEE_REJECT,
+                MENTEE_PENDING,
+                MENTOR_FINALLY_REJECT,
+                MENTOR_FINALLY_APPROVE,
+                MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
+        ).anyMatch(it -> it == this);
     }
 }
