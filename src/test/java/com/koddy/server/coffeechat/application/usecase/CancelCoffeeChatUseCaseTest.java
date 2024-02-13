@@ -30,10 +30,36 @@ class CancelCoffeeChatUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
     private final CancelCoffeeChatUseCase sut = new CancelCoffeeChatUseCase(coffeeChatRepository);
 
-    private final Mentee mentee = MENTEE_1.toDomain().apply(1L);
-    private final Mentor mentor = MENTOR_1.toDomain().apply(2L);
-    private final Authenticated menteeAuthenticated = new Authenticated(mentee.getId(), mentee.getAuthority());
+    private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
     private final Authenticated mentorAuthenticated = new Authenticated(mentor.getId(), mentor.getAuthority());
+    private final Mentee mentee = MENTEE_1.toDomain().apply(2L);
+    private final Authenticated menteeAuthenticated = new Authenticated(mentee.getId(), mentee.getAuthority());
+
+    @Test
+    @DisplayName("멘토는 자신이 제안한 커피챗을 취소한다")
+    void cancelSuggestedCoffeeChat() {
+        // given
+        final CoffeeChat coffeeChat = MentorFlow.suggest(mentor, mentee).apply(1L);
+
+        final CancelCoffeeChatCommand command = new CancelCoffeeChatCommand(mentorAuthenticated, coffeeChat.getId());
+        given(coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId(), command.authenticated().id())).willReturn(coffeeChat);
+
+        // when
+        sut.invoke(command);
+
+        // then
+        assertAll(
+                () -> verify(coffeeChatRepository, times(1)).getByIdAndMentorId(command.coffeeChatId(), command.authenticated().id()),
+                () -> assertThat(coffeeChat.getMentorId()).isEqualTo(mentor.getId()),
+                () -> assertThat(coffeeChat.getMenteeId()).isEqualTo(mentee.getId()),
+                () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_CANCEL),
+                () -> assertThat(coffeeChat.getApplyReason()).isNull(),
+                () -> assertThat(coffeeChat.getSuggestReason()).isNotNull(),
+                () -> assertThat(coffeeChat.getRejectReason()).isNull(),
+                () -> assertThat(coffeeChat.getReservation()).isNull(),
+                () -> assertThat(coffeeChat.getStrategy()).isNull()
+        );
+    }
 
     @Test
     @DisplayName("멘티는 자신이 신청한 커피챗을 취소한다")
@@ -43,48 +69,22 @@ class CancelCoffeeChatUseCaseTest extends UnitTest {
         final CoffeeChat coffeeChat = MenteeFlow.apply(start, start.plusMinutes(30), mentee, mentor).apply(1L);
 
         final CancelCoffeeChatCommand command = new CancelCoffeeChatCommand(menteeAuthenticated, coffeeChat.getId());
-        given(coffeeChatRepository.getAppliedOrSuggestedCoffeeChat(command.coffeeChatId(), command.authenticated().id())).willReturn(coffeeChat);
+        given(coffeeChatRepository.getByIdAndMenteeId(command.coffeeChatId(), command.authenticated().id())).willReturn(coffeeChat);
 
         // when
         sut.invoke(command);
 
         // then
         assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getAppliedOrSuggestedCoffeeChat(command.coffeeChatId(), command.authenticated().id()),
-                () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
-                () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
+                () -> verify(coffeeChatRepository, times(1)).getByIdAndMenteeId(command.coffeeChatId(), command.authenticated().id()),
+                () -> assertThat(coffeeChat.getMentorId()).isEqualTo(mentor.getId()),
+                () -> assertThat(coffeeChat.getMenteeId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_CANCEL),
                 () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                 () -> assertThat(coffeeChat.getSuggestReason()).isNull(),
                 () -> assertThat(coffeeChat.getRejectReason()).isNull(),
                 () -> assertThat(coffeeChat.getReservation().getStart()).isEqualTo(start),
                 () -> assertThat(coffeeChat.getReservation().getEnd()).isEqualTo(start.plusMinutes(30)),
-                () -> assertThat(coffeeChat.getStrategy()).isNull()
-        );
-    }
-
-    @Test
-    @DisplayName("멘토는 자신이 제안한 커피챗을 취소한다")
-    void cancelSuggestedCoffeeChat() {
-        // given
-        final CoffeeChat coffeeChat = MentorFlow.suggest(mentor, mentee).apply(1L);
-
-        final CancelCoffeeChatCommand command = new CancelCoffeeChatCommand(mentorAuthenticated, coffeeChat.getId());
-        given(coffeeChatRepository.getAppliedOrSuggestedCoffeeChat(command.coffeeChatId(), command.authenticated().id())).willReturn(coffeeChat);
-
-        // when
-        sut.invoke(command);
-
-        // then
-        assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getAppliedOrSuggestedCoffeeChat(command.coffeeChatId(), command.authenticated().id()),
-                () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
-                () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
-                () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_CANCEL),
-                () -> assertThat(coffeeChat.getApplyReason()).isNull(),
-                () -> assertThat(coffeeChat.getSuggestReason()).isNotNull(),
-                () -> assertThat(coffeeChat.getRejectReason()).isNull(),
-                () -> assertThat(coffeeChat.getReservation()).isNull(),
                 () -> assertThat(coffeeChat.getStrategy()).isNull()
         );
     }

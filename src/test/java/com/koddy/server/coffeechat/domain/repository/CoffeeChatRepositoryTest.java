@@ -1,10 +1,8 @@
 package com.koddy.server.coffeechat.domain.repository;
 
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
-import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.common.RepositoryTest;
 import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow;
-import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MemberRepository;
@@ -14,19 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.APPLIED_COFFEE_CHAT_NOT_FOUND;
-import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND;
-import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.PENDING_COFFEE_CHAT_NOT_FOUND;
-import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.SUGGESTED_COFFEE_CHAT_NOT_FOUND;
 import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_2;
-import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_3;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_2;
-import static com.koddy.server.common.fixture.MentorFixture.MENTOR_3;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("CoffeeChat -> CoffeeChatRepository 테스트")
@@ -38,169 +29,32 @@ class CoffeeChatRepositoryTest extends RepositoryTest {
     private MemberRepository memberRepository;
 
     @Test
-    @DisplayName("멘토 기준에서 멘티가 신청한 커피챗을 가져온다")
-    void getMenteeAppliedCoffeeChat() {
+    @DisplayName("멘토/멘티 자신들과 연관된 커피챗을 가져온다")
+    void findByIdAnd() {
         // given
-        final Mentee mentee = memberRepository.save(MENTEE_1.toDomain());
-        final Mentor[] mentors = memberRepository.saveAll(List.of(
-                MENTOR_1.toDomain(),
-                MENTOR_2.toDomain(),
-                MENTOR_3.toDomain()
-        )).toArray(Mentor[]::new);
-
-        final CoffeeChat applyToMentor0 = sut.save(MenteeFlow.apply(월요일_1주차_20_00_시작, mentee, mentors[0]));
-        final CoffeeChat applyToMentor1 = sut.save(MenteeFlow.apply(월요일_1주차_20_00_시작, mentee, mentors[1]));
-        final CoffeeChat applyToMentor2 = sut.save(MenteeFlow.apply(월요일_1주차_20_00_시작, mentee, mentors[2]));
-
-        // when - then
-        assertAll(
-                () -> {
-                    assertThat(sut.getMenteeAppliedCoffeeChat(applyToMentor0.getId(), mentors[0].getId())).isEqualTo(applyToMentor0);
-                    assertThatThrownBy(() -> sut.getMenteeAppliedCoffeeChat(applyToMentor0.getId(), mentors[1].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(APPLIED_COFFEE_CHAT_NOT_FOUND.getMessage());
-                    assertThatThrownBy(() -> sut.getMenteeAppliedCoffeeChat(applyToMentor0.getId(), mentors[2].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(APPLIED_COFFEE_CHAT_NOT_FOUND.getMessage());
-                },
-                () -> {
-                    assertThat(sut.getMenteeAppliedCoffeeChat(applyToMentor1.getId(), mentors[1].getId())).isEqualTo(applyToMentor1);
-                    assertThatThrownBy(() -> sut.getMenteeAppliedCoffeeChat(applyToMentor1.getId(), mentors[0].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(APPLIED_COFFEE_CHAT_NOT_FOUND.getMessage());
-                    assertThatThrownBy(() -> sut.getMenteeAppliedCoffeeChat(applyToMentor1.getId(), mentors[2].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(APPLIED_COFFEE_CHAT_NOT_FOUND.getMessage());
-                },
-                () -> {
-                    assertThat(sut.getMenteeAppliedCoffeeChat(applyToMentor2.getId(), mentors[2].getId())).isEqualTo(applyToMentor2);
-                    assertThatThrownBy(() -> sut.getMenteeAppliedCoffeeChat(applyToMentor2.getId(), mentors[0].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(APPLIED_COFFEE_CHAT_NOT_FOUND.getMessage());
-                    assertThatThrownBy(() -> sut.getMenteeAppliedCoffeeChat(applyToMentor2.getId(), mentors[1].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(APPLIED_COFFEE_CHAT_NOT_FOUND.getMessage());
-                }
-        );
-    }
-
-    @Test
-    @DisplayName("멘토 기준에서 자신이 제안하고 멘티가 1차 수락한 커피챗을 가져온다")
-    void getMenteePendingCoffeeChat() {
-        // given
-        final Mentor[] mentors = memberRepository.saveAll(List.of(
-                MENTOR_1.toDomain(),
-                MENTOR_2.toDomain(),
-                MENTOR_3.toDomain()
-        )).toArray(Mentor[]::new);
-        final Mentee mentee = memberRepository.save(MENTEE_1.toDomain());
-
-        final CoffeeChat pendingToMentor0 = sut.save(MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentors[0], mentee));
-        final CoffeeChat pendingToMentor1 = sut.save(MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentors[1], mentee));
-        final CoffeeChat pendingToMentor2 = sut.save(MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentors[2], mentee));
-
-        // when - then
-        assertAll(
-                () -> {
-                    assertThat(sut.getMenteePendingCoffeeChat(pendingToMentor0.getId(), mentors[0].getId())).isEqualTo(pendingToMentor0);
-                    assertThatThrownBy(() -> sut.getMenteePendingCoffeeChat(pendingToMentor0.getId(), mentors[1].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(PENDING_COFFEE_CHAT_NOT_FOUND.getMessage());
-                    assertThatThrownBy(() -> sut.getMenteePendingCoffeeChat(pendingToMentor0.getId(), mentors[2].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(PENDING_COFFEE_CHAT_NOT_FOUND.getMessage());
-                },
-                () -> {
-                    assertThat(sut.getMenteePendingCoffeeChat(pendingToMentor1.getId(), mentors[1].getId())).isEqualTo(pendingToMentor1);
-                    assertThatThrownBy(() -> sut.getMenteePendingCoffeeChat(pendingToMentor1.getId(), mentors[0].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(PENDING_COFFEE_CHAT_NOT_FOUND.getMessage());
-                    assertThatThrownBy(() -> sut.getMenteePendingCoffeeChat(pendingToMentor1.getId(), mentors[2].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(PENDING_COFFEE_CHAT_NOT_FOUND.getMessage());
-                },
-                () -> {
-                    assertThat(sut.getMenteePendingCoffeeChat(pendingToMentor2.getId(), mentors[2].getId())).isEqualTo(pendingToMentor2);
-                    assertThatThrownBy(() -> sut.getMenteePendingCoffeeChat(pendingToMentor2.getId(), mentors[0].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(PENDING_COFFEE_CHAT_NOT_FOUND.getMessage());
-                    assertThatThrownBy(() -> sut.getMenteePendingCoffeeChat(pendingToMentor2.getId(), mentors[1].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(PENDING_COFFEE_CHAT_NOT_FOUND.getMessage());
-                }
-        );
-    }
-
-    @Test
-    @DisplayName("멘티 기준에서 멘토가 제안한 커피챗을 가져온다")
-    void getMentorSuggestedCoffeeChat() {
-        // given
-        final Mentor mentor = memberRepository.save(MENTOR_1.toDomain());
         final Mentee[] mentees = memberRepository.saveAll(List.of(
                 MENTEE_1.toDomain(),
-                MENTEE_2.toDomain(),
-                MENTEE_3.toDomain()
+                MENTEE_2.toDomain()
         )).toArray(Mentee[]::new);
+        final Mentor[] mentors = memberRepository.saveAll(List.of(
+                MENTOR_1.toDomain(),
+                MENTOR_2.toDomain()
+        )).toArray(Mentor[]::new);
 
-        final CoffeeChat suggestToMentee0 = sut.save(MentorFlow.suggest(mentor, mentees[0]));
-        final CoffeeChat suggestToMentee1 = sut.save(MentorFlow.suggest(mentor, mentees[1]));
-        final CoffeeChat suggestToMentee2 = sut.save(MentorFlow.suggest(mentor, mentees[2]));
-
-        // when - then
-        assertAll(
-                () -> {
-                    assertThat(sut.getMentorSuggestedCoffeeChat(suggestToMentee0.getId(), mentees[0].getId())).isEqualTo(suggestToMentee0);
-                    assertThatThrownBy(() -> sut.getMentorSuggestedCoffeeChat(suggestToMentee0.getId(), mentees[1].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(SUGGESTED_COFFEE_CHAT_NOT_FOUND.getMessage());
-                    assertThatThrownBy(() -> sut.getMentorSuggestedCoffeeChat(suggestToMentee0.getId(), mentees[2].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(SUGGESTED_COFFEE_CHAT_NOT_FOUND.getMessage());
-                },
-                () -> {
-                    assertThat(sut.getMentorSuggestedCoffeeChat(suggestToMentee1.getId(), mentees[1].getId())).isEqualTo(suggestToMentee1);
-                    assertThatThrownBy(() -> sut.getMentorSuggestedCoffeeChat(suggestToMentee1.getId(), mentees[0].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(SUGGESTED_COFFEE_CHAT_NOT_FOUND.getMessage());
-                    assertThatThrownBy(() -> sut.getMentorSuggestedCoffeeChat(suggestToMentee1.getId(), mentees[2].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(SUGGESTED_COFFEE_CHAT_NOT_FOUND.getMessage());
-                },
-                () -> {
-                    assertThat(sut.getMentorSuggestedCoffeeChat(suggestToMentee2.getId(), mentees[2].getId())).isEqualTo(suggestToMentee2);
-                    assertThatThrownBy(() -> sut.getMentorSuggestedCoffeeChat(suggestToMentee2.getId(), mentees[0].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(SUGGESTED_COFFEE_CHAT_NOT_FOUND.getMessage());
-                    assertThatThrownBy(() -> sut.getMentorSuggestedCoffeeChat(suggestToMentee2.getId(), mentees[1].getId()))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(SUGGESTED_COFFEE_CHAT_NOT_FOUND.getMessage());
-                }
-        );
-    }
-
-    @Test
-    @DisplayName("멘티가 신청 or 멘토가 제안한 커피챗을 조회한다")
-    void getAppliedOrSuggestedCoffeeChat() {
-        // given
-        final Mentor mentor = memberRepository.save(MENTOR_1.toDomain());
-        final Mentee mentee = memberRepository.save(MENTEE_1.toDomain());
-
-        final CoffeeChat appliedCoffeeChat = sut.save(MenteeFlow.apply(월요일_1주차_20_00_시작, mentee, mentor));
-        final CoffeeChat suggestedCoffeeChat = sut.save(MentorFlow.suggest(mentor, mentee));
+        final CoffeeChat applyToMentor0 = sut.save(MenteeFlow.apply(월요일_1주차_20_00_시작, mentees[0], mentors[0]));
+        final CoffeeChat applyToMentor1 = sut.save(MenteeFlow.apply(월요일_1주차_20_00_시작, mentees[1], mentors[1]));
 
         // when - then
         assertAll(
-                // 멘티가 신청한 커피챗
-                () -> assertThat(sut.getAppliedOrSuggestedCoffeeChat(appliedCoffeeChat.getId(), mentee.getId())).isEqualTo(appliedCoffeeChat),
-                () -> assertThatThrownBy(() -> sut.getAppliedOrSuggestedCoffeeChat(appliedCoffeeChat.getId(), mentor.getId()))
-                        .isInstanceOf(CoffeeChatException.class)
-                        .hasMessage(APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND.getMessage()),
+                () -> assertThat(sut.findByIdAndMentorId(applyToMentor0.getId(), mentors[0].getId())).isPresent(),
+                () -> assertThat(sut.findByIdAndMentorId(applyToMentor0.getId(), mentors[1].getId())).isEmpty(),
+                () -> assertThat(sut.findByIdAndMentorId(applyToMentor1.getId(), mentors[0].getId())).isEmpty(),
+                () -> assertThat(sut.findByIdAndMentorId(applyToMentor1.getId(), mentors[1].getId())).isPresent(),
 
-                // 멘토가 제안한 커피챗
-                () -> assertThat(sut.getAppliedOrSuggestedCoffeeChat(suggestedCoffeeChat.getId(), mentor.getId())).isEqualTo(suggestedCoffeeChat),
-                () -> assertThatThrownBy(() -> sut.getAppliedOrSuggestedCoffeeChat(suggestedCoffeeChat.getId(), mentee.getId()))
-                        .isInstanceOf(CoffeeChatException.class)
-                        .hasMessage(APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND.getMessage())
+                () -> assertThat(sut.findByIdAndMenteeId(applyToMentor0.getId(), mentees[0].getId())).isPresent(),
+                () -> assertThat(sut.findByIdAndMenteeId(applyToMentor0.getId(), mentees[1].getId())).isEmpty(),
+                () -> assertThat(sut.findByIdAndMenteeId(applyToMentor1.getId(), mentees[0].getId())).isEmpty(),
+                () -> assertThat(sut.findByIdAndMenteeId(applyToMentor1.getId(), mentees[1].getId())).isPresent()
         );
     }
 }

@@ -18,13 +18,13 @@ public class HandlePendingCoffeeChatUseCase {
 
     @KoddyWritableTransactional
     public void reject(final RejectPendingCoffeeChatCommand command) {
-        final CoffeeChat coffeeChat = coffeeChatRepository.getMenteePendingCoffeeChat(command.coffeeChatId(), command.mentorId());
+        final CoffeeChat coffeeChat = coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId(), command.mentorId());
         coffeeChat.rejectPendingCoffeeChat(command.rejectReason());
     }
 
     @KoddyWritableTransactional
     public void approve(final ApprovePendingCoffeeChatCommand command) {
-        final CoffeeChat coffeeChat = coffeeChatRepository.getMenteePendingCoffeeChat(command.coffeeChatId(), command.mentorId());
+        final CoffeeChat coffeeChat = coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId(), command.mentorId());
         coffeeChat.approvePendingCoffeeChat(Strategy.of(command.type(), command.value(), encryptor));
     }
 }
