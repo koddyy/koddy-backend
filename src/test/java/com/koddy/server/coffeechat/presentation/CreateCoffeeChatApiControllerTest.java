@@ -82,7 +82,7 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
                                     body("suggestReason", "커피챗 제안 이유", true)
                             ),
                             responseFields(
-                                    body("coffeeChatId", "커피챗 ID(PK)")
+                                    body("result", "커피챗 ID(PK)")
                             )
                     ))
             );
@@ -166,7 +166,7 @@ class CreateCoffeeChatApiControllerTest extends ControllerTest {
                                     body("end", "커피챗 날짜 (종료 시간)", "[KST] yyyy-MM-ddTHH:mm:ss" + ENTER + "-> 시간 = 00:00:00 ~ 23:59:59", true)
                             ),
                             responseFields(
-                                    body("coffeeChatId", "커피챗 ID(PK)")
+                                    body("result", "커피챗 ID(PK)")
                             )
                     ))
             );

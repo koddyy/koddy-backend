@@ -48,7 +48,7 @@ public class CreateCoffeeChatAcceptanceTest extends AcceptanceTest {
 
             멘토가_멘티에게_커피챗을_제안한다(mentee.id(), mentor.token().accessToken())
                     .statusCode(OK.value())
-                    .body("coffeeChatId", notNullValue(Long.class));
+                    .body("result", notNullValue(Long.class));
         }
     }
 
@@ -99,7 +99,7 @@ public class CreateCoffeeChatAcceptanceTest extends AcceptanceTest {
                     mentor.id(),
                     mentee.token().accessToken()
             ).statusCode(OK.value())
-                    .body("coffeeChatId", notNullValue(Long.class));
+                    .body("result", notNullValue(Long.class));
         }
     }
 }

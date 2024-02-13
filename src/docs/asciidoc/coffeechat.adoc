@@ -178,55 +178,27 @@ include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Approve/Success/ht
 
 === 멘토
 
-==== 제안한 스케줄 상태별 조회
-
 *HTTP Request*
 
-include::{snippets}/CoffeeChatApi/Schedule/Mentor/Suggested/Success/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/Schedule/Mentor/Suggested/Success/query-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentor/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentor/Success/query-parameters.adoc[]
 
 *HTTP Response*
 
-include::{snippets}/CoffeeChatApi/Schedule/Mentor/Suggested/Success/http-response.adoc[]
-include::{snippets}/CoffeeChatApi/Schedule/Mentor/Suggested/Success/response-fields.adoc[]
-
-==== 신청받은 스케줄 상태별 조회
-
-*HTTP Request*
-
-include::{snippets}/CoffeeChatApi/Schedule/Mentor/Applied/Success/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/Schedule/Mentor/Applied/Success/query-parameters.adoc[]
-
-*HTTP Response*
-
-include::{snippets}/CoffeeChatApi/Schedule/Mentor/Applied/Success/http-response.adoc[]
-include::{snippets}/CoffeeChatApi/Schedule/Mentor/Applied/Success/response-fields.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentor/Success/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentor/Success/response-fields.adoc[]
 
 === 멘티
 
-==== 신청한 스케줄 상태별 조회
-
 *HTTP Request*
 
-include::{snippets}/CoffeeChatApi/Schedule/Mentee/Applied/Success/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/Schedule/Mentee/Applied/Success/query-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentee/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentee/Success/query-parameters.adoc[]
 
 *HTTP Response*
 
-include::{snippets}/CoffeeChatApi/Schedule/Mentee/Applied/Success/http-response.adoc[]
-include::{snippets}/CoffeeChatApi/Schedule/Mentee/Applied/Success/response-fields.adoc[]
-
-==== 제안받은 스케줄 상태별 조회
-
-*HTTP Request*
-
-include::{snippets}/CoffeeChatApi/Schedule/Mentee/Suggested/Success/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/Schedule/Mentee/Suggested/Success/query-parameters.adoc[]
-
-*HTTP Response*
-
-include::{snippets}/CoffeeChatApi/Schedule/Mentee/Suggested/Success/http-response.adoc[]
-include::{snippets}/CoffeeChatApi/Schedule/Mentee/Suggested/Success/response-fields.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentee/Success/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/Schedule/Mentee/Success/response-fields.adoc[]
 
 == 커피챗 스케줄 상세 조회
 

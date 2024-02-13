@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class CoffeeChatQueryRepositorySupporter extends RepositoryTest {
+public abstract class CoffeeChatScheduleQueryRepositorySupporter extends RepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 

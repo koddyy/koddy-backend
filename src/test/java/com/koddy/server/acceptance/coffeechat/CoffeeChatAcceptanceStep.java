@@ -85,7 +85,7 @@ public class CoffeeChatAcceptanceStep {
         return postRequestWithAccessToken(uri, request, accessToken)
                 .extract()
                 .jsonPath()
-                .getLong("coffeeChatId");
+                .getLong("result");
     }
 
     public static ValidatableResponse 멘티가_멘토에게_커피챗을_신청한다(
@@ -132,7 +132,7 @@ public class CoffeeChatAcceptanceStep {
         return postRequestWithAccessToken(uri, request, accessToken)
                 .extract()
                 .jsonPath()
-                .getLong("coffeeChatId");
+                .getLong("result");
     }
 
     public static ValidatableResponse 멘토가_멘티의_커피챗_신청을_거절한다(

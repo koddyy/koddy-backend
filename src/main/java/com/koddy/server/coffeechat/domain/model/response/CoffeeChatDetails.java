@@ -20,7 +20,7 @@ public record CoffeeChatDetails(
     public static CoffeeChatDetails of(final CoffeeChat coffeeChat, final Encryptor encryptor) {
         return new CoffeeChatDetails(
                 coffeeChat.getId(),
-                coffeeChat.getStatus().getValue(),
+                coffeeChat.getStatus().name(),
                 coffeeChat.getApplyReason(),
                 coffeeChat.getSuggestReason(),
                 (coffeeChat.getQuestion() != null) ? coffeeChat.getQuestion() : null,

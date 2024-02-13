@@ -6,7 +6,7 @@ import com.koddy.server.coffeechat.application.usecase.command.MenteeApplyCoffee
 import com.koddy.server.coffeechat.application.usecase.command.MentorSuggestCoffeeChatCommand;
 import com.koddy.server.coffeechat.presentation.dto.request.MenteeApplyCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.MentorSuggestCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.dto.response.CreateCoffeeChatResponse;
+import com.koddy.server.global.ResponseWrapper;
 import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.aop.AccessControl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +32,7 @@ public class CreateCoffeeChatApiController {
     @Operation(summary = "멘토 -> 멘티 커피챗 제안 Endpoint")
     @PostMapping("/suggest")
     @AccessControl(role = MENTOR)
-    public ResponseEntity<CreateCoffeeChatResponse> suggestCoffeeChat(
+    public ResponseEntity<ResponseWrapper<Long>> suggestCoffeeChat(
             @Auth final Authenticated authenticated,
             @RequestBody @Valid final MentorSuggestCoffeeChatRequest request
     ) {
@@ -41,13 +41,13 @@ public class CreateCoffeeChatApiController {
                 request.menteeId(),
                 request.suggestReason()
         ));
-        return ResponseEntity.ok(new CreateCoffeeChatResponse(coffeeChatId));
+        return ResponseEntity.ok(ResponseWrapper.from(coffeeChatId));
     }
 
     @Operation(summary = "멘티 -> 멘토 커피챗 신청 Endpoint")
     @PostMapping("/apply")
     @AccessControl(role = MENTEE)
-    public ResponseEntity<CreateCoffeeChatResponse> applyCoffeeChat(
+    public ResponseEntity<ResponseWrapper<Long>> applyCoffeeChat(
             @Auth final Authenticated authenticated,
             @RequestBody @Valid final MenteeApplyCoffeeChatRequest request
     ) {
@@ -57,6 +57,6 @@ public class CreateCoffeeChatApiController {
                 request.applyReason(),
                 request.toReservation()
         ));
-        return ResponseEntity.ok(new CreateCoffeeChatResponse(coffeeChatId));
+        return ResponseEntity.ok(ResponseWrapper.from(coffeeChatId));
     }
 }
