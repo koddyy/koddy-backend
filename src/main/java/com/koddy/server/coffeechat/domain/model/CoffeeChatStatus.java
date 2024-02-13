@@ -33,4 +33,19 @@ public enum CoffeeChatStatus {
                 .filter(it -> it.filter.equals(filter))
                 .toList();
     }
+
+    public static List<CoffeeChatStatus> withWaitingCategory() {
+        return List.of(MENTEE_APPLY, MENTOR_SUGGEST, MENTEE_PENDING);
+    }
+
+    public static List<CoffeeChatStatus> withScheduledCategory() {
+        return List.of(MENTOR_APPROVE, MENTOR_FINALLY_APPROVE);
+    }
+
+    public static List<CoffeeChatStatus> withPassedCategory() {
+        return List.of(
+                MENTEE_CANCEL, MENTOR_REJECT, MENTEE_APPLY_COFFEE_CHAT_COMPLETE,
+                MENTOR_CANCEL, MENTEE_REJECT, MENTOR_FINALLY_REJECT, MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
+        );
+    }
 }
