@@ -1,80 +1,36 @@
 package com.koddy.server.coffeechat.domain.model;
 
-import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.stream.Stream;
-
-import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.INVALID_COFFEECHAT_STATUS;
+import java.util.Arrays;
+import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
 public enum CoffeeChatStatus {
     // MenteeFlow
-    MENTEE_APPLY("APPLY"),
-    MENTEE_CANCEL("CANCEL"),
-    MENTOR_REJECT("REJECT"),
-    MENTOR_APPROVE("APPROVE"),
-    MENTEE_APPLY_COFFEE_CHAT_COMPLETE("COMPLETE"),
+    MENTEE_APPLY("waiting"),
+    MENTEE_CANCEL("passed"),
+    MENTOR_REJECT("passed"),
+    MENTOR_APPROVE("scheduled"),
+    MENTEE_APPLY_COFFEE_CHAT_COMPLETE("passed"),
 
     // MentorFlow
-    MENTOR_SUGGEST("SUGGEST"),
-    MENTOR_CANCEL("CANCEL"),
-    MENTEE_REJECT("REJECT"),
-    MENTEE_PENDING("PENDING"),
-    MENTOR_FINALLY_REJECT("REJECT"),
-    MENTOR_FINALLY_APPROVE("APPROVE"),
-    MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE("COMPLETE"),
+    MENTOR_SUGGEST("waiting"),
+    MENTOR_CANCEL("passed"),
+    MENTEE_REJECT("passed"),
+    MENTEE_PENDING("waiting"),
+    MENTOR_FINALLY_REJECT("passed"),
+    MENTOR_FINALLY_APPROVE("scheduled"),
+    MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE("passed"),
     ;
 
-    private final String value;
+    private final String filter;
 
-    public static CoffeeChatStatus fromMenteeFlow(final String value) {
-        return Stream.of(
-                        MENTEE_APPLY,
-                        MENTEE_CANCEL,
-                        MENTOR_REJECT,
-                        MENTOR_APPROVE,
-                        MENTEE_APPLY_COFFEE_CHAT_COMPLETE
-                ).filter(it -> it.value.equalsIgnoreCase(value))
-                .findFirst()
-                .orElseThrow(() -> new CoffeeChatException(INVALID_COFFEECHAT_STATUS));
-    }
-
-    public static CoffeeChatStatus fromMentorFlow(final String value) {
-        return Stream.of(
-                        MENTOR_SUGGEST,
-                        MENTOR_CANCEL,
-                        MENTEE_REJECT,
-                        MENTEE_PENDING,
-                        MENTOR_FINALLY_REJECT,
-                        MENTOR_FINALLY_APPROVE,
-                        MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
-                ).filter(it -> it.value.equalsIgnoreCase(value))
-                .findFirst()
-                .orElseThrow(() -> new CoffeeChatException(INVALID_COFFEECHAT_STATUS));
-    }
-
-    public boolean isMenteeFlow() {
-        return Stream.of(
-                MENTEE_APPLY,
-                MENTEE_CANCEL,
-                MENTOR_REJECT,
-                MENTOR_APPROVE,
-                MENTEE_APPLY_COFFEE_CHAT_COMPLETE
-        ).anyMatch(it -> it == this);
-    }
-
-    public boolean isMentorFlow() {
-        return Stream.of(
-                MENTOR_SUGGEST,
-                MENTOR_CANCEL,
-                MENTEE_REJECT,
-                MENTEE_PENDING,
-                MENTOR_FINALLY_REJECT,
-                MENTOR_FINALLY_APPROVE,
-                MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
-        ).anyMatch(it -> it == this);
+    public static List<CoffeeChatStatus> from(final String filter) {
+        return Arrays.stream(values())
+                .filter(it -> it.filter.equals(filter))
+                .toList();
     }
 }
