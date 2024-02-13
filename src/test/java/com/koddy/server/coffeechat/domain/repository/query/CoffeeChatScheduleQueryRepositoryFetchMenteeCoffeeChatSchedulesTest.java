@@ -84,6 +84,16 @@ public class CoffeeChatScheduleQueryRepositoryFetchMenteeCoffeeChatSchedulesTest
     }
 
     @Test
+    @DisplayName("0. 멘티의 상태별 커피챗 개수를 조회한다")
+    void counts() {
+        assertAll(
+                () -> assertThat(coffeeChatRepository.getMenteeWaitingCoffeeChatCount(mentees[0].getId())).isEqualTo(15),
+                () -> assertThat(coffeeChatRepository.getMenteeScheduledCoffeeChatCount(mentees[0].getId())).isEqualTo(6),
+                () -> assertThat(coffeeChatRepository.getMenteePassedCoffeeChatCount(mentees[0].getId())).isEqualTo(9)
+        );
+    }
+
+    @Test
     @DisplayName("1. 멘티의 내 일정 `대기 상태` 커피챗 정보를 조회한다")
     void waiting() {
         // given
