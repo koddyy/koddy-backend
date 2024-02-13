@@ -1,7 +1,7 @@
 package com.koddy.server.coffeechat.presentation;
 
-import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.coffeechat.application.usecase.GetCoffeeChatScheduleUseCase;
+import com.koddy.server.coffeechat.application.usecase.query.response.CoffeeChatEachCategoryCounts;
 import com.koddy.server.coffeechat.domain.repository.query.response.MenteeCoffeeChatScheduleData;
 import com.koddy.server.coffeechat.domain.repository.query.response.MentorCoffeeChatScheduleData;
 import com.koddy.server.common.ControllerTest;
@@ -22,7 +22,6 @@ import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.body;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.SnippetFactory.query;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.createHttpSpecSnippets;
-import static com.koddy.server.common.utils.RestDocsSpecificationUtils.failureDocsWithAccessToken;
 import static com.koddy.server.common.utils.RestDocsSpecificationUtils.successDocsWithAccessToken;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -39,43 +38,40 @@ public class CoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
     private final Mentee mentee = MENTEE_1.toDomain().apply(2L);
 
     @Nested
-    @DisplayName("멘토의 내 일정 커피챗 상태별 조회 API [GET /api/coffeechats/mentors/me]")
-    class GetMentorSchedules {
-        private static final String BASE_URL = "/api/coffeechats/mentors/me";
+    @DisplayName("내 일정 상태별 커피챗 개수 조회 API [GET /api/coffeechats/me/category-counts]")
+    class GetEachCategoryCounts {
+        private static final String BASE_URL = "/api/coffeechats/me/category-counts";
 
         @Test
-        @DisplayName("멘토가 아니면 권한이 없다")
-        void throwExceptionByInvalidPermission() {
+        @DisplayName("내 일정 상태별 커피챗 개수를 조회한다")
+        void success() {
             // given
-            applyToken(true, mentee);
+            applyToken(true, mentor);
+            given(getCoffeeChatScheduleUseCase.getEachCategoryCounts(any())).willReturn(new CoffeeChatEachCategoryCounts(3L, 0L, 2L));
 
             // when - then
-            failedExecute(
-                    getRequestWithAccessToken(BASE_URL, Map.of(
-                            "status", "waiting",
-                            "page", "1"
-                    )),
-                    status().isForbidden(),
-                    ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
-                    failureDocsWithAccessToken("CoffeeChatApi/Schedule/Mentor/Failure", createHttpSpecSnippets(
-                            queryParameters(
-                                    query(
-                                            "status",
-                                            "커피챗 상태",
-                                            "- 대기 = waiting" + ENTER
-                                                    + "- 예정 = scheduled" + ENTER
-                                                    + "- 지나감 = passed",
-                                            true
-                                    ),
-                                    query("page", "페이지", "1부터 시작", true)
+            successfulExecute(
+                    getRequestWithAccessToken(BASE_URL),
+                    status().isOk(),
+                    successDocsWithAccessToken("CoffeeChatApi/MySchedule/CategoryCounts", createHttpSpecSnippets(
+                            responseFields(
+                                    body("waiting", "대기 일정 개수"),
+                                    body("scheduled", "예정 일정 개수"),
+                                    body("passed", "지나간 일정 개수")
                             )
                     ))
             );
         }
+    }
+
+    @Nested
+    @DisplayName("내 일정 상태별 커피챗 정보 조회 API [GET /api/coffeechats/me/schedules]")
+    class GetSchedules {
+        private static final String BASE_URL = "/api/coffeechats/me/schedules";
 
         @Test
-        @DisplayName("멘토의 내 일정 커피챗을 상태별로 조회한다")
-        void success() {
+        @DisplayName("멘토의 내 일정에서 상태별 커피챗 정보를 조회한다")
+        void mentor() {
             // given
             applyToken(true, mentor);
             given(getCoffeeChatScheduleUseCase.getMentorSchedules(any())).willReturn(new SliceResponse<>(
@@ -98,7 +94,7 @@ public class CoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                             "page", "1"
                     )),
                     status().isOk(),
-                    successDocsWithAccessToken("CoffeeChatApi/Schedule/Mentor/Success", createHttpSpecSnippets(
+                    successDocsWithAccessToken("CoffeeChatApi/MySchedule/Mentor", createHttpSpecSnippets(
                             queryParameters(
                                     query(
                                             "status",
@@ -110,7 +106,6 @@ public class CoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                                     ),
                                     query("page", "페이지", "1부터 시작", true)
                             ),
-
                             responseFields(
                                     body("result[].id", "커피챗 ID(PK)"),
                                     body("result[].status", "커피챗 상태"),
@@ -124,46 +119,10 @@ public class CoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                     ))
             );
         }
-    }
-
-    @Nested
-    @DisplayName("멘티의 내 일정 커피챗 상태별 조회 API [GET /api/coffeechats/mentees/me]")
-    class GetMenteeSchedules {
-        private static final String BASE_URL = "/api/coffeechats/mentees/me";
 
         @Test
-        @DisplayName("멘토가 아니면 권한이 없다")
-        void throwExceptionByInvalidPermission() {
-            // given
-            applyToken(true, mentor);
-
-            // when - then
-            failedExecute(
-                    getRequestWithAccessToken(BASE_URL, Map.of(
-                            "status", "waiting",
-                            "page", "1"
-                    )),
-                    status().isForbidden(),
-                    ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
-                    failureDocsWithAccessToken("CoffeeChatApi/Schedule/Mentee/Failure", createHttpSpecSnippets(
-                            queryParameters(
-                                    query(
-                                            "status",
-                                            "커피챗 상태",
-                                            "- 대기 = waiting" + ENTER
-                                                    + "- 예정 = scheduled" + ENTER
-                                                    + "- 지나감 = passed",
-                                            true
-                                    ),
-                                    query("page", "페이지", "1부터 시작", true)
-                            )
-                    ))
-            );
-        }
-
-        @Test
-        @DisplayName("멘티의 내 일정 커피챗을 상태별로 조회한다")
-        void success() {
+        @DisplayName("멘티의 내 일정에서 상태별 커피챗 정보를 조회한다")
+        void mentee() {
             // given
             applyToken(true, mentee);
             given(getCoffeeChatScheduleUseCase.getMenteeSchedules(any())).willReturn(new SliceResponse<>(
@@ -187,7 +146,7 @@ public class CoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                             "page", "1"
                     )),
                     status().isOk(),
-                    successDocsWithAccessToken("CoffeeChatApi/Schedule/Mentee/Success", createHttpSpecSnippets(
+                    successDocsWithAccessToken("CoffeeChatApi/MySchedule/Mentee", createHttpSpecSnippets(
                             queryParameters(
                                     query(
                                             "status",
@@ -199,7 +158,6 @@ public class CoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                                     ),
                                     query("page", "페이지", "1부터 시작", true)
                             ),
-
                             responseFields(
                                     body("result[].id", "커피챗 ID(PK)"),
                                     body("result[].status", "커피챗 상태"),
