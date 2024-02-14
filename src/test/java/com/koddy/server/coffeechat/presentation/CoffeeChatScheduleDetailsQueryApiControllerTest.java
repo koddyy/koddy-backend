@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
+
 import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
@@ -47,7 +49,7 @@ class CoffeeChatScheduleDetailsQueryApiControllerTest extends ControllerTest {
         @DisplayName("내 일정 커피챗 상세 조회를 진행한다 (멘토 입장)")
         void mentor() {
             // given
-            final CoffeeChat coffeeChat = CoffeeChatFixture.MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L);
+            final CoffeeChat coffeeChat = CoffeeChatFixture.MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L, LocalDateTime.now());
 
             applyToken(true, mentor);
             given(getCoffeeChatScheduleDetailsUseCase.invoke(any())).willReturn(new MentorCoffeeChatScheduleDetails(
@@ -77,14 +79,16 @@ class CoffeeChatScheduleDetailsQueryApiControllerTest extends ControllerTest {
 
                                     body("coffeeChat.id", "커피챗 ID(PK)"),
                                     body("coffeeChat.status", "커피챗 상태"),
-                                    body("coffeeChat.applyReason", "신청 이유"),
-                                    body("coffeeChat.suggestReason", "제안 이유"),
+                                    body("coffeeChat.applyReason", "신청 이유", "Nullable"),
+                                    body("coffeeChat.suggestReason", "제안 이유", "Nullable"),
                                     body("coffeeChat.question", "궁금한 점", "Nullable"),
                                     body("coffeeChat.rejectReason", "거절 사유", "Nullable"),
                                     body("coffeeChat.start", "시작 날짜", "Nullable"),
                                     body("coffeeChat.end", "종료 날짜", "Nullable"),
                                     body("coffeeChat.chatType", "진행 방식", "Nullable"),
-                                    body("coffeeChat.chatValue", "진행 방식에 대한 값", "Nullable")
+                                    body("coffeeChat.chatValue", "진행 방식에 대한 값", "Nullable"),
+                                    body("coffeeChat.createdAt", "생성 날짜 [신청/제안한 날짜]"),
+                                    body("coffeeChat.lastModifiedAt", "마지막 수정 날짜 [정보 수정 or 상태값 변경]")
                             )
                     ))
             );
@@ -94,7 +98,7 @@ class CoffeeChatScheduleDetailsQueryApiControllerTest extends ControllerTest {
         @DisplayName("내 일정 커피챗 상세 조회를 진행한다 (멘티 입장)")
         void mentee() {
             // given
-            final CoffeeChat coffeeChat = CoffeeChatFixture.MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor).apply(1L);
+            final CoffeeChat coffeeChat = CoffeeChatFixture.MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor).apply(1L, LocalDateTime.now());
 
             applyToken(true, mentee);
             given(getCoffeeChatScheduleDetailsUseCase.invoke(any())).willReturn(new MenteeCoffeeChatScheduleDetails(
@@ -124,14 +128,16 @@ class CoffeeChatScheduleDetailsQueryApiControllerTest extends ControllerTest {
 
                                     body("coffeeChat.id", "커피챗 ID(PK)"),
                                     body("coffeeChat.status", "커피챗 상태"),
-                                    body("coffeeChat.applyReason", "신청 이유"),
-                                    body("coffeeChat.suggestReason", "제안 이유"),
+                                    body("coffeeChat.applyReason", "신청 이유", "Nullable"),
+                                    body("coffeeChat.suggestReason", "제안 이유", "Nullable"),
                                     body("coffeeChat.question", "궁금한 점", "Nullable"),
                                     body("coffeeChat.rejectReason", "거절 사유", "Nullable"),
                                     body("coffeeChat.start", "시작 날짜", "Nullable"),
                                     body("coffeeChat.end", "종료 날짜", "Nullable"),
                                     body("coffeeChat.chatType", "진행 방식", "Nullable"),
-                                    body("coffeeChat.chatValue", "진행 방식에 대한 값", "Nullable")
+                                    body("coffeeChat.chatValue", "진행 방식에 대한 값", "Nullable"),
+                                    body("coffeeChat.createdAt", "생성 날짜 [신청/제안한 날짜]"),
+                                    body("coffeeChat.lastModifiedAt", "마지막 수정 날짜 [정보 수정 or 상태값 변경]")
                             )
                     ))
             );

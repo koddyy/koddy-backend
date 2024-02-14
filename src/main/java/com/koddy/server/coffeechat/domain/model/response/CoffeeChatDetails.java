@@ -15,7 +15,9 @@ public record CoffeeChatDetails(
         LocalDateTime start,
         LocalDateTime end,
         String chatType,
-        String chatValue
+        String chatValue,
+        LocalDateTime createdAt,
+        LocalDateTime lastModifiedAt
 ) {
     public static CoffeeChatDetails of(final CoffeeChat coffeeChat, final Encryptor encryptor) {
         return new CoffeeChatDetails(
@@ -28,7 +30,9 @@ public record CoffeeChatDetails(
                 (coffeeChat.getReservation() != null) ? coffeeChat.getReservation().getStart() : null,
                 (coffeeChat.getReservation() != null) ? coffeeChat.getReservation().getEnd() : null,
                 (coffeeChat.getStrategy() != null) ? coffeeChat.getStrategy().getType().getEng() : null,
-                (coffeeChat.getStrategy() != null) ? encryptor.symmetricDecrypt(coffeeChat.getStrategy().getValue()) : null
+                (coffeeChat.getStrategy() != null) ? encryptor.symmetricDecrypt(coffeeChat.getStrategy().getValue()) : null,
+                coffeeChat.getCreatedAt(),
+                coffeeChat.getLastModifiedAt()
         );
     }
 }
