@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.신청_제안한_커피챗을_취소한다;
-import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND;
+import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.COFFEE_CHAT_NOT_FOUND;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_2;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
@@ -50,12 +50,12 @@ public class CancelCoffeeChatAcceptanceTest extends AcceptanceTest {
 
             신청_제안한_커피챗을_취소한다(suggestedByMentorA, mentorB.token().accessToken())
                     .statusCode(NOT_FOUND.value())
-                    .body("errorCode", is(APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND.getErrorCode()))
-                    .body("message", is(APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND.getMessage()));
+                    .body("errorCode", is(COFFEE_CHAT_NOT_FOUND.getErrorCode()))
+                    .body("message", is(COFFEE_CHAT_NOT_FOUND.getMessage()));
             신청_제안한_커피챗을_취소한다(suggestedByMentorB, mentorA.token().accessToken())
                     .statusCode(NOT_FOUND.value())
-                    .body("errorCode", is(APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND.getErrorCode()))
-                    .body("message", is(APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND.getMessage()));
+                    .body("errorCode", is(COFFEE_CHAT_NOT_FOUND.getErrorCode()))
+                    .body("message", is(COFFEE_CHAT_NOT_FOUND.getMessage()));
         }
 
         @Test
@@ -92,12 +92,12 @@ public class CancelCoffeeChatAcceptanceTest extends AcceptanceTest {
 
             신청_제안한_커피챗을_취소한다(appliedByMenteeA, menteeB.token().accessToken())
                     .statusCode(NOT_FOUND.value())
-                    .body("errorCode", is(APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND.getErrorCode()))
-                    .body("message", is(APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND.getMessage()));
+                    .body("errorCode", is(COFFEE_CHAT_NOT_FOUND.getErrorCode()))
+                    .body("message", is(COFFEE_CHAT_NOT_FOUND.getMessage()));
             신청_제안한_커피챗을_취소한다(appliedByMenteeB, menteeA.token().accessToken())
                     .statusCode(NOT_FOUND.value())
-                    .body("errorCode", is(APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND.getErrorCode()))
-                    .body("message", is(APPLIED_OR_SUGGESTED_COFFEE_CHAT_NOT_FOUND.getMessage()));
+                    .body("errorCode", is(COFFEE_CHAT_NOT_FOUND.getErrorCode()))
+                    .body("message", is(COFFEE_CHAT_NOT_FOUND.getMessage()));
         }
 
         @Test

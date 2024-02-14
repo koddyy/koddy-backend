@@ -1,6 +1,5 @@
 package com.koddy.server.global.utils;
 
-import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.Nationality;
@@ -9,18 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY_COFFEE_CHAT_COMPLETE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_CANCEL;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_REJECT;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_APPROVE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_CANCEL;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_APPROVE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_REJECT;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE;
 import static com.koddy.server.member.domain.model.Language.Category.CN;
 import static com.koddy.server.member.domain.model.Language.Category.EN;
 import static com.koddy.server.member.domain.model.Language.Category.JP;
@@ -60,45 +47,5 @@ class FilteringConverterTest extends UnitTest {
 
         // then
         assertThat(result).containsExactly(KR, EN, CN, JP, VN);
-    }
-
-    @Test
-    @DisplayName("N개의 MenteeFlow 커피챗 상태 데이터를 List<CoffeeChatStatus> 도메인으로 변환한다")
-    void convertToMenteeFlowCoffeeChatStatus() {
-        // given
-        final String value = "APPLY,CANCEL,REJECT,APPROVE,COMPLETE";
-
-        // when
-        final List<CoffeeChatStatus> result = FilteringConverter.convertToMenteeFlowCoffeeChatStatus(value);
-
-        // then
-        assertThat(result).containsExactlyInAnyOrder(
-                MENTEE_APPLY,
-                MENTEE_CANCEL,
-                MENTOR_REJECT,
-                MENTOR_APPROVE,
-                MENTEE_APPLY_COFFEE_CHAT_COMPLETE
-        );
-    }
-
-    @Test
-    @DisplayName("N개의 MentorFlow 커피챗 상태 데이터를 List<CoffeeChatStatus> 도메인으로 변환한다")
-    void convertToMentorFlowCoffeeChatStatus() {
-        // given
-        final String value = "SUGGEST,CANCEL,REJECT,PENDING,APPROVE,COMPLETE";
-
-        // when
-        final List<CoffeeChatStatus> result = FilteringConverter.convertToMentorFlowCoffeeChatStatus(value);
-
-        // then
-        assertThat(result).containsExactlyInAnyOrder(
-                MENTOR_SUGGEST,
-                MENTOR_CANCEL,
-                MENTEE_REJECT,
-                MENTEE_PENDING,
-                MENTOR_FINALLY_REJECT,
-                MENTOR_FINALLY_APPROVE,
-                MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
-        );
     }
 }

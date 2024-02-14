@@ -44,9 +44,9 @@ public class MentorMainSearchRepositoryImpl implements MentorMainSearchRepositor
                         mentee.interest
                 ))
                 .from(coffeeChat)
-                .innerJoin(mentee).on(mentee.id.eq(coffeeChat.sourceMemberId))
+                .innerJoin(mentee).on(mentee.id.eq(coffeeChat.menteeId))
                 .where(
-                        coffeeChat.targetMemberId.eq(mentorId),
+                        coffeeChat.mentorId.eq(mentorId),
                         coffeeChat.status.eq(MENTEE_APPLY)
                 )
                 .limit(limit)
@@ -56,9 +56,9 @@ public class MentorMainSearchRepositoryImpl implements MentorMainSearchRepositor
         final Long totalCount = query
                 .select(coffeeChat.id.count())
                 .from(coffeeChat)
-                .innerJoin(mentee).on(mentee.id.eq(coffeeChat.sourceMemberId))
+                .innerJoin(mentee).on(mentee.id.eq(coffeeChat.menteeId))
                 .where(
-                        coffeeChat.targetMemberId.eq(mentorId),
+                        coffeeChat.mentorId.eq(mentorId),
                         coffeeChat.status.eq(MENTEE_APPLY)
                 )
                 .fetchOne();

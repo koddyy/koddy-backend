@@ -1,10 +1,12 @@
 package com.koddy.server.coffeechat.domain.repository.query;
 
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus;
+import com.koddy.server.coffeechat.domain.repository.query.response.MenteeCoffeeChatScheduleData;
 import com.koddy.server.coffeechat.domain.repository.query.response.MentorCoffeeChatScheduleData;
+import com.koddy.server.coffeechat.domain.repository.query.response.QMenteeCoffeeChatScheduleData;
 import com.koddy.server.coffeechat.domain.repository.query.response.QMentorCoffeeChatScheduleData;
-import com.koddy.server.coffeechat.domain.repository.query.spec.AppliedCoffeeChatQueryCondition;
-import com.koddy.server.coffeechat.domain.repository.query.spec.SuggestedCoffeeChatQueryCondition;
+import com.koddy.server.coffeechat.domain.repository.query.spec.MenteeCoffeeChatQueryCondition;
+import com.koddy.server.coffeechat.domain.repository.query.spec.MentorCoffeeChatQueryCondition;
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,16 +21,17 @@ import java.util.List;
 
 import static com.koddy.server.coffeechat.domain.model.QCoffeeChat.coffeeChat;
 import static com.koddy.server.member.domain.model.mentee.QMentee.mentee;
+import static com.koddy.server.member.domain.model.mentor.QMentor.mentor;
 
 @Repository
 @KoddyReadOnlyTransactional
 @RequiredArgsConstructor
-public class MentorCoffeeChatScheduleQueryRepositoryImpl implements MentorCoffeeChatScheduleQueryRepository {
+public class CoffeeChatScheduleQueryRepositoryImpl implements CoffeeChatScheduleQueryRepository {
     private final JPAQueryFactory query;
 
     @Override
-    public Slice<MentorCoffeeChatScheduleData> fetchSuggestedCoffeeChatsByCondition(
-            final SuggestedCoffeeChatQueryCondition condition,
+    public Slice<MentorCoffeeChatScheduleData> fetchMentorCoffeeChatSchedules(
+            final MentorCoffeeChatQueryCondition condition,
             final Pageable pageable
     ) {
         final List<MentorCoffeeChatScheduleData> result = query
@@ -41,9 +44,9 @@ public class MentorCoffeeChatScheduleQueryRepositoryImpl implements MentorCoffee
                         mentee.interest
                 ))
                 .from(coffeeChat)
-                .innerJoin(mentee).on(mentee.id.eq(coffeeChat.targetMemberId))
+                .innerJoin(mentee).on(mentee.id.eq(coffeeChat.menteeId))
                 .where(
-                        coffeeChat.sourceMemberId.eq(condition.memberId()),
+                        coffeeChat.mentorId.eq(condition.mentorId()),
                         statusIn(condition.status())
                 )
                 .orderBy(coffeeChat.lastModifiedAt.desc(), coffeeChat.id.desc())
@@ -59,23 +62,23 @@ public class MentorCoffeeChatScheduleQueryRepositoryImpl implements MentorCoffee
     }
 
     @Override
-    public Slice<MentorCoffeeChatScheduleData> fetchAppliedCoffeeChatsByCondition(
-            final AppliedCoffeeChatQueryCondition condition,
+    public Slice<MenteeCoffeeChatScheduleData> fetchMenteeCoffeeChatSchedules(
+            final MenteeCoffeeChatQueryCondition condition,
             final Pageable pageable
     ) {
-        final List<MentorCoffeeChatScheduleData> result = query
-                .select(new QMentorCoffeeChatScheduleData(
+        final List<MenteeCoffeeChatScheduleData> result = query
+                .select(new QMenteeCoffeeChatScheduleData(
                         coffeeChat.id,
                         coffeeChat.status,
-                        mentee.id,
-                        mentee.name,
-                        mentee.profileImageUrl,
-                        mentee.interest
+                        mentor.id,
+                        mentor.name,
+                        mentor.profileImageUrl,
+                        mentor.universityProfile
                 ))
                 .from(coffeeChat)
-                .innerJoin(mentee).on(mentee.id.eq(coffeeChat.sourceMemberId))
+                .innerJoin(mentor).on(mentor.id.eq(coffeeChat.mentorId))
                 .where(
-                        coffeeChat.targetMemberId.eq(condition.memberId()),
+                        coffeeChat.menteeId.eq(condition.menteeId()),
                         statusIn(condition.status())
                 )
                 .orderBy(coffeeChat.lastModifiedAt.desc(), coffeeChat.id.desc())

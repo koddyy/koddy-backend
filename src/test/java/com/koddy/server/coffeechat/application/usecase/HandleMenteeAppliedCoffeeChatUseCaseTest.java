@@ -44,16 +44,16 @@ class HandleMenteeAppliedCoffeeChatUseCaseTest extends UnitTest {
         final CoffeeChat coffeeChat = MenteeFlow.apply(start, start.plusMinutes(30), mentee, mentor).apply(1L);
 
         final RejectAppliedCoffeeChatCommand command = new RejectAppliedCoffeeChatCommand(mentor.getId(), coffeeChat.getId(), "거절...");
-        given(coffeeChatRepository.getMenteeAppliedCoffeeChat(command.coffeeChatId(), command.mentorId())).willReturn(coffeeChat);
+        given(coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId(), command.mentorId())).willReturn(coffeeChat);
 
         // when
         sut.reject(command);
 
         // then
         assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getMenteeAppliedCoffeeChat(command.coffeeChatId(), command.mentorId()),
-                () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
-                () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
+                () -> verify(coffeeChatRepository, times(1)).getByIdAndMentorId(command.coffeeChatId(), command.mentorId()),
+                () -> assertThat(coffeeChat.getMentorId()).isEqualTo(mentor.getId()),
+                () -> assertThat(coffeeChat.getMenteeId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_REJECT),
                 () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                 () -> assertThat(coffeeChat.getSuggestReason()).isNull(),
@@ -77,16 +77,16 @@ class HandleMenteeAppliedCoffeeChatUseCaseTest extends UnitTest {
                 Strategy.Type.KAKAO_ID,
                 "sjiwon"
         );
-        given(coffeeChatRepository.getMenteeAppliedCoffeeChat(command.coffeeChatId(), command.mentorId())).willReturn(coffeeChat);
+        given(coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId(), command.mentorId())).willReturn(coffeeChat);
 
         // when
         sut.approve(command);
 
         // then
         assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getMenteeAppliedCoffeeChat(command.coffeeChatId(), command.mentorId()),
-                () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentee.getId()),
-                () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentor.getId()),
+                () -> verify(coffeeChatRepository, times(1)).getByIdAndMentorId(command.coffeeChatId(), command.mentorId()),
+                () -> assertThat(coffeeChat.getMentorId()).isEqualTo(mentor.getId()),
+                () -> assertThat(coffeeChat.getMenteeId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_APPROVE),
                 () -> assertThat(coffeeChat.getApplyReason()).isNotNull(),
                 () -> assertThat(coffeeChat.getSuggestReason()).isNull(),

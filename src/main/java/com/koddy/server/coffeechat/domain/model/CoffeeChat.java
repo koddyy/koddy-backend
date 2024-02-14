@@ -34,11 +34,11 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Table(name = "coffee_chat")
 public class CoffeeChat extends BaseEntity<CoffeeChat> {
-    @Column(name = "source_member_id", nullable = false)
-    private Long sourceMemberId;
+    @Column(name = "mentor_id", nullable = false)
+    private Long mentorId;
 
-    @Column(name = "target_member_id", nullable = false)
-    private Long targetMemberId;
+    @Column(name = "mentee_id", nullable = false)
+    private Long menteeId;
 
     @Enumerated(STRING)
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(30)")
@@ -67,8 +67,8 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     private Strategy strategy;
 
     private CoffeeChat(
-            final Long sourceMemberId,
-            final Long targetMemberId,
+            final Mentor mentor,
+            final Mentee mentee,
             final CoffeeChatStatus status,
             final String applyReason,
             final String suggestReason,
@@ -77,8 +77,8 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             final Reservation reservation,
             final Strategy strategy
     ) {
-        this.sourceMemberId = sourceMemberId;
-        this.targetMemberId = targetMemberId;
+        this.mentorId = mentor.getId();
+        this.menteeId = mentee.getId();
         this.status = status;
         this.applyReason = applyReason;
         this.suggestReason = suggestReason;
@@ -94,17 +94,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             final String applyReason,
             final Reservation reservation
     ) {
-        return new CoffeeChat(
-                mentee.getId(),
-                mentor.getId(),
-                MENTEE_APPLY,
-                applyReason,
-                null,
-                null,
-                null,
-                reservation,
-                null
-        );
+        return new CoffeeChat(mentor, mentee, MENTEE_APPLY, applyReason, null, null, null, reservation, null);
     }
 
     public static CoffeeChat suggest(
@@ -112,17 +102,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             final Mentee mentee,
             final String suggestReason
     ) {
-        return new CoffeeChat(
-                mentor.getId(),
-                mentee.getId(),
-                MENTOR_SUGGEST,
-                null,
-                suggestReason,
-                null,
-                null,
-                null,
-                null
-        );
+        return new CoffeeChat(mentor, mentee, MENTOR_SUGGEST, null, suggestReason, null, null, null, null);
     }
 
     /**

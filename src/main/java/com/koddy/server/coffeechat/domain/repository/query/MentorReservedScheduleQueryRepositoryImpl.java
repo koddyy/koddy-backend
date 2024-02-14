@@ -32,7 +32,7 @@ public class MentorReservedScheduleQueryRepositoryImpl implements MentorReserved
                 .select(coffeeChat)
                 .from(coffeeChat)
                 .where(
-                        coffeeChat.sourceMemberId.eq(mentorId),
+                        coffeeChat.mentorId.eq(mentorId),
                         reservationStartBetween(year, month),
                         statusIn(List.of(MENTEE_PENDING, MENTOR_FINALLY_APPROVE))
                 )
@@ -42,7 +42,7 @@ public class MentorReservedScheduleQueryRepositoryImpl implements MentorReserved
                 .select(coffeeChat)
                 .from(coffeeChat)
                 .where(
-                        coffeeChat.targetMemberId.eq(mentorId),
+                        coffeeChat.mentorId.eq(mentorId),
                         reservationStartBetween(year, month),
                         statusIn(List.of(MENTEE_APPLY, MENTOR_APPROVE))
                 )

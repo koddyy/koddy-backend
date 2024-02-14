@@ -49,16 +49,16 @@ class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
         final CoffeeChat coffeeChat = MentorFlow.suggest(mentor, mentee).apply(1L);
 
         final RejectSuggestedCoffeeChatCommand command = new RejectSuggestedCoffeeChatCommand(mentee.getId(), coffeeChat.getId(), "거절...");
-        given(coffeeChatRepository.getMentorSuggestedCoffeeChat(command.coffeeChatId(), command.menteeId())).willReturn(coffeeChat);
+        given(coffeeChatRepository.getByIdAndMenteeId(command.coffeeChatId(), command.menteeId())).willReturn(coffeeChat);
 
         // when
         sut.reject(command);
 
         // then
         assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getMentorSuggestedCoffeeChat(command.coffeeChatId(), command.menteeId()),
-                () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
-                () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
+                () -> verify(coffeeChatRepository, times(1)).getByIdAndMenteeId(command.coffeeChatId(), command.menteeId()),
+                () -> assertThat(coffeeChat.getMentorId()).isEqualTo(mentor.getId()),
+                () -> assertThat(coffeeChat.getMenteeId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_REJECT),
                 () -> assertThat(coffeeChat.getApplyReason()).isNull(),
                 () -> assertThat(coffeeChat.getSuggestReason()).isNotNull(),
@@ -81,8 +81,8 @@ class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
                 "질문..",
                 Reservation.of(start, start.plusMinutes(30))
         );
-        given(coffeeChatRepository.getMentorSuggestedCoffeeChat(command.coffeeChatId(), command.menteeId())).willReturn(coffeeChat);
-        given(mentorRepository.getByIdWithSchedules(coffeeChat.getSourceMemberId())).willReturn(mentor);
+        given(coffeeChatRepository.getByIdAndMenteeId(command.coffeeChatId(), command.menteeId())).willReturn(coffeeChat);
+        given(mentorRepository.getByIdWithSchedules(coffeeChat.getMentorId())).willReturn(mentor);
         doNothing()
                 .when(reservationAvailabilityChecker)
                 .check(mentor, command.reservation());
@@ -92,11 +92,11 @@ class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
 
         // then
         assertAll(
-                () -> verify(coffeeChatRepository, times(1)).getMentorSuggestedCoffeeChat(command.coffeeChatId(), command.menteeId()),
-                () -> verify(mentorRepository, times(1)).getByIdWithSchedules(coffeeChat.getSourceMemberId()),
+                () -> verify(coffeeChatRepository, times(1)).getByIdAndMenteeId(command.coffeeChatId(), command.menteeId()),
+                () -> verify(mentorRepository, times(1)).getByIdWithSchedules(coffeeChat.getMentorId()),
                 () -> verify(reservationAvailabilityChecker, times(1)).check(mentor, command.reservation()),
-                () -> assertThat(coffeeChat.getSourceMemberId()).isEqualTo(mentor.getId()),
-                () -> assertThat(coffeeChat.getTargetMemberId()).isEqualTo(mentee.getId()),
+                () -> assertThat(coffeeChat.getMentorId()).isEqualTo(mentor.getId()),
+                () -> assertThat(coffeeChat.getMenteeId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_PENDING),
                 () -> assertThat(coffeeChat.getApplyReason()).isNull(),
                 () -> assertThat(coffeeChat.getSuggestReason()).isNotNull(),
