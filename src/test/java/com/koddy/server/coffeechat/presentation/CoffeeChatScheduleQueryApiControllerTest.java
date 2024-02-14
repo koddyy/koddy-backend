@@ -100,6 +100,7 @@ public class CoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                                             "status",
                                             "커피챗 상태",
                                             "- 대기 = waiting" + ENTER
+                                                    + "- 제안 = suggest" + ENTER
                                                     + "- 예정 = scheduled" + ENTER
                                                     + "- 지나감 = passed",
                                             true
@@ -152,6 +153,7 @@ public class CoffeeChatScheduleQueryApiControllerTest extends ControllerTest {
                                             "status",
                                             "커피챗 상태",
                                             "- 대기 = waiting" + ENTER
+                                                    + "- 제안 = suggest" + ENTER
                                                     + "- 예정 = scheduled" + ENTER
                                                     + "- 지나감 = passed",
                                             true
