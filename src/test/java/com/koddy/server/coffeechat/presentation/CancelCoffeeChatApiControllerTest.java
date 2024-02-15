@@ -1,6 +1,7 @@
 package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.coffeechat.application.usecase.CancelCoffeeChatUseCase;
+import com.koddy.server.coffeechat.presentation.dto.request.CancelCoffeeChatRequest;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +30,7 @@ class CancelCoffeeChatApiControllerTest extends ControllerTest {
     @DisplayName("신청/제안한 커피챗 취소 API [DELETE /api/coffeechats/cancel/{coffeeChatId}]")
     class Cancel {
         private static final String BASE_URL = "/api/coffeechats/cancel/{coffeeChatId}";
+        private final CancelCoffeeChatRequest request = new CancelCoffeeChatRequest("취소..");
 
         @Test
         @DisplayName("신청/제안한 커피챗을 취소한다")
@@ -41,7 +43,7 @@ class CancelCoffeeChatApiControllerTest extends ControllerTest {
 
             // when - then
             successfulExecute(
-                    deleteRequestWithAccessToken(new UrlWithVariables(BASE_URL, COFFEE_CHAT_ID)),
+                    patchRequestWithAccessToken(new UrlWithVariables(BASE_URL, COFFEE_CHAT_ID), request),
                     status().isNoContent(),
                     successDocsWithAccessToken("CoffeeChatApi/LifeCycle/Cancel", createHttpSpecSnippets(
                             pathParameters(

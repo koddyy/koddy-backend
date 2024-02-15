@@ -4,6 +4,7 @@ import com.koddy.server.auth.domain.model.Authenticated;
 
 public record CancelCoffeeChatCommand(
         Authenticated authenticated,
-        long coffeeChatId
+        long coffeeChatId,
+        String cancelReason
 ) {
 }

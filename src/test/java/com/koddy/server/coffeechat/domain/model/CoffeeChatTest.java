@@ -24,7 +24,6 @@ import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_F
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE;
-import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_CANCEL_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_COMPLETE_STATUS;
 import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
@@ -251,31 +250,13 @@ class CoffeeChatTest extends UnitTest {
     @DisplayName("신청/제안한 커피챗 취소")
     class Cancel {
         @Test
-        @DisplayName("멘티(APPLY) & 멘토(SUGGESET) 상태가 아니면 취소가 불가능하다")
-        void throwExceptionByCannotCancelStatus() {
-            // given
-            final CoffeeChat applyCoffeeChat = MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor).apply(1L);
-            final CoffeeChat suggestCoffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(2L);
-
-            // when - then
-            assertAll(
-                    () -> assertThatThrownBy(() -> applyCoffeeChat.cancel(MENTEE_CANCEL))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(CANNOT_CANCEL_STATUS.getMessage()),
-                    () -> assertThatThrownBy(() -> suggestCoffeeChat.cancel(MENTOR_CANCEL))
-                            .isInstanceOf(CoffeeChatException.class)
-                            .hasMessage(CANNOT_CANCEL_STATUS.getMessage())
-            );
-        }
-
-        @Test
         @DisplayName("멘티는 자신이 신청한 커피챗을 취소한다")
         void cancelAppliedCoffeeChat() {
             // given
             final CoffeeChat coffeeChat = MenteeFlow.apply(월요일_1주차_20_00_시작, mentee, mentor).apply(1L);
 
             // when
-            coffeeChat.cancel(MENTEE_CANCEL);
+            coffeeChat.cancel(MENTEE_CANCEL, "취소..");
 
             // then
             assertAll(
@@ -299,7 +280,7 @@ class CoffeeChatTest extends UnitTest {
             final CoffeeChat coffeeChat = MentorFlow.suggest(mentor, mentee).apply(1L);
 
             // when
-            coffeeChat.cancel(MENTOR_CANCEL);
+            coffeeChat.cancel(MENTOR_CANCEL, "취소..");
 
             // then
             assertAll(
