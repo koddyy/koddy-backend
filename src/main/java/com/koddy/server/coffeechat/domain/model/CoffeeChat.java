@@ -43,21 +43,8 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(30)")
     private CoffeeChatStatus status;
 
-    @Lob
-    @Column(name = "apply_reason", columnDefinition = "TEXT")
-    private String applyReason;
-
-    @Lob
-    @Column(name = "suggest_reason", columnDefinition = "TEXT")
-    private String suggestReason;
-
-    @Lob
-    @Column(name = "cancel_reason", columnDefinition = "TEXT")
-    private String cancelReason;
-
-    @Lob
-    @Column(name = "reject_reason", columnDefinition = "TEXT")
-    private String rejectReason;
+    @Embedded
+    private Reason reason;
 
     @Lob
     @Column(name = "question", columnDefinition = "TEXT")
@@ -73,10 +60,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             final Mentor mentor,
             final Mentee mentee,
             final CoffeeChatStatus status,
-            final String applyReason,
-            final String suggestReason,
-            final String cancelReason,
-            final String rejectReason,
+            final Reason reason,
             final String question,
             final Reservation reservation,
             final Strategy strategy
@@ -84,10 +68,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         this.mentorId = mentor.getId();
         this.menteeId = mentee.getId();
         this.status = status;
-        this.applyReason = applyReason;
-        this.suggestReason = suggestReason;
-        this.cancelReason = cancelReason;
-        this.rejectReason = rejectReason;
+        this.reason = reason;
         this.question = question;
         this.reservation = reservation;
         this.strategy = strategy;
@@ -99,7 +80,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             final String applyReason,
             final Reservation reservation
     ) {
-        return new CoffeeChat(mentor, mentee, MENTEE_APPLY, applyReason, null, null, null, null, reservation, null);
+        return new CoffeeChat(mentor, mentee, MENTEE_APPLY, Reason.apply(applyReason), null, reservation, null);
     }
 
     public static CoffeeChat suggest(
@@ -107,7 +88,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             final Mentee mentee,
             final String suggestReason
     ) {
-        return new CoffeeChat(mentor, mentee, MENTOR_SUGGEST, null, suggestReason, null, null, null, null, null);
+        return new CoffeeChat(mentor, mentee, MENTOR_SUGGEST, Reason.suggest(suggestReason), null, null, null);
     }
 
     /**
@@ -115,7 +96,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
      */
     public void cancel(final CoffeeChatStatus status, final String cancelReason) {
         this.status = status;
-        this.cancelReason = cancelReason;
+        this.reason = this.reason.applyCancelReason(cancelReason);
     }
 
     public boolean isMenteeCannotCancel() {
@@ -134,7 +115,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             throw new CoffeeChatException(CANNOT_REJECT_STATUS);
         }
 
-        this.rejectReason = rejectReason;
+        this.reason = this.reason.applyRejectReason(rejectReason);
         this.status = MENTOR_REJECT;
     }
 
@@ -158,7 +139,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             throw new CoffeeChatException(CANNOT_REJECT_STATUS);
         }
 
-        this.rejectReason = rejectReason;
+        this.reason = this.reason.applyRejectReason(rejectReason);
         this.status = MENTEE_REJECT;
     }
 
@@ -183,7 +164,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             throw new CoffeeChatException(CANNOT_FINALLY_DECIDE_STATUS);
         }
 
-        this.rejectReason = rejectReason;
+        this.reason = this.reason.applyRejectReason(rejectReason);
         this.status = MENTOR_FINALLY_REJECT;
     }
 

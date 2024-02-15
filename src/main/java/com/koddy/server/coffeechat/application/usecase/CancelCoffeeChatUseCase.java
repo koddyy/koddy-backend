@@ -34,7 +34,7 @@ public class CancelCoffeeChatUseCase {
         if (coffeeChat.isMentorCannotCancel()) {
             throw new CoffeeChatException(CANNOT_CANCEL_STATUS);
         }
-        coffeeChat.cancel(MENTOR_CANCEL, coffeeChat.getCancelReason());
+        coffeeChat.cancel(MENTOR_CANCEL, command.cancelReason());
     }
 
     private void cancelAppliedCoffeeChat(final CancelCoffeeChatCommand command, final Authenticated authenticated) {
@@ -42,6 +42,6 @@ public class CancelCoffeeChatUseCase {
         if (coffeeChat.isMenteeCannotCancel()) {
             throw new CoffeeChatException(CANNOT_CANCEL_STATUS);
         }
-        coffeeChat.cancel(MENTEE_CANCEL, coffeeChat.getCancelReason());
+        coffeeChat.cancel(MENTEE_CANCEL, command.cancelReason());
     }
 }
