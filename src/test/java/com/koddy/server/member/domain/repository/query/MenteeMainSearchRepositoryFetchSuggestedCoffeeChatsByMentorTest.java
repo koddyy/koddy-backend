@@ -123,10 +123,10 @@ class MenteeMainSearchRepositoryFetchSuggestedCoffeeChatsByMentorTest extends Re
         );
 
         /* cancel 후 limit별 조회 */
-        coffeeChat3.cancel(MENTOR_CANCEL);
-        coffeeChat5.cancel(MENTOR_CANCEL);
-        coffeeChat7.cancel(MENTOR_CANCEL);
-        coffeeChat9.cancel(MENTOR_CANCEL);
+        coffeeChat3.cancel(MENTOR_CANCEL, "취소..");
+        coffeeChat5.cancel(MENTOR_CANCEL, "취소..");
+        coffeeChat7.cancel(MENTOR_CANCEL, "취소..");
+        coffeeChat9.cancel(MENTOR_CANCEL, "취소..");
 
         final Page<SuggestedCoffeeChatsByMentor> result5 = sut.fetchSuggestedMentors(mentee.getId(), 3);
         final Page<SuggestedCoffeeChatsByMentor> result6 = sut.fetchSuggestedMentors(mentee.getId(), 5);

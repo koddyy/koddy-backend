@@ -169,7 +169,7 @@ public enum CoffeeChatFixture {
                     "신청..",
                     Reservation.of(fixture.start, fixture.end)
             );
-            coffeeChat.cancel(MENTEE_CANCEL);
+            coffeeChat.cancel(MENTEE_CANCEL, "취소..");
             return coffeeChat;
         }
 
@@ -180,7 +180,7 @@ public enum CoffeeChatFixture {
                     "신청..",
                     Reservation.of(start, end)
             );
-            coffeeChat.cancel(MENTEE_CANCEL);
+            coffeeChat.cancel(MENTEE_CANCEL, "취소..");
             return coffeeChat;
         }
 
@@ -260,7 +260,7 @@ public enum CoffeeChatFixture {
 
         public static CoffeeChat suggestAndCancel(final Mentor mentor, final Mentee mentee) {
             final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
-            coffeeChat.cancel(MENTOR_CANCEL);
+            coffeeChat.cancel(MENTOR_CANCEL, "취소..");
             return coffeeChat;
         }
 

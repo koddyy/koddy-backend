@@ -22,7 +22,6 @@ import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_F
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_APPROVE_STATUS;
-import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_CANCEL_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_COMPLETE_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_FINALLY_DECIDE_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_REJECT_STATUS;
@@ -44,21 +43,12 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(30)")
     private CoffeeChatStatus status;
 
-    @Lob
-    @Column(name = "apply_reason", columnDefinition = "TEXT")
-    private String applyReason;
-
-    @Lob
-    @Column(name = "suggest_reason", columnDefinition = "TEXT")
-    private String suggestReason;
+    @Embedded
+    private Reason reason;
 
     @Lob
     @Column(name = "question", columnDefinition = "TEXT")
     private String question;
-
-    @Lob
-    @Column(name = "reject_reason", columnDefinition = "TEXT")
-    private String rejectReason;
 
     @Embedded
     private Reservation reservation;
@@ -70,20 +60,16 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             final Mentor mentor,
             final Mentee mentee,
             final CoffeeChatStatus status,
-            final String applyReason,
-            final String suggestReason,
+            final Reason reason,
             final String question,
-            final String rejectReason,
             final Reservation reservation,
             final Strategy strategy
     ) {
         this.mentorId = mentor.getId();
         this.menteeId = mentee.getId();
         this.status = status;
-        this.applyReason = applyReason;
-        this.suggestReason = suggestReason;
+        this.reason = reason;
         this.question = question;
-        this.rejectReason = rejectReason;
         this.reservation = reservation;
         this.strategy = strategy;
     }
@@ -94,7 +80,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             final String applyReason,
             final Reservation reservation
     ) {
-        return new CoffeeChat(mentor, mentee, MENTEE_APPLY, applyReason, null, null, null, reservation, null);
+        return new CoffeeChat(mentor, mentee, MENTEE_APPLY, Reason.apply(applyReason), null, reservation, null);
     }
 
     public static CoffeeChat suggest(
@@ -102,18 +88,23 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             final Mentee mentee,
             final String suggestReason
     ) {
-        return new CoffeeChat(mentor, mentee, MENTOR_SUGGEST, null, suggestReason, null, null, null, null);
+        return new CoffeeChat(mentor, mentee, MENTOR_SUGGEST, Reason.suggest(suggestReason), null, null, null);
     }
 
     /**
-     * 멘티 신청 커피챗 or 멘토 제안 커피챗을 취소 (Self)
+     * 멘티 신청 커피챗 or 멘토 제안 커피챗을 취소
      */
-    public void cancel(final CoffeeChatStatus status) {
-        if (this.status != MENTEE_APPLY && this.status != MENTOR_SUGGEST) {
-            throw new CoffeeChatException(CANNOT_CANCEL_STATUS);
-        }
-
+    public void cancel(final CoffeeChatStatus status, final String cancelReason) {
         this.status = status;
+        this.reason = this.reason.applyCancelReason(cancelReason);
+    }
+
+    public boolean isMenteeCannotCancel() {
+        return status.isMenteeCannotCancel();
+    }
+
+    public boolean isMentorCannotCancel() {
+        return status.isMentorCannotCancel();
     }
 
     /**
@@ -124,7 +115,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             throw new CoffeeChatException(CANNOT_REJECT_STATUS);
         }
 
-        this.rejectReason = rejectReason;
+        this.reason = this.reason.applyRejectReason(rejectReason);
         this.status = MENTOR_REJECT;
     }
 
@@ -148,7 +139,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             throw new CoffeeChatException(CANNOT_REJECT_STATUS);
         }
 
-        this.rejectReason = rejectReason;
+        this.reason = this.reason.applyRejectReason(rejectReason);
         this.status = MENTEE_REJECT;
     }
 
@@ -173,7 +164,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
             throw new CoffeeChatException(CANNOT_FINALLY_DECIDE_STATUS);
         }
 
-        this.rejectReason = rejectReason;
+        this.reason = this.reason.applyRejectReason(rejectReason);
         this.status = MENTOR_FINALLY_REJECT;
     }
 
