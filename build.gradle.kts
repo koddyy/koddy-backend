@@ -105,6 +105,9 @@ dependencies {
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
+    // Mockk
+    testImplementation("io.mockk:mockk:${property("mockkVersion")}")
+
     // Spring REST Docs (With MockMvc)
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 
