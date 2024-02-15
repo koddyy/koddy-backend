@@ -1,7 +1,11 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
-    java
+    kotlin("jvm")
+    kotlin("kapt")
+    kotlin("plugin.spring")
+    kotlin("plugin.jpa")
     id("org.springframework.boot")
     id("io.spring.dependency-management")
     id("org.asciidoctor.jvm.convert")
@@ -9,10 +13,7 @@ plugins {
 
 group = "${property("projectGroup")}"
 version = "${property("applicationVersion")}"
-
-java {
-    sourceCompatibility = JavaVersion.valueOf("VERSION_${property("javaVersion")}")
-}
+java.sourceCompatibility = JavaVersion.valueOf("VERSION_${property("javaVersion")}")
 
 configurations {
     compileOnly {
@@ -24,13 +25,31 @@ repositories {
     mavenCentral()
 }
 
+allOpen {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
+}
+
+noArg {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
+}
+
 dependencies {
+    // Kotlin
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
     // Spring Web
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.security:spring-security-crypto")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    kapt("org.springframework.boot:spring-boot-configuration-processor")
 
     // Data
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -103,20 +122,10 @@ dependencies {
     testImplementation("org.testcontainers:localstack:${property("localStackVersion")}")
 }
 
-// QueryDsl QClass
-val queryDslTypeDir: String = "src/main/generated"
-
-tasks.withType<JavaCompile>().configureEach {
-    options.generatedSourceOutputDirectory = file(queryDslTypeDir)
-}
-
-sourceSets {
-    getByName("main").java.srcDirs(queryDslTypeDir)
-}
-
-tasks.named("clean") {
-    doLast {
-        file(queryDslTypeDir).deleteRecursively()
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs += "-Xjsr305=strict"
+        jvmTarget = "${project.property("javaVersion")}"
     }
 }
 
