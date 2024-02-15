@@ -2,6 +2,7 @@ package com.koddy.server.acceptance.coffeechat;
 
 import com.koddy.server.coffeechat.presentation.dto.request.ApproveAppliedCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.ApprovePendingCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.dto.request.CancelCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.CreateMeetingLinkRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.MenteeApplyCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.dto.request.MentorSuggestCoffeeChatRequest;
@@ -232,7 +233,9 @@ public class CoffeeChatAcceptanceStep {
                 .build(coffeeChatId)
                 .getPath();
 
-        return deleteRequestWithAccessToken(uri, accessToken);
+        final CancelCoffeeChatRequest request = new CancelCoffeeChatRequest("취소");
+
+        return patchRequestWithAccessToken(uri, request, accessToken);
     }
 
     public static ValidatableResponse 내_일정_커피챗_상세_조회를_진행한다(final long coffeeChatId, final String accessToken) {
