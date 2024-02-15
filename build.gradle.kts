@@ -105,7 +105,10 @@ dependencies {
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    // Mockk
+    // Kotest & Mockk
+    testImplementation("io.kotest:kotest-runner-junit5:${property("kotestVersion")}")
+    testImplementation("io.kotest:kotest-assertions-core:${property("kotestVersion")}")
+    testImplementation("io.kotest:kotest-extensions-spring:${property("kotestVersion")}")
     testImplementation("io.mockk:mockk:${property("mockkVersion")}")
 
     // Spring REST Docs (With MockMvc)
