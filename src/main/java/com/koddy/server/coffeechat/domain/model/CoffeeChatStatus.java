@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Getter
 @RequiredArgsConstructor
@@ -47,5 +48,15 @@ public enum CoffeeChatStatus {
                 MENTEE_CANCEL, MENTOR_REJECT, MENTEE_APPLY_COFFEE_CHAT_COMPLETE,
                 MENTOR_CANCEL, MENTEE_REJECT, MENTOR_FINALLY_REJECT, MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
         );
+    }
+
+    public boolean isMenteeCannotCancel() {
+        return Stream.of(MENTEE_APPLY, MENTOR_APPROVE)
+                .noneMatch(it -> it == this);
+    }
+
+    public boolean isMentorCannotCancel() {
+        return Stream.of(MENTOR_SUGGEST, MENTEE_PENDING, MENTOR_FINALLY_APPROVE)
+                .noneMatch(it -> it == this);
     }
 }
