@@ -9,6 +9,7 @@ plugins {
     id("org.springframework.boot")
     id("io.spring.dependency-management")
     id("org.asciidoctor.jvm.convert")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 group = "${property("projectGroup")}"
