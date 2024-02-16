@@ -1,17 +1,16 @@
-package com.koddy.server.coffeechat.exception;
+package com.koddy.server.coffeechat.exception
 
-import com.koddy.server.global.base.BaseExceptionCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import com.koddy.server.global.base.BusinessExceptionCode
+import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.BAD_REQUEST
+import org.springframework.http.HttpStatus.CONFLICT
+import org.springframework.http.HttpStatus.NOT_FOUND
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-
-@Getter
-@RequiredArgsConstructor
-public enum CoffeeChatExceptionCode implements BaseExceptionCode {
+enum class CoffeeChatExceptionCode(
+    override val status: HttpStatus,
+    override val errorCode: String,
+    override val message: String,
+) : BusinessExceptionCode {
     COFFEE_CHAT_NOT_FOUND(NOT_FOUND, "COFFEE_CHAT_001", "커피챗 정보가 존재하지 않습니다."),
     RESERVATION_INFO_MUST_EXISTS(BAD_REQUEST, "COFFEE_CHAT_002", "예약 정보를 빠짐없이 선택해주세요."),
     RESERVATION_MUST_ALIGN(BAD_REQUEST, "COFFEE_CHAT_003", "시작이 종료 이후가 될 수 없습니다."),
@@ -24,9 +23,4 @@ public enum CoffeeChatExceptionCode implements BaseExceptionCode {
     CANNOT_REJECT_STATUS(CONFLICT, "COFFEE_CHAT_010", "거절할 수 없는 상태입니다."),
     CANNOT_FINALLY_DECIDE_STATUS(CONFLICT, "COFFEE_CHAT_011", "최종 결정을 할 수 없는 상태입니다."),
     CANNOT_COMPLETE_STATUS(CONFLICT, "COFFEE_CHAT_012", "완료할 수 없는 상태입니다."),
-    ;
-
-    private final HttpStatus status;
-    private final String errorCode;
-    private final String message;
 }

@@ -1,17 +1,16 @@
-package com.koddy.server.member.exception;
+package com.koddy.server.member.exception
 
-import com.koddy.server.global.base.BaseExceptionCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import com.koddy.server.global.base.BusinessExceptionCode
+import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.BAD_REQUEST
+import org.springframework.http.HttpStatus.CONFLICT
+import org.springframework.http.HttpStatus.NOT_FOUND
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-
-@Getter
-@RequiredArgsConstructor
-public enum MemberExceptionCode implements BaseExceptionCode {
+enum class MemberExceptionCode(
+    override val status: HttpStatus,
+    override val errorCode: String,
+    override val message: String,
+) : BusinessExceptionCode {
     MEMBER_NOT_FOUND(NOT_FOUND, "MEMBER_001", "사용자 정보가 존재하지 않습니다."),
     MENTOR_NOT_FOUND(NOT_FOUND, "MEMBER_002", "멘토 정보가 존재하지 않습니다."),
     MENTEE_NOT_FOUND(NOT_FOUND, "MEMBER_003", "멘티 정보가 존재하지 않습니다."),
@@ -28,9 +27,4 @@ public enum MemberExceptionCode implements BaseExceptionCode {
     MENTOR_NOT_FILL_IN_SCHEDULE(CONFLICT, "MEMBER_014", "멘토가 아직 멘토링 준비가 되지 않았습니다."),
     CANNOT_RESERVATION(CONFLICT, "MEMBER_015", "이미 예약되었거나 멘토링이 가능하지 않은 날짜입니다."),
     ACCOUNT_ALREADY_EXISTS(CONFLICT, "MEMBER_016", "이미 가입된 사용자입니다."),
-    ;
-
-    private final HttpStatus status;
-    private final String errorCode;
-    private final String message;
 }

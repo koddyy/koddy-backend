@@ -1,11 +1,14 @@
 package com.koddy.server.coffeechat.domain.model;
 
+import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.INVALID_COFFEECHAT_STATUS;
 
 @Getter
 @RequiredArgsConstructor
@@ -30,9 +33,18 @@ public enum CoffeeChatStatus {
     private final String filter;
 
     public static List<CoffeeChatStatus> from(final String filter) {
+        if (isAnonymousFilter(filter)) {
+            throw new CoffeeChatException(INVALID_COFFEECHAT_STATUS);
+        }
+
         return Arrays.stream(values())
                 .filter(it -> it.filter.equals(filter))
                 .toList();
+    }
+
+    private static boolean isAnonymousFilter(final String filter) {
+        return Arrays.stream(values())
+                .noneMatch(it -> it.filter.equals(filter));
     }
 
     public static List<CoffeeChatStatus> withWaitingCategory() {
