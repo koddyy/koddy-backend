@@ -17,16 +17,10 @@ import org.springframework.context.annotation.Import
 @Tag("Acceptance")
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = [LocalStackTestContainersConfig::class],
+    classes = [LocalStackTestContainersConfig::class]
 )
-@ExtendWith(
-    MySqlTestContainersExtension::class,
-    RedisTestContainersExtension::class,
-)
-@Import(
-    ExternalApiConfig::class,
-    BlackboxLogicControlConfig::class,
-)
+@ExtendWith(MySqlTestContainersExtension::class, RedisTestContainersExtension::class)
+@Import(ExternalApiConfig::class, BlackboxLogicControlConfig::class)
 abstract class AcceptanceTestKt : BehaviorSpec() {
     @LocalServerPort
     private val port: Int = 0

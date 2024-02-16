@@ -31,10 +31,7 @@ annotation class UnitTestKt
 @Retention(AnnotationRetention.RUNTIME)
 @DataJpaTest(showSql = false)
 @ExtendWith(MySqlTestContainersExtension::class)
-@Import(
-    QueryDslConfig::class,
-    P6SpyConfig::class,
-)
+@Import(QueryDslConfig::class, P6SpyConfig::class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 annotation class RepositoryTestKt
 
@@ -52,7 +49,7 @@ annotation class RedisTestKt
 @ExtendWith(
     DatabaseCleanerEachCallbackExtension::class,
     MySqlTestContainersExtension::class,
-    RedisTestContainersExtension::class,
+    RedisTestContainersExtension::class
 )
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 annotation class IntegrateTestKt

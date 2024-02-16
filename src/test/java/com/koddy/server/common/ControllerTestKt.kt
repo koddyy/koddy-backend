@@ -32,11 +32,11 @@ import org.springframework.web.filter.CharacterEncodingFilter
 @Import(
     TestAopConfig::class,
     TestWebBeanConfig::class,
-    MockAllUseCaseBeanFactoryPostProcessor::class,
+    MockAllUseCaseBeanFactoryPostProcessor::class
 )
 @TestExecutionListeners(
     value = [ResetMockTestExecutionListener::class],
-    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
+    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS
 )
 @AutoConfigureRestDocs
 abstract class ControllerTestKt : BehaviorSpec() {
@@ -52,7 +52,10 @@ abstract class ControllerTestKt : BehaviorSpec() {
     private lateinit var slackAlertManager: SlackAlertManager
 
     @BeforeEach
-    fun setUp(context: WebApplicationContext, provider: RestDocumentationContextProvider) {
+    fun setUp(
+        context: WebApplicationContext,
+        provider: RestDocumentationContextProvider,
+    ) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
             .apply { MockMvcRestDocumentation.documentationConfiguration(provider) }
             .alwaysDo<DefaultMockMvcBuilder> { MockMvcResultHandlers.print() }
