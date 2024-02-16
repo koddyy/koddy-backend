@@ -1,6 +1,6 @@
 package com.koddy.server.member.exception;
 
-import com.koddy.server.global.base.KoddyExceptionCode;
+import com.koddy.server.global.base.BaseExceptionCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Getter
 @RequiredArgsConstructor
-public enum MemberExceptionCode implements KoddyExceptionCode {
+public enum MemberExceptionCode implements BaseExceptionCode {
     MEMBER_NOT_FOUND(NOT_FOUND, "MEMBER_001", "사용자 정보가 존재하지 않습니다."),
     MENTOR_NOT_FOUND(NOT_FOUND, "MEMBER_002", "멘토 정보가 존재하지 않습니다."),
     MENTEE_NOT_FOUND(NOT_FOUND, "MEMBER_003", "멘티 정보가 존재하지 않습니다."),

@@ -1,9 +1,9 @@
 package com.koddy.server.auth.exception;
 
-import com.koddy.server.global.base.KoddyException;
-import com.koddy.server.global.base.KoddyExceptionCode;
+import com.koddy.server.global.base.BaseException;
+import com.koddy.server.global.base.BaseExceptionCode;
 
-public class AuthException extends KoddyException {
+public class AuthException extends BaseException {
     private final AuthExceptionCode code;
 
     public AuthException(final AuthExceptionCode code) {
@@ -12,7 +12,7 @@ public class AuthException extends KoddyException {
     }
 
     @Override
-    public KoddyExceptionCode getCode() {
+    public BaseExceptionCode getCode() {
         return code;
     }
 }

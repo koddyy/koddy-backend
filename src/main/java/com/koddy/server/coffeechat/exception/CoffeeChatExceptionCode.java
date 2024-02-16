@@ -1,6 +1,6 @@
 package com.koddy.server.coffeechat.exception;
 
-import com.koddy.server.global.base.KoddyExceptionCode;
+import com.koddy.server.global.base.BaseExceptionCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Getter
 @RequiredArgsConstructor
-public enum CoffeeChatExceptionCode implements KoddyExceptionCode {
+public enum CoffeeChatExceptionCode implements BaseExceptionCode {
     COFFEE_CHAT_NOT_FOUND(NOT_FOUND, "COFFEE_CHAT_001", "커피챗 정보가 존재하지 않습니다."),
     RESERVATION_INFO_MUST_EXISTS(BAD_REQUEST, "COFFEE_CHAT_002", "예약 정보를 빠짐없이 선택해주세요."),
     RESERVATION_MUST_ALIGN(BAD_REQUEST, "COFFEE_CHAT_003", "시작이 종료 이후가 될 수 없습니다."),

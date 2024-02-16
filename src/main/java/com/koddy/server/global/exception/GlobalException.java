@@ -1,9 +1,9 @@
 package com.koddy.server.global.exception;
 
-import com.koddy.server.global.base.KoddyException;
-import com.koddy.server.global.base.KoddyExceptionCode;
+import com.koddy.server.global.base.BaseException;
+import com.koddy.server.global.base.BaseExceptionCode;
 
-public class GlobalException extends KoddyException {
+public class GlobalException extends BaseException {
     private final GlobalExceptionCode code;
 
     public GlobalException(final GlobalExceptionCode code) {
@@ -12,7 +12,7 @@ public class GlobalException extends KoddyException {
     }
 
     @Override
-    public KoddyExceptionCode getCode() {
+    public BaseExceptionCode getCode() {
         return code;
     }
 }

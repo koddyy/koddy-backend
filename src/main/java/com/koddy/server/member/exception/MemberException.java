@@ -1,9 +1,9 @@
 package com.koddy.server.member.exception;
 
-import com.koddy.server.global.base.KoddyException;
-import com.koddy.server.global.base.KoddyExceptionCode;
+import com.koddy.server.global.base.BaseException;
+import com.koddy.server.global.base.BaseExceptionCode;
 
-public class MemberException extends KoddyException {
+public class MemberException extends BaseException {
     private final MemberExceptionCode code;
 
     public MemberException(final MemberExceptionCode code) {
@@ -12,7 +12,7 @@ public class MemberException extends KoddyException {
     }
 
     @Override
-    public KoddyExceptionCode getCode() {
+    public BaseExceptionCode getCode() {
         return code;
     }
 }

@@ -1,6 +1,6 @@
 package com.koddy.server.global.exception;
 
-import com.koddy.server.global.base.KoddyExceptionCode;
+import com.koddy.server.global.base.BaseExceptionCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.UNSUPPORTED_MEDIA_TYPE;
 
 @Getter
 @RequiredArgsConstructor
-public enum GlobalExceptionCode implements KoddyExceptionCode {
+public enum GlobalExceptionCode implements BaseExceptionCode {
     NOT_SUPPORTED_URI_ERROR(NOT_FOUND, "GLOBAL_001", "제공하지 않는 요청입니다."),
     NOT_SUPPORTED_METHOD_ERROR(METHOD_NOT_ALLOWED, "GLOBAL_002", "제공하지 않는 HTTP Method 요청입니다."),
     VALIDATION_ERROR(BAD_REQUEST, "GLOBAL_003", "잘못된 요청입니다."),

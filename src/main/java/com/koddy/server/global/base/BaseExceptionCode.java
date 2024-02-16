@@ -2,7 +2,7 @@ package com.koddy.server.global.base;
 
 import org.springframework.http.HttpStatus;
 
-public interface KoddyExceptionCode {
+public interface BaseExceptionCode {
     HttpStatus getStatus();
 
     String getErrorCode();

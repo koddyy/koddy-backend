@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.koddy.server.auth.domain.model.oauth.OAuthUserResponse;
 import com.koddy.server.auth.exception.OAuthUserNotFoundException;
-import com.koddy.server.global.base.KoddyException;
-import com.koddy.server.global.base.KoddyExceptionCode;
+import com.koddy.server.global.base.BaseException;
+import com.koddy.server.global.base.BaseExceptionCode;
 import com.koddy.server.global.exception.alert.SlackAlertManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +38,8 @@ public class ApiGlobalExceptionHandler {
     private final ObjectMapper objectMapper;
     private final SlackAlertManager slackAlertManager;
 
-    @ExceptionHandler(KoddyException.class)
-    public ResponseEntity<ExceptionResponse> handleKoddyException(final KoddyException exception) {
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<ExceptionResponse> handleBaseException(final BaseException exception) {
         return createExceptionResponse(exception.getCode());
     }
 
@@ -158,14 +158,14 @@ public class ApiGlobalExceptionHandler {
         return createExceptionResponse(GlobalExceptionCode.NOT_SUPPORTED_URI_ERROR);
     }
 
-    private ResponseEntity<ExceptionResponse> createExceptionResponse(final KoddyExceptionCode code) {
+    private ResponseEntity<ExceptionResponse> createExceptionResponse(final BaseExceptionCode code) {
         return ResponseEntity
                 .status(code.getStatus())
                 .body(new ExceptionResponse(code));
     }
 
     private ResponseEntity<ExceptionResponse> createExceptionResponse(final List<FieldError> fieldErrors) {
-        final KoddyExceptionCode code = GlobalExceptionCode.VALIDATION_ERROR;
+        final BaseExceptionCode code = GlobalExceptionCode.VALIDATION_ERROR;
         final String exceptionMessage = extractErrorMessage(fieldErrors);
         return ResponseEntity
                 .status(code.getStatus())

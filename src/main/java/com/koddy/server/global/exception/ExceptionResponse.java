@@ -1,16 +1,16 @@
 package com.koddy.server.global.exception;
 
-import com.koddy.server.global.base.KoddyExceptionCode;
+import com.koddy.server.global.base.BaseExceptionCode;
 
 public record ExceptionResponse(
         String errorCode,
         String message
 ) {
-    public ExceptionResponse(final KoddyExceptionCode code) {
+    public ExceptionResponse(final BaseExceptionCode code) {
         this(code.getErrorCode(), code.getMessage());
     }
 
-    public ExceptionResponse(final KoddyExceptionCode code, final String message) {
+    public ExceptionResponse(final BaseExceptionCode code, final String message) {
         this(code.getErrorCode(), message);
     }
 }
