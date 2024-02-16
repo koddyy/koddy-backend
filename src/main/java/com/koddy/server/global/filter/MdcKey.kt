@@ -1,6 +1,6 @@
-package com.koddy.server.global.filter;
+package com.koddy.server.global.filter
 
-public enum MdcKey {
+enum class MdcKey {
     REQUEST_ID,
     REQUEST_IP,
     REQUEST_METHOD,

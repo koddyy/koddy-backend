@@ -31,7 +31,7 @@ class WebLogConfig {
     }
 
     @Bean
-    fun thirdFilter(loggingStatusManager: LoggingStatusManager?): FilterRegistrationBean<RequestLoggingFilter> {
+    fun thirdFilter(loggingStatusManager: LoggingStatusManager): FilterRegistrationBean<RequestLoggingFilter> {
         return FilterRegistrationBean<RequestLoggingFilter>().apply {
             order = 3
             filter = RequestLoggingFilter(
