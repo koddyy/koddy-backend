@@ -15,8 +15,8 @@ class ReadableRequestWrapper(
     request: HttpServletRequest,
 ) : HttpServletRequestWrapper(request) {
     val params: MutableMap<String, Array<String>> = request.parameterMap
-    val encoding: Charset
-    val parts: Collection<Part>?
+    private val encoding: Charset
+    private val parts: Collection<Part>?
     val contentAsByteArray: ByteArray
 
     init {
@@ -45,7 +45,7 @@ class ReadableRequestWrapper(
     }
 
     private fun isMultipartRequest(request: HttpServletRequest): Boolean {
-        return request.contentType.isNullOrBlank().not() && request.contentType.startsWith(MULTIPART_FORM_DATA_VALUE)
+        return !request.contentType.isNullOrBlank() && request.contentType.startsWith(MULTIPART_FORM_DATA_VALUE)
     }
 
     override fun getInputStream(): ServletInputStream {

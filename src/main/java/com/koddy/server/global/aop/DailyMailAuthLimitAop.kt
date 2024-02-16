@@ -39,7 +39,7 @@ class DailyMailAuthLimitAop(
         )
         val authBanValue: String? = redisOperator.get(authBanKey)
 
-        if (authBanValue.isNullOrBlank().not() && AUTH_BAN_VALUE == authBanValue) {
+        if (!authBanValue.isNullOrBlank() && AUTH_BAN_VALUE == authBanValue) {
             throw AuthException(TOO_MANY_MAIL_AUTH_ATTEMPTS)
         }
     }

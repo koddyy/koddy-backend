@@ -46,7 +46,7 @@ class StringRedisOperator(
     }
 
     override fun contains(key: String): Boolean {
-        return executor.get(key).isNullOrBlank().not()
+        return !executor.get(key).isNullOrBlank()
     }
 
     override fun delete(key: String) {
