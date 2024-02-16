@@ -7,10 +7,10 @@ class MdcTaskDecorator : TaskDecorator {
     override fun decorate(runnable: Runnable): Runnable {
         val copyOfContextMap: Map<String, String>? = MDC.getCopyOfContextMap()
         return Runnable {
-            if (copyOfContextMap != null) {
-                MDC.setContextMap(copyOfContextMap)
+            if (copyOfContextMap.isNullOrEmpty()) {
+                runnable.run()
             }
-            runnable.run()
+            MDC.setContextMap(copyOfContextMap)
         }
     }
 }
