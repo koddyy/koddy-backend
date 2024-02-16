@@ -1,10 +1,9 @@
 package com.koddy.server.common.fixture;
 
 import com.koddy.server.coffeechat.domain.model.Strategy;
+import com.koddy.server.common.mock.fake.FakeEncryptor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import static com.koddy.server.common.utils.EncryptorFactory.getEncryptor;
 
 @Getter
 @RequiredArgsConstructor
@@ -20,6 +19,6 @@ public enum StrategyFixture {
     private final String value;
 
     public Strategy toDomain() {
-        return Strategy.of(type, value, getEncryptor());
+        return Strategy.of(type, value, new FakeEncryptor());
     }
 }

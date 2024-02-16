@@ -7,6 +7,7 @@ import com.koddy.server.coffeechat.domain.model.Strategy;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.CoffeeChatFixture;
+import com.koddy.server.common.mock.fake.FakeEncryptor;
 import com.koddy.server.global.utils.encrypt.Encryptor;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -19,7 +20,6 @@ import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_F
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_REJECT;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
-import static com.koddy.server.common.utils.EncryptorFactory.getEncryptor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verify;
 @DisplayName("CoffeeChat -> HandlePendingCoffeeChatUseCase 테스트")
 class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
-    private final Encryptor encryptor = getEncryptor();
+    private final Encryptor encryptor = new FakeEncryptor();
     private final HandlePendingCoffeeChatUseCase sut = new HandlePendingCoffeeChatUseCase(coffeeChatRepository, encryptor);
 
     private final Mentee mentee = MENTEE_1.toDomain().apply(1L);

@@ -10,6 +10,7 @@ import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow;
 import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow;
+import com.koddy.server.common.mock.fake.FakeEncryptor;
 import com.koddy.server.global.utils.encrypt.Encryptor;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -23,7 +24,6 @@ import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_A
 import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
-import static com.koddy.server.common.utils.EncryptorFactory.getEncryptor;
 import static com.koddy.server.member.domain.model.Language.Category.EN;
 import static com.koddy.server.member.domain.model.Language.Category.KR;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,7 +36,7 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final MenteeRepository menteeRepository = mock(MenteeRepository.class);
-    private final Encryptor encryptor = getEncryptor();
+    private final Encryptor encryptor = new FakeEncryptor();
     private final GetCoffeeChatScheduleDetailsUseCase sut = new GetCoffeeChatScheduleDetailsUseCase(
             coffeeChatRepository,
             mentorRepository,
