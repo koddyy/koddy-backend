@@ -27,23 +27,14 @@ repositories {
     mavenCentral()
 }
 
-allOpen {
-    annotation("jakarta.persistence.Entity")
-    annotation("jakarta.persistence.MappedSuperclass")
-    annotation("jakarta.persistence.Embeddable")
-}
-
-noArg {
-    annotation("jakarta.persistence.Entity")
-    annotation("jakarta.persistence.MappedSuperclass")
-    annotation("jakarta.persistence.Embeddable")
-}
-
 dependencies {
     // Kotlin
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+    // Kotlin Logging
+    implementation("io.github.oshai:kotlin-logging-jvm:${property("kotlinLoggingVersion")}")
 
     // Spring Web
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -75,10 +66,6 @@ dependencies {
     // Cloud Infra
     implementation("io.awspring.cloud:spring-cloud-aws-starter:${property("awspringVersion")}")
     implementation("io.awspring.cloud:spring-cloud-aws-starter-s3:${property("awspringVersion")}")
-
-    // Monitoring
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 
     // JWT
     implementation("io.jsonwebtoken:jjwt-api:${property("jwtTokenVersion")}")
@@ -128,6 +115,18 @@ dependencies {
 
     // TestContainers + LocalStack
     testImplementation("org.testcontainers:localstack:${property("localStackVersion")}")
+}
+
+allOpen {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
+}
+
+noArg {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
 }
 
 tasks.withType<KotlinCompile> {
