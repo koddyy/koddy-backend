@@ -35,7 +35,7 @@ class ApiGlobalExceptionHandler(
 
     @ExceptionHandler(BusinessException::class)
     fun handleBusinessException(exception: BusinessException): ResponseEntity<ExceptionResponse> {
-        logger.info { "handleBusinessException -> code = ${exception.code} message = ${exception.message}" }
+        logger.info { "handleBusinessException -> code = ${exception.code}, message = ${exception.message}" }
         return createExceptionResponse(exception.code)
     }
 
@@ -58,7 +58,7 @@ class ApiGlobalExceptionHandler(
 
     @ExceptionHandler(MismatchedInputException::class)
     protected fun handleMismatchedInputException(exception: MismatchedInputException): ResponseEntity<ExceptionResponse> {
-        logger.warn { "handleMismatchedInputException -> target = ${exception.targetType} ${exception.localizedMessage}" }
+        logger.warn { "handleMismatchedInputException -> target = ${exception.targetType}, message = ${exception.localizedMessage}" }
         return createExceptionResponse(GlobalExceptionCode.VALIDATION_ERROR)
     }
 
@@ -76,7 +76,7 @@ class ApiGlobalExceptionHandler(
      */
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleMethodArgumentNotValidException(exception: MethodArgumentNotValidException): ResponseEntity<ExceptionResponse> {
-        logger.warn { "handleMethodArgumentNotValidException -> param = ${exception.parameter} message = ${exception.localizedMessage}" }
+        logger.warn { "handleMethodArgumentNotValidException -> param = ${exception.parameter}, message = ${exception.localizedMessage}" }
         return createExceptionResponse(exception.bindingResult.fieldErrors)
     }
 
@@ -128,7 +128,7 @@ class ApiGlobalExceptionHandler(
         exception: Exception,
     ): ResponseEntity<ExceptionResponse> {
         if (exception !is NoHandlerFoundException) {
-            logger.error { "handleAnyException -> method = ${request.method} request = ${getRequestUriWithQueryString(request)} ${exception.stackTrace}" }
+            logger.error { "handleAnyException -> method = ${request.method}, request = ${getRequestUriWithQueryString(request)} ${exception.stackTrace}" }
             slackAlertManager.sendErrorLog(request, exception)
             return createExceptionResponse(GlobalExceptionCode.UNEXPECTED_SERVER_ERROR)
         }
