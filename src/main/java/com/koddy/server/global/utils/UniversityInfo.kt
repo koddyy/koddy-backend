@@ -1,10 +1,10 @@
 package com.koddy.server.global.utils
 
+import com.koddy.server.auth.domain.model.Authenticated
 import com.koddy.server.global.exception.GlobalException
 import com.koddy.server.global.exception.GlobalExceptionCode.NOT_PROVIDED_UNIV_DOMAIN
 import com.koddy.server.global.log.logger
 import org.slf4j.Logger
-import java.util.Arrays
 
 enum class UniversityInfo(
     private val schoolName: String,
@@ -73,15 +73,20 @@ enum class UniversityInfo(
         private val log: Logger = logger()
 
         @JvmStatic
-        fun validateDomain(schoolMail: String) {
+        fun validateDomain(
+            authenticated: Authenticated,
+            schoolMail: String,
+        ) {
             val domain: String = extractDomain(schoolMail)
-            val noneMatch: Boolean = Arrays.stream(entries.toTypedArray())
-                .noneMatch { it.domains.contains(domain) }
-
-            if (noneMatch) {
-                log.error("School Domain Not Match.. {}", schoolMail)
+            if (isAnonymousDomain(domain)) {
+                log.warn("School Domain Not Match -> auth = {}, mail = {}", authenticated, schoolMail)
                 throw GlobalException(NOT_PROVIDED_UNIV_DOMAIN)
             }
+        }
+
+        private fun isAnonymousDomain(domain: String): Boolean {
+            return entries.stream()
+                .noneMatch { it.domains.contains(domain) }
         }
 
         private fun extractDomain(schoolMail: String): String {

@@ -39,7 +39,7 @@ public class AuthenticationMentorUnivApiController {
             @Auth final Authenticated authenticated,
             @RequestBody @Valid final AuthenticationWithMailRequest request
     ) {
-        UniversityInfo.validateDomain(request.schoolMail());
+        UniversityInfo.validateDomain(authenticated, request.schoolMail());
         authenticationMentorUnivUseCase.authWithMail(new AuthenticationWithMailCommand(
                 authenticated.id(),
                 request.schoolMail()
@@ -54,7 +54,7 @@ public class AuthenticationMentorUnivApiController {
             @Auth final Authenticated authenticated,
             @RequestBody @Valid final AuthenticationConfirmWithMailRequest request
     ) {
-        UniversityInfo.validateDomain(request.schoolMail());
+        UniversityInfo.validateDomain(authenticated, request.schoolMail());
         authenticationMentorUnivUseCase.confirmMailAuthCode(new AuthenticationConfirmWithMailCommand(
                 authenticated.id(),
                 request.schoolMail(),
