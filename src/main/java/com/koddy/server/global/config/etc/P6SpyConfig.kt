@@ -1,13 +1,17 @@
 package com.koddy.server.global.config.etc
 
-import com.p6spy.engine.spy.P6SpyOptions
-import jakarta.annotation.PostConstruct
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
 class P6SpyConfig {
-    @PostConstruct
-    fun setLogMessageFormat() {
-        P6SpyOptions.getActiveInstance().logMessageFormat = P6SpyFormatter::class.java.name
+    @Bean
+    fun p6SpyCustomEventListener(): P6SpyEventListener {
+        return P6SpyEventListener()
+    }
+
+    @Bean
+    fun p6SpyCustomFormatter(): P6SpyFormatter {
+        return P6SpyFormatter()
     }
 }
