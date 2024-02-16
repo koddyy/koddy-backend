@@ -99,7 +99,7 @@ class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
                 () -> assertThat(coffeeChat.getReservation().getEnd()).isEqualTo(start.plusMinutes(30)),
                 () -> assertThat(coffeeChat.getStrategy().getType()).isEqualTo(command.type()),
                 () -> assertThat(coffeeChat.getStrategy().getValue()).isNotEqualTo(command.value()),
-                () -> assertThat(encryptor.symmetricDecrypt(coffeeChat.getStrategy().getValue())).isEqualTo(command.value())
+                () -> assertThat(encryptor.decrypt(coffeeChat.getStrategy().getValue())).isEqualTo(command.value())
         );
     }
 }

@@ -6,22 +6,22 @@ public class FakeEncryptor implements Encryptor {
     private static final String DUMMY = "_koddy";
 
     @Override
-    public String hashEncrypt(final String value) {
+    public String hash(final String value) {
         return value + DUMMY;
     }
 
     @Override
-    public boolean isHashMatch(final String rawValue, final String encodedValue) {
+    public boolean matches(final String rawValue, final String encodedValue) {
         return encodedValue.replace(DUMMY, "").equals(rawValue);
     }
 
     @Override
-    public String symmetricEncrypt(final String value) {
+    public String encrypt(final String value) {
         return value + DUMMY;
     }
 
     @Override
-    public String symmetricDecrypt(final String value) {
+    public String decrypt(final String value) {
         return value.replace(DUMMY, "");
     }
 }

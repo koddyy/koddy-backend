@@ -135,7 +135,7 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
                             () -> assertThat(details.coffeeChat().start()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
                             () -> assertThat(details.coffeeChat().end()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                             () -> assertThat(details.coffeeChat().chatType()).isEqualTo(월요일_1주차_20_00_시작.getStrategy().getType().getEng()),
-                            () -> assertThat(details.coffeeChat().chatValue()).isEqualTo(encryptor.symmetricDecrypt(월요일_1주차_20_00_시작.getStrategy().getValue()))
+                            () -> assertThat(details.coffeeChat().chatValue()).isEqualTo(encryptor.decrypt(월요일_1주차_20_00_시작.getStrategy().getValue()))
                     );
                 }
         );

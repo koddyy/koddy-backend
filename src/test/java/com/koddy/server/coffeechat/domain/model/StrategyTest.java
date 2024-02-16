@@ -35,15 +35,15 @@ class StrategyTest extends UnitTest {
         // then
         assertAll(
                 () -> assertThat(strategyA.getType()).isEqualTo(ZOOM_LINK),
-                () -> assertThat(encryptor.symmetricDecrypt(strategyA.getValue())).isEqualTo(link),
+                () -> assertThat(encryptor.decrypt(strategyA.getValue())).isEqualTo(link),
                 () -> assertThat(strategyB.getType()).isEqualTo(GOOGLE_MEET_LINK),
-                () -> assertThat(encryptor.symmetricDecrypt(strategyB.getValue())).isEqualTo(link),
+                () -> assertThat(encryptor.decrypt(strategyB.getValue())).isEqualTo(link),
                 () -> assertThat(strategyC.getType()).isEqualTo(KAKAO_ID),
-                () -> assertThat(encryptor.symmetricDecrypt(strategyC.getValue())).isEqualTo(messangerId),
+                () -> assertThat(encryptor.decrypt(strategyC.getValue())).isEqualTo(messangerId),
                 () -> assertThat(strategyD.getType()).isEqualTo(LINK_ID),
-                () -> assertThat(encryptor.symmetricDecrypt(strategyD.getValue())).isEqualTo(messangerId),
+                () -> assertThat(encryptor.decrypt(strategyD.getValue())).isEqualTo(messangerId),
                 () -> assertThat(strategyE.getType()).isEqualTo(WECHAT_ID),
-                () -> assertThat(encryptor.symmetricDecrypt(strategyE.getValue())).isEqualTo(messangerId)
+                () -> assertThat(encryptor.decrypt(strategyE.getValue())).isEqualTo(messangerId)
         );
     }
 }
