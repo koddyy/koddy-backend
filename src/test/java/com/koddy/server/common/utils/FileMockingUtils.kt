@@ -9,7 +9,10 @@ object FileMockingUtils {
     private const val FILE_PATH = "src/test/resources/files/"
 
     @JvmStatic
-    fun createFile(fileName: String, contentType: String): MultipartFile {
+    fun createFile(
+        fileName: String,
+        contentType: String,
+    ): MultipartFile {
         try {
             FileInputStream(FILE_PATH + fileName).use {
                 return MockMultipartFile("file", fileName, contentType, it)
