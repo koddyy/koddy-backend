@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
@@ -138,6 +139,17 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+// Ktlint
+configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+    reporters {
+        reporter(ReporterType.JSON)
+    }
+
+    filter {
+        exclude("**/generated/**")
+    }
 }
 
 // build REST Docs
