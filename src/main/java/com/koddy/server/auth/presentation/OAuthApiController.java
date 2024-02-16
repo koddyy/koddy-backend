@@ -48,7 +48,7 @@ public class OAuthApiController {
                 OAuthProvider.from(provider),
                 redirectUri
         ));
-        return ResponseEntity.ok(ResponseWrapper.from(oAuthLink));
+        return ResponseEntity.ok(new ResponseWrapper<>(oAuthLink));
     }
 
     @Operation(summary = "Authorization Code를 통해서 Provider별 인증을 위한 EndPoint")

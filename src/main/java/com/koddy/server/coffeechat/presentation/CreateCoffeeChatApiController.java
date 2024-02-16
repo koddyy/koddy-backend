@@ -41,7 +41,7 @@ public class CreateCoffeeChatApiController {
                 request.menteeId(),
                 request.suggestReason()
         ));
-        return ResponseEntity.ok(ResponseWrapper.from(coffeeChatId));
+        return ResponseEntity.ok(new ResponseWrapper<>(coffeeChatId));
     }
 
     @Operation(summary = "멘티 -> 멘토 커피챗 신청 Endpoint")
@@ -57,6 +57,6 @@ public class CreateCoffeeChatApiController {
                 request.applyReason(),
                 request.toReservation()
         ));
-        return ResponseEntity.ok(ResponseWrapper.from(coffeeChatId));
+        return ResponseEntity.ok(new ResponseWrapper<>(coffeeChatId));
     }
 }
