@@ -2,8 +2,8 @@ package com.koddy.server.global.utils
 
 import com.koddy.server.global.exception.GlobalException
 import com.koddy.server.global.exception.GlobalExceptionCode.NOT_PROVIDED_UNIV_DOMAIN
-import io.github.oshai.kotlinlogging.KLogger
-import io.github.oshai.kotlinlogging.KotlinLogging
+import com.koddy.server.global.log.logger
+import org.slf4j.Logger
 import java.util.Arrays
 
 enum class UniversityInfo(
@@ -70,7 +70,7 @@ enum class UniversityInfo(
     ;
 
     companion object {
-        private val logger: KLogger = KotlinLogging.logger { }
+        private val log: Logger = logger()
 
         @JvmStatic
         fun validateDomain(schoolMail: String) {
@@ -79,7 +79,7 @@ enum class UniversityInfo(
                 .noneMatch { it.domains.contains(domain) }
 
             if (noneMatch) {
-                logger.error { "school domain not match -> schoolMail = $schoolMail" }
+                log.error("School Domain Not Match.. {}", schoolMail)
                 throw GlobalException(NOT_PROVIDED_UNIV_DOMAIN)
             }
         }

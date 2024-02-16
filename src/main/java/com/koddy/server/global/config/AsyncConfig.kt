@@ -1,8 +1,8 @@
 package com.koddy.server.global.config
 
 import com.koddy.server.global.decorator.MdcTaskDecorator
-import io.github.oshai.kotlinlogging.KLogger
-import io.github.oshai.kotlinlogging.KotlinLogging
+import com.koddy.server.global.log.logger
+import org.slf4j.Logger
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadPoolExecutor
 @Configuration
 @EnableAsync
 class AsyncConfig : AsyncConfigurer {
-    private val logger: KLogger = KotlinLogging.logger { }
+    private val log: Logger = logger()
 
     @Bean(name = ["emailAsyncExecutor"])
     fun emailAsyncExecutor(): Executor {
@@ -33,7 +33,7 @@ class AsyncConfig : AsyncConfigurer {
 
     override fun getAsyncUncaughtExceptionHandler(): AsyncUncaughtExceptionHandler? {
         return AsyncUncaughtExceptionHandler { ex: Throwable?, method: Method?, params: Array<Any?>? ->
-            logger.error { "Asynchronous method thrown exception... -> Method = $method, Params = $params Trace = $ex" }
+            log.error("Asynchronous method thrown exception... -> Method = {}, Params = {}", method, params, ex)
         }
     }
 }

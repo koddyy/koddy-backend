@@ -2,7 +2,6 @@ package com.koddy.server.global.log
 
 import lombok.RequiredArgsConstructor
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Component
 class LoggingTracer(
     private val loggingStatusManager: LoggingStatusManager,
 ) {
-    private val log: Logger = LoggerFactory.getLogger(javaClass)
+    private val log: Logger = logger()
 
     fun methodCall(
         methodSignature: String,

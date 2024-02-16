@@ -2,13 +2,13 @@ package com.koddy.server.global.exception.alert
 
 import com.koddy.server.global.log.RequestMetadataExtractor.getClientIP
 import com.koddy.server.global.log.RequestMetadataExtractor.getRequestUriWithQueryString
+import com.koddy.server.global.log.logger
 import com.slack.api.Slack
 import com.slack.api.model.Attachment
 import com.slack.api.model.Field
 import com.slack.api.webhook.WebhookPayloads.payload
-import io.github.oshai.kotlinlogging.KLogger
-import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.http.HttpServletRequest
+import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.io.IOException
@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter
 class SlackAlertManager(
     @Value("\${slack.webhook.url}") private val slackWebhookUrl: String,
 ) {
-    private val logger: KLogger = KotlinLogging.logger { }
+    private val log: Logger = logger()
 
     fun sendErrorLog(
         request: HttpServletRequest,
@@ -36,7 +36,7 @@ class SlackAlertManager(
                 }
             )
         } catch (ex: IOException) {
-            logger.error { "Slack API 통신 간 에러 발생 $ex" }
+            log.error("Slack API 통신 간 에러 발생", ex)
         }
     }
 

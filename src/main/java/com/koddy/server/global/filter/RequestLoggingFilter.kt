@@ -7,15 +7,14 @@ import com.koddy.server.global.filter.MdcKey.REQUEST_PARAMS
 import com.koddy.server.global.filter.MdcKey.REQUEST_TIME
 import com.koddy.server.global.filter.MdcKey.REQUEST_URI
 import com.koddy.server.global.log.LoggingStatusManager
-import io.github.oshai.kotlinlogging.KLogger
-import io.github.oshai.kotlinlogging.KotlinLogging
+import com.koddy.server.global.log.logger
 import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import okhttp3.internal.format
+import org.slf4j.Logger
 import org.slf4j.MDC
 import org.springframework.util.PatternMatchUtils
 import org.springframework.util.StopWatch
@@ -27,7 +26,7 @@ class RequestLoggingFilter(
     private val loggingStatusManager: LoggingStatusManager,
     vararg ignoredUrls: String,
 ) : Filter {
-    private val logger: KLogger = KotlinLogging.logger {}
+    private val log: Logger = logger()
 
     private val ignoredUrls: MutableSet<String> = HashSet()
 
@@ -69,18 +68,16 @@ class RequestLoggingFilter(
     }
 
     private fun loggingRequestInfo(httpRequest: HttpServletRequest) {
-        logger.info {
-            format(
-                "[Request START] = [Task ID = %s, IP = %s, HTTP Method = %s, Uri = %s, Params = %s, 요청 시작 시간 = %s]",
-                MDC.get(REQUEST_ID.name),
-                MDC.get(REQUEST_IP.name),
-                MDC.get(REQUEST_METHOD.name),
-                MDC.get(REQUEST_URI.name),
-                MDC.get(REQUEST_PARAMS.name),
-                MDC.get(REQUEST_TIME.name)
-            )
-        }
-        logger.info { "Request Body = ${readRequestData(httpRequest)}" }
+        log.info(
+            "[Request START] = [Task ID = {}, IP = {}, HTTP Method = {}, Uri = {}, Params = {}, 요청 시작 시간 = {}]",
+            MDC.get(REQUEST_ID.name),
+            MDC.get(REQUEST_IP.name),
+            MDC.get(REQUEST_METHOD.name),
+            MDC.get(REQUEST_URI.name),
+            MDC.get(REQUEST_PARAMS.name),
+            MDC.get(REQUEST_TIME.name)
+        )
+        log.info("Request Body = {}", readRequestData(httpRequest))
     }
 
     private fun readRequestData(request: HttpServletRequest): String {
@@ -99,18 +96,16 @@ class RequestLoggingFilter(
         httpResponse: HttpServletResponse,
         stopWatch: StopWatch,
     ) {
-        logger.info { "Response Body = ${readResponseData(httpResponse)}" }
-        logger.info {
-            format(
-                "[Request END] = [Task ID = %s, IP = %s, HTTP Method = %s, Uri = %s, HTTP Status = %s, 요청 처리 시간 = %sms]",
-                MDC.get(REQUEST_ID.name),
-                MDC.get(REQUEST_IP.name),
-                MDC.get(REQUEST_METHOD.name),
-                MDC.get(REQUEST_URI.name),
-                httpResponse.status,
-                stopWatch.totalTimeMillis
-            )
-        }
+        log.info("Response Body = {}", readResponseData(httpResponse))
+        log.info(
+            "[Request END] = [Task ID = {}, IP = {}, HTTP Method = {}, Uri = {}, HTTP Status = {}, 요청 처리 시간 = {}ms]",
+            MDC.get(REQUEST_ID.name),
+            MDC.get(REQUEST_IP.name),
+            MDC.get(REQUEST_METHOD.name),
+            MDC.get(REQUEST_URI.name),
+            httpResponse.status,
+            stopWatch.totalTimeMillis
+        )
     }
 
     private fun readResponseData(response: HttpServletResponse): String {

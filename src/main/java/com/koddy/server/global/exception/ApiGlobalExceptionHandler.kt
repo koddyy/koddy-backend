@@ -8,9 +8,9 @@ import com.koddy.server.global.base.BusinessException
 import com.koddy.server.global.base.BusinessExceptionCode
 import com.koddy.server.global.exception.alert.SlackAlertManager
 import com.koddy.server.global.log.RequestMetadataExtractor.getRequestUriWithQueryString
-import io.github.oshai.kotlinlogging.KLogger
-import io.github.oshai.kotlinlogging.KotlinLogging
+import com.koddy.server.global.log.logger
 import jakarta.servlet.http.HttpServletRequest
+import org.slf4j.Logger
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -31,34 +31,34 @@ class ApiGlobalExceptionHandler(
     private val objectMapper: ObjectMapper,
     private val slackAlertManager: SlackAlertManager,
 ) {
-    private val logger: KLogger = KotlinLogging.logger { }
+    private val log: Logger = logger()
 
     @ExceptionHandler(BusinessException::class)
-    fun handleBusinessException(exception: BusinessException): ResponseEntity<ExceptionResponse> {
-        logger.info { "handleBusinessException -> code = ${exception.code}, message = ${exception.message}" }
-        return createExceptionResponse(exception.code)
+    fun handleBusinessException(ex: BusinessException): ResponseEntity<ExceptionResponse> {
+        log.info("handleBusinessException -> code = {}, message = {}", ex.code, ex.message)
+        return createExceptionResponse(ex.code)
     }
 
     @ExceptionHandler(OAuthUserNotFoundException::class)
-    fun handleOAuthUserNotFoundException(exception: OAuthUserNotFoundException): ResponseEntity<OAuthExceptionResponse> {
-        logger.info { "handleOAuthUserNotFoundException -> response = ${exception.response}" }
+    fun handleOAuthUserNotFoundException(ex: OAuthUserNotFoundException): ResponseEntity<OAuthExceptionResponse> {
+        log.info("handleOAuthUserNotFoundException -> response = {}", ex.response)
         return ResponseEntity
             .status(HttpStatus.NOT_FOUND)
-            .body(OAuthExceptionResponse(exception.response))
+            .body(OAuthExceptionResponse(ex.response))
     }
 
     /**
      * HTTP Body Data Parsing에 대한 처리
      */
     @ExceptionHandler(HttpMessageNotReadableException::class)
-    fun handleHttpMessageNotReadableException(exception: HttpMessageNotReadableException): ResponseEntity<ExceptionResponse> {
-        logger.warn { "handleHttpMessageNotReadableException -> message = ${exception.localizedMessage}" }
+    fun handleHttpMessageNotReadableException(ex: HttpMessageNotReadableException): ResponseEntity<ExceptionResponse> {
+        log.warn("handleHttpMessageNotReadableException -> message = {}", ex.localizedMessage)
         return createExceptionResponse(GlobalExceptionCode.VALIDATION_ERROR)
     }
 
     @ExceptionHandler(MismatchedInputException::class)
-    protected fun handleMismatchedInputException(exception: MismatchedInputException): ResponseEntity<ExceptionResponse> {
-        logger.warn { "handleMismatchedInputException -> target = ${exception.targetType}, message = ${exception.localizedMessage}" }
+    protected fun handleMismatchedInputException(ex: MismatchedInputException): ResponseEntity<ExceptionResponse> {
+        log.warn("handleHttpMessageNotReadableException -> target = {}, message = {}", ex.targetType, ex.localizedMessage)
         return createExceptionResponse(GlobalExceptionCode.VALIDATION_ERROR)
     }
 
@@ -66,8 +66,8 @@ class ApiGlobalExceptionHandler(
      * Required 요청 파라미터가 들어오지 않았을 경우에 대한 처리
      */
     @ExceptionHandler(UnsatisfiedServletRequestParameterException::class)
-    fun handleUnsatisfiedServletRequestParameterException(exception: UnsatisfiedServletRequestParameterException): ResponseEntity<ExceptionResponse> {
-        logger.warn { "handleUnsatisfiedServletRequestParameterException -> message = ${exception.localizedMessage}" }
+    fun handleUnsatisfiedServletRequestParameterException(ex: UnsatisfiedServletRequestParameterException): ResponseEntity<ExceptionResponse> {
+        log.warn("handleUnsatisfiedServletRequestParameterException -> message = {}", ex.localizedMessage)
         return createExceptionResponse(GlobalExceptionCode.VALIDATION_ERROR)
     }
 
@@ -75,18 +75,18 @@ class ApiGlobalExceptionHandler(
      * 요청 데이터 Validation에 대한 처리 (@RequestBody)
      */
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleMethodArgumentNotValidException(exception: MethodArgumentNotValidException): ResponseEntity<ExceptionResponse> {
-        logger.warn { "handleMethodArgumentNotValidException -> param = ${exception.parameter}, message = ${exception.localizedMessage}" }
-        return createExceptionResponse(exception.bindingResult.fieldErrors)
+    fun handleMethodArgumentNotValidException(ex: MethodArgumentNotValidException): ResponseEntity<ExceptionResponse> {
+        log.warn("handleMethodArgumentNotValidException -> param = {}, message = {}", ex.parameter, ex.localizedMessage)
+        return createExceptionResponse(ex.bindingResult.fieldErrors)
     }
 
     /**
      * 요청 데이터 Validation에 대한 처리 (@ModelAttribute)
      */
     @ExceptionHandler(BindException::class)
-    fun handleBindException(exception: BindException): ResponseEntity<ExceptionResponse> {
-        logger.warn { "handleMethodArgumentNotValidException -> message = ${exception.localizedMessage}" }
-        return createExceptionResponse(exception.bindingResult.fieldErrors)
+    fun handleBindException(ex: BindException): ResponseEntity<ExceptionResponse> {
+        log.warn("handleMethodArgumentNotValidException -> message = {}", ex.localizedMessage)
+        return createExceptionResponse(ex.bindingResult.fieldErrors)
     }
 
     /**
@@ -96,8 +96,8 @@ class ApiGlobalExceptionHandler(
         MethodArgumentTypeMismatchException::class,
         MaxUploadSizeExceededException::class
     )
-    fun handleRequestDataException(exception: Exception): ResponseEntity<ExceptionResponse> {
-        logger.warn { "handleRequestDataException -> message = ${exception.localizedMessage}" }
+    fun handleRequestDataException(ex: Exception): ResponseEntity<ExceptionResponse> {
+        log.warn("handleRequestDataException -> message = {}", ex.localizedMessage)
         return createExceptionResponse(GlobalExceptionCode.VALIDATION_ERROR)
     }
 
@@ -105,8 +105,8 @@ class ApiGlobalExceptionHandler(
      * HTTP Request Method 오류에 대한 처리
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
-    fun handleHttpRequestMethodNotSupportedException(exception: HttpRequestMethodNotSupportedException): ResponseEntity<ExceptionResponse> {
-        logger.warn { "handleHttpRequestMethodNotSupportedException -> message = ${exception.localizedMessage}" }
+    fun handleHttpRequestMethodNotSupportedException(ex: HttpRequestMethodNotSupportedException): ResponseEntity<ExceptionResponse> {
+        log.warn("handleHttpRequestMethodNotSupportedException -> message = {}", ex.localizedMessage)
         return createExceptionResponse(GlobalExceptionCode.NOT_SUPPORTED_METHOD_ERROR)
     }
 
@@ -114,8 +114,8 @@ class ApiGlobalExceptionHandler(
      * MediaType 전용 ExceptionHandler
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException::class)
-    fun handleHttpMediaTypeNotSupportedException(exception: HttpMediaTypeNotSupportedException): ResponseEntity<ExceptionResponse> {
-        logger.warn { "handleHttpMediaTypeNotSupportedException -> message = ${exception.localizedMessage}" }
+    fun handleHttpMediaTypeNotSupportedException(ex: HttpMediaTypeNotSupportedException): ResponseEntity<ExceptionResponse> {
+        log.warn("handleHttpMediaTypeNotSupportedException -> message = {}", ex.localizedMessage)
         return createExceptionResponse(GlobalExceptionCode.UNSUPPORTED_MEDIA_TYPE_ERROR)
     }
 
@@ -125,11 +125,11 @@ class ApiGlobalExceptionHandler(
     @ExceptionHandler(Exception::class)
     fun handleAnyException(
         request: HttpServletRequest,
-        exception: Exception,
+        ex: Exception,
     ): ResponseEntity<ExceptionResponse> {
-        if (exception !is NoHandlerFoundException) {
-            logger.error { "handleAnyException -> method = ${request.method}, request = ${getRequestUriWithQueryString(request)} ${exception.stackTrace}" }
-            slackAlertManager.sendErrorLog(request, exception)
+        if (ex !is NoHandlerFoundException) {
+            log.error("handleAnyException -> method = {}, request = {}", request.method, getRequestUriWithQueryString(request), ex)
+            slackAlertManager.sendErrorLog(request, ex)
             return createExceptionResponse(GlobalExceptionCode.UNEXPECTED_SERVER_ERROR)
         }
         return createExceptionResponse(GlobalExceptionCode.NOT_SUPPORTED_URI_ERROR)
