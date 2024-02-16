@@ -1,25 +1,22 @@
-package com.koddy.server.global.log;
+package com.koddy.server.global.log
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.stereotype.Component;
+import org.aspectj.lang.ProceedingJoinPoint
+import org.aspectj.lang.annotation.Around
+import org.aspectj.lang.annotation.Aspect
+import org.aspectj.lang.annotation.Pointcut
+import org.springframework.stereotype.Component
 
-@Slf4j
 @Aspect
 @Component
-@RequiredArgsConstructor
-public class LoggingAspect {
-    private final LoggingTracer loggingTracer;
-
+class LoggingAspect(
+    private val loggingTracer: LoggingTracer,
+) {
     @Pointcut("execution(* com.koddy.server..*(..))")
-    private void includeComponent() {
+    private fun includeComponent() {
     }
 
-    @Pointcut("""
+    @Pointcut(
+        """
             !execution(* com.koddy.server.global.annotation..*(..))
             && !execution(* com.koddy.server.global.aop..*(..))
             && !execution(* com.koddy.server.global.base..*(..))
@@ -35,22 +32,23 @@ public class LoggingAspect {
             && !execution(* com.koddy.server..*TokenProvider.*(..))
             && !execution(* com.koddy.server..*TokenResponseWriter.*(..))
             && !execution(* com.koddy.server..*TokenExtractor.*(..))
-            """)
-    private void excludeComponent() {
+        """
+    )
+    private fun excludeComponent() {
     }
 
     @Around("includeComponent() && excludeComponent()")
-    public Object doLogging(final ProceedingJoinPoint joinPoint) throws Throwable {
-        final String methodSignature = joinPoint.getSignature().toShortString();
-        final Object[] args = joinPoint.getArgs();
-        loggingTracer.methodCall(methodSignature, args);
+    fun doLogging(joinPoint: ProceedingJoinPoint): Any? {
+        val methodSignature: String = joinPoint.signature.toShortString()
+        val args: Array<Any?> = joinPoint.args
+        loggingTracer.methodCall(methodSignature, args)
         try {
-            final Object result = joinPoint.proceed();
-            loggingTracer.methodReturn(methodSignature);
-            return result;
-        } catch (final Throwable e) {
-            loggingTracer.throwException(methodSignature, e);
-            throw e;
+            val result: Any? = joinPoint.proceed()
+            loggingTracer.methodReturn(methodSignature)
+            return result
+        } catch (e: Throwable) {
+            loggingTracer.throwException(methodSignature, e)
+            throw e
         }
     }
 }
