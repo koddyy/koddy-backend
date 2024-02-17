@@ -7,8 +7,7 @@ import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
 import io.kotest.core.annotation.DisplayName
-import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
@@ -17,52 +16,52 @@ import jakarta.servlet.http.HttpServletRequest
 
 @UnitTestKt
 @DisplayName("Auth -> TokenExtractor 테스트")
-internal class TokenExtractorTest : BehaviorSpec({
+internal class TokenExtractorTest : DescribeSpec({
     val request: HttpServletRequest = mockk<HttpServletRequest>()
 
-    Given("TokenExtractor's extractAccessToken") {
-        When("Authorization Header에 Bearer 타입 & AccessToken 둘다 없으면") {
+    describe("TokenExtractor's extractAccessToken") {
+        context("Authorization Header에 Bearer 타입 & AccessToken 둘다 없으면") {
             every { request.getHeader(ACCESS_TOKEN_HEADER) } returns null
 
-            Then("null을 응답한다") {
+            it("null을 응답한다") {
                 val token: String? = TokenExtractor.extractAccessToken(request)
-                token.shouldBeNull()
+                token shouldBe null
             }
         }
 
-        When("Authorization Header에 Bearer 타입만 있으면") {
+        context("Authorization Header에 Bearer 타입만 있으면") {
             every { request.getHeader(ACCESS_TOKEN_HEADER) } returns TOKEN_TYPE
 
-            Then("null을 응답한다") {
+            it("null을 응답한다") {
                 val token: String? = TokenExtractor.extractAccessToken(request)
-                token.shouldBeNull()
+                token shouldBe null
             }
         }
 
-        When("Authorization Header에 Bearer 타입 & AccessToken 둘다 있으면") {
+        context("Authorization Header에 Bearer 타입 & AccessToken 둘다 있으면") {
             every { request.getHeader(ACCESS_TOKEN_HEADER) } returns "$TOKEN_TYPE $ACCESS_TOKEN"
 
-            Then("정상적으로 AccessToken을 추출한다") {
+            it("정상적으로 AccessToken을 추출한다") {
                 val token: String? = TokenExtractor.extractAccessToken(request)
                 token shouldBe ACCESS_TOKEN
             }
         }
     }
 
-    Given("TokenExtractor's extractRefreshToken") {
-        When("Cookie Header에 RefreshToken이 없으면") {
+    describe("TokenExtractor's extractRefreshToken") {
+        context("Cookie Header에 RefreshToken이 없으면") {
             every { request.cookies } returns emptyArray()
 
-            Then("null을 응답한다") {
+            it("null을 응답한다") {
                 val token: String? = TokenExtractor.extractRefreshToken(request)
-                token.shouldBeNull()
+                token shouldBe null
             }
         }
 
-        When("Cookie Header에 RefreshToken이 있으면") {
+        context("Cookie Header에 RefreshToken이 있으면") {
             every { request.cookies } returns arrayOf(Cookie(REFRESH_TOKEN_HEADER, REFRESH_TOKEN))
 
-            Then("정상적으로 RefreshToken을 추출한다") {
+            it("정상적으로 RefreshToken을 추출한다") {
                 val token: String? = TokenExtractor.extractRefreshToken(request)
                 token shouldBe REFRESH_TOKEN
             }
