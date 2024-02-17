@@ -56,11 +56,12 @@ abstract class ControllerTestKt : BehaviorSpec() {
         context: WebApplicationContext,
         provider: RestDocumentationContextProvider,
     ) {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
-            .apply { MockMvcRestDocumentation.documentationConfiguration(provider) }
-            .alwaysDo<DefaultMockMvcBuilder> { MockMvcResultHandlers.print() }
-            .alwaysDo<DefaultMockMvcBuilder> { MockMvcResultHandlers.log() }
-            .addFilter<DefaultMockMvcBuilder>(CharacterEncodingFilter("UTF-8", true))
-            .build()
+        this.mockMvc =
+            MockMvcBuilders.webAppContextSetup(context)
+                .apply { MockMvcRestDocumentation.documentationConfiguration(provider) }
+                .alwaysDo<DefaultMockMvcBuilder> { MockMvcResultHandlers.print() }
+                .alwaysDo<DefaultMockMvcBuilder> { MockMvcResultHandlers.log() }
+                .addFilter<DefaultMockMvcBuilder>(CharacterEncodingFilter("UTF-8", true))
+                .build()
     }
 }

@@ -21,11 +21,9 @@ ij_wrap_on_typing = false
 [*.{kt,kts}]
 ij_kotlin_allow_trailing_comma = true
 ij_kotlin_allow_trailing_comma_on_call_site = true
-ij_kotlin_name_count_to_use_star_import = 2147483647
-ij_kotlin_name_count_to_use_star_import_for_members = 2147483647
+ij_kotlin_name_count_to_use_star_import = 999
+ij_kotlin_name_count_to_use_star_import_for_members = 999
 ij_kotlin_packages_to_use_import_on_demand = unset
-ktlint_standard_string-template-indent = disabled
-ktlint_standard_multiline-expression-wrapping = disabled
 
 [{*.yml,*.yaml}]
 tab_width = 2

@@ -32,10 +32,8 @@ class WebLogConfig {
 
     @Bean
     fun thirdFilter(loggingStatusManager: LoggingStatusManager): FilterRegistrationBean<RequestLoggingFilter> {
-        return FilterRegistrationBean<RequestLoggingFilter>().apply {
-            order = 3
-            filter = RequestLoggingFilter(
-                loggingStatusManager,
+        val ignoredUrls: List<String> =
+            listOf(
                 "/favicon.ico",
                 "/error*",
                 "/api/swagger*",
@@ -43,6 +41,10 @@ class WebLogConfig {
                 "/api/actuator*",
                 "/api/health",
             )
+
+        return FilterRegistrationBean<RequestLoggingFilter>().apply {
+            order = 3
+            filter = RequestLoggingFilter(loggingStatusManager, *ignoredUrls.toTypedArray())
             setName("requestLoggingFilter")
             addUrlPatterns("/api/*")
         }

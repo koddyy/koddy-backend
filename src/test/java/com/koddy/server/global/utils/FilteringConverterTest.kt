@@ -17,14 +17,15 @@ internal class FilteringConverterTest : DescribeSpec({
             it("List<Nationality> 도메인으로 변환한다") {
                 val result: List<Nationality> = FilteringConverter.convertToNationality(value)
 
-                result shouldContainExactly listOf(
-                    Nationality.KOREA,
-                    Nationality.USA,
-                    Nationality.JAPAN,
-                    Nationality.CHINA,
-                    Nationality.VIETNAM,
-                    Nationality.ETC,
-                )
+                result shouldContainExactly
+                    listOf(
+                        Nationality.KOREA,
+                        Nationality.USA,
+                        Nationality.JAPAN,
+                        Nationality.CHINA,
+                        Nationality.VIETNAM,
+                        Nationality.ETC,
+                    )
             }
         }
     }
@@ -36,13 +37,14 @@ internal class FilteringConverterTest : DescribeSpec({
             it("List<Language.Category> 도메인으로 변환한다") {
                 val result: List<Language.Category> = FilteringConverter.convertToLanguage(value)
 
-                result shouldContainExactly listOf(
-                    Language.Category.KR,
-                    Language.Category.EN,
-                    Language.Category.CN,
-                    Language.Category.JP,
-                    Language.Category.VN,
-                )
+                result shouldContainExactly
+                    listOf(
+                        Language.Category.KR,
+                        Language.Category.EN,
+                        Language.Category.CN,
+                        Language.Category.JP,
+                        Language.Category.VN,
+                    )
             }
         }
     }

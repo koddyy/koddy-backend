@@ -30,26 +30,27 @@ class LocalStackTestContainersConfig {
 
     @Bean
     fun s3Client(container: LocalStackContainer): S3Client {
-        val s3Client = S3Client
-            .builder()
-            .endpointOverride(container.endpoint)
-            .credentialsProvider(
-                StaticCredentialsProvider.create(
-                    AwsBasicCredentials.create(
-                        container.accessKey,
-                        container.secretKey,
+        val s3Client =
+            S3Client
+                .builder()
+                .endpointOverride(container.endpoint)
+                .credentialsProvider(
+                    StaticCredentialsProvider.create(
+                        AwsBasicCredentials.create(
+                            container.accessKey,
+                            container.secretKey,
+                        ),
                     ),
-                ),
-            )
-            .region(Region.of(container.region))
-            .build().apply {
-                createBucket(
-                    CreateBucketRequest.builder()
-                        .acl(BucketCannedACL.PUBLIC_READ)
-                        .bucket(BUCKET_NAME)
-                        .build(),
                 )
-            }
+                .region(Region.of(container.region))
+                .build().apply {
+                    createBucket(
+                        CreateBucketRequest.builder()
+                            .acl(BucketCannedACL.PUBLIC_READ)
+                            .bucket(BUCKET_NAME)
+                            .build(),
+                    )
+                }
         return s3Client
     }
 

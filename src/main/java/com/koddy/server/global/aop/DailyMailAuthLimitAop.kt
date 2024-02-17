@@ -33,10 +33,11 @@ class DailyMailAuthLimitAop(
     }
 
     private fun checkUserAlreadyBanned(authenticated: Authenticated) {
-        val authBanKey: String = createKey(
-            prefix = AUTH_BAN_KEY,
-            suffix = authenticated.id.toString(),
-        )
+        val authBanKey: String =
+            createKey(
+                prefix = AUTH_BAN_KEY,
+                suffix = authenticated.id.toString(),
+            )
         val authBanValue: String? = redisOperator.get(authBanKey)
 
         if (!authBanValue.isNullOrBlank() && AUTH_BAN_VALUE == authBanValue) {

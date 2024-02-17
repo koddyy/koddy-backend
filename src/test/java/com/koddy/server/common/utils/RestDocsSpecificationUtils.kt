@@ -439,26 +439,29 @@ object RestDocsSpecificationUtils {
         get() = Preprocessors.preprocessResponse(Preprocessors.prettyPrint())
 
     private val headerWithAccessToken: Snippet
-        get() = HeaderDocumentation.requestHeaders(
-            SnippetFactory.header(
-                name = AuthToken.ACCESS_TOKEN_HEADER,
-                description = "Access Token",
-                mustRequired = true,
-            ),
-        )
+        get() =
+            HeaderDocumentation.requestHeaders(
+                SnippetFactory.header(
+                    name = AuthToken.ACCESS_TOKEN_HEADER,
+                    description = "Access Token",
+                    mustRequired = true,
+                ),
+            )
 
     private val cookieWithRefreshToken: Snippet
-        get() = CookieDocumentation.requestCookies(
-            SnippetFactory.cookie(
-                name = AuthToken.REFRESH_TOKEN_HEADER,
-                description = "Refresh Token",
-                mustRequired = true,
-            ),
-        )
+        get() =
+            CookieDocumentation.requestCookies(
+                SnippetFactory.cookie(
+                    name = AuthToken.REFRESH_TOKEN_HEADER,
+                    description = "Refresh Token",
+                    mustRequired = true,
+                ),
+            )
 
     private val exceptionResponseFields: Snippet
-        get() = PayloadDocumentation.responseFields(
-            PayloadDocumentation.fieldWithPath("errorCode").description("커스텀 예외 코드"),
-            PayloadDocumentation.fieldWithPath("message").description("예외 메시지"),
-        )
+        get() =
+            PayloadDocumentation.responseFields(
+                PayloadDocumentation.fieldWithPath("errorCode").description("커스텀 예외 코드"),
+                PayloadDocumentation.fieldWithPath("message").description("예외 메시지"),
+            )
 }
