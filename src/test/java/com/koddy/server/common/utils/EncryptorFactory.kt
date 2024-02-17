@@ -3,7 +3,7 @@ package com.koddy.server.common.utils
 import java.security.SecureRandom
 
 object EncryptorFactory {
-    fun main(args: Array<String>) {
+    fun main() {
         password()
         salt()
     }
