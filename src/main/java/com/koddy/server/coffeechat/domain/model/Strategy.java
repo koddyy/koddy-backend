@@ -34,7 +34,7 @@ public class Strategy {
     }
 
     public static Strategy of(final Type type, final String value, final Encryptor encryptor) {
-        return new Strategy(type, encryptor.symmetricEncrypt(value));
+        return new Strategy(type, encryptor.encrypt(value));
     }
 
     @Getter

@@ -6,7 +6,7 @@ on:
       - dev
 
 env:
-  SUBMODULE_TOKEN: ${{ secrets.SUBMODULE_TOKEN }}
+  SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
   KODDY_DEV_SERVER_HOST: ${{ secrets.KODDY_DEV_SERVER_HOST }}
   KODDY_DEV_SERVER_PORT: ${{ secrets.KODDY_DEV_SERVER_PORT }}
   KODDY_DEV_SERVER_USERNAME: ${{ secrets.KODDY_DEV_SERVER_USERNAME }}
@@ -25,7 +25,7 @@ jobs:
       - name: Repository를 가져온다
         uses: actions/checkout@v3
         with:
-          token: ${{ env.SUBMODULE_TOKEN }}
+          token: ${{ env.SECRET_TOKEN }}
           submodules: true
 
       - name: JDK 17을 설정한다

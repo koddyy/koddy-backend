@@ -18,6 +18,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_AUTH_CODE;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
@@ -27,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@Import(AuthenticationMentorUnivUseCaseIntegrateTest.FakeConfig.class)
 @DisplayName("Member -> AuthenticationMentorUnivUseCase 테스트 [IntegrateTest]")
 class AuthenticationMentorUnivUseCaseIntegrateTest extends IntegrateTest {
     @Autowired
@@ -42,18 +45,21 @@ class AuthenticationMentorUnivUseCaseIntegrateTest extends IntegrateTest {
     private static final String AUTH_CODE = "123456";
 
     @TestConfiguration
-    static class AuthenticationMentorUnivUseCaseIntegrateTestConfig {
+    static class FakeConfig {
         @Bean
+        @Primary
         public AuthKeyGenerator authKeyGenerator() {
             return (prefix, suffix) -> String.format(AUTH_KEY_PREFIX, suffix);
         }
 
         @Bean
+        @Primary
         public AuthCodeGenerator authCodeGenerator() {
             return () -> AUTH_CODE;
         }
 
         @Bean
+        @Primary
         public EmailSender emailSender() {
             return new StubEmailSender();
         }

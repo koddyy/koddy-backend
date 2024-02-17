@@ -1,10 +1,16 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
-    java
+    kotlin("jvm")
+//    kotlin("kapt")
+    kotlin("plugin.spring")
+    kotlin("plugin.jpa")
     id("org.springframework.boot")
     id("io.spring.dependency-management")
     id("org.asciidoctor.jvm.convert")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 group = "${property("projectGroup")}"
@@ -12,6 +18,7 @@ version = "${property("applicationVersion")}"
 
 java {
     sourceCompatibility = JavaVersion.valueOf("VERSION_${property("javaVersion")}")
+    targetCompatibility = JavaVersion.valueOf("VERSION_${property("javaVersion")}")
 }
 
 configurations {
@@ -25,12 +32,18 @@ repositories {
 }
 
 dependencies {
+    // Kotlin
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
     // Spring Web
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.security:spring-security-crypto")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+//    kapt("org.springframework.boot:spring-boot-configuration-processor")
 
     // Data
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -54,10 +67,6 @@ dependencies {
     // Cloud Infra
     implementation("io.awspring.cloud:spring-cloud-aws-starter:${property("awspringVersion")}")
     implementation("io.awspring.cloud:spring-cloud-aws-starter-s3:${property("awspringVersion")}")
-
-    // Monitoring
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 
     // JWT
     implementation("io.jsonwebtoken:jjwt-api:${property("jwtTokenVersion")}")
@@ -85,6 +94,11 @@ dependencies {
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
+    // Kotest & Mockk
+    testImplementation("io.kotest:kotest-runner-junit5:${property("kotestVersion")}")
+    testImplementation("io.kotest.extensions:kotest-extensions-spring:${property("kotestExtentionsSpringVersion")}")
+    testImplementation("io.mockk:mockk:${property("mockkVersion")}")
+
     // Spring REST Docs (With MockMvc)
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 
@@ -103,6 +117,48 @@ dependencies {
     testImplementation("org.testcontainers:localstack:${property("localStackVersion")}")
 }
 
+allOpen {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
+}
+
+noArg {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs += "-Xjsr305=strict"
+        jvmTarget = "${project.property("javaVersion")}"
+    }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
+// TODO: compileJava + compileTestJava & ktlint 빌드 의존성 꼬임 관련 임시 해결
+tasks.runKtlintCheckOverMainSourceSet {
+    mustRunAfter(
+        tasks.compileJava,
+        tasks.compileTestJava,
+    )
+}
+
+// Ktlint
+configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+    reporters {
+        reporter(ReporterType.JSON)
+    }
+
+    filter {
+        exclude("**/generated/**")
+    }
+}
+
 // QueryDsl QClass
 val queryDslTypeDir: String = "src/main/generated"
 
@@ -118,10 +174,6 @@ tasks.named("clean") {
     doLast {
         file(queryDslTypeDir).deleteRecursively()
     }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
 }
 
 // build REST Docs

@@ -61,6 +61,6 @@ public class FileManagementApiController {
             @RequestPart final MultipartFile file
     ) {
         final String uploadUrl = uploadFileUseCase.invoke(new UploadFileCommand(FileConverter.convertFile(file)));
-        return ResponseEntity.ok(ResponseWrapper.from(uploadUrl));
+        return ResponseEntity.ok(new ResponseWrapper<>(uploadUrl));
     }
 }

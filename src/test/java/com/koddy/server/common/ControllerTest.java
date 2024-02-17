@@ -8,7 +8,7 @@ import com.koddy.server.common.config.MockAllUseCaseBeanFactoryPostProcessor;
 import com.koddy.server.common.config.ResetMockTestExecutionListener;
 import com.koddy.server.common.config.TestAopConfig;
 import com.koddy.server.common.config.TestWebBeanConfig;
-import com.koddy.server.global.base.KoddyExceptionCode;
+import com.koddy.server.global.base.BusinessExceptionCode;
 import com.koddy.server.global.exception.alert.SlackAlertManager;
 import com.koddy.server.member.domain.model.Member;
 import org.junit.jupiter.api.BeforeEach;
@@ -483,14 +483,14 @@ public abstract class ControllerTest {
      * Execute & Result Documentation
      */
     public record ExceptionSpec(
-            KoddyExceptionCode code,
+            BusinessExceptionCode code,
             String message
     ) {
-        public static ExceptionSpec of(final KoddyExceptionCode code) {
+        public static ExceptionSpec of(final BusinessExceptionCode code) {
             return new ExceptionSpec(code, null);
         }
 
-        public static ExceptionSpec of(final KoddyExceptionCode code, final String message) {
+        public static ExceptionSpec of(final BusinessExceptionCode code, final String message) {
             return new ExceptionSpec(code, message);
         }
     }
