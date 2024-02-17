@@ -50,7 +50,6 @@ jobs:
           github_token: ${{ secrets.SECRET_TOKEN }}
           reporter: github-pr-review
           fail_on_error: true
-          ktlint_version: 12.1.0
 
       - name: Gradle build를 수행한다
         run: ./gradlew build
