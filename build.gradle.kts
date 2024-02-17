@@ -4,7 +4,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     kotlin("jvm")
-    kotlin("kapt")
+//    kotlin("kapt")
     kotlin("plugin.spring")
     kotlin("plugin.jpa")
     id("org.springframework.boot")
@@ -15,7 +15,11 @@ plugins {
 
 group = "${property("projectGroup")}"
 version = "${property("applicationVersion")}"
-java.sourceCompatibility = JavaVersion.valueOf("VERSION_${property("javaVersion")}")
+
+java {
+    sourceCompatibility = JavaVersion.valueOf("VERSION_${property("javaVersion")}")
+    targetCompatibility = JavaVersion.valueOf("VERSION_${property("javaVersion")}")
+}
 
 configurations {
     compileOnly {
@@ -39,7 +43,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.security:spring-security-crypto")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    kapt("org.springframework.boot:spring-boot-configuration-processor")
+//    kapt("org.springframework.boot:spring-boot-configuration-processor")
 
     // Data
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -92,8 +96,7 @@ dependencies {
 
     // Kotest & Mockk
     testImplementation("io.kotest:kotest-runner-junit5:${property("kotestVersion")}")
-    testImplementation("io.kotest:kotest-assertions-core:${property("kotestVersion")}")
-    testImplementation("io.kotest:kotest-extensions-spring:${property("kotestVersion")}")
+    testImplementation("io.kotest.extensions:kotest-extensions-spring:${property("kotestExtentionsSpringVersion")}")
     testImplementation("io.mockk:mockk:${property("mockkVersion")}")
 
     // Spring REST Docs (With MockMvc)
