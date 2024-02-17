@@ -4,7 +4,6 @@ import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.aop.AccessControl;
 import com.koddy.server.member.application.usecase.UpdateMentorInfoUseCase;
-import com.koddy.server.member.application.usecase.command.UpdateMentorScheduleCommand;
 import com.koddy.server.member.presentation.dto.request.UpdateMentorBasicInfoRequest;
 import com.koddy.server.member.presentation.dto.request.UpdateMentorScheduleRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,11 +43,7 @@ public class UpdateMentorInfoApiController {
         @Auth final Authenticated authenticated,
         @RequestBody @Valid final UpdateMentorScheduleRequest request
     ) {
-        updateMentorInfoUseCase.updateSchedule(new UpdateMentorScheduleCommand(
-            authenticated.id(),
-            request.toPeriod(),
-            request.toSchedules()
-        ));
+        updateMentorInfoUseCase.updateSchedule(request.toCommand(authenticated.id()));
         return ResponseEntity.noContent().build();
     }
 }
