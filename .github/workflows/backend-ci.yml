@@ -44,6 +44,14 @@ jobs:
       - name: Gradle 명령 실행을 위한 권한을 부여한다
         run: chmod +x gradlew
 
+      - name: ktlint를 실행한다
+        uses: ScaCap/action-ktlint@master
+        with:
+          github_token: ${{ secrets.SECRET_TOKEN }}
+          reporter: github-pr-review
+          fail_on_error: true
+          ktlint_version: 12.1.0
+
       - name: Gradle build를 수행한다
         run: ./gradlew build
 
