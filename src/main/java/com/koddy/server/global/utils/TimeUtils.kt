@@ -9,6 +9,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import kotlin.math.absoluteValue
 
 object TimeUtils {
     private val timeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME
@@ -48,22 +49,19 @@ object TimeUtils {
 
     @JvmStatic
     fun calculateDurationByMinutes(
-        start: ZonedDateTime,
-        end: ZonedDateTime,
-    ): Long = ChronoUnit.MINUTES.between(start, end)
-
-    @JvmStatic
-    fun calculateDurationByMinutes(
         start: LocalDateTime,
         end: LocalDateTime,
-    ): Long = ChronoUnit.MINUTES.between(start, end)
-
-    @JvmStatic
-    fun kstToUtc(kst: ZonedDateTime): ZonedDateTime = kst.withZoneSameInstant(utcZoneId)
+    ): Long = ChronoUnit.MINUTES.between(start, end).absoluteValue
 
     @JvmStatic
     fun kstToUtc(kst: LocalDateTime): LocalDateTime =
         ZonedDateTime.of(kst, kstZoneId)
             .withZoneSameInstant(utcZoneId)
+            .toLocalDateTime()
+
+    @JvmStatic
+    fun utcToKst(utc: LocalDateTime): LocalDateTime =
+        ZonedDateTime.of(utc, utcZoneId)
+            .withZoneSameInstant(kstZoneId)
             .toLocalDateTime()
 }
