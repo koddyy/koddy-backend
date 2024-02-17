@@ -41,7 +41,7 @@ class WebLogConfig {
                 "/api/swagger*",
                 "/api-docs*",
                 "/api/actuator*",
-                "/api/health"
+                "/api/health",
             )
             setName("requestLoggingFilter")
             addUrlPatterns("/api/*")

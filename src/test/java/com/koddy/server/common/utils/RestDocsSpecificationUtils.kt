@@ -28,7 +28,7 @@ object RestDocsSpecificationUtils {
             identifier,
             documentRequest,
             documentResponse,
-            *snippets
+            *snippets,
         )
     }
 
@@ -41,7 +41,7 @@ object RestDocsSpecificationUtils {
             identifier,
             documentRequest,
             documentResponse,
-            *arrayOf(headerWithAccessToken, *snippets)
+            *arrayOf(headerWithAccessToken, *snippets),
         )
     }
 
@@ -54,7 +54,7 @@ object RestDocsSpecificationUtils {
             identifier,
             documentRequest,
             documentResponse,
-            *arrayOf(cookieWithRefreshToken, *snippets)
+            *arrayOf(cookieWithRefreshToken, *snippets),
         )
     }
 
@@ -67,7 +67,7 @@ object RestDocsSpecificationUtils {
             identifier,
             documentRequest,
             documentResponse,
-            *arrayOf(exceptionResponseFields, *snippets)
+            *arrayOf(exceptionResponseFields, *snippets),
         )
     }
 
@@ -80,7 +80,7 @@ object RestDocsSpecificationUtils {
             identifier,
             documentRequest,
             documentResponse,
-            *arrayOf(headerWithAccessToken, exceptionResponseFields, *snippets)
+            *arrayOf(headerWithAccessToken, exceptionResponseFields, *snippets),
         )
     }
 
@@ -93,7 +93,7 @@ object RestDocsSpecificationUtils {
             identifier,
             documentRequest,
             documentResponse,
-            *arrayOf(cookieWithRefreshToken, exceptionResponseFields, *snippets)
+            *arrayOf(cookieWithRefreshToken, exceptionResponseFields, *snippets),
         )
     }
 
@@ -443,8 +443,8 @@ object RestDocsSpecificationUtils {
             SnippetFactory.header(
                 name = AuthToken.ACCESS_TOKEN_HEADER,
                 description = "Access Token",
-                mustRequired = true
-            )
+                mustRequired = true,
+            ),
         )
 
     private val cookieWithRefreshToken: Snippet
@@ -452,13 +452,13 @@ object RestDocsSpecificationUtils {
             SnippetFactory.cookie(
                 name = AuthToken.REFRESH_TOKEN_HEADER,
                 description = "Refresh Token",
-                mustRequired = true
-            )
+                mustRequired = true,
+            ),
         )
 
     private val exceptionResponseFields: Snippet
         get() = PayloadDocumentation.responseFields(
             PayloadDocumentation.fieldWithPath("errorCode").description("커스텀 예외 코드"),
-            PayloadDocumentation.fieldWithPath("message").description("예외 메시지")
+            PayloadDocumentation.fieldWithPath("message").description("예외 메시지"),
         )
 }

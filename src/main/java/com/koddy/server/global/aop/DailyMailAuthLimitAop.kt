@@ -35,7 +35,7 @@ class DailyMailAuthLimitAop(
     private fun checkUserAlreadyBanned(authenticated: Authenticated) {
         val authBanKey: String = createKey(
             prefix = AUTH_BAN_KEY,
-            suffix = authenticated.id.toString()
+            suffix = authenticated.id.toString(),
         )
         val authBanValue: String? = redisOperator.get(authBanKey)
 
@@ -63,10 +63,10 @@ class DailyMailAuthLimitAop(
         return redisOperator.incr(
             createKey(
                 prefix = AUTH_TRY_COUNT_KEY,
-                suffix = authenticated.id.toString()
+                suffix = authenticated.id.toString(),
             ),
             dailyMailAuthLimit.banTime,
-            dailyMailAuthLimit.banTimeUnit
+            dailyMailAuthLimit.banTimeUnit,
         )
     }
 
@@ -77,11 +77,11 @@ class DailyMailAuthLimitAop(
         redisOperator.save(
             createKey(
                 prefix = AUTH_BAN_KEY,
-                suffix = id.toString()
+                suffix = id.toString(),
             ),
             AUTH_BAN_VALUE,
             dailyMailAuthLimit.banTime,
-            dailyMailAuthLimit.banTimeUnit
+            dailyMailAuthLimit.banTimeUnit,
         )
     }
 
@@ -89,8 +89,8 @@ class DailyMailAuthLimitAop(
         redisOperator.delete(
             createKey(
                 prefix = AUTH_TRY_COUNT_KEY,
-                suffix = id.toString()
-            )
+                suffix = id.toString(),
+            ),
         )
     }
 

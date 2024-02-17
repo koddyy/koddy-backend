@@ -24,7 +24,7 @@ class LoggingTracer(
             log.info(
                 "{} args={}",
                 loggingStatus.depthPrefix(REQUEST_PREFIX) + methodSignature,
-                args
+                args,
             )
         }
     }
@@ -36,7 +36,7 @@ class LoggingTracer(
             log.info(
                 "{} time={}ms",
                 loggingStatus.depthPrefix(RESPONSE_PREFIX) + methodSignature,
-                loggingStatus.calculateTakenTime()
+                loggingStatus.calculateTakenTime(),
             )
         }
         loggingStatus.decreaseDepth()
@@ -53,7 +53,7 @@ class LoggingTracer(
                 "{} time={}ms ex={}",
                 loggingStatus.depthPrefix(EXCEPTION_PREFIX) + methodSignature,
                 loggingStatus.calculateTakenTime(),
-                exception.toString()
+                exception.toString(),
             )
         }
         loggingStatus.decreaseDepth()

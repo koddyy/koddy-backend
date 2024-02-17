@@ -75,7 +75,7 @@ class RequestLoggingFilter(
             MDC.get(REQUEST_METHOD.name),
             MDC.get(REQUEST_URI.name),
             MDC.get(REQUEST_PARAMS.name),
-            MDC.get(REQUEST_TIME.name)
+            MDC.get(REQUEST_TIME.name),
         )
         log.info("Request Body = {}", readRequestData(httpRequest))
     }
@@ -104,7 +104,7 @@ class RequestLoggingFilter(
             MDC.get(REQUEST_METHOD.name),
             MDC.get(REQUEST_URI.name),
             httpResponse.status,
-            stopWatch.totalTimeMillis
+            stopWatch.totalTimeMillis,
         )
     }
 

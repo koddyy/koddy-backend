@@ -37,9 +37,9 @@ class LocalStackTestContainersConfig {
                 StaticCredentialsProvider.create(
                     AwsBasicCredentials.create(
                         container.accessKey,
-                        container.secretKey
-                    )
-                )
+                        container.secretKey,
+                    ),
+                ),
             )
             .region(Region.of(container.region))
             .build().apply {
@@ -47,7 +47,7 @@ class LocalStackTestContainersConfig {
                     CreateBucketRequest.builder()
                         .acl(BucketCannedACL.PUBLIC_READ)
                         .bucket(BUCKET_NAME)
-                        .build()
+                        .build(),
                 )
             }
         return s3Client

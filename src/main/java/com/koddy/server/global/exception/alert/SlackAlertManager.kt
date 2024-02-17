@@ -31,9 +31,9 @@ class SlackAlertManager(
                 payload {
                     it.text("서버 에러 발생!!")
                         .attachments(
-                            listOf(generateSlackErrorAttachments(request, exception))
+                            listOf(generateSlackErrorAttachments(request, exception)),
                         )
-                }
+                },
             )
         } catch (ex: IOException) {
             log.error("Slack API 통신 간 에러 발생", ex)
@@ -52,17 +52,17 @@ class SlackAlertManager(
                 listOf(
                     generateSlackField(
                         title = REQUEST_IP,
-                        value = getClientIP(request)
+                        value = getClientIP(request),
                     ),
                     generateSlackField(
                         title = REQUEST_URL,
-                        value = "[${request.method}] ${getRequestUriWithQueryString(request)}"
+                        value = "[${request.method}] ${getRequestUriWithQueryString(request)}",
                     ),
                     generateSlackField(
                         title = ERROR_MESSAGE,
-                        value = exception.toString()
-                    )
-                )
+                        value = exception.toString(),
+                    ),
+                ),
             )
             .build()
     }

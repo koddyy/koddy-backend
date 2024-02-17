@@ -32,7 +32,7 @@ class LoggingAspect(
             && !execution(* com.koddy.server..*TokenProvider.*(..))
             && !execution(* com.koddy.server..*TokenResponseWriter.*(..))
             && !execution(* com.koddy.server..*TokenExtractor.*(..))
-        """
+        """,
     )
     private fun excludeComponent() {
     }

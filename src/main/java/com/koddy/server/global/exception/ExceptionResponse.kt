@@ -8,7 +8,7 @@ data class ExceptionResponse(
 ) {
     constructor(code: BusinessExceptionCode) : this(
         errorCode = code.errorCode,
-        message = code.message
+        message = code.message,
     )
 
     constructor(
@@ -16,6 +16,6 @@ data class ExceptionResponse(
         message: String,
     ) : this(
         errorCode = code.errorCode,
-        message = message
+        message = message,
     )
 }

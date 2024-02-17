@@ -35,7 +35,7 @@ annotation class UnitTestKt
 @ContextConfiguration(initializers = [MySqlTestContainers.Initializer::class])
 @Import(
     QueryDslConfig::class,
-    P6SpyConfig::class
+    P6SpyConfig::class,
 )
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 annotation class RepositoryTestKt
@@ -54,12 +54,12 @@ annotation class RedisTestKt
 @ContextConfiguration(
     initializers = [
         MySqlTestContainers.Initializer::class,
-        RedisTestContainers.Initializer::class
-    ]
+        RedisTestContainers.Initializer::class,
+    ],
 )
 @ExtendWith(
     DatabaseCleanerEachCallbackExtension::class,
-    RedisCleanerEachCallbackExtension::class
+    RedisCleanerEachCallbackExtension::class,
 )
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 annotation class IntegrateTestKt

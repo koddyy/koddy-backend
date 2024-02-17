@@ -29,7 +29,7 @@ class AuthArgumentResolver(
         val accessToken: String = getAccessToken(request!!)
         return Authenticated(
             tokenProvider.getId(accessToken),
-            tokenProvider.getAuthority(accessToken)
+            tokenProvider.getAuthority(accessToken),
         )
     }
 

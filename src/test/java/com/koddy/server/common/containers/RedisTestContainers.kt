@@ -24,7 +24,7 @@ abstract class RedisTestContainers {
         override fun initialize(applicationContext: ConfigurableApplicationContext) {
             TestPropertyValues.of(
                 "spring.data.redis.host=${container.host}",
-                "spring.data.redis.port=${container.getMappedPort(REDIS_PORT)}"
+                "spring.data.redis.port=${container.getMappedPort(REDIS_PORT)}",
             ).applyTo(applicationContext.environment)
         }
     }

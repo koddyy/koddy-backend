@@ -12,6 +12,6 @@ data class OAuthExceptionResponse(
         id = oAuthUserResponse.id(),
         name = oAuthUserResponse.name(),
         email = oAuthUserResponse.email(),
-        profileImageUrl = oAuthUserResponse.profileImageUrl()
+        profileImageUrl = oAuthUserResponse.profileImageUrl(),
     )
 }

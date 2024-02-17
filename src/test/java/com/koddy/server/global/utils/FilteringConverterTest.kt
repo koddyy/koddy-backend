@@ -23,7 +23,7 @@ internal class FilteringConverterTest : DescribeSpec({
                     Nationality.JAPAN,
                     Nationality.CHINA,
                     Nationality.VIETNAM,
-                    Nationality.ETC
+                    Nationality.ETC,
                 )
             }
         }
@@ -41,7 +41,7 @@ internal class FilteringConverterTest : DescribeSpec({
                     Language.Category.EN,
                     Language.Category.CN,
                     Language.Category.JP,
-                    Language.Category.VN
+                    Language.Category.VN,
                 )
             }
         }

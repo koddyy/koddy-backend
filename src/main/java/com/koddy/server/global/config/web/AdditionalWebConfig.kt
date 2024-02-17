@@ -31,7 +31,7 @@ class AdditionalWebConfig(
                 PATCH.name(),
                 DELETE.name(),
                 OPTIONS.name(),
-                HEAD.name()
+                HEAD.name(),
             )
             .allowedHeaders("*")
             .exposedHeaders(ACCESS_TOKEN_HEADER)
@@ -43,8 +43,8 @@ class AdditionalWebConfig(
         resolvers.addAll(
             listOf(
                 AuthArgumentResolver(tokenProvider),
-                ExtractTokenArgumentResolver(tokenProvider)
-            )
+                ExtractTokenArgumentResolver(tokenProvider),
+            ),
         )
     }
 }

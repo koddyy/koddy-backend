@@ -39,7 +39,7 @@ class SwaggerConfig(
                 Contact()
                     .name("서지원")
                     .email("sjiwon4491@gmail.com")
-                    .url("https://github.com/koddyy/koddy-backend")
+                    .url("https://github.com/koddyy/koddy-backend"),
             )
             .version("v1")
     }
@@ -78,7 +78,7 @@ class SwaggerConfig(
                 .getConfig()
                 .addAnnotationsToIgnore(
                     Auth::class.java,
-                    ExtractToken::class.java
+                    ExtractToken::class.java,
                 )
         }
     }

@@ -94,7 +94,7 @@ class ApiGlobalExceptionHandler(
      */
     @ExceptionHandler(
         MethodArgumentTypeMismatchException::class,
-        MaxUploadSizeExceededException::class
+        MaxUploadSizeExceededException::class,
     )
     fun handleRequestDataException(ex: Exception): ResponseEntity<ExceptionResponse> {
         log.warn("handleRequestDataException -> message = {}", ex.localizedMessage)

@@ -43,7 +43,7 @@ object RequestMetadataExtractor {
             .joinToString(
                 separator = ", ",
                 prefix = "[",
-                postfix = "]"
+                postfix = "]",
             ) { "$it = ${request.getParameter(it)}" }
     }
 }

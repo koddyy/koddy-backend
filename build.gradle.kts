@@ -144,7 +144,7 @@ tasks.withType<Test> {
 tasks.runKtlintCheckOverMainSourceSet {
     mustRunAfter(
         tasks.compileJava,
-        tasks.compileTestJava
+        tasks.compileTestJava,
     )
 }
 

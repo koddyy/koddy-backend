@@ -17,17 +17,17 @@ import org.springframework.test.context.ContextConfiguration
 @Tag("Acceptance")
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = [LocalStackTestContainersConfig::class]
+    classes = [LocalStackTestContainersConfig::class],
 )
 @ContextConfiguration(
     initializers = [
         MySqlTestContainers.Initializer::class,
-        RedisTestContainers.Initializer::class
-    ]
+        RedisTestContainers.Initializer::class,
+    ],
 )
 @Import(
     ExternalApiConfig::class,
-    BlackboxLogicControlConfig::class
+    BlackboxLogicControlConfig::class,
 )
 abstract class AcceptanceTestKt : BehaviorSpec() {
     @LocalServerPort

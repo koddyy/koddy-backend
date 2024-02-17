@@ -32,7 +32,7 @@ open class StubMeetingLinkManager : MeetingLinkManager {
             "sjiwon4491@gmail.com",
             "Hello 줌 회의",
             "zoom-join-url",
-            60
+            60,
         )
     }
 

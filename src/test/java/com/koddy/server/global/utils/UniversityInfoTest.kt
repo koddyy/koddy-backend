@@ -24,7 +24,7 @@ internal class UniversityInfoTest : DescribeSpec({
                 "sjiwon@kyonggi.edu",
                 "sjiwon@kgu.edu",
                 "sjiwon@kaya.edu",
-                "gachon@snu.edu"
+                "gachon@snu.edu",
             )
 
             it("NOT_PROVIDED_UNIV_DOMAIN 예외가 발생한다") {
@@ -41,7 +41,7 @@ internal class UniversityInfoTest : DescribeSpec({
                 "sjiwon@kyonggi.ac.kr",
                 "sjiwon@kgu.ac.kr",
                 "sjiwon@kaya.ac.kr",
-                "gachon@snu.ac.kr"
+                "gachon@snu.ac.kr",
             )
 
             it("검증에 성공한다") {

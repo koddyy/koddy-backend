@@ -34,7 +34,7 @@ abstract class MySqlTestContainers {
                 "spring.datasource.password=${container.password}",
                 "spring.flyway.url=${container.jdbcUrl}",
                 "spring.flyway.user=${container.username}",
-                "spring.flyway.password=${container.password}"
+                "spring.flyway.password=${container.password}",
             ).applyTo(applicationContext.environment)
         }
     }
