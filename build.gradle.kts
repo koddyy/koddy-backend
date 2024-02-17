@@ -140,6 +140,14 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+// TODO: compileJava + compileTestJava & ktlint 빌드 의존성 꼬임 관련 임시 해결
+tasks.runKtlintCheckOverMainSourceSet {
+    mustRunAfter(
+        tasks.compileJava,
+        tasks.compileTestJava
+    )
+}
+
 // Ktlint
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     reporters {
@@ -148,6 +156,23 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
 
     filter {
         exclude("**/generated/**")
+    }
+}
+
+// QueryDsl QClass
+val queryDslTypeDir: String = "src/main/generated"
+
+tasks.withType<JavaCompile>().configureEach {
+    options.generatedSourceOutputDirectory = file(queryDslTypeDir)
+}
+
+sourceSets {
+    getByName("main").java.srcDirs(queryDslTypeDir)
+}
+
+tasks.named("clean") {
+    doLast {
+        file(queryDslTypeDir).deleteRecursively()
     }
 }
 
