@@ -20,7 +20,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@Import({RedisAuthenticationProcessor.class, StringRedisOperator.class})
+@Import({
+        RedisAuthenticationProcessor.class,
+        StringRedisOperator.class,
+        RedisAuthenticationProcessorTest.FakeConfig.class
+})
 @DisplayName("Auth -> RedisAuthenticationProcessor 테스트")
 class RedisAuthenticationProcessorTest extends RedisTest {
     @Autowired
@@ -33,7 +37,7 @@ class RedisAuthenticationProcessorTest extends RedisTest {
     private static final String AUTH_CODE = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8);
 
     @TestConfiguration
-    static class RedisMailAuthenticationProcessorTestConfig {
+    static class FakeConfig {
         @Bean
         public AuthCodeGenerator authCodeGenerator() {
             return () -> AUTH_CODE;

@@ -1,12 +1,12 @@
 package com.koddy.server.common;
 
-import com.koddy.server.common.containers.RedisTestContainersExtension;
+import com.koddy.server.common.containers.RedisTestContainers;
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
+import org.springframework.test.context.ContextConfiguration;
 
 @Tag("Redis")
 @DataRedisTest
-@ExtendWith(RedisTestContainersExtension.class)
+@ContextConfiguration(initializers = RedisTestContainers.Initializer.class)
 public abstract class RedisTest {
 }
