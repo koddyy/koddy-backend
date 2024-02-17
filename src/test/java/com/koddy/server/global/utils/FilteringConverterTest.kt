@@ -1,13 +1,11 @@
 package com.koddy.server.global.utils
 
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.global.utils.FilteringConverter.convertToLanguage
-import com.koddy.server.global.utils.FilteringConverter.convertToNationality
 import com.koddy.server.member.domain.model.Language
 import com.koddy.server.member.domain.model.Nationality
+import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainExactly
-import org.junit.jupiter.api.DisplayName
 
 @UnitTestKt
 @DisplayName("Global/Utils -> FilteringConverter 테스트")
@@ -17,7 +15,7 @@ internal class FilteringConverterTest : DescribeSpec({
             val value = "KR,EN,CN,JP,VN,ETC"
 
             it("List<Nationality> 도메인으로 변환한다") {
-                val result: List<Nationality> = convertToNationality(value)
+                val result: List<Nationality> = FilteringConverter.convertToNationality(value)
 
                 result shouldContainExactly listOf(
                     Nationality.KOREA,
@@ -36,7 +34,7 @@ internal class FilteringConverterTest : DescribeSpec({
             val value = "KR,EN,CN,JP,VN"
 
             it("List<Language.Category> 도메인으로 변환한다") {
-                val result: List<Language.Category> = convertToLanguage(value)
+                val result: List<Language.Category> = FilteringConverter.convertToLanguage(value)
 
                 result shouldContainExactly listOf(
                     Language.Category.KR,

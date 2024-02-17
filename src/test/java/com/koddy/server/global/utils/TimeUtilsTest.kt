@@ -6,10 +6,10 @@ import com.koddy.server.global.exception.GlobalExceptionCode
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.throwable.shouldHaveMessage
-import org.junit.jupiter.api.DisplayName
 import java.time.LocalDateTime
 
 @UnitTestKt

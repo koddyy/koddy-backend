@@ -8,9 +8,9 @@ import com.koddy.server.global.exception.GlobalExceptionCode
 import com.koddy.server.member.domain.model.Member
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.throwable.shouldHaveMessage
-import org.junit.jupiter.api.DisplayName
 
 @UnitTestKt
 @DisplayName("Global/Utils -> UniversityInfo 테스트")
