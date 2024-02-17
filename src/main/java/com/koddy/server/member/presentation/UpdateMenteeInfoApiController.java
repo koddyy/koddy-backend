@@ -4,7 +4,6 @@ import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.aop.AccessControl;
 import com.koddy.server.member.application.usecase.UpdateMenteeInfoUseCase;
-import com.koddy.server.member.application.usecase.command.UpdateMenteeBasicInfoCommand;
 import com.koddy.server.member.presentation.dto.request.UpdateMenteeBasicInfoRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,19 +28,10 @@ public class UpdateMenteeInfoApiController {
     @PatchMapping("/basic-info")
     @AccessControl(role = MENTEE)
     public ResponseEntity<Void> updateBasicInfo(
-            @Auth final Authenticated authenticated,
-            @RequestBody @Valid final UpdateMenteeBasicInfoRequest request
+        @Auth final Authenticated authenticated,
+        @RequestBody @Valid final UpdateMenteeBasicInfoRequest request
     ) {
-        updateMenteeInfoUseCase.updateBasicInfo(new UpdateMenteeBasicInfoCommand(
-                authenticated.id(),
-                request.name(),
-                request.toNationality(),
-                request.profileImageUrl(),
-                request.introduction(),
-                request.toLanguages(),
-                request.interestSchool(),
-                request.interestMajor()
-        ));
+        updateMenteeInfoUseCase.updateBasicInfo(request.toCommand(authenticated.id()));
         return ResponseEntity.noContent().build();
     }
 }

@@ -4,7 +4,6 @@ import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.aop.AccessControl;
 import com.koddy.server.member.application.usecase.UpdateMentorInfoUseCase;
-import com.koddy.server.member.application.usecase.command.UpdateMentorBasicInfoCommand;
 import com.koddy.server.member.application.usecase.command.UpdateMentorScheduleCommand;
 import com.koddy.server.member.presentation.dto.request.UpdateMentorBasicInfoRequest;
 import com.koddy.server.member.presentation.dto.request.UpdateMentorScheduleRequest;
@@ -31,19 +30,10 @@ public class UpdateMentorInfoApiController {
     @PatchMapping("/basic-info")
     @AccessControl(role = MENTOR)
     public ResponseEntity<Void> updateBasicInfo(
-            @Auth final Authenticated authenticated,
-            @RequestBody @Valid final UpdateMentorBasicInfoRequest request
+        @Auth final Authenticated authenticated,
+        @RequestBody @Valid final UpdateMentorBasicInfoRequest request
     ) {
-        updateMentorInfoUseCase.updateBasicInfo(new UpdateMentorBasicInfoCommand(
-                authenticated.id(),
-                request.name(),
-                request.profileImageUrl(),
-                request.introduction(),
-                request.toLanguages(),
-                request.school(),
-                request.major(),
-                request.enteredIn()
-        ));
+        updateMentorInfoUseCase.updateBasicInfo(request.toCommand(authenticated.id()));
         return ResponseEntity.noContent().build();
     }
 
@@ -51,13 +41,13 @@ public class UpdateMentorInfoApiController {
     @PatchMapping("/schedules")
     @AccessControl(role = MENTOR)
     public ResponseEntity<Void> updateSchedule(
-            @Auth final Authenticated authenticated,
-            @RequestBody @Valid final UpdateMentorScheduleRequest request
+        @Auth final Authenticated authenticated,
+        @RequestBody @Valid final UpdateMentorScheduleRequest request
     ) {
         updateMentorInfoUseCase.updateSchedule(new UpdateMentorScheduleCommand(
-                authenticated.id(),
-                request.toPeriod(),
-                request.toSchedules()
+            authenticated.id(),
+            request.toPeriod(),
+            request.toSchedules()
         ));
         return ResponseEntity.noContent().build();
     }
