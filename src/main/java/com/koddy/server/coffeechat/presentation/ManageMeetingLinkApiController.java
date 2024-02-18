@@ -7,8 +7,8 @@ import com.koddy.server.coffeechat.application.usecase.command.CreateMeetingLink
 import com.koddy.server.coffeechat.application.usecase.command.DeleteMeetingLinkCommand;
 import com.koddy.server.coffeechat.domain.model.link.MeetingLinkProvider;
 import com.koddy.server.coffeechat.domain.model.link.MeetingLinkResponse;
-import com.koddy.server.coffeechat.presentation.dto.request.CreateMeetingLinkRequest;
-import com.koddy.server.coffeechat.presentation.dto.response.CreateMeetingLinkResponse;
+import com.koddy.server.coffeechat.presentation.request.CreateMeetingLinkRequest;
+import com.koddy.server.coffeechat.presentation.response.CreateMeetingLinkResponse;
 import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.aop.AccessControl;
 import io.swagger.v3.oas.annotations.Operation;

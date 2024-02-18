@@ -5,8 +5,8 @@ import com.koddy.server.global.annotation.Auth
 import com.koddy.server.global.aop.AccessControl
 import com.koddy.server.member.application.usecase.CompleteProfileUseCase
 import com.koddy.server.member.domain.model.Role
-import com.koddy.server.member.presentation.dto.request.CompleteMenteeProfileRequest
-import com.koddy.server.member.presentation.dto.request.CompleteMentorProfileRequest
+import com.koddy.server.member.presentation.request.CompleteMenteeProfileRequest
+import com.koddy.server.member.presentation.request.CompleteMentorProfileRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid

@@ -1,7 +1,7 @@
 package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.coffeechat.application.usecase.CancelCoffeeChatUseCase;
-import com.koddy.server.coffeechat.presentation.dto.request.CancelCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.CancelCoffeeChatRequest;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;

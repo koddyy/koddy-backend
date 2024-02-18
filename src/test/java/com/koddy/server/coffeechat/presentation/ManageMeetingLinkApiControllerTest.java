@@ -3,7 +3,7 @@ package com.koddy.server.coffeechat.presentation;
 import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.coffeechat.application.usecase.ManageMeetingLinkUseCase;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkResponse;
-import com.koddy.server.coffeechat.presentation.dto.request.CreateMeetingLinkRequest;
+import com.koddy.server.coffeechat.presentation.request.CreateMeetingLinkRequest;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;

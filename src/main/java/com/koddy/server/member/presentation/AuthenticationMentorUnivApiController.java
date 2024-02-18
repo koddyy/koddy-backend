@@ -9,9 +9,9 @@ import com.koddy.server.member.application.usecase.AuthenticationMentorUnivUseCa
 import com.koddy.server.member.application.usecase.command.AuthenticationConfirmWithMailCommand;
 import com.koddy.server.member.application.usecase.command.AuthenticationWithMailCommand;
 import com.koddy.server.member.application.usecase.command.AuthenticationWithProofDataCommand;
-import com.koddy.server.member.presentation.dto.request.AuthenticationConfirmWithMailRequest;
-import com.koddy.server.member.presentation.dto.request.AuthenticationWithMailRequest;
-import com.koddy.server.member.presentation.dto.request.AuthenticationWithProofDataRequest;
+import com.koddy.server.member.presentation.request.AuthenticationConfirmWithMailRequest;
+import com.koddy.server.member.presentation.request.AuthenticationWithMailRequest;
+import com.koddy.server.member.presentation.request.AuthenticationWithProofDataRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

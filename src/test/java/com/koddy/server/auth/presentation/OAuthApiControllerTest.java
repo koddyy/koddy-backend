@@ -8,7 +8,7 @@ import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.auth.exception.OAuthUserNotFoundException;
 import com.koddy.server.auth.infrastructure.social.google.response.GoogleUserResponse;
-import com.koddy.server.auth.presentation.dto.request.OAuthLoginRequest;
+import com.koddy.server.auth.presentation.request.OAuthLoginRequest;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;

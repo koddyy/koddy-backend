@@ -5,7 +5,7 @@ import com.koddy.server.global.annotation.Auth
 import com.koddy.server.global.aop.AccessControl
 import com.koddy.server.member.application.usecase.UpdateMenteeInfoUseCase
 import com.koddy.server.member.domain.model.Role
-import com.koddy.server.member.presentation.dto.request.UpdateMenteeBasicInfoRequest
+import com.koddy.server.member.presentation.request.UpdateMenteeBasicInfoRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid

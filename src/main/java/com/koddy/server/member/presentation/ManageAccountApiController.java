@@ -2,15 +2,15 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.domain.model.AuthMember;
 import com.koddy.server.auth.domain.model.Authenticated;
-import com.koddy.server.auth.presentation.dto.response.LoginResponse;
+import com.koddy.server.auth.presentation.response.LoginResponse;
 import com.koddy.server.auth.utils.TokenResponseWriter;
 import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.member.application.usecase.DeleteMemberUseCase;
 import com.koddy.server.member.application.usecase.SignUpUsecase;
 import com.koddy.server.member.application.usecase.command.SignUpMenteeCommand;
 import com.koddy.server.member.application.usecase.command.SignUpMentorCommand;
-import com.koddy.server.member.presentation.dto.request.SignUpMenteeRequest;
-import com.koddy.server.member.presentation.dto.request.SignUpMentorRequest;
+import com.koddy.server.member.presentation.request.SignUpMenteeRequest;
+import com.koddy.server.member.presentation.request.SignUpMentorRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;

@@ -3,7 +3,7 @@ package com.koddy.server.coffeechat.presentation;
 import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.coffeechat.application.usecase.CancelCoffeeChatUseCase;
 import com.koddy.server.coffeechat.application.usecase.command.CancelCoffeeChatCommand;
-import com.koddy.server.coffeechat.presentation.dto.request.CancelCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.CancelCoffeeChatRequest;
 import com.koddy.server.global.annotation.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

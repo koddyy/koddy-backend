@@ -2,8 +2,8 @@ package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.coffeechat.application.usecase.HandleMentorSuggestedCoffeeChatUseCase;
-import com.koddy.server.coffeechat.presentation.dto.request.PendingSuggestedCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.dto.request.RejectSuggestedCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.PendingSuggestedCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.RejectSuggestedCoffeeChatRequest;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;

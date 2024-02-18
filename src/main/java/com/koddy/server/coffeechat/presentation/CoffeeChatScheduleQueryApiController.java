@@ -7,7 +7,7 @@ import com.koddy.server.coffeechat.application.usecase.query.GetMentorCoffeeChat
 import com.koddy.server.coffeechat.application.usecase.query.response.CoffeeChatEachCategoryCounts;
 import com.koddy.server.coffeechat.domain.repository.query.response.MenteeCoffeeChatScheduleData;
 import com.koddy.server.coffeechat.domain.repository.query.response.MentorCoffeeChatScheduleData;
-import com.koddy.server.coffeechat.presentation.dto.request.GetCoffeeChatScheduleRequest;
+import com.koddy.server.coffeechat.presentation.request.GetCoffeeChatScheduleRequest;
 import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.query.SliceResponse;
 import io.swagger.v3.oas.annotations.Operation;

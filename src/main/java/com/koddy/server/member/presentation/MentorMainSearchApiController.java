@@ -9,7 +9,7 @@ import com.koddy.server.member.application.usecase.MentorMainSearchUseCase;
 import com.koddy.server.member.application.usecase.query.GetAppliedMentees;
 import com.koddy.server.member.application.usecase.query.response.AppliedCoffeeChatsByMenteeResponse;
 import com.koddy.server.member.application.usecase.query.response.MenteeSimpleSearchProfile;
-import com.koddy.server.member.presentation.dto.request.GetMenteesByConditionRequest;
+import com.koddy.server.member.presentation.request.GetMenteesByConditionRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

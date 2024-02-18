@@ -5,7 +5,7 @@ import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.member.application.usecase.GetReservedScheduleUseCase;
 import com.koddy.server.member.application.usecase.query.GetReservedSchedule;
 import com.koddy.server.member.application.usecase.query.response.ReservedSchedule;
-import com.koddy.server.member.presentation.dto.request.ReservedScheduleRequest;
+import com.koddy.server.member.presentation.request.ReservedScheduleRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
