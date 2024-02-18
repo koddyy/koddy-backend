@@ -8,8 +8,10 @@ import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.dto.request.CompleteMenteeProfileRequest;
 import com.koddy.server.member.presentation.dto.request.CompleteMentorProfileRequest;
+import com.koddy.server.member.presentation.dto.request.End;
 import com.koddy.server.member.presentation.dto.request.MentorScheduleRequest;
 import com.koddy.server.member.presentation.dto.request.MentoringPeriodRequest;
+import com.koddy.server.member.presentation.dto.request.Start;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,8 +28,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("Member -> CompleteAccountApiController 테스트")
-class CompleteAccountApiControllerTest extends ControllerTest {
+@DisplayName("Member -> CompleteAccountApi 테스트")
+class CompleteAccountApiTest extends ControllerTest {
     @Autowired
     private CompleteProfileUseCase completeProfileUseCase;
 
@@ -49,11 +51,11 @@ class CompleteAccountApiControllerTest extends ControllerTest {
                         .stream()
                         .map(it -> new MentorScheduleRequest(
                                 it.getDayOfWeek().getKor(),
-                                new MentorScheduleRequest.Start(
+                                new Start(
                                         it.getStartTime().getHour(),
                                         it.getStartTime().getMinute()
                                 ),
-                                new MentorScheduleRequest.End(
+                                new End(
                                         it.getEndTime().getHour(),
                                         it.getEndTime().getMinute()
                                 )

@@ -6,9 +6,11 @@ import com.koddy.server.member.application.usecase.UpdateMentorInfoUseCase;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
+import com.koddy.server.member.presentation.dto.request.End;
 import com.koddy.server.member.presentation.dto.request.LanguageRequest;
 import com.koddy.server.member.presentation.dto.request.MentorScheduleRequest;
 import com.koddy.server.member.presentation.dto.request.MentoringPeriodRequest;
+import com.koddy.server.member.presentation.dto.request.Start;
 import com.koddy.server.member.presentation.dto.request.UpdateMentorBasicInfoRequest;
 import com.koddy.server.member.presentation.dto.request.UpdateMentorScheduleRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -128,8 +130,8 @@ class UpdateMentorInfoApiTest extends ControllerTest {
                 LocalDate.of(2024, 5, 1)
             ),
             List.of(
-                new MentorScheduleRequest(MON.getKor(), new MentorScheduleRequest.Start(9, 0), new MentorScheduleRequest.End(17, 0)),
-                new MentorScheduleRequest(WED.getKor(), new MentorScheduleRequest.Start(13, 0), new MentorScheduleRequest.End(20, 0))
+                new MentorScheduleRequest(MON.getKor(), new Start(9, 0), new End(17, 0)),
+                new MentorScheduleRequest(WED.getKor(), new Start(13, 0), new End(20, 0))
             )
         );
 

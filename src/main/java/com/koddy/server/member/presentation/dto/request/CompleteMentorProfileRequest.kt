@@ -1,30 +1,20 @@
-package com.koddy.server.member.presentation.dto.request;
+package com.koddy.server.member.presentation.dto.request
 
-import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
-import com.koddy.server.member.domain.model.mentor.Timeline;
-import org.springframework.util.CollectionUtils;
+import com.koddy.server.member.application.usecase.command.CompleteMentorProfileCommand
 
-import java.util.List;
-
-public record CompleteMentorProfileRequest(
-        String introduction,
-        String profileImageUrl,
-        MentoringPeriodRequest period,
-        List<MentorScheduleRequest> schedules
+data class CompleteMentorProfileRequest(
+    val introduction: String?,
+    val profileImageUrl: String?,
+    val period: MentoringPeriodRequest?,
+    val schedules: List<MentorScheduleRequest?>?,
 ) {
-    public MentoringPeriod toPeriod() {
-        if (period != null) {
-            return period.toPeriod();
-        }
-        return null;
-    }
-
-    public List<Timeline> toSchedules() {
-        if (CollectionUtils.isEmpty(schedules)) {
-            return List.of();
-        }
-        return schedules.stream()
-                .map(MentorScheduleRequest::toTimeline)
-                .toList();
-    }
+    fun toCommand(mentorId: Long): CompleteMentorProfileCommand =
+        CompleteMentorProfileCommand(
+            mentorId,
+            introduction,
+            profileImageUrl,
+            period?.toPeriod(),
+            schedules?.filterNotNull()
+                ?.map { it.toTimeline() },
+        )
 }

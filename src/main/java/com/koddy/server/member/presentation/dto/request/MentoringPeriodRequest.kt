@@ -1,17 +1,16 @@
-package com.koddy.server.member.presentation.dto.request;
+package com.koddy.server.member.presentation.dto.request
 
-import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
+import com.koddy.server.member.domain.model.mentor.MentoringPeriod
+import java.time.LocalDate
 
-import java.time.LocalDate;
-
-public record MentoringPeriodRequest(
-        LocalDate startDate,
-        LocalDate endDate
+data class MentoringPeriodRequest(
+    val startDate: LocalDate?,
+    val endDate: LocalDate?,
 ) {
-    public MentoringPeriod toPeriod() {
+    fun toPeriod(): MentoringPeriod? {
         if (startDate != null && endDate != null) {
-            return MentoringPeriod.of(startDate, endDate);
+            return MentoringPeriod.of(startDate, endDate)
         }
-        return null;
+        return null
     }
 }

@@ -1,33 +1,29 @@
-package com.koddy.server.member.presentation.dto.request;
+package com.koddy.server.member.presentation.dto.request
 
-import com.koddy.server.global.utils.TimeUtils;
-import com.koddy.server.member.domain.model.mentor.DayOfWeek;
-import com.koddy.server.member.domain.model.mentor.Timeline;
-import lombok.Builder;
+import com.koddy.server.global.utils.TimeUtils
+import com.koddy.server.member.domain.model.mentor.DayOfWeek
+import com.koddy.server.member.domain.model.mentor.Timeline
 
-@Builder
-public record MentorScheduleRequest(
-        String dayOfWeek,
-        Start start,
-        End end
+data class MentorScheduleRequest(
+    val dayOfWeek: String,
+    val start: Start,
+    val end: End,
 ) {
-    public record Start(
-            int hour,
-            int minute
-    ) {
-    }
-
-    public record End(
-            int hour,
-            int minute
-    ) {
-    }
-
-    public Timeline toTimeline() {
+    fun toTimeline(): Timeline {
         return Timeline.of(
-                DayOfWeek.from(dayOfWeek),
-                TimeUtils.toLocalTime(start.hour, start.minute),
-                TimeUtils.toLocalTime(end.hour, end.minute)
-        );
+            DayOfWeek.from(dayOfWeek),
+            TimeUtils.toLocalTime(start.hour, start.minute),
+            TimeUtils.toLocalTime(end.hour, end.minute),
+        )
     }
 }
+
+data class Start(
+    val hour: Int,
+    val minute: Int,
+)
+
+data class End(
+    val hour: Int,
+    val minute: Int,
+)

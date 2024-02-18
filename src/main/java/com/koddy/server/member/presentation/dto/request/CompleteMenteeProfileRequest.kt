@@ -1,7 +1,15 @@
-package com.koddy.server.member.presentation.dto.request;
+package com.koddy.server.member.presentation.dto.request
 
-public record CompleteMenteeProfileRequest(
-        String introduction,
-        String profileImageUrl
+import com.koddy.server.member.application.usecase.command.CompleteMenteeProfileCommand
+
+data class CompleteMenteeProfileRequest(
+    val introduction: String?,
+    val profileImageUrl: String?,
 ) {
+    fun toCommand(menteeId: Long): CompleteMenteeProfileCommand =
+        CompleteMenteeProfileCommand(
+            menteeId,
+            introduction,
+            profileImageUrl,
+        )
 }
