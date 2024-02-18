@@ -70,7 +70,7 @@ class CoffeeChatScheduleDetailsQueryApiTest extends ControllerTest {
                             responseFields(
                                     body("mentee.id", "멘티 ID(PK)"),
                                     body("mentee.name", "이름"),
-                                    body("mentee.profileImageUrl", "프로필 이미지 URL"),
+                                    body("mentee.profileImageUrl", "프로필 이미지 URL", "Nullable"),
                                     body("mentee.nationality", "국적", "KR EN CN JP VN ETC"),
                                     body("mentee.introduction", "자기 소개", "Nullable"),
                                     body("mentee.languages", "사용 가능한 언어", "KR EN CN JP VN"),
@@ -120,7 +120,7 @@ class CoffeeChatScheduleDetailsQueryApiTest extends ControllerTest {
                             responseFields(
                                     body("mentor.id", "멘토 ID(PK)"),
                                     body("mentor.name", "이름"),
-                                    body("mentor.profileImageUrl", "프로필 이미지 URL"),
+                                    body("mentor.profileImageUrl", "프로필 이미지 URL", "Nullable"),
                                     body("mentor.introduction", "자기 소개", "Nullable"),
                                     body("mentor.languages", "사용 가능한 언어", "KR EN CN JP VN"),
                                     body("mentor.languages.main", "메인 언어", "1개"),

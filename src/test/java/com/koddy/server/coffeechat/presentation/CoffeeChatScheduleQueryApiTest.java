@@ -126,7 +126,7 @@ public class CoffeeChatScheduleQueryApiTest extends ControllerTest {
                                     body("result[].status", "커피챗 상태"),
                                     body("result[].menteeId", "멘티 ID(PK)"),
                                     body("result[].name", "멘티 이름"),
-                                    body("result[].profileImageUrl", "멘티 프로필 이미지 URL"),
+                                    body("result[].profileImageUrl", "멘티 프로필 이미지 URL", "Nullable"),
                                     body("result[].interestSchool", "멘티 관심있는 학교"),
                                     body("result[].interestMajor", "멘티 관심있는 전공"),
                                     body("hasNext", "다음 스크롤 존재 여부")
@@ -192,7 +192,7 @@ public class CoffeeChatScheduleQueryApiTest extends ControllerTest {
                                     body("result[].status", "커피챗 상태"),
                                     body("result[].mentorId", "멘토 ID(PK)"),
                                     body("result[].name", "멘토 이름"),
-                                    body("result[].profileImageUrl", "멘토 프로필 이미지 URL"),
+                                    body("result[].profileImageUrl", "멘토 프로필 이미지 URL", "Nullable"),
                                     body("result[].school", "멘토 학교"),
                                     body("result[].major", "멘토 전공"),
                                     body("result[].enteredIn", "멘토 학번"),

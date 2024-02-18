@@ -110,7 +110,7 @@ class MenteeMainSearchApiTest extends ControllerTest {
                                     body("result[].coffeeChatId", "커피챗 ID(PK)"),
                                     body("result[].mentorId", "멘토 ID(PK)"),
                                     body("result[].name", "이름"),
-                                    body("result[].profileImageUrl", "프로필 이미지 URL"),
+                                    body("result[].profileImageUrl", "프로필 이미지 URL", "Nullable"),
                                     body("result[].school", "학교"),
                                     body("result[].major", "전공"),
                                     body("result[].enteredIn", "학번"),
@@ -179,7 +179,7 @@ class MenteeMainSearchApiTest extends ControllerTest {
                             responseFields(
                                     body("result[].id", "멘토 ID(PK)"),
                                     body("result[].name", "이름"),
-                                    body("result[].profileImageUrl", "프로필 이미지 URL"),
+                                    body("result[].profileImageUrl", "프로필 이미지 URL", "Nullable"),
                                     body("result[].school", "학교"),
                                     body("result[].major", "전공"),
                                     body("result[].enteredIn", "학번"),
