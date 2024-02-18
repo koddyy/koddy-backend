@@ -91,20 +91,33 @@ public class CoffeeChatScheduleQueryApiTest extends ControllerTest {
             // when - then
             successfulExecute(
                     getRequestWithAccessToken(BASE_URL, Map.of(
-                            "status", "waiting",
+                            "category", "waiting",
+                            "detail", "apply",
                             "page", "1"
                     )),
                     status().isOk(),
                     successDocsWithAccessToken("CoffeeChatApi/MySchedule/Mentor", createHttpSpecSnippets(
                             queryParameters(
                                     query(
-                                            "status",
-                                            "커피챗 상태",
+                                            "category",
+                                            "카테고리 필터",
                                             "- 대기 = waiting" + ENTER
-                                                    + "- 제안 = suggest" + ENTER
+                                                    + "- 제안 = suggested" + ENTER
                                                     + "- 예정 = scheduled" + ENTER
-                                                    + "- 지나감 = passed",
+                                                    + "- 지나감 = passed" + ENTER,
                                             true
+                                    ),
+                                    query(
+                                            "detail",
+                                            "상세 필터",
+                                            "[안보내면 전체]" + ENTER
+                                                    + "- 신청(with 대기) = apply" + ENTER
+                                                    + "- 수락(with 대기) = pending" + ENTER
+                                                    + "- 예정(with 예정) = approve" + ENTER
+                                                    + "- 취소(with 지나감) = cancel" + ENTER
+                                                    + "- 거절(with 지나감) = reject" + ENTER
+                                                    + "- 완료(with 지나감) = complete" + ENTER,
+                                            false
                                     ),
                                     query("page", "페이지", "1부터 시작", true)
                             ),
@@ -144,20 +157,33 @@ public class CoffeeChatScheduleQueryApiTest extends ControllerTest {
             // when - then
             successfulExecute(
                     getRequestWithAccessToken(BASE_URL, Map.of(
-                            "status", "waiting",
+                            "category", "waiting",
+                            "detail", "apply",
                             "page", "1"
                     )),
                     status().isOk(),
                     successDocsWithAccessToken("CoffeeChatApi/MySchedule/Mentee", createHttpSpecSnippets(
                             queryParameters(
                                     query(
-                                            "status",
-                                            "커피챗 상태",
+                                            "category",
+                                            "카테고리 필터",
                                             "- 대기 = waiting" + ENTER
-                                                    + "- 제안 = suggest" + ENTER
+                                                    + "- 제안 = suggested" + ENTER
                                                     + "- 예정 = scheduled" + ENTER
-                                                    + "- 지나감 = passed",
+                                                    + "- 지나감 = passed" + ENTER,
                                             true
+                                    ),
+                                    query(
+                                            "detail",
+                                            "상세 필터",
+                                            "[안보내면 전체]" + ENTER
+                                                    + "- 신청(with 대기) = apply" + ENTER
+                                                    + "- 수락(with 대기) = pending" + ENTER
+                                                    + "- 예정(with 예정) = approve" + ENTER
+                                                    + "- 취소(with 지나감) = cancel" + ENTER
+                                                    + "- 거절(with 지나감) = reject" + ENTER
+                                                    + "- 완료(with 지나감) = complete" + ENTER,
+                                            false
                                     ),
                                     query("page", "페이지", "1부터 시작", true)
                             ),

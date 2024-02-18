@@ -26,7 +26,7 @@ class CoffeeChatStatusTest extends UnitTest {
     void withWaitingCategory() {
         assertAll(
                 () -> assertThat(CoffeeChatStatus.withWaitingCategory()).containsExactlyInAnyOrder(MENTEE_APPLY, MENTEE_PENDING),
-                () -> assertThat(CoffeeChatStatus.from("waiting")).containsExactlyInAnyOrder(MENTEE_APPLY, MENTEE_PENDING)
+                () -> assertThat(CoffeeChatStatus.fromCategory("waiting")).containsExactlyInAnyOrder(MENTEE_APPLY, MENTEE_PENDING)
         );
     }
 
@@ -35,7 +35,7 @@ class CoffeeChatStatusTest extends UnitTest {
     void withSuggstedCategory() {
         assertAll(
                 () -> assertThat(CoffeeChatStatus.withSuggstedCategory()).containsExactlyInAnyOrder(MENTOR_SUGGEST),
-                () -> assertThat(CoffeeChatStatus.from("suggested")).containsExactlyInAnyOrder(MENTOR_SUGGEST)
+                () -> assertThat(CoffeeChatStatus.fromCategory("suggested")).containsExactlyInAnyOrder(MENTOR_SUGGEST)
         );
     }
 
@@ -44,7 +44,7 @@ class CoffeeChatStatusTest extends UnitTest {
     void withScheduledCategory() {
         assertAll(
                 () -> assertThat(CoffeeChatStatus.withScheduledCategory()).containsExactlyInAnyOrder(MENTOR_APPROVE, MENTOR_FINALLY_APPROVE),
-                () -> assertThat(CoffeeChatStatus.from("scheduled")).containsExactlyInAnyOrder(MENTOR_APPROVE, MENTOR_FINALLY_APPROVE)
+                () -> assertThat(CoffeeChatStatus.fromCategory("scheduled")).containsExactlyInAnyOrder(MENTOR_APPROVE, MENTOR_FINALLY_APPROVE)
         );
     }
 
@@ -56,9 +56,37 @@ class CoffeeChatStatusTest extends UnitTest {
                         MENTEE_CANCEL, MENTOR_REJECT, MENTEE_APPLY_COFFEE_CHAT_COMPLETE,
                         MENTOR_CANCEL, MENTEE_REJECT, MENTOR_FINALLY_REJECT, MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
                 ),
-                () -> assertThat(CoffeeChatStatus.from("passed")).containsExactlyInAnyOrder(
+                () -> assertThat(CoffeeChatStatus.fromCategory("passed")).containsExactlyInAnyOrder(
                         MENTEE_CANCEL, MENTOR_REJECT, MENTEE_APPLY_COFFEE_CHAT_COMPLETE,
                         MENTOR_CANCEL, MENTEE_REJECT, MENTOR_FINALLY_REJECT, MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
+                )
+        );
+    }
+
+    @Test
+    @DisplayName("카테고리 + 상세 필터를 통해서 조회하려는 CoffeeChatStatus를 가져온다 [대기 & 지나간 일정]")
+    void fromCategoryDetail() {
+        assertAll(
+                () -> assertThat(CoffeeChatStatus.fromCategoryDetail("waiting", "apply")).containsExactlyInAnyOrder(MENTEE_APPLY),
+                () -> assertThat(CoffeeChatStatus.fromCategoryDetail("waiting", "pending")).containsExactlyInAnyOrder(MENTEE_PENDING),
+
+                () -> assertThat(CoffeeChatStatus.fromCategoryDetail("scheduled", "approve")).containsExactlyInAnyOrder(
+                        MENTOR_APPROVE,
+                        MENTOR_FINALLY_APPROVE
+                ),
+
+                () -> assertThat(CoffeeChatStatus.fromCategoryDetail("passed", "cancel")).containsExactlyInAnyOrder(
+                        MENTEE_CANCEL,
+                        MENTOR_CANCEL
+                ),
+                () -> assertThat(CoffeeChatStatus.fromCategoryDetail("passed", "reject")).containsExactlyInAnyOrder(
+                        MENTOR_REJECT,
+                        MENTEE_REJECT,
+                        MENTOR_FINALLY_REJECT
+                ),
+                () -> assertThat(CoffeeChatStatus.fromCategoryDetail("passed", "complete")).containsExactlyInAnyOrder(
+                        MENTEE_APPLY_COFFEE_CHAT_COMPLETE,
+                        MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
                 )
         );
     }

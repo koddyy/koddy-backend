@@ -14,37 +14,59 @@ import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.INVA
 @RequiredArgsConstructor
 public enum CoffeeChatStatus {
     // MenteeFlow
-    MENTEE_APPLY("waiting"),
-    MENTEE_CANCEL("passed"),
-    MENTOR_REJECT("passed"),
-    MENTOR_APPROVE("scheduled"),
-    MENTEE_APPLY_COFFEE_CHAT_COMPLETE("passed"),
+    MENTEE_APPLY("waiting", "apply"),
+    MENTEE_CANCEL("passed", "cancel"),
+    MENTOR_REJECT("passed", "reject"),
+    MENTOR_APPROVE("scheduled", "approve"),
+    MENTEE_APPLY_COFFEE_CHAT_COMPLETE("passed", "complete"),
 
     // MentorFlow
-    MENTOR_SUGGEST("suggested"),
-    MENTOR_CANCEL("passed"),
-    MENTEE_REJECT("passed"),
-    MENTEE_PENDING("waiting"),
-    MENTOR_FINALLY_REJECT("passed"),
-    MENTOR_FINALLY_APPROVE("scheduled"),
-    MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE("passed"),
+    MENTOR_SUGGEST("suggested", ""),
+    MENTOR_CANCEL("passed", "cancel"),
+    MENTEE_REJECT("passed", "reject"),
+    MENTEE_PENDING("waiting", "pending"),
+    MENTOR_FINALLY_REJECT("passed", "reject"),
+    MENTOR_FINALLY_APPROVE("scheduled", "approve"),
+    MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE("passed", "complete"),
     ;
 
-    private final String filter;
+    private final String category;
+    private final String detail;
 
-    public static List<CoffeeChatStatus> from(final String filter) {
-        if (isAnonymousFilter(filter)) {
+    public static List<CoffeeChatStatus> fromCategory(final String category) {
+        if (isAnonymousCategory(category)) {
             throw new CoffeeChatException(INVALID_COFFEECHAT_STATUS);
         }
 
         return Arrays.stream(values())
-                .filter(it -> it.filter.equals(filter))
+                .filter(it -> it.category.equals(category))
                 .toList();
     }
 
-    private static boolean isAnonymousFilter(final String filter) {
+    private static boolean isAnonymousCategory(final String category) {
         return Arrays.stream(values())
-                .noneMatch(it -> it.filter.equals(filter));
+                .noneMatch(it -> it.category.equals(category));
+    }
+
+    public static List<CoffeeChatStatus> fromCategoryDetail(
+            final String category,
+            final String detail
+    ) {
+        if (isAnonymousCategoryDetail(category, detail)) {
+            throw new CoffeeChatException(INVALID_COFFEECHAT_STATUS);
+        }
+
+        return Arrays.stream(values())
+                .filter(it -> it.category.equals(category) && it.detail.equals(detail))
+                .toList();
+    }
+
+    private static boolean isAnonymousCategoryDetail(
+            final String category,
+            final String detail
+    ) {
+        return Arrays.stream(values())
+                .noneMatch(it -> it.category.equals(category) && it.detail.equals(detail));
     }
 
     public static List<CoffeeChatStatus> withWaitingCategory() {
