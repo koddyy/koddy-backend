@@ -110,7 +110,7 @@ class MentorMainSearchApiTest extends ControllerTest {
                                     body("result[].coffeeChatId", "커피챗 ID(PK)"),
                                     body("result[].menteeId", "멘티 ID(PK)"),
                                     body("result[].name", "이름"),
-                                    body("result[].profileImageUrl", "프로필 이미지 URL"),
+                                    body("result[].profileImageUrl", "프로필 이미지 URL", "Nullable"),
                                     body("result[].nationality", "국적", "KR EN CN JP VN ETC"),
                                     body("result[].interestSchool", "관심있는 학교"),
                                     body("result[].interestMajor", "관심있는 전공"),
@@ -181,7 +181,7 @@ class MentorMainSearchApiTest extends ControllerTest {
                             responseFields(
                                     body("result[].id", "멘티 ID(PK)"),
                                     body("result[].name", "이름"),
-                                    body("result[].profileImageUrl", "프로필 이미지 URL"),
+                                    body("result[].profileImageUrl", "프로필 이미지 URL", "Nullable"),
                                     body("result[].nationality", "국적", "KR EN CN JP VN ETC"),
                                     body("result[].interestSchool", "관심있는 학교"),
                                     body("result[].interestMajor", "관심있는 전공"),

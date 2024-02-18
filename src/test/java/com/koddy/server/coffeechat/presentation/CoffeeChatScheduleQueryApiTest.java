@@ -47,7 +47,7 @@ public class CoffeeChatScheduleQueryApiTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentor);
-            given(getCoffeeChatScheduleUseCase.getEachCategoryCounts(any())).willReturn(new CoffeeChatEachCategoryCounts(3L, 0L, 2L));
+            given(getCoffeeChatScheduleUseCase.getEachCategoryCounts(any())).willReturn(new CoffeeChatEachCategoryCounts(3L, 1L, 0L, 2L));
 
             // when - then
             successfulExecute(
@@ -56,6 +56,7 @@ public class CoffeeChatScheduleQueryApiTest extends ControllerTest {
                     successDocsWithAccessToken("CoffeeChatApi/MySchedule/CategoryCounts", createHttpSpecSnippets(
                             responseFields(
                                     body("waiting", "대기 일정 개수"),
+                                    body("suggested", "제안 일정 개수"),
                                     body("scheduled", "예정 일정 개수"),
                                     body("passed", "지나간 일정 개수")
                             )
@@ -90,20 +91,33 @@ public class CoffeeChatScheduleQueryApiTest extends ControllerTest {
             // when - then
             successfulExecute(
                     getRequestWithAccessToken(BASE_URL, Map.of(
-                            "status", "waiting",
+                            "category", "waiting",
+                            "detail", "apply",
                             "page", "1"
                     )),
                     status().isOk(),
                     successDocsWithAccessToken("CoffeeChatApi/MySchedule/Mentor", createHttpSpecSnippets(
                             queryParameters(
                                     query(
-                                            "status",
-                                            "커피챗 상태",
+                                            "category",
+                                            "카테고리 필터",
                                             "- 대기 = waiting" + ENTER
-                                                    + "- 제안 = suggest" + ENTER
+                                                    + "- 제안 = suggested" + ENTER
                                                     + "- 예정 = scheduled" + ENTER
-                                                    + "- 지나감 = passed",
+                                                    + "- 지나감 = passed" + ENTER,
                                             true
+                                    ),
+                                    query(
+                                            "detail",
+                                            "상세 필터",
+                                            "[안보내면 전체]" + ENTER
+                                                    + "- 신청(with 대기) = apply" + ENTER
+                                                    + "- 수락(with 대기) = pending" + ENTER
+                                                    + "- 예정(with 예정) = approve" + ENTER
+                                                    + "- 취소(with 지나감) = cancel" + ENTER
+                                                    + "- 거절(with 지나감) = reject" + ENTER
+                                                    + "- 완료(with 지나감) = complete" + ENTER,
+                                            false
                                     ),
                                     query("page", "페이지", "1부터 시작", true)
                             ),
@@ -112,7 +126,7 @@ public class CoffeeChatScheduleQueryApiTest extends ControllerTest {
                                     body("result[].status", "커피챗 상태"),
                                     body("result[].menteeId", "멘티 ID(PK)"),
                                     body("result[].name", "멘티 이름"),
-                                    body("result[].profileImageUrl", "멘티 프로필 이미지 URL"),
+                                    body("result[].profileImageUrl", "멘티 프로필 이미지 URL", "Nullable"),
                                     body("result[].interestSchool", "멘티 관심있는 학교"),
                                     body("result[].interestMajor", "멘티 관심있는 전공"),
                                     body("hasNext", "다음 스크롤 존재 여부")
@@ -143,20 +157,33 @@ public class CoffeeChatScheduleQueryApiTest extends ControllerTest {
             // when - then
             successfulExecute(
                     getRequestWithAccessToken(BASE_URL, Map.of(
-                            "status", "waiting",
+                            "category", "waiting",
+                            "detail", "apply",
                             "page", "1"
                     )),
                     status().isOk(),
                     successDocsWithAccessToken("CoffeeChatApi/MySchedule/Mentee", createHttpSpecSnippets(
                             queryParameters(
                                     query(
-                                            "status",
-                                            "커피챗 상태",
+                                            "category",
+                                            "카테고리 필터",
                                             "- 대기 = waiting" + ENTER
-                                                    + "- 제안 = suggest" + ENTER
+                                                    + "- 제안 = suggested" + ENTER
                                                     + "- 예정 = scheduled" + ENTER
-                                                    + "- 지나감 = passed",
+                                                    + "- 지나감 = passed" + ENTER,
                                             true
+                                    ),
+                                    query(
+                                            "detail",
+                                            "상세 필터",
+                                            "[안보내면 전체]" + ENTER
+                                                    + "- 신청(with 대기) = apply" + ENTER
+                                                    + "- 수락(with 대기) = pending" + ENTER
+                                                    + "- 예정(with 예정) = approve" + ENTER
+                                                    + "- 취소(with 지나감) = cancel" + ENTER
+                                                    + "- 거절(with 지나감) = reject" + ENTER
+                                                    + "- 완료(with 지나감) = complete" + ENTER,
+                                            false
                                     ),
                                     query("page", "페이지", "1부터 시작", true)
                             ),
@@ -165,7 +192,7 @@ public class CoffeeChatScheduleQueryApiTest extends ControllerTest {
                                     body("result[].status", "커피챗 상태"),
                                     body("result[].mentorId", "멘토 ID(PK)"),
                                     body("result[].name", "멘토 이름"),
-                                    body("result[].profileImageUrl", "멘토 프로필 이미지 URL"),
+                                    body("result[].profileImageUrl", "멘토 프로필 이미지 URL", "Nullable"),
                                     body("result[].school", "멘토 학교"),
                                     body("result[].major", "멘토 전공"),
                                     body("result[].enteredIn", "멘토 학번"),

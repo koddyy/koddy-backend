@@ -52,7 +52,7 @@ class MemberBasicProflieQueryApiTest extends ControllerTest {
                             responseFields(
                                     body("id", "ID(PK)"),
                                     body("name", "이름"),
-                                    body("profileImageUrl", "프로필 이미지 URL"),
+                                    body("profileImageUrl", "프로필 이미지 URL", "Nullable"),
                                     body("introduction", "자기 소개", "Nullable"),
                                     body("languages", "사용 가능한 언어", "KR EN CN JP VN"),
                                     body("languages.main", "메인 언어", "1개"),
@@ -88,7 +88,7 @@ class MemberBasicProflieQueryApiTest extends ControllerTest {
                             responseFields(
                                     body("id", "ID(PK)"),
                                     body("name", "이름"),
-                                    body("profileImageUrl", "프로필 이미지 URL"),
+                                    body("profileImageUrl", "프로필 이미지 URL", "Nullable"),
                                     body("nationality", "국적", "KR EN CN JP VN ETC"),
                                     body("introduction", "자기 소개", "Nullable"),
                                     body("languages", "사용 가능한 언어", "KR EN CN JP VN"),

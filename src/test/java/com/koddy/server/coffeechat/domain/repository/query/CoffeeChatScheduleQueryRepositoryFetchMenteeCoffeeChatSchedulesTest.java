@@ -84,10 +84,11 @@ public class CoffeeChatScheduleQueryRepositoryFetchMenteeCoffeeChatSchedulesTest
     }
 
     @Test
-    @DisplayName("0. 멘티의 상태별 커피챗 개수를 조회한다 [대기, 예정, 지나간]")
+    @DisplayName("0. 멘티의 상태별 커피챗 개수를 조회한다 [대기, 제안, 예정, 지나간]")
     void counts() {
         assertAll(
                 () -> assertThat(coffeeChatRepository.getMenteeWaitingCoffeeChatCount(mentees[0].getId())).isEqualTo(11),
+                () -> assertThat(coffeeChatRepository.getMenteeSuggestedCoffeeChatCount(mentees[0].getId())).isEqualTo(7),
                 () -> assertThat(coffeeChatRepository.getMenteeScheduledCoffeeChatCount(mentees[0].getId())).isEqualTo(3),
                 () -> assertThat(coffeeChatRepository.getMenteePassedCoffeeChatCount(mentees[0].getId())).isEqualTo(9)
         );
@@ -149,7 +150,7 @@ public class CoffeeChatScheduleQueryRepositoryFetchMenteeCoffeeChatSchedulesTest
     @DisplayName("2. 멘티의 내 일정 `제안 상태` 커피챗 정보를 조회한다")
     void suggest() {
         // given
-        final MenteeCoffeeChatQueryCondition condition = new MenteeCoffeeChatQueryCondition(mentees[0].getId(), CoffeeChatStatus.from("suggest"));
+        final MenteeCoffeeChatQueryCondition condition = new MenteeCoffeeChatQueryCondition(mentees[0].getId(), CoffeeChatStatus.withSuggstedCategory());
 
         /* 페이지 1 */
         final Slice<MenteeCoffeeChatScheduleData> result1 = sut.fetchMenteeCoffeeChatSchedules(condition, pageable1);

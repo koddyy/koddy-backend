@@ -36,6 +36,10 @@ public interface CoffeeChatRepository extends JpaRepository<CoffeeChat, Long> {
         return countByMentorIdAndStatusIn(mentorId, CoffeeChatStatus.withWaitingCategory());
     }
 
+    default long getMentorSuggestedCoffeeChatCount(final Long mentorId) {
+        return countByMentorIdAndStatusIn(mentorId, CoffeeChatStatus.withSuggstedCategory());
+    }
+
     default long getMentorScheduledCoffeeChatCount(final Long mentorId) {
         return countByMentorIdAndStatusIn(mentorId, CoffeeChatStatus.withScheduledCategory());
     }
@@ -48,6 +52,10 @@ public interface CoffeeChatRepository extends JpaRepository<CoffeeChat, Long> {
 
     default long getMenteeWaitingCoffeeChatCount(final Long menteeId) {
         return countByMenteeIdAndStatusIn(menteeId, CoffeeChatStatus.withWaitingCategory());
+    }
+
+    default long getMenteeSuggestedCoffeeChatCount(final Long menteeId) {
+        return countByMenteeIdAndStatusIn(menteeId, CoffeeChatStatus.withSuggstedCategory());
     }
 
     default long getMenteeScheduledCoffeeChatCount(final Long menteeId) {
