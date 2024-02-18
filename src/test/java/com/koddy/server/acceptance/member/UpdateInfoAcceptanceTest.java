@@ -2,7 +2,7 @@ package com.koddy.server.acceptance.member;
 
 import com.koddy.server.common.AcceptanceTest;
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension;
-import com.koddy.server.member.presentation.dto.request.LanguageRequest;
+import com.koddy.server.member.presentation.request.LanguageRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

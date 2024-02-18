@@ -54,7 +54,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@Tag("Controller")
+@Tag("ApiDocs")
 @WebMvcTest
 @ExtendWith(RestDocumentationExtension.class)
 @Import({TestAopConfig.class, TestWebBeanConfig.class, MockAllUseCaseBeanFactoryPostProcessor.class})

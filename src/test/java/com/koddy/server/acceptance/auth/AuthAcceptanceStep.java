@@ -1,6 +1,6 @@
 package com.koddy.server.acceptance.auth;
 
-import com.koddy.server.auth.presentation.dto.request.OAuthLoginRequest;
+import com.koddy.server.auth.presentation.request.OAuthLoginRequest;
 import io.restassured.response.ValidatableResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 

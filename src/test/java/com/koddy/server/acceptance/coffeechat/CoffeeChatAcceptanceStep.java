@@ -1,15 +1,15 @@
 package com.koddy.server.acceptance.coffeechat;
 
-import com.koddy.server.coffeechat.presentation.dto.request.ApproveAppliedCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.dto.request.ApprovePendingCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.dto.request.CancelCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.dto.request.CreateMeetingLinkRequest;
-import com.koddy.server.coffeechat.presentation.dto.request.MenteeApplyCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.dto.request.MentorSuggestCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.dto.request.PendingSuggestedCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.dto.request.RejectAppliedCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.dto.request.RejectPendingCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.dto.request.RejectSuggestedCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.ApproveAppliedCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.ApprovePendingCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.CancelCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.CreateMeetingLinkRequest;
+import com.koddy.server.coffeechat.presentation.request.MenteeApplyCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.MentorSuggestCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.PendingSuggestedCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.RejectAppliedCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.RejectPendingCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.RejectSuggestedCoffeeChatRequest;
 import com.koddy.server.common.fixture.StrategyFixture;
 import io.restassured.response.ValidatableResponse;
 import org.springframework.web.util.UriComponentsBuilder;

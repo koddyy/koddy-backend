@@ -3,19 +3,21 @@ package com.koddy.server.acceptance.member;
 import com.koddy.server.common.fixture.MenteeFixture;
 import com.koddy.server.common.fixture.MentorFixture;
 import com.koddy.server.member.domain.model.Language;
-import com.koddy.server.member.presentation.dto.request.AuthenticationConfirmWithMailRequest;
-import com.koddy.server.member.presentation.dto.request.AuthenticationWithMailRequest;
-import com.koddy.server.member.presentation.dto.request.AuthenticationWithProofDataRequest;
-import com.koddy.server.member.presentation.dto.request.CompleteMenteeProfileRequest;
-import com.koddy.server.member.presentation.dto.request.CompleteMentorProfileRequest;
-import com.koddy.server.member.presentation.dto.request.LanguageRequest;
-import com.koddy.server.member.presentation.dto.request.MentorScheduleRequest;
-import com.koddy.server.member.presentation.dto.request.MentoringPeriodRequest;
-import com.koddy.server.member.presentation.dto.request.SignUpMenteeRequest;
-import com.koddy.server.member.presentation.dto.request.SignUpMentorRequest;
-import com.koddy.server.member.presentation.dto.request.UpdateMenteeBasicInfoRequest;
-import com.koddy.server.member.presentation.dto.request.UpdateMentorBasicInfoRequest;
-import com.koddy.server.member.presentation.dto.request.UpdateMentorScheduleRequest;
+import com.koddy.server.member.presentation.request.AuthenticationConfirmWithMailRequest;
+import com.koddy.server.member.presentation.request.AuthenticationWithMailRequest;
+import com.koddy.server.member.presentation.request.AuthenticationWithProofDataRequest;
+import com.koddy.server.member.presentation.request.CompleteMenteeProfileRequest;
+import com.koddy.server.member.presentation.request.CompleteMentorProfileRequest;
+import com.koddy.server.member.presentation.request.End;
+import com.koddy.server.member.presentation.request.LanguageRequest;
+import com.koddy.server.member.presentation.request.MentorScheduleRequest;
+import com.koddy.server.member.presentation.request.MentoringPeriodRequest;
+import com.koddy.server.member.presentation.request.SignUpMenteeRequest;
+import com.koddy.server.member.presentation.request.SignUpMentorRequest;
+import com.koddy.server.member.presentation.request.Start;
+import com.koddy.server.member.presentation.request.UpdateMenteeBasicInfoRequest;
+import com.koddy.server.member.presentation.request.UpdateMentorBasicInfoRequest;
+import com.koddy.server.member.presentation.request.UpdateMentorScheduleRequest;
 import io.restassured.response.ValidatableResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -143,11 +145,11 @@ public class MemberAcceptanceStep {
                         .stream()
                         .map(it -> new MentorScheduleRequest(
                                 it.getDayOfWeek().getKor(),
-                                new MentorScheduleRequest.Start(
+                                new Start(
                                         it.getStartTime().getHour(),
                                         it.getStartTime().getMinute()
                                 ),
-                                new MentorScheduleRequest.End(
+                                new End(
                                         it.getEndTime().getHour(),
                                         it.getEndTime().getMinute()
                                 )
@@ -213,11 +215,11 @@ public class MemberAcceptanceStep {
                         .stream()
                         .map(it -> new MentorScheduleRequest(
                                 it.getDayOfWeek().getKor(),
-                                new MentorScheduleRequest.Start(
+                                new Start(
                                         it.getStartTime().getHour(),
                                         it.getStartTime().getMinute()
                                 ),
-                                new MentorScheduleRequest.End(
+                                new End(
                                         it.getEndTime().getHour(),
                                         it.getEndTime().getMinute()
                                 )
