@@ -75,7 +75,7 @@ class UpdateMentorInfoApiTest extends ControllerTest {
                 failureDocsWithAccessToken("MemberApi/Update/Mentor/BasicInfo/Failure", createHttpSpecSnippets(
                     requestFields(
                         body("name", "이름", true),
-                        body("profileImageUrl", "프로필 이미지 URL", true),
+                        body("profileImageUrl", "프로필 이미지 URL", false),
                         body("introduction", "멘토 자기소개", false),
                         body("languages", "사용 가능한 언어", "KR EN CN JP VN", true),
                         body("languages.main", "메인 언어", "1개", true),
@@ -104,7 +104,7 @@ class UpdateMentorInfoApiTest extends ControllerTest {
                 successDocsWithAccessToken("MemberApi/Update/Mentor/BasicInfo/Success", createHttpSpecSnippets(
                     requestFields(
                         body("name", "이름", true),
-                        body("profileImageUrl", "프로필 이미지 URL", true),
+                        body("profileImageUrl", "프로필 이미지 URL", false),
                         body("introduction", "멘토 자기소개", false),
                         body("languages", "사용 가능한 언어", "KR EN CN JP VN", true),
                         body("languages.main", "메인 언어", "1개", true),

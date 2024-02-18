@@ -70,7 +70,7 @@ class UpdateMenteeInfoApiTest extends ControllerTest {
                     requestFields(
                         body("name", "이름", true),
                         body("nationality", "국적", "KR EN CN JP VN ETC", true),
-                        body("profileImageUrl", "프로필 이미지 URL", true),
+                        body("profileImageUrl", "프로필 이미지 URL", false),
                         body("introduction", "멘티 자기소개", false),
                         body("languages", "사용 가능한 언어", "KR EN CN JP VN", true),
                         body("languages.main", "메인 언어", "1개", true),
@@ -99,7 +99,7 @@ class UpdateMenteeInfoApiTest extends ControllerTest {
                     requestFields(
                         body("name", "이름", true),
                         body("nationality", "국적", "KR EN CN JP VN ETC", true),
-                        body("profileImageUrl", "프로필 이미지 URL", true),
+                        body("profileImageUrl", "프로필 이미지 URL", false),
                         body("introduction", "멘티 자기소개", false),
                         body("languages", "사용 가능한 언어", "KR EN CN JP VN", true),
                         body("languages.main", "메인 언어", "1개", true),
