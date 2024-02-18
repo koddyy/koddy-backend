@@ -14,6 +14,7 @@ import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_C
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_APPROVE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_REJECT;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -31,6 +32,15 @@ class CoffeeChatStatusTest extends UnitTest {
 
     @Test
     @DisplayName("`제안 상태` 카테고리인 CoffeeChatStatus를 가져온다")
+    void withSuggstedCategory() {
+        assertAll(
+                () -> assertThat(CoffeeChatStatus.withSuggstedCategory()).containsExactlyInAnyOrder(MENTOR_SUGGEST),
+                () -> assertThat(CoffeeChatStatus.from("suggested")).containsExactlyInAnyOrder(MENTOR_SUGGEST)
+        );
+    }
+
+    @Test
+    @DisplayName("`예정 상태` 카테고리인 CoffeeChatStatus를 가져온다")
     void withScheduledCategory() {
         assertAll(
                 () -> assertThat(CoffeeChatStatus.withScheduledCategory()).containsExactlyInAnyOrder(MENTOR_APPROVE, MENTOR_FINALLY_APPROVE),

@@ -47,7 +47,7 @@ public class CoffeeChatScheduleQueryApiTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentor);
-            given(getCoffeeChatScheduleUseCase.getEachCategoryCounts(any())).willReturn(new CoffeeChatEachCategoryCounts(3L, 0L, 2L));
+            given(getCoffeeChatScheduleUseCase.getEachCategoryCounts(any())).willReturn(new CoffeeChatEachCategoryCounts(3L, 1L, 0L, 2L));
 
             // when - then
             successfulExecute(
@@ -56,6 +56,7 @@ public class CoffeeChatScheduleQueryApiTest extends ControllerTest {
                     successDocsWithAccessToken("CoffeeChatApi/MySchedule/CategoryCounts", createHttpSpecSnippets(
                             responseFields(
                                     body("waiting", "대기 일정 개수"),
+                                    body("suggested", "제안 일정 개수"),
                                     body("scheduled", "예정 일정 개수"),
                                     body("passed", "지나간 일정 개수")
                             )

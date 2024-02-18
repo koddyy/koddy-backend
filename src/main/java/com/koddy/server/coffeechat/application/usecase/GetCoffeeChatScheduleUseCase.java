@@ -35,6 +35,7 @@ public class GetCoffeeChatScheduleUseCase {
     private CoffeeChatEachCategoryCounts getMentorCoffeeChatCounts(final long mentorId) {
         return new CoffeeChatEachCategoryCounts(
                 coffeeChatRepository.getMentorWaitingCoffeeChatCount(mentorId),
+                coffeeChatRepository.getMentorSuggestedCoffeeChatCount(mentorId),
                 coffeeChatRepository.getMentorScheduledCoffeeChatCount(mentorId),
                 coffeeChatRepository.getMentorPassedCoffeeChatCount(mentorId)
         );
@@ -43,6 +44,7 @@ public class GetCoffeeChatScheduleUseCase {
     private CoffeeChatEachCategoryCounts getMenteeCoffeeChatCounts(final long menteeId) {
         return new CoffeeChatEachCategoryCounts(
                 coffeeChatRepository.getMenteeWaitingCoffeeChatCount(menteeId),
+                coffeeChatRepository.getMenteeSuggestedCoffeeChatCount(menteeId),
                 coffeeChatRepository.getMenteeScheduledCoffeeChatCount(menteeId),
                 coffeeChatRepository.getMenteePassedCoffeeChatCount(menteeId)
         );

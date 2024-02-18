@@ -21,7 +21,7 @@ public enum CoffeeChatStatus {
     MENTEE_APPLY_COFFEE_CHAT_COMPLETE("passed"),
 
     // MentorFlow
-    MENTOR_SUGGEST("suggest"),
+    MENTOR_SUGGEST("suggested"),
     MENTOR_CANCEL("passed"),
     MENTEE_REJECT("passed"),
     MENTEE_PENDING("waiting"),
@@ -49,6 +49,10 @@ public enum CoffeeChatStatus {
 
     public static List<CoffeeChatStatus> withWaitingCategory() {
         return List.of(MENTEE_APPLY, MENTEE_PENDING);
+    }
+
+    public static List<CoffeeChatStatus> withSuggstedCategory() {
+        return List.of(MENTOR_SUGGEST);
     }
 
     public static List<CoffeeChatStatus> withScheduledCategory() {
