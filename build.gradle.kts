@@ -98,6 +98,7 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5:${property("kotestVersion")}")
     testImplementation("io.kotest.extensions:kotest-extensions-spring:${property("kotestExtentionsSpringVersion")}")
     testImplementation("io.mockk:mockk:${property("mockkVersion")}")
+    testImplementation("com.ninja-squad:springmockk:${property("springmockkVersion")}")
 
     // Spring REST Docs (With MockMvc)
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
