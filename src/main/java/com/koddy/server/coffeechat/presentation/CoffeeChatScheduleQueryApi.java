@@ -39,8 +39,8 @@ public class CoffeeChatScheduleQueryApi {
             @ModelAttribute @Valid final GetCoffeeChatScheduleRequest request
     ) {
         final SliceResponse<?> result = authenticated.isMentor()
-                ? getCoffeeChatScheduleUseCase.getMentorSchedules(request.toMentorQuery(authenticated.id()))
-                : getCoffeeChatScheduleUseCase.getMenteeSchedules(request.toMenteeQuery(authenticated.id()));
+                ? getCoffeeChatScheduleUseCase.getMentorSchedules(request.toMentorQuery(authenticated.id))
+                : getCoffeeChatScheduleUseCase.getMenteeSchedules(request.toMenteeQuery(authenticated.id));
 
         return ResponseEntity.ok(result);
     }

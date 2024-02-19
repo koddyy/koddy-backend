@@ -31,7 +31,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "mentor")
-@DiscriminatorValue(value = Role.Value.MENTOR)
+@DiscriminatorValue(value = Role.MENTOR_VALUE)
 public class Mentor extends Member<Mentor> {
     @Embedded
     private UniversityProfile universityProfile;

@@ -75,7 +75,7 @@ public class OAuthApi {
     @Operation(summary = "로그아웃 EndPoint")
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@Auth final Authenticated authenticated) {
-        logoutUseCase.invoke(new LogoutCommand(authenticated.id()));
+        logoutUseCase.invoke(new LogoutCommand(authenticated.id));
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,4 +1,4 @@
-package com.koddy.server.global.exception.alert
+package com.koddy.server.global.exception.notify
 
 import com.koddy.server.global.log.RequestMetadataExtractor.getClientIP
 import com.koddy.server.global.log.RequestMetadataExtractor.getRequestUriWithQueryString
@@ -16,12 +16,12 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Component
-class SlackAlertManager(
+class SlackErrorNotifier(
     @Value("\${slack.webhook.url}") private val slackWebhookUrl: String,
-) {
+) : ErrorNotifier {
     private val log: Logger = logger()
 
-    fun sendErrorLog(
+    override fun send(
         request: HttpServletRequest,
         exception: Exception,
     ) {

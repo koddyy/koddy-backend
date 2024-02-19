@@ -40,7 +40,7 @@ public class MenteeMainSearchApi {
             @RequestParam(defaultValue = "3") final int limit
     ) {
         final PageResponse<List<SuggestedCoffeeChatsByMentorResponse>> result = menteeMainSearchUseCase.getSuggestedMentors(
-                new GetSuggestedMentors(authenticated.id(), limit)
+                new GetSuggestedMentors(authenticated.id, limit)
         );
         return ResponseEntity.ok(result);
     }

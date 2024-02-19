@@ -20,8 +20,8 @@ class AccessControlAop {
     ) {
         val accessControl: AccessControl = getAccessControlAnnotation(joinPoint)
         when (accessControl.role) {
-            Role.MENTOR -> verifyMentorRole(authenticated)
-            Role.MENTEE -> verifyMenteeRole(authenticated)
+            Role.MENTOR -> if (authenticated.isMentor.not()) throw AuthException(AuthExceptionCode.INVALID_PERMISSION)
+            Role.MENTEE -> if (authenticated.isMentee.not()) throw AuthException(AuthExceptionCode.INVALID_PERMISSION)
             Role.ADMIN -> {}
         }
     }
@@ -30,17 +30,5 @@ class AccessControlAop {
         val signature = joinPoint.signature as MethodSignature
         val method = signature.method
         return method.getAnnotation(AccessControl::class.java)
-    }
-
-    private fun verifyMentorRole(authenticated: Authenticated) {
-        if (authenticated.isMentor.not()) {
-            throw AuthException(AuthExceptionCode.INVALID_PERMISSION)
-        }
-    }
-
-    private fun verifyMenteeRole(authenticated: Authenticated) {
-        if (authenticated.isMentee.not()) {
-            throw AuthException(AuthExceptionCode.INVALID_PERMISSION)
-        }
     }
 }

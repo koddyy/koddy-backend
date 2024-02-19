@@ -16,7 +16,9 @@ class ExtractTokenArgumentResolver(
     private val tokenProvider: TokenProvider,
 ) : HandlerMethodArgumentResolver {
     override fun supportsParameter(parameter: MethodParameter): Boolean {
-        return parameter.hasParameterAnnotation(ExtractToken::class.java)
+        val hasRequiredAnnotation: Boolean = parameter.getParameterAnnotation(ExtractToken::class.java) != null
+        val hasRequiredType: Boolean = parameter.parameterType == String::class.java
+        return hasRequiredAnnotation && hasRequiredType
     }
 
     override fun resolveArgument(

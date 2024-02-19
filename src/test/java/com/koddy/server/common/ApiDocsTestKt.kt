@@ -16,7 +16,6 @@ import com.koddy.server.common.docs.ENUM
 import com.koddy.server.common.utils.TokenUtils.applyAccessToken
 import com.koddy.server.common.utils.TokenUtils.applyRefreshToken
 import com.koddy.server.global.base.BusinessExceptionCode
-import com.koddy.server.global.exception.alert.SlackAlertManager
 import com.koddy.server.member.domain.model.Member
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.core.spec.style.FeatureSpec
@@ -24,8 +23,7 @@ import io.mockk.every
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.anyString
-import org.mockito.Mockito.doNothing
-import org.mockito.Mockito.doThrow
+import org.mockito.BDDMockito.doThrow
 import org.mockito.MockitoAnnotations
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -93,9 +91,6 @@ abstract class ApiDocsTestKt : FeatureSpec() {
 
     @MockkBean
     private lateinit var tokenProvider: TokenProvider
-
-    @MockkBean
-    private lateinit var slackAlertManager: SlackAlertManager
 
     init {
         beforeSpec {
@@ -204,31 +199,24 @@ abstract class ApiDocsTestKt : FeatureSpec() {
         isValid: Boolean,
         member: Member<*>,
     ) {
-        if (isValid) {
-            doNothing()
-                .`when`(tokenProvider)
-                .validateToken(anyString())
-        } else {
+        if (isValid.not()) {
             doThrow(AuthException(AuthExceptionCode.INVALID_TOKEN))
                 .`when`(tokenProvider)
                 .validateToken(anyString())
         }
-        makeTokenExtractResult(member)
+
+        every { tokenProvider.getId(anyString()) } returns member.id
+        every { tokenProvider.getAuthority(anyString()) } returns member.authority
     }
 
     protected fun MockHttpServletRequestBuilder.authorizationHeader(member: Member<*>) {
-        makeTokenExtractResult(member)
+        applyToken(true, member)
         this.header(ACCESS_TOKEN_HEADER, applyAccessToken())
     }
 
     protected fun MockHttpServletRequestBuilder.cookieHeader(member: Member<*>) {
-        makeTokenExtractResult(member)
+        applyToken(true, member)
         this.cookie(applyRefreshToken())
-    }
-
-    private fun makeTokenExtractResult(member: Member<*>) {
-        every { tokenProvider.getId(anyString()) } returns member.id
-        every { tokenProvider.getAuthority(anyString()) } returns member.authority
     }
 
     protected fun ResultActions.isStatus(status: Int): ResultActions = andExpect(status().`is`(status))

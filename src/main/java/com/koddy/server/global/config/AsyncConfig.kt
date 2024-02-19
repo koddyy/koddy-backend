@@ -19,8 +19,8 @@ class AsyncConfig : AsyncConfigurer {
     private val log: Logger = logger()
 
     @Bean(name = ["emailAsyncExecutor"])
-    fun emailAsyncExecutor(): Executor {
-        return ThreadPoolTaskExecutor().apply {
+    fun emailAsyncExecutor(): Executor =
+        ThreadPoolTaskExecutor().apply {
             corePoolSize = 10
             maxPoolSize = 90
             queueCapacity = 50
@@ -29,11 +29,9 @@ class AsyncConfig : AsyncConfigurer {
             setTaskDecorator(MdcTaskDecorator())
             setThreadNamePrefix("Asynchronous Mail Sender Thread-")
         }
-    }
 
-    override fun getAsyncUncaughtExceptionHandler(): AsyncUncaughtExceptionHandler? {
-        return AsyncUncaughtExceptionHandler { ex: Throwable?, method: Method?, params: Array<Any?>? ->
+    override fun getAsyncUncaughtExceptionHandler(): AsyncUncaughtExceptionHandler? =
+        AsyncUncaughtExceptionHandler { ex: Throwable?, method: Method?, params: Array<Any?>? ->
             log.error("Asynchronous method thrown exception... -> Method = {}, Params = {}", method, params, ex)
         }
-    }
 }

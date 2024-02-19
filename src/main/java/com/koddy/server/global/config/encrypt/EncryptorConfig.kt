@@ -12,12 +12,8 @@ class EncryptorConfig(
     private val encryptorProperties: EncryptorProperties,
 ) {
     @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return BCryptPasswordEncoder()
-    }
+    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
-    fun bytesEncryptor(): BytesEncryptor {
-        return AesBytesEncryptor(encryptorProperties.secretKey, encryptorProperties.salt)
-    }
+    fun bytesEncryptor(): BytesEncryptor = AesBytesEncryptor(encryptorProperties.secretKey, encryptorProperties.salt)
 }

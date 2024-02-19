@@ -23,84 +23,76 @@ object RestDocsSpecificationUtils {
     fun successDocs(
         identifier: String,
         vararg snippets: Snippet,
-    ): RestDocumentationResultHandler {
-        return MockMvcRestDocumentation.document(
+    ): RestDocumentationResultHandler =
+        MockMvcRestDocumentation.document(
             identifier,
             documentRequest,
             documentResponse,
             *snippets,
         )
-    }
 
     @JvmStatic
     fun successDocsWithAccessToken(
         identifier: String,
         vararg snippets: Snippet,
-    ): RestDocumentationResultHandler {
-        return MockMvcRestDocumentation.document(
+    ): RestDocumentationResultHandler =
+        MockMvcRestDocumentation.document(
             identifier,
             documentRequest,
             documentResponse,
             *arrayOf(headerWithAccessToken, *snippets),
         )
-    }
 
     @JvmStatic
     fun successDocsWithRefreshToken(
         identifier: String,
         vararg snippets: Snippet,
-    ): RestDocumentationResultHandler {
-        return MockMvcRestDocumentation.document(
+    ): RestDocumentationResultHandler =
+        MockMvcRestDocumentation.document(
             identifier,
             documentRequest,
             documentResponse,
             *arrayOf(cookieWithRefreshToken, *snippets),
         )
-    }
 
     @JvmStatic
     fun failureDocs(
         identifier: String,
         vararg snippets: Snippet,
-    ): RestDocumentationResultHandler {
-        return MockMvcRestDocumentation.document(
+    ): RestDocumentationResultHandler =
+        MockMvcRestDocumentation.document(
             identifier,
             documentRequest,
             documentResponse,
             *arrayOf(exceptionResponseFields, *snippets),
         )
-    }
 
     @JvmStatic
     fun failureDocsWithAccessToken(
         identifier: String,
         vararg snippets: Snippet,
-    ): RestDocumentationResultHandler {
-        return MockMvcRestDocumentation.document(
+    ): RestDocumentationResultHandler =
+        MockMvcRestDocumentation.document(
             identifier,
             documentRequest,
             documentResponse,
             *arrayOf(headerWithAccessToken, exceptionResponseFields, *snippets),
         )
-    }
 
     @JvmStatic
     fun failureDocsWithRefreshToken(
         identifier: String,
         vararg snippets: Snippet,
-    ): RestDocumentationResultHandler {
-        return MockMvcRestDocumentation.document(
+    ): RestDocumentationResultHandler =
+        MockMvcRestDocumentation.document(
             identifier,
             documentRequest,
             documentResponse,
             *arrayOf(cookieWithRefreshToken, exceptionResponseFields, *snippets),
         )
-    }
 
     @JvmStatic
-    fun createHttpSpecSnippets(vararg snippets: Snippet): Array<Snippet> {
-        return snippets.toList().toTypedArray()
-    }
+    fun createHttpSpecSnippets(vararg snippets: Snippet): Array<Snippet> = snippets.toList().toTypedArray()
 
     object SnippetFactory {
         /**
@@ -112,11 +104,10 @@ object RestDocsSpecificationUtils {
         fun header(
             name: String?,
             description: String?,
-        ): HeaderDescriptor {
-            return HeaderDocumentation
+        ): HeaderDescriptor =
+            HeaderDocumentation
                 .headerWithName(name)
                 .description(description)
-        }
 
         @JvmStatic
         fun header(
@@ -136,12 +127,11 @@ object RestDocsSpecificationUtils {
             name: String?,
             description: String?,
             constraint: String,
-        ): HeaderDescriptor {
-            return HeaderDocumentation
+        ): HeaderDescriptor =
+            HeaderDocumentation
                 .headerWithName(name)
                 .description(description)
                 .attributes(constraint(constraint))
-        }
 
         @JvmStatic
         fun header(
@@ -167,11 +157,10 @@ object RestDocsSpecificationUtils {
         fun cookie(
             name: String?,
             description: String?,
-        ): CookieDescriptor {
-            return CookieDocumentation
+        ): CookieDescriptor =
+            CookieDocumentation
                 .cookieWithName(name)
                 .description(description)
-        }
 
         @JvmStatic
         fun cookie(
@@ -191,12 +180,11 @@ object RestDocsSpecificationUtils {
             name: String?,
             description: String?,
             constraint: String,
-        ): CookieDescriptor {
-            return CookieDocumentation
+        ): CookieDescriptor =
+            CookieDocumentation
                 .cookieWithName(name)
                 .description(description)
                 .attributes(constraint(constraint))
-        }
 
         @JvmStatic
         fun cookie(
@@ -220,11 +208,10 @@ object RestDocsSpecificationUtils {
         fun path(
             name: String?,
             description: String?,
-        ): ParameterDescriptor {
-            return RequestDocumentation
+        ): ParameterDescriptor =
+            RequestDocumentation
                 .parameterWithName(name)
                 .description(description)
-        }
 
         @JvmStatic
         fun path(
@@ -244,12 +231,11 @@ object RestDocsSpecificationUtils {
             name: String?,
             description: String?,
             constraint: String,
-        ): ParameterDescriptor {
-            return RequestDocumentation
+        ): ParameterDescriptor =
+            RequestDocumentation
                 .parameterWithName(name)
                 .description(description)
                 .attributes(constraint(constraint))
-        }
 
         @JvmStatic
         fun path(
@@ -273,11 +259,10 @@ object RestDocsSpecificationUtils {
         fun query(
             name: String?,
             description: String?,
-        ): ParameterDescriptor {
-            return RequestDocumentation
+        ): ParameterDescriptor =
+            RequestDocumentation
                 .parameterWithName(name)
                 .description(description)
-        }
 
         @JvmStatic
         fun query(
@@ -297,12 +282,11 @@ object RestDocsSpecificationUtils {
             name: String?,
             description: String?,
             constraint: String,
-        ): ParameterDescriptor {
-            return RequestDocumentation
+        ): ParameterDescriptor =
+            RequestDocumentation
                 .parameterWithName(name)
                 .description(description)
                 .attributes(constraint(constraint))
-        }
 
         @JvmStatic
         fun query(
@@ -326,11 +310,10 @@ object RestDocsSpecificationUtils {
         fun file(
             name: String?,
             description: String?,
-        ): RequestPartDescriptor {
-            return RequestDocumentation
+        ): RequestPartDescriptor =
+            RequestDocumentation
                 .partWithName(name)
                 .description(description)
-        }
 
         @JvmStatic
         fun file(
@@ -350,12 +333,11 @@ object RestDocsSpecificationUtils {
             name: String?,
             description: String?,
             constraint: String,
-        ): RequestPartDescriptor {
-            return RequestDocumentation
+        ): RequestPartDescriptor =
+            RequestDocumentation
                 .partWithName(name)
                 .description(description)
                 .attributes(constraint(constraint))
-        }
 
         @JvmStatic
         fun file(
@@ -381,11 +363,10 @@ object RestDocsSpecificationUtils {
         fun body(
             name: String?,
             description: String?,
-        ): FieldDescriptor {
-            return PayloadDocumentation
+        ): FieldDescriptor =
+            PayloadDocumentation
                 .fieldWithPath(name)
                 .description(description)
-        }
 
         @JvmStatic
         fun body(
@@ -405,12 +386,11 @@ object RestDocsSpecificationUtils {
             name: String?,
             description: String?,
             constraint: String,
-        ): FieldDescriptor {
-            return PayloadDocumentation
+        ): FieldDescriptor =
+            PayloadDocumentation
                 .fieldWithPath(name)
                 .description(description)
                 .attributes(constraint(constraint))
-        }
 
         @JvmStatic
         fun body(
@@ -427,9 +407,7 @@ object RestDocsSpecificationUtils {
             return if (mustRequired) result else result.optional()
         }
 
-        private fun constraint(value: String): Attributes.Attribute {
-            return Attributes.Attribute("constraints", value)
-        }
+        private fun constraint(value: String): Attributes.Attribute = Attributes.Attribute("constraints", value)
     }
 
     private val documentRequest: OperationRequestPreprocessor

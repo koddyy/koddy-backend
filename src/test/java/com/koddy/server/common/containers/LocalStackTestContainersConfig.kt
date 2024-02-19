@@ -14,45 +14,39 @@ import software.amazon.awssdk.services.s3.model.CreateBucketRequest
 @TestConfiguration
 class LocalStackTestContainersConfig {
     @Bean(initMethod = "start", destroyMethod = "stop")
-    fun localStackContainer(): LocalStackContainer {
-        val container: LocalStackContainer =
-            LocalStackContainer(LOCALSTACK_IMAGE)
-                .apply {
-                    withServices(LocalStackContainer.Service.S3)
+    fun localStackContainer(): LocalStackContainer =
+        LocalStackContainer(LOCALSTACK_IMAGE)
+            .apply {
+                withServices(LocalStackContainer.Service.S3)
 
-                    System.setProperty("spring.cloud.aws.region.static", region)
-                    System.setProperty("spring.cloud.aws.credentials.access-key", accessKey)
-                    System.setProperty("spring.cloud.aws.credentials.secret-key", secretKey)
-                    System.setProperty("spring.cloud.aws.s3.bucket", BUCKET_NAME)
-                }
-        return container
-    }
+                System.setProperty("spring.cloud.aws.region.static", region)
+                System.setProperty("spring.cloud.aws.credentials.access-key", accessKey)
+                System.setProperty("spring.cloud.aws.credentials.secret-key", secretKey)
+                System.setProperty("spring.cloud.aws.s3.bucket", BUCKET_NAME)
+            }
 
     @Bean
-    fun s3Client(container: LocalStackContainer): S3Client {
-        val s3Client =
-            S3Client
-                .builder()
-                .endpointOverride(container.endpoint)
-                .credentialsProvider(
-                    StaticCredentialsProvider.create(
-                        AwsBasicCredentials.create(
-                            container.accessKey,
-                            container.secretKey,
-                        ),
+    fun s3Client(container: LocalStackContainer): S3Client =
+        S3Client
+            .builder()
+            .endpointOverride(container.endpoint)
+            .credentialsProvider(
+                StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(
+                        container.accessKey,
+                        container.secretKey,
                     ),
+                ),
+            )
+            .region(Region.of(container.region))
+            .build().apply {
+                createBucket(
+                    CreateBucketRequest.builder()
+                        .acl(BucketCannedACL.PUBLIC_READ)
+                        .bucket(BUCKET_NAME)
+                        .build(),
                 )
-                .region(Region.of(container.region))
-                .build().apply {
-                    createBucket(
-                        CreateBucketRequest.builder()
-                            .acl(BucketCannedACL.PUBLIC_READ)
-                            .bucket(BUCKET_NAME)
-                            .build(),
-                    )
-                }
-        return s3Client
-    }
+            }
 
     companion object {
         private val LOCALSTACK_IMAGE: DockerImageName = DockerImageName.parse("localstack/localstack")

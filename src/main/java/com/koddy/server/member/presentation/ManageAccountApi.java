@@ -78,7 +78,7 @@ public class ManageAccountApi {
     public ResponseEntity<Void> delete(
             @Auth final Authenticated authenticated
     ) {
-        deleteMemberUseCase.invoke(authenticated.id());
+        deleteMemberUseCase.invoke(authenticated.id);
         return ResponseEntity.noContent().build();
     }
 }

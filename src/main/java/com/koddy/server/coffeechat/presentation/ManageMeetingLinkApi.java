@@ -40,7 +40,7 @@ public class ManageMeetingLinkApi {
             @RequestBody final CreateMeetingLinkRequest request
     ) {
         final MeetingLinkResponse result = manageMeetingLinkUseCase.create(new CreateMeetingLinkCommand(
-                authenticated.id(),
+                authenticated.id,
                 OAuthProvider.from(provider),
                 MeetingLinkProvider.from(provider),
                 request.authorizationCode(),

@@ -37,7 +37,7 @@ public class CreateCoffeeChatApi {
             @RequestBody @Valid final MentorSuggestCoffeeChatRequest request
     ) {
         final long coffeeChatId = createCoffeeChatUseCase.suggestCoffeeChat(new MentorSuggestCoffeeChatCommand(
-                authenticated.id(),
+                authenticated.id,
                 request.menteeId(),
                 request.suggestReason()
         ));
@@ -52,7 +52,7 @@ public class CreateCoffeeChatApi {
             @RequestBody @Valid final MenteeApplyCoffeeChatRequest request
     ) {
         final long coffeeChatId = createCoffeeChatUseCase.applyCoffeeChat(new MenteeApplyCoffeeChatCommand(
-                authenticated.id(),
+                authenticated.id,
                 request.mentorId(),
                 request.applyReason(),
                 request.toReservation()

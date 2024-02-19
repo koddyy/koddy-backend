@@ -19,7 +19,5 @@ class RedisCleanerAllCallbackExtension : AfterAllCallback {
             .cleanUpRedis()
     }
 
-    private fun isNestedClass(currentClass: Class<*>): Boolean {
-        return !ModifierSupport.isStatic(currentClass) && currentClass.isMemberClass
-    }
+    private fun isNestedClass(currentClass: Class<*>): Boolean = !ModifierSupport.isStatic(currentClass) && currentClass.isMemberClass
 }

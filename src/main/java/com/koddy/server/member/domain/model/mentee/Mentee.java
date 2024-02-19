@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "mentee")
-@DiscriminatorValue(value = Role.Value.MENTEE)
+@DiscriminatorValue(value = Role.MENTEE_VALUE)
 public class Mentee extends Member<Mentee> {
     @Embedded
     private Interest interest;

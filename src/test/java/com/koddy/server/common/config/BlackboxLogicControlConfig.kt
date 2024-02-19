@@ -10,15 +10,11 @@ import org.springframework.context.annotation.Primary
 class BlackboxLogicControlConfig {
     @Bean
     @Primary
-    fun authCodeGenerator(): AuthCodeGenerator {
-        return AuthCodeGenerator { AUTH_CODE }
-    }
+    fun authCodeGenerator(): AuthCodeGenerator = AuthCodeGenerator { AUTH_CODE }
 
     @Bean
     @Primary
-    fun bucketFileNameGenerator(): BucketFileNameGenerator {
-        return BucketFileNameGenerator { BUCKET_UPLOAD_PREFIX + it }
-    }
+    fun bucketFileNameGenerator(): BucketFileNameGenerator = BucketFileNameGenerator { BUCKET_UPLOAD_PREFIX + it }
 
     companion object {
         const val AUTH_CODE: String = "123456"

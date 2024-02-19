@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.koddy.server.auth.exception.OAuthUserNotFoundException
 import com.koddy.server.global.base.BusinessException
 import com.koddy.server.global.base.BusinessExceptionCode
-import com.koddy.server.global.exception.alert.SlackAlertManager
+import com.koddy.server.global.exception.notify.ErrorNotifier
 import com.koddy.server.global.log.RequestMetadataExtractor.getRequestUriWithQueryString
 import com.koddy.server.global.log.logger
 import jakarta.servlet.http.HttpServletRequest
@@ -29,7 +29,7 @@ import org.springframework.web.servlet.NoHandlerFoundException
 @RestControllerAdvice
 class ApiGlobalExceptionHandler(
     private val objectMapper: ObjectMapper,
-    private val slackAlertManager: SlackAlertManager,
+    private val errorNotifier: ErrorNotifier,
 ) {
     private val log: Logger = logger()
 
@@ -129,7 +129,7 @@ class ApiGlobalExceptionHandler(
     ): ResponseEntity<ExceptionResponse> {
         if (ex !is NoHandlerFoundException) {
             log.error("handleAnyException -> method = {}, request = {}", request.method, getRequestUriWithQueryString(request), ex)
-            slackAlertManager.sendErrorLog(request, ex)
+            errorNotifier.send(request, ex)
             return createExceptionResponse(GlobalExceptionCode.UNEXPECTED_SERVER_ERROR)
         }
         return createExceptionResponse(GlobalExceptionCode.NOT_SUPPORTED_URI_ERROR)

@@ -41,7 +41,7 @@ public class AuthenticationMentorUnivApi {
     ) {
         UniversityInfo.validateDomain(authenticated, request.schoolMail());
         authenticationMentorUnivUseCase.authWithMail(new AuthenticationWithMailCommand(
-                authenticated.id(),
+                authenticated.id,
                 request.schoolMail()
         ));
         return ResponseEntity.noContent().build();
@@ -56,7 +56,7 @@ public class AuthenticationMentorUnivApi {
     ) {
         UniversityInfo.validateDomain(authenticated, request.schoolMail());
         authenticationMentorUnivUseCase.confirmMailAuthCode(new AuthenticationConfirmWithMailCommand(
-                authenticated.id(),
+                authenticated.id,
                 request.schoolMail(),
                 request.authCode()
         ));
@@ -71,7 +71,7 @@ public class AuthenticationMentorUnivApi {
             @RequestBody @Valid final AuthenticationWithProofDataRequest request
     ) {
         authenticationMentorUnivUseCase.authWithProofData(new AuthenticationWithProofDataCommand(
-                authenticated.id(),
+                authenticated.id,
                 request.proofDataUploadUrl()
         ));
         return ResponseEntity.noContent().build();

@@ -33,7 +33,7 @@ public interface MemberRepository extends JpaRepository<Member<?>, Long> {
     String getType(@Param("id") Long id);
 
     default boolean isMentor(final Long id) {
-        return Role.Value.MENTOR.equals(getType(id));
+        return Role.MENTOR_VALUE.equals(getType(id));
     }
 
     @KoddyWritableTransactional

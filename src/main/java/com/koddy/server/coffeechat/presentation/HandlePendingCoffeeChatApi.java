@@ -37,7 +37,7 @@ public class HandlePendingCoffeeChatApi {
             @RequestBody @Valid final RejectPendingCoffeeChatRequest request
     ) {
         handlePendingCoffeeChatUseCase.reject(new RejectPendingCoffeeChatCommand(
-                authenticated.id(),
+                authenticated.id,
                 coffeeChatId,
                 request.rejectReason()
         ));
@@ -53,7 +53,7 @@ public class HandlePendingCoffeeChatApi {
             @RequestBody @Valid final ApprovePendingCoffeeChatRequest request
     ) {
         handlePendingCoffeeChatUseCase.approve(new ApprovePendingCoffeeChatCommand(
-                authenticated.id(),
+                authenticated.id,
                 coffeeChatId,
                 request.toStrategyType(),
                 request.chatValue()
