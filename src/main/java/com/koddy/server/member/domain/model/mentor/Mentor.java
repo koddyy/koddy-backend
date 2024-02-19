@@ -117,18 +117,22 @@ public class Mentor extends Member<Mentor> {
     }
 
     public void validateReservationData(final Reservation reservation) {
+        // 1. 멘토 스케줄 정보 입력 완료 확인
         if (mentoringPeriod == null || schedules.isEmpty()) {
             throw new MemberException(MENTOR_NOT_FILL_IN_SCHEDULE);
         }
 
+        // 2. 멘토링 진행 기간에 포함되는지 확인
         if (isOutOfDate(reservation)) {
             throw new MemberException(CANNOT_RESERVATION);
         }
 
+        // 3. 멘토의 각 멘토링 진행 시간(TimeUnit)과 일치하는지 확인
         if (nowAllowedTimeUnit(reservation)) {
             throw new MemberException(CANNOT_RESERVATION);
         }
 
+        // 4. 요일별 스케줄 시간대에 포함되는지 확인
         if (notAllowedSchedule(reservation)) {
             throw new MemberException(CANNOT_RESERVATION);
         }

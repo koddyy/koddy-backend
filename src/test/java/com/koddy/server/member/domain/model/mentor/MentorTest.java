@@ -411,20 +411,23 @@ class MentorTest extends UnitTest {
                     LocalDate.of(2024, 3, 1)
             );
             final LocalTime time = LocalTime.of(18, 0);
-            final List<Timeline> timelines = List.of(
-                    Timeline.of(TUE, time, time.plusHours(3)),
-                    Timeline.of(WED, time, time.plusHours(3)),
-                    Timeline.of(THU, time, time.plusHours(3))
-            );
+            final List<Timeline> timelines = List.of(Timeline.of(FRI, time, time.plusHours(3)));
             final Mentor mentor = MENTOR_1.toDomainWithMentoringInfo(mentoringPeriod, timelines);
 
             // when - then
-            final LocalDateTime target1 = LocalDateTime.of(2024, 2, 6, 18, 0);
-            final LocalDateTime target2 = LocalDateTime.of(2024, 2, 7, 18, 0);
-            final LocalDateTime target3 = LocalDateTime.of(2024, 2, 8, 18, 0);
-            final LocalDateTime target4 = LocalDateTime.of(2024, 2, 13, 18, 0);
-            final LocalDateTime target5 = LocalDateTime.of(2024, 2, 14, 18, 0);
-            final LocalDateTime target6 = LocalDateTime.of(2024, 2, 15, 18, 0);
+            final LocalDateTime target1 = LocalDateTime.of(2024, 2, 2, 18, 0);
+            final LocalDateTime target2 = LocalDateTime.of(2024, 2, 2, 18, 30);
+            final LocalDateTime target3 = LocalDateTime.of(2024, 2, 2, 19, 0);
+            final LocalDateTime target4 = LocalDateTime.of(2024, 2, 2, 19, 30);
+            final LocalDateTime target5 = LocalDateTime.of(2024, 2, 2, 20, 0);
+            final LocalDateTime target6 = LocalDateTime.of(2024, 2, 2, 20, 30);
+
+            final LocalDateTime target7 = LocalDateTime.of(2024, 3, 1, 18, 0);
+            final LocalDateTime target8 = LocalDateTime.of(2024, 3, 1, 18, 30);
+            final LocalDateTime target9 = LocalDateTime.of(2024, 3, 1, 19, 0);
+            final LocalDateTime target10 = LocalDateTime.of(2024, 3, 1, 19, 30);
+            final LocalDateTime target11 = LocalDateTime.of(2024, 3, 1, 20, 0);
+            final LocalDateTime target12 = LocalDateTime.of(2024, 3, 1, 20, 30);
 
             assertAll(
                     () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target1, target1.plusMinutes(30)))),
@@ -432,7 +435,13 @@ class MentorTest extends UnitTest {
                     () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target3, target3.plusMinutes(30)))),
                     () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target4, target4.plusMinutes(30)))),
                     () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target5, target5.plusMinutes(30)))),
-                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target6, target6.plusMinutes(30))))
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target6, target6.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target7, target7.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target8, target8.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target9, target9.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target10, target10.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target11, target11.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target12, target12.plusMinutes(30))))
             );
         }
     }
