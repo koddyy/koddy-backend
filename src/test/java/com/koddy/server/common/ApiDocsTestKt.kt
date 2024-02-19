@@ -23,8 +23,7 @@ import io.mockk.every
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.anyString
-import org.mockito.Mockito.doNothing
-import org.mockito.Mockito.doThrow
+import org.mockito.BDDMockito.doThrow
 import org.mockito.MockitoAnnotations
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -200,31 +199,24 @@ abstract class ApiDocsTestKt : FeatureSpec() {
         isValid: Boolean,
         member: Member<*>,
     ) {
-        if (isValid) {
-            doNothing()
-                .`when`(tokenProvider)
-                .validateToken(anyString())
-        } else {
+        if (isValid.not()) {
             doThrow(AuthException(AuthExceptionCode.INVALID_TOKEN))
                 .`when`(tokenProvider)
                 .validateToken(anyString())
         }
-        makeTokenExtractResult(member)
+
+        every { tokenProvider.getId(anyString()) } returns member.id
+        every { tokenProvider.getAuthority(anyString()) } returns member.authority
     }
 
     protected fun MockHttpServletRequestBuilder.authorizationHeader(member: Member<*>) {
-        makeTokenExtractResult(member)
+        applyToken(true, member)
         this.header(ACCESS_TOKEN_HEADER, applyAccessToken())
     }
 
     protected fun MockHttpServletRequestBuilder.cookieHeader(member: Member<*>) {
-        makeTokenExtractResult(member)
+        applyToken(true, member)
         this.cookie(applyRefreshToken())
-    }
-
-    private fun makeTokenExtractResult(member: Member<*>) {
-        every { tokenProvider.getId(anyString()) } returns member.id
-        every { tokenProvider.getAuthority(anyString()) } returns member.authority
     }
 
     protected fun ResultActions.isStatus(status: Int): ResultActions = andExpect(status().`is`(status))

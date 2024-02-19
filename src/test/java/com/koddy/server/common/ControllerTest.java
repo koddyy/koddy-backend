@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.koddy.server.auth.domain.service.TokenProvider;
 import com.koddy.server.auth.exception.AuthException;
+import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.config.MockAllUseCaseBeanFactoryPostProcessor;
 import com.koddy.server.common.config.ResetMockTestExecutionListener;
 import com.koddy.server.common.config.TestAopConfig;
@@ -40,12 +41,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
 
-import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN;
 import static com.koddy.server.common.utils.TokenUtils.applyAccessToken;
 import static com.koddy.server.common.utils.TokenUtils.applyRefreshToken;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -538,16 +537,16 @@ public abstract class ControllerTest {
         };
     }
 
-    protected void applyToken(final boolean isValid, final Member<?> member) {
-        if (isValid) {
-            doNothing()
-                    .when(tokenProvider)
-                    .validateToken(anyString());
-        } else {
-            doThrow(new AuthException(INVALID_TOKEN))
+    protected void applyToken(
+            final boolean isValid,
+            final Member<?> member
+    ) {
+        if (!isValid) {
+            doThrow(new AuthException(AuthExceptionCode.INVALID_TOKEN))
                     .when(tokenProvider)
                     .validateToken(anyString());
         }
+
         given(tokenProvider.getId(anyString())).willReturn(member.getId());
         given(tokenProvider.getAuthority(anyString())).willReturn(member.getAuthority());
     }
