@@ -16,7 +16,6 @@ import com.koddy.server.common.docs.ENUM
 import com.koddy.server.common.utils.TokenUtils.applyAccessToken
 import com.koddy.server.common.utils.TokenUtils.applyRefreshToken
 import com.koddy.server.global.base.BusinessExceptionCode
-import com.koddy.server.global.exception.alert.SlackAlertManager
 import com.koddy.server.member.domain.model.Member
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.core.spec.style.FeatureSpec
@@ -93,9 +92,6 @@ abstract class ApiDocsTestKt : FeatureSpec() {
 
     @MockkBean
     private lateinit var tokenProvider: TokenProvider
-
-    @MockkBean
-    private lateinit var slackAlertManager: SlackAlertManager
 
     init {
         beforeSpec {

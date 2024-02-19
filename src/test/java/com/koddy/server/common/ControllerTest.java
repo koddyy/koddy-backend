@@ -9,7 +9,6 @@ import com.koddy.server.common.config.ResetMockTestExecutionListener;
 import com.koddy.server.common.config.TestAopConfig;
 import com.koddy.server.common.config.TestWebBeanConfig;
 import com.koddy.server.global.base.BusinessExceptionCode;
-import com.koddy.server.global.exception.alert.SlackAlertManager;
 import com.koddy.server.member.domain.model.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -73,9 +72,6 @@ public abstract class ControllerTest {
 
     @MockBean
     private TokenProvider tokenProvider;
-
-    @MockBean
-    private SlackAlertManager slackAlertManager;
 
     @BeforeEach
     void setUp(final WebApplicationContext context, final RestDocumentationContextProvider provider) {
