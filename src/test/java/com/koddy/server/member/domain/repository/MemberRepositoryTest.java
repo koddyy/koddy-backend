@@ -41,9 +41,9 @@ class MemberRepositoryTest extends RepositoryTest {
 
         // then
         assertAll(
-                () -> assertThat(typeA).isEqualTo(Role.Value.MENTOR),
+                () -> assertThat(typeA).isEqualTo(Role.MENTOR_VALUE),
                 () -> assertThat(sut.isMentor(memberA.getId())).isTrue(),
-                () -> assertThat(typeB).isEqualTo(Role.Value.MENTEE),
+                () -> assertThat(typeB).isEqualTo(Role.MENTEE_VALUE),
                 () -> assertThat(sut.isMentor(memberB.getId())).isFalse()
         );
     }

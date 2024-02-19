@@ -30,7 +30,7 @@ public class CancelCoffeeChatUseCase {
     }
 
     private void cancelSuggestedCoffeeChat(final CancelCoffeeChatCommand command, final Authenticated authenticated) {
-        final CoffeeChat coffeeChat = coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId(), authenticated.id());
+        final CoffeeChat coffeeChat = coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId(), authenticated.id);
         if (coffeeChat.isMentorCannotCancel()) {
             throw new CoffeeChatException(CANNOT_CANCEL_STATUS);
         }
@@ -38,7 +38,7 @@ public class CancelCoffeeChatUseCase {
     }
 
     private void cancelAppliedCoffeeChat(final CancelCoffeeChatCommand command, final Authenticated authenticated) {
-        final CoffeeChat coffeeChat = coffeeChatRepository.getByIdAndMenteeId(command.coffeeChatId(), authenticated.id());
+        final CoffeeChat coffeeChat = coffeeChatRepository.getByIdAndMenteeId(command.coffeeChatId(), authenticated.id);
         if (coffeeChat.isMenteeCannotCancel()) {
             throw new CoffeeChatException(CANNOT_CANCEL_STATUS);
         }

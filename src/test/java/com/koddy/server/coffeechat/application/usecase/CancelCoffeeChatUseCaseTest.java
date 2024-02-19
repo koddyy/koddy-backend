@@ -50,14 +50,14 @@ class CancelCoffeeChatUseCaseTest extends UnitTest {
             final CoffeeChat coffeeChat = MenteeFlow.apply(start, start.plusMinutes(30), mentee, mentor).apply(1L);
 
             final CancelCoffeeChatCommand command = new CancelCoffeeChatCommand(mentorAuthenticated, coffeeChat.getId(), "취소..");
-            given(coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId(), command.authenticated().id())).willReturn(coffeeChat);
+            given(coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId(), command.authenticated().id)).willReturn(coffeeChat);
 
             // when - then
             assertAll(
                     () -> assertThatThrownBy(() -> sut.invoke(command))
                             .isInstanceOf(CoffeeChatException.class)
                             .hasMessage(CANNOT_CANCEL_STATUS.getMessage()),
-                    () -> verify(coffeeChatRepository, times(1)).getByIdAndMentorId(command.coffeeChatId(), command.authenticated().id())
+                    () -> verify(coffeeChatRepository, times(1)).getByIdAndMentorId(command.coffeeChatId(), command.authenticated().id)
             );
         }
 
@@ -68,14 +68,14 @@ class CancelCoffeeChatUseCaseTest extends UnitTest {
             final CoffeeChat coffeeChat = MentorFlow.suggest(mentor, mentee).apply(1L);
 
             final CancelCoffeeChatCommand command = new CancelCoffeeChatCommand(mentorAuthenticated, coffeeChat.getId(), "취소..");
-            given(coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId(), command.authenticated().id())).willReturn(coffeeChat);
+            given(coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId(), command.authenticated().id)).willReturn(coffeeChat);
 
             // when
             sut.invoke(command);
 
             // then
             assertAll(
-                    () -> verify(coffeeChatRepository, times(1)).getByIdAndMentorId(command.coffeeChatId(), command.authenticated().id()),
+                    () -> verify(coffeeChatRepository, times(1)).getByIdAndMentorId(command.coffeeChatId(), command.authenticated().id),
                     () -> assertThat(coffeeChat.getMentorId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getMenteeId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_CANCEL),
@@ -100,14 +100,14 @@ class CancelCoffeeChatUseCaseTest extends UnitTest {
             final CoffeeChat coffeeChat = MentorFlow.suggest(mentor, mentee).apply(1L);
 
             final CancelCoffeeChatCommand command = new CancelCoffeeChatCommand(menteeAuthenticated, coffeeChat.getId(), "취소..");
-            given(coffeeChatRepository.getByIdAndMenteeId(command.coffeeChatId(), command.authenticated().id())).willReturn(coffeeChat);
+            given(coffeeChatRepository.getByIdAndMenteeId(command.coffeeChatId(), command.authenticated().id)).willReturn(coffeeChat);
 
             // when - then
             assertAll(
                     () -> assertThatThrownBy(() -> sut.invoke(command))
                             .isInstanceOf(CoffeeChatException.class)
                             .hasMessage(CANNOT_CANCEL_STATUS.getMessage()),
-                    () -> verify(coffeeChatRepository, times(1)).getByIdAndMenteeId(command.coffeeChatId(), command.authenticated().id())
+                    () -> verify(coffeeChatRepository, times(1)).getByIdAndMenteeId(command.coffeeChatId(), command.authenticated().id)
             );
         }
 
@@ -119,14 +119,14 @@ class CancelCoffeeChatUseCaseTest extends UnitTest {
             final CoffeeChat coffeeChat = MenteeFlow.apply(start, start.plusMinutes(30), mentee, mentor).apply(1L);
 
             final CancelCoffeeChatCommand command = new CancelCoffeeChatCommand(menteeAuthenticated, coffeeChat.getId(), "취소..");
-            given(coffeeChatRepository.getByIdAndMenteeId(command.coffeeChatId(), command.authenticated().id())).willReturn(coffeeChat);
+            given(coffeeChatRepository.getByIdAndMenteeId(command.coffeeChatId(), command.authenticated().id)).willReturn(coffeeChat);
 
             // when
             sut.invoke(command);
 
             // then
             assertAll(
-                    () -> verify(coffeeChatRepository, times(1)).getByIdAndMenteeId(command.coffeeChatId(), command.authenticated().id()),
+                    () -> verify(coffeeChatRepository, times(1)).getByIdAndMenteeId(command.coffeeChatId(), command.authenticated().id),
                     () -> assertThat(coffeeChat.getMentorId()).isEqualTo(mentor.getId()),
                     () -> assertThat(coffeeChat.getMenteeId()).isEqualTo(mentee.getId()),
                     () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_CANCEL),

@@ -31,8 +31,8 @@ public class MemberPrivateProflieQueryApi {
             @Auth final Authenticated authenticated
     ) {
         final MemberPrivateProfile response = authenticated.isMentor()
-                ? getMemberPrivateProfileUseCase.getMentorProfile(authenticated.id())
-                : getMemberPrivateProfileUseCase.getMenteeProfile(authenticated.id());
+                ? getMemberPrivateProfileUseCase.getMentorProfile(authenticated.id)
+                : getMemberPrivateProfileUseCase.getMenteeProfile(authenticated.id);
         return ResponseEntity.ok(response);
     }
 
@@ -42,7 +42,7 @@ public class MemberPrivateProflieQueryApi {
     public ResponseEntity<MentorPrivateProfile> getMentorProfile(
             @Auth final Authenticated authenticated
     ) {
-        final MentorPrivateProfile response = getMemberPrivateProfileUseCase.getMentorProfile(authenticated.id());
+        final MentorPrivateProfile response = getMemberPrivateProfileUseCase.getMentorProfile(authenticated.id);
         return ResponseEntity.ok(response);
     }
 
@@ -52,7 +52,7 @@ public class MemberPrivateProflieQueryApi {
     public ResponseEntity<MenteePrivateProfile> getMenteeProfile(
             @Auth final Authenticated authenticated
     ) {
-        final MenteePrivateProfile response = getMemberPrivateProfileUseCase.getMenteeProfile(authenticated.id());
+        final MenteePrivateProfile response = getMemberPrivateProfileUseCase.getMenteeProfile(authenticated.id);
         return ResponseEntity.ok(response);
     }
 }

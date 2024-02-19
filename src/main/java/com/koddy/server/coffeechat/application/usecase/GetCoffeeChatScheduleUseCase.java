@@ -27,9 +27,9 @@ public class GetCoffeeChatScheduleUseCase {
 
     public CoffeeChatEachCategoryCounts getEachCategoryCounts(final Authenticated authenticated) {
         if (authenticated.isMentor()) {
-            return getMentorCoffeeChatCounts(authenticated.id());
+            return getMentorCoffeeChatCounts(authenticated.id);
         }
-        return getMenteeCoffeeChatCounts(authenticated.id());
+        return getMenteeCoffeeChatCounts(authenticated.id);
     }
 
     private CoffeeChatEachCategoryCounts getMentorCoffeeChatCounts(final long mentorId) {
