@@ -4,7 +4,6 @@ import com.p6spy.engine.logging.Category.STATEMENT
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy
 import org.hibernate.engine.jdbc.internal.FormatStyle.BASIC
 import org.hibernate.engine.jdbc.internal.FormatStyle.DDL
-import org.hibernate.engine.jdbc.internal.FormatStyle.HIGHLIGHT
 import java.util.Locale.ROOT
 
 class P6SpyFormatter : MessageFormattingStrategy {
@@ -21,9 +20,9 @@ class P6SpyFormatter : MessageFormattingStrategy {
             return "Command -> Execute = ${elapsed}ms || Category = $category || DB Connection ID = $connectionId || URL = $url"
         }
         if (isStatementDDL(sql, category)) {
-            return "DDL Query -> Execute = ${elapsed}ms || DB Connection ID = $connectionId || URL = $url ${highlight(DDL.formatter.format(sql))}"
+            return "DDL Query -> Execute = ${elapsed}ms || DB Connection ID = $connectionId || URL = $url ${DDL.formatter.format(sql)}"
         }
-        return "DML Query -> Execute = ${elapsed}ms || DB Connection ID = $connectionId || URL = $url ${highlight(BASIC.formatter.format(sql))}"
+        return "DML Query -> Execute = ${elapsed}ms || DB Connection ID = $connectionId || URL = $url ${BASIC.formatter.format(sql)}"
     }
 
     private fun isStatementDDL(
@@ -34,8 +33,6 @@ class P6SpyFormatter : MessageFormattingStrategy {
     private fun isStatement(category: String): Boolean = STATEMENT.name == category
 
     private fun isDDL(sql: String): Boolean = setOf(CREATE, ALTER, DROP, COMMENT).any { sql.startsWith(it) }
-
-    private fun highlight(sql: String?): String = HIGHLIGHT.formatter.format(sql)
 
     companion object {
         private const val CREATE: String = "create"
