@@ -16,7 +16,9 @@ class AuthArgumentResolver(
     private val tokenProvider: TokenProvider,
 ) : HandlerMethodArgumentResolver {
     override fun supportsParameter(parameter: MethodParameter): Boolean {
-        return parameter.hasParameterAnnotation(Auth::class.java)
+        val hasRequiredAnnotation: Boolean = parameter.getParameterAnnotation(Auth::class.java) != null
+        val hasRequiredType: Boolean = parameter.parameterType == Authenticated::class.java
+        return hasRequiredAnnotation && hasRequiredType
     }
 
     override fun resolveArgument(

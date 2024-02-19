@@ -11,17 +11,11 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy
 @EnableAspectJAutoProxy
 class TestAopConfig {
     @Bean
-    fun accessControlAop(): AccessControlAop {
-        return AccessControlAop()
-    }
+    fun accessControlAop(): AccessControlAop = AccessControlAop()
 
     @Bean
-    fun loggingStatusManager(): LoggingStatusManager {
-        return LoggingStatusManager()
-    }
+    fun loggingStatusManager(): LoggingStatusManager = LoggingStatusManager()
 
     @Bean
-    fun loggingTracer(): LoggingTracer {
-        return LoggingTracer(loggingStatusManager())
-    }
+    fun loggingTracer(): LoggingTracer = LoggingTracer(loggingStatusManager())
 }

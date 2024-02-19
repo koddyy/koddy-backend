@@ -16,16 +16,13 @@ class ResetMockTestExecutionListener : TestExecutionListener {
         mockCache.forEach { MockUtil.resetMock(it) }
     }
 
-    private fun isNewContext(applicationContext: ApplicationContext): Boolean {
-        return applicationContext.startupDate != applicationContextStartupDate
-    }
+    private fun isNewContext(applicationContext: ApplicationContext): Boolean = applicationContext.startupDate != applicationContextStartupDate
 
-    private fun initMocks(applicationContext: ApplicationContext) {
+    private fun initMocks(applicationContext: ApplicationContext) =
         applicationContext.beanDefinitionNames
             .map { applicationContext.getBean(it) }
             .filter { MockUtil.isMock(it) }
             .forEach { mockCache.add(it) }
-    }
 
     companion object {
         private var applicationContextStartupDate: Long = 0

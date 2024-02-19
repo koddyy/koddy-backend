@@ -29,22 +29,13 @@ class P6SpyFormatter : MessageFormattingStrategy {
     private fun isStatementDDL(
         sql: String?,
         category: String,
-    ): Boolean {
-        return isStatement(category) && !sql.isNullOrBlank() && isDDL(sql.trim().lowercase(ROOT))
-    }
+    ): Boolean = isStatement(category) && !sql.isNullOrBlank() && isDDL(sql.trim().lowercase(ROOT))
 
-    private fun isStatement(category: String): Boolean {
-        return STATEMENT.name == category
-    }
+    private fun isStatement(category: String): Boolean = STATEMENT.name == category
 
-    private fun isDDL(sql: String): Boolean {
-        return setOf(CREATE, ALTER, DROP, COMMENT)
-            .any { sql.startsWith(it) }
-    }
+    private fun isDDL(sql: String): Boolean = setOf(CREATE, ALTER, DROP, COMMENT).any { sql.startsWith(it) }
 
-    private fun highlight(sql: String?): String {
-        return HIGHLIGHT.formatter.format(sql)
-    }
+    private fun highlight(sql: String?): String = HIGHLIGHT.formatter.format(sql)
 
     companion object {
         private const val CREATE: String = "create"

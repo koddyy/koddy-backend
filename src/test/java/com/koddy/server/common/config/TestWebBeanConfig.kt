@@ -13,14 +13,10 @@ class TestWebBeanConfig {
     private val log: Logger = logger()
 
     @Bean
-    fun corsProperties(): CorsProperties {
-        return CorsProperties(setOf("http://localhost:8080"))
-    }
+    fun corsProperties(): CorsProperties = CorsProperties(setOf("http://localhost:8080"))
 
     @Bean
-    fun tokenResponseWriter(): TokenResponseWriter {
-        return TokenResponseWriter(1234)
-    }
+    fun tokenResponseWriter(): TokenResponseWriter = TokenResponseWriter(1234)
 
     @Bean
     fun errorNotifier(): ErrorNotifier = ErrorNotifier { request, exception -> log.error("에러 발생 -> $request $exception") }

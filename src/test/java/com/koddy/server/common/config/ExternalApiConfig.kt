@@ -13,18 +13,12 @@ import org.springframework.context.annotation.Primary
 @TestConfiguration
 class ExternalApiConfig {
     @Bean
-    fun oAuthLoginProcessor(): OAuthLoginProcessor {
-        return StubOAuthLoginProcessor()
-    }
+    fun oAuthLoginProcessor(): OAuthLoginProcessor = StubOAuthLoginProcessor()
 
     @Bean
-    fun meetingLinkManager(): MeetingLinkManager {
-        return StubMeetingLinkManager()
-    }
+    fun meetingLinkManager(): MeetingLinkManager = StubMeetingLinkManager()
 
     @Bean
     @Primary
-    fun emailSender(): EmailSender {
-        return StubEmailSender()
-    }
+    fun emailSender(): EmailSender = StubEmailSender()
 }

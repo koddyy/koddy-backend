@@ -10,7 +10,5 @@ open class StubEmailSender : EmailSender {
     override fun sendEmailAuthMail(
         targetEmail: String,
         authCode: String,
-    ) {
-        log.info("학교 인증 메일 발송 -> Email=[{}], AuthCode=[{}]", targetEmail, authCode)
-    }
+    ) = log.info("학교 인증 메일 발송 -> Email=[{}], AuthCode=[{}]", targetEmail, authCode)
 }

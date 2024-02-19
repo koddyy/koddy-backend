@@ -15,7 +15,5 @@ class LoggingStatusManager {
         }
     }
 
-    fun clearResource() {
-        statusContainer.remove()
-    }
+    fun clearResource() = statusContainer.remove()
 }

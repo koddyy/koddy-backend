@@ -17,11 +17,11 @@ interface RedisOperator<K, V> {
         duration: Duration,
     )
 
-    fun get(key: K): V
+    fun get(key: K): V?
 
     fun contains(key: K): Boolean
 
-    fun delete(key: K)
+    fun delete(key: K): Boolean
 
     fun incr(key: K): Long
 

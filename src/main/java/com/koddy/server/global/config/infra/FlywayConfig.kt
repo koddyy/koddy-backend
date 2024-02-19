@@ -7,10 +7,9 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class FlywayConfig {
     @Bean
-    fun cleanMigrateStrategy(): FlywayMigrationStrategy {
-        return FlywayMigrationStrategy {
+    fun cleanMigrateStrategy(): FlywayMigrationStrategy =
+        FlywayMigrationStrategy {
             it.repair()
             it.migrate()
         }
-    }
 }

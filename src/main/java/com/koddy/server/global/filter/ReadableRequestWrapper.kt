@@ -44,28 +44,21 @@ class ReadableRequestWrapper(
         return null
     }
 
-    private fun isMultipartRequest(request: HttpServletRequest): Boolean {
-        return !request.contentType.isNullOrBlank() && request.contentType.startsWith(MULTIPART_FORM_DATA_VALUE)
-    }
+    private fun isMultipartRequest(request: HttpServletRequest): Boolean =
+        !request.contentType.isNullOrBlank() &&
+            request.contentType.startsWith(MULTIPART_FORM_DATA_VALUE)
 
     override fun getInputStream(): ServletInputStream {
         val byteArrayInputStream = ByteArrayInputStream(this.contentAsByteArray)
 
         return object : ServletInputStream() {
-            override fun isFinished(): Boolean {
-                throw UnsupportedOperationException("[ReadableRequestWrapper] isFinished() not supported")
-            }
+            override fun isFinished(): Boolean = throw UnsupportedOperationException("[ReadableRequestWrapper] isFinished() not supported")
 
-            override fun isReady(): Boolean {
-                throw UnsupportedOperationException("[ReadableRequestWrapper] isReady() not supported")
-            }
+            override fun isReady(): Boolean = throw UnsupportedOperationException("[ReadableRequestWrapper] isReady() not supported")
 
-            override fun setReadListener(listener: ReadListener) {
-            }
+            override fun setReadListener(listener: ReadListener) = Unit
 
-            override fun read(): Int {
-                return byteArrayInputStream.read()
-            }
+            override fun read(): Int = byteArrayInputStream.read()
         }
     }
 }
