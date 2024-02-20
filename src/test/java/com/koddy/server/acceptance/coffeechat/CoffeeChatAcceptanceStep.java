@@ -161,7 +161,11 @@ public class CoffeeChatAcceptanceStep {
                 .build(coffeeChatId)
                 .getPath();
 
-        final ApproveAppliedCoffeeChatRequest request = new ApproveAppliedCoffeeChatRequest(fixture.getType().getEng(), fixture.getValue());
+        final ApproveAppliedCoffeeChatRequest request = new ApproveAppliedCoffeeChatRequest(
+                "질문..",
+                fixture.getType().getEng(),
+                fixture.getValue()
+        );
 
         return patchRequestWithAccessToken(uri, request, accessToken);
     }

@@ -191,7 +191,7 @@ public enum CoffeeChatFixture {
                     "신청..",
                     Reservation.of(fixture.start, fixture.end)
             );
-            coffeeChat.approveFromMenteeApply(fixture.strategy);
+            coffeeChat.approveFromMenteeApply("질문..", fixture.strategy);
             return coffeeChat;
         }
 
@@ -202,7 +202,7 @@ public enum CoffeeChatFixture {
                     "신청..",
                     Reservation.of(start, end)
             );
-            coffeeChat.approveFromMenteeApply(KAKAO_ID.toDomain());
+            coffeeChat.approveFromMenteeApply("질문..", KAKAO_ID.toDomain());
             return coffeeChat;
         }
 
@@ -235,7 +235,7 @@ public enum CoffeeChatFixture {
                     "신청..",
                     Reservation.of(fixture.start, fixture.end)
             );
-            coffeeChat.approveFromMenteeApply(fixture.strategy);
+            coffeeChat.approveFromMenteeApply("질문..", fixture.strategy);
             coffeeChat.complete(MENTEE_APPLY_COFFEE_CHAT_COMPLETE);
             return coffeeChat;
         }
@@ -247,7 +247,7 @@ public enum CoffeeChatFixture {
                     "신청..",
                     Reservation.of(start, end)
             );
-            coffeeChat.approveFromMenteeApply(KAKAO_ID.toDomain());
+            coffeeChat.approveFromMenteeApply("질문..", KAKAO_ID.toDomain());
             coffeeChat.complete(MENTEE_APPLY_COFFEE_CHAT_COMPLETE);
             return coffeeChat;
         }

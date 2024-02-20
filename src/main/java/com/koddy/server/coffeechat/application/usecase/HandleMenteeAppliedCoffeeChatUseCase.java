@@ -25,6 +25,9 @@ public class HandleMenteeAppliedCoffeeChatUseCase {
     @KoddyWritableTransactional
     public void approve(final ApproveAppliedCoffeeChatCommand command) {
         final CoffeeChat coffeeChat = coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId(), command.mentorId());
-        coffeeChat.approveFromMenteeApply(Strategy.of(command.type(), command.value(), encryptor));
+        coffeeChat.approveFromMenteeApply(
+                command.question(),
+                Strategy.of(command.type(), command.value(), encryptor)
+        );
     }
 }
