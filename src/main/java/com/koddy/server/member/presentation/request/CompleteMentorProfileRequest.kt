@@ -6,7 +6,7 @@ data class CompleteMentorProfileRequest(
     val introduction: String?,
     val profileImageUrl: String?,
     val period: MentoringPeriodRequest?,
-    val schedules: List<MentorScheduleRequest?>?,
+    val schedules: List<MentorScheduleRequest> = emptyList(),
 ) {
     fun toCommand(mentorId: Long): CompleteMentorProfileCommand =
         CompleteMentorProfileCommand(
@@ -14,7 +14,6 @@ data class CompleteMentorProfileRequest(
             introduction,
             profileImageUrl,
             period?.toPeriod(),
-            schedules?.filterNotNull()
-                ?.map { it.toTimeline() },
+            schedules.map { it.toTimeline() },
         )
 }
