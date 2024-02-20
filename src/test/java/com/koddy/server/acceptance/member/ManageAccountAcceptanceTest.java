@@ -14,8 +14,10 @@ import static com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER;
 import static com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -56,7 +58,10 @@ public class ManageAccountAcceptanceTest extends AcceptanceTest {
         void mentorDelete() {
             final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             서비스를_탈퇴한다(accessToken)
-                    .statusCode(NO_CONTENT.value());
+                    .statusCode(NO_CONTENT.value())
+                    .header(SET_COOKIE, containsString(REFRESH_TOKEN_HEADER + "=;"))
+                    .header(SET_COOKIE, containsString("Max-Age=1;"))
+                    .cookie(REFRESH_TOKEN_HEADER, is(""));
         }
 
         @Test
@@ -64,7 +69,10 @@ public class ManageAccountAcceptanceTest extends AcceptanceTest {
         void menteeDelete() {
             final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
             서비스를_탈퇴한다(accessToken)
-                    .statusCode(NO_CONTENT.value());
+                    .statusCode(NO_CONTENT.value())
+                    .header(SET_COOKIE, containsString(REFRESH_TOKEN_HEADER + "=;"))
+                    .header(SET_COOKIE, containsString("Max-Age=1;"))
+                    .cookie(REFRESH_TOKEN_HEADER, is(""));
         }
     }
 }

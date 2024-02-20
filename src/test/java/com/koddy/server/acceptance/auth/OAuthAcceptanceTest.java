@@ -17,6 +17,7 @@ import static com.koddy.server.common.fixture.OAuthFixture.GOOGLE_MENTOR_1;
 import static com.koddy.server.common.utils.OAuthUtils.GOOGLE_PROVIDER;
 import static com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI;
 import static com.koddy.server.common.utils.OAuthUtils.STATE;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
@@ -75,7 +76,10 @@ public class OAuthAcceptanceTest extends AcceptanceTest {
         void success() {
             final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             로그아웃을_진행한다(accessToken)
-                    .statusCode(NO_CONTENT.value());
+                    .statusCode(NO_CONTENT.value())
+                    .header(SET_COOKIE, containsString(REFRESH_TOKEN_HEADER + "=;"))
+                    .header(SET_COOKIE, containsString("Max-Age=1;"))
+                    .cookie(REFRESH_TOKEN_HEADER, is(""));
         }
     }
 }
