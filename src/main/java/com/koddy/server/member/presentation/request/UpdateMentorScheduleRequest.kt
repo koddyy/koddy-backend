@@ -4,13 +4,12 @@ import com.koddy.server.member.application.usecase.command.UpdateMentorScheduleC
 
 data class UpdateMentorScheduleRequest(
     val period: MentoringPeriodRequest?,
-    val schedules: List<MentorScheduleRequest?>?,
+    val schedules: List<MentorScheduleRequest> = emptyList(),
 ) {
     fun toCommand(mentorId: Long): UpdateMentorScheduleCommand =
         UpdateMentorScheduleCommand(
             mentorId,
             period?.toPeriod(),
-            schedules?.filterNotNull()
-                ?.map { it.toTimeline() },
+            schedules.map { it.toTimeline() },
         )
 }
