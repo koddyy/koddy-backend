@@ -76,9 +76,11 @@ public class ManageAccountApi {
     @Operation(summary = "사용자 탈퇴 Endpoint")
     @DeleteMapping("/members")
     public ResponseEntity<Void> delete(
-            @Auth final Authenticated authenticated
+            @Auth final Authenticated authenticated,
+            final HttpServletResponse response
     ) {
         deleteMemberUseCase.invoke(authenticated.id);
+        tokenResponseWriter.expireRefreshTokenCookie(response);
         return ResponseEntity.noContent().build();
     }
 }
