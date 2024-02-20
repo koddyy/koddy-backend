@@ -122,7 +122,7 @@ class CoffeeChatTest extends UnitTest {
 
             // when
             final Strategy strategy = KAKAO_ID.toDomain();
-            coffeeChat.approveFromMenteeApply(strategy);
+            coffeeChat.approveFromMenteeApply("질문..", strategy);
 
             // then
             assertAll(
@@ -133,7 +133,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getReason().getSuggestReason()).isNull(),
                     () -> assertThat(coffeeChat.getReason().getCancelReason()).isNull(),
                     () -> assertThat(coffeeChat.getReason().getRejectReason()).isNull(),
-                    () -> assertThat(coffeeChat.getQuestion()).isNull(),
+                    () -> assertThat(coffeeChat.getQuestion()).isNotNull(),
                     () -> assertThat(coffeeChat.getReservation().getStart()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
                     () -> assertThat(coffeeChat.getReservation().getEnd()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                     () -> assertThat(coffeeChat.getStrategy()).isEqualTo(strategy)
@@ -346,7 +346,7 @@ class CoffeeChatTest extends UnitTest {
                     () -> assertThat(coffeeChat.getReason().getSuggestReason()).isNull(),
                     () -> assertThat(coffeeChat.getReason().getCancelReason()).isNull(),
                     () -> assertThat(coffeeChat.getReason().getRejectReason()).isNull(),
-                    () -> assertThat(coffeeChat.getQuestion()).isNull(),
+                    () -> assertThat(coffeeChat.getQuestion()).isNotNull(),
                     () -> assertThat(coffeeChat.getReservation().getStart()).isEqualTo(월요일_1주차_20_00_시작.getStart()),
                     () -> assertThat(coffeeChat.getReservation().getEnd()).isEqualTo(월요일_1주차_20_00_시작.getEnd()),
                     () -> assertThat(coffeeChat.getStrategy()).isEqualTo(월요일_1주차_20_00_시작.getStrategy())

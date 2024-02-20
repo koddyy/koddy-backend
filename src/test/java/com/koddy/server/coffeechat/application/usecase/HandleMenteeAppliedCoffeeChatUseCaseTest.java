@@ -76,6 +76,7 @@ class HandleMenteeAppliedCoffeeChatUseCaseTest extends UnitTest {
         final ApproveAppliedCoffeeChatCommand command = new ApproveAppliedCoffeeChatCommand(
                 mentor.getId(),
                 coffeeChat.getId(),
+                "질문..",
                 Strategy.Type.KAKAO_ID,
                 "sjiwon"
         );
@@ -94,7 +95,7 @@ class HandleMenteeAppliedCoffeeChatUseCaseTest extends UnitTest {
                 () -> assertThat(coffeeChat.getReason().getSuggestReason()).isNull(),
                 () -> assertThat(coffeeChat.getReason().getCancelReason()).isNull(),
                 () -> assertThat(coffeeChat.getReason().getRejectReason()).isNull(),
-                () -> assertThat(coffeeChat.getQuestion()).isNull(),
+                () -> assertThat(coffeeChat.getQuestion()).isNotNull(),
                 () -> assertThat(coffeeChat.getReservation().getStart()).isEqualTo(start),
                 () -> assertThat(coffeeChat.getReservation().getEnd()).isEqualTo(start.plusMinutes(30)),
                 () -> assertThat(coffeeChat.getStrategy().getType()).isEqualTo(command.type()),

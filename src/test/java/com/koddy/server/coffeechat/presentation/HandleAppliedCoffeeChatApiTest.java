@@ -93,6 +93,7 @@ class HandleAppliedCoffeeChatApiTest extends ControllerTest {
     class Approve {
         private static final String BASE_URL = "/api/coffeechats/applied/approve/{coffeeChatId}";
         private final ApproveAppliedCoffeeChatRequest request = new ApproveAppliedCoffeeChatRequest(
+                "질문..",
                 StrategyFixture.KAKAO_ID.getType().getEng(),
                 StrategyFixture.KAKAO_ID.getValue()
         );
@@ -113,7 +114,14 @@ class HandleAppliedCoffeeChatApiTest extends ControllerTest {
                                     path("coffeeChatId", "커피챗 ID(PK)", true)
                             ),
                             requestFields(
-                                    body("chatType", "멘토링 진행 방식", "- 링크 = zoom google" + ENTER + "- 메신저 = kakao line wechat", true),
+                                    body("question", "멘티에게 궁금한 점", true),
+                                    body(
+                                            "chatType",
+                                            "멘토링 진행 방식",
+                                            "- 링크 = zoom google" + ENTER
+                                                    + "- 메신저 = kakao line wechat",
+                                            true
+                                    ),
                                     body("chatValue", "멘토링 진행 방식에 대한 값", "미팅 URL or 메신저 ID", true)
                             )
                     ))
@@ -138,7 +146,14 @@ class HandleAppliedCoffeeChatApiTest extends ControllerTest {
                                     path("coffeeChatId", "커피챗 ID(PK)", true)
                             ),
                             requestFields(
-                                    body("chatType", "멘토링 진행 방식", "- 링크 = zoom google" + ENTER + "- 메신저 = kakao line wechat", true),
+                                    body("question", "멘티에게 궁금한 점", true),
+                                    body(
+                                            "chatType",
+                                            "멘토링 진행 방식",
+                                            "- 링크 = zoom google" + ENTER
+                                                    + "- 메신저 = kakao line wechat",
+                                            true
+                                    ),
                                     body("chatValue", "멘토링 진행 방식에 대한 값", "미팅 URL or 메신저 ID", true)
                             )
                     ))

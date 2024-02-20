@@ -122,11 +122,12 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     /**
      * 멘티의 신청 -> 멘토가 수락
      */
-    public void approveFromMenteeApply(final Strategy strategy) {
+    public void approveFromMenteeApply(final String question, final Strategy strategy) {
         if (this.status != MENTEE_APPLY) {
             throw new CoffeeChatException(CANNOT_APPROVE_STATUS);
         }
 
+        this.question = question;
         this.strategy = strategy;
         this.status = MENTOR_APPROVE;
     }

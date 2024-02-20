@@ -2,8 +2,6 @@ package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.coffeechat.application.usecase.HandleMenteeAppliedCoffeeChatUseCase;
-import com.koddy.server.coffeechat.application.usecase.command.ApproveAppliedCoffeeChatCommand;
-import com.koddy.server.coffeechat.application.usecase.command.RejectAppliedCoffeeChatCommand;
 import com.koddy.server.coffeechat.presentation.request.ApproveAppliedCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.request.RejectAppliedCoffeeChatRequest;
 import com.koddy.server.global.annotation.Auth;
@@ -36,11 +34,7 @@ public class HandleAppliedCoffeeChatApi {
             @PathVariable final Long coffeeChatId,
             @RequestBody @Valid final RejectAppliedCoffeeChatRequest request
     ) {
-        handleMenteeAppliedCoffeeChatUseCase.reject(new RejectAppliedCoffeeChatCommand(
-                authenticated.id,
-                coffeeChatId,
-                request.rejectReason()
-        ));
+        handleMenteeAppliedCoffeeChatUseCase.reject(request.toCommand(authenticated.id, coffeeChatId));
         return ResponseEntity.noContent().build();
     }
 
@@ -52,12 +46,7 @@ public class HandleAppliedCoffeeChatApi {
             @PathVariable final Long coffeeChatId,
             @RequestBody @Valid final ApproveAppliedCoffeeChatRequest request
     ) {
-        handleMenteeAppliedCoffeeChatUseCase.approve(new ApproveAppliedCoffeeChatCommand(
-                authenticated.id,
-                coffeeChatId,
-                request.toStrategyType(),
-                request.chatValue()
-        ));
+        handleMenteeAppliedCoffeeChatUseCase.approve(request.toCommand(authenticated.id, coffeeChatId));
         return ResponseEntity.noContent().build();
     }
 }
