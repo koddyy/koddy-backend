@@ -1,6 +1,8 @@
 package com.koddy.server.notification.domain.model;
 
 import com.koddy.server.global.base.BaseEntity;
+import com.koddy.server.member.domain.model.mentee.Mentee;
+import com.koddy.server.member.domain.model.mentor.Mentor;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
@@ -17,11 +19,11 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Table(name = "notification")
 public class Notification extends BaseEntity<Notification> {
-    @Column(name = "source_member_id", nullable = false, updatable = false)
-    private Long sourceMemberId;
+    @Column(name = "mentor_id", nullable = false, updatable = false)
+    private Long mentorId;
 
-    @Column(name = "target_member_id", nullable = false, updatable = false)
-    private Long targetMemberId;
+    @Column(name = "mentee_id", nullable = false, updatable = false)
+    private Long menteeId;
 
     @Enumerated(STRING)
     @Column(name = "notification_type", nullable = false, updatable = false, columnDefinition = "VARCHAR(50)")
@@ -32,32 +34,32 @@ public class Notification extends BaseEntity<Notification> {
     private String message;
 
     @Column(name = "is_read", nullable = false, columnDefinition = "TINYINT")
-    private boolean isRead;
+    private boolean read;
 
     private Notification(
-            final Long sourceMemberId,
-            final Long targetMemberId,
+            final Mentor mentor,
+            final Mentee mentee,
             final NotificationType type,
             final String message,
-            final boolean isRead
+            final boolean read
     ) {
-        this.sourceMemberId = sourceMemberId;
-        this.targetMemberId = targetMemberId;
+        this.mentorId = mentor.getId();
+        this.menteeId = mentee.getId();
         this.type = type;
         this.message = message;
-        this.isRead = isRead;
+        this.read = read;
     }
 
     public static Notification create(
-            final Long sourceMemberId,
-            final Long targetMemberId,
+            final Mentor mentor,
+            final Mentee mentee,
             final NotificationType type,
             final String message
     ) {
-        return new Notification(sourceMemberId, targetMemberId, type, message, false);
+        return new Notification(mentor, mentee, type, message, false);
     }
 
     public void read() {
-        this.isRead = true;
+        this.read = true;
     }
 }
