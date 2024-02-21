@@ -1,5 +1,6 @@
 package com.koddy.server.member.domain.model.mentor;
 
+import com.koddy.server.global.utils.TimeUtils;
 import com.koddy.server.member.exception.MemberException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -47,12 +48,15 @@ public class Timeline {
     }
 
     private static void validateStartIsBeforeEnd(final LocalTime startTime, final LocalTime endTime) {
-        if (startTime.isAfter(endTime)) {
+        if (TimeUtils.isGreator(startTime, endTime)) {
             throw new MemberException(SCHEDULE_PERIOD_TIME_MUST_ALIGN);
         }
     }
 
-    public boolean isTimeIncluded(final LocalTime time) {
-        return !time.isBefore(startTime) && !time.isAfter(endTime);
+    /**
+     * start <= ... <= end
+     */
+    public boolean isTimeIncluded(final LocalTime target) {
+        return TimeUtils.isLowerOrEqual(startTime, target) && TimeUtils.isLowerOrEqual(target, endTime);
     }
 }

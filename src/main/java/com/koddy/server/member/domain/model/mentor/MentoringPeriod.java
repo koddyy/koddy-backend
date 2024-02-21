@@ -1,5 +1,6 @@
 package com.koddy.server.member.domain.model.mentor;
 
+import com.koddy.server.global.utils.TimeUtils;
 import com.koddy.server.member.exception.MemberException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -54,13 +55,16 @@ public class MentoringPeriod {
     }
 
     private static void validateStartIsBeforeEnd(final LocalDate startDate, final LocalDate endDate) {
-        if (startDate.isAfter(endDate)) {
+        if (TimeUtils.isGreator(startDate, endDate)) {
             throw new MemberException(SCHEDULE_PERIOD_TIME_MUST_ALIGN);
         }
     }
 
-    public boolean isDateIncluded(final LocalDate date) {
-        return !date.isBefore(startDate) && !date.isAfter(endDate);
+    /**
+     * start <= ... <= end
+     */
+    public boolean isDateIncluded(final LocalDate target) {
+        return TimeUtils.isLowerOrEqual(startDate, target) && TimeUtils.isLowerOrEqual(target, endDate);
     }
 
     public boolean allowedTimeUnit(final LocalDateTime start, final LocalDateTime end) {
