@@ -249,14 +249,14 @@ class ReservationAvailabilityCheckerTest extends UnitTest {
 
         // when - then
         final LocalDateTime target1 = LocalDateTime.of(2024, 2, 6, 17, 0);
-        final LocalDateTime target2 = LocalDateTime.of(2024, 2, 6, 17, 29);
-        final LocalDateTime target3 = LocalDateTime.of(2024, 2, 6, 20, 0);
+        final LocalDateTime target2 = LocalDateTime.of(2024, 2, 6, 17, 30);
+        final LocalDateTime target3 = LocalDateTime.of(2024, 2, 6, 18, 30);
         final LocalDateTime target4 = LocalDateTime.of(2024, 2, 7, 17, 0);
-        final LocalDateTime target5 = LocalDateTime.of(2024, 2, 7, 17, 29);
-        final LocalDateTime target6 = LocalDateTime.of(2024, 2, 7, 20, 0);
+        final LocalDateTime target5 = LocalDateTime.of(2024, 2, 7, 17, 30);
+        final LocalDateTime target6 = LocalDateTime.of(2024, 2, 7, 18, 30);
         final LocalDateTime target7 = LocalDateTime.of(2024, 2, 8, 17, 0);
-        final LocalDateTime target8 = LocalDateTime.of(2024, 2, 8, 17, 29);
-        final LocalDateTime target9 = LocalDateTime.of(2024, 2, 8, 20, 0);
+        final LocalDateTime target8 = LocalDateTime.of(2024, 2, 8, 17, 30);
+        final LocalDateTime target9 = LocalDateTime.of(2024, 2, 8, 18, 30);
 
         assertAll(
                 () -> assertDoesNotThrow(() -> sut.check(mentor, Reservation.of(target1, target1.plusMinutes(30)))),

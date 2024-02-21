@@ -10,7 +10,9 @@ import java.time.LocalDateTime;
 
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.RESERVATION_INFO_MUST_EXISTS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.RESERVATION_MUST_ALIGN;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @DisplayName("CoffeeChat -> 도메인 [Reservation] 테스트")
@@ -42,5 +44,36 @@ class ReservationTest extends UnitTest {
         void construct() {
             assertDoesNotThrow(() -> Reservation.of(start, end));
         }
+    }
+
+    @Test
+    @DisplayName("주어진 시간이 예약 시간에 포함되는지 확인한다")
+    void isDateTimeIncluded() {
+        // given
+        final LocalDateTime start = LocalDateTime.of(2024, 2, 27, 16, 0);
+        final LocalDateTime end = LocalDateTime.of(2024, 2, 27, 16, 30);
+        final Reservation reservation = Reservation.of(start, end);
+
+        // when
+        final LocalDateTime target1 = LocalDateTime.of(2024, 2, 27, 15, 30);
+        final LocalDateTime target2 = LocalDateTime.of(2024, 2, 27, 15, 50);
+        final LocalDateTime target3 = LocalDateTime.of(2024, 2, 27, 16, 0);
+        final LocalDateTime target4 = LocalDateTime.of(2024, 2, 27, 16, 20);
+        final LocalDateTime target5 = LocalDateTime.of(2024, 2, 27, 16, 30);
+
+        final boolean actual1 = reservation.isDateTimeIncluded(Reservation.of(target1, target1.plusMinutes(30)));
+        final boolean actual2 = reservation.isDateTimeIncluded(Reservation.of(target2, target2.plusMinutes(30)));
+        final boolean actual3 = reservation.isDateTimeIncluded(Reservation.of(target3, target3.plusMinutes(30)));
+        final boolean actual4 = reservation.isDateTimeIncluded(Reservation.of(target4, target4.plusMinutes(30)));
+        final boolean actual5 = reservation.isDateTimeIncluded(Reservation.of(target5, target5.plusMinutes(30)));
+
+        // then
+        assertAll(
+                () -> assertThat(actual1).isFalse(),
+                () -> assertThat(actual2).isTrue(),
+                () -> assertThat(actual3).isTrue(),
+                () -> assertThat(actual4).isTrue(),
+                () -> assertThat(actual5).isFalse()
+        );
     }
 }
