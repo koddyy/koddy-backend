@@ -73,7 +73,7 @@ object TimeUtils {
     fun isLower(
         targetA: LocalDate,
         targetB: LocalDate,
-    ): Boolean = targetA < targetB;
+    ): Boolean = targetA < targetB
 
     /**
      * targetA <= targetB
@@ -82,7 +82,7 @@ object TimeUtils {
     fun isLowerOrEqual(
         targetA: LocalDate,
         targetB: LocalDate,
-    ): Boolean = targetA <= targetB;
+    ): Boolean = targetA <= targetB
 
     /**
      * targetA > targetB
@@ -91,7 +91,7 @@ object TimeUtils {
     fun isGreator(
         targetA: LocalDate,
         targetB: LocalDate,
-    ): Boolean = targetA > targetB;
+    ): Boolean = targetA > targetB
 
     /**
      * targetA >= targetB
@@ -100,7 +100,7 @@ object TimeUtils {
     fun isGreatorOrEqual(
         targetA: LocalDate,
         targetB: LocalDate,
-    ): Boolean = targetA >= targetB;
+    ): Boolean = targetA >= targetB
 
     /**
      * targetA < targetB
@@ -109,7 +109,7 @@ object TimeUtils {
     fun isLower(
         targetA: LocalTime,
         targetB: LocalTime,
-    ): Boolean = targetA < targetB;
+    ): Boolean = targetA < targetB
 
     /**
      * targetA <= targetB
@@ -118,7 +118,7 @@ object TimeUtils {
     fun isLowerOrEqual(
         targetA: LocalTime,
         targetB: LocalTime,
-    ): Boolean = targetA <= targetB;
+    ): Boolean = targetA <= targetB
 
     /**
      * targetA > targetB
@@ -127,7 +127,7 @@ object TimeUtils {
     fun isGreator(
         targetA: LocalTime,
         targetB: LocalTime,
-    ): Boolean = targetA > targetB;
+    ): Boolean = targetA > targetB
 
     /**
      * targetA >= targetB
@@ -136,7 +136,7 @@ object TimeUtils {
     fun isGreatorOrEqual(
         targetA: LocalTime,
         targetB: LocalTime,
-    ): Boolean = targetA >= targetB;
+    ): Boolean = targetA >= targetB
 
     /**
      * targetA < targetB
@@ -145,7 +145,7 @@ object TimeUtils {
     fun isLower(
         targetA: LocalDateTime,
         targetB: LocalDateTime,
-    ): Boolean = targetA < targetB;
+    ): Boolean = targetA < targetB
 
     /**
      * targetA <= targetB
@@ -154,7 +154,7 @@ object TimeUtils {
     fun isLowerOrEqual(
         targetA: LocalDateTime,
         targetB: LocalDateTime,
-    ): Boolean = targetA <= targetB;
+    ): Boolean = targetA <= targetB
 
     /**
      * targetA > targetB
@@ -163,7 +163,7 @@ object TimeUtils {
     fun isGreator(
         targetA: LocalDateTime,
         targetB: LocalDateTime,
-    ): Boolean = targetA > targetB;
+    ): Boolean = targetA > targetB
 
     /**
      * targetA >= targetB
@@ -172,5 +172,5 @@ object TimeUtils {
     fun isGreatorOrEqual(
         targetA: LocalDateTime,
         targetB: LocalDateTime,
-    ): Boolean = targetA >= targetB;
+    ): Boolean = targetA >= targetB
 }
