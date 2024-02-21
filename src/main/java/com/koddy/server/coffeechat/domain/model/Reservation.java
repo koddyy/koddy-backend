@@ -1,6 +1,7 @@
 package com.koddy.server.coffeechat.domain.model;
 
 import com.koddy.server.coffeechat.exception.CoffeeChatException;
+import com.koddy.server.global.utils.TimeUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
@@ -40,12 +41,41 @@ public class Reservation {
     }
 
     private static void validateStartIsBeforeEnd(final LocalDateTime start, final LocalDateTime end) {
-        if (start.isAfter(end)) {
+        if (TimeUtils.isGreator(start, end)) {
             throw new CoffeeChatException(RESERVATION_MUST_ALIGN);
         }
     }
 
-    public boolean isDateTimeIncluded(final LocalDateTime target) {
-        return !target.isBefore(start) && target.isBefore(end);
+    /**
+     * 1. target.end가 진행중인 시간에 포함 <br>
+     * -> (target.start < this.start) && (this.start < target.end <= this.end) <br><br>
+     * <p>
+     * 2. target's start, end가 진행중인 시간에 포함 <br>
+     * -> (this.start <= target.start <= this.end) && (this.start <= target.end <= this.end) <br><br>
+     * <p>
+     * 3. target.start가 진행중인 시간에 포함 <br>
+     * ->  (this.start <= target.start < this.end) && (this.end < target.end) <br><br>
+     * <p>
+     * 4. target's start, end가 진행중인 시간대 전역을 커버 <br>
+     * -> (target.start <= this.start) && (this.end <= target.end)
+     */
+    public boolean isDateTimeIncluded(final Reservation target) {
+        if (TimeUtils.isLower(target.start, this.start) && TimeUtils.isLower(this.start, target.end) && TimeUtils.isLowerOrEqual(target.end, this.end)) {
+            return true;
+        }
+
+        if (isBetween(target.start) && isBetween(target.end)) {
+            return true;
+        }
+
+        if (TimeUtils.isLowerOrEqual(this.start, target.start) && TimeUtils.isLower(target.start, this.end) && TimeUtils.isLower(this.end, target.end)) {
+            return true;
+        }
+
+        return TimeUtils.isLowerOrEqual(target.start, this.start) && TimeUtils.isLowerOrEqual(this.end, target.end);
+    }
+
+    private boolean isBetween(final LocalDateTime target) {
+        return TimeUtils.isLowerOrEqual(this.start, target) && TimeUtils.isLowerOrEqual(target, this.end);
     }
 }
