@@ -1,7 +1,7 @@
 package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
-import com.koddy.server.coffeechat.application.usecase.HandleMenteeAppliedCoffeeChatUseCase;
+import com.koddy.server.coffeechat.application.usecase.HandleAppliedCoffeeChatUseCase;
 import com.koddy.server.coffeechat.presentation.request.ApproveAppliedCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.request.RejectAppliedCoffeeChatRequest;
 import com.koddy.server.global.annotation.Auth;
@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.koddy.server.member.domain.model.Role.MENTOR;
 
-@Tag(name = "4-4-1. 멘티가 신청한 커피챗 처리 API")
+@Tag(name = "4-4-1. 멘티가 신청한 커피챗 처리 API [멘토 전용]")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/coffeechats/applied")
 public class HandleAppliedCoffeeChatApi {
-    private final HandleMenteeAppliedCoffeeChatUseCase handleMenteeAppliedCoffeeChatUseCase;
+    private final HandleAppliedCoffeeChatUseCase handleAppliedCoffeeChatUseCase;
 
     @Operation(summary = "멘티가 신청한 커피챗 거절 Endpoint")
     @PatchMapping("/reject/{coffeeChatId}")
@@ -34,7 +34,7 @@ public class HandleAppliedCoffeeChatApi {
             @PathVariable final Long coffeeChatId,
             @RequestBody @Valid final RejectAppliedCoffeeChatRequest request
     ) {
-        handleMenteeAppliedCoffeeChatUseCase.reject(request.toCommand(authenticated.id, coffeeChatId));
+        handleAppliedCoffeeChatUseCase.reject(request.toCommand(authenticated.id, coffeeChatId));
         return ResponseEntity.noContent().build();
     }
 
@@ -46,7 +46,7 @@ public class HandleAppliedCoffeeChatApi {
             @PathVariable final Long coffeeChatId,
             @RequestBody @Valid final ApproveAppliedCoffeeChatRequest request
     ) {
-        handleMenteeAppliedCoffeeChatUseCase.approve(request.toCommand(authenticated.id, coffeeChatId));
+        handleAppliedCoffeeChatUseCase.approve(request.toCommand(authenticated.id, coffeeChatId));
         return ResponseEntity.noContent().build();
     }
 }

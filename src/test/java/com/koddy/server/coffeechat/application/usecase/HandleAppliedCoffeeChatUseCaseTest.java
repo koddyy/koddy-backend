@@ -27,17 +27,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@DisplayName("CoffeeChat -> HandleMenteeAppliedCoffeeChatUseCase 테스트")
-class HandleMenteeAppliedCoffeeChatUseCaseTest extends UnitTest {
+@DisplayName("CoffeeChat -> HandleAppliedCoffeeChatUseCase 테스트")
+class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
     private final Encryptor encryptor = new FakeEncryptor();
-    private final HandleMenteeAppliedCoffeeChatUseCase sut = new HandleMenteeAppliedCoffeeChatUseCase(coffeeChatRepository, encryptor);
+    private final HandleAppliedCoffeeChatUseCase sut = new HandleAppliedCoffeeChatUseCase(coffeeChatRepository, encryptor);
 
     private final Mentee mentee = MENTEE_1.toDomain().apply(1L);
     private final Mentor mentor = MENTOR_1.toDomain().apply(2L);
 
     @Test
-    @DisplayName("멘티의 커피챗 신청을 거절한다")
+    @DisplayName("멘토는 멘티의 커피챗 신청을 거절한다")
     void reject() {
         // given
         final LocalDateTime start = LocalDateTime.of(2024, 2, 1, 9, 0);
@@ -67,7 +67,7 @@ class HandleMenteeAppliedCoffeeChatUseCaseTest extends UnitTest {
     }
 
     @Test
-    @DisplayName("멘티의 커피챗 신청을 수락한다")
+    @DisplayName("멘토는 멘티의 커피챗 신청을 수락한다")
     void approve() {
         // given
         final LocalDateTime start = LocalDateTime.of(2024, 2, 1, 9, 0);
