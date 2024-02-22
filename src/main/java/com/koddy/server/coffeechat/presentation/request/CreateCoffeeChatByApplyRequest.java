@@ -6,7 +6,7 @@ import com.koddy.server.global.utils.TimeUtils;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record MenteeApplyCoffeeChatRequest(
+public record CreateCoffeeChatByApplyRequest(
         @NotNull(message = "멘토 정보는 필수입니다.")
         Long mentorId,
 

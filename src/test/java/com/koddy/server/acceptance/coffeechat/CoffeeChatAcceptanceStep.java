@@ -2,11 +2,11 @@ package com.koddy.server.acceptance.coffeechat;
 
 import com.koddy.server.coffeechat.presentation.request.ApproveAppliedCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.request.CancelCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.CreateCoffeeChatByApplyRequest;
+import com.koddy.server.coffeechat.presentation.request.CreateCoffeeChatBySuggestRequest;
 import com.koddy.server.coffeechat.presentation.request.CreateMeetingLinkRequest;
 import com.koddy.server.coffeechat.presentation.request.FinallyApprovePendingCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.request.FinallyCancelPendingCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.request.MenteeApplyCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.request.MentorSuggestCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.request.PendingSuggestedCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.request.RejectAppliedCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.request.RejectSuggestedCoffeeChatRequest;
@@ -66,7 +66,7 @@ public class CoffeeChatAcceptanceStep {
                 .toUri()
                 .getPath();
 
-        final MentorSuggestCoffeeChatRequest request = new MentorSuggestCoffeeChatRequest(menteeId, "제안 이유...");
+        final CreateCoffeeChatBySuggestRequest request = new CreateCoffeeChatBySuggestRequest(menteeId, "제안 이유...");
 
         return postRequestWithAccessToken(uri, request, accessToken);
     }
@@ -81,7 +81,7 @@ public class CoffeeChatAcceptanceStep {
                 .toUri()
                 .getPath();
 
-        final MentorSuggestCoffeeChatRequest request = new MentorSuggestCoffeeChatRequest(menteeId, "제안 이유...");
+        final CreateCoffeeChatBySuggestRequest request = new CreateCoffeeChatBySuggestRequest(menteeId, "제안 이유...");
 
         return postRequestWithAccessToken(uri, request, accessToken)
                 .extract()
@@ -101,7 +101,7 @@ public class CoffeeChatAcceptanceStep {
                 .toUri()
                 .getPath();
 
-        final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest(
+        final CreateCoffeeChatByApplyRequest request = new CreateCoffeeChatByApplyRequest(
                 mentorId,
                 "신청 이유...",
                 start.toString(),
@@ -123,7 +123,7 @@ public class CoffeeChatAcceptanceStep {
                 .toUri()
                 .getPath();
 
-        final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest(
+        final CreateCoffeeChatByApplyRequest request = new CreateCoffeeChatByApplyRequest(
                 mentorId,
                 "신청 이유...",
                 start.toString(),

@@ -2,10 +2,10 @@ package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.coffeechat.application.usecase.CreateCoffeeChatUseCase;
-import com.koddy.server.coffeechat.application.usecase.command.MenteeApplyCoffeeChatCommand;
-import com.koddy.server.coffeechat.application.usecase.command.MentorSuggestCoffeeChatCommand;
-import com.koddy.server.coffeechat.presentation.request.MenteeApplyCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.request.MentorSuggestCoffeeChatRequest;
+import com.koddy.server.coffeechat.application.usecase.command.CreateCoffeeChatByApplyCommand;
+import com.koddy.server.coffeechat.application.usecase.command.CreateCoffeeChatBySuggestCommand;
+import com.koddy.server.coffeechat.presentation.request.CreateCoffeeChatByApplyRequest;
+import com.koddy.server.coffeechat.presentation.request.CreateCoffeeChatBySuggestRequest;
 import com.koddy.server.global.ResponseWrapper;
 import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.aop.AccessControl;
@@ -29,33 +29,33 @@ import static com.koddy.server.member.domain.model.Role.MENTOR;
 public class CreateCoffeeChatApi {
     private final CreateCoffeeChatUseCase createCoffeeChatUseCase;
 
-    @Operation(summary = "멘토 -> 멘티 커피챗 제안 Endpoint")
-    @PostMapping("/suggest")
-    @AccessControl(role = MENTOR)
-    public ResponseEntity<ResponseWrapper<Long>> suggestCoffeeChat(
-            @Auth final Authenticated authenticated,
-            @RequestBody @Valid final MentorSuggestCoffeeChatRequest request
-    ) {
-        final long coffeeChatId = createCoffeeChatUseCase.suggestCoffeeChat(new MentorSuggestCoffeeChatCommand(
-                authenticated.id,
-                request.menteeId(),
-                request.suggestReason()
-        ));
-        return ResponseEntity.ok(new ResponseWrapper<>(coffeeChatId));
-    }
-
     @Operation(summary = "멘티 -> 멘토 커피챗 신청 Endpoint")
     @PostMapping("/apply")
     @AccessControl(role = MENTEE)
-    public ResponseEntity<ResponseWrapper<Long>> applyCoffeeChat(
+    public ResponseEntity<ResponseWrapper<Long>> createByApply(
             @Auth final Authenticated authenticated,
-            @RequestBody @Valid final MenteeApplyCoffeeChatRequest request
+            @RequestBody @Valid final CreateCoffeeChatByApplyRequest request
     ) {
-        final long coffeeChatId = createCoffeeChatUseCase.applyCoffeeChat(new MenteeApplyCoffeeChatCommand(
+        final long coffeeChatId = createCoffeeChatUseCase.createByApply(new CreateCoffeeChatByApplyCommand(
                 authenticated.id,
                 request.mentorId(),
                 request.applyReason(),
                 request.toReservation()
+        ));
+        return ResponseEntity.ok(new ResponseWrapper<>(coffeeChatId));
+    }
+
+    @Operation(summary = "멘토 -> 멘티 커피챗 제안 Endpoint")
+    @PostMapping("/suggest")
+    @AccessControl(role = MENTOR)
+    public ResponseEntity<ResponseWrapper<Long>> createBySuggest(
+            @Auth final Authenticated authenticated,
+            @RequestBody @Valid final CreateCoffeeChatBySuggestRequest request
+    ) {
+        final long coffeeChatId = createCoffeeChatUseCase.createBySuggest(new CreateCoffeeChatBySuggestCommand(
+                authenticated.id,
+                request.menteeId(),
+                request.suggestReason()
         ));
         return ResponseEntity.ok(new ResponseWrapper<>(coffeeChatId));
     }

@@ -3,7 +3,7 @@ package com.koddy.server.coffeechat.presentation.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record MentorSuggestCoffeeChatRequest(
+public record CreateCoffeeChatBySuggestRequest(
         @NotNull(message = "멘티 정보는 필수입니다.")
         Long menteeId,
 
