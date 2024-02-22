@@ -95,7 +95,8 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     }
 
     /**
-     * 멘티 신청 커피챗 or 멘토 제안 커피챗을 취소
+     * 커피챗 취소 <br>
+     * - 완료 상태가 아닌 경우 언제든지 가능
      */
     public void cancel(final CoffeeChatStatus status, final String cancelReason) {
         if (isCompletedStatus()) {
@@ -185,7 +186,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     }
 
     /**
-     * 멘티 신청 커피챗 or 멘토 제안 커피챗 진행을 완료했을 경우
+     * 커피챗 진행 완료
      */
     public void complete(final CoffeeChatStatus status) {
         if (this.status != MENTOR_APPROVE && this.status != MENTOR_FINALLY_APPROVE) {
