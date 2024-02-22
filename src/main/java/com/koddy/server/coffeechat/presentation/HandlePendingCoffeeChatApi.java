@@ -2,8 +2,6 @@ package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.coffeechat.application.usecase.HandlePendingCoffeeChatUseCase;
-import com.koddy.server.coffeechat.application.usecase.command.FinallyApprovePendingCoffeeChatCommand;
-import com.koddy.server.coffeechat.application.usecase.command.FinallyCancelPendingCoffeeChatCommand;
 import com.koddy.server.coffeechat.presentation.request.FinallyApprovePendingCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.request.FinallyCancelPendingCoffeeChatRequest;
 import com.koddy.server.global.annotation.Auth;
@@ -28,7 +26,7 @@ import static com.koddy.server.member.domain.model.Role.MENTOR;
 public class HandlePendingCoffeeChatApi {
     private final HandlePendingCoffeeChatUseCase handlePendingCoffeeChatUseCase;
 
-    @Operation(summary = "최종 취소")
+    @Operation(summary = "Pending 상태 커피챗 최종 취소 Endpoint")
     @PatchMapping("/cancel/{coffeeChatId}")
     @AccessControl(role = MENTOR)
     public ResponseEntity<Void> finallyCancel(
@@ -36,15 +34,11 @@ public class HandlePendingCoffeeChatApi {
             @PathVariable final Long coffeeChatId,
             @RequestBody @Valid final FinallyCancelPendingCoffeeChatRequest request
     ) {
-        handlePendingCoffeeChatUseCase.finallyCancel(new FinallyCancelPendingCoffeeChatCommand(
-                authenticated.id,
-                coffeeChatId,
-                request.cancelReason()
-        ));
+        handlePendingCoffeeChatUseCase.finallyCancel(request.toCommand(authenticated.id, coffeeChatId));
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "최종 수락")
+    @Operation(summary = "Pending 상태 커피챗 최종 수락 Endpoint")
     @PatchMapping("/approve/{coffeeChatId}")
     @AccessControl(role = MENTOR)
     public ResponseEntity<Void> finallyApprove(
@@ -52,12 +46,7 @@ public class HandlePendingCoffeeChatApi {
             @PathVariable final Long coffeeChatId,
             @RequestBody @Valid final FinallyApprovePendingCoffeeChatRequest request
     ) {
-        handlePendingCoffeeChatUseCase.finallyApprove(new FinallyApprovePendingCoffeeChatCommand(
-                authenticated.id,
-                coffeeChatId,
-                request.toStrategyType(),
-                request.chatValue()
-        ));
+        handlePendingCoffeeChatUseCase.finallyApprove(request.toCommand(authenticated.id, coffeeChatId));
         return ResponseEntity.noContent().build();
     }
 }
