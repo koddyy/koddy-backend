@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @UseCase
 @RequiredArgsConstructor
-public class HandleMentorSuggestedCoffeeChatUseCase {
+public class HandleSuggestedCoffeeChatUseCase {
     private final CoffeeChatRepository coffeeChatRepository;
     private final MentorRepository mentorRepository;
     private final ReservationAvailabilityChecker reservationAvailabilityChecker;

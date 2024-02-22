@@ -28,12 +28,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@DisplayName("CoffeeChat -> HandleMentorSuggestedCoffeeChatUseCase 테스트")
-class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
+@DisplayName("CoffeeChat -> HandleSuggestedCoffeeChatUseCase 테스트")
+class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final ReservationAvailabilityChecker reservationAvailabilityChecker = mock(ReservationAvailabilityChecker.class);
-    private final HandleMentorSuggestedCoffeeChatUseCase sut = new HandleMentorSuggestedCoffeeChatUseCase(
+    private final HandleSuggestedCoffeeChatUseCase sut = new HandleSuggestedCoffeeChatUseCase(
             coffeeChatRepository,
             mentorRepository,
             reservationAvailabilityChecker
@@ -43,7 +43,7 @@ class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
     private final Mentor mentor = MENTOR_1.toDomain().apply(2L);
 
     @Test
-    @DisplayName("멘토의 커피챗 제안을 거절한다")
+    @DisplayName("멘티는 멘토의 커피챗 제안을 거절한다")
     void reject() {
         // given
         final CoffeeChat coffeeChat = MentorFlow.suggest(mentor, mentee).apply(1L);
@@ -71,7 +71,7 @@ class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
     }
 
     @Test
-    @DisplayName("멘토의 커피챗 제안을 1차 수락한다")
+    @DisplayName("멘티는 멘토의 커피챗 제안을 1차 수락한다")
     void pending() {
         // given
         final CoffeeChat coffeeChat = MentorFlow.suggest(mentor, mentee).apply(1L);

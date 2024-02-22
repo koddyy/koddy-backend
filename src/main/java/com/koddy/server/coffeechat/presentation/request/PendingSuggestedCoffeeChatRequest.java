@@ -1,6 +1,7 @@
 package com.koddy.server.coffeechat.presentation.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.koddy.server.coffeechat.application.usecase.command.PendingSuggestedCoffeeChatCommand;
 import com.koddy.server.coffeechat.domain.model.Reservation;
 import com.koddy.server.global.utils.TimeUtils;
 import jakarta.validation.constraints.NotBlank;
@@ -17,7 +18,15 @@ public record PendingSuggestedCoffeeChatRequest(
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         String end
 ) {
-    public Reservation toReservation() {
-        return Reservation.of(TimeUtils.toLocalDateTime(start), TimeUtils.toLocalDateTime(end));
+    public PendingSuggestedCoffeeChatCommand toCommand(
+            final long menteeId,
+            final long coffeeChatId
+    ) {
+        return new PendingSuggestedCoffeeChatCommand(
+                menteeId,
+                coffeeChatId,
+                question,
+                Reservation.of(TimeUtils.toLocalDateTime(start), TimeUtils.toLocalDateTime(end))
+        );
     }
 }
