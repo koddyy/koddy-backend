@@ -13,6 +13,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY_COFFEE_CHAT_COMPLETE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING;
@@ -198,5 +200,9 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
 
     public boolean isRequestReservationIncludedSchedules(final Reservation target) {
         return reservation.isDateTimeIncluded(target);
+    }
+
+    public LocalDate getReservedDay() {
+        return reservation.getStart().toLocalDate();
     }
 }
