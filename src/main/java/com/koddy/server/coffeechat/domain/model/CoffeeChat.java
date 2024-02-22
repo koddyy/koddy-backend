@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY_COFFEE_CHAT_COMPLETE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_REJECT;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_APPROVE;
@@ -21,7 +22,9 @@ import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_F
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_CANCEL;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_APPROVE_STATUS;
+import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_CANCEL_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_COMPLETE_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_FINALLY_DECIDE_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_REJECT_STATUS;
@@ -95,16 +98,16 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
      * 멘티 신청 커피챗 or 멘토 제안 커피챗을 취소
      */
     public void cancel(final CoffeeChatStatus status, final String cancelReason) {
+        if (isCompletedStatus()) {
+            throw new CoffeeChatException(CANNOT_CANCEL_STATUS);
+        }
+
         this.status = status;
         this.reason = this.reason.applyCancelReason(cancelReason);
     }
 
-    public boolean isMenteeCannotCancel() {
-        return status.isMenteeCannotCancel();
-    }
-
-    public boolean isMentorCannotCancel() {
-        return status.isMentorCannotCancel();
+    private boolean isCompletedStatus() {
+        return status == MENTEE_APPLY_COFFEE_CHAT_COMPLETE || status == MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE;
     }
 
     /**

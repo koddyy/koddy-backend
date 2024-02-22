@@ -2,7 +2,6 @@ package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.coffeechat.application.usecase.CancelCoffeeChatUseCase;
-import com.koddy.server.coffeechat.application.usecase.command.CancelCoffeeChatCommand;
 import com.koddy.server.coffeechat.presentation.request.CancelCoffeeChatRequest;
 import com.koddy.server.global.annotation.Auth;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,11 +29,7 @@ public class CancelCoffeeChatApi {
             @PathVariable final Long coffeeChatId,
             @RequestBody @Valid final CancelCoffeeChatRequest request
     ) {
-        cancelCoffeeChatUseCase.invoke(new CancelCoffeeChatCommand(
-                authenticated,
-                coffeeChatId,
-                request.cancelReason()
-        ));
+        cancelCoffeeChatUseCase.invoke(request.toCommand(authenticated, coffeeChatId));
         return ResponseEntity.noContent().build();
     }
 }
