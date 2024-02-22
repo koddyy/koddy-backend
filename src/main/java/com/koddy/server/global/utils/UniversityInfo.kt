@@ -84,13 +84,8 @@ enum class UniversityInfo(
             }
         }
 
-        private fun isAnonymousDomain(domain: String): Boolean {
-            return entries.stream()
-                .noneMatch { it.domains.contains(domain) }
-        }
+        private fun isAnonymousDomain(domain: String): Boolean = entries.none { it.domains.contains(domain) }
 
-        private fun extractDomain(schoolMail: String): String {
-            return schoolMail.split("@".toRegex()).last()
-        }
+        private fun extractDomain(schoolMail: String): String = schoolMail.split("@".toRegex()).last()
     }
 }
