@@ -100,7 +100,7 @@ include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Success/reque
 
 include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Success/http-response.adoc[]
 
-==== 승인 = MENTOR_APPROVE
+==== 수락 = MENTOR_APPROVE
 
 *HTTP Request*
 
