@@ -3,7 +3,7 @@ package com.koddy.server.coffeechat.presentation.request;
 import com.koddy.server.coffeechat.domain.model.Strategy;
 import jakarta.validation.constraints.NotBlank;
 
-public record ApprovePendingCoffeeChatRequest(
+public record FinallyApprovePendingCoffeeChatRequest(
         @NotBlank(message = "멘토링 진행 방식은 필수입니다.")
         String chatType,
 

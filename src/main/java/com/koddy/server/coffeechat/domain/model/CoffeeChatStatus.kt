@@ -20,7 +20,7 @@ enum class CoffeeChatStatus(
     MENTOR_CANCEL("passed", "cancel"),
     MENTEE_REJECT("passed", "reject"),
     MENTEE_PENDING("waiting", "pending"),
-    MENTOR_FINALLY_REJECT("passed", "reject"),
+    MENTOR_FINALLY_CANCEL("passed", "cancel"),
     MENTOR_FINALLY_APPROVE("scheduled", "approve"),
     MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE("passed", "complete"),
     ;
@@ -85,7 +85,7 @@ enum class CoffeeChatStatus(
                 MENTEE_APPLY_COFFEE_CHAT_COMPLETE,
                 MENTOR_CANCEL,
                 MENTEE_REJECT,
-                MENTOR_FINALLY_REJECT,
+                MENTOR_FINALLY_CANCEL,
                 MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE,
             )
     }

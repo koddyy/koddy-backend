@@ -1,8 +1,8 @@
 package com.koddy.server.coffeechat.application.usecase.command;
 
-public record RejectPendingCoffeeChatCommand(
+public record FinallyCancelPendingCoffeeChatCommand(
         long mentorId,
         long coffeeChatId,
-        String rejectReason
+        String cancelReason
 ) {
 }

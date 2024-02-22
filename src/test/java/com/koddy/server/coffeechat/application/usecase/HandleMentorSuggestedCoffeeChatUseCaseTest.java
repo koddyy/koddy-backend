@@ -71,7 +71,7 @@ class HandleMentorSuggestedCoffeeChatUseCaseTest extends UnitTest {
     }
 
     @Test
-    @DisplayName("멘토의 커피챗 제안을 1차 수락한다 (멘토 최종 수락 대기)")
+    @DisplayName("멘토의 커피챗 제안을 1차 수락한다")
     void pending() {
         // given
         final CoffeeChat coffeeChat = MentorFlow.suggest(mentor, mentee).apply(1L);

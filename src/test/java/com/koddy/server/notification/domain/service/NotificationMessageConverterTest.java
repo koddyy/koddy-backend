@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("CoffeeChat -> NotificationMessageConverter 테스트")
+@DisplayName("Notification -> NotificationMessageConverter 테스트")
 class NotificationMessageConverterTest extends UnitTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final NotificationMessageConverter sut = new NotificationMessageConverter(objectMapper);

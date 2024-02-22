@@ -18,7 +18,7 @@ import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_P
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_REJECT;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_APPROVE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_APPROVE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_CANCEL;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_APPROVE_STATUS;
@@ -158,21 +158,21 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     }
 
     /**
-     * 멘토의 제안 & 멘티의 1차 수락 -> 멘토가 최종 거절
+     * 멘토의 제안 & 멘티의 1차 수락 -> 멘토가 최종 취소
      */
-    public void rejectPendingCoffeeChat(final String rejectReason) {
+    public void finallyCancelPendingCoffeeChat(final String cancelReason) {
         if (this.status != MENTEE_PENDING) {
             throw new CoffeeChatException(CANNOT_FINALLY_DECIDE_STATUS);
         }
 
-        this.reason = this.reason.applyRejectReason(rejectReason);
-        this.status = MENTOR_FINALLY_REJECT;
+        this.reason = this.reason.applyCancelReason(cancelReason);
+        this.status = MENTOR_FINALLY_CANCEL;
     }
 
     /**
      * 멘토의 제안 & 멘티의 1차 수락 -> 멘토가 최종 수락
      */
-    public void approvePendingCoffeeChat(final Strategy strategy) {
+    public void finallyApprovePendingCoffeeChat(final Strategy strategy) {
         if (this.status != MENTEE_PENDING) {
             throw new CoffeeChatException(CANNOT_FINALLY_DECIDE_STATUS);
         }

@@ -17,8 +17,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.내_일정_커피챗_상세_조회를_진행한다;
-import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘토가_Pending_상태인_커피챗에_대해서_최종_거절을_한다;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘토가_Pending_상태인_커피챗에_대해서_최종_수락을_한다;
+import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘토가_Pending_상태인_커피챗에_대해서_최종_취소를_한다;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘토가_멘티의_커피챗_신청을_거절한다;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘토가_멘티의_커피챗_신청을_수락한다;
@@ -33,7 +33,7 @@ import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_R
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_APPROVE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_CANCEL;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_APPROVE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_CANCEL;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
 import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작;
@@ -328,7 +328,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
         }
 
         @Test
-        @DisplayName("4. MENTEE_REJECT(1차) 상태 커피챗 상세 조회")
+        @DisplayName("4. MENTEE_REJECT 상태 커피챗 상세 조회")
         void reject() {
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
             멘티가_멘토의_커피챗_제안을_거절한다(coffeeChatId, "거절..", mentee.token().accessToken());
@@ -403,21 +403,21 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
         }
 
         @Test
-        @DisplayName("6. MENTOR_FINALLY_REJECT(최종) 상태 커피챗 상세 조회")
-        void finallyReject() {
+        @DisplayName("6. MENTOR_FINALLY_CANCEL 상태 커피챗 상세 조회")
+        void finallyCancel() {
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
             멘티가_멘토의_커피챗_제안을_1차_수락한다(coffeeChatId, start, end, mentee.token().accessToken());
-            멘토가_Pending_상태인_커피챗에_대해서_최종_거절을_한다(coffeeChatId, "거절..", mentor.token().accessToken());
+            멘토가_Pending_상태인_커피챗에_대해서_최종_취소를_한다(coffeeChatId, "최종 취소..", mentor.token().accessToken());
 
             final ValidatableResponse mentorResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token().accessToken()).statusCode(OK.value());
             assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(MENTOR_FINALLY_REJECT.name()))
+                    .body("coffeeChat.status", is(MENTOR_FINALLY_CANCEL.name()))
                     .body("coffeeChat.applyReason", nullValue())
                     .body("coffeeChat.suggestReason", notNullValue(String.class))
-                    .body("coffeeChat.cancelReason", nullValue())
-                    .body("coffeeChat.rejectReason", notNullValue(String.class))
+                    .body("coffeeChat.cancelReason", notNullValue(String.class))
+                    .body("coffeeChat.rejectReason", nullValue())
                     .body("coffeeChat.question", notNullValue(String.class))
                     .body("coffeeChat.start", is(start.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
                     .body("coffeeChat.end", is(end.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
@@ -428,11 +428,11 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
             menteeResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(MENTOR_FINALLY_REJECT.name()))
+                    .body("coffeeChat.status", is(MENTOR_FINALLY_CANCEL.name()))
                     .body("coffeeChat.applyReason", nullValue())
                     .body("coffeeChat.suggestReason", notNullValue(String.class))
-                    .body("coffeeChat.cancelReason", nullValue())
-                    .body("coffeeChat.rejectReason", notNullValue(String.class))
+                    .body("coffeeChat.cancelReason", notNullValue(String.class))
+                    .body("coffeeChat.rejectReason", nullValue())
                     .body("coffeeChat.question", notNullValue(String.class))
                     .body("coffeeChat.start", is(start.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
                     .body("coffeeChat.end", is(end.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))

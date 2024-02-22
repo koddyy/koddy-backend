@@ -43,7 +43,7 @@ include::{snippets}/CoffeeChatApi/MeetingLink/Delete/Success/http-response.adoc[
 
 == 커피챗 신청/제안
 
-=== 멘티의 신청 = APPLY
+=== 멘티의 신청 = MENTEE_APPLY
 
 *HTTP Request*
 
@@ -60,7 +60,7 @@ NOTE: 2. 성공
 
 include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/http-response.adoc[]
 
-=== 멘토의 제안 = SUGGEST
+=== 멘토의 제안 = MENTOR_SUGGEST
 
 *HTTP Request*
 
@@ -88,7 +88,7 @@ include::{snippets}/CoffeeChatApi/LifeCycle/Cancel/http-response.adoc[]
 
 IMPORTANT: 멘토만 접근 가능한 API
 
-==== 거절(REJECT)
+==== 거절 = MENTOR_REJECT
 
 *HTTP Request*
 
@@ -100,7 +100,7 @@ include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Success/reque
 
 include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Reject/Success/http-response.adoc[]
 
-==== 승인(APPROVE)
+==== 승인 = MENTOR_APPROVE
 
 *HTTP Request*
 
@@ -116,7 +116,7 @@ include::{snippets}/CoffeeChatApi/LifeCycle/AppliedByMentee/Approve/Success/http
 
 IMPORTANT: 멘티만 접근 가능한 API
 
-==== 거절(REJECT)
+==== 거절 = MENTEE_REJECT
 
 *HTTP Request*
 
@@ -128,7 +128,7 @@ include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Reject/Success/req
 
 include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Reject/Success/http-response.adoc[]
 
-==== 1차 수락(PENDING)
+==== 1차 수락 = MENTEE_PENDING
 
 *HTTP Request*
 
@@ -150,19 +150,19 @@ include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/ht
 
 IMPORTANT: 멘토만 접근 가능한 API
 
-==== 최종 거절(REJECT)
+==== 최종 취소 = MENTOR_FINALLY_CANCEL
 
 *HTTP Request*
 
-include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Reject/Success/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Reject/Success/path-parameters.adoc[]
-include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Reject/Success/request-fields.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Cancel/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Cancel/Success/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Cancel/Success/request-fields.adoc[]
 
 *HTTP Response*
 
-include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Reject/Success/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/PendingCoffeeChat/Cancel/Success/http-response.adoc[]
 
-==== 최종 수락(APPROVE)
+==== 최종 수락 = MENTOR_FINALLY_APPROVE
 
 *HTTP Request*
 

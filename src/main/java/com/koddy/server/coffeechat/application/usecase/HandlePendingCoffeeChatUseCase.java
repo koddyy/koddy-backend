@@ -1,7 +1,7 @@
 package com.koddy.server.coffeechat.application.usecase;
 
-import com.koddy.server.coffeechat.application.usecase.command.ApprovePendingCoffeeChatCommand;
-import com.koddy.server.coffeechat.application.usecase.command.RejectPendingCoffeeChatCommand;
+import com.koddy.server.coffeechat.application.usecase.command.FinallyApprovePendingCoffeeChatCommand;
+import com.koddy.server.coffeechat.application.usecase.command.FinallyCancelPendingCoffeeChatCommand;
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.model.Strategy;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
@@ -17,14 +17,14 @@ public class HandlePendingCoffeeChatUseCase {
     private final Encryptor encryptor;
 
     @KoddyWritableTransactional
-    public void reject(final RejectPendingCoffeeChatCommand command) {
+    public void finallyCancel(final FinallyCancelPendingCoffeeChatCommand command) {
         final CoffeeChat coffeeChat = coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId(), command.mentorId());
-        coffeeChat.rejectPendingCoffeeChat(command.rejectReason());
+        coffeeChat.finallyCancelPendingCoffeeChat(command.cancelReason());
     }
 
     @KoddyWritableTransactional
-    public void approve(final ApprovePendingCoffeeChatCommand command) {
+    public void finallyApprove(final FinallyApprovePendingCoffeeChatCommand command) {
         final CoffeeChat coffeeChat = coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId(), command.mentorId());
-        coffeeChat.approvePendingCoffeeChat(Strategy.of(command.type(), command.value(), encryptor));
+        coffeeChat.finallyApprovePendingCoffeeChat(Strategy.of(command.type(), command.value(), encryptor));
     }
 }

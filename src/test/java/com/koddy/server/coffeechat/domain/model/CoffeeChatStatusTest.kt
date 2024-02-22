@@ -8,7 +8,7 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_REJECT
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_APPROVE
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_CANCEL
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_APPROVE
-import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_REJECT
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_CANCEL
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
@@ -78,7 +78,7 @@ internal class CoffeeChatStatusTest : DescribeSpec({
                 MENTEE_APPLY_COFFEE_CHAT_COMPLETE,
                 MENTOR_CANCEL,
                 MENTEE_REJECT,
-                MENTOR_FINALLY_REJECT,
+                MENTOR_FINALLY_CANCEL,
                 MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE,
             )
 
@@ -123,11 +123,11 @@ internal class CoffeeChatStatusTest : DescribeSpec({
                     CoffeeChatStatus.fromCategoryDetail("passed", "cancel") shouldContainExactly listOf(
                         MENTEE_CANCEL,
                         MENTOR_CANCEL,
+                        MENTOR_FINALLY_CANCEL,
                     )
                     CoffeeChatStatus.fromCategoryDetail("passed", "reject") shouldContainExactly listOf(
                         MENTOR_REJECT,
                         MENTEE_REJECT,
-                        MENTOR_FINALLY_REJECT,
                     )
                     CoffeeChatStatus.fromCategoryDetail("passed", "complete") shouldContainExactly listOf(
                         MENTEE_APPLY_COFFEE_CHAT_COMPLETE,
