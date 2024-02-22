@@ -1,6 +1,7 @@
 package com.koddy.server.notification.domain.model;
 
 import com.koddy.server.global.base.BaseEntity;
+import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import jakarta.persistence.Column;
@@ -19,6 +20,9 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Table(name = "notification")
 public class Notification extends BaseEntity<Notification> {
+    @Column(name = "target_id", nullable = false, updatable = false)
+    private Long targetId;
+
     @Column(name = "mentor_id", nullable = false, updatable = false)
     private Long mentorId;
 
@@ -37,12 +41,14 @@ public class Notification extends BaseEntity<Notification> {
     private boolean read;
 
     private Notification(
+            final Member<?> target,
             final Mentor mentor,
             final Mentee mentee,
             final NotificationType type,
             final String message,
             final boolean read
     ) {
+        this.targetId = target.getId();
         this.mentorId = mentor.getId();
         this.menteeId = mentee.getId();
         this.type = type;
@@ -51,12 +57,13 @@ public class Notification extends BaseEntity<Notification> {
     }
 
     public static Notification create(
+            final Member<?> target,
             final Mentor mentor,
             final Mentee mentee,
             final NotificationType type,
             final String message
     ) {
-        return new Notification(mentor, mentee, type, message, false);
+        return new Notification(target, mentor, mentee, type, message, false);
     }
 
     public void read() {
