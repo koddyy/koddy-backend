@@ -11,23 +11,23 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public enum NotificationType {
     // 멘토가 받는 알림
+    MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_APPLY("%s님이 커피챗을 신청했습니다.", Category.SIMPLE),
+    MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_CANCEL("%s님이 커피챗을 취소했습니다. (취소 사유: %s)", Category.CANCEL_REASON),
+    MENTOR_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE("%s님과의 커피챗이 %s로 예정되었습니다.", Category.SCHEDULED),
+
     MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_CANCEL("%s님이 커피챗을 취소했습니다. (취소 사유: %s)", Category.CANCEL_REASON),
     MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_REJECT("%s님이 커피챗을 거절했습니다. (거절 사유: %s)", Category.REJECT_REASON),
     MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING("%s님이 커피챗을 수락했습니다.", Category.SIMPLE),
     MENTOR_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE("%s님과의 커피챗이 %s로 예정되었습니다.", Category.SCHEDULED),
 
-    MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_APPLY("%s님이 커피챗을 신청했습니다.", Category.SIMPLE),
-    MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_CANCEL("%s님이 커피챗을 취소했습니다. (취소 사유: %s)", Category.CANCEL_REASON),
-    MENTOR_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE("%s님과의 커피챗이 %s로 예정되었습니다.", Category.SCHEDULED),
-
     // 멘티가 받는 알림
-    MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST("%s님이 커피챗을 제안했습니다.", Category.SIMPLE),
-    MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_CANCEL("%s님이 커피챗을 취소했습니다. (취소 사유: %s)", Category.CANCEL_REASON),
-    MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE("%s님과의 커피챗이 %s로 예정되었습니다.", Category.SCHEDULED),
-
     MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_CANCEL("%s님이 커피챗을 취소했습니다. (취소 사유: %s)", Category.CANCEL_REASON),
     MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_REJECT("%s님이 커피챗을 거절했습니다. (거절 사유: %s)", Category.REJECT_REASON),
     MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE("%s님과의 커피챗이 %s로 예정되었습니다.", Category.SCHEDULED),
+
+    MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST("%s님이 커피챗을 제안했습니다.", Category.SIMPLE),
+    MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_CANCEL("%s님이 커피챗을 취소했습니다. (취소 사유: %s)", Category.CANCEL_REASON),
+    MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE("%s님과의 커피챗이 %s로 예정되었습니다.", Category.SCHEDULED),
     ;
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
