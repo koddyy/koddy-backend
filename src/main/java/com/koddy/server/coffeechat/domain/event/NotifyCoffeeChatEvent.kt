@@ -72,7 +72,7 @@ sealed class MenteeNotification(
     ) : MenteeNotification(menteeId, mentorId, coffeeChatId)
 }
 
-sealed class CommonNotification(
+sealed class BothNotification(
     open val menteeId: Long,
     open val mentorId: Long,
     open val coffeeChatId: Long,
@@ -81,11 +81,11 @@ sealed class CommonNotification(
         override val menteeId: Long,
         override val mentorId: Long,
         override val coffeeChatId: Long,
-    ) : CommonNotification(menteeId, mentorId, coffeeChatId)
+    ) : BothNotification(menteeId, mentorId, coffeeChatId)
 
     data class FinallyApprovedFromMentorFlowEvent(
         override val menteeId: Long,
         override val mentorId: Long,
         override val coffeeChatId: Long,
-    ) : CommonNotification(menteeId, mentorId, coffeeChatId)
+    ) : BothNotification(menteeId, mentorId, coffeeChatId)
 }
