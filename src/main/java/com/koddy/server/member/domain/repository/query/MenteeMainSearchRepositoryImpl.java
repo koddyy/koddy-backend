@@ -6,7 +6,6 @@ import com.koddy.server.member.domain.repository.query.response.QSuggestedCoffee
 import com.koddy.server.member.domain.repository.query.response.SuggestedCoffeeChatsByMentor;
 import com.koddy.server.member.domain.repository.query.spec.SearchMentorCondition;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,9 +23,12 @@ import static com.koddy.server.member.domain.model.mentor.QMentor.mentor;
 
 @Repository
 @KoddyReadOnlyTransactional
-@RequiredArgsConstructor
 public class MenteeMainSearchRepositoryImpl implements MenteeMainSearchRepository {
     private final JPAQueryFactory query;
+
+    public MenteeMainSearchRepositoryImpl(final JPAQueryFactory query) {
+        this.query = query;
+    }
 
     @Override
     public Page<SuggestedCoffeeChatsByMentor> fetchSuggestedMentors(final long menteeId, final int limit) {

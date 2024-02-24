@@ -12,15 +12,21 @@ import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MemberRepository;
 import com.koddy.server.member.exception.MemberException;
-import lombok.RequiredArgsConstructor;
 
 import static com.koddy.server.member.exception.MemberExceptionCode.ACCOUNT_ALREADY_EXISTS;
 
 @UseCase
-@RequiredArgsConstructor
 public class SignUpUsecase {
     private final MemberRepository memberRepository;
     private final TokenIssuer tokenIssuer;
+
+    public SignUpUsecase(
+            final MemberRepository memberRepository,
+            final TokenIssuer tokenIssuer
+    ) {
+        this.memberRepository = memberRepository;
+        this.tokenIssuer = tokenIssuer;
+    }
 
     public AuthMember signUpMentor(final SignUpMentorCommand command) {
         validateAccountExists(command.platform());

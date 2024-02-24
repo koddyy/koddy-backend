@@ -3,8 +3,6 @@ package com.koddy.server.common.fixture;
 import com.koddy.server.auth.domain.model.oauth.OAuthTokenResponse;
 import com.koddy.server.auth.domain.model.oauth.OAuthUserResponse;
 import com.koddy.server.auth.infrastructure.social.google.response.GoogleTokenResponse;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -24,8 +22,6 @@ import static com.koddy.server.common.utils.TokenUtils.EXPIRES_IN;
 import static com.koddy.server.common.utils.TokenUtils.ID_TOKEN;
 import static com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN;
 
-@Getter
-@RequiredArgsConstructor
 public enum OAuthFixture {
     GOOGLE_MENTOR_1(
             MENTOR_1.getPlatform().getSocialId(),
@@ -154,6 +150,18 @@ public enum OAuthFixture {
     private final OAuthTokenResponse oAuthTokenResponse;
     private final OAuthUserResponse oAuthUserResponse;
 
+    OAuthFixture(
+            final String identifier,
+            final String authorizationCode,
+            final OAuthTokenResponse oAuthTokenResponse,
+            final OAuthUserResponse oAuthUserResponse
+    ) {
+        this.identifier = identifier;
+        this.authorizationCode = authorizationCode;
+        this.oAuthTokenResponse = oAuthTokenResponse;
+        this.oAuthUserResponse = oAuthUserResponse;
+    }
+
     public static OAuthTokenResponse parseOAuthTokenByCode(final String authorizationCode) {
         return Arrays.stream(values())
                 .filter(value -> value.authorizationCode.equals(authorizationCode))
@@ -168,5 +176,21 @@ public enum OAuthFixture {
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new)
                 .oAuthUserResponse;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public String getAuthorizationCode() {
+        return authorizationCode;
+    }
+
+    public OAuthTokenResponse getoAuthTokenResponse() {
+        return oAuthTokenResponse;
+    }
+
+    public OAuthUserResponse getoAuthUserResponse() {
+        return oAuthUserResponse;
     }
 }

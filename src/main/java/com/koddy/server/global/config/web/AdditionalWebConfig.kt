@@ -1,6 +1,6 @@
 package com.koddy.server.global.config.web
 
-import com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER
+import com.koddy.server.auth.domain.model.AuthToken
 import com.koddy.server.auth.domain.service.TokenProvider
 import com.koddy.server.global.annotation.AuthArgumentResolver
 import com.koddy.server.global.annotation.ExtractTokenArgumentResolver
@@ -36,7 +36,7 @@ class AdditionalWebConfig(
                 HEAD.name(),
             )
             .allowedHeaders("*")
-            .exposedHeaders(ACCESS_TOKEN_HEADER)
+            .exposedHeaders(AuthToken.ACCESS_TOKEN_HEADER)
             .allowCredentials(true)
             .maxAge(3600)
     }

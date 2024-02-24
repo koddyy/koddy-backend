@@ -2,7 +2,6 @@ package com.koddy.server.coffeechat.domain.model
 
 import com.koddy.server.coffeechat.exception.CoffeeChatException
 import com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode
-import java.util.stream.Stream
 
 enum class CoffeeChatStatus(
     val category: String,
@@ -24,12 +23,6 @@ enum class CoffeeChatStatus(
     MENTOR_FINALLY_APPROVE("scheduled", "approve"),
     MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE("passed", "complete"),
     ;
-
-    val isMenteeCannotCancel: Boolean
-        get() = Stream.of(MENTEE_APPLY, MENTOR_APPROVE).noneMatch { it == this }
-
-    val isMentorCannotCancel: Boolean
-        get() = Stream.of(MENTOR_SUGGEST, MENTEE_PENDING, MENTOR_FINALLY_APPROVE).noneMatch { it == this }
 
     companion object {
         @JvmStatic

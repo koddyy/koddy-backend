@@ -9,7 +9,6 @@ import com.koddy.server.global.aop.AccessControl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,10 +20,13 @@ import static com.koddy.server.member.domain.model.Role.MENTOR;
 
 @Tag(name = "4-4-3. Pending 상태인 커피챗에 대한 멘토의 최종 결정")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/coffeechats/pending")
 public class HandlePendingCoffeeChatApi {
     private final HandlePendingCoffeeChatUseCase handlePendingCoffeeChatUseCase;
+
+    public HandlePendingCoffeeChatApi(final HandlePendingCoffeeChatUseCase handlePendingCoffeeChatUseCase) {
+        this.handlePendingCoffeeChatUseCase = handlePendingCoffeeChatUseCase;
+    }
 
     @Operation(summary = "Pending 상태 커피챗 최종 취소 Endpoint")
     @PatchMapping("/cancel/{coffeeChatId}")

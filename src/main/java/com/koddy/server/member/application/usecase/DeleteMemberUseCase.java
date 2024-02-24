@@ -7,14 +7,22 @@ import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MemberRepository;
 import com.koddy.server.member.domain.service.MenteeDeleter;
 import com.koddy.server.member.domain.service.MentorDeleter;
-import lombok.RequiredArgsConstructor;
 
 @UseCase
-@RequiredArgsConstructor
 public class DeleteMemberUseCase {
     private final MemberRepository memberRepository;
     private final MentorDeleter mentorDeleter;
     private final MenteeDeleter menteeDeleter;
+
+    public DeleteMemberUseCase(
+            final MemberRepository memberRepository,
+            final MentorDeleter mentorDeleter,
+            final MenteeDeleter menteeDeleter
+    ) {
+        this.memberRepository = memberRepository;
+        this.mentorDeleter = mentorDeleter;
+        this.menteeDeleter = menteeDeleter;
+    }
 
     @KoddyWritableTransactional
     public void invoke(final long memberId) {

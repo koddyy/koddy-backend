@@ -5,8 +5,6 @@ import com.koddy.server.coffeechat.domain.model.Reservation;
 import com.koddy.server.coffeechat.domain.model.Strategy;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -16,8 +14,6 @@ import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_C
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE;
 import static com.koddy.server.common.fixture.StrategyFixture.KAKAO_ID;
 
-@Getter
-@RequiredArgsConstructor
 public enum CoffeeChatFixture {
     월요일_1주차_20_00_시작(mentoring(1, 20, 0), mentoring(1, 20, 30), KAKAO_ID.toDomain()),
     월요일_1주차_20_30_시작(mentoring(1, 20, 30), mentoring(1, 21, 0), KAKAO_ID.toDomain()),
@@ -138,6 +134,16 @@ public enum CoffeeChatFixture {
     private final LocalDateTime start;
     private final LocalDateTime end;
     private final Strategy strategy;
+
+    CoffeeChatFixture(
+            final LocalDateTime start,
+            final LocalDateTime end,
+            final Strategy strategy
+    ) {
+        this.start = start;
+        this.end = end;
+        this.strategy = strategy;
+    }
 
     private static LocalDateTime mentoring(final int day, final int hour, final int minute) {
         return LocalDateTime.of(2024, 1, day, hour, minute);
@@ -325,5 +331,17 @@ public enum CoffeeChatFixture {
             coffeeChat.complete(MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE);
             return coffeeChat;
         }
+    }
+
+    public LocalDateTime getStart() {
+        return start;
+    }
+
+    public LocalDateTime getEnd() {
+        return end;
+    }
+
+    public Strategy getStrategy() {
+        return strategy;
     }
 }

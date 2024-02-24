@@ -11,8 +11,6 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -25,14 +23,15 @@ import static com.koddy.server.member.exception.MemberExceptionCode.CANNOT_RESER
 import static com.koddy.server.member.exception.MemberExceptionCode.MENTOR_NOT_FILL_IN_SCHEDULE;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
-import static lombok.AccessLevel.PROTECTED;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "mentor")
 @DiscriminatorValue(value = Role.MENTOR_VALUE)
 public class Mentor extends Member<Mentor> {
+    protected Mentor() {
+        super();
+    }
+
     @Embedded
     private UniversityProfile universityProfile;
 
@@ -70,7 +69,7 @@ public class Mentor extends Member<Mentor> {
         super.completeInfo(introduction, profileImageUrl);
         this.mentoringPeriod = mentoringPeriod;
         applySchedules(timelines);
-        super.checkProfileCompleted();
+        checkProfileCompleted();
     }
 
     public void updateBasicInfo(
@@ -84,13 +83,13 @@ public class Mentor extends Member<Mentor> {
     ) {
         super.updateBasicInfo(name, KOREA, profileImageUrl, introduction, languages);
         this.universityProfile = this.universityProfile.update(school, major, enteredIn);
-        super.checkProfileCompleted();
+        checkProfileCompleted();
     }
 
     public void updateSchedules(final MentoringPeriod mentoringPeriod, final List<Timeline> timelines) {
         this.mentoringPeriod = mentoringPeriod;
         applySchedules(timelines);
-        super.checkProfileCompleted();
+        checkProfileCompleted();
     }
 
     private void applySchedules(final List<Timeline> timelines) {
@@ -168,7 +167,11 @@ public class Mentor extends Member<Mentor> {
     }
 
     @Override
-    public boolean isProfileComplete() {
+    public void checkProfileCompleted() {
+        super.profileComplete = isCompleted();
+    }
+
+    private boolean isCompleted() {
         return StringUtils.hasText(introduction)
                 && StringUtils.hasText(profileImageUrl)
                 && mentoringPeriod != null
@@ -187,5 +190,21 @@ public class Mentor extends Member<Mentor> {
             return null;
         }
         return mentoringPeriod.getTimeUnit().getValue();
+    }
+
+    public UniversityProfile getUniversityProfile() {
+        return universityProfile;
+    }
+
+    public UniversityAuthentication getUniversityAuthentication() {
+        return universityAuthentication;
+    }
+
+    public MentoringPeriod getMentoringPeriod() {
+        return mentoringPeriod;
+    }
+
+    public List<Schedule> getSchedules() {
+        return schedules;
     }
 }

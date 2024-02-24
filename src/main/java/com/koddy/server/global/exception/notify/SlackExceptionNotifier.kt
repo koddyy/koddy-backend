@@ -16,9 +16,9 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Component
-class SlackErrorNotifier(
+class SlackExceptionNotifier(
     @Value("\${slack.webhook.url}") private val slackWebhookUrl: String,
-) : ErrorNotifier {
+) : ExceptionNotifier {
     private val log: Logger = logger()
 
     override fun send(

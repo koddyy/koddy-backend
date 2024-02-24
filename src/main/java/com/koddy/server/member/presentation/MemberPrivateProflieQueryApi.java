@@ -9,7 +9,6 @@ import com.koddy.server.member.application.usecase.query.response.MenteePrivateP
 import com.koddy.server.member.application.usecase.query.response.MentorPrivateProfile;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +20,12 @@ import static com.koddy.server.member.domain.model.Role.MENTOR;
 @Tag(name = "2-7. 사용자 마이페이지(Private) 프로필 조회 API")
 @RestController
 @RequestMapping("/api")
-@RequiredArgsConstructor
 public class MemberPrivateProflieQueryApi {
     private final GetMemberPrivateProfileUseCase getMemberPrivateProfileUseCase;
+
+    public MemberPrivateProflieQueryApi(final GetMemberPrivateProfileUseCase getMemberPrivateProfileUseCase) {
+        this.getMemberPrivateProfileUseCase = getMemberPrivateProfileUseCase;
+    }
 
     @Operation(summary = "마이페이지 프로필 조회 Endpoint (@Auth Authorities에 따른 분기)")
     @GetMapping("/members/me")

@@ -17,7 +17,7 @@ public record AppliedCoffeeChatsByMenteeResponse(
                 result.menteeId(),
                 result.name(),
                 result.profileImageUrl(),
-                result.nationality().getCode(),
+                result.nationality().code,
                 result.interest().getSchool(),
                 result.interest().getMajor()
         );

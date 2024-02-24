@@ -1,14 +1,12 @@
 package com.koddy.server.auth.utils
 
-import com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER
-import com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER
-import com.koddy.server.auth.domain.model.AuthToken.TOKEN_TYPE
+import com.koddy.server.auth.domain.model.AuthToken
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 
 object TokenExtractor {
     fun extractAccessToken(request: HttpServletRequest): String? {
-        val token: String? = request.getHeader(ACCESS_TOKEN_HEADER)
+        val token: String? = request.getHeader(AuthToken.ACCESS_TOKEN_HEADER)
         if (token.isNullOrEmpty()) {
             return null
         }
@@ -20,13 +18,13 @@ object TokenExtractor {
         if (cookies.isNullOrEmpty()) {
             return null
         }
-        return cookies.filter { it.name == REFRESH_TOKEN_HEADER }
+        return cookies.filter { it.name == AuthToken.REFRESH_TOKEN_HEADER }
             .map { it.value }
             .firstOrNull()
     }
 
     private fun checkToken(parts: List<String>): String? {
-        if (parts.size == 2 && parts[0] == TOKEN_TYPE) {
+        if (parts.size == 2 && parts[0] == AuthToken.TOKEN_TYPE) {
             return parts[1]
         }
         return null

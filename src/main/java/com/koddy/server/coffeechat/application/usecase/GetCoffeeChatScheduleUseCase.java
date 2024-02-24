@@ -13,17 +13,23 @@ import com.koddy.server.coffeechat.domain.repository.query.spec.MentorCoffeeChat
 import com.koddy.server.global.annotation.UseCase;
 import com.koddy.server.global.query.PageCreator;
 import com.koddy.server.global.query.SliceResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
 @UseCase
-@RequiredArgsConstructor
 public class GetCoffeeChatScheduleUseCase {
     private final CoffeeChatRepository coffeeChatRepository;
     private final CoffeeChatScheduleQueryRepository coffeeChatScheduleQueryRepository;
+
+    public GetCoffeeChatScheduleUseCase(
+            final CoffeeChatRepository coffeeChatRepository,
+            final CoffeeChatScheduleQueryRepository coffeeChatScheduleQueryRepository
+    ) {
+        this.coffeeChatRepository = coffeeChatRepository;
+        this.coffeeChatScheduleQueryRepository = coffeeChatScheduleQueryRepository;
+    }
 
     public CoffeeChatEachCategoryCounts getEachCategoryCounts(final Authenticated authenticated) {
         if (authenticated.isMentor()) {

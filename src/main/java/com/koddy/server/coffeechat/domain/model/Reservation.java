@@ -4,19 +4,17 @@ import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.global.utils.TimeUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.RESERVATION_INFO_MUST_EXISTS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.RESERVATION_MUST_ALIGN;
-import static lombok.AccessLevel.PROTECTED;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Embeddable
 public class Reservation {
+    protected Reservation() {
+    }
+
     @Column(name = "start")
     private LocalDateTime start;
 
@@ -77,5 +75,13 @@ public class Reservation {
 
     private boolean isBetween(final LocalDateTime target) {
         return TimeUtils.isLowerOrEqual(this.start, target) && TimeUtils.isLowerOrEqual(target, this.end);
+    }
+
+    public LocalDateTime getStart() {
+        return start;
+    }
+
+    public LocalDateTime getEnd() {
+        return end;
     }
 }

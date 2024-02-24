@@ -6,20 +6,17 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Lob;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.INVALID_MEETING_STRATEGY;
 import static jakarta.persistence.EnumType.STRING;
-import static lombok.AccessLevel.PROTECTED;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Embeddable
 public class Strategy {
+    protected Strategy() {
+    }
+
     @Enumerated(STRING)
     @Column(name = "chat_type", columnDefinition = "VARCHAR(30)")
     private Type type;
@@ -37,8 +34,14 @@ public class Strategy {
         return new Strategy(type, encryptor.encrypt(value));
     }
 
-    @Getter
-    @RequiredArgsConstructor
+    public Type getType() {
+        return type;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
     public enum Type {
         ZOOM_LINK("줌 링크", "zoom"),
         GOOGLE_MEET_LINK("구글 미트 링크", "google"),
@@ -50,11 +53,24 @@ public class Strategy {
         private final String kor;
         private final String eng;
 
+        Type(final String kor, final String eng) {
+            this.kor = kor;
+            this.eng = eng;
+        }
+
         public static Type from(final String eng) {
             return Arrays.stream(values())
                     .filter(it -> it.eng.equals(eng))
                     .findFirst()
                     .orElseThrow(() -> new CoffeeChatException(INVALID_MEETING_STRATEGY));
+        }
+
+        public String getKor() {
+            return kor;
+        }
+
+        public String getEng() {
+            return eng;
         }
     }
 }

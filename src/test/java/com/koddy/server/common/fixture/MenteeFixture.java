@@ -14,8 +14,6 @@ import com.koddy.server.member.domain.model.mentee.Interest;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,8 +30,6 @@ import static com.koddy.server.member.domain.model.Nationality.JAPAN;
 import static com.koddy.server.member.domain.model.Nationality.USA;
 import static com.koddy.server.member.domain.model.Nationality.VIETNAM;
 
-@Getter
-@RequiredArgsConstructor
 public enum MenteeFixture {
     MENTEE_1(
             new SocialPlatform(GOOGLE, "ID-MENTEE-1", Email.from("mentee1@gmail.com")),
@@ -145,6 +141,24 @@ public enum MenteeFixture {
     private final List<Language> languages;
     private final Interest interest;
 
+    MenteeFixture(
+            final SocialPlatform platform,
+            final String name,
+            final String profileImageUrl,
+            final Nationality nationality,
+            final String introduction,
+            final List<Language> languages,
+            final Interest interest
+    ) {
+        this.platform = platform;
+        this.name = name;
+        this.profileImageUrl = profileImageUrl;
+        this.nationality = nationality;
+        this.introduction = introduction;
+        this.languages = languages;
+        this.interest = interest;
+    }
+
     public Mentee toDomain() {
         final Mentee mentee = new Mentee(platform, name, nationality, languages, interest);
         mentee.completeInfo(introduction, profileImageUrl);
@@ -228,5 +242,33 @@ public enum MenteeFixture {
                 this.name,
                 new AuthToken(accessToken, refreshToken)
         );
+    }
+
+    public SocialPlatform getPlatform() {
+        return platform;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public Nationality getNationality() {
+        return nationality;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public List<Language> getLanguages() {
+        return languages;
+    }
+
+    public Interest getInterest() {
+        return interest;
     }
 }

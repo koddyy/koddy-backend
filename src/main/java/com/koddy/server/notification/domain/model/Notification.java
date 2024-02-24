@@ -8,17 +8,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.EnumType.STRING;
-import static lombok.AccessLevel.PROTECTED;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "notification")
 public class Notification extends BaseEntity<Notification> {
+    protected Notification() {
+    }
+
     @Column(name = "target_id", nullable = false, updatable = false)
     private Long targetId;
 
@@ -61,5 +59,25 @@ public class Notification extends BaseEntity<Notification> {
 
     public void read() {
         this.read = true;
+    }
+
+    public Long getTargetId() {
+        return targetId;
+    }
+
+    public Long getCoffeeChatId() {
+        return coffeeChatId;
+    }
+
+    public NotificationType getType() {
+        return type;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public boolean isRead() {
+        return read;
     }
 }

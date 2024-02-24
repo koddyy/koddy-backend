@@ -10,16 +10,26 @@ import com.koddy.server.member.application.usecase.command.AuthenticationWithPro
 import com.koddy.server.member.domain.event.MailAuthenticatedEvent;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MentorRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 
 @UseCase
-@RequiredArgsConstructor
 public class AuthenticationMentorUnivUseCase {
     private final MentorRepository mentorRepository;
     private final AuthKeyGenerator authKeyGenerator;
     private final AuthenticationProcessor authenticationProcessor;
     private final ApplicationEventPublisher eventPublisher;
+
+    public AuthenticationMentorUnivUseCase(
+            final MentorRepository mentorRepository,
+            final AuthKeyGenerator authKeyGenerator,
+            final AuthenticationProcessor authenticationProcessor,
+            final ApplicationEventPublisher eventPublisher
+    ) {
+        this.mentorRepository = mentorRepository;
+        this.authKeyGenerator = authKeyGenerator;
+        this.authenticationProcessor = authenticationProcessor;
+        this.eventPublisher = eventPublisher;
+    }
 
     @KoddyWritableTransactional
     public void authWithMail(final AuthenticationWithMailCommand command) {

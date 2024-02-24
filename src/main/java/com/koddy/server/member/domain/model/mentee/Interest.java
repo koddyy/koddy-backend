@@ -2,15 +2,12 @@ package com.koddy.server.member.domain.model.mentee;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-import static lombok.AccessLevel.PROTECTED;
-
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Embeddable
 public class Interest {
+    protected Interest() {
+    }
+
     @Column(name = "interest_school", nullable = false)
     private String school;
 
@@ -24,5 +21,13 @@ public class Interest {
 
     public Interest update(final String interestSchool, final String interestMajor) {
         return new Interest(interestSchool, interestMajor);
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public String getMajor() {
+        return major;
     }
 }

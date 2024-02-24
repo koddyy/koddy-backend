@@ -13,7 +13,6 @@ import com.koddy.server.global.annotation.Auth;
 import com.koddy.server.global.aop.AccessControl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,10 +25,13 @@ import static com.koddy.server.member.domain.model.Role.MENTOR;
 
 @Tag(name = "4-1. 커피챗 링크 생성/삭제 API")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/oauth/{provider}/meetings")
 public class ManageMeetingLinkApi {
     private final ManageMeetingLinkUseCase manageMeetingLinkUseCase;
+
+    public ManageMeetingLinkApi(final ManageMeetingLinkUseCase manageMeetingLinkUseCase) {
+        this.manageMeetingLinkUseCase = manageMeetingLinkUseCase;
+    }
 
     @Operation(summary = "커피챗 링크 생성 Endpoint")
     @PostMapping

@@ -23,7 +23,7 @@ import java.time.Duration
 class S3FileManager(
     private val s3Template: S3Template,
     private val bucketFileNameGenerator: BucketFileNameGenerator,
-    @param:Value("\${spring.cloud.aws.s3.bucket}") private val bucket: String,
+    @Value("\${spring.cloud.aws.s3.bucket}") private val bucket: String,
 ) : FileManager {
     private val log: Logger = logger()
 

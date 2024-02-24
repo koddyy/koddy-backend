@@ -58,6 +58,7 @@ class AuthenticationMentorUnivUseCaseTest extends UnitTest {
         void success() {
             // given
             given(mentorRepository.getById(command.mentorId())).willReturn(mentor);
+            given(authenticationProcessor.storeAuthCode(getAuthKey(mentor.getId(), schoolMail))).willReturn(AUTH_CODE);
 
             // when
             sut.authWithMail(command);

@@ -3,18 +3,16 @@ package com.koddy.server.member.domain.model.mentor;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Enumerated;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.ATTEMPT;
 import static com.koddy.server.member.domain.model.mentor.AuthenticationStatus.SUCCESS;
 import static jakarta.persistence.EnumType.STRING;
-import static lombok.AccessLevel.PROTECTED;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Embeddable
 public class UniversityAuthentication {
+    protected UniversityAuthentication() {
+    }
+
     @Column(name = "school_mail")
     private String schoolMail;
 
@@ -49,5 +47,17 @@ public class UniversityAuthentication {
 
     public boolean isAuthenticated() {
         return status == SUCCESS;
+    }
+
+    public String getSchoolMail() {
+        return schoolMail;
+    }
+
+    public String getProofDataUploadUrl() {
+        return proofDataUploadUrl;
+    }
+
+    public AuthenticationStatus getStatus() {
+        return status;
     }
 }

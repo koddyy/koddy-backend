@@ -9,14 +9,22 @@ import com.koddy.server.global.annotation.KoddyWritableTransactional;
 import com.koddy.server.global.annotation.UseCase;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MentorRepository;
-import lombok.RequiredArgsConstructor;
 
 @UseCase
-@RequiredArgsConstructor
 public class HandleSuggestedCoffeeChatUseCase {
     private final CoffeeChatRepository coffeeChatRepository;
     private final MentorRepository mentorRepository;
     private final ReservationAvailabilityChecker reservationAvailabilityChecker;
+
+    public HandleSuggestedCoffeeChatUseCase(
+            final CoffeeChatRepository coffeeChatRepository,
+            final MentorRepository mentorRepository,
+            final ReservationAvailabilityChecker reservationAvailabilityChecker
+    ) {
+        this.coffeeChatRepository = coffeeChatRepository;
+        this.mentorRepository = mentorRepository;
+        this.reservationAvailabilityChecker = reservationAvailabilityChecker;
+    }
 
     @KoddyWritableTransactional
     public void reject(final RejectSuggestedCoffeeChatCommand command) {

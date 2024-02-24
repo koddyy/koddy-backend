@@ -1,8 +1,6 @@
 package com.koddy.server.member.domain.model.mentor;
 
 import com.koddy.server.member.exception.MemberException;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -10,8 +8,6 @@ import java.util.List;
 
 import static com.koddy.server.member.exception.MemberExceptionCode.INVALID_DAY;
 
-@Getter
-@RequiredArgsConstructor
 public enum DayOfWeek {
     MON("월", "MON"),
     TUE("화", "TUE"),
@@ -23,6 +19,11 @@ public enum DayOfWeek {
 
     private final String kor;
     private final String eng;
+
+    DayOfWeek(final String kor, final String eng) {
+        this.kor = kor;
+        this.eng = eng;
+    }
 
     public static DayOfWeek from(final String kor) {
         return Arrays.stream(values())
@@ -47,5 +48,13 @@ public enum DayOfWeek {
             case SATURDAY -> SAT;
             case SUNDAY -> SUN;
         };
+    }
+
+    public String getKor() {
+        return kor;
+    }
+
+    public String getEng() {
+        return eng;
     }
 }

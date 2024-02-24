@@ -61,7 +61,7 @@ class MenteeDeleterTest extends IntegrateTest {
                             () -> assertThat(findMember.getProfileImageUrl()).isEqualTo(MENTEE_1.getProfileImageUrl()),
                             () -> assertThat(findMember.getNationality()).isEqualTo(MENTEE_1.getNationality()),
                             () -> assertThat(findMember.getIntroduction()).isEqualTo(MENTEE_1.getIntroduction()),
-                            () -> assertThat(findMember.profileComplete()).isTrue(),
+                            () -> assertThat(findMember.isProfileComplete()).isTrue(),
                             () -> assertThat(findMember.getRole()).isEqualTo(MENTEE),
                             () -> assertThat(findMember.getStatus()).isEqualTo(ACTIVE)
                     );
@@ -95,7 +95,7 @@ class MenteeDeleterTest extends IntegrateTest {
                             () -> assertThat(findMember.getProfileImageUrl()).isEqualTo(MENTEE_1.getProfileImageUrl()),
                             () -> assertThat(findMember.getNationality()).isEqualTo(MENTEE_1.getNationality()),
                             () -> assertThat(findMember.getIntroduction()).isEqualTo(MENTEE_1.getIntroduction()),
-                            () -> assertThat(findMember.profileComplete()).isFalse(),
+                            () -> assertThat(findMember.isProfileComplete()).isFalse(),
                             () -> assertThat(findMember.getRole()).isEqualTo(MENTEE),
                             () -> assertThat(findMember.getStatus()).isEqualTo(INACTIVE)
                     );

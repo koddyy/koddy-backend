@@ -11,8 +11,6 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 import org.springframework.util.CollectionUtils;
 
@@ -26,16 +24,16 @@ import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.InheritanceType.JOINED;
-import static lombok.AccessLevel.PROTECTED;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
-@Inheritance(strategy = JOINED)
-@DiscriminatorColumn(name = "type")
 @Entity
 @Table(name = "member")
+@Inheritance(strategy = JOINED)
+@DiscriminatorColumn(name = "type")
 @SQLRestriction("status = 'ACTIVE'")
 public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
+    protected Member() {
+    }
+
     @Embedded
     protected SocialPlatform platform;
 
@@ -133,10 +131,6 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         applyLanguages(languages);
     }
 
-    protected void checkProfileCompleted() {
-        profileComplete = isProfileComplete();
-    }
-
     public void syncEmail(final Email email) {
         this.platform = this.platform.syncEmail(email);
     }
@@ -147,15 +141,47 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
                 .toList();
     }
 
+    public SocialPlatform getPlatform() {
+        return platform;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Nationality getNationality() {
+        return nationality;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public boolean isProfileComplete() {
+        return profileComplete;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
     public String getAuthority() {
         return role.getAuthority();
     }
 
-    public boolean profileComplete() {
-        return profileComplete;
+    public List<AvailableLanguage> getAvailableLanguages() {
+        return availableLanguages;
     }
 
-    public abstract boolean isProfileComplete();
+    public abstract void checkProfileCompleted();
 
     public enum Status {
         ACTIVE, INACTIVE, BAN

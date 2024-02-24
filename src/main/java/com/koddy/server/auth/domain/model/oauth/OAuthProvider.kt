@@ -14,10 +14,7 @@ enum class OAuthProvider(
     companion object {
         @JvmStatic
         fun from(value: String): OAuthProvider {
-            return entries.stream()
-                .filter { it.value == value }
-                .findFirst()
-                .orElseThrow { AuthException(AuthExceptionCode.INVALID_OAUTH_PROVIDER) }
+            return entries.firstOrNull { it.value == value } ?: throw AuthException(AuthExceptionCode.INVALID_OAUTH_PROVIDER)
         }
     }
 }

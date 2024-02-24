@@ -11,15 +11,25 @@ import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MenteeRepository;
 import com.koddy.server.member.domain.repository.MentorRepository;
-import lombok.RequiredArgsConstructor;
 
 @UseCase
-@RequiredArgsConstructor
 public class CreateCoffeeChatUseCase {
     private final MentorRepository mentorRepository;
     private final MenteeRepository menteeRepository;
     private final ReservationAvailabilityChecker reservationAvailabilityChecker;
     private final CoffeeChatRepository coffeeChatRepository;
+
+    public CreateCoffeeChatUseCase(
+            final MentorRepository mentorRepository,
+            final MenteeRepository menteeRepository,
+            final ReservationAvailabilityChecker reservationAvailabilityChecker,
+            final CoffeeChatRepository coffeeChatRepository
+    ) {
+        this.mentorRepository = mentorRepository;
+        this.menteeRepository = menteeRepository;
+        this.reservationAvailabilityChecker = reservationAvailabilityChecker;
+        this.coffeeChatRepository = coffeeChatRepository;
+    }
 
     @KoddyWritableTransactional
     public long createByApply(final CreateCoffeeChatByApplyCommand command) {

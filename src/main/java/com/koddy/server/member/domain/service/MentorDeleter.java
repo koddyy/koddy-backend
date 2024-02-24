@@ -6,16 +6,26 @@ import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.repository.AvailableLanguageRepository;
 import com.koddy.server.member.domain.repository.MemberRepository;
 import com.koddy.server.member.domain.repository.MentorScheduleRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class MentorDeleter {
     private final MemberRepository memberRepository;
     private final TokenStore tokenStore;
     private final AvailableLanguageRepository availableLanguageRepository;
     private final MentorScheduleRepository mentorScheduleRepository;
+
+    public MentorDeleter(
+            final MemberRepository memberRepository,
+            final TokenStore tokenStore,
+            final AvailableLanguageRepository availableLanguageRepository,
+            final MentorScheduleRepository mentorScheduleRepository
+    ) {
+        this.memberRepository = memberRepository;
+        this.tokenStore = tokenStore;
+        this.availableLanguageRepository = availableLanguageRepository;
+        this.mentorScheduleRepository = mentorScheduleRepository;
+    }
 
     @KoddyWritableTransactional
     public void execute(final long mentorId) {

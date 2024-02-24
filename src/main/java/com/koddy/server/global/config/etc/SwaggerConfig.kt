@@ -18,8 +18,7 @@ import org.springframework.context.annotation.Profile
 
 @Configuration
 class SwaggerConfig(
-    @Value("\${springdoc.server.url}")
-    private val url: String,
+    @Value("\${springdoc.server.url}") private val url: String,
 ) {
     @Bean
     @Profile("!prod")

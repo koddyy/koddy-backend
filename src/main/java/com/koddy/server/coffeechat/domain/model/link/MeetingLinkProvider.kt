@@ -12,6 +12,8 @@ enum class MeetingLinkProvider(
 
     companion object {
         @JvmStatic
-        fun from(provider: String): MeetingLinkProvider = entries.firstOrNull { it.provider == provider } ?: throw CoffeeChatException(INVALID_MEETING_LINK_PROVIDER)
+        fun from(provider: String): MeetingLinkProvider {
+            return entries.firstOrNull { it.provider == provider } ?: throw CoffeeChatException(INVALID_MEETING_LINK_PROVIDER)
+        }
     }
 }

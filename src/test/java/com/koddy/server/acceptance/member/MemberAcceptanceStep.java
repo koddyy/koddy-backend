@@ -95,7 +95,7 @@ public class MemberAcceptanceStep {
                 fixture.getPlatform().getSocialId(),
                 fixture.getPlatform().getEmail().getValue(),
                 fixture.getName(),
-                fixture.getNationality().getCode(),
+                fixture.getNationality().code,
                 new LanguageRequest(
                         fixture.getLanguages()
                                 .stream()
@@ -243,7 +243,7 @@ public class MemberAcceptanceStep {
 
         final UpdateMenteeBasicInfoRequest request = new UpdateMenteeBasicInfoRequest(
                 fixture.getName(),
-                fixture.getNationality().getCode(),
+                fixture.getNationality().code,
                 fixture.getProfileImageUrl(),
                 fixture.getIntroduction(),
                 languageRequest,

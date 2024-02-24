@@ -9,7 +9,6 @@ import com.koddy.server.global.aop.AccessControl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,10 +20,13 @@ import static com.koddy.server.member.domain.model.Role.MENTOR;
 
 @Tag(name = "4-4-1. 멘티가 신청한 커피챗 처리 API [멘토 전용]")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/coffeechats/applied")
 public class HandleAppliedCoffeeChatApi {
     private final HandleAppliedCoffeeChatUseCase handleAppliedCoffeeChatUseCase;
+
+    public HandleAppliedCoffeeChatApi(final HandleAppliedCoffeeChatUseCase handleAppliedCoffeeChatUseCase) {
+        this.handleAppliedCoffeeChatUseCase = handleAppliedCoffeeChatUseCase;
+    }
 
     @Operation(summary = "멘티가 신청한 커피챗 거절 Endpoint")
     @PatchMapping("/reject/{coffeeChatId}")

@@ -15,7 +15,6 @@ import com.koddy.server.member.presentation.request.AuthenticationWithProofDataR
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,9 +26,12 @@ import static com.koddy.server.member.domain.model.Role.MENTOR;
 @Tag(name = "2-5. 멘토 학교 인증 API")
 @RestController
 @RequestMapping("/api/mentors/me/univ")
-@RequiredArgsConstructor
 public class AuthenticationMentorUnivApi {
     private final AuthenticationMentorUnivUseCase authenticationMentorUnivUseCase;
+
+    public AuthenticationMentorUnivApi(final AuthenticationMentorUnivUseCase authenticationMentorUnivUseCase) {
+        this.authenticationMentorUnivUseCase = authenticationMentorUnivUseCase;
+    }
 
     @Operation(summary = "메일 인증 시도 Endpoint")
     @PostMapping("/mail")

@@ -467,7 +467,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
                 .body("mentee.id", is(id.intValue()))
                 .body("mentee.name", is(mentee.getName()))
                 .body("mentee.profileImageUrl", is(mentee.getProfileImageUrl()))
-                .body("mentee.nationality", is(mentee.getNationality().getCode()))
+                .body("mentee.nationality", is(mentee.getNationality().code))
                 .body("mentee.introduction", is(mentee.getIntroduction()))
                 .body("mentee.languages.main", is(EN.getCode()))
                 .body("mentee.languages.sub", containsInAnyOrder(List.of(KR.getCode()).toArray()))

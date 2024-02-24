@@ -264,7 +264,7 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
                     .body(index + ".menteeId", is(menteeId.intValue()))
                     .body(index + ".name", is(mentee.getName()))
                     .body(index + ".profileImageUrl", is(mentee.getProfileImageUrl()))
-                    .body(index + ".nationality", is(mentee.getNationality().getCode()))
+                    .body(index + ".nationality", is(mentee.getNationality().code))
                     .body(index + ".interestSchool", is(mentee.getInterest().getSchool()))
                     .body(index + ".interestMajor", is(mentee.getInterest().getMajor()));
         }
@@ -290,7 +290,7 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
                     .body(index + ".id", is(menteeId.intValue()))
                     .body(index + ".name", is(mentee.getName()))
                     .body(index + ".profileImageUrl", is(mentee.getProfileImageUrl()))
-                    .body(index + ".nationality", is(mentee.getNationality().getCode()))
+                    .body(index + ".nationality", is(mentee.getNationality().code))
                     .body(index + ".interestSchool", is(mentee.getInterest().getSchool()))
                     .body(index + ".interestMajor", is(mentee.getInterest().getMajor()));
         }

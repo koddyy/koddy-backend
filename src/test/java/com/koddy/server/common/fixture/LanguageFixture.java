@@ -1,13 +1,9 @@
 package com.koddy.server.common.fixture;
 
 import com.koddy.server.member.domain.model.Language;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@Getter
-@RequiredArgsConstructor
 public enum LanguageFixture {
     KR_MAIN(Language.Category.KR, Language.Type.MAIN),
     KR_SUB(Language.Category.KR, Language.Type.SUB),
@@ -27,6 +23,14 @@ public enum LanguageFixture {
 
     private final Language.Category category;
     private final Language.Type type;
+
+    LanguageFixture(
+            final Language.Category category,
+            final Language.Type type
+    ) {
+        this.category = category;
+        this.type = type;
+    }
 
     public Language toDomain() {
         return new Language(category, type);
@@ -59,5 +63,13 @@ public enum LanguageFixture {
                 EN_MAIN.toDomain(),
                 JP_SUB.toDomain()
         );
+    }
+
+    public Language.Category getCategory() {
+        return category;
+    }
+
+    public Language.Type getType() {
+        return type;
     }
 }

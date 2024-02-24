@@ -10,17 +10,25 @@ import com.koddy.server.coffeechat.domain.model.link.MeetingLinkRequest;
 import com.koddy.server.coffeechat.domain.model.link.MeetingLinkResponse;
 import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.ZoomMeetingLinkProcessor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.INVALID_MEETING_LINK_PROVIDER;
 
 @Component
-@RequiredArgsConstructor
 public class MeetingLinkManagerFacade implements MeetingLinkManager {
     private final ZoomOAuthConnector zoomOAuthConnector;
     private final ZoomMeetingLinkProcessor zoomMeetingLinkProcessor;
     private final GoogleOAuthConnector googleOAuthConnector;
+
+    public MeetingLinkManagerFacade(
+            final ZoomOAuthConnector zoomOAuthConnector,
+            final ZoomMeetingLinkProcessor zoomMeetingLinkProcessor,
+            final GoogleOAuthConnector googleOAuthConnector
+    ) {
+        this.zoomOAuthConnector = zoomOAuthConnector;
+        this.zoomMeetingLinkProcessor = zoomMeetingLinkProcessor;
+        this.googleOAuthConnector = googleOAuthConnector;
+    }
 
     @Override
     public OAuthTokenResponse fetchToken(

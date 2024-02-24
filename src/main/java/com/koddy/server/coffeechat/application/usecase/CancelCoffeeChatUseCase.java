@@ -6,15 +6,17 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 import com.koddy.server.global.annotation.KoddyWritableTransactional;
 import com.koddy.server.global.annotation.UseCase;
-import lombok.RequiredArgsConstructor;
 
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_CANCEL;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_CANCEL;
 
 @UseCase
-@RequiredArgsConstructor
 public class CancelCoffeeChatUseCase {
     private final CoffeeChatRepository coffeeChatRepository;
+
+    public CancelCoffeeChatUseCase(final CoffeeChatRepository coffeeChatRepository) {
+        this.coffeeChatRepository = coffeeChatRepository;
+    }
 
     @KoddyWritableTransactional
     public void invoke(final CancelCoffeeChatCommand command) {

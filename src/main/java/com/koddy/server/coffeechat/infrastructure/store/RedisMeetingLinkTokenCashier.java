@@ -2,13 +2,11 @@ package com.koddy.server.coffeechat.infrastructure.store;
 
 import com.koddy.server.coffeechat.application.adapter.MeetingLinkTokenCashier;
 import com.koddy.server.global.utils.redis.RedisOperator;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
 @Component
-@RequiredArgsConstructor
 public class RedisMeetingLinkTokenCashier implements MeetingLinkTokenCashier {
     /**
      * Key = User Platform ID <br>
@@ -23,6 +21,10 @@ public class RedisMeetingLinkTokenCashier implements MeetingLinkTokenCashier {
     private static final String USER_OAUTH_TOKEN_FROM_MEETING_ID = "USER_OAUTH_TOKEN:CREATE_MEETING:%s";
 
     private final RedisOperator<String, String> redisOperator;
+
+    public RedisMeetingLinkTokenCashier(final RedisOperator<String, String> redisOperator) {
+        this.redisOperator = redisOperator;
+    }
 
     @Override
     public void storeViaPlatformId(final long platformId, final String oAuthAccessToken, final Duration duration) {

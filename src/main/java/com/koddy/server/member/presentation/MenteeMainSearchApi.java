@@ -13,7 +13,6 @@ import com.koddy.server.member.presentation.request.GetMentorsByConditionRequest
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,9 +27,12 @@ import static com.koddy.server.member.domain.model.Role.MENTEE;
 @Tag(name = "2-10. 제안온 커피챗, 멘토 둘러보기 조회 API")
 @RestController
 @RequestMapping("/api/mentors")
-@RequiredArgsConstructor
 public class MenteeMainSearchApi {
     private final MenteeMainSearchUseCase menteeMainSearchUseCase;
+
+    public MenteeMainSearchApi(final MenteeMainSearchUseCase menteeMainSearchUseCase) {
+        this.menteeMainSearchUseCase = menteeMainSearchUseCase;
+    }
 
     @Operation(summary = "멘토로부터 제안온 커피챗 조회 Endpoint (멘티 전용)")
     @GetMapping("/suggested-coffeechats")

@@ -9,21 +9,20 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 
 import static com.koddy.server.member.domain.model.Role.MENTEE;
-import static lombok.AccessLevel.PROTECTED;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "mentee")
 @DiscriminatorValue(value = Role.MENTEE_VALUE)
 public class Mentee extends Member<Mentee> {
+    protected Mentee() {
+        super();
+    }
+
     @Embedded
     private Interest interest;
 
@@ -49,7 +48,7 @@ public class Mentee extends Member<Mentee> {
             final String profileImageUrl
     ) {
         super.completeInfo(introduction, profileImageUrl);
-        super.checkProfileCompleted();
+        checkProfileCompleted();
     }
 
     public void updateBasicInfo(
@@ -67,8 +66,16 @@ public class Mentee extends Member<Mentee> {
     }
 
     @Override
-    public boolean isProfileComplete() {
+    public void checkProfileCompleted() {
+        super.profileComplete = isCompleted();
+    }
+
+    private boolean isCompleted() {
         return StringUtils.hasText(introduction)
                 && StringUtils.hasText(profileImageUrl);
+    }
+
+    public Interest getInterest() {
+        return interest;
     }
 }

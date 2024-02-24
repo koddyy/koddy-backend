@@ -5,16 +5,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Enumerated;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.EnumType.STRING;
-import static lombok.AccessLevel.PROTECTED;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Embeddable
 public class SocialPlatform {
+    protected SocialPlatform() {
+    }
+
     @Enumerated(STRING)
     @Column(name = "social_provider", columnDefinition = "VARCHAR(30)")
     private OAuthProvider provider;
@@ -33,5 +31,17 @@ public class SocialPlatform {
 
     public SocialPlatform syncEmail(final Email email) {
         return new SocialPlatform(provider, socialId, email);
+    }
+
+    public OAuthProvider getProvider() {
+        return provider;
+    }
+
+    public String getSocialId() {
+        return socialId;
+    }
+
+    public Email getEmail() {
+        return email;
     }
 }

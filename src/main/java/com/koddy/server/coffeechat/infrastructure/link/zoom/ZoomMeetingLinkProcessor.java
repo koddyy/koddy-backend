@@ -8,8 +8,8 @@ import com.koddy.server.coffeechat.exception.CoffeeChatException;
 import com.koddy.server.coffeechat.infrastructure.link.MeetingLinkProcessor;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkResponse;
 import com.koddy.server.global.exception.GlobalException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -25,13 +25,23 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.POST;
 
-@Slf4j
 @Component
-@RequiredArgsConstructor
 public class ZoomMeetingLinkProcessor implements MeetingLinkProcessor {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     private final ZoomOAuthProperties properties;
     private final RestTemplate restTemplate;
     private final MeetingLinkTokenCashier meetingLinkTokenCashier;
+
+    public ZoomMeetingLinkProcessor(
+            final ZoomOAuthProperties properties,
+            final RestTemplate restTemplate,
+            final MeetingLinkTokenCashier meetingLinkTokenCashier
+    ) {
+        this.properties = properties;
+        this.restTemplate = restTemplate;
+        this.meetingLinkTokenCashier = meetingLinkTokenCashier;
+    }
 
     @Override
     public MeetingLinkResponse create(final String oAuthAccessToken, final MeetingLinkRequest meetingLinkRequest) {

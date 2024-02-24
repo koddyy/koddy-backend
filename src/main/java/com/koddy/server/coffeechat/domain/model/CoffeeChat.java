@@ -10,10 +10,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY_COFFEE_CHAT_COMPLETE;
@@ -31,13 +27,13 @@ import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANN
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_FINALLY_DECIDE_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_REJECT_STATUS;
 import static jakarta.persistence.EnumType.STRING;
-import static lombok.AccessLevel.PROTECTED;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "coffee_chat")
 public class CoffeeChat extends BaseEntity<CoffeeChat> {
+    protected CoffeeChat() {
+    }
+
     @Column(name = "mentor_id", nullable = false)
     private Long mentorId;
 
@@ -202,7 +198,31 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         return reservation.isDateTimeIncluded(target);
     }
 
-    public LocalDate getReservedDay() {
-        return reservation.getStart().toLocalDate();
+    public Long getMentorId() {
+        return mentorId;
+    }
+
+    public Long getMenteeId() {
+        return menteeId;
+    }
+
+    public CoffeeChatStatus getStatus() {
+        return status;
+    }
+
+    public Reason getReason() {
+        return reason;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    public Strategy getStrategy() {
+        return strategy;
     }
 }

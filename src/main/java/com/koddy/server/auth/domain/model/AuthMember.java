@@ -7,7 +7,10 @@ public record AuthMember(
         String name,
         AuthToken token
 ) {
-    public AuthMember(final Member<?> member, final AuthToken token) {
+    public AuthMember(
+            final Member<?> member,
+            final AuthToken token
+    ) {
         this(member.getId(), member.getName(), token);
     }
 }
