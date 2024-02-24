@@ -1,85 +1,108 @@
 package com.koddy.server.coffeechat.domain.model
 
 import com.koddy.server.coffeechat.exception.CoffeeChatException
-import com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode
+import com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.INVALID_COFFEECHAT_STATUS
 
 enum class CoffeeChatStatus(
-    val category: String,
-    val detail: String,
+    val category: Category,
+    val detail: Detail,
 ) {
     // MenteeFlow
-    MENTEE_APPLY("waiting", "apply"),
-    MENTEE_CANCEL("passed", "cancel"),
-    MENTOR_REJECT("passed", "reject"),
-    MENTOR_APPROVE("scheduled", "approve"),
-    MENTEE_APPLY_COFFEE_CHAT_COMPLETE("passed", "complete"),
+    MENTEE_APPLY(Category.WAITING, Detail.APPLY),
+    MENTOR_REJECT(Category.PASSED, Detail.REJECT),
+    MENTOR_APPROVE(Category.SCHEDULED, Detail.APPROVE),
+    MENTEE_APPLY_COFFEE_CHAT_COMPLETE(Category.PASSED, Detail.COMPLETE),
+    CANCEL_FROM_MENTEE_FLOW(Category.PASSED, Detail.CANCEL),
 
     // MentorFlow
-    MENTOR_SUGGEST("suggested", ""),
-    MENTOR_CANCEL("passed", "cancel"),
-    MENTEE_REJECT("passed", "reject"),
-    MENTEE_PENDING("waiting", "pending"),
-    MENTOR_FINALLY_CANCEL("passed", "cancel"),
-    MENTOR_FINALLY_APPROVE("scheduled", "approve"),
-    MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE("passed", "complete"),
+    MENTOR_SUGGEST(Category.SUGGESTED, Detail.NONE),
+    MENTEE_REJECT(Category.PASSED, Detail.REJECT),
+    MENTEE_PENDING(Category.WAITING, Detail.PENDING),
+    MENTOR_FINALLY_CANCEL(Category.PASSED, Detail.CANCEL),
+    MENTOR_FINALLY_APPROVE(Category.SCHEDULED, Detail.APPROVE),
+    MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE(Category.PASSED, Detail.COMPLETE),
+    CANCEL_FROM_MENTOR_FLOW(Category.PASSED, Detail.CANCEL),
     ;
+
+    private val cancelableStatus: List<CoffeeChatStatus>
+        get() = listOf(
+            MENTEE_APPLY,
+            MENTOR_APPROVE,
+            MENTOR_SUGGEST,
+            MENTEE_PENDING,
+            MENTOR_FINALLY_APPROVE,
+        )
+
+    fun isCancelable(): Boolean = cancelableStatus.any { it == this }
+
+    private val menteeFlow: List<CoffeeChatStatus>
+        get() = listOf(
+            MENTEE_APPLY,
+            MENTOR_REJECT,
+            MENTOR_APPROVE,
+            MENTEE_APPLY_COFFEE_CHAT_COMPLETE,
+            CANCEL_FROM_MENTEE_FLOW,
+        )
+
+    fun isMenteeFlow(): Boolean = menteeFlow.any { it == this }
 
     companion object {
         @JvmStatic
-        fun fromCategory(category: String): List<CoffeeChatStatus> {
-            if (isAnonymousCategory(category)) {
-                throw CoffeeChatException(CoffeeChatExceptionCode.INVALID_COFFEECHAT_STATUS)
-            }
-
-            return entries.filter { it.category == category }
-        }
-
-        private fun isAnonymousCategory(category: String): Boolean = entries.none { it.category == category }
+        fun fromCategory(category: Category): List<CoffeeChatStatus> = entries.filter { it.category == category }
 
         @JvmStatic
         fun fromCategoryDetail(
-            category: String,
-            detail: String,
-        ): List<CoffeeChatStatus> {
-            if (isAnonymousCategoryDetail(category, detail)) {
-                throw CoffeeChatException(CoffeeChatExceptionCode.INVALID_COFFEECHAT_STATUS)
+            category: Category,
+            detail: Detail,
+        ): List<CoffeeChatStatus> = entries.filter { it.category == category && it.detail == detail }
+
+        @JvmStatic
+        fun withWaitingCategory(): List<CoffeeChatStatus> = entries.filter { it.category == Category.WAITING }
+
+        @JvmStatic
+        fun withSuggstedCategory(): List<CoffeeChatStatus> = entries.filter { it.category == Category.SUGGESTED }
+
+        @JvmStatic
+        fun withScheduledCategory(): List<CoffeeChatStatus> = entries.filter { it.category == Category.SCHEDULED }
+
+        @JvmStatic
+        fun withPassedCategory(): List<CoffeeChatStatus> = entries.filter { it.category == Category.PASSED }
+    }
+
+    enum class Category(
+        private val value: String,
+    ) {
+        WAITING("waiting"),
+        SUGGESTED("suggested"),
+        SCHEDULED("scheduled"),
+        PASSED("passed"),
+        ;
+
+        companion object {
+            @JvmStatic
+            fun from(value: String): Category {
+                return entries.firstOrNull { it.value == value } ?: throw CoffeeChatException(INVALID_COFFEECHAT_STATUS)
             }
-
-            return entries.filter { it.category == category && it.detail == detail }
         }
+    }
 
-        private fun isAnonymousCategoryDetail(
-            category: String,
-            detail: String,
-        ): Boolean = entries.none { it.category == category && it.detail == detail }
+    enum class Detail(
+        private val value: String,
+    ) {
+        APPLY("apply"),
+        REJECT("reject"),
+        APPROVE("approve"),
+        PENDING("pending"),
+        COMPLETE("complete"),
+        CANCEL("cancel"),
+        NONE(""),
+        ;
 
-        @JvmStatic
-        fun withWaitingCategory(): List<CoffeeChatStatus> =
-            listOf(
-                MENTEE_APPLY,
-                MENTEE_PENDING,
-            )
-
-        @JvmStatic
-        fun withSuggstedCategory(): List<CoffeeChatStatus> = listOf(MENTOR_SUGGEST)
-
-        @JvmStatic
-        fun withScheduledCategory(): List<CoffeeChatStatus> =
-            listOf(
-                MENTOR_APPROVE,
-                MENTOR_FINALLY_APPROVE,
-            )
-
-        @JvmStatic
-        fun withPassedCategory(): List<CoffeeChatStatus> =
-            listOf(
-                MENTEE_CANCEL,
-                MENTOR_REJECT,
-                MENTEE_APPLY_COFFEE_CHAT_COMPLETE,
-                MENTOR_CANCEL,
-                MENTEE_REJECT,
-                MENTOR_FINALLY_CANCEL,
-                MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE,
-            )
+        companion object {
+            @JvmStatic
+            fun from(value: String): Detail {
+                return entries.firstOrNull { it.value == value } ?: throw CoffeeChatException(INVALID_COFFEECHAT_STATUS)
+            }
+        }
     }
 }

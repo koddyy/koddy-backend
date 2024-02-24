@@ -12,7 +12,6 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY_COFFEE_CHAT_COMPLETE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_REJECT;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_APPROVE;
@@ -20,7 +19,6 @@ import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_F
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_CANCEL;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_APPROVE_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_CANCEL_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_COMPLETE_STATUS;
@@ -43,6 +41,12 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     @Enumerated(STRING)
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(30)")
     private CoffeeChatStatus status;
+
+    /**
+     * 언제든 취소 가능하기 때문에 실제로 취소한 사용자 추적 용도
+     */
+    @Column(name = "cancel_by")
+    private Long cancelBy;
 
     @Embedded
     private Reason reason;
@@ -96,17 +100,22 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
      * 커피챗 취소 <br>
      * - 완료 상태가 아닌 경우 언제든지 가능
      */
-    public void cancel(final CoffeeChatStatus status, final String cancelReason) {
-        if (isCompletedStatus()) {
+    public void cancel(
+            final CoffeeChatStatus status,
+            final Long cancelBy,
+            final String cancelReason
+    ) {
+        if (notCancelable()) {
             throw new CoffeeChatException(CANNOT_CANCEL_STATUS);
         }
 
         this.status = status;
+        this.cancelBy = cancelBy;
         this.reason = this.reason.applyCancelReason(cancelReason);
     }
 
-    private boolean isCompletedStatus() {
-        return status == MENTEE_APPLY_COFFEE_CHAT_COMPLETE || status == MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE;
+    private boolean notCancelable() {
+        return !this.status.isCancelable();
     }
 
     /**
@@ -198,6 +207,10 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
         return reservation.isDateTimeIncluded(target);
     }
 
+    public boolean isMenteeFlow() {
+        return status.isMenteeFlow();
+    }
+
     public Long getMentorId() {
         return mentorId;
     }
@@ -212,6 +225,10 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
 
     public Reason getReason() {
         return reason;
+    }
+
+    public Long getCancelBy() {
+        return cancelBy;
     }
 
     public String getQuestion() {

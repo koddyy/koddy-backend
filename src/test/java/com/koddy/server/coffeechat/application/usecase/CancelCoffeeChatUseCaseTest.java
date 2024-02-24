@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_CANCEL;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTEE_FLOW;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTOR_FLOW;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,11 +52,12 @@ class CancelCoffeeChatUseCaseTest extends UnitTest {
                 () -> verify(coffeeChatRepository, times(1)).getByIdAndMentorId(command.coffeeChatId(), command.authenticated().id),
                 () -> assertThat(coffeeChat.getMentorId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getMenteeId()).isEqualTo(mentee.getId()),
-                () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_CANCEL),
+                () -> assertThat(coffeeChat.getStatus()).isEqualTo(CANCEL_FROM_MENTOR_FLOW),
                 () -> assertThat(coffeeChat.getReason().getApplyReason()).isNull(),
                 () -> assertThat(coffeeChat.getReason().getSuggestReason()).isNotNull(),
                 () -> assertThat(coffeeChat.getReason().getCancelReason()).isNotNull(),
                 () -> assertThat(coffeeChat.getReason().getRejectReason()).isNull(),
+                () -> assertThat(coffeeChat.getCancelBy()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getQuestion()).isNull(),
                 () -> assertThat(coffeeChat.getReservation()).isNull(),
                 () -> assertThat(coffeeChat.getStrategy()).isNull()
@@ -81,11 +82,12 @@ class CancelCoffeeChatUseCaseTest extends UnitTest {
                 () -> verify(coffeeChatRepository, times(1)).getByIdAndMenteeId(command.coffeeChatId(), command.authenticated().id),
                 () -> assertThat(coffeeChat.getMentorId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getMenteeId()).isEqualTo(mentee.getId()),
-                () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_CANCEL),
+                () -> assertThat(coffeeChat.getStatus()).isEqualTo(CANCEL_FROM_MENTEE_FLOW),
                 () -> assertThat(coffeeChat.getReason().getApplyReason()).isNotNull(),
                 () -> assertThat(coffeeChat.getReason().getSuggestReason()).isNull(),
                 () -> assertThat(coffeeChat.getReason().getCancelReason()).isNotNull(),
                 () -> assertThat(coffeeChat.getReason().getRejectReason()).isNull(),
+                () -> assertThat(coffeeChat.getCancelBy()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getQuestion()).isNull(),
                 () -> assertThat(coffeeChat.getReservation().getStart()).isEqualTo(start),
                 () -> assertThat(coffeeChat.getReservation().getEnd()).isEqualTo(start.plusMinutes(30)),

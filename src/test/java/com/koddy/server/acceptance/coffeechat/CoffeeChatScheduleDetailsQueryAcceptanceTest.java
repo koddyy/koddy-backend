@@ -27,11 +27,11 @@ import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.�
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘티가_멘토의_커피챗_제안을_거절한다;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.신청_제안한_커피챗을_취소한다;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTEE_FLOW;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_REJECT;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_APPROVE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTOR_FLOW;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_APPROVE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_CANCEL;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT;
@@ -112,7 +112,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(MENTEE_CANCEL.name()))
+                    .body("coffeeChat.status", is(CANCEL_FROM_MENTEE_FLOW.name()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.suggestReason", nullValue())
                     .body("coffeeChat.cancelReason", notNullValue(String.class))
@@ -127,7 +127,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
             menteeResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(MENTEE_CANCEL.name()))
+                    .body("coffeeChat.status", is(CANCEL_FROM_MENTEE_FLOW.name()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
                     .body("coffeeChat.suggestReason", nullValue())
                     .body("coffeeChat.cancelReason", notNullValue(String.class))
@@ -263,7 +263,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(MENTOR_CANCEL.name()))
+                    .body("coffeeChat.status", is(CANCEL_FROM_MENTOR_FLOW.name()))
                     .body("coffeeChat.applyReason", nullValue())
                     .body("coffeeChat.suggestReason", notNullValue(String.class))
                     .body("coffeeChat.cancelReason", notNullValue(String.class))
@@ -278,7 +278,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
             menteeResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
-                    .body("coffeeChat.status", is(MENTOR_CANCEL.name()))
+                    .body("coffeeChat.status", is(CANCEL_FROM_MENTOR_FLOW.name()))
                     .body("coffeeChat.applyReason", nullValue())
                     .body("coffeeChat.suggestReason", notNullValue(String.class))
                     .body("coffeeChat.cancelReason", notNullValue(String.class))

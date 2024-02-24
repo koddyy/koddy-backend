@@ -9,8 +9,8 @@ import com.koddy.server.member.domain.model.mentor.Mentor;
 import java.time.LocalDateTime;
 
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY_COFFEE_CHAT_COMPLETE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_CANCEL;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTEE_FLOW;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTOR_FLOW;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE;
 import static com.koddy.server.common.fixture.StrategyFixture.KAKAO_ID;
 
@@ -175,7 +175,7 @@ public enum CoffeeChatFixture {
                     "신청..",
                     Reservation.of(fixture.start, fixture.end)
             );
-            coffeeChat.cancel(MENTEE_CANCEL, "취소..");
+            coffeeChat.cancel(CANCEL_FROM_MENTEE_FLOW, mentee.getId(), "취소..");
             return coffeeChat;
         }
 
@@ -186,7 +186,7 @@ public enum CoffeeChatFixture {
                     "신청..",
                     Reservation.of(start, end)
             );
-            coffeeChat.cancel(MENTEE_CANCEL, "취소..");
+            coffeeChat.cancel(CANCEL_FROM_MENTEE_FLOW, mentee.getId(), "취소..");
             return coffeeChat;
         }
 
@@ -266,7 +266,7 @@ public enum CoffeeChatFixture {
 
         public static CoffeeChat suggestAndCancel(final Mentor mentor, final Mentee mentee) {
             final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
-            coffeeChat.cancel(MENTOR_CANCEL, "취소..");
+            coffeeChat.cancel(CANCEL_FROM_MENTOR_FLOW, mentor.getId(), "취소..");
             return coffeeChat;
         }
 
