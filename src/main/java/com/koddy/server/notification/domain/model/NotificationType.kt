@@ -29,6 +29,7 @@ enum class NotificationType(
 
     MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST("%s님이 커피챗을 제안했습니다.", SIMPLE),
     MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_CANCEL("%s님이 커피챗을 취소했습니다. (취소 사유: %s)", CANCEL_REASON),
+    MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL("%s님이 커피챗을 취소했습니다. (취소 사유: %s)", CANCEL_REASON),
     MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE("%s님과의 커피챗이 %s로 예정되었습니다.", SCHEDULED),
     ;
 
