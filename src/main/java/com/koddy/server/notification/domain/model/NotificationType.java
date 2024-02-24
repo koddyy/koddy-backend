@@ -1,8 +1,7 @@
 package com.koddy.server.notification.domain.model;
 
-import com.koddy.server.coffeechat.domain.model.CoffeeChat;
-import com.koddy.server.member.domain.model.mentee.Mentee;
-import com.koddy.server.member.domain.model.mentor.Mentor;
+import com.koddy.server.coffeechat.domain.model.Reason;
+import com.koddy.server.coffeechat.domain.model.Reservation;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -36,27 +35,29 @@ public enum NotificationType {
     private final String form;
     private final Category category;
 
-    public String completeMentorNotification(
-            final Mentee mentee,
-            final CoffeeChat coffeeChat
+    public String createMentorNotification(
+            final String menteeName,
+            final Reason reason,
+            final Reservation reservation
     ) {
         return switch (category) {
-            case SIMPLE -> complete(mentee.getName());
-            case CANCEL_REASON -> complete(mentee.getName(), coffeeChat.getReason().getCancelReason());
-            case REJECT_REASON -> complete(mentee.getName(), coffeeChat.getReason().getRejectReason());
-            case SCHEDULED -> complete(mentee.getName(), coffeeChat.getReservedDay().format(dateTimeFormatter));
+            case SIMPLE -> complete(menteeName);
+            case CANCEL_REASON -> complete(menteeName, reason.getCancelReason());
+            case REJECT_REASON -> complete(menteeName, reason.getRejectReason());
+            case SCHEDULED -> complete(menteeName, reservation.getStart().toLocalDate().format(dateTimeFormatter));
         };
     }
 
-    public String completeMenteeNotification(
-            final Mentor mentor,
-            final CoffeeChat coffeeChat
+    public String createMenteeNotification(
+            final String mentorName,
+            final Reason reason,
+            final Reservation reservation
     ) {
         return switch (category) {
-            case SIMPLE -> complete(mentor.getName());
-            case CANCEL_REASON -> complete(mentor.getName(), coffeeChat.getReason().getCancelReason());
-            case REJECT_REASON -> complete(mentor.getName(), coffeeChat.getReason().getRejectReason());
-            case SCHEDULED -> complete(mentor.getName(), coffeeChat.getReservedDay().format(dateTimeFormatter));
+            case SIMPLE -> complete(mentorName);
+            case CANCEL_REASON -> complete(mentorName, reason.getCancelReason());
+            case REJECT_REASON -> complete(mentorName, reason.getRejectReason());
+            case SCHEDULED -> complete(mentorName, reservation.getStart().toLocalDate().format(dateTimeFormatter));
         };
     }
 
