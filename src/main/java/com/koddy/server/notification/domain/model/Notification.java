@@ -6,7 +6,6 @@ import com.koddy.server.member.domain.model.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 import static jakarta.persistence.EnumType.STRING;
@@ -27,10 +26,6 @@ public class Notification extends BaseEntity<Notification> {
     @Column(name = "notification_type", nullable = false, updatable = false, columnDefinition = "VARCHAR(50)")
     private NotificationType type;
 
-    @Lob
-    @Column(name = "message", nullable = false, updatable = false, columnDefinition = "TEXT")
-    private String message;
-
     @Column(name = "is_read", nullable = false, columnDefinition = "TINYINT")
     private boolean read;
 
@@ -38,23 +33,20 @@ public class Notification extends BaseEntity<Notification> {
             final Member<?> target,
             final CoffeeChat coffeeChat,
             final NotificationType type,
-            final String message,
             final boolean read
     ) {
         this.targetId = target.getId();
         this.coffeeChatId = coffeeChat.getId();
         this.type = type;
-        this.message = message;
         this.read = read;
     }
 
     public static Notification create(
             final Member<?> target,
             final CoffeeChat coffeeChat,
-            final NotificationType type,
-            final String message
+            final NotificationType type
     ) {
-        return new Notification(target, coffeeChat, type, message, false);
+        return new Notification(target, coffeeChat, type, false);
     }
 
     public void read() {
@@ -71,10 +63,6 @@ public class Notification extends BaseEntity<Notification> {
 
     public NotificationType getType() {
         return type;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
     public boolean isRead() {

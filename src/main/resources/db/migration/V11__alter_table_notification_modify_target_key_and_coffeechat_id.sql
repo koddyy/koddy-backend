@@ -11,7 +11,7 @@ ALTER TABLE notification
     DROP COLUMN target_member_id;
 
 ALTER TABLE notification
-    MODIFY message TEXT NOT NULL COMMENT '';
+    DROP COLUMN message;
 
 ALTER TABLE notification
     ADD COLUMN target_id BIGINT NOT NULL AFTER id;

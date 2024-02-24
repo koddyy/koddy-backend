@@ -4,9 +4,7 @@ import com.koddy.server.coffeechat.domain.event.MenteeNotification
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository
 import com.koddy.server.member.domain.model.mentee.Mentee
-import com.koddy.server.member.domain.model.mentor.Mentor
 import com.koddy.server.member.domain.repository.MenteeRepository
-import com.koddy.server.member.domain.repository.MentorRepository
 import com.koddy.server.notification.domain.model.Notification
 import com.koddy.server.notification.domain.model.NotificationType
 import com.koddy.server.notification.domain.repository.NotificationRepository
@@ -20,7 +18,6 @@ import org.springframework.transaction.event.TransactionalEventListener
 @Component
 class MenteeNotificationHandler(
     private val menteeRepository: MenteeRepository,
-    private val mentorRepository: MentorRepository,
     private val coffeeChatRepository: CoffeeChatRepository,
     private val notificationRepository: NotificationRepository,
 ) {
@@ -28,22 +25,10 @@ class MenteeNotificationHandler(
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @EventListener
     fun handleMentorCanceledFromMenteeFlowEvent(event: MenteeNotification.MentorCanceledFromMenteeFlowEvent) {
-        val mentee: Mentee = menteeRepository.getById(event.menteeId)
-        val mentor: Mentor = mentorRepository.getById(event.mentorId)
-        val coffeeChat: CoffeeChat = coffeeChatRepository.getById(event.coffeeChatId)
-
-        val type: NotificationType = NotificationType.MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_CANCEL
-        notificationRepository.save(
-            Notification.create(
-                mentee,
-                coffeeChat,
-                type,
-                type.createMenteeNotification(
-                    mentorName = mentor.name,
-                    reason = coffeeChat.reason,
-                    reservation = coffeeChat.reservation,
-                ),
-            ),
+        notify(
+            menteeId = event.menteeId,
+            coffeeChatId = event.coffeeChatId,
+            type = NotificationType.MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_CANCEL,
         )
     }
 
@@ -51,22 +36,10 @@ class MenteeNotificationHandler(
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @EventListener
     fun handleMentorRejectedFromMenteeFlowEvent(event: MenteeNotification.MentorRejectedFromMenteeFlowEvent) {
-        val mentee: Mentee = menteeRepository.getById(event.menteeId)
-        val mentor: Mentor = mentorRepository.getById(event.mentorId)
-        val coffeeChat: CoffeeChat = coffeeChatRepository.getById(event.coffeeChatId)
-
-        val type: NotificationType = NotificationType.MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_REJECT
-        notificationRepository.save(
-            Notification.create(
-                mentee,
-                coffeeChat,
-                type,
-                type.createMenteeNotification(
-                    mentorName = mentor.name,
-                    reason = coffeeChat.reason,
-                    reservation = coffeeChat.reservation,
-                ),
-            ),
+        notify(
+            menteeId = event.menteeId,
+            coffeeChatId = event.coffeeChatId,
+            type = NotificationType.MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_REJECT,
         )
     }
 
@@ -74,22 +47,10 @@ class MenteeNotificationHandler(
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @EventListener
     fun handleMentorSuggestedFromMentorFlowEvent(event: MenteeNotification.MentorSuggestedFromMentorFlowEvent) {
-        val mentee: Mentee = menteeRepository.getById(event.menteeId)
-        val mentor: Mentor = mentorRepository.getById(event.mentorId)
-        val coffeeChat: CoffeeChat = coffeeChatRepository.getById(event.coffeeChatId)
-
-        val type: NotificationType = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST
-        notificationRepository.save(
-            Notification.create(
-                mentee,
-                coffeeChat,
-                type,
-                type.createMenteeNotification(
-                    mentorName = mentor.name,
-                    reason = coffeeChat.reason,
-                    reservation = coffeeChat.reservation,
-                ),
-            ),
+        notify(
+            menteeId = event.menteeId,
+            coffeeChatId = event.coffeeChatId,
+            type = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST,
         )
     }
 
@@ -97,22 +58,10 @@ class MenteeNotificationHandler(
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @EventListener
     fun handleMentorCanceledFromMentorFlowEvent(event: MenteeNotification.MentorCanceledFromMentorFlowEvent) {
-        val mentee: Mentee = menteeRepository.getById(event.menteeId)
-        val mentor: Mentor = mentorRepository.getById(event.mentorId)
-        val coffeeChat: CoffeeChat = coffeeChatRepository.getById(event.coffeeChatId)
-
-        val type: NotificationType = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_CANCEL
-        notificationRepository.save(
-            Notification.create(
-                mentee,
-                coffeeChat,
-                type,
-                type.createMenteeNotification(
-                    mentorName = mentor.name,
-                    reason = coffeeChat.reason,
-                    reservation = coffeeChat.reservation,
-                ),
-            ),
+        notify(
+            menteeId = event.menteeId,
+            coffeeChatId = event.coffeeChatId,
+            type = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_CANCEL,
         )
     }
 
@@ -120,21 +69,26 @@ class MenteeNotificationHandler(
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @EventListener
     fun handleMentorFinallyCanceledFromMentorFlowEvent(event: MenteeNotification.MentorFinallyCanceledFromMentorFlowEvent) {
-        val mentee: Mentee = menteeRepository.getById(event.menteeId)
-        val mentor: Mentor = mentorRepository.getById(event.mentorId)
-        val coffeeChat: CoffeeChat = coffeeChatRepository.getById(event.coffeeChatId)
+        notify(
+            menteeId = event.menteeId,
+            coffeeChatId = event.coffeeChatId,
+            type = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL,
+        )
+    }
 
-        val type: NotificationType = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL
+    private fun notify(
+        menteeId: Long,
+        coffeeChatId: Long,
+        type: NotificationType,
+    ) {
+        val mentee: Mentee = menteeRepository.getById(menteeId)
+        val coffeeChat: CoffeeChat = coffeeChatRepository.getById(coffeeChatId)
+
         notificationRepository.save(
             Notification.create(
                 mentee,
                 coffeeChat,
                 type,
-                type.createMenteeNotification(
-                    mentorName = mentor.name,
-                    reason = coffeeChat.reason,
-                    reservation = coffeeChat.reservation,
-                ),
             ),
         )
     }

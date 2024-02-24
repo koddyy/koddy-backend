@@ -28,35 +28,12 @@ class BothNotificationHandler(
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @EventListener
     fun handleApprovedFromMenteeFlowEvent(event: BothNotification.ApprovedFromMenteeFlowEvent) {
-        val mentor: Mentor = mentorRepository.getById(event.mentorId)
-        val mentee: Mentee = menteeRepository.getById(event.menteeId)
-        val coffeeChat: CoffeeChat = coffeeChatRepository.getById(event.coffeeChatId)
-
-        val mentorNotifyType: NotificationType = NotificationType.MENTOR_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE
-        val menteeNotifyType: NotificationType = NotificationType.MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE
-        notificationRepository.saveAll(
-            listOf(
-                Notification.create(
-                    mentor,
-                    coffeeChat,
-                    mentorNotifyType,
-                    mentorNotifyType.createMentorNotification(
-                        menteeName = mentee.name,
-                        reason = coffeeChat.reason,
-                        reservation = coffeeChat.reservation,
-                    ),
-                ),
-                Notification.create(
-                    mentee,
-                    coffeeChat,
-                    menteeNotifyType,
-                    menteeNotifyType.createMenteeNotification(
-                        mentorName = mentor.name,
-                        reason = coffeeChat.reason,
-                        reservation = coffeeChat.reservation,
-                    ),
-                ),
-            ),
+        notify(
+            mentorId = event.mentorId,
+            menteeId = event.menteeId,
+            coffeeChatId = event.coffeeChatId,
+            mentorNotifyType = NotificationType.MENTOR_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE,
+            menteeNotifyType = NotificationType.MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE,
         )
     }
 
@@ -64,33 +41,37 @@ class BothNotificationHandler(
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @EventListener
     fun handleFinallyApprovedFromMentorFlowEvent(event: BothNotification.FinallyApprovedFromMentorFlowEvent) {
-        val mentor: Mentor = mentorRepository.getById(event.mentorId)
-        val mentee: Mentee = menteeRepository.getById(event.menteeId)
-        val coffeeChat: CoffeeChat = coffeeChatRepository.getById(event.coffeeChatId)
+        notify(
+            mentorId = event.mentorId,
+            menteeId = event.menteeId,
+            coffeeChatId = event.coffeeChatId,
+            mentorNotifyType = NotificationType.MENTOR_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE,
+            menteeNotifyType = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE,
+        )
+    }
 
-        val mentorNotifyType: NotificationType = NotificationType.MENTOR_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE
-        val menteeNotifyType: NotificationType = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE
+    private fun notify(
+        mentorId: Long,
+        menteeId: Long,
+        coffeeChatId: Long,
+        mentorNotifyType: NotificationType,
+        menteeNotifyType: NotificationType,
+    ) {
+        val mentor: Mentor = mentorRepository.getById(mentorId)
+        val mentee: Mentee = menteeRepository.getById(menteeId)
+        val coffeeChat: CoffeeChat = coffeeChatRepository.getById(coffeeChatId)
+
         notificationRepository.saveAll(
             listOf(
                 Notification.create(
                     mentor,
                     coffeeChat,
                     mentorNotifyType,
-                    mentorNotifyType.createMentorNotification(
-                        menteeName = mentee.name,
-                        reason = coffeeChat.reason,
-                        reservation = coffeeChat.reservation,
-                    ),
                 ),
                 Notification.create(
                     mentee,
                     coffeeChat,
                     menteeNotifyType,
-                    menteeNotifyType.createMenteeNotification(
-                        mentorName = mentor.name,
-                        reason = coffeeChat.reason,
-                        reservation = coffeeChat.reservation,
-                    ),
                 ),
             ),
         )
