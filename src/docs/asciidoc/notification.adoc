@@ -27,3 +27,15 @@ include::{snippets}/NotificationApi/ReadProcessing/All/http-request.adoc[]
 *HTTP Response*
 
 include::{snippets}/NotificationApi/ReadProcessing/All/http-response.adoc[]
+
+== 알림 조회
+
+*HTTP Request*
+
+include::{snippets}/NotificationApi/GetMyNotifications/http-request.adoc[]
+include::{snippets}/NotificationApi/GetMyNotifications/query-parameters.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/NotificationApi/GetMyNotifications/http-response.adoc[]
+include::{snippets}/NotificationApi/GetMyNotifications/response-fields.adoc[]
