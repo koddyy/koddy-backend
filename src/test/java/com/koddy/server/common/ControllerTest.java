@@ -435,6 +435,20 @@ public abstract class ControllerTest {
                 .content(toBody(data));
     }
 
+    protected RequestBuilder patchRequestWithAccessToken(final String url) {
+        return MockMvcRequestBuilders
+                .patch(url)
+                .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION, applyAccessToken());
+    }
+
+    protected RequestBuilder patchRequestWithAccessToken(final UrlWithVariables path) {
+        return RestDocumentationRequestBuilders
+                .patch(path.url, path.variables)
+                .contentType(APPLICATION_JSON)
+                .header(AUTHORIZATION, applyAccessToken());
+    }
+
     protected RequestBuilder patchRequestWithAccessToken(final String url, final Object data) {
         return MockMvcRequestBuilders
                 .patch(url)

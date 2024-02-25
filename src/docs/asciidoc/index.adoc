@@ -11,4 +11,6 @@ include::member.adoc[leveloffset=+1]
 
 include::coffeechat.adoc[leveloffset=+1]
 
+include::notification.adoc[leveloffset=+1]
+
 include::etc.adoc[leveloffset=+1]

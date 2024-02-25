@@ -2,7 +2,6 @@ package com.koddy.server.notification.application.usecase
 
 import com.koddy.server.global.annotation.KoddyWritableTransactional
 import com.koddy.server.global.annotation.UseCase
-import com.koddy.server.notification.application.usecase.command.ReadAllNotificationCommand
 import com.koddy.server.notification.application.usecase.command.ReadSingleNotificationCommand
 import com.koddy.server.notification.domain.model.Notification
 import com.koddy.server.notification.domain.repository.NotificationRepository
@@ -17,7 +16,7 @@ class ReadNotificationUseCase(
         notification.read()
     }
 
-    fun readAll(command: ReadAllNotificationCommand) {
-        notificationRepository.readAll(command.memberId)
+    fun readAll(memberId: Long) {
+        notificationRepository.readAll(memberId)
     }
 }
