@@ -6,6 +6,7 @@ import com.koddy.server.global.annotation.UseCase
 import com.koddy.server.global.query.PageCreator
 import com.koddy.server.global.query.SliceResponse
 import com.koddy.server.notification.application.usecase.query.GetNotifications
+import com.koddy.server.notification.application.usecase.query.response.NotificationSummary
 import com.koddy.server.notification.domain.repository.query.NotificationQueryRepository
 import com.koddy.server.notification.domain.repository.query.response.NotificationDetails
 import org.springframework.data.domain.Pageable
@@ -16,7 +17,7 @@ class GetNotificationsUseCase(
     private val notificationQueryRepository: NotificationQueryRepository,
 ) {
     @KoddyReadOnlyTransactional
-    fun invoke(query: GetNotifications): SliceResponse<List<NotificationDetails>> {
+    fun invoke(query: GetNotifications): SliceResponse<List<NotificationSummary>> {
         val authenticated: Authenticated = query.authenticated
         val pageable: Pageable = PageCreator.create(query.page)
 
@@ -26,7 +27,7 @@ class GetNotificationsUseCase(
         }
 
         return SliceResponse(
-            result = result.content,
+            result = result.content.map { NotificationSummary.from(it) },
             hasNext = result.hasNext(),
         )
     }
