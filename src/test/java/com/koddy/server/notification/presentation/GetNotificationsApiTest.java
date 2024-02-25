@@ -1,6 +1,5 @@
 package com.koddy.server.notification.presentation;
 
-import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -8,6 +7,7 @@ import com.koddy.server.notification.application.usecase.GetNotificationsUseCase
 import com.koddy.server.notification.application.usecase.query.response.NotificationSummary;
 import com.koddy.server.notification.application.usecase.query.response.NotifyCoffeeChat;
 import com.koddy.server.notification.application.usecase.query.response.NotifyMember;
+import com.koddy.server.notification.domain.model.NotificationType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -51,6 +51,7 @@ class GetNotificationsApiTest extends ControllerTest {
                             new NotificationSummary(
                                     1L,
                                     false,
+                                    NotificationType.MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_APPLY.name(),
                                     LocalDateTime.now(),
                                     new NotifyMember(
                                             1L,
@@ -59,7 +60,6 @@ class GetNotificationsApiTest extends ControllerTest {
                                     ),
                                     new NotifyCoffeeChat(
                                             1L,
-                                            CoffeeChatStatus.MENTEE_APPLY.name(),
                                             "취소 사유..",
                                             "거절 사유..",
                                             LocalDate.of(2024, 3, 1)
@@ -80,12 +80,12 @@ class GetNotificationsApiTest extends ControllerTest {
                             responseFields(
                                     body("result[].id", "알림 ID(PK)"),
                                     body("result[].read", "알림 읽음 여부"),
+                                    body("result[].type", "알림 타입"),
                                     body("result[].createdAt", "알림 생성 시간"),
                                     body("result[].member.id", "사용자 ID(PK)"),
                                     body("result[].member.name", "사용자 이름"),
                                     body("result[].member.profileImageUrl", "사용자 프로필 이미지 URL", "Nullable"),
                                     body("result[].coffeeChat.id", "커피챗 ID(PK)"),
-                                    body("result[].coffeeChat.status", "커피챗 상태"),
                                     body("result[].coffeeChat.cancelReason", "커피챗 취소 사유", "Nullable"),
                                     body("result[].coffeeChat.rejectReason", "커피챗 거절 사유", "Nullable"),
                                     body("result[].coffeeChat.reservedDay", "커피챗 예약 날짜", "Nullable"),

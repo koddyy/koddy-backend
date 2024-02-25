@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 data class NotificationSummary(
     val id: Long,
     val read: Boolean,
+    val type: String,
     val createdAt: LocalDateTime,
     val member: NotifyMember,
     val coffeeChat: NotifyCoffeeChat,
@@ -16,6 +17,7 @@ data class NotificationSummary(
             return NotificationSummary(
                 id = details.id,
                 read = details.read,
+                type = details.type.name,
                 createdAt = details.createdAt,
                 member = NotifyMember(
                     id = details.memberId,
@@ -24,7 +26,6 @@ data class NotificationSummary(
                 ),
                 coffeeChat = NotifyCoffeeChat(
                     id = details.coffeeChatId,
-                    status = details.coffeeChatStatus.name,
                     cancelReason = details.coffeeChatReason?.cancelReason,
                     rejectReason = details.coffeeChatReason?.rejectReason,
                     reservedDay = details.coffeeChatReservation?.start?.toLocalDate(),
@@ -42,7 +43,6 @@ data class NotifyMember(
 
 data class NotifyCoffeeChat(
     val id: Long,
-    val status: String,
     val cancelReason: String?,
     val rejectReason: String?,
     val reservedDay: LocalDate?,
