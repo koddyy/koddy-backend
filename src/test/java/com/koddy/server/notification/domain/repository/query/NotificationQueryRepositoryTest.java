@@ -157,10 +157,10 @@ class NotificationQueryRepositoryTest extends RepositoryTest {
                 () -> assertThat(result2.getContent())
                         .map(NotificationDetails::coffeeChatId)
                         .containsExactly(
-                                notifications[2].getId(),
-                                notifications[1].getId(),
-                                notifications[1].getId(),
-                                notifications[0].getId()
+                                coffeeChats[2].getId(),
+                                coffeeChats[1].getId(),
+                                coffeeChats[1].getId(),
+                                coffeeChats[0].getId()
                         )
         );
     }
