@@ -148,20 +148,10 @@ class NotificationQueryRepositoryTest extends RepositoryTest {
                 () -> assertThat(result2.hasNext()).isFalse(),
                 () -> assertThat(result2.getContent())
                         .map(NotificationDetails::id)
-                        .containsExactly(
-                                notifications[7].getId(),
-                                notifications[5].getId(),
-                                notifications[3].getId(),
-                                notifications[1].getId()
-                        ),
+                        .containsExactly(notifications[7].getId(), notifications[5].getId(), notifications[3].getId(), notifications[1].getId()),
                 () -> assertThat(result2.getContent())
                         .map(NotificationDetails::coffeeChatId)
-                        .containsExactly(
-                                coffeeChats[2].getId(),
-                                coffeeChats[1].getId(),
-                                coffeeChats[1].getId(),
-                                coffeeChats[0].getId()
-                        )
+                        .containsExactly(coffeeChats[2].getId(), coffeeChats[1].getId(), coffeeChats[1].getId(), coffeeChats[0].getId())
         );
     }
 
@@ -196,20 +186,10 @@ class NotificationQueryRepositoryTest extends RepositoryTest {
                 () -> assertThat(result2.hasNext()).isFalse(),
                 () -> assertThat(result2.getContent())
                         .map(NotificationDetails::id)
-                        .containsExactly(
-                                notifications[6].getId(),
-                                notifications[4].getId(),
-                                notifications[2].getId(),
-                                notifications[0].getId()
-                        ),
+                        .containsExactly(notifications[6].getId(), notifications[4].getId(), notifications[2].getId(), notifications[0].getId()),
                 () -> assertThat(result2.getContent())
                         .map(NotificationDetails::coffeeChatId)
-                        .containsExactly(
-                                coffeeChats[2].getId(),
-                                coffeeChats[1].getId(),
-                                coffeeChats[0].getId(),
-                                coffeeChats[0].getId()
-                        )
+                        .containsExactly(coffeeChats[2].getId(), coffeeChats[1].getId(), coffeeChats[0].getId(), coffeeChats[0].getId())
         );
     }
 }

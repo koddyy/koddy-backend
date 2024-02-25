@@ -1,5 +1,6 @@
 package com.koddy.server.notification.presentation;
 
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -51,6 +52,7 @@ class GetNotificationsApiTest extends ControllerTest {
                             new NotificationSummary(
                                     1L,
                                     false,
+                                    CoffeeChatStatus.MENTEE_APPLY.name(),
                                     NotificationType.MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_APPLY.name(),
                                     LocalDateTime.now(),
                                     new NotifyMember(
@@ -80,6 +82,7 @@ class GetNotificationsApiTest extends ControllerTest {
                             responseFields(
                                     body("result[].id", "알림 ID(PK)"),
                                     body("result[].read", "알림 읽음 여부"),
+                                    body("result[].coffeeChatStatusSnapshot", "알림 시점 커피챗 상태 스냅샷"),
                                     body("result[].type", "알림 타입"),
                                     body("result[].createdAt", "알림 생성 시간"),
                                     body("result[].member.id", "사용자 ID(PK)"),

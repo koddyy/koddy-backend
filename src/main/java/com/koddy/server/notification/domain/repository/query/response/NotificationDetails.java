@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public record NotificationDetails(
         long id,
         boolean read,
+        String coffeeChatStatusSnapshot,
         NotificationType type,
         LocalDateTime createdAt,
         long memberId,

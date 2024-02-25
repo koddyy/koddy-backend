@@ -34,6 +34,7 @@ public class NotificationQueryRepositoryImpl implements NotificationQueryReposit
                 .select(new QNotificationDetails(
                         notification.id,
                         notification.read,
+                        notification.coffeeChatStatusSnapshot,
                         notification.type,
                         notification.createdAt,
                         mentee.id,
@@ -68,6 +69,7 @@ public class NotificationQueryRepositoryImpl implements NotificationQueryReposit
                 .select(new QNotificationDetails(
                         notification.id,
                         notification.read,
+                        notification.coffeeChatStatusSnapshot,
                         notification.type,
                         notification.createdAt,
                         mentor.id,

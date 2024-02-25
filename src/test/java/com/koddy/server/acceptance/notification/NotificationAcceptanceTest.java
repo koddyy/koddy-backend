@@ -1,6 +1,7 @@
 package com.koddy.server.acceptance.notification;
 
 import com.koddy.server.auth.domain.model.AuthMember;
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus;
 import com.koddy.server.common.AcceptanceTest;
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension;
 import com.koddy.server.notification.domain.model.NotificationType;
@@ -21,6 +22,9 @@ import static com.koddy.server.acceptance.notification.NotificationAcceptanceSte
 import static com.koddy.server.acceptance.notification.NotificationAcceptanceStep.알림을_조회한다;
 import static com.koddy.server.acceptance.notification.NotificationAcceptanceStep.전체_알림을_읽음_처리한다;
 import static com.koddy.server.acceptance.notification.NotificationAcceptanceStep.특정_타입의_알림_ID를_조회한다;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL;
@@ -56,8 +60,8 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
     }
 
     @Nested
-    @DisplayName("알림 조회 + 읽음 처리")
-    class ReadAndProcessing {
+    @DisplayName("멘토 알림 조회 + 읽음 처리")
+    class MentorReadAndProcessing {
         @Test
         @DisplayName("멘토가 알림을 조회하고 단건 읽음 처리를 진행한다")
         void mentorReadAndSingleProcessing() {
@@ -65,6 +69,7 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response1,
                     List.of(false),
+                    List.of(MENTEE_PENDING),
                     List.of(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
                     List.of(mentee.id()),
                     List.of(coffeeChatId),
@@ -78,6 +83,7 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response2,
                     List.of(true),
+                    List.of(MENTEE_PENDING),
                     List.of(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
                     List.of(mentee.id()),
                     List.of(coffeeChatId),
@@ -92,6 +98,7 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response1,
                     List.of(false),
+                    List.of(MENTEE_PENDING),
                     List.of(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
                     List.of(mentee.id()),
                     List.of(coffeeChatId),
@@ -104,13 +111,18 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response2,
                     List.of(true),
+                    List.of(MENTEE_PENDING),
                     List.of(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
                     List.of(mentee.id()),
                     List.of(coffeeChatId),
                     false
             );
         }
+    }
 
+    @Nested
+    @DisplayName("멘티 알림 조회 + 읽음 처리")
+    class MenteeReadAndProcessing {
         @Test
         @DisplayName("멘티가 알림을 조회하고 단건 읽음 처리를 진행한다")
         void menteeReadAndSingleProcessing() {
@@ -118,6 +130,7 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response1,
                     List.of(false, false),
+                    List.of(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
                     List.of(MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL, MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
                     List.of(mentor.id(), mentor.id()),
                     List.of(coffeeChatId, coffeeChatId),
@@ -131,6 +144,7 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response2,
                     List.of(true, false),
+                    List.of(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
                     List.of(MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL, MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
                     List.of(mentor.id(), mentor.id()),
                     List.of(coffeeChatId, coffeeChatId),
@@ -144,6 +158,7 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response3,
                     List.of(true, true),
+                    List.of(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
                     List.of(MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL, MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
                     List.of(mentor.id(), mentor.id()),
                     List.of(coffeeChatId, coffeeChatId),
@@ -158,6 +173,7 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response1,
                     List.of(false, false),
+                    List.of(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
                     List.of(MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL, MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
                     List.of(coffeeChatId, coffeeChatId),
                     List.of(mentor.id(), mentor.id()),
@@ -170,6 +186,7 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response2,
                     List.of(true, true),
+                    List.of(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
                     List.of(MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL, MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
                     List.of(mentor.id(), mentor.id()),
                     List.of(coffeeChatId, coffeeChatId),
@@ -181,6 +198,7 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
     private void assertNotificationsMatch(
             final ValidatableResponse response,
             final List<Boolean> reads,
+            final List<CoffeeChatStatus> coffeeChatStatusSnapshots,
             final List<NotificationType> types,
             final List<Long> memberIds,
             final List<Long> coffeeChatIds,
@@ -194,12 +212,14 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
         for (int i = 0; i < totalSize; i++) {
             final String index = String.format("result[%d]", i);
             final boolean read = reads.get(i);
+            final CoffeeChatStatus status = coffeeChatStatusSnapshots.get(i);
             final NotificationType type = types.get(i);
             final long memberId = memberIds.get(i);
             final long coffeeChatId = coffeeChatIds.get(i);
 
             response
                     .body(index + ".read", is(read))
+                    .body(index + ".coffeeChatStatusSnapshot", is(status.name()))
                     .body(index + ".type", is(type.name()))
                     .body(index + ".member.id", is((int) memberId))
                     .body(index + ".coffeeChat.id", is((int) coffeeChatId));

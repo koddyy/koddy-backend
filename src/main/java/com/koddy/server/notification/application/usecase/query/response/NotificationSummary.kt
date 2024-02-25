@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 data class NotificationSummary(
     val id: Long,
     val read: Boolean,
+    val coffeeChatStatusSnapshot: String,
     val type: String,
     val createdAt: LocalDateTime,
     val member: NotifyMember,
@@ -17,6 +18,7 @@ data class NotificationSummary(
             return NotificationSummary(
                 id = details.id,
                 read = details.read,
+                coffeeChatStatusSnapshot = details.coffeeChatStatusSnapshot,
                 type = details.type.name,
                 createdAt = details.createdAt,
                 member = NotifyMember(
