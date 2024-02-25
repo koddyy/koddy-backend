@@ -11,7 +11,8 @@ public record MenteeDetails(
         String introduction,
         LanguageResponse languages,
         String interestSchool,
-        String interestMajor
+        String interestMajor,
+        String status
 ) {
     public static MenteeDetails from(final Mentee mentee) {
         return new MenteeDetails(
@@ -22,7 +23,8 @@ public record MenteeDetails(
                 mentee.getIntroduction(),
                 LanguageResponse.of(mentee.getLanguages()),
                 mentee.getInterest().getSchool(),
-                mentee.getInterest().getMajor()
+                mentee.getInterest().getMajor(),
+                mentee.getStatus().name()
         );
     }
 }

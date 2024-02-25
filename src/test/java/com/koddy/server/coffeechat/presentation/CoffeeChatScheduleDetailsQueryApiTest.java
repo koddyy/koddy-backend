@@ -78,6 +78,7 @@ class CoffeeChatScheduleDetailsQueryApiTest extends ControllerTest {
                                     body("mentee.languages.sub[]", "서브 언어", "0..N개"),
                                     body("mentee.interestSchool", "관심있는 학교"),
                                     body("mentee.interestMajor", "관심있는 전공"),
+                                    body("mentee.status", "상태", "ACTIVE INACTIVE BAN"),
 
                                     body("coffeeChat.id", "커피챗 ID(PK)"),
                                     body("coffeeChat.status", "커피챗 상태"),
@@ -128,6 +129,7 @@ class CoffeeChatScheduleDetailsQueryApiTest extends ControllerTest {
                                     body("mentor.school", "학교"),
                                     body("mentor.major", "전공"),
                                     body("mentor.enteredIn", "학번"),
+                                    body("mentor.status", "상태", "ACTIVE INACTIVE BAN"),
 
                                     body("coffeeChat.id", "커피챗 ID(PK)"),
                                     body("coffeeChat.status", "커피챗 상태"),

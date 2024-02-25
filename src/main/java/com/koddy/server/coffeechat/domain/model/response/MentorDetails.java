@@ -11,7 +11,8 @@ public record MentorDetails(
         LanguageResponse languages,
         String school,
         String major,
-        int enteredIn
+        int enteredIn,
+        String status
 ) {
     public static MentorDetails from(final Mentor mentor) {
         return new MentorDetails(
@@ -22,7 +23,8 @@ public record MentorDetails(
                 LanguageResponse.of(mentor.getLanguages()),
                 mentor.getUniversityProfile().getSchool(),
                 mentor.getUniversityProfile().getMajor(),
-                mentor.getUniversityProfile().getEnteredIn()
+                mentor.getUniversityProfile().getEnteredIn(),
+                mentor.getStatus().name()
         );
     }
 }
