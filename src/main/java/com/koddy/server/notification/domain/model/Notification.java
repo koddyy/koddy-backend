@@ -22,6 +22,9 @@ public class Notification extends BaseEntity<Notification> {
     @Column(name = "coffee_chat_id", nullable = false, updatable = false)
     private Long coffeeChatId;
 
+    @Column(name = "coffee_chat_status_snapshot", nullable = false, updatable = false)
+    private String coffeeChatStatusSnapshot;
+
     @Enumerated(STRING)
     @Column(name = "notification_type", nullable = false, updatable = false, columnDefinition = "VARCHAR(50)")
     private NotificationType type;
@@ -37,6 +40,7 @@ public class Notification extends BaseEntity<Notification> {
     ) {
         this.targetId = target.getId();
         this.coffeeChatId = coffeeChat.getId();
+        this.coffeeChatStatusSnapshot = coffeeChat.getStatus().name();
         this.type = type;
         this.read = read;
     }
@@ -59,6 +63,10 @@ public class Notification extends BaseEntity<Notification> {
 
     public Long getCoffeeChatId() {
         return coffeeChatId;
+    }
+
+    public String getCoffeeChatStatusSnapshot() {
+        return coffeeChatStatusSnapshot;
     }
 
     public NotificationType getType() {
