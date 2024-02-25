@@ -6,15 +6,23 @@ import com.koddy.server.auth.domain.model.oauth.OAuthUserResponse;
 import com.koddy.server.auth.infrastructure.social.google.GoogleOAuthConnector;
 import com.koddy.server.auth.infrastructure.social.kakao.KakaoOAuthConnector;
 import com.koddy.server.auth.infrastructure.social.zoom.ZoomOAuthConnector;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class OAuthLoginProcessorFacade implements OAuthLoginProcessor {
     private final GoogleOAuthConnector googleOAuthConnector;
     private final KakaoOAuthConnector kakaoOAuthConnector;
     private final ZoomOAuthConnector zoomOAuthConnector;
+
+    public OAuthLoginProcessorFacade(
+            final GoogleOAuthConnector googleOAuthConnector,
+            final KakaoOAuthConnector kakaoOAuthConnector,
+            final ZoomOAuthConnector zoomOAuthConnector
+    ) {
+        this.googleOAuthConnector = googleOAuthConnector;
+        this.kakaoOAuthConnector = kakaoOAuthConnector;
+        this.zoomOAuthConnector = zoomOAuthConnector;
+    }
 
     @Override
     public OAuthUserResponse login(

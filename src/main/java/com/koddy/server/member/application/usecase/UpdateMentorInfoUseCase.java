@@ -6,12 +6,14 @@ import com.koddy.server.member.application.usecase.command.UpdateMentorBasicInfo
 import com.koddy.server.member.application.usecase.command.UpdateMentorScheduleCommand;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MentorRepository;
-import lombok.RequiredArgsConstructor;
 
 @UseCase
-@RequiredArgsConstructor
 public class UpdateMentorInfoUseCase {
     private final MentorRepository mentorRepository;
+
+    public UpdateMentorInfoUseCase(final MentorRepository mentorRepository) {
+        this.mentorRepository = mentorRepository;
+    }
 
     @KoddyWritableTransactional
     public void updateBasicInfo(final UpdateMentorBasicInfoCommand command) {

@@ -5,12 +5,14 @@ import com.koddy.server.global.annotation.UseCase;
 import com.koddy.server.member.application.usecase.command.UpdateMenteeBasicInfoCommand;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.repository.MenteeRepository;
-import lombok.RequiredArgsConstructor;
 
 @UseCase
-@RequiredArgsConstructor
 public class UpdateMenteeInfoUseCase {
     private final MenteeRepository menteeRepository;
+
+    public UpdateMenteeInfoUseCase(final MenteeRepository menteeRepository) {
+        this.menteeRepository = menteeRepository;
+    }
 
     @KoddyWritableTransactional
     public void updateBasicInfo(final UpdateMenteeBasicInfoCommand command) {

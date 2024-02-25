@@ -9,7 +9,6 @@ import com.koddy.server.global.query.SliceResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,10 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "4-5. 내 일정 관련 조회 API")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/coffeechats")
 public class CoffeeChatScheduleQueryApi {
     private final GetCoffeeChatScheduleUseCase getCoffeeChatScheduleUseCase;
+
+    public CoffeeChatScheduleQueryApi(final GetCoffeeChatScheduleUseCase getCoffeeChatScheduleUseCase) {
+        this.getCoffeeChatScheduleUseCase = getCoffeeChatScheduleUseCase;
+    }
 
     @Operation(summary = "내 일정 상태별 커피챗 개수 조회")
     @GetMapping("/me/category-counts")

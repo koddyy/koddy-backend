@@ -122,7 +122,7 @@ class ManageAccountApiTest extends ControllerTest {
                     MENTEE_1.getPlatform().getSocialId(),
                     MENTEE_1.getPlatform().getEmail().getValue(),
                     MENTEE_1.getName(),
-                    MENTEE_1.getNationality().getCode(),
+                    MENTEE_1.getNationality().code,
                     new LanguageRequest(Language.Category.KR.getCode(), List.of()),
                     MENTEE_1.getInterest().getSchool(),
                     MENTEE_1.getInterest().getMajor()

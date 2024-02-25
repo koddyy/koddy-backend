@@ -18,20 +18,50 @@ import java.util.concurrent.ThreadPoolExecutor
 class AsyncConfig : AsyncConfigurer {
     private val log: Logger = logger()
 
-    @Bean(name = ["emailAsyncExecutor"])
-    fun emailAsyncExecutor(): Executor =
-        ThreadPoolTaskExecutor().apply {
+    override fun getAsyncExecutor(): Executor {
+        return ThreadPoolTaskExecutor().apply {
             corePoolSize = 10
-            maxPoolSize = 90
-            queueCapacity = 50
+            maxPoolSize = 100
+            queueCapacity = 30
+            setRejectedExecutionHandler(ThreadPoolExecutor.CallerRunsPolicy())
+            setAwaitTerminationSeconds(60)
+            setTaskDecorator(MdcTaskDecorator())
+            setThreadNamePrefix("Asynchronous Thread-")
+            initialize()
+        }
+    }
+
+    @Bean(name = ["emailAsyncExecutor"])
+    fun emailAsyncExecutor(): Executor {
+        return ThreadPoolTaskExecutor().apply {
+            corePoolSize = 5
+            maxPoolSize = 50
+            queueCapacity = 30
             setRejectedExecutionHandler(ThreadPoolExecutor.CallerRunsPolicy())
             setAwaitTerminationSeconds(60)
             setTaskDecorator(MdcTaskDecorator())
             setThreadNamePrefix("Asynchronous Mail Sender Thread-")
+            initialize()
         }
+    }
 
-    override fun getAsyncUncaughtExceptionHandler(): AsyncUncaughtExceptionHandler? =
-        AsyncUncaughtExceptionHandler { ex: Throwable?, method: Method?, params: Array<Any?>? ->
+    @Bean(name = ["eventAsyncExecutor"])
+    fun eventAsyncExecutor(): Executor {
+        return ThreadPoolTaskExecutor().apply {
+            corePoolSize = 10
+            maxPoolSize = 100
+            queueCapacity = 30
+            setRejectedExecutionHandler(ThreadPoolExecutor.CallerRunsPolicy())
+            setAwaitTerminationSeconds(60)
+            setTaskDecorator(MdcTaskDecorator())
+            setThreadNamePrefix("Asynchronous Event Publish Thread-")
+            initialize()
+        }
+    }
+
+    override fun getAsyncUncaughtExceptionHandler(): AsyncUncaughtExceptionHandler {
+        return AsyncUncaughtExceptionHandler { ex: Throwable, method: Method, params: Array<Any?> ->
             log.error("Asynchronous method thrown exception... -> Method = {}, Params = {}", method, params, ex)
         }
+    }
 }

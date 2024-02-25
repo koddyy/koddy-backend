@@ -1,10 +1,5 @@
 package com.koddy.server.member.domain.model.mentor;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
 public enum AuthenticationStatus {
     ATTEMPT("시도"),
     SUCCESS("성공"),
@@ -12,4 +7,12 @@ public enum AuthenticationStatus {
     ;
 
     private final String value;
+
+    AuthenticationStatus(final String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }

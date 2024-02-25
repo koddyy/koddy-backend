@@ -73,7 +73,7 @@ public class CoffeeChatScheduleQueryRepositoryFetchMenteeCoffeeChatSchedulesTest
                 MentorFlow.suggestAndFinallyApprove(월요일_2주차_20_00_시작, mentors[0], mentees[0]), // 예정
                 MentorFlow.suggestAndPending(화요일_2주차_20_00_시작, mentors[1], mentees[0]), // 대기
                 MentorFlow.suggest(mentors[2], mentees[0]), // 제안
-                MentorFlow.suggestAndFinallyReject(토요일_2주차_20_00_시작, mentors[3], mentees[0]), // 지나간
+                MentorFlow.suggestAndFinallyCancel(토요일_2주차_20_00_시작, mentors[3], mentees[0]), // 지나간
                 MentorFlow.suggest(mentors[4], mentees[0]), // 제안
                 MentorFlow.suggestAndPending(월요일_3주차_20_00_시작, mentors[5], mentees[0]), // 대기
                 MentorFlow.suggest(mentors[6], mentees[0]), // 제안

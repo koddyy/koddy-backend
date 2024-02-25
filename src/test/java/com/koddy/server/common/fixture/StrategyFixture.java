@@ -2,11 +2,7 @@ package com.koddy.server.common.fixture;
 
 import com.koddy.server.coffeechat.domain.model.Strategy;
 import com.koddy.server.common.mock.fake.FakeEncryptor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@Getter
-@RequiredArgsConstructor
 public enum StrategyFixture {
     ZOOM_LINK(Strategy.Type.ZOOM_LINK, "https://zoom-url/sjiwon"),
     GOOGLE_MEET_LINK(Strategy.Type.GOOGLE_MEET_LINK, "https://google-meet-url/sjiwon"),
@@ -18,7 +14,23 @@ public enum StrategyFixture {
     private final Strategy.Type type;
     private final String value;
 
+    StrategyFixture(
+            final Strategy.Type type,
+            final String value
+    ) {
+        this.type = type;
+        this.value = value;
+    }
+
     public Strategy toDomain() {
         return Strategy.of(type, value, new FakeEncryptor());
+    }
+
+    public Strategy.Type getType() {
+        return type;
+    }
+
+    public String getValue() {
+        return value;
     }
 }

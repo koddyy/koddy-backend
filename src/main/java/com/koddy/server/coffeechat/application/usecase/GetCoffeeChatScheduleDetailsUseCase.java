@@ -13,15 +13,25 @@ import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MenteeRepository;
 import com.koddy.server.member.domain.repository.MentorRepository;
-import lombok.RequiredArgsConstructor;
 
 @UseCase
-@RequiredArgsConstructor
 public class GetCoffeeChatScheduleDetailsUseCase {
     private final CoffeeChatRepository coffeeChatRepository;
     private final MentorRepository mentorRepository;
     private final MenteeRepository menteeRepository;
     private final Encryptor encryptor;
+
+    public GetCoffeeChatScheduleDetailsUseCase(
+            final CoffeeChatRepository coffeeChatRepository,
+            final MentorRepository mentorRepository,
+            final MenteeRepository menteeRepository,
+            final Encryptor encryptor
+    ) {
+        this.coffeeChatRepository = coffeeChatRepository;
+        this.mentorRepository = mentorRepository;
+        this.menteeRepository = menteeRepository;
+        this.encryptor = encryptor;
+    }
 
     @KoddyReadOnlyTransactional
     public CoffeeChatScheduleDetails invoke(final GetCoffeeChatScheduleDetails query) {

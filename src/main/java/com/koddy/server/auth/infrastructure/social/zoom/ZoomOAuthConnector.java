@@ -6,8 +6,8 @@ import com.koddy.server.auth.infrastructure.social.OAuthConnector;
 import com.koddy.server.auth.infrastructure.social.zoom.response.ZoomTokenResponse;
 import com.koddy.server.auth.infrastructure.social.zoom.response.ZoomUserResponse;
 import com.koddy.server.global.exception.GlobalException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -25,12 +25,20 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
-@Slf4j
 @Component
-@RequiredArgsConstructor
 public class ZoomOAuthConnector implements OAuthConnector {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     private final ZoomOAuthProperties properties;
     private final RestTemplate restTemplate;
+
+    public ZoomOAuthConnector(
+            final ZoomOAuthProperties properties,
+            final RestTemplate restTemplate
+    ) {
+        this.properties = properties;
+        this.restTemplate = restTemplate;
+    }
 
     @Override
     public OAuthTokenResponse fetchToken(final String code, final String redirectUri, final String state) {

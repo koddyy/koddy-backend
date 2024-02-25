@@ -10,7 +10,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -22,9 +23,10 @@ import java.util.Date;
 
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN;
 
-@Slf4j
 @Component
 public class TokenProvider {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     private final SecretKey secretKey;
     private final long accessTokenValidityInSeconds;
     private final long refreshTokenValidityInSeconds;

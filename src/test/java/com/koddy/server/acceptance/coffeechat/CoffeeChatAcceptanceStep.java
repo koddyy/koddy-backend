@@ -1,14 +1,14 @@
 package com.koddy.server.acceptance.coffeechat;
 
 import com.koddy.server.coffeechat.presentation.request.ApproveAppliedCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.request.ApprovePendingCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.request.CancelCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.CreateCoffeeChatByApplyRequest;
+import com.koddy.server.coffeechat.presentation.request.CreateCoffeeChatBySuggestRequest;
 import com.koddy.server.coffeechat.presentation.request.CreateMeetingLinkRequest;
-import com.koddy.server.coffeechat.presentation.request.MenteeApplyCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.request.MentorSuggestCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.FinallyApprovePendingCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.FinallyCancelPendingCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.request.PendingSuggestedCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.request.RejectAppliedCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.request.RejectPendingCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.request.RejectSuggestedCoffeeChatRequest;
 import com.koddy.server.common.fixture.StrategyFixture;
 import io.restassured.response.ValidatableResponse;
@@ -66,7 +66,7 @@ public class CoffeeChatAcceptanceStep {
                 .toUri()
                 .getPath();
 
-        final MentorSuggestCoffeeChatRequest request = new MentorSuggestCoffeeChatRequest(menteeId, "제안 이유...");
+        final CreateCoffeeChatBySuggestRequest request = new CreateCoffeeChatBySuggestRequest(menteeId, "제안 이유...");
 
         return postRequestWithAccessToken(uri, request, accessToken);
     }
@@ -81,7 +81,7 @@ public class CoffeeChatAcceptanceStep {
                 .toUri()
                 .getPath();
 
-        final MentorSuggestCoffeeChatRequest request = new MentorSuggestCoffeeChatRequest(menteeId, "제안 이유...");
+        final CreateCoffeeChatBySuggestRequest request = new CreateCoffeeChatBySuggestRequest(menteeId, "제안 이유...");
 
         return postRequestWithAccessToken(uri, request, accessToken)
                 .extract()
@@ -101,7 +101,7 @@ public class CoffeeChatAcceptanceStep {
                 .toUri()
                 .getPath();
 
-        final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest(
+        final CreateCoffeeChatByApplyRequest request = new CreateCoffeeChatByApplyRequest(
                 mentorId,
                 "신청 이유...",
                 start.toString(),
@@ -123,7 +123,7 @@ public class CoffeeChatAcceptanceStep {
                 .toUri()
                 .getPath();
 
-        final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest(
+        final CreateCoffeeChatByApplyRequest request = new CreateCoffeeChatByApplyRequest(
                 mentorId,
                 "신청 이유...",
                 start.toString(),
@@ -134,6 +134,17 @@ public class CoffeeChatAcceptanceStep {
                 .extract()
                 .jsonPath()
                 .getLong("result");
+    }
+
+    public static ValidatableResponse 신청_제안한_커피챗을_취소한다(final long coffeeChatId, final String accessToken) {
+        final String uri = UriComponentsBuilder
+                .fromPath("/api/coffeechats/cancel/{coffeeChatId}")
+                .build(coffeeChatId)
+                .getPath();
+
+        final CancelCoffeeChatRequest request = new CancelCoffeeChatRequest("취소");
+
+        return patchRequestWithAccessToken(uri, request, accessToken);
     }
 
     public static ValidatableResponse 멘토가_멘티의_커피챗_신청을_거절한다(
@@ -201,17 +212,17 @@ public class CoffeeChatAcceptanceStep {
         return patchRequestWithAccessToken(uri, request, accessToken);
     }
 
-    public static ValidatableResponse 멘토가_Pending_상태인_커피챗에_대해서_최종_거절을_한다(
+    public static ValidatableResponse 멘토가_Pending_상태인_커피챗에_대해서_최종_취소를_한다(
             final long coffeeChatId,
-            final String rejectReason,
+            final String cancelReason,
             final String accessToken
     ) {
         final String uri = UriComponentsBuilder
-                .fromPath("/api/coffeechats/pending/reject/{coffeeChatId}")
+                .fromPath("/api/coffeechats/pending/cancel/{coffeeChatId}")
                 .build(coffeeChatId)
                 .getPath();
 
-        final RejectPendingCoffeeChatRequest request = new RejectPendingCoffeeChatRequest(rejectReason);
+        final FinallyCancelPendingCoffeeChatRequest request = new FinallyCancelPendingCoffeeChatRequest(cancelReason);
 
         return patchRequestWithAccessToken(uri, request, accessToken);
     }
@@ -226,18 +237,7 @@ public class CoffeeChatAcceptanceStep {
                 .build(coffeeChatId)
                 .getPath();
 
-        final ApprovePendingCoffeeChatRequest request = new ApprovePendingCoffeeChatRequest(fixture.getType().getEng(), fixture.getValue());
-
-        return patchRequestWithAccessToken(uri, request, accessToken);
-    }
-
-    public static ValidatableResponse 신청_제안한_커피챗을_취소한다(final long coffeeChatId, final String accessToken) {
-        final String uri = UriComponentsBuilder
-                .fromPath("/api/coffeechats/cancel/{coffeeChatId}")
-                .build(coffeeChatId)
-                .getPath();
-
-        final CancelCoffeeChatRequest request = new CancelCoffeeChatRequest("취소");
+        final FinallyApprovePendingCoffeeChatRequest request = new FinallyApprovePendingCoffeeChatRequest(fixture.getType().getEng(), fixture.getValue());
 
         return patchRequestWithAccessToken(uri, request, accessToken);
     }

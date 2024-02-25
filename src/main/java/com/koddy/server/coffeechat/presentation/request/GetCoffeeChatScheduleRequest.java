@@ -38,8 +38,11 @@ public record GetCoffeeChatScheduleRequest(
 
     public List<CoffeeChatStatus> convertToCoffeeChatStatus() {
         if (StringUtils.hasText(detail)) {
-            return CoffeeChatStatus.fromCategoryDetail(category, detail);
+            return CoffeeChatStatus.fromCategoryDetail(
+                    CoffeeChatStatus.Category.from(category),
+                    CoffeeChatStatus.Detail.from(detail)
+            );
         }
-        return CoffeeChatStatus.fromCategory(category);
+        return CoffeeChatStatus.fromCategory(CoffeeChatStatus.Category.from(category));
     }
 }

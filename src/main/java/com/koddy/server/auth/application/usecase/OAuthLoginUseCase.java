@@ -10,14 +10,22 @@ import com.koddy.server.auth.exception.OAuthUserNotFoundException;
 import com.koddy.server.global.annotation.UseCase;
 import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.repository.MemberRepository;
-import lombok.RequiredArgsConstructor;
 
 @UseCase
-@RequiredArgsConstructor
 public class OAuthLoginUseCase {
     private final OAuthLoginProcessor oAuthLoginProcessor;
     private final MemberRepository memberRepository;
     private final TokenIssuer tokenIssuer;
+
+    public OAuthLoginUseCase(
+            final OAuthLoginProcessor oAuthLoginProcessor,
+            final MemberRepository memberRepository,
+            final TokenIssuer tokenIssuer
+    ) {
+        this.oAuthLoginProcessor = oAuthLoginProcessor;
+        this.memberRepository = memberRepository;
+        this.tokenIssuer = tokenIssuer;
+    }
 
     public AuthMember invoke(final OAuthLoginCommand command) {
         final OAuthUserResponse oAuthUser = oAuthLoginProcessor.login(command.provider(), command.code(), command.redirectUrl(), command.state());

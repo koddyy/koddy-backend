@@ -3,15 +3,12 @@ package com.koddy.server.coffeechat.domain.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Lob;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-import static lombok.AccessLevel.PROTECTED;
-
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Embeddable
 public class Reason {
+    protected Reason() {
+    }
+
     @Lob
     @Column(name = "apply_reason", columnDefinition = "TEXT")
     private String applyReason;
@@ -54,5 +51,21 @@ public class Reason {
 
     public Reason applyRejectReason(final String value) {
         return new Reason(applyReason, suggestReason, cancelReason, value);
+    }
+
+    public String getApplyReason() {
+        return applyReason;
+    }
+
+    public String getSuggestReason() {
+        return suggestReason;
+    }
+
+    public String getCancelReason() {
+        return cancelReason;
+    }
+
+    public String getRejectReason() {
+        return rejectReason;
     }
 }

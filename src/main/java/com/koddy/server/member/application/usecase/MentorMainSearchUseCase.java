@@ -13,7 +13,6 @@ import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.repository.query.MentorMainSearchRepository;
 import com.koddy.server.member.domain.repository.query.response.AppliedCoffeeChatsByMentee;
 import com.koddy.server.member.domain.repository.query.spec.SearchMenteeCondition;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -21,9 +20,12 @@ import org.springframework.data.domain.Slice;
 import java.util.List;
 
 @UseCase
-@RequiredArgsConstructor
 public class MentorMainSearchUseCase {
     private final MentorMainSearchRepository mentorMainSearchRepository;
+
+    public MentorMainSearchUseCase(final MentorMainSearchRepository mentorMainSearchRepository) {
+        this.mentorMainSearchRepository = mentorMainSearchRepository;
+    }
 
     @KoddyReadOnlyTransactional
     public PageResponse<List<AppliedCoffeeChatsByMenteeResponse>> getAppliedMentees(final GetAppliedMentees query) {

@@ -1,8 +1,6 @@
 package com.koddy.server.auth.utils
 
-import com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER
-import com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER
-import com.koddy.server.auth.domain.model.AuthToken.TOKEN_TYPE
+import com.koddy.server.auth.domain.model.AuthToken
 import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
@@ -21,7 +19,7 @@ internal class TokenExtractorTest : DescribeSpec({
 
     describe("TokenExtractor's extractAccessToken") {
         context("Authorization Header에 Bearer 타입 & AccessToken 둘다 없으면") {
-            every { request.getHeader(ACCESS_TOKEN_HEADER) } returns null
+            every { request.getHeader(AuthToken.ACCESS_TOKEN_HEADER) } returns null
 
             it("null을 응답한다") {
                 val token: String? = TokenExtractor.extractAccessToken(request)
@@ -30,7 +28,7 @@ internal class TokenExtractorTest : DescribeSpec({
         }
 
         context("Authorization Header에 Bearer 타입만 있으면") {
-            every { request.getHeader(ACCESS_TOKEN_HEADER) } returns TOKEN_TYPE
+            every { request.getHeader(AuthToken.ACCESS_TOKEN_HEADER) } returns AuthToken.TOKEN_TYPE
 
             it("null을 응답한다") {
                 val token: String? = TokenExtractor.extractAccessToken(request)
@@ -39,7 +37,7 @@ internal class TokenExtractorTest : DescribeSpec({
         }
 
         context("Authorization Header에 Bearer 타입 & AccessToken 둘다 있으면") {
-            every { request.getHeader(ACCESS_TOKEN_HEADER) } returns "$TOKEN_TYPE $ACCESS_TOKEN"
+            every { request.getHeader(AuthToken.ACCESS_TOKEN_HEADER) } returns "${AuthToken.TOKEN_TYPE} $ACCESS_TOKEN"
 
             it("정상적으로 AccessToken을 추출한다") {
                 val token: String? = TokenExtractor.extractAccessToken(request)
@@ -59,7 +57,7 @@ internal class TokenExtractorTest : DescribeSpec({
         }
 
         context("Cookie Header에 RefreshToken이 있으면") {
-            every { request.cookies } returns arrayOf(Cookie(REFRESH_TOKEN_HEADER, REFRESH_TOKEN))
+            every { request.cookies } returns arrayOf(Cookie(AuthToken.REFRESH_TOKEN_HEADER, REFRESH_TOKEN))
 
             it("정상적으로 RefreshToken을 추출한다") {
                 val token: String? = TokenExtractor.extractRefreshToken(request)

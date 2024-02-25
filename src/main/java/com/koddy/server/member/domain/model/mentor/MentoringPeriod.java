@@ -5,9 +5,6 @@ import com.koddy.server.member.exception.MemberException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Enumerated;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,12 +16,12 @@ import static com.koddy.server.member.exception.MemberExceptionCode.INVALID_TIME
 import static com.koddy.server.member.exception.MemberExceptionCode.SCHEDULE_PERIOD_TIME_MUST_ALIGN;
 import static com.koddy.server.member.exception.MemberExceptionCode.SCHEDULE_PERIOD_TIME_MUST_EXISTS;
 import static jakarta.persistence.EnumType.STRING;
-import static lombok.AccessLevel.PROTECTED;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Embeddable
 public class MentoringPeriod {
+    protected MentoringPeriod() {
+    }
+
     @Column(name = "mentoring_start_date")
     private LocalDate startDate;
 
@@ -72,8 +69,18 @@ public class MentoringPeriod {
         return timeUnit.getValue() == requestDuration;
     }
 
-    @Getter
-    @RequiredArgsConstructor
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public TimeUnit getTimeUnit() {
+        return timeUnit;
+    }
+
     public enum TimeUnit {
         HALF_HOUR(30),
         ONE_HOUR(60),
@@ -81,11 +88,19 @@ public class MentoringPeriod {
 
         private final int value;
 
+        TimeUnit(final int value) {
+            this.value = value;
+        }
+
         public static TimeUnit from(final int value) {
             return Arrays.stream(values())
                     .filter(it -> it.value == value)
                     .findFirst()
                     .orElseThrow(() -> new MemberException(INVALID_TIME_UNIT));
+        }
+
+        public int getValue() {
+            return value;
         }
     }
 }

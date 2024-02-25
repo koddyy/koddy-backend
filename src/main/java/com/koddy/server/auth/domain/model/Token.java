@@ -4,15 +4,13 @@ import com.koddy.server.global.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "member_token")
 public class Token extends BaseEntity<Token> {
+    protected Token() {
+    }
+
     @Column(name = "member_id", nullable = false, unique = true)
     private Long memberId;
 
@@ -26,5 +24,13 @@ public class Token extends BaseEntity<Token> {
 
     public void updateRefreshToken(final String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
     }
 }

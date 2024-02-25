@@ -8,15 +8,21 @@ import com.koddy.server.coffeechat.application.usecase.command.DeleteMeetingLink
 import com.koddy.server.coffeechat.domain.model.link.MeetingLinkResponse;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkRequest;
 import com.koddy.server.global.annotation.UseCase;
-import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;
 
 @UseCase
-@RequiredArgsConstructor
 public class ManageMeetingLinkUseCase {
     private final MeetingLinkManager meetingLinkManager;
     private final MeetingLinkTokenCashier meetingLinkTokenCashier;
+
+    public ManageMeetingLinkUseCase(
+            final MeetingLinkManager meetingLinkManager,
+            final MeetingLinkTokenCashier meetingLinkTokenCashier
+    ) {
+        this.meetingLinkManager = meetingLinkManager;
+        this.meetingLinkTokenCashier = meetingLinkTokenCashier;
+    }
 
     /**
      * 추후 Google Meet Creator 연동하면서 MeetingLinkCreator Request/Response 스펙 재정의 (Interface)

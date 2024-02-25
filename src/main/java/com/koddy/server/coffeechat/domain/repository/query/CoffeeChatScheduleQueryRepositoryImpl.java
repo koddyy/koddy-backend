@@ -10,7 +10,6 @@ import com.koddy.server.coffeechat.domain.repository.query.spec.MentorCoffeeChat
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -25,9 +24,12 @@ import static com.koddy.server.member.domain.model.mentor.QMentor.mentor;
 
 @Repository
 @KoddyReadOnlyTransactional
-@RequiredArgsConstructor
 public class CoffeeChatScheduleQueryRepositoryImpl implements CoffeeChatScheduleQueryRepository {
     private final JPAQueryFactory query;
+
+    public CoffeeChatScheduleQueryRepositoryImpl(final JPAQueryFactory query) {
+        this.query = query;
+    }
 
     @Override
     public Slice<MentorCoffeeChatScheduleData> fetchMentorCoffeeChatSchedules(

@@ -2,8 +2,8 @@ package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.coffeechat.application.usecase.CreateCoffeeChatUseCase;
-import com.koddy.server.coffeechat.presentation.request.MenteeApplyCoffeeChatRequest;
-import com.koddy.server.coffeechat.presentation.request.MentorSuggestCoffeeChatRequest;
+import com.koddy.server.coffeechat.presentation.request.CreateCoffeeChatByApplyRequest;
+import com.koddy.server.coffeechat.presentation.request.CreateCoffeeChatBySuggestRequest;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -37,65 +37,14 @@ class CreateCoffeeChatApiTest extends ControllerTest {
 
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
     private final Mentee mentee = MENTEE_1.toDomain().apply(2L);
-    private final String applyReason = "신청/제안 이유...";
-
-    @Nested
-    @DisplayName("멘토 -> 멘티 커피챗 제안 API [POST /api/coffeechats/suggest]")
-    class SuggestCoffeeChat {
-        private static final String BASE_URL = "/api/coffeechats/suggest";
-        private final MentorSuggestCoffeeChatRequest request = new MentorSuggestCoffeeChatRequest(mentee.getId(), applyReason);
-
-        @Test
-        @DisplayName("멘토가 아니면 권한이 없다")
-        void throwExceptionByInvalidPermission() {
-            // given
-            applyToken(true, mentee);
-
-            // when - then
-            failedExecute(
-                    postRequestWithAccessToken(BASE_URL, request),
-                    status().isForbidden(),
-                    ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
-                    failureDocsWithAccessToken("CoffeeChatApi/LifeCycle/Create/MentorSuggest/Failure", createHttpSpecSnippets(
-                            requestFields(
-                                    body("menteeId", "멘티 ID(PK)", true),
-                                    body("suggestReason", "커피챗 제안 이유", true)
-                            )
-                    ))
-            );
-        }
-
-        @Test
-        @DisplayName("멘토가 멘티에게 커피챗을 제안한다")
-        void success() {
-            // given
-            applyToken(true, mentor);
-            given(createCoffeeChatUseCase.suggestCoffeeChat(any())).willReturn(1L);
-
-            // when - then
-            successfulExecute(
-                    postRequestWithAccessToken(new UrlWithVariables(BASE_URL, mentee.getId()), request),
-                    status().isOk(),
-                    successDocsWithAccessToken("CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success", createHttpSpecSnippets(
-                            requestFields(
-                                    body("menteeId", "멘티 ID(PK)", true),
-                                    body("suggestReason", "커피챗 제안 이유", true)
-                            ),
-                            responseFields(
-                                    body("result", "커피챗 ID(PK)")
-                            )
-                    ))
-            );
-        }
-    }
 
     @Nested
     @DisplayName("멘티 -> 멘토 커피챗 신청 API [POST /api/coffeechats/apply]")
-    class ApplyCoffeeChat {
+    class CreateCoffeeChatByApply {
         private static final String BASE_URL = "/api/coffeechats/apply";
-        private final MenteeApplyCoffeeChatRequest request = new MenteeApplyCoffeeChatRequest(
+        private final CreateCoffeeChatByApplyRequest request = new CreateCoffeeChatByApplyRequest(
                 mentor.getId(),
-                applyReason,
+                "신청 이유..",
                 LocalDateTime.of(2024, 2, 1, 18, 0).toString(),
                 LocalDateTime.of(2024, 2, 1, 19, 30).toString()
         );
@@ -129,7 +78,7 @@ class CreateCoffeeChatApiTest extends ControllerTest {
             applyToken(true, mentee);
             doThrow(new MemberException(CANNOT_RESERVATION))
                     .when(createCoffeeChatUseCase)
-                    .applyCoffeeChat(any());
+                    .createByApply(any());
 
             // when - then
             failedExecute(
@@ -152,7 +101,7 @@ class CreateCoffeeChatApiTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentee);
-            given(createCoffeeChatUseCase.applyCoffeeChat(any())).willReturn(1L);
+            given(createCoffeeChatUseCase.createByApply(any())).willReturn(1L);
 
             // when - then
             successfulExecute(
@@ -164,6 +113,56 @@ class CreateCoffeeChatApiTest extends ControllerTest {
                                     body("applyReason", "커피챗 신청 이유", true),
                                     body("start", "커피챗 날짜 (시작 시간)", "[KST] yyyy-MM-ddTHH:mm:ss" + ENTER + "-> 시간 = 00:00:00 ~ 23:59:59", true),
                                     body("end", "커피챗 날짜 (종료 시간)", "[KST] yyyy-MM-ddTHH:mm:ss" + ENTER + "-> 시간 = 00:00:00 ~ 23:59:59", true)
+                            ),
+                            responseFields(
+                                    body("result", "커피챗 ID(PK)")
+                            )
+                    ))
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("멘토 -> 멘티 커피챗 제안 API [POST /api/coffeechats/suggest]")
+    class CreateCoffeeChatBySuggest {
+        private static final String BASE_URL = "/api/coffeechats/suggest";
+        private final CreateCoffeeChatBySuggestRequest request = new CreateCoffeeChatBySuggestRequest(mentee.getId(), "제안 이유..");
+
+        @Test
+        @DisplayName("멘토가 아니면 권한이 없다")
+        void throwExceptionByInvalidPermission() {
+            // given
+            applyToken(true, mentee);
+
+            // when - then
+            failedExecute(
+                    postRequestWithAccessToken(BASE_URL, request),
+                    status().isForbidden(),
+                    ExceptionSpec.of(AuthExceptionCode.INVALID_PERMISSION),
+                    failureDocsWithAccessToken("CoffeeChatApi/LifeCycle/Create/MentorSuggest/Failure", createHttpSpecSnippets(
+                            requestFields(
+                                    body("menteeId", "멘티 ID(PK)", true),
+                                    body("suggestReason", "커피챗 제안 이유", true)
+                            )
+                    ))
+            );
+        }
+
+        @Test
+        @DisplayName("멘토가 멘티에게 커피챗을 제안한다")
+        void success() {
+            // given
+            applyToken(true, mentor);
+            given(createCoffeeChatUseCase.createBySuggest(any())).willReturn(1L);
+
+            // when - then
+            successfulExecute(
+                    postRequestWithAccessToken(new UrlWithVariables(BASE_URL, mentee.getId()), request),
+                    status().isOk(),
+                    successDocsWithAccessToken("CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success", createHttpSpecSnippets(
+                            requestFields(
+                                    body("menteeId", "멘티 ID(PK)", true),
+                                    body("suggestReason", "커피챗 제안 이유", true)
                             ),
                             responseFields(
                                     body("result", "커피챗 ID(PK)")

@@ -5,7 +5,6 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus;
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
@@ -22,9 +21,12 @@ import static com.koddy.server.coffeechat.domain.model.QCoffeeChat.coffeeChat;
 
 @Repository
 @KoddyReadOnlyTransactional
-@RequiredArgsConstructor
 public class MentorReservedScheduleQueryRepositoryImpl implements MentorReservedScheduleQueryRepository {
     private final JPAQueryFactory query;
+
+    public MentorReservedScheduleQueryRepositoryImpl(final JPAQueryFactory query) {
+        this.query = query;
+    }
 
     @Override
     public List<CoffeeChat> fetchReservedCoffeeChat(final long mentorId, final int year, final int month) {

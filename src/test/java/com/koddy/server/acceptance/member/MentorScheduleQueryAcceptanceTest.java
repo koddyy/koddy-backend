@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘토가_Pending_상태인_커피챗에_대해서_최종_거절을_한다;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘토가_Pending_상태인_커피챗에_대해서_최종_수락을_한다;
+import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘토가_Pending_상태인_커피챗에_대해서_최종_취소를_한다;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘토가_멘티의_커피챗_신청을_수락한다;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다;
@@ -142,7 +142,7 @@ public class MentorScheduleQueryAcceptanceTest extends AcceptanceTest {
                     LocalDateTime.of(2024, 4, 1, 18, 30),
                     mentee7.token().accessToken()
             );
-            멘토가_Pending_상태인_커피챗에_대해서_최종_거절을_한다(coffeeChat7, "거절..", mentor.token().accessToken());
+            멘토가_Pending_상태인_커피챗에_대해서_최종_취소를_한다(coffeeChat7, "최종 취소..", mentor.token().accessToken());
             멘티가_멘토의_커피챗_제안을_1차_수락한다(
                     coffeeChat10,
                     LocalDateTime.of(2024, 4, 10, 18, 0),
@@ -150,8 +150,7 @@ public class MentorScheduleQueryAcceptanceTest extends AcceptanceTest {
                     mentee10.token().accessToken()
             );
 
-            final ValidatableResponse response1 = 멘토의_예약된_스케줄_정보를_조회한다(mentor.id(), 2024, 1, mentee1.token().accessToken())
-                    .statusCode(OK.value());
+            final ValidatableResponse response1 = 멘토의_예약된_스케줄_정보를_조회한다(mentor.id(), 2024, 1, mentee1.token().accessToken()).statusCode(OK.value());
             assertReservedScheduleMatch(
                     response1,
                     MENTOR_1,
@@ -159,8 +158,7 @@ public class MentorScheduleQueryAcceptanceTest extends AcceptanceTest {
                     List.of()
             );
 
-            final ValidatableResponse response2 = 멘토의_예약된_스케줄_정보를_조회한다(mentor.id(), 2024, 2, mentee1.token().accessToken())
-                    .statusCode(OK.value());
+            final ValidatableResponse response2 = 멘토의_예약된_스케줄_정보를_조회한다(mentor.id(), 2024, 2, mentee1.token().accessToken()).statusCode(OK.value());
             assertReservedScheduleMatch(
                     response2,
                     MENTOR_1,
@@ -174,8 +172,7 @@ public class MentorScheduleQueryAcceptanceTest extends AcceptanceTest {
                     )
             );
 
-            final ValidatableResponse response3 = 멘토의_예약된_스케줄_정보를_조회한다(mentor.id(), 2024, 3, mentee1.token().accessToken())
-                    .statusCode(OK.value());
+            final ValidatableResponse response3 = 멘토의_예약된_스케줄_정보를_조회한다(mentor.id(), 2024, 3, mentee1.token().accessToken()).statusCode(OK.value());
             assertReservedScheduleMatch(
                     response3,
                     MENTOR_1,
@@ -189,8 +186,7 @@ public class MentorScheduleQueryAcceptanceTest extends AcceptanceTest {
                     )
             );
 
-            final ValidatableResponse response4 = 멘토의_예약된_스케줄_정보를_조회한다(mentor.id(), 2024, 4, mentee1.token().accessToken())
-                    .statusCode(OK.value());
+            final ValidatableResponse response4 = 멘토의_예약된_스케줄_정보를_조회한다(mentor.id(), 2024, 4, mentee1.token().accessToken()).statusCode(OK.value());
             assertReservedScheduleMatch(
                     response4,
                     MENTOR_1,
@@ -206,8 +202,7 @@ public class MentorScheduleQueryAcceptanceTest extends AcceptanceTest {
                     )
             );
 
-            final ValidatableResponse response5 = 멘토의_예약된_스케줄_정보를_조회한다(mentor.id(), 2024, 5, mentee1.token().accessToken())
-                    .statusCode(OK.value());
+            final ValidatableResponse response5 = 멘토의_예약된_스케줄_정보를_조회한다(mentor.id(), 2024, 5, mentee1.token().accessToken()).statusCode(OK.value());
             assertReservedScheduleMatch(
                     response5,
                     MENTOR_1,

@@ -4,13 +4,15 @@ import com.koddy.server.auth.application.adapter.TokenStore;
 import com.koddy.server.auth.domain.model.Token;
 import com.koddy.server.auth.domain.repository.TokenRepository;
 import com.koddy.server.global.annotation.KoddyWritableTransactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class RdbTokenStore implements TokenStore {
     private final TokenRepository tokenRepository;
+
+    public RdbTokenStore(final TokenRepository tokenRepository) {
+        this.tokenRepository = tokenRepository;
+    }
 
     @KoddyWritableTransactional
     @Override

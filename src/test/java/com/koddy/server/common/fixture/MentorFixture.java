@@ -15,8 +15,6 @@ import com.koddy.server.member.domain.model.mentor.Timeline;
 import com.koddy.server.member.domain.model.mentor.UniversityProfile;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,8 +26,6 @@ import static com.koddy.server.auth.domain.model.oauth.OAuthProvider.GOOGLE;
 import static com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN;
 import static com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN;
 
-@Getter
-@RequiredArgsConstructor
 public enum MentorFixture {
     MENTOR_1(
             new SocialPlatform(GOOGLE, "ID-MENTOR-1", Email.from("mentor1@gmail.com")),
@@ -162,6 +158,26 @@ public enum MentorFixture {
     private final MentoringPeriod mentoringPeriod;
     private final List<Timeline> timelines;
 
+    MentorFixture(
+            final SocialPlatform platform,
+            final String name,
+            final String profileImageUrl,
+            final String introduction,
+            final List<Language> languages,
+            final UniversityProfile universityProfile,
+            final MentoringPeriod mentoringPeriod,
+            final List<Timeline> timelines
+    ) {
+        this.platform = platform;
+        this.name = name;
+        this.profileImageUrl = profileImageUrl;
+        this.introduction = introduction;
+        this.languages = languages;
+        this.universityProfile = universityProfile;
+        this.mentoringPeriod = mentoringPeriod;
+        this.timelines = timelines;
+    }
+
     public Mentor toDomain() {
         final Mentor mentor = new Mentor(platform, name, languages, universityProfile);
         mentor.completeInfo(introduction, profileImageUrl, mentoringPeriod, timelines);
@@ -261,5 +277,37 @@ public enum MentorFixture {
                 this.name,
                 new AuthToken(accessToken, refreshToken)
         );
+    }
+
+    public SocialPlatform getPlatform() {
+        return platform;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public List<Language> getLanguages() {
+        return languages;
+    }
+
+    public UniversityProfile getUniversityProfile() {
+        return universityProfile;
+    }
+
+    public MentoringPeriod getMentoringPeriod() {
+        return mentoringPeriod;
+    }
+
+    public List<Timeline> getTimelines() {
+        return timelines;
     }
 }

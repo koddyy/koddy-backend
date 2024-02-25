@@ -2,7 +2,7 @@ package com.koddy.server.common
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER
+import com.koddy.server.auth.domain.model.AuthToken
 import com.koddy.server.auth.domain.service.TokenProvider
 import com.koddy.server.auth.exception.AuthException
 import com.koddy.server.auth.exception.AuthExceptionCode
@@ -211,7 +211,7 @@ abstract class ApiDocsTestKt : FeatureSpec() {
 
     protected fun MockHttpServletRequestBuilder.authorizationHeader(member: Member<*>) {
         applyToken(true, member)
-        this.header(ACCESS_TOKEN_HEADER, applyAccessToken())
+        this.header(AuthToken.ACCESS_TOKEN_HEADER, applyAccessToken())
     }
 
     protected fun MockHttpServletRequestBuilder.cookieHeader(member: Member<*>) {

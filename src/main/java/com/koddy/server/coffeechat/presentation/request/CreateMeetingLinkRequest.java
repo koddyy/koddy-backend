@@ -3,11 +3,9 @@ package com.koddy.server.coffeechat.presentation.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.koddy.server.global.utils.TimeUtils;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Builder;
 
 import java.time.LocalDateTime;
 
-@Builder
 public record CreateMeetingLinkRequest(
         @NotBlank(message = "Authorization Code는 필수입니다.")
         String authorizationCode,

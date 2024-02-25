@@ -5,20 +5,18 @@ import com.koddy.server.member.exception.MemberException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Enumerated;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 
 import static com.koddy.server.member.exception.MemberExceptionCode.SCHEDULE_PERIOD_TIME_MUST_ALIGN;
 import static com.koddy.server.member.exception.MemberExceptionCode.SCHEDULE_PERIOD_TIME_MUST_EXISTS;
 import static jakarta.persistence.EnumType.STRING;
-import static lombok.AccessLevel.PROTECTED;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Embeddable
 public class Timeline {
+    protected Timeline() {
+    }
+
     @Enumerated(STRING)
     @Column(name = "day_of_week", nullable = false, columnDefinition = "VARCHAR(20)")
     private DayOfWeek dayOfWeek;
@@ -58,5 +56,17 @@ public class Timeline {
      */
     public boolean isTimeIncluded(final LocalTime target) {
         return TimeUtils.isLowerOrEqual(startTime, target) && TimeUtils.isLowerOrEqual(target, endTime);
+    }
+
+    public DayOfWeek getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
     }
 }

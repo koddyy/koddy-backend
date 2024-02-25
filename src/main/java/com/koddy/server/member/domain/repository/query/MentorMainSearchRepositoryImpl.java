@@ -9,7 +9,6 @@ import com.koddy.server.member.domain.repository.query.spec.SearchMenteeConditio
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,9 +27,12 @@ import static com.koddy.server.member.domain.model.mentee.QMentee.mentee;
 
 @Repository
 @KoddyReadOnlyTransactional
-@RequiredArgsConstructor
 public class MentorMainSearchRepositoryImpl implements MentorMainSearchRepository {
     private final JPAQueryFactory query;
+
+    public MentorMainSearchRepositoryImpl(final JPAQueryFactory query) {
+        this.query = query;
+    }
 
     @Override
     public Page<AppliedCoffeeChatsByMentee> fetchAppliedMentees(final long mentorId, final int limit) {

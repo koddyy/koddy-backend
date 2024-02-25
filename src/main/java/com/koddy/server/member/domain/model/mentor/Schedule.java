@@ -7,18 +7,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.PROTECTED;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "mentor_schedule")
 public class Schedule {
+    protected Schedule() {
+    }
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -33,5 +31,17 @@ public class Schedule {
     public Schedule(final Mentor mentor, final Timeline timeline) {
         this.mentor = mentor;
         this.timeline = timeline;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Timeline getTimeline() {
+        return timeline;
+    }
+
+    public Mentor getMentor() {
+        return mentor;
     }
 }

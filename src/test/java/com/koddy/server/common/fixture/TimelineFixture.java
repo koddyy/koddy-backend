@@ -2,8 +2,6 @@ package com.koddy.server.common.fixture;
 
 import com.koddy.server.member.domain.model.mentor.DayOfWeek;
 import com.koddy.server.member.domain.model.mentor.Timeline;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -16,8 +14,6 @@ import static com.koddy.server.member.domain.model.mentor.DayOfWeek.THU;
 import static com.koddy.server.member.domain.model.mentor.DayOfWeek.TUE;
 import static com.koddy.server.member.domain.model.mentor.DayOfWeek.WED;
 
-@Getter
-@RequiredArgsConstructor
 public enum TimelineFixture {
     MON_09_22(MON, LocalTime.of(9, 0), LocalTime.of(22, 0)),
     TUE_09_22(TUE, LocalTime.of(9, 0), LocalTime.of(22, 0)),
@@ -31,6 +27,16 @@ public enum TimelineFixture {
     private final DayOfWeek dayOfWeek;
     private final LocalTime startTime;
     private final LocalTime endTime;
+
+    TimelineFixture(
+            final DayOfWeek dayOfWeek,
+            final LocalTime startTime,
+            final LocalTime endTime
+    ) {
+        this.dayOfWeek = dayOfWeek;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 
     public Timeline toDomain() {
         return Timeline.of(dayOfWeek, startTime, endTime);
@@ -79,5 +85,17 @@ public enum TimelineFixture {
                 SAT_09_22.toDomain(),
                 SUN_09_22.toDomain()
         );
+    }
+
+    public DayOfWeek getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
     }
 }

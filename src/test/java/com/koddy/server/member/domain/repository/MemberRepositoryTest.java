@@ -103,7 +103,7 @@ class MemberRepositoryTest extends RepositoryTest {
                             () -> assertThat(findMember.getProfileImageUrl()).isEqualTo(MENTOR_1.getProfileImageUrl()),
                             () -> assertThat(findMember.getNationality()).isEqualTo(KOREA),
                             () -> assertThat(findMember.getIntroduction()).isEqualTo(MENTOR_1.getIntroduction()),
-                            () -> assertThat(findMember.profileComplete()).isFalse(),
+                            () -> assertThat(findMember.isProfileComplete()).isFalse(),
                             () -> assertThat(findMember.getRole()).isEqualTo(MENTOR),
                             () -> assertThat(findMember.getStatus()).isEqualTo(INACTIVE)
                     );

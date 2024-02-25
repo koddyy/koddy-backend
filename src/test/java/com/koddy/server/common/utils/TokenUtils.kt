@@ -1,7 +1,6 @@
 package com.koddy.server.common.utils
 
-import com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER
-import com.koddy.server.auth.domain.model.AuthToken.TOKEN_TYPE
+import com.koddy.server.auth.domain.model.AuthToken
 import jakarta.servlet.http.Cookie
 
 object TokenUtils {
@@ -11,8 +10,8 @@ object TokenUtils {
     const val EXPIRES_IN: Long = 3000
 
     @JvmStatic
-    fun applyAccessToken(): String = "$TOKEN_TYPE $ACCESS_TOKEN"
+    fun applyAccessToken(): String = "${AuthToken.TOKEN_TYPE} $ACCESS_TOKEN"
 
     @JvmStatic
-    fun applyRefreshToken(): Cookie = Cookie(REFRESH_TOKEN_HEADER, REFRESH_TOKEN)
+    fun applyRefreshToken(): Cookie = Cookie(AuthToken.REFRESH_TOKEN_HEADER, REFRESH_TOKEN)
 }

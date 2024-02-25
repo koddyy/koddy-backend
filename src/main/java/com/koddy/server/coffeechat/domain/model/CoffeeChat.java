@@ -10,29 +10,28 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_REJECT;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_APPROVE;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_APPROVE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_REJECT;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_CANCEL;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_APPROVE_STATUS;
+import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_CANCEL_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_COMPLETE_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_FINALLY_DECIDE_STATUS;
 import static com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.CANNOT_REJECT_STATUS;
 import static jakarta.persistence.EnumType.STRING;
-import static lombok.AccessLevel.PROTECTED;
 
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "coffee_chat")
 public class CoffeeChat extends BaseEntity<CoffeeChat> {
+    protected CoffeeChat() {
+    }
+
     @Column(name = "mentor_id", nullable = false)
     private Long mentorId;
 
@@ -42,6 +41,12 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     @Enumerated(STRING)
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(30)")
     private CoffeeChatStatus status;
+
+    /**
+     * 언제든 취소 가능하기 때문에 실제로 취소한 사용자 추적 용도
+     */
+    @Column(name = "cancel_by")
+    private Long cancelBy;
 
     @Embedded
     private Reason reason;
@@ -92,19 +97,25 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     }
 
     /**
-     * 멘티 신청 커피챗 or 멘토 제안 커피챗을 취소
+     * 커피챗 취소 <br>
+     * - 완료 상태가 아닌 경우 언제든지 가능
      */
-    public void cancel(final CoffeeChatStatus status, final String cancelReason) {
+    public void cancel(
+            final CoffeeChatStatus status,
+            final Long cancelBy,
+            final String cancelReason
+    ) {
+        if (notCancelable()) {
+            throw new CoffeeChatException(CANNOT_CANCEL_STATUS);
+        }
+
         this.status = status;
+        this.cancelBy = cancelBy;
         this.reason = this.reason.applyCancelReason(cancelReason);
     }
 
-    public boolean isMenteeCannotCancel() {
-        return status.isMenteeCannotCancel();
-    }
-
-    public boolean isMentorCannotCancel() {
-        return status.isMentorCannotCancel();
+    private boolean notCancelable() {
+        return !this.status.isCancelable();
     }
 
     /**
@@ -158,21 +169,21 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     }
 
     /**
-     * 멘토의 제안 & 멘티의 1차 수락 -> 멘토가 최종 거절
+     * 멘토의 제안 & 멘티의 1차 수락 -> 멘토가 최종 취소
      */
-    public void rejectPendingCoffeeChat(final String rejectReason) {
+    public void finallyCancelPendingCoffeeChat(final String cancelReason) {
         if (this.status != MENTEE_PENDING) {
             throw new CoffeeChatException(CANNOT_FINALLY_DECIDE_STATUS);
         }
 
-        this.reason = this.reason.applyRejectReason(rejectReason);
-        this.status = MENTOR_FINALLY_REJECT;
+        this.reason = this.reason.applyCancelReason(cancelReason);
+        this.status = MENTOR_FINALLY_CANCEL;
     }
 
     /**
      * 멘토의 제안 & 멘티의 1차 수락 -> 멘토가 최종 수락
      */
-    public void approvePendingCoffeeChat(final Strategy strategy) {
+    public void finallyApprovePendingCoffeeChat(final Strategy strategy) {
         if (this.status != MENTEE_PENDING) {
             throw new CoffeeChatException(CANNOT_FINALLY_DECIDE_STATUS);
         }
@@ -182,7 +193,7 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
     }
 
     /**
-     * 멘티 신청 커피챗 or 멘토 제안 커피챗 진행을 완료했을 경우
+     * 커피챗 진행 완료
      */
     public void complete(final CoffeeChatStatus status) {
         if (this.status != MENTOR_APPROVE && this.status != MENTOR_FINALLY_APPROVE) {
@@ -194,5 +205,41 @@ public class CoffeeChat extends BaseEntity<CoffeeChat> {
 
     public boolean isRequestReservationIncludedSchedules(final Reservation target) {
         return reservation.isDateTimeIncluded(target);
+    }
+
+    public boolean isMenteeFlow() {
+        return status.isMenteeFlow();
+    }
+
+    public Long getMentorId() {
+        return mentorId;
+    }
+
+    public Long getMenteeId() {
+        return menteeId;
+    }
+
+    public CoffeeChatStatus getStatus() {
+        return status;
+    }
+
+    public Reason getReason() {
+        return reason;
+    }
+
+    public Long getCancelBy() {
+        return cancelBy;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    public Strategy getStrategy() {
+        return strategy;
     }
 }

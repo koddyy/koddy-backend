@@ -7,13 +7,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-@Getter
 @MappedSuperclass
 public abstract class BaseEntity<T> {
     @Id
@@ -52,5 +50,17 @@ public abstract class BaseEntity<T> {
         this.createdAt = now;
         this.lastModifiedAt = now;
         return (T) this;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getLastModifiedAt() {
+        return lastModifiedAt;
     }
 }

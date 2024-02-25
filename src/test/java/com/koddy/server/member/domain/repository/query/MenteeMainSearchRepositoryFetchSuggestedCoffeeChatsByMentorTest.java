@@ -19,7 +19,7 @@ import org.springframework.data.domain.Page;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_CANCEL;
+import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTOR_FLOW;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -123,10 +123,10 @@ class MenteeMainSearchRepositoryFetchSuggestedCoffeeChatsByMentorTest extends Re
         );
 
         /* cancel 후 limit별 조회 */
-        coffeeChat3.cancel(MENTOR_CANCEL, "취소..");
-        coffeeChat5.cancel(MENTOR_CANCEL, "취소..");
-        coffeeChat7.cancel(MENTOR_CANCEL, "취소..");
-        coffeeChat9.cancel(MENTOR_CANCEL, "취소..");
+        coffeeChat3.cancel(CANCEL_FROM_MENTOR_FLOW, mentors[3].getId(), "취소..");
+        coffeeChat5.cancel(CANCEL_FROM_MENTOR_FLOW, mentors[5].getId(), "취소..");
+        coffeeChat7.cancel(CANCEL_FROM_MENTOR_FLOW, mentors[7].getId(), "취소..");
+        coffeeChat9.cancel(CANCEL_FROM_MENTOR_FLOW, mentors[9].getId(), "취소..");
 
         final Page<SuggestedCoffeeChatsByMentor> result5 = sut.fetchSuggestedMentors(mentee.getId(), 3);
         final Page<SuggestedCoffeeChatsByMentor> result6 = sut.fetchSuggestedMentors(mentee.getId(), 5);

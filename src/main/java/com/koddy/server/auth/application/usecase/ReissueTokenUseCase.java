@@ -8,16 +8,24 @@ import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.global.annotation.UseCase;
 import com.koddy.server.member.domain.model.Member;
 import com.koddy.server.member.domain.repository.MemberRepository;
-import lombok.RequiredArgsConstructor;
 
 import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN;
 
 @UseCase
-@RequiredArgsConstructor
 public class ReissueTokenUseCase {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
     private final TokenIssuer tokenIssuer;
+
+    public ReissueTokenUseCase(
+            final MemberRepository memberRepository,
+            final TokenProvider tokenProvider,
+            final TokenIssuer tokenIssuer
+    ) {
+        this.memberRepository = memberRepository;
+        this.tokenProvider = tokenProvider;
+        this.tokenIssuer = tokenIssuer;
+    }
 
     public AuthToken invoke(final ReissueTokenCommand command) {
         final Member<?> member = getMember(command.refreshToken());

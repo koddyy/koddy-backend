@@ -22,7 +22,7 @@ public record MenteePrivateProfile(
                 mentee.getPlatform().getEmail().getValue(),
                 mentee.getName(),
                 mentee.getProfileImageUrl(),
-                mentee.getNationality().getCode(),
+                mentee.getNationality().code,
                 mentee.getIntroduction(),
                 LanguageResponse.of(mentee.getLanguages()),
                 mentee.getInterest().getSchool(),

@@ -1,11 +1,9 @@
 package com.koddy.server.global.log
 
-import lombok.RequiredArgsConstructor
 import org.slf4j.Logger
 import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
 class LoggingTracer(
     private val loggingStatusManager: LoggingStatusManager,
 ) {

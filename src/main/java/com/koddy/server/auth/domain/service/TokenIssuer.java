@@ -2,14 +2,20 @@ package com.koddy.server.auth.domain.service;
 
 import com.koddy.server.auth.application.adapter.TokenStore;
 import com.koddy.server.auth.domain.model.AuthToken;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class TokenIssuer {
     private final TokenProvider tokenProvider;
     private final TokenStore tokenStore;
+
+    public TokenIssuer(
+            final TokenProvider tokenProvider,
+            final TokenStore tokenStore
+    ) {
+        this.tokenProvider = tokenProvider;
+        this.tokenStore = tokenStore;
+    }
 
     public AuthToken provideAuthorityToken(final long memberId, final String authority) {
         final String accessToken = tokenProvider.createAccessToken(memberId, authority);

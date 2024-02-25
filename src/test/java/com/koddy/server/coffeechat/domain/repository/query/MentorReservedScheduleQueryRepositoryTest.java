@@ -89,7 +89,7 @@ class MentorReservedScheduleQueryRepositoryTest extends RepositoryTest {
                 MenteeFlow.apply(coffeeChat3Start, coffeeChat3Start.plusMinutes(30), mentees[3], mentor),
                 MenteeFlow.applyAndApprove(coffeeChat4Start, coffeeChat4Start.plusMinutes(30), mentees[4], mentor),
                 MentorFlow.suggestAndPending(coffeeChat5Start, coffeeChat5Start.plusMinutes(30), mentor, mentees[5]),
-                MentorFlow.suggestAndFinallyReject(coffeeChat6Start, coffeeChat6Start.plusMinutes(30), mentor, mentees[6]),
+                MentorFlow.suggestAndFinallyCancel(coffeeChat6Start, coffeeChat6Start.plusMinutes(30), mentor, mentees[6]),
                 MenteeFlow.apply(coffeeChat7Start, coffeeChat7Start.plusMinutes(30), mentees[7], mentor),
                 MenteeFlow.applyAndApprove(coffeeChat8Start, coffeeChat8Start.plusMinutes(30), mentees[8], mentor),
                 MentorFlow.suggestAndPending(coffeeChat9Start, coffeeChat9Start.plusMinutes(30), mentor, mentees[9])

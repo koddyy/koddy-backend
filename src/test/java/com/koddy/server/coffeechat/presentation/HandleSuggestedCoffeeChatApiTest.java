@@ -1,7 +1,7 @@
 package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.auth.exception.AuthExceptionCode;
-import com.koddy.server.coffeechat.application.usecase.HandleMentorSuggestedCoffeeChatUseCase;
+import com.koddy.server.coffeechat.application.usecase.HandleSuggestedCoffeeChatUseCase;
 import com.koddy.server.coffeechat.presentation.request.PendingSuggestedCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.request.RejectSuggestedCoffeeChatRequest;
 import com.koddy.server.common.ControllerTest;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("CoffeeChat -> HandleSuggestedCoffeeChatApi 테스트")
 class HandleSuggestedCoffeeChatApiTest extends ControllerTest {
     @Autowired
-    private HandleMentorSuggestedCoffeeChatUseCase handleMentorSuggestedCoffeeChatUseCase;
+    private HandleSuggestedCoffeeChatUseCase handleSuggestedCoffeeChatUseCase;
 
     private static final Long COFFEE_CHAT_ID = 1L;
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
@@ -74,7 +74,7 @@ class HandleSuggestedCoffeeChatApiTest extends ControllerTest {
             // given
             applyToken(true, mentee);
             doNothing()
-                    .when(handleMentorSuggestedCoffeeChatUseCase)
+                    .when(handleSuggestedCoffeeChatUseCase)
                     .reject(any());
 
             // when - then
@@ -133,7 +133,7 @@ class HandleSuggestedCoffeeChatApiTest extends ControllerTest {
             // given
             applyToken(true, mentee);
             doThrow(new MemberException(CANNOT_RESERVATION))
-                    .when(handleMentorSuggestedCoffeeChatUseCase)
+                    .when(handleSuggestedCoffeeChatUseCase)
                     .pending(any());
 
             // when - then
@@ -160,7 +160,7 @@ class HandleSuggestedCoffeeChatApiTest extends ControllerTest {
             // given
             applyToken(true, mentee);
             doNothing()
-                    .when(handleMentorSuggestedCoffeeChatUseCase)
+                    .when(handleSuggestedCoffeeChatUseCase)
                     .pending(any());
 
             // when - then
