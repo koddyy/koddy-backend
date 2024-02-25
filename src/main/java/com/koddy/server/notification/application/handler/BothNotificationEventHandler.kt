@@ -10,7 +10,7 @@ import com.koddy.server.member.domain.repository.MentorRepository
 import com.koddy.server.notification.domain.model.Notification
 import com.koddy.server.notification.domain.model.NotificationType
 import com.koddy.server.notification.domain.repository.NotificationRepository
-import org.springframework.context.event.EventListener
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -18,15 +18,15 @@ import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
 
 @Component
-class BothNotificationHandler(
+class BothNotificationEventHandler(
     private val mentorRepository: MentorRepository,
     private val menteeRepository: MenteeRepository,
     private val coffeeChatRepository: CoffeeChatRepository,
     private val notificationRepository: NotificationRepository,
 ) {
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     fun handleApprovedFromMenteeFlowEvent(event: BothNotification.ApprovedFromMenteeFlowEvent) {
         notify(
             mentorId = event.mentorId,
@@ -37,9 +37,9 @@ class BothNotificationHandler(
         )
     }
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     fun handleFinallyApprovedFromMentorFlowEvent(event: BothNotification.FinallyApprovedFromMentorFlowEvent) {
         notify(
             mentorId = event.mentorId,
