@@ -2,6 +2,7 @@ package com.koddy.server.coffeechat.application.usecase;
 
 import com.koddy.server.coffeechat.application.usecase.command.PendingSuggestedCoffeeChatCommand;
 import com.koddy.server.coffeechat.application.usecase.command.RejectSuggestedCoffeeChatCommand;
+import com.koddy.server.coffeechat.domain.event.MentorNotification;
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.model.Reservation;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
@@ -14,6 +15,7 @@ import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MentorRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
 
@@ -23,6 +25,7 @@ import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -34,7 +37,8 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final ReservationAvailabilityChecker reservationAvailabilityChecker = mock(ReservationAvailabilityChecker.class);
-    private final CoffeeChatNotificationEventPublisher eventPublisher = mock(CoffeeChatNotificationEventPublisher.class);
+    private final ApplicationEventPublisher applicationEventPublisher = mock(ApplicationEventPublisher.class);
+    private final CoffeeChatNotificationEventPublisher eventPublisher = new CoffeeChatNotificationEventPublisher(applicationEventPublisher);
     private final HandleSuggestedCoffeeChatUseCase sut = new HandleSuggestedCoffeeChatUseCase(
             coffeeChatRepository,
             mentorRepository,
@@ -60,6 +64,7 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
         // then
         assertAll(
                 () -> verify(coffeeChatRepository, times(1)).getByIdAndMenteeId(command.coffeeChatId(), command.menteeId()),
+                () -> verify(applicationEventPublisher, times(1)).publishEvent(any(MentorNotification.MenteeRejectedFromMentorFlowEvent.class)),
                 () -> assertThat(coffeeChat.getMentorId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getMenteeId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_REJECT),
@@ -100,6 +105,7 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
                 () -> verify(coffeeChatRepository, times(1)).getByIdAndMenteeId(command.coffeeChatId(), command.menteeId()),
                 () -> verify(mentorRepository, times(1)).getByIdWithSchedules(coffeeChat.getMentorId()),
                 () -> verify(reservationAvailabilityChecker, times(1)).check(mentor, command.reservation()),
+                () -> verify(applicationEventPublisher, times(1)).publishEvent(any(MentorNotification.MenteePendedFromMentorFlowEvent.class)),
                 () -> assertThat(coffeeChat.getMentorId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getMenteeId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTEE_PENDING),

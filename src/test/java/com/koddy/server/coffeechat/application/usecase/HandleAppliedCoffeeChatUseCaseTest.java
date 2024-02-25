@@ -2,6 +2,8 @@ package com.koddy.server.coffeechat.application.usecase;
 
 import com.koddy.server.coffeechat.application.usecase.command.ApproveAppliedCoffeeChatCommand;
 import com.koddy.server.coffeechat.application.usecase.command.RejectAppliedCoffeeChatCommand;
+import com.koddy.server.coffeechat.domain.event.BothNotification;
+import com.koddy.server.coffeechat.domain.event.MenteeNotification;
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.model.Strategy;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
@@ -14,6 +16,7 @@ import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
 
@@ -23,6 +26,7 @@ import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -32,7 +36,8 @@ import static org.mockito.Mockito.verify;
 class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
     private final Encryptor encryptor = new FakeEncryptor();
-    private final CoffeeChatNotificationEventPublisher eventPublisher = mock(CoffeeChatNotificationEventPublisher.class);
+    private final ApplicationEventPublisher applicationEventPublisher = mock(ApplicationEventPublisher.class);
+    private final CoffeeChatNotificationEventPublisher eventPublisher = new CoffeeChatNotificationEventPublisher(applicationEventPublisher);
     private final HandleAppliedCoffeeChatUseCase sut = new HandleAppliedCoffeeChatUseCase(
             coffeeChatRepository,
             encryptor,
@@ -58,6 +63,7 @@ class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
         // then
         assertAll(
                 () -> verify(coffeeChatRepository, times(1)).getByIdAndMentorId(command.coffeeChatId(), command.mentorId()),
+                () -> verify(applicationEventPublisher, times(1)).publishEvent(any(MenteeNotification.MentorRejectedFromMenteeFlowEvent.class)),
                 () -> assertThat(coffeeChat.getMentorId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getMenteeId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_REJECT),
@@ -94,6 +100,7 @@ class HandleAppliedCoffeeChatUseCaseTest extends UnitTest {
         // then
         assertAll(
                 () -> verify(coffeeChatRepository, times(1)).getByIdAndMentorId(command.coffeeChatId(), command.mentorId()),
+                () -> verify(applicationEventPublisher, times(1)).publishEvent(any(BothNotification.ApprovedFromMenteeFlowEvent.class)),
                 () -> assertThat(coffeeChat.getMentorId()).isEqualTo(mentor.getId()),
                 () -> assertThat(coffeeChat.getMenteeId()).isEqualTo(mentee.getId()),
                 () -> assertThat(coffeeChat.getStatus()).isEqualTo(MENTOR_APPROVE),
