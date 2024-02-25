@@ -5,6 +5,7 @@ import com.koddy.server.common.AcceptanceTest;
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension;
 import com.koddy.server.common.fixture.MenteeFixture;
 import com.koddy.server.common.fixture.MentorFixture;
+import com.koddy.server.member.domain.model.Member;
 import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +27,7 @@ import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.�
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘티가_멘토의_커피챗_제안을_1차_수락한다;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.멘티가_멘토의_커피챗_제안을_거절한다;
 import static com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.신청_제안한_커피챗을_취소한다;
+import static com.koddy.server.acceptance.member.MemberAcceptanceStep.서비스를_탈퇴한다;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTEE_FLOW;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTOR_FLOW;
 import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY;
@@ -72,7 +74,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             final long coffeeChatId = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(start, end, mentor.id(), mentee.token().accessToken());
 
             final ValidatableResponse mentorResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token().accessToken()).statusCode(OK.value());
-            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
+            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1, Member.Status.ACTIVE);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTEE_APPLY.name()))
@@ -86,9 +88,25 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
                     .body("coffeeChat.chatType", nullValue())
                     .body("coffeeChat.chatValue", nullValue());
 
-            final ValidatableResponse menteeResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
-            assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
-            menteeResponse
+            final ValidatableResponse menteeResponse1 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse1, mentor.id(), MENTOR_1, Member.Status.ACTIVE);
+            menteeResponse1
+                    .body("coffeeChat.id", is((int) coffeeChatId))
+                    .body("coffeeChat.status", is(MENTEE_APPLY.name()))
+                    .body("coffeeChat.applyReason", notNullValue(String.class))
+                    .body("coffeeChat.suggestReason", nullValue())
+                    .body("coffeeChat.cancelReason", nullValue())
+                    .body("coffeeChat.rejectReason", nullValue())
+                    .body("coffeeChat.question", nullValue())
+                    .body("coffeeChat.start", is(start.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                    .body("coffeeChat.end", is(end.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                    .body("coffeeChat.chatType", nullValue())
+                    .body("coffeeChat.chatValue", nullValue());
+
+            서비스를_탈퇴한다(mentor.token().accessToken());
+            final ValidatableResponse menteeResponse2 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse2, mentor.id(), MENTOR_1, Member.Status.INACTIVE);
+            menteeResponse2
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTEE_APPLY.name()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
@@ -109,7 +127,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             신청_제안한_커피챗을_취소한다(coffeeChatId, mentee.token().accessToken());
 
             final ValidatableResponse mentorResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token().accessToken()).statusCode(OK.value());
-            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
+            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1, Member.Status.ACTIVE);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(CANCEL_FROM_MENTEE_FLOW.name()))
@@ -123,9 +141,25 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
                     .body("coffeeChat.chatType", nullValue())
                     .body("coffeeChat.chatValue", nullValue());
 
-            final ValidatableResponse menteeResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
-            assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
-            menteeResponse
+            final ValidatableResponse menteeResponse1 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse1, mentor.id(), MENTOR_1, Member.Status.ACTIVE);
+            menteeResponse1
+                    .body("coffeeChat.id", is((int) coffeeChatId))
+                    .body("coffeeChat.status", is(CANCEL_FROM_MENTEE_FLOW.name()))
+                    .body("coffeeChat.applyReason", notNullValue(String.class))
+                    .body("coffeeChat.suggestReason", nullValue())
+                    .body("coffeeChat.cancelReason", notNullValue(String.class))
+                    .body("coffeeChat.rejectReason", nullValue())
+                    .body("coffeeChat.question", nullValue())
+                    .body("coffeeChat.start", is(start.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                    .body("coffeeChat.end", is(end.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                    .body("coffeeChat.chatType", nullValue())
+                    .body("coffeeChat.chatValue", nullValue());
+
+            서비스를_탈퇴한다(mentor.token().accessToken());
+            final ValidatableResponse menteeResponse2 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse2, mentor.id(), MENTOR_1, Member.Status.INACTIVE);
+            menteeResponse2
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(CANCEL_FROM_MENTEE_FLOW.name()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
@@ -146,7 +180,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             멘토가_멘티의_커피챗_신청을_수락한다(coffeeChatId, KAKAO_ID, mentor.token().accessToken());
 
             final ValidatableResponse mentorResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token().accessToken()).statusCode(OK.value());
-            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
+            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1, Member.Status.ACTIVE);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTOR_APPROVE.name()))
@@ -160,9 +194,25 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
                     .body("coffeeChat.chatType", is(KAKAO_ID.getType().getEng()))
                     .body("coffeeChat.chatValue", is(KAKAO_ID.getValue()));
 
-            final ValidatableResponse menteeResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
-            assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
-            menteeResponse
+            final ValidatableResponse menteeResponse1 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse1, mentor.id(), MENTOR_1, Member.Status.ACTIVE);
+            menteeResponse1
+                    .body("coffeeChat.id", is((int) coffeeChatId))
+                    .body("coffeeChat.status", is(MENTOR_APPROVE.name()))
+                    .body("coffeeChat.applyReason", notNullValue(String.class))
+                    .body("coffeeChat.suggestReason", nullValue())
+                    .body("coffeeChat.cancelReason", nullValue())
+                    .body("coffeeChat.rejectReason", nullValue())
+                    .body("coffeeChat.question", notNullValue(String.class))
+                    .body("coffeeChat.start", is(start.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                    .body("coffeeChat.end", is(end.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                    .body("coffeeChat.chatType", is(KAKAO_ID.getType().getEng()))
+                    .body("coffeeChat.chatValue", is(KAKAO_ID.getValue()));
+
+            서비스를_탈퇴한다(mentor.token().accessToken());
+            final ValidatableResponse menteeResponse2 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse2, mentor.id(), MENTOR_1, Member.Status.INACTIVE);
+            menteeResponse2
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTOR_APPROVE.name()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
@@ -183,7 +233,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             멘토가_멘티의_커피챗_신청을_거절한다(coffeeChatId, "거절..", mentor.token().accessToken());
 
             final ValidatableResponse mentorResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token().accessToken()).statusCode(OK.value());
-            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
+            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1, Member.Status.ACTIVE);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTOR_REJECT.name()))
@@ -197,9 +247,25 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
                     .body("coffeeChat.chatType", nullValue())
                     .body("coffeeChat.chatValue", nullValue());
 
-            final ValidatableResponse menteeResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
-            assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
-            menteeResponse
+            final ValidatableResponse menteeResponse1 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse1, mentor.id(), MENTOR_1, Member.Status.ACTIVE);
+            menteeResponse1
+                    .body("coffeeChat.id", is((int) coffeeChatId))
+                    .body("coffeeChat.status", is(MENTOR_REJECT.name()))
+                    .body("coffeeChat.applyReason", notNullValue(String.class))
+                    .body("coffeeChat.suggestReason", nullValue())
+                    .body("coffeeChat.cancelReason", nullValue())
+                    .body("coffeeChat.rejectReason", notNullValue(String.class))
+                    .body("coffeeChat.question", nullValue())
+                    .body("coffeeChat.start", is(start.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                    .body("coffeeChat.end", is(end.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                    .body("coffeeChat.chatType", nullValue())
+                    .body("coffeeChat.chatValue", nullValue());
+
+            서비스를_탈퇴한다(mentor.token().accessToken());
+            final ValidatableResponse menteeResponse2 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse2, mentor.id(), MENTOR_1, Member.Status.INACTIVE);
+            menteeResponse2
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTOR_REJECT.name()))
                     .body("coffeeChat.applyReason", notNullValue(String.class))
@@ -223,7 +289,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             final long coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id(), mentor.token().accessToken());
 
             final ValidatableResponse mentorResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token().accessToken()).statusCode(OK.value());
-            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
+            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1, Member.Status.ACTIVE);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTOR_SUGGEST.name()))
@@ -237,9 +303,25 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
                     .body("coffeeChat.chatType", nullValue())
                     .body("coffeeChat.chatValue", nullValue());
 
-            final ValidatableResponse menteeResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
-            assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
-            menteeResponse
+            final ValidatableResponse menteeResponse1 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse1, mentor.id(), MENTOR_1, Member.Status.ACTIVE);
+            menteeResponse1
+                    .body("coffeeChat.id", is((int) coffeeChatId))
+                    .body("coffeeChat.status", is(MENTOR_SUGGEST.name()))
+                    .body("coffeeChat.applyReason", nullValue())
+                    .body("coffeeChat.suggestReason", notNullValue(String.class))
+                    .body("coffeeChat.cancelReason", nullValue())
+                    .body("coffeeChat.rejectReason", nullValue())
+                    .body("coffeeChat.question", nullValue())
+                    .body("coffeeChat.start", nullValue())
+                    .body("coffeeChat.end", nullValue())
+                    .body("coffeeChat.chatType", nullValue())
+                    .body("coffeeChat.chatValue", nullValue());
+
+            서비스를_탈퇴한다(mentor.token().accessToken());
+            final ValidatableResponse menteeResponse2 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse2, mentor.id(), MENTOR_1, Member.Status.INACTIVE);
+            menteeResponse2
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTOR_SUGGEST.name()))
                     .body("coffeeChat.applyReason", nullValue())
@@ -260,7 +342,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             신청_제안한_커피챗을_취소한다(coffeeChatId, mentor.token().accessToken());
 
             final ValidatableResponse mentorResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token().accessToken()).statusCode(OK.value());
-            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
+            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1, Member.Status.ACTIVE);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(CANCEL_FROM_MENTOR_FLOW.name()))
@@ -274,9 +356,25 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
                     .body("coffeeChat.chatType", nullValue())
                     .body("coffeeChat.chatValue", nullValue());
 
-            final ValidatableResponse menteeResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
-            assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
-            menteeResponse
+            final ValidatableResponse menteeResponse1 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse1, mentor.id(), MENTOR_1, Member.Status.ACTIVE);
+            menteeResponse1
+                    .body("coffeeChat.id", is((int) coffeeChatId))
+                    .body("coffeeChat.status", is(CANCEL_FROM_MENTOR_FLOW.name()))
+                    .body("coffeeChat.applyReason", nullValue())
+                    .body("coffeeChat.suggestReason", notNullValue(String.class))
+                    .body("coffeeChat.cancelReason", notNullValue(String.class))
+                    .body("coffeeChat.rejectReason", nullValue())
+                    .body("coffeeChat.question", nullValue())
+                    .body("coffeeChat.start", nullValue())
+                    .body("coffeeChat.end", nullValue())
+                    .body("coffeeChat.chatType", nullValue())
+                    .body("coffeeChat.chatValue", nullValue());
+
+            서비스를_탈퇴한다(mentor.token().accessToken());
+            final ValidatableResponse menteeResponse2 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse2, mentor.id(), MENTOR_1, Member.Status.INACTIVE);
+            menteeResponse2
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(CANCEL_FROM_MENTOR_FLOW.name()))
                     .body("coffeeChat.applyReason", nullValue())
@@ -297,7 +395,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             멘티가_멘토의_커피챗_제안을_1차_수락한다(coffeeChatId, start, end, mentee.token().accessToken());
 
             final ValidatableResponse mentorResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token().accessToken()).statusCode(OK.value());
-            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
+            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1, Member.Status.ACTIVE);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTEE_PENDING.name()))
@@ -311,9 +409,25 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
                     .body("coffeeChat.chatType", nullValue())
                     .body("coffeeChat.chatValue", nullValue());
 
-            final ValidatableResponse menteeResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
-            assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
-            menteeResponse
+            final ValidatableResponse menteeResponse1 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse1, mentor.id(), MENTOR_1, Member.Status.ACTIVE);
+            menteeResponse1
+                    .body("coffeeChat.id", is((int) coffeeChatId))
+                    .body("coffeeChat.status", is(MENTEE_PENDING.name()))
+                    .body("coffeeChat.applyReason", nullValue())
+                    .body("coffeeChat.suggestReason", notNullValue(String.class))
+                    .body("coffeeChat.cancelReason", nullValue())
+                    .body("coffeeChat.rejectReason", nullValue())
+                    .body("coffeeChat.question", notNullValue(String.class))
+                    .body("coffeeChat.start", is(start.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                    .body("coffeeChat.end", is(end.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                    .body("coffeeChat.chatType", nullValue())
+                    .body("coffeeChat.chatValue", nullValue());
+
+            서비스를_탈퇴한다(mentor.token().accessToken());
+            final ValidatableResponse menteeResponse2 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse2, mentor.id(), MENTOR_1, Member.Status.INACTIVE);
+            menteeResponse2
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTEE_PENDING.name()))
                     .body("coffeeChat.applyReason", nullValue())
@@ -334,7 +448,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             멘티가_멘토의_커피챗_제안을_거절한다(coffeeChatId, "거절..", mentee.token().accessToken());
 
             final ValidatableResponse mentorResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token().accessToken()).statusCode(OK.value());
-            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
+            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1, Member.Status.ACTIVE);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTEE_REJECT.name()))
@@ -348,9 +462,25 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
                     .body("coffeeChat.chatType", nullValue())
                     .body("coffeeChat.chatValue", nullValue());
 
-            final ValidatableResponse menteeResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
-            assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
-            menteeResponse
+            final ValidatableResponse menteeResponse1 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse1, mentor.id(), MENTOR_1, Member.Status.ACTIVE);
+            menteeResponse1
+                    .body("coffeeChat.id", is((int) coffeeChatId))
+                    .body("coffeeChat.status", is(MENTEE_REJECT.name()))
+                    .body("coffeeChat.applyReason", nullValue())
+                    .body("coffeeChat.suggestReason", notNullValue(String.class))
+                    .body("coffeeChat.cancelReason", nullValue())
+                    .body("coffeeChat.rejectReason", notNullValue(String.class))
+                    .body("coffeeChat.question", nullValue())
+                    .body("coffeeChat.start", nullValue())
+                    .body("coffeeChat.end", nullValue())
+                    .body("coffeeChat.chatType", nullValue())
+                    .body("coffeeChat.chatValue", nullValue());
+
+            서비스를_탈퇴한다(mentor.token().accessToken());
+            final ValidatableResponse menteeResponse2 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse2, mentor.id(), MENTOR_1, Member.Status.INACTIVE);
+            menteeResponse2
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTEE_REJECT.name()))
                     .body("coffeeChat.applyReason", nullValue())
@@ -372,7 +502,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             멘토가_Pending_상태인_커피챗에_대해서_최종_수락을_한다(coffeeChatId, KAKAO_ID, mentor.token().accessToken());
 
             final ValidatableResponse mentorResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token().accessToken()).statusCode(OK.value());
-            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
+            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1, Member.Status.ACTIVE);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTOR_FINALLY_APPROVE.name()))
@@ -386,9 +516,25 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
                     .body("coffeeChat.chatType", is(KAKAO_ID.getType().getEng()))
                     .body("coffeeChat.chatValue", is(KAKAO_ID.getValue()));
 
-            final ValidatableResponse menteeResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
-            assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
-            menteeResponse
+            final ValidatableResponse menteeResponse1 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse1, mentor.id(), MENTOR_1, Member.Status.ACTIVE);
+            menteeResponse1
+                    .body("coffeeChat.id", is((int) coffeeChatId))
+                    .body("coffeeChat.status", is(MENTOR_FINALLY_APPROVE.name()))
+                    .body("coffeeChat.applyReason", nullValue())
+                    .body("coffeeChat.suggestReason", notNullValue(String.class))
+                    .body("coffeeChat.cancelReason", nullValue())
+                    .body("coffeeChat.rejectReason", nullValue())
+                    .body("coffeeChat.question", notNullValue(String.class))
+                    .body("coffeeChat.start", is(start.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                    .body("coffeeChat.end", is(end.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                    .body("coffeeChat.chatType", is(KAKAO_ID.getType().getEng()))
+                    .body("coffeeChat.chatValue", is(KAKAO_ID.getValue()));
+
+            서비스를_탈퇴한다(mentor.token().accessToken());
+            final ValidatableResponse menteeResponse2 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse2, mentor.id(), MENTOR_1, Member.Status.INACTIVE);
+            menteeResponse2
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTOR_FINALLY_APPROVE.name()))
                     .body("coffeeChat.applyReason", nullValue())
@@ -410,7 +556,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
             멘토가_Pending_상태인_커피챗에_대해서_최종_취소를_한다(coffeeChatId, "최종 취소..", mentor.token().accessToken());
 
             final ValidatableResponse mentorResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token().accessToken()).statusCode(OK.value());
-            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1);
+            assertMenteeMatch(mentorResponse, mentee.id(), MENTEE_1, Member.Status.ACTIVE);
             mentorResponse
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTOR_FINALLY_CANCEL.name()))
@@ -424,9 +570,25 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
                     .body("coffeeChat.chatType", nullValue())
                     .body("coffeeChat.chatValue", nullValue());
 
-            final ValidatableResponse menteeResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
-            assertMentorMatch(menteeResponse, mentor.id(), MENTOR_1);
-            menteeResponse
+            final ValidatableResponse menteeResponse1 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse1, mentor.id(), MENTOR_1, Member.Status.ACTIVE);
+            menteeResponse1
+                    .body("coffeeChat.id", is((int) coffeeChatId))
+                    .body("coffeeChat.status", is(MENTOR_FINALLY_CANCEL.name()))
+                    .body("coffeeChat.applyReason", nullValue())
+                    .body("coffeeChat.suggestReason", notNullValue(String.class))
+                    .body("coffeeChat.cancelReason", notNullValue(String.class))
+                    .body("coffeeChat.rejectReason", nullValue())
+                    .body("coffeeChat.question", notNullValue(String.class))
+                    .body("coffeeChat.start", is(start.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                    .body("coffeeChat.end", is(end.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                    .body("coffeeChat.chatType", nullValue())
+                    .body("coffeeChat.chatValue", nullValue());
+
+            서비스를_탈퇴한다(mentor.token().accessToken());
+            final ValidatableResponse menteeResponse2 = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token().accessToken()).statusCode(OK.value());
+            assertMentorMatch(menteeResponse2, mentor.id(), MENTOR_1, Member.Status.INACTIVE);
+            menteeResponse2
                     .body("coffeeChat.id", is((int) coffeeChatId))
                     .body("coffeeChat.status", is(MENTOR_FINALLY_CANCEL.name()))
                     .body("coffeeChat.applyReason", nullValue())
@@ -444,7 +606,8 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
     private void assertMentorMatch(
             final ValidatableResponse response,
             final Long id,
-            final MentorFixture mentor
+            final MentorFixture mentor,
+            final Member.Status status
     ) {
         response
                 .body("mentor.id", is(id.intValue()))
@@ -455,13 +618,15 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
                 .body("mentor.languages.sub", containsInAnyOrder(List.of(EN.getCode()).toArray()))
                 .body("mentor.school", is(mentor.getUniversityProfile().getSchool()))
                 .body("mentor.major", is(mentor.getUniversityProfile().getMajor()))
-                .body("mentor.enteredIn", is(mentor.getUniversityProfile().getEnteredIn()));
+                .body("mentor.enteredIn", is(mentor.getUniversityProfile().getEnteredIn()))
+                .body("mentor.status", is(status.name()));
     }
 
     private void assertMenteeMatch(
             final ValidatableResponse response,
             final Long id,
-            final MenteeFixture mentee
+            final MenteeFixture mentee,
+            final Member.Status status
     ) {
         response
                 .body("mentee.id", is(id.intValue()))
@@ -472,6 +637,7 @@ public class CoffeeChatScheduleDetailsQueryAcceptanceTest extends AcceptanceTest
                 .body("mentee.languages.main", is(EN.getCode()))
                 .body("mentee.languages.sub", containsInAnyOrder(List.of(KR.getCode()).toArray()))
                 .body("mentee.interestSchool", is(mentee.getInterest().getSchool()))
-                .body("mentee.interestMajor", is(mentee.getInterest().getMajor()));
+                .body("mentee.interestMajor", is(mentee.getInterest().getMajor()))
+                .body("mentee.status", is(status.name()));
     }
 }

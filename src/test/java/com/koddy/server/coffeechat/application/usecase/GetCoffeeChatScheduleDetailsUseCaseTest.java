@@ -14,6 +14,7 @@ import com.koddy.server.common.mock.fake.FakeEncryptor;
 import com.koddy.server.global.utils.encrypt.Encryptor;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
+import com.koddy.server.member.domain.repository.AvailableLanguageRepository;
 import com.koddy.server.member.domain.repository.MenteeRepository;
 import com.koddy.server.member.domain.repository.MentorRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -36,11 +37,13 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final MenteeRepository menteeRepository = mock(MenteeRepository.class);
+    private final AvailableLanguageRepository availableLanguageRepository = mock(AvailableLanguageRepository.class);
     private final Encryptor encryptor = new FakeEncryptor();
     private final GetCoffeeChatScheduleDetailsUseCase sut = new GetCoffeeChatScheduleDetailsUseCase(
             coffeeChatRepository,
             mentorRepository,
             menteeRepository,
+            availableLanguageRepository,
             encryptor
     );
 
@@ -54,8 +57,10 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
         final CoffeeChat coffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L);
 
         given(coffeeChatRepository.getById(coffeeChat.getId())).willReturn(coffeeChat);
-        given(mentorRepository.getById(coffeeChat.getMentorId())).willReturn(mentor);
-        given(menteeRepository.getById(coffeeChat.getMenteeId())).willReturn(mentee);
+        given(mentorRepository.getByIdWithNative(coffeeChat.getMentorId())).willReturn(mentor);
+        given(menteeRepository.getByIdWithNative(coffeeChat.getMenteeId())).willReturn(mentee);
+        given(availableLanguageRepository.findByMemberIdWithNative(mentor.getId())).willReturn(mentor.getAvailableLanguages());
+        given(availableLanguageRepository.findByMemberIdWithNative(mentee.getId())).willReturn(mentee.getAvailableLanguages());
 
         // when
         final CoffeeChatScheduleDetails result = sut.invoke(new GetCoffeeChatScheduleDetails(
@@ -78,6 +83,7 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
                             () -> assertThat(details.mentee().languages().sub()).containsExactlyInAnyOrder(KR.getCode()),
                             () -> assertThat(details.mentee().interestSchool()).isEqualTo(mentee.getInterest().getSchool()),
                             () -> assertThat(details.mentee().interestMajor()).isEqualTo(mentee.getInterest().getMajor()),
+                            () -> assertThat(details.mentee().status()).isEqualTo(mentee.getStatus().name()),
 
                             () -> assertThat(details.coffeeChat().id()).isEqualTo(coffeeChat.getId()),
                             () -> assertThat(details.coffeeChat().status()).isEqualTo(MENTEE_PENDING.name()),
@@ -102,8 +108,10 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
         final CoffeeChat coffeeChat = MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor).apply(1L);
 
         given(coffeeChatRepository.getById(coffeeChat.getId())).willReturn(coffeeChat);
-        given(mentorRepository.getById(coffeeChat.getMentorId())).willReturn(mentor);
-        given(menteeRepository.getById(coffeeChat.getMenteeId())).willReturn(mentee);
+        given(mentorRepository.getByIdWithNative(coffeeChat.getMentorId())).willReturn(mentor);
+        given(menteeRepository.getByIdWithNative(coffeeChat.getMenteeId())).willReturn(mentee);
+        given(availableLanguageRepository.findByMemberIdWithNative(mentor.getId())).willReturn(mentor.getAvailableLanguages());
+        given(availableLanguageRepository.findByMemberIdWithNative(mentee.getId())).willReturn(mentee.getAvailableLanguages());
 
         // when
         final CoffeeChatScheduleDetails result = sut.invoke(new GetCoffeeChatScheduleDetails(
@@ -126,6 +134,7 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
                             () -> assertThat(details.mentor().school()).isEqualTo(mentor.getUniversityProfile().getSchool()),
                             () -> assertThat(details.mentor().major()).isEqualTo(mentor.getUniversityProfile().getMajor()),
                             () -> assertThat(details.mentor().enteredIn()).isEqualTo(mentor.getUniversityProfile().getEnteredIn()),
+                            () -> assertThat(details.mentor().status()).isEqualTo(mentor.getStatus().name()),
 
                             () -> assertThat(details.coffeeChat().id()).isEqualTo(coffeeChat.getId()),
                             () -> assertThat(details.coffeeChat().status()).isEqualTo(MENTOR_APPROVE.name()),
@@ -150,8 +159,10 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
         final CoffeeChat coffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L);
 
         given(coffeeChatRepository.getById(coffeeChat.getId())).willReturn(coffeeChat);
-        given(mentorRepository.getById(coffeeChat.getMentorId())).willReturn(mentor);
-        given(menteeRepository.getById(coffeeChat.getMenteeId())).willReturn(mentee);
+        given(mentorRepository.getByIdWithNative(coffeeChat.getMentorId())).willReturn(mentor);
+        given(menteeRepository.getByIdWithNative(coffeeChat.getMenteeId())).willReturn(mentee);
+        given(availableLanguageRepository.findByMemberIdWithNative(mentor.getId())).willReturn(mentor.getAvailableLanguages());
+        given(availableLanguageRepository.findByMemberIdWithNative(mentee.getId())).willReturn(mentee.getAvailableLanguages());
 
         /* 멘토 입장 */
         final CoffeeChatScheduleDetails mentorResult = sut.invoke(new GetCoffeeChatScheduleDetails(
@@ -172,6 +183,7 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
                             () -> assertThat(details.mentee().languages().sub()).containsExactlyInAnyOrder(KR.getCode()),
                             () -> assertThat(details.mentee().interestSchool()).isEqualTo(mentee.getInterest().getSchool()),
                             () -> assertThat(details.mentee().interestMajor()).isEqualTo(mentee.getInterest().getMajor()),
+                            () -> assertThat(details.mentee().status()).isEqualTo(mentee.getStatus().name()),
 
                             () -> assertThat(details.coffeeChat().id()).isEqualTo(coffeeChat.getId()),
                             () -> assertThat(details.coffeeChat().status()).isEqualTo(MENTEE_PENDING.name()),
@@ -207,6 +219,7 @@ class GetCoffeeChatScheduleDetailsUseCaseTest extends UnitTest {
                             () -> assertThat(details.mentor().school()).isEqualTo(mentor.getUniversityProfile().getSchool()),
                             () -> assertThat(details.mentor().major()).isEqualTo(mentor.getUniversityProfile().getMajor()),
                             () -> assertThat(details.mentor().enteredIn()).isEqualTo(mentor.getUniversityProfile().getEnteredIn()),
+                            () -> assertThat(details.mentor().status()).isEqualTo(mentor.getStatus().name()),
 
                             () -> assertThat(details.coffeeChat().id()).isEqualTo(coffeeChat.getId()),
                             () -> assertThat(details.coffeeChat().status()).isEqualTo(MENTEE_PENDING.name()),

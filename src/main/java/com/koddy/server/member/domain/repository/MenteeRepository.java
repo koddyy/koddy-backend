@@ -16,6 +16,22 @@ public interface MenteeRepository extends JpaRepository<Mentee, Long> {
                 .orElseThrow(() -> new MemberException(MENTEE_NOT_FOUND));
     }
 
+    @Query(
+            value = """
+                    SELECT *
+                    FROM mentee m1
+                    INNER JOIN member m2 ON m1.id = m2.id
+                    WHERE m1.id = :id
+                    """,
+            nativeQuery = true
+    )
+    Optional<Mentee> findByIdWithNative(@Param("id") final Long id);
+
+    default Mentee getByIdWithNative(final Long id) {
+        return findByIdWithNative(id)
+                .orElseThrow(() -> new MemberException(MENTEE_NOT_FOUND));
+    }
+
     @Query("""
             SELECT m
             FROM Mentee m

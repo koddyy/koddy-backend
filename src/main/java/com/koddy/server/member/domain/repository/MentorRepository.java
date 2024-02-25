@@ -16,6 +16,22 @@ public interface MentorRepository extends JpaRepository<Mentor, Long> {
                 .orElseThrow(() -> new MemberException(MENTOR_NOT_FOUND));
     }
 
+    @Query(
+            value = """
+                    SELECT *
+                    FROM mentor m1
+                    INNER JOIN member m2 ON m1.id = m2.id
+                    WHERE m1.id = :id
+                    """,
+            nativeQuery = true
+    )
+    Optional<Mentor> findByIdWithNative(@Param("id") final Long id);
+
+    default Mentor getByIdWithNative(final Long id) {
+        return findByIdWithNative(id)
+                .orElseThrow(() -> new MemberException(MENTOR_NOT_FOUND));
+    }
+
     @Query("""
             SELECT m
             FROM Mentor m
