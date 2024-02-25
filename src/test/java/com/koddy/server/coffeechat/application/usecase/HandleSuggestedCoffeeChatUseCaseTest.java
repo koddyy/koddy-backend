@@ -5,6 +5,7 @@ import com.koddy.server.coffeechat.application.usecase.command.RejectSuggestedCo
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.model.Reservation;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
+import com.koddy.server.coffeechat.domain.service.CoffeeChatNotificationEventPublisher;
 import com.koddy.server.coffeechat.domain.service.ReservationAvailabilityChecker;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow;
@@ -33,10 +34,12 @@ class HandleSuggestedCoffeeChatUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final ReservationAvailabilityChecker reservationAvailabilityChecker = mock(ReservationAvailabilityChecker.class);
+    private final CoffeeChatNotificationEventPublisher eventPublisher = mock(CoffeeChatNotificationEventPublisher.class);
     private final HandleSuggestedCoffeeChatUseCase sut = new HandleSuggestedCoffeeChatUseCase(
             coffeeChatRepository,
             mentorRepository,
-            reservationAvailabilityChecker
+            reservationAvailabilityChecker,
+            eventPublisher
     );
 
     private final Mentee mentee = MENTEE_1.toDomain().apply(1L);

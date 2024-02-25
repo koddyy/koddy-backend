@@ -5,6 +5,7 @@ import com.koddy.server.coffeechat.application.usecase.command.FinallyCancelPend
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.model.Strategy;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
+import com.koddy.server.coffeechat.domain.service.CoffeeChatNotificationEventPublisher;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.CoffeeChatFixture;
 import com.koddy.server.common.mock.fake.FakeEncryptor;
@@ -31,7 +32,13 @@ import static org.mockito.Mockito.verify;
 class HandlePendingCoffeeChatUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
     private final Encryptor encryptor = new FakeEncryptor();
-    private final HandlePendingCoffeeChatUseCase sut = new HandlePendingCoffeeChatUseCase(coffeeChatRepository, encryptor);
+
+    private final CoffeeChatNotificationEventPublisher eventPublisher = mock(CoffeeChatNotificationEventPublisher.class);
+    private final HandlePendingCoffeeChatUseCase sut = new HandlePendingCoffeeChatUseCase(
+            coffeeChatRepository,
+            encryptor,
+            eventPublisher
+    );
 
     private final Mentee mentee = MENTEE_1.toDomain().apply(1L);
     private final Mentor mentor = MENTOR_1.toDomain().apply(2L);

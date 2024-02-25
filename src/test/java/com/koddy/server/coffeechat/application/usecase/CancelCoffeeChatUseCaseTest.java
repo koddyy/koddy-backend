@@ -4,6 +4,7 @@ import com.koddy.server.auth.domain.model.Authenticated;
 import com.koddy.server.coffeechat.application.usecase.command.CancelCoffeeChatCommand;
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
+import com.koddy.server.coffeechat.domain.service.CoffeeChatNotificationEventPublisher;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow;
 import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow;
@@ -28,7 +29,11 @@ import static org.mockito.Mockito.verify;
 @DisplayName("CoffeeChat -> CancelCoffeeChatUseCase 테스트")
 class CancelCoffeeChatUseCaseTest extends UnitTest {
     private final CoffeeChatRepository coffeeChatRepository = mock(CoffeeChatRepository.class);
-    private final CancelCoffeeChatUseCase sut = new CancelCoffeeChatUseCase(coffeeChatRepository);
+    private final CoffeeChatNotificationEventPublisher eventPublisher = mock(CoffeeChatNotificationEventPublisher.class);
+    private final CancelCoffeeChatUseCase sut = new CancelCoffeeChatUseCase(
+            coffeeChatRepository,
+            eventPublisher
+    );
 
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
     private final Authenticated mentorAuthenticated = new Authenticated(mentor.getId(), mentor.getAuthority());
