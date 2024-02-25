@@ -9,5 +9,5 @@ class DefaultAuthCodeGenerator : AuthCodeGenerator {
         UUID.randomUUID()
             .toString()
             .replace("-".toRegex(), "")
-            .substring(0, 8)
+            .substring(0, 6)
 }

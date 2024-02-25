@@ -1,0 +1,41 @@
+= [알림 관련 기능]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+
+== 알림 처리
+
+=== 단건 읽음 처리
+
+*HTTP Request*
+
+include::{snippets}/NotificationApi/ReadProcessing/Single/http-request.adoc[]
+include::{snippets}/NotificationApi/ReadProcessing/Single/path-parameters.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/NotificationApi/ReadProcessing/Single/http-response.adoc[]
+
+=== 전체 읽음 처리
+
+*HTTP Request*
+
+include::{snippets}/NotificationApi/ReadProcessing/All/http-request.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/NotificationApi/ReadProcessing/All/http-response.adoc[]
+
+== 알림 조회
+
+*HTTP Request*
+
+include::{snippets}/NotificationApi/GetMyNotifications/http-request.adoc[]
+include::{snippets}/NotificationApi/GetMyNotifications/query-parameters.adoc[]
+
+*HTTP Response*
+
+include::{snippets}/NotificationApi/GetMyNotifications/http-response.adoc[]
+include::{snippets}/NotificationApi/GetMyNotifications/response-fields.adoc[]
