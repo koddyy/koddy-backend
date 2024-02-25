@@ -73,7 +73,7 @@ class MenteeDeleterTest extends IntegrateTest {
 
         // then
         assertAll(
-                () -> assertThat(getLanguage(mentee.getId())).hasSize(0),
+                () -> assertThat(getLanguage(mentee.getId())).hasSize(MENTEE_1.getLanguages().size()),
                 () -> {
                     assertThatThrownBy(() -> getMenteeByJpql(mentee.getId())).isInstanceOf(NoResultException.class);
                     assertThat(getMenteeByNative(mentee.getId())).isNotNull();

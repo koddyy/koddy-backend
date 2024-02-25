@@ -77,7 +77,7 @@ class MentorDeleterTest extends IntegrateTest {
 
         // then
         assertAll(
-                () -> assertThat(getLanguage(mentor.getId())).hasSize(0),
+                () -> assertThat(getLanguage(mentor.getId())).hasSize(MENTOR_1.getLanguages().size()),
                 () -> assertThat(getSchedule(mentor.getId())).hasSize(0),
                 () -> {
                     assertThatThrownBy(() -> getMentorByJpql(mentor.getId())).isInstanceOf(NoResultException.class);
