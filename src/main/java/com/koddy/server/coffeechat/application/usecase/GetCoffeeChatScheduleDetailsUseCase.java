@@ -36,8 +36,8 @@ public class GetCoffeeChatScheduleDetailsUseCase {
     @KoddyReadOnlyTransactional
     public CoffeeChatScheduleDetails invoke(final GetCoffeeChatScheduleDetails query) {
         final CoffeeChat coffeeChat = coffeeChatRepository.getById(query.coffeeChatId());
-        final Mentor mentor = mentorRepository.getById(coffeeChat.getMentorId());
-        final Mentee mentee = menteeRepository.getById(coffeeChat.getMenteeId());
+        final Mentor mentor = mentorRepository.getByIdWithNative(coffeeChat.getMentorId());
+        final Mentee mentee = menteeRepository.getByIdWithNative(coffeeChat.getMenteeId());
 
         if (query.authenticated().isMentor()) {
             return MentorCoffeeChatScheduleDetails.of(mentee, coffeeChat, encryptor);
