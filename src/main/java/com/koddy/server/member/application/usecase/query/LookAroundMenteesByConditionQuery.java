@@ -7,7 +7,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
-public record GetMenteesByCondition(
+public record LookAroundMenteesByConditionQuery(
         List<Nationality> nationalities,
         List<Language.Category> languages,
         int page

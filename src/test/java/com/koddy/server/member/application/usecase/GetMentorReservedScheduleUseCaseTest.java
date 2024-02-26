@@ -4,8 +4,8 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.repository.query.MentorReservedScheduleQueryRepository;
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow;
-import com.koddy.server.member.application.usecase.query.GetReservedSchedule;
-import com.koddy.server.member.application.usecase.query.response.ReservedSchedule;
+import com.koddy.server.member.application.usecase.query.GetMentorReservedSchedule;
+import com.koddy.server.member.application.usecase.query.response.MentorReservedSchedule;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.model.response.ScheduleResponse;
@@ -27,11 +27,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@DisplayName("Member -> GetReservedScheduleUseCase 테스트")
-class GetReservedScheduleUseCaseTest extends UnitTest {
+@DisplayName("Member -> GetMentorReservedScheduleUseCase 테스트")
+class GetMentorReservedScheduleUseCaseTest extends UnitTest {
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final MentorReservedScheduleQueryRepository mentorReservedScheduleQueryRepository = mock(MentorReservedScheduleQueryRepository.class);
-    private final GetReservedScheduleUseCase sut = new GetReservedScheduleUseCase(mentorRepository, mentorReservedScheduleQueryRepository);
+    private final GetMentorReservedScheduleUseCase sut = new GetMentorReservedScheduleUseCase(mentorRepository, mentorReservedScheduleQueryRepository);
 
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
     private final Mentee menteeA = MENTEE_1.toDomain().apply(2L);
@@ -42,7 +42,7 @@ class GetReservedScheduleUseCaseTest extends UnitTest {
     @DisplayName("특정 Year-Month에 대해서 멘토의 예약된 스케줄 정보를 조회한다")
     void success() {
         // given
-        final GetReservedSchedule query = new GetReservedSchedule(mentor.getId(), 2024, 2);
+        final GetMentorReservedSchedule query = new GetMentorReservedSchedule(mentor.getId(), 2024, 2);
         given(mentorRepository.getByIdWithSchedules(query.mentorId())).willReturn(mentor);
 
         final LocalDateTime startB = LocalDateTime.of(2024, 2, 18, 18, 0);
@@ -54,7 +54,7 @@ class GetReservedScheduleUseCaseTest extends UnitTest {
         given(mentorReservedScheduleQueryRepository.fetchReservedCoffeeChat(query.mentorId(), query.year(), query.month())).willReturn(List.of(coffeeChatC, coffeeChatB));
 
         // when
-        final ReservedSchedule result = sut.invoke(query);
+        final MentorReservedSchedule result = sut.invoke(query);
 
         // then
         assertAll(
@@ -70,10 +70,10 @@ class GetReservedScheduleUseCaseTest extends UnitTest {
                 ),
                 () -> assertThat(result.timeUnit()).isEqualTo(mentor.getMentoringTimeUnit()),
                 () -> assertThat(result.reserved())
-                        .map(ReservedSchedule.Reserved::start)
+                        .map(MentorReservedSchedule.Reserved::start)
                         .containsExactly(coffeeChatC.getReservation().getStart(), coffeeChatB.getReservation().getStart()),
                 () -> assertThat(result.reserved())
-                        .map(ReservedSchedule.Reserved::end)
+                        .map(MentorReservedSchedule.Reserved::end)
                         .containsExactly(coffeeChatC.getReservation().getEnd(), coffeeChatB.getReservation().getEnd())
         );
     }

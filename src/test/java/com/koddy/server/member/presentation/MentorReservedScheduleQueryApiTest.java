@@ -1,8 +1,8 @@
 package com.koddy.server.member.presentation;
 
 import com.koddy.server.common.ControllerTest;
-import com.koddy.server.member.application.usecase.GetReservedScheduleUseCase;
-import com.koddy.server.member.application.usecase.query.response.ReservedSchedule;
+import com.koddy.server.member.application.usecase.GetMentorReservedScheduleUseCase;
+import com.koddy.server.member.application.usecase.query.response.MentorReservedSchedule;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
@@ -32,17 +32,17 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("Member -> MentorScheduleQueryApi 테스트")
-class MentorScheduleQueryApiTest extends ControllerTest {
+@DisplayName("Member -> MentorReservedScheduleQueryApi 테스트")
+class MentorReservedScheduleQueryApiTest extends ControllerTest {
     @Autowired
-    private GetReservedScheduleUseCase getReservedScheduleUseCase;
+    private GetMentorReservedScheduleUseCase getMentorReservedScheduleUseCase;
 
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
     private final Mentee mentee = MENTEE_1.toDomain().apply(2L);
 
     @Nested
     @DisplayName("특정 Year-Month에 대해서 멘토의 예약된 스케줄 조회 API [GET /api/mentors/{mentorId}/reserved-schedule]")
-    class GetReservedSchedule {
+    class GetMentorReservedSchedule {
         private static final String BASE_URL = "/api/mentors/{mentorId}/reserved-schedule";
 
         @Test
@@ -50,7 +50,7 @@ class MentorScheduleQueryApiTest extends ControllerTest {
         void success() {
             // given
             applyToken(true, mentee);
-            given(getReservedScheduleUseCase.invoke(any())).willReturn(new ReservedSchedule(
+            given(getMentorReservedScheduleUseCase.invoke(any())).willReturn(new MentorReservedSchedule(
                     new MentoringPeriodResponse(
                             LocalDate.of(2024, 1, 1),
                             LocalDate.of(2024, 12, 31)
@@ -69,23 +69,23 @@ class MentorScheduleQueryApiTest extends ControllerTest {
                     ),
                     MentoringPeriod.TimeUnit.HALF_HOUR.getValue(),
                     List.of(
-                            new ReservedSchedule.Reserved(
+                            new MentorReservedSchedule.Reserved(
                                     LocalDateTime.of(2024, 2, 7, 18, 30),
                                     LocalDateTime.of(2024, 2, 7, 19, 0)
                             ),
-                            new ReservedSchedule.Reserved(
+                            new MentorReservedSchedule.Reserved(
                                     LocalDateTime.of(2024, 2, 12, 18, 30),
                                     LocalDateTime.of(2024, 2, 12, 19, 0)
                             ),
-                            new ReservedSchedule.Reserved(
+                            new MentorReservedSchedule.Reserved(
                                     LocalDateTime.of(2024, 2, 14, 18, 30),
                                     LocalDateTime.of(2024, 2, 14, 19, 0)
                             ),
-                            new ReservedSchedule.Reserved(
+                            new MentorReservedSchedule.Reserved(
                                     LocalDateTime.of(2024, 2, 19, 18, 30),
                                     LocalDateTime.of(2024, 2, 19, 19, 0)
                             ),
-                            new ReservedSchedule.Reserved(
+                            new MentorReservedSchedule.Reserved(
                                     LocalDateTime.of(2024, 2, 26, 18, 30),
                                     LocalDateTime.of(2024, 2, 26, 19, 0)
                             )

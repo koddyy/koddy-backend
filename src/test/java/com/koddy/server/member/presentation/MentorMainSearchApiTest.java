@@ -124,14 +124,14 @@ class MentorMainSearchApiTest extends ControllerTest {
 
     @Nested
     @DisplayName("멘티 둘러보기 API [GET /api/mentees]")
-    class GetMenteesByCondition {
+    class LookAroundMenteesByCondition {
         private static final String BASE_URL = "/api/mentees";
 
         @Test
         @DisplayName("멘티들을 조건에 따라 둘러본다")
         void success() {
             // given
-            given(mentorMainSearchUseCase.getMenteesByCondition(any())).willReturn(new SliceResponse<>(
+            given(mentorMainSearchUseCase.lookAroundMenteesByCondition(any())).willReturn(new SliceResponse<>(
                     List.of(
                             new MenteeSimpleSearchProfile(
                                     3,

@@ -9,7 +9,7 @@ import com.koddy.server.member.domain.model.response.ScheduleResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ReservedSchedule(
+public record MentorReservedSchedule(
         MentoringPeriodResponse period,
         List<ScheduleResponse> schedules,
         Integer timeUnit,
@@ -24,8 +24,8 @@ public record ReservedSchedule(
         }
     }
 
-    public static ReservedSchedule of(final Mentor mentor, final List<CoffeeChat> reservedCoffeeChat) {
-        return new ReservedSchedule(
+    public static MentorReservedSchedule of(final Mentor mentor, final List<CoffeeChat> reservedCoffeeChat) {
+        return new MentorReservedSchedule(
                 MentoringPeriodResponse.from(mentor.getMentoringPeriod()),
                 mentor.getSchedules()
                         .stream()
@@ -33,7 +33,7 @@ public record ReservedSchedule(
                         .toList(),
                 mentor.getMentoringTimeUnit(),
                 reservedCoffeeChat.stream()
-                        .map(it -> ReservedSchedule.Reserved.from(it.getReservation()))
+                        .map(it -> MentorReservedSchedule.Reserved.from(it.getReservation()))
                         .toList()
         );
     }

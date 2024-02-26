@@ -5,8 +5,8 @@ import com.koddy.server.global.annotation.UseCase;
 import com.koddy.server.global.query.PageCreator;
 import com.koddy.server.global.query.PageResponse;
 import com.koddy.server.global.query.SliceResponse;
-import com.koddy.server.member.application.usecase.query.GetMentorsByCondition;
 import com.koddy.server.member.application.usecase.query.GetSuggestedMentors;
+import com.koddy.server.member.application.usecase.query.LookAroundMentorsByConditionQuery;
 import com.koddy.server.member.application.usecase.query.response.MentorSimpleSearchProfile;
 import com.koddy.server.member.application.usecase.query.response.SuggestedCoffeeChatsByMentorResponse;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -41,7 +41,9 @@ public class MenteeMainSearchUseCase {
     }
 
     @KoddyReadOnlyTransactional
-    public SliceResponse<List<MentorSimpleSearchProfile>> getMentorsByCondition(final GetMentorsByCondition query) {
+    public SliceResponse<List<MentorSimpleSearchProfile>> lookAroundMentorsByCondition(
+            final LookAroundMentorsByConditionQuery query
+    ) {
         final SearchMentorCondition condition = query.toCondition();
         final Pageable pageable = PageCreator.create(query.page());
         final Slice<Mentor> result = menteeMainSearchRepository.fetchMentorsByCondition(condition, pageable);

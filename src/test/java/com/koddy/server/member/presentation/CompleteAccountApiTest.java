@@ -10,8 +10,8 @@ import com.koddy.server.member.presentation.request.CompleteMenteeProfileRequest
 import com.koddy.server.member.presentation.request.CompleteMentorProfileRequest;
 import com.koddy.server.member.presentation.request.End;
 import com.koddy.server.member.presentation.request.MentorScheduleRequest;
-import com.koddy.server.member.presentation.request.MentoringPeriodRequest;
 import com.koddy.server.member.presentation.request.Start;
+import com.koddy.server.member.presentation.request.model.MentoringPeriodRequestModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ class CompleteAccountApiTest extends ControllerTest {
         private final CompleteMentorProfileRequest request = new CompleteMentorProfileRequest(
                 MENTOR_1.getIntroduction(),
                 MENTOR_1.getProfileImageUrl(),
-                new MentoringPeriodRequest(
+                new MentoringPeriodRequestModel(
                         MENTOR_1.getMentoringPeriod().getStartDate(),
                         MENTOR_1.getMentoringPeriod().getEndDate()
                 ),

@@ -2,7 +2,7 @@ package com.koddy.server.acceptance.member;
 
 import com.koddy.server.common.AcceptanceTest;
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension;
-import com.koddy.server.member.presentation.request.LanguageRequest;
+import com.koddy.server.member.presentation.request.model.LanguageRequestModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -40,11 +40,11 @@ public class UpdateInfoAcceptanceTest extends AcceptanceTest {
             @DisplayName("멘티는 접근 권한이 없다")
             void throwExceptionByInvalidPermission() {
                 final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
-                final LanguageRequest languageRequest = new LanguageRequest(
+                final LanguageRequestModel languageRequestModel = new LanguageRequestModel(
                         EN.getCode(),
                         List.of(KR.getCode(), CN.getCode(), JP.getCode(), VN.getCode())
                 );
-                멘토_기본_정보를_수정한다(MENTOR_2, languageRequest, accessToken)
+                멘토_기본_정보를_수정한다(MENTOR_2, languageRequestModel, accessToken)
                         .statusCode(FORBIDDEN.value())
                         .body("errorCode", is(INVALID_PERMISSION.getErrorCode()))
                         .body("message", is(INVALID_PERMISSION.getMessage()));
@@ -54,11 +54,11 @@ public class UpdateInfoAcceptanceTest extends AcceptanceTest {
             @DisplayName("멘토 기본 정보를 수정한다")
             void success() {
                 final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
-                final LanguageRequest languageRequest = new LanguageRequest(
+                final LanguageRequestModel languageRequestModel = new LanguageRequestModel(
                         EN.getCode(),
                         List.of(KR.getCode(), CN.getCode(), JP.getCode(), VN.getCode())
                 );
-                멘토_기본_정보를_수정한다(MENTOR_2, languageRequest, accessToken)
+                멘토_기본_정보를_수정한다(MENTOR_2, languageRequestModel, accessToken)
                         .statusCode(NO_CONTENT.value());
             }
         }
@@ -96,11 +96,11 @@ public class UpdateInfoAcceptanceTest extends AcceptanceTest {
             @DisplayName("멘토는 접근 권한이 없다")
             void throwExceptionByInvalidPermission() {
                 final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
-                final LanguageRequest languageRequest = new LanguageRequest(
+                final LanguageRequestModel languageRequestModel = new LanguageRequestModel(
                         KR.getCode(),
                         List.of(EN.getCode(), CN.getCode(), JP.getCode(), VN.getCode())
                 );
-                멘티_기본_정보를_수정한다(MENTEE_2, languageRequest, accessToken)
+                멘티_기본_정보를_수정한다(MENTEE_2, languageRequestModel, accessToken)
                         .statusCode(FORBIDDEN.value())
                         .body("errorCode", is(INVALID_PERMISSION.getErrorCode()))
                         .body("message", is(INVALID_PERMISSION.getMessage()));
@@ -110,11 +110,11 @@ public class UpdateInfoAcceptanceTest extends AcceptanceTest {
             @DisplayName("멘티 기본 정보를 수정한다")
             void success() {
                 final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
-                final LanguageRequest languageRequest = new LanguageRequest(
+                final LanguageRequestModel languageRequestModel = new LanguageRequestModel(
                         KR.getCode(),
                         List.of(EN.getCode(), CN.getCode(), JP.getCode(), VN.getCode())
                 );
-                멘티_기본_정보를_수정한다(MENTEE_2, languageRequest, accessToken)
+                멘티_기본_정보를_수정한다(MENTEE_2, languageRequestModel, accessToken)
                         .statusCode(NO_CONTENT.value());
             }
         }

@@ -46,7 +46,7 @@ import static org.springframework.http.HttpStatus.OK;
 public class MentorScheduleQueryAcceptanceTest extends AcceptanceTest {
     @Nested
     @DisplayName("특정 Year-Month에 대해서 멘토의 예약된 스케줄 정보를 조회한다")
-    class GetReservedSchedule {
+    class GetMentorReservedSchedule {
         @Test
         @DisplayName("멘토링 시간 정보를 기입하지 않은 멘토에 대한 조회")
         void successA() {
