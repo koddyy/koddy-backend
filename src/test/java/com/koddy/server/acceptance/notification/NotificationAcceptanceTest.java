@@ -69,10 +69,10 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response1,
                     List.of(false),
-                    List.of(MENTEE_PENDING),
                     List.of(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
                     List.of(mentee.id()),
                     List.of(coffeeChatId),
+                    List.of(MENTEE_PENDING),
                     false
             );
 
@@ -83,10 +83,10 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response2,
                     List.of(true),
-                    List.of(MENTEE_PENDING),
                     List.of(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
                     List.of(mentee.id()),
                     List.of(coffeeChatId),
+                    List.of(MENTEE_PENDING),
                     false
             );
         }
@@ -98,10 +98,10 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response1,
                     List.of(false),
-                    List.of(MENTEE_PENDING),
                     List.of(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
                     List.of(mentee.id()),
                     List.of(coffeeChatId),
+                    List.of(MENTEE_PENDING),
                     false
             );
 
@@ -111,10 +111,10 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response2,
                     List.of(true),
-                    List.of(MENTEE_PENDING),
                     List.of(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
                     List.of(mentee.id()),
                     List.of(coffeeChatId),
+                    List.of(MENTEE_PENDING),
                     false
             );
         }
@@ -130,10 +130,10 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response1,
                     List.of(false, false),
-                    List.of(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
                     List.of(MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL, MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
                     List.of(mentor.id(), mentor.id()),
                     List.of(coffeeChatId, coffeeChatId),
+                    List.of(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
                     false
             );
 
@@ -144,10 +144,10 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response2,
                     List.of(true, false),
-                    List.of(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
                     List.of(MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL, MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
                     List.of(mentor.id(), mentor.id()),
                     List.of(coffeeChatId, coffeeChatId),
+                    List.of(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
                     false
             );
 
@@ -158,10 +158,10 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response3,
                     List.of(true, true),
-                    List.of(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
                     List.of(MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL, MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
                     List.of(mentor.id(), mentor.id()),
                     List.of(coffeeChatId, coffeeChatId),
+                    List.of(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
                     false
             );
         }
@@ -173,10 +173,10 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response1,
                     List.of(false, false),
-                    List.of(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
                     List.of(MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL, MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
                     List.of(coffeeChatId, coffeeChatId),
                     List.of(mentor.id(), mentor.id()),
+                    List.of(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
                     false
             );
 
@@ -186,10 +186,10 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
             assertNotificationsMatch(
                     response2,
                     List.of(true, true),
-                    List.of(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
                     List.of(MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL, MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
                     List.of(mentor.id(), mentor.id()),
                     List.of(coffeeChatId, coffeeChatId),
+                    List.of(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
                     false
             );
         }
@@ -198,10 +198,10 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
     private void assertNotificationsMatch(
             final ValidatableResponse response,
             final List<Boolean> reads,
-            final List<CoffeeChatStatus> coffeeChatStatusSnapshots,
             final List<NotificationType> types,
             final List<Long> memberIds,
             final List<Long> coffeeChatIds,
+            final List<CoffeeChatStatus> coffeeChatStatusSnapshots,
             final boolean hasNext
     ) {
         final int totalSize = reads.size();
@@ -212,17 +212,17 @@ public class NotificationAcceptanceTest extends AcceptanceTest {
         for (int i = 0; i < totalSize; i++) {
             final String index = String.format("result[%d]", i);
             final boolean read = reads.get(i);
-            final CoffeeChatStatus status = coffeeChatStatusSnapshots.get(i);
             final NotificationType type = types.get(i);
             final long memberId = memberIds.get(i);
             final long coffeeChatId = coffeeChatIds.get(i);
+            final CoffeeChatStatus status = coffeeChatStatusSnapshots.get(i);
 
             response
                     .body(index + ".read", is(read))
-                    .body(index + ".coffeeChatStatusSnapshot", is(status.name()))
                     .body(index + ".type", is(type.name()))
                     .body(index + ".member.id", is((int) memberId))
-                    .body(index + ".coffeeChat.id", is((int) coffeeChatId));
+                    .body(index + ".coffeeChat.id", is((int) coffeeChatId))
+                    .body(index + ".coffeeChat.statusSnapshot", is(status.name()));
         }
     }
 }

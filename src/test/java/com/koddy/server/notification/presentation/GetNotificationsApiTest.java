@@ -52,7 +52,6 @@ class GetNotificationsApiTest extends ControllerTest {
                             new NotificationSummary(
                                     1L,
                                     false,
-                                    CoffeeChatStatus.MENTEE_APPLY.name(),
                                     NotificationType.MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_APPLY.name(),
                                     LocalDateTime.now(),
                                     new NotifyMember(
@@ -62,6 +61,7 @@ class GetNotificationsApiTest extends ControllerTest {
                                     ),
                                     new NotifyCoffeeChat(
                                             1L,
+                                            CoffeeChatStatus.MENTEE_APPLY.name(),
                                             "취소 사유..",
                                             "거절 사유..",
                                             LocalDate.of(2024, 3, 1)
@@ -82,13 +82,13 @@ class GetNotificationsApiTest extends ControllerTest {
                             responseFields(
                                     body("result[].id", "알림 ID(PK)"),
                                     body("result[].read", "알림 읽음 여부"),
-                                    body("result[].coffeeChatStatusSnapshot", "알림 시점 커피챗 상태 스냅샷"),
                                     body("result[].type", "알림 타입"),
                                     body("result[].createdAt", "알림 생성 시간"),
                                     body("result[].member.id", "사용자 ID(PK)"),
                                     body("result[].member.name", "사용자 이름"),
                                     body("result[].member.profileImageUrl", "사용자 프로필 이미지 URL", "Nullable"),
                                     body("result[].coffeeChat.id", "커피챗 ID(PK)"),
+                                    body("result[].coffeeChat.statusSnapshot", "알림 시점 커피챗 상태 스냅샷"),
                                     body("result[].coffeeChat.cancelReason", "커피챗 취소 사유", "Nullable"),
                                     body("result[].coffeeChat.rejectReason", "커피챗 거절 사유", "Nullable"),
                                     body("result[].coffeeChat.reservedDay", "커피챗 예약 날짜", "Nullable"),
