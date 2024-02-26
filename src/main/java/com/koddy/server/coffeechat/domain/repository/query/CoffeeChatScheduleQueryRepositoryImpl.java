@@ -13,6 +13,7 @@ import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -38,20 +39,22 @@ public class CoffeeChatScheduleQueryRepositoryImpl implements CoffeeChatSchedule
 
     @Override
     public CoffeeChatCountPerCategory fetchMentorCoffeeChatCountPerCategory(final long mentorId) {
-        return query
+        final CoffeeChatCountPerCategory result = query
                 .selectDistinct(fetchCoffeeChatCountPerCategory())
                 .from(coffeeChat)
                 .where(coffeeChat.mentorId.eq(mentorId))
                 .fetchOne();
+        return checkResult(result);
     }
 
     @Override
     public CoffeeChatCountPerCategory fetchMenteeCoffeeChatCountPerCategory(final long menteeId) {
-        return query
+        final CoffeeChatCountPerCategory result = query
                 .selectDistinct(fetchCoffeeChatCountPerCategory())
                 .from(coffeeChat)
                 .where(coffeeChat.menteeId.eq(menteeId))
                 .fetchOne();
+        return checkResult(result);
     }
 
     private QCoffeeChatCountPerCategory fetchCoffeeChatCountPerCategory() {
@@ -67,12 +70,14 @@ public class CoffeeChatScheduleQueryRepositoryImpl implements CoffeeChatSchedule
             final List<CoffeeChatStatus> status,
             final String alias
     ) {
-        return ExpressionUtils.as(
-                select(coffeeChat.count())
-                        .from(coffeeChat)
-                        .where(coffeeChat.status.in(status)),
-                alias
-        );
+        final JPQLQuery<Long> subQuery = select(coffeeChat.count())
+                .from(coffeeChat)
+                .where(coffeeChat.status.in(status));
+        return ExpressionUtils.as(subQuery, alias);
+    }
+
+    private CoffeeChatCountPerCategory checkResult(final CoffeeChatCountPerCategory result) {
+        return result == null ? CoffeeChatCountPerCategory.zero() : result;
     }
 
     @Override

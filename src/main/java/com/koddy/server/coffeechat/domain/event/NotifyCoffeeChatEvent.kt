@@ -1,9 +1,11 @@
 package com.koddy.server.coffeechat.domain.event
 
+import com.koddy.server.global.base.BaseDomainEvent
+
 sealed class MentorNotification(
     open val mentorId: Long,
     open val coffeeChatId: Long,
-) {
+) : BaseDomainEvent() {
     data class MenteeAppliedFromMenteeFlowEvent(
         override val mentorId: Long,
         override val coffeeChatId: Long,
@@ -33,7 +35,7 @@ sealed class MentorNotification(
 sealed class MenteeNotification(
     open val menteeId: Long,
     open val coffeeChatId: Long,
-) {
+) : BaseDomainEvent() {
     data class MentorCanceledFromMenteeFlowEvent(
         override val menteeId: Long,
         override val coffeeChatId: Long,
@@ -64,7 +66,7 @@ sealed class BothNotification(
     open val menteeId: Long,
     open val mentorId: Long,
     open val coffeeChatId: Long,
-) {
+) : BaseDomainEvent() {
     data class ApprovedFromMenteeFlowEvent(
         override val menteeId: Long,
         override val mentorId: Long,

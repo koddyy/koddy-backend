@@ -11,4 +11,8 @@ public record CoffeeChatCountPerCategory(
     @QueryProjection
     public CoffeeChatCountPerCategory {
     }
+
+    public static CoffeeChatCountPerCategory zero() {
+        return new CoffeeChatCountPerCategory(0, 0, 0, 0);
+    }
 }
