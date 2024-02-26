@@ -3,6 +3,7 @@ package com.koddy.server.coffeechat.domain.repository.query;
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus;
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
+import com.koddy.server.coffeechat.domain.repository.query.response.CoffeeChatCountPerCategory;
 import com.koddy.server.coffeechat.domain.repository.query.response.MenteeCoffeeChatScheduleData;
 import com.koddy.server.coffeechat.domain.repository.query.spec.MenteeCoffeeChatQueryCondition;
 import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow;
@@ -86,7 +87,12 @@ public class CoffeeChatScheduleQueryRepositoryFetchMenteeCoffeeChatSchedulesTest
     @Test
     @DisplayName("0. 멘티의 상태별 커피챗 개수를 조회한다 [대기, 제안, 예정, 지나간]")
     void counts() {
+        final CoffeeChatCountPerCategory result = sut.fetchMenteeCoffeeChatCountPerCategory(mentees[0].getId());
         assertAll(
+                () -> assertThat(result.waiting()).isEqualTo(11),
+                () -> assertThat(result.suggested()).isEqualTo(7),
+                () -> assertThat(result.scheduled()).isEqualTo(3),
+                () -> assertThat(result.passed()).isEqualTo(9),
                 () -> assertThat(coffeeChatRepository.getMenteeWaitingCoffeeChatCount(mentees[0].getId())).isEqualTo(11),
                 () -> assertThat(coffeeChatRepository.getMenteeSuggestedCoffeeChatCount(mentees[0].getId())).isEqualTo(7),
                 () -> assertThat(coffeeChatRepository.getMenteeScheduledCoffeeChatCount(mentees[0].getId())).isEqualTo(3),
