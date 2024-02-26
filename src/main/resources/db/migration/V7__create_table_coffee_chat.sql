@@ -4,10 +4,12 @@ CREATE TABLE IF NOT EXISTS coffee_chat
     mentor_id        BIGINT      NOT NULL,
     mentee_id        BIGINT      NOT NULL,
     status           VARCHAR(50) NOT NULL,
+    cancel_by        BIGINT      NULL,
     apply_reason     TEXT        NULL,
     suggest_reason   TEXT        NULL,
-    question         TEXT        NULL,
+    cancel_reason    TEXT        NULL,
     reject_reason    TEXT        NULL,
+    question         TEXT        NULL,
     start            DATETIME    NULL,
     end              DATETIME    NULL,
     chat_type        VARCHAR(30) NULL,
@@ -25,4 +27,9 @@ ALTER TABLE coffee_chat
 ALTER TABLE coffee_chat
     ADD CONSTRAINT fk_coffee_chat_mentee_id_from_member
         FOREIGN KEY (mentee_id)
+            REFERENCES member (id);
+
+ALTER TABLE coffee_chat
+    ADD CONSTRAINT fk_coffee_chat_cancel_by_from_member
+        FOREIGN KEY (cancel_by)
             REFERENCES member (id);

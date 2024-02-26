@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS member
     id                BIGINT AUTO_INCREMENT PRIMARY KEY,
     social_provider   VARCHAR(30)  NOT NULL,
     social_id         VARCHAR(200) NULL UNIQUE,
-    email             VARCHAR(200) NULL UNIQUE,
+    email             VARCHAR(200) NULL,
     name              VARCHAR(100) NOT NULL,
     nationality       VARCHAR(50)  NOT NULL,
     introduction      TEXT         NULL,
