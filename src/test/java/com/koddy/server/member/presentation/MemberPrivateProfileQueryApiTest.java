@@ -22,8 +22,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("Member -> MemberPrivateProflieQueryApi 테스트")
-class MemberPrivateProflieQueryApiTest extends ControllerTest {
+@DisplayName("Member -> MemberPrivateProfileQueryApi 테스트")
+class MemberPrivateProfileQueryApiTest extends ControllerTest {
     @Autowired
     private GetMemberPrivateProfileUseCase getMemberPrivateProfileUseCase;
 

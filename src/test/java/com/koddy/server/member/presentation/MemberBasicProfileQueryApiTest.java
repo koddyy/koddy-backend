@@ -22,8 +22,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("Member -> MemberBasicProflieQueryApi 테스트")
-class MemberBasicProflieQueryApiTest extends ControllerTest {
+@DisplayName("Member -> MemberBasicProfileQueryApi 테스트")
+class MemberBasicProfileQueryApiTest extends ControllerTest {
     @Autowired
     private GetMemberBasicProfileUseCase getMemberBasicProfileUseCase;
 
