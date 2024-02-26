@@ -72,7 +72,6 @@ enum class UniversityInfo(
     companion object {
         private val log: Logger = logger()
 
-        @JvmStatic
         fun validateDomain(
             authenticated: Authenticated,
             schoolMail: String,
