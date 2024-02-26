@@ -33,21 +33,9 @@ public class GetCoffeeChatScheduleUseCase {
 
     public CoffeeChatEachCategoryCounts getEachCategoryCounts(final Authenticated authenticated) {
         if (authenticated.isMentor()) {
-            return new CoffeeChatEachCategoryCounts(
-                    coffeeChatRepository.getMentorWaitingCoffeeChatCount(authenticated.id),
-                    coffeeChatRepository.getMentorSuggestedCoffeeChatCount(authenticated.id),
-                    coffeeChatRepository.getMentorScheduledCoffeeChatCount(authenticated.id),
-                    coffeeChatRepository.getMentorPassedCoffeeChatCount(authenticated.id)
-            );
-//            return CoffeeChatEachCategoryCounts.from(coffeeChatScheduleQueryRepository.fetchMentorCoffeeChatCountPerCategory(authenticated.id));
+            return CoffeeChatEachCategoryCounts.from(coffeeChatScheduleQueryRepository.fetchMentorCoffeeChatCountPerCategory(authenticated.id));
         }
-        return new CoffeeChatEachCategoryCounts(
-                coffeeChatRepository.getMenteeWaitingCoffeeChatCount(authenticated.id),
-                coffeeChatRepository.getMenteeSuggestedCoffeeChatCount(authenticated.id),
-                coffeeChatRepository.getMenteeScheduledCoffeeChatCount(authenticated.id),
-                coffeeChatRepository.getMenteePassedCoffeeChatCount(authenticated.id)
-        );
-//        return CoffeeChatEachCategoryCounts.from(coffeeChatScheduleQueryRepository.fetchMenteeCoffeeChatCountPerCategory(authenticated.id));
+        return CoffeeChatEachCategoryCounts.from(coffeeChatScheduleQueryRepository.fetchMenteeCoffeeChatCountPerCategory(authenticated.id));
     }
 
     public SliceResponse<List<MentorCoffeeChatScheduleData>> getMentorSchedules(final GetMentorCoffeeChats query) {
