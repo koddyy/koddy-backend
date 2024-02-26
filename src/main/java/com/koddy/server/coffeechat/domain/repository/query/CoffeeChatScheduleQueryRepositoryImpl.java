@@ -1,13 +1,16 @@
 package com.koddy.server.coffeechat.domain.repository.query;
 
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus;
+import com.koddy.server.coffeechat.domain.repository.query.response.CoffeeChatCountPerCategory;
 import com.koddy.server.coffeechat.domain.repository.query.response.MenteeCoffeeChatScheduleData;
 import com.koddy.server.coffeechat.domain.repository.query.response.MentorCoffeeChatScheduleData;
+import com.koddy.server.coffeechat.domain.repository.query.response.QCoffeeChatCountPerCategory;
 import com.koddy.server.coffeechat.domain.repository.query.response.QMenteeCoffeeChatScheduleData;
 import com.koddy.server.coffeechat.domain.repository.query.response.QMentorCoffeeChatScheduleData;
 import com.koddy.server.coffeechat.domain.repository.query.spec.MenteeCoffeeChatQueryCondition;
 import com.koddy.server.coffeechat.domain.repository.query.spec.MentorCoffeeChatQueryCondition;
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +24,7 @@ import java.util.List;
 import static com.koddy.server.coffeechat.domain.model.QCoffeeChat.coffeeChat;
 import static com.koddy.server.member.domain.model.mentee.QMentee.mentee;
 import static com.koddy.server.member.domain.model.mentor.QMentor.mentor;
+import static com.querydsl.jpa.JPAExpressions.select;
 
 @Repository
 @KoddyReadOnlyTransactional
@@ -29,6 +33,40 @@ public class CoffeeChatScheduleQueryRepositoryImpl implements CoffeeChatSchedule
 
     public CoffeeChatScheduleQueryRepositoryImpl(final JPAQueryFactory query) {
         this.query = query;
+    }
+
+    @Override
+    public CoffeeChatCountPerCategory fetchMentorCoffeeChatCountPerCategory(final long mentorId) {
+        return query
+                .selectDistinct(new QCoffeeChatCountPerCategory(
+                        ExpressionUtils.as(
+                                select(coffeeChat.count())
+                                        .from(coffeeChat)
+                                        .where(coffeeChat.status.in(CoffeeChatStatus.withWaitingCategory())),
+                                "waiting"
+                        ),
+                        ExpressionUtils.as(
+                                select(coffeeChat.count())
+                                        .from(coffeeChat)
+                                        .where(coffeeChat.status.in(CoffeeChatStatus.withSuggstedCategory())),
+                                "suggested"
+                        ),
+                        ExpressionUtils.as(
+                                select(coffeeChat.count())
+                                        .from(coffeeChat)
+                                        .where(coffeeChat.status.in(CoffeeChatStatus.withScheduledCategory())),
+                                "scheduled"
+                        ),
+                        ExpressionUtils.as(
+                                select(coffeeChat.count())
+                                        .from(coffeeChat)
+                                        .where(coffeeChat.status.in(CoffeeChatStatus.withPassedCategory())),
+                                "passed"
+                        )
+                ))
+                .from(coffeeChat)
+                .where(coffeeChat.mentorId.eq(mentorId))
+                .fetchOne();
     }
 
     @Override
@@ -61,6 +99,40 @@ public class CoffeeChatScheduleQueryRepositoryImpl implements CoffeeChatSchedule
                 pageable,
                 result.size() > pageable.getPageSize()
         );
+    }
+
+    @Override
+    public CoffeeChatCountPerCategory fetchMenteeCoffeeChatCountPerCategory(final long menteeId) {
+        return query
+                .selectDistinct(new QCoffeeChatCountPerCategory(
+                        ExpressionUtils.as(
+                                select(coffeeChat.count())
+                                        .from(coffeeChat)
+                                        .where(coffeeChat.status.in(CoffeeChatStatus.withWaitingCategory())),
+                                "waiting"
+                        ),
+                        ExpressionUtils.as(
+                                select(coffeeChat.count())
+                                        .from(coffeeChat)
+                                        .where(coffeeChat.status.in(CoffeeChatStatus.withSuggstedCategory())),
+                                "suggested"
+                        ),
+                        ExpressionUtils.as(
+                                select(coffeeChat.count())
+                                        .from(coffeeChat)
+                                        .where(coffeeChat.status.in(CoffeeChatStatus.withScheduledCategory())),
+                                "scheduled"
+                        ),
+                        ExpressionUtils.as(
+                                select(coffeeChat.count())
+                                        .from(coffeeChat)
+                                        .where(coffeeChat.status.in(CoffeeChatStatus.withPassedCategory())),
+                                "passed"
+                        )
+                ))
+                .from(coffeeChat)
+                .where(coffeeChat.menteeId.eq(menteeId))
+                .fetchOne();
     }
 
     @Override
