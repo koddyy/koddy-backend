@@ -22,7 +22,7 @@ class MemberBasicProfileQueryApi(
     fun getMentorProfile(
         @PathVariable mentorId: Long,
     ): ResponseEntity<MentorBasicProfile> {
-        val response = getMemberBasicProfileUseCase.getMentorProfile(mentorId)
+        val response: MentorBasicProfile = getMemberBasicProfileUseCase.getMentorProfile(mentorId)
         return ResponseEntity.ok(response)
     }
 
@@ -31,7 +31,7 @@ class MemberBasicProfileQueryApi(
     fun getMenteeProfile(
         @PathVariable menteeId: Long,
     ): ResponseEntity<MenteeBasicProfile> {
-        val response = getMemberBasicProfileUseCase.getMenteeProfile(menteeId)
+        val response: MenteeBasicProfile = getMemberBasicProfileUseCase.getMenteeProfile(menteeId)
         return ResponseEntity.ok(response)
     }
 }

@@ -3,7 +3,6 @@ package com.koddy.server.member.presentation
 import com.koddy.server.auth.domain.model.Authenticated
 import com.koddy.server.global.annotation.Auth
 import com.koddy.server.member.application.usecase.GetMentorReservedScheduleUseCase
-import com.koddy.server.member.application.usecase.query.GetMentorReservedSchedule
 import com.koddy.server.member.application.usecase.query.response.MentorReservedSchedule
 import com.koddy.server.member.presentation.request.GetMentorReservedScheduleRequest
 import io.swagger.v3.oas.annotations.Operation
@@ -29,13 +28,7 @@ class MentorReservedScheduleQueryApi(
         @PathVariable mentorId: Long,
         @ModelAttribute @Valid request: GetMentorReservedScheduleRequest,
     ): ResponseEntity<MentorReservedSchedule> {
-        val result = getMentorReservedScheduleUseCase.invoke(
-            GetMentorReservedSchedule(
-                mentorId,
-                request.year,
-                request.month,
-            ),
-        )
+        val result: MentorReservedSchedule = getMentorReservedScheduleUseCase.invoke(request.toQuery(mentorId))
         return ResponseEntity.ok(result)
     }
 }

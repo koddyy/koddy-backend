@@ -6,9 +6,6 @@ import com.koddy.server.global.aop.AccessControl
 import com.koddy.server.global.aop.DailyMailAuthLimit
 import com.koddy.server.global.utils.UniversityInfo
 import com.koddy.server.member.application.usecase.AuthenticationMentorUnivUseCase
-import com.koddy.server.member.application.usecase.command.AuthenticationConfirmWithMailCommand
-import com.koddy.server.member.application.usecase.command.AuthenticationWithMailCommand
-import com.koddy.server.member.application.usecase.command.AuthenticationWithProofDataCommand
 import com.koddy.server.member.domain.model.Role
 import com.koddy.server.member.presentation.request.AuthenticationConfirmWithMailRequest
 import com.koddy.server.member.presentation.request.AuthenticationWithMailRequest
@@ -37,12 +34,7 @@ class AuthenticationMentorUnivApi(
         @RequestBody @Valid request: AuthenticationWithMailRequest,
     ): ResponseEntity<Void> {
         UniversityInfo.validateDomain(authenticated, request.schoolMail)
-        authenticationMentorUnivUseCase.authWithMail(
-            AuthenticationWithMailCommand(
-                authenticated.id,
-                request.schoolMail,
-            ),
-        )
+        authenticationMentorUnivUseCase.authWithMail(request.toCommand(authenticated.id))
         return ResponseEntity.noContent().build()
     }
 
@@ -54,13 +46,7 @@ class AuthenticationMentorUnivApi(
         @RequestBody @Valid request: AuthenticationConfirmWithMailRequest,
     ): ResponseEntity<Void> {
         UniversityInfo.validateDomain(authenticated, request.schoolMail)
-        authenticationMentorUnivUseCase.confirmMailAuthCode(
-            AuthenticationConfirmWithMailCommand(
-                authenticated.id,
-                request.schoolMail,
-                request.authCode,
-            ),
-        )
+        authenticationMentorUnivUseCase.confirmMailAuthCode(request.toCommand(authenticated.id))
         return ResponseEntity.noContent().build()
     }
 
@@ -71,12 +57,7 @@ class AuthenticationMentorUnivApi(
         @Auth authenticated: Authenticated,
         @RequestBody @Valid request: AuthenticationWithProofDataRequest,
     ): ResponseEntity<Void> {
-        authenticationMentorUnivUseCase.authWithProofData(
-            AuthenticationWithProofDataCommand(
-                authenticated.id,
-                request.proofDataUploadUrl,
-            ),
-        )
+        authenticationMentorUnivUseCase.authWithProofData(request.toCommand(authenticated.id))
         return ResponseEntity.noContent().build()
     }
 }
