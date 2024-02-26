@@ -139,7 +139,7 @@ public class MentorMainSearchAcceptanceTest extends AcceptanceTest {
 
     @Nested
     @DisplayName("멘티 둘러보기 API")
-    class GetMenteesByCondition {
+    class LookAroundMenteesByConditionQuery {
         private static final String BASE_URL = "/api/mentees";
 
         @Test

@@ -6,9 +6,9 @@ import com.koddy.server.member.application.usecase.DeleteMemberUseCase;
 import com.koddy.server.member.application.usecase.SignUpUsecase;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentor.Mentor;
-import com.koddy.server.member.presentation.request.LanguageRequest;
 import com.koddy.server.member.presentation.request.SignUpMenteeRequest;
 import com.koddy.server.member.presentation.request.SignUpMentorRequest;
+import com.koddy.server.member.presentation.request.model.LanguageRequestModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -60,7 +60,7 @@ class ManageAccountApiTest extends ControllerTest {
                     MENTOR_1.getPlatform().getSocialId(),
                     MENTOR_1.getPlatform().getEmail().getValue(),
                     MENTOR_1.getName(),
-                    new LanguageRequest(
+                    new LanguageRequestModel(
                             Language.Category.KR.getCode(),
                             List.of(
                                     Language.Category.EN.getCode(),
@@ -123,7 +123,7 @@ class ManageAccountApiTest extends ControllerTest {
                     MENTEE_1.getPlatform().getEmail().getValue(),
                     MENTEE_1.getName(),
                     MENTEE_1.getNationality().code,
-                    new LanguageRequest(Language.Category.KR.getCode(), List.of()),
+                    new LanguageRequestModel(Language.Category.KR.getCode(), List.of()),
                     MENTEE_1.getInterest().getSchool(),
                     MENTEE_1.getInterest().getMajor()
             );

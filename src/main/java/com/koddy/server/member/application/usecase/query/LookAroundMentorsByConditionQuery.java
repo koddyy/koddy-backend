@@ -6,7 +6,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
-public record GetMentorsByCondition(
+public record LookAroundMentorsByConditionQuery(
         List<Language.Category> languages,
         int page
 ) {

@@ -7,12 +7,12 @@ import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.request.End;
-import com.koddy.server.member.presentation.request.LanguageRequest;
 import com.koddy.server.member.presentation.request.MentorScheduleRequest;
-import com.koddy.server.member.presentation.request.MentoringPeriodRequest;
 import com.koddy.server.member.presentation.request.Start;
 import com.koddy.server.member.presentation.request.UpdateMentorBasicInfoRequest;
 import com.koddy.server.member.presentation.request.UpdateMentorScheduleRequest;
+import com.koddy.server.member.presentation.request.model.LanguageRequestModel;
+import com.koddy.server.member.presentation.request.model.MentoringPeriodRequestModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ class UpdateMentorInfoApiTest extends ControllerTest {
             MENTOR_1.getName(),
             MENTOR_1.getProfileImageUrl(),
             MENTOR_1.getIntroduction(),
-            new LanguageRequest(
+            new LanguageRequestModel(
                 Language.Category.KR.getCode(),
                 List.of(
                     Language.Category.EN.getCode(),
@@ -125,7 +125,7 @@ class UpdateMentorInfoApiTest extends ControllerTest {
     class UpdateSchedule {
         private static final String BASE_URL = "/api/mentors/me/schedules";
         private final UpdateMentorScheduleRequest request = new UpdateMentorScheduleRequest(
-            new MentoringPeriodRequest(
+            new MentoringPeriodRequestModel(
                 LocalDate.of(2024, 1, 1),
                 LocalDate.of(2024, 5, 1)
             ),

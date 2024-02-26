@@ -6,8 +6,8 @@ import com.koddy.server.member.application.usecase.UpdateMenteeInfoUseCase;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
-import com.koddy.server.member.presentation.request.LanguageRequest;
 import com.koddy.server.member.presentation.request.UpdateMenteeBasicInfoRequest;
+import com.koddy.server.member.presentation.request.model.LanguageRequestModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ class UpdateMenteeInfoApiTest extends ControllerTest {
                 MENTEE_1.getNationality().code,
             MENTEE_1.getProfileImageUrl(),
             MENTEE_1.getIntroduction(),
-            new LanguageRequest(
+            new LanguageRequestModel(
                 Language.Category.KR.getCode(),
                 List.of(
                     Language.Category.EN.getCode(),

@@ -10,7 +10,7 @@ import com.koddy.server.member.application.usecase.query.GetAppliedMentees
 import com.koddy.server.member.application.usecase.query.response.AppliedCoffeeChatsByMenteeResponse
 import com.koddy.server.member.application.usecase.query.response.MenteeSimpleSearchProfile
 import com.koddy.server.member.domain.model.Role
-import com.koddy.server.member.presentation.request.GetMenteesByConditionRequest
+import com.koddy.server.member.presentation.request.LookAroundMenteesByConditionRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
@@ -46,10 +46,10 @@ class MentorMainSearchApi(
 
     @Operation(summary = "멘티 둘러보기 Endpoint")
     @GetMapping
-    fun getMenteesByCondition(
-        @ModelAttribute @Valid request: GetMenteesByConditionRequest,
+    fun lookAroundMenteesByCondition(
+        @ModelAttribute @Valid request: LookAroundMenteesByConditionRequest,
     ): ResponseEntity<SliceResponse<List<MenteeSimpleSearchProfile>>> {
-        val result: SliceResponse<List<MenteeSimpleSearchProfile>> = mentorMainSearchUseCase.getMenteesByCondition(
+        val result: SliceResponse<List<MenteeSimpleSearchProfile>> = mentorMainSearchUseCase.lookAroundMenteesByCondition(
             request.toQuery(),
         )
         return ResponseEntity.ok(result)

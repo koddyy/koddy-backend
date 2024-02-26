@@ -1,9 +1,9 @@
-package com.koddy.server.member.presentation.request
+package com.koddy.server.member.presentation.request.model
 
 import com.koddy.server.member.domain.model.Language
 import jakarta.validation.constraints.NotBlank
 
-data class LanguageRequest(
+data class LanguageRequestModel(
     @field:NotBlank(message = "메인 언어를 선택해주세요.")
     val main: String,
 

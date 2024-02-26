@@ -9,15 +9,15 @@ import com.koddy.server.member.presentation.request.AuthenticationWithProofDataR
 import com.koddy.server.member.presentation.request.CompleteMenteeProfileRequest;
 import com.koddy.server.member.presentation.request.CompleteMentorProfileRequest;
 import com.koddy.server.member.presentation.request.End;
-import com.koddy.server.member.presentation.request.LanguageRequest;
 import com.koddy.server.member.presentation.request.MentorScheduleRequest;
-import com.koddy.server.member.presentation.request.MentoringPeriodRequest;
 import com.koddy.server.member.presentation.request.SignUpMenteeRequest;
 import com.koddy.server.member.presentation.request.SignUpMentorRequest;
 import com.koddy.server.member.presentation.request.Start;
 import com.koddy.server.member.presentation.request.UpdateMenteeBasicInfoRequest;
 import com.koddy.server.member.presentation.request.UpdateMentorBasicInfoRequest;
 import com.koddy.server.member.presentation.request.UpdateMentorScheduleRequest;
+import com.koddy.server.member.presentation.request.model.LanguageRequestModel;
+import com.koddy.server.member.presentation.request.model.MentoringPeriodRequestModel;
 import io.restassured.response.ValidatableResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -51,7 +51,7 @@ public class MemberAcceptanceStep {
                 fixture.getPlatform().getSocialId(),
                 fixture.getPlatform().getEmail().getValue(),
                 fixture.getName(),
-                new LanguageRequest(
+                new LanguageRequestModel(
                         fixture.getLanguages()
                                 .stream()
                                 .filter(it -> it.getType() == Language.Type.MAIN)
@@ -96,7 +96,7 @@ public class MemberAcceptanceStep {
                 fixture.getPlatform().getEmail().getValue(),
                 fixture.getName(),
                 fixture.getNationality().code,
-                new LanguageRequest(
+                new LanguageRequestModel(
                         fixture.getLanguages()
                                 .stream()
                                 .filter(it -> it.getType() == Language.Type.MAIN)
@@ -137,7 +137,7 @@ public class MemberAcceptanceStep {
         final CompleteMentorProfileRequest request = new CompleteMentorProfileRequest(
                 fixture.getIntroduction(),
                 fixture.getProfileImageUrl(),
-                new MentoringPeriodRequest(
+                new MentoringPeriodRequestModel(
                         fixture.getMentoringPeriod().getStartDate(),
                         fixture.getMentoringPeriod().getEndDate()
                 ),
@@ -177,7 +177,7 @@ public class MemberAcceptanceStep {
 
     public static ValidatableResponse 멘토_기본_정보를_수정한다(
             final MentorFixture fixture,
-            final LanguageRequest languageRequest,
+            final LanguageRequestModel languageRequestModel,
             final String accessToken
     ) {
         final String uri = UriComponentsBuilder
@@ -190,7 +190,7 @@ public class MemberAcceptanceStep {
                 fixture.getName(),
                 fixture.getProfileImageUrl(),
                 fixture.getIntroduction(),
-                languageRequest,
+                languageRequestModel,
                 fixture.getUniversityProfile().getSchool(),
                 fixture.getUniversityProfile().getMajor(),
                 fixture.getUniversityProfile().getEnteredIn()
@@ -207,7 +207,7 @@ public class MemberAcceptanceStep {
                 .getPath();
 
         final UpdateMentorScheduleRequest request = new UpdateMentorScheduleRequest(
-                new MentoringPeriodRequest(
+                new MentoringPeriodRequestModel(
                         fixture.getMentoringPeriod().getStartDate(),
                         fixture.getMentoringPeriod().getEndDate()
                 ),
@@ -232,7 +232,7 @@ public class MemberAcceptanceStep {
 
     public static ValidatableResponse 멘티_기본_정보를_수정한다(
             final MenteeFixture fixture,
-            final LanguageRequest languageRequest,
+            final LanguageRequestModel languageRequestModel,
             final String accessToken
     ) {
         final String uri = UriComponentsBuilder
@@ -246,7 +246,7 @@ public class MemberAcceptanceStep {
                 fixture.getNationality().code,
                 fixture.getProfileImageUrl(),
                 fixture.getIntroduction(),
-                languageRequest,
+                languageRequestModel,
                 fixture.getInterest().getSchool(),
                 fixture.getInterest().getMajor()
         );
