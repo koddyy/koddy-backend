@@ -3,7 +3,11 @@ package com.koddy.server.coffeechat.domain.repository;
 import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus;
 import com.koddy.server.coffeechat.exception.CoffeeChatException;
+import com.koddy.server.global.annotation.KoddyWritableTransactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +20,27 @@ public interface CoffeeChatRepository extends JpaRepository<CoffeeChat, Long> {
                 .orElseThrow(() -> new CoffeeChatException(COFFEE_CHAT_NOT_FOUND));
     }
 
+    // @Query
+    @Query("""
+            SELECT c.id
+            FROM CoffeeChat c
+            WHERE c.status = :status
+            """)
+    List<Long> findIdsByStatus(@Param("status") final CoffeeChatStatus status);
+
+    @KoddyWritableTransactional
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("""
+            UPDATE CoffeeChat c
+            SET c.status = :status
+            WHERE c.id IN :ids
+            """)
+    void updateStatusInBatch(
+            @Param("ids") final List<Long> ids,
+            @Param("status") final CoffeeChatStatus status
+    );
+
+    // Query Method
     Optional<CoffeeChat> findByIdAndMentorId(final Long id, final Long mentorId);
 
     default CoffeeChat getByIdAndMentorId(final Long id, final Long mentorId) {
