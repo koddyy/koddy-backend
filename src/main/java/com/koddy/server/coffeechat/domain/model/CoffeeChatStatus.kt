@@ -13,6 +13,7 @@ enum class CoffeeChatStatus(
     MENTOR_APPROVE(Category.SCHEDULED, Detail.APPROVE),
     MENTEE_APPLY_COFFEE_CHAT_COMPLETE(Category.PASSED, Detail.COMPLETE),
     CANCEL_FROM_MENTEE_FLOW(Category.PASSED, Detail.CANCEL),
+    AUTO_CANCEL_FROM_MENTEE_FLOW(Category.PASSED, Detail.CANCEL),
 
     // MentorFlow
     MENTOR_SUGGEST(Category.SUGGESTED, Detail.NONE),
@@ -22,6 +23,7 @@ enum class CoffeeChatStatus(
     MENTOR_FINALLY_APPROVE(Category.SCHEDULED, Detail.APPROVE),
     MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE(Category.PASSED, Detail.COMPLETE),
     CANCEL_FROM_MENTOR_FLOW(Category.PASSED, Detail.CANCEL),
+    AUTO_CANCEL_FROM_MENTOR_FLOW(Category.PASSED, Detail.CANCEL),
     ;
 
     private val cancelableStatus: List<CoffeeChatStatus>
@@ -42,6 +44,7 @@ enum class CoffeeChatStatus(
             MENTOR_APPROVE,
             MENTEE_APPLY_COFFEE_CHAT_COMPLETE,
             CANCEL_FROM_MENTEE_FLOW,
+            AUTO_CANCEL_FROM_MENTEE_FLOW,
         )
 
     fun isMenteeFlow(): Boolean = menteeFlow.any { it == this }
