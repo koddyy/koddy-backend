@@ -58,7 +58,7 @@ class CoffeeChatRepositoryTest extends RepositoryTest {
 
     @Test
     @DisplayName("Status에 해당되는 커피챗 ID를 조회한다")
-    void findByStatus() {
+    void findIdsByStatusAndReservationStandard() {
         // given
         final Mentee[] mentees = memberRepository.saveAll(List.of(
                 MENTEE_1.toDomain(),
@@ -87,23 +87,31 @@ class CoffeeChatRepositoryTest extends RepositoryTest {
 
         // when - then
         assertAll(
-                () -> assertThat(sut.findIdsByStatus(MENTEE_APPLY, 월요일_1주차_20_00_시작.getStart())).containsExactlyInAnyOrder(coffeeChats[0].getId()),
-                () -> assertThat(sut.findIdsByStatus(MENTEE_APPLY, 월요일_2주차_20_00_시작.getStart())).containsExactlyInAnyOrder(coffeeChats[0].getId(), coffeeChats[1].getId()),
-                () -> assertThat(sut.findIdsByStatus(MENTOR_REJECT, 월요일_3주차_20_00_시작.getStart())).containsExactlyInAnyOrder(coffeeChats[2].getId()),
-                () -> assertThat(sut.findIdsByStatus(MENTOR_APPROVE, 수요일_1주차_20_00_시작.getStart())).containsExactlyInAnyOrder(coffeeChats[4].getId()),
-                () -> assertThat(sut.findIdsByStatus(MENTEE_APPLY_COFFEE_CHAT_COMPLETE, now)).isEmpty(),
-                () -> assertThat(sut.findIdsByStatus(CANCEL_FROM_MENTEE_FLOW, 월요일_4주차_20_00_시작.getStart())).containsExactlyInAnyOrder(coffeeChats[3].getId()),
-                () -> assertThat(sut.findIdsByStatus(AUTO_CANCEL_FROM_MENTEE_FLOW, now)).isEmpty(),
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(MENTEE_APPLY, 월요일_1주차_20_00_시작.getStart()))
+                        .containsExactlyInAnyOrder(coffeeChats[0].getId()),
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(MENTEE_APPLY, 월요일_2주차_20_00_시작.getStart()))
+                        .containsExactlyInAnyOrder(coffeeChats[0].getId(), coffeeChats[1].getId()),
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(MENTOR_REJECT, 월요일_3주차_20_00_시작.getStart()))
+                        .containsExactlyInAnyOrder(coffeeChats[2].getId()),
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(MENTOR_APPROVE, 수요일_1주차_20_00_시작.getStart()))
+                        .containsExactlyInAnyOrder(coffeeChats[4].getId()),
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(MENTEE_APPLY_COFFEE_CHAT_COMPLETE, now)).isEmpty(),
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(CANCEL_FROM_MENTEE_FLOW, 월요일_4주차_20_00_시작.getStart()))
+                        .containsExactlyInAnyOrder(coffeeChats[3].getId()),
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(AUTO_CANCEL_FROM_MENTEE_FLOW, now)).isEmpty(),
 
-                () -> assertThat(sut.findIdsByStatus(MENTOR_SUGGEST, now)).isEmpty(),
-                () -> assertThat(sut.findIdsByStatus(MENTEE_REJECT, now)).isEmpty(),
-                () -> assertThat(sut.findIdsByStatus(MENTEE_PENDING, 수요일_2주차_20_00_시작.getStart())).containsExactlyInAnyOrder(coffeeChats[7].getId()),
-                () -> assertThat(sut.findIdsByStatus(MENTEE_PENDING, 수요일_3주차_20_00_시작.getStart())).containsExactlyInAnyOrder(coffeeChats[7].getId(), coffeeChats[8].getId()),
-                () -> assertThat(sut.findIdsByStatus(MENTOR_FINALLY_CANCEL, now)).isEmpty(),
-                () -> assertThat(sut.findIdsByStatus(MENTOR_FINALLY_APPROVE, 수요일_4주차_20_00_시작.getStart())).containsExactlyInAnyOrder(coffeeChats[9].getId()),
-                () -> assertThat(sut.findIdsByStatus(MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE, now)).isEmpty(),
-                () -> assertThat(sut.findIdsByStatus(CANCEL_FROM_MENTOR_FLOW, now)).isEmpty(),
-                () -> assertThat(sut.findIdsByStatus(AUTO_CANCEL_FROM_MENTOR_FLOW, now)).isEmpty()
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(MENTOR_SUGGEST, now)).isEmpty(),
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(MENTEE_REJECT, now)).isEmpty(),
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(MENTEE_PENDING, 수요일_2주차_20_00_시작.getStart()))
+                        .containsExactlyInAnyOrder(coffeeChats[7].getId()),
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(MENTEE_PENDING, 수요일_3주차_20_00_시작.getStart()))
+                        .containsExactlyInAnyOrder(coffeeChats[7].getId(), coffeeChats[8].getId()),
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(MENTOR_FINALLY_CANCEL, now)).isEmpty(),
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(MENTOR_FINALLY_APPROVE, 수요일_4주차_20_00_시작.getStart()))
+                        .containsExactlyInAnyOrder(coffeeChats[9].getId()),
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE, now)).isEmpty(),
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(CANCEL_FROM_MENTOR_FLOW, now)).isEmpty(),
+                () -> assertThat(sut.findIdsByStatusAndReservationStandard(AUTO_CANCEL_FROM_MENTOR_FLOW, now)).isEmpty()
         );
     }
 

@@ -26,10 +26,10 @@ public interface CoffeeChatRepository extends JpaRepository<CoffeeChat, Long> {
             SELECT c.id
             FROM CoffeeChat c
             WHERE c.status = :status
-                AND c.reservation IS NOT NULL
+                AND c.reservation.start IS NOT NULL
                 AND c.reservation.start <= :standard
             """)
-    List<Long> findIdsByStatus(
+    List<Long> findIdsByStatusAndReservationStandard(
             @Param("status") final CoffeeChatStatus status,
             @Param("standard") final LocalDateTime standard
     );
