@@ -1,11 +1,13 @@
 package com.koddy.server.file.utils.validator
 
+import com.koddy.server.common.UnitTestKt
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import jakarta.validation.ConstraintValidatorContext
 
+@UnitTestKt
 @DisplayName("File -> ValidImageFileValidator 테스트")
 internal class ValidImageFileValidatorTest : DescribeSpec({
     val context = mockk<ConstraintValidatorContext>()

@@ -16,6 +16,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.TestConstructor
+
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.RUNTIME)
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+annotation class TestEnvironment
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
@@ -31,26 +37,28 @@ annotation class UnitTestKt
 @Tag("Repository")
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-@DataJpaTest(showSql = false)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ContextConfiguration(initializers = [MySqlTestContainers.Initializer::class])
 @Import(
     QueryDslConfig::class,
     P6SpyConfig::class,
 )
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@DataJpaTest(showSql = false)
+@TestEnvironment
 annotation class RepositoryTestKt
 
 @Tag("Redis")
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-@DataRedisTest
 @ContextConfiguration(initializers = [RedisTestContainers.Initializer::class])
+@DataRedisTest
+@TestEnvironment
 annotation class RedisTestKt
 
 @Tag("Integrate")
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-@SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ContextConfiguration(
     initializers = [
         MySqlTestContainers.Initializer::class,
@@ -61,5 +69,6 @@ annotation class RedisTestKt
     DatabaseCleanerEachCallbackExtension::class,
     RedisCleanerEachCallbackExtension::class,
 )
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@SpringBootTest
+@TestEnvironment
 annotation class IntegrateTestKt

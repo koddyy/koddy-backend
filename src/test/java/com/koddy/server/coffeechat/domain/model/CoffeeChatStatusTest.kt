@@ -24,12 +24,14 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
+import com.koddy.server.common.UnitTestKt
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 
+@UnitTestKt
 @DisplayName("CoffeeChat -> 도메인 [CoffeeChatStatus] 테스트")
 internal class CoffeeChatStatusTest : DescribeSpec({
     describe("CoffeeChatStatus's isCancelable") {

@@ -1,5 +1,6 @@
 package com.koddy.server.file.utils.converter
 
+import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.utils.FileMockingUtils.createFile
 import com.koddy.server.file.domain.model.FileExtension
 import com.koddy.server.file.domain.model.RawFileData
@@ -14,6 +15,7 @@ import io.kotest.matchers.throwable.shouldHaveMessage
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.multipart.MultipartFile
 
+@UnitTestKt
 @DisplayName("File -> FileConverter 테스트")
 internal class FileConverterTest : DescribeSpec({
     describe("FileConverter's convertFile") {

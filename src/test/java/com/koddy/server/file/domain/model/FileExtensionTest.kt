@@ -1,5 +1,6 @@
 package com.koddy.server.file.domain.model
 
+import com.koddy.server.common.UnitTestKt
 import com.koddy.server.file.exception.FileException
 import com.koddy.server.file.exception.FileExceptionCode
 import io.kotest.assertions.throwables.shouldThrow
@@ -8,6 +9,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.throwable.shouldHaveMessage
 
+@UnitTestKt
 @DisplayName("File -> 도메인 [FileExtension] 테스트")
 internal class FileExtensionTest : DescribeSpec({
     describe("FileExtension's from") {
