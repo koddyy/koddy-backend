@@ -8,7 +8,7 @@ import jakarta.validation.ConstraintValidatorContext
 
 @DisplayName("File -> ValidPdfFileValidator 테스트")
 internal class ValidPdfFileValidatorTest : DescribeSpec({
-    val context: ConstraintValidatorContext = mockk<ConstraintValidatorContext>()
+    val context = mockk<ConstraintValidatorContext>()
     val sut = ValidPdfFileValidator()
 
     describe("ValidImageFileValidator's isValid") {

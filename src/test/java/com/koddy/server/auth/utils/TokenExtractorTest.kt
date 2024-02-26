@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletRequest
 @UnitTestKt
 @DisplayName("Auth -> TokenExtractor 테스트")
 internal class TokenExtractorTest : DescribeSpec({
-    val request: HttpServletRequest = mockk<HttpServletRequest>()
+    val request = mockk<HttpServletRequest>()
 
     describe("TokenExtractor's extractAccessToken") {
         context("Authorization Header에 Bearer 타입 & AccessToken 둘다 없으면") {
