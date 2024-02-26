@@ -15,15 +15,14 @@ import jakarta.servlet.http.HttpServletRequest
 @UnitTestKt
 @DisplayName("Auth -> TokenExtractor 테스트")
 internal class TokenExtractorTest : DescribeSpec({
-    val request: HttpServletRequest = mockk<HttpServletRequest>()
+    val request = mockk<HttpServletRequest>()
 
     describe("TokenExtractor's extractAccessToken") {
         context("Authorization Header에 Bearer 타입 & AccessToken 둘다 없으면") {
             every { request.getHeader(AuthToken.ACCESS_TOKEN_HEADER) } returns null
 
             it("null을 응답한다") {
-                val token: String? = TokenExtractor.extractAccessToken(request)
-                token shouldBe null
+                TokenExtractor.extractAccessToken(request) shouldBe null
             }
         }
 
@@ -31,8 +30,7 @@ internal class TokenExtractorTest : DescribeSpec({
             every { request.getHeader(AuthToken.ACCESS_TOKEN_HEADER) } returns AuthToken.TOKEN_TYPE
 
             it("null을 응답한다") {
-                val token: String? = TokenExtractor.extractAccessToken(request)
-                token shouldBe null
+                TokenExtractor.extractAccessToken(request) shouldBe null
             }
         }
 
@@ -40,8 +38,7 @@ internal class TokenExtractorTest : DescribeSpec({
             every { request.getHeader(AuthToken.ACCESS_TOKEN_HEADER) } returns "${AuthToken.TOKEN_TYPE} $ACCESS_TOKEN"
 
             it("정상적으로 AccessToken을 추출한다") {
-                val token: String? = TokenExtractor.extractAccessToken(request)
-                token shouldBe ACCESS_TOKEN
+                TokenExtractor.extractAccessToken(request) shouldBe ACCESS_TOKEN
             }
         }
     }
@@ -51,8 +48,7 @@ internal class TokenExtractorTest : DescribeSpec({
             every { request.cookies } returns emptyArray()
 
             it("null을 응답한다") {
-                val token: String? = TokenExtractor.extractRefreshToken(request)
-                token shouldBe null
+                TokenExtractor.extractRefreshToken(request) shouldBe null
             }
         }
 
@@ -60,8 +56,7 @@ internal class TokenExtractorTest : DescribeSpec({
             every { request.cookies } returns arrayOf(Cookie(AuthToken.REFRESH_TOKEN_HEADER, REFRESH_TOKEN))
 
             it("정상적으로 RefreshToken을 추출한다") {
-                val token: String? = TokenExtractor.extractRefreshToken(request)
-                token shouldBe REFRESH_TOKEN
+                TokenExtractor.extractRefreshToken(request) shouldBe REFRESH_TOKEN
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.koddy.server.coffeechat.domain.model
 
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.AUTO_CANCEL_FROM_MENTEE_FLOW
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.AUTO_CANCEL_FROM_MENTOR_FLOW
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTEE_FLOW
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTOR_FLOW
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.Category.PASSED
@@ -22,12 +24,14 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
+import com.koddy.server.common.UnitTestKt
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 
+@UnitTestKt
 @DisplayName("CoffeeChat -> 도메인 [CoffeeChatStatus] 테스트")
 internal class CoffeeChatStatusTest : DescribeSpec({
     describe("CoffeeChatStatus's isCancelable") {
@@ -39,6 +43,7 @@ internal class CoffeeChatStatusTest : DescribeSpec({
                     MENTOR_APPROVE.isCancelable() shouldBe true
                     MENTEE_APPLY_COFFEE_CHAT_COMPLETE.isCancelable() shouldBe false
                     CANCEL_FROM_MENTEE_FLOW.isCancelable() shouldBe false
+                    AUTO_CANCEL_FROM_MENTEE_FLOW.isCancelable() shouldBe false
                     MENTOR_SUGGEST.isCancelable() shouldBe true
                     MENTEE_REJECT.isCancelable() shouldBe false
                     MENTEE_PENDING.isCancelable() shouldBe true
@@ -46,6 +51,7 @@ internal class CoffeeChatStatusTest : DescribeSpec({
                     MENTOR_FINALLY_APPROVE.isCancelable() shouldBe true
                     MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE.isCancelable() shouldBe false
                     CANCEL_FROM_MENTOR_FLOW.isCancelable() shouldBe false
+                    AUTO_CANCEL_FROM_MENTOR_FLOW.isCancelable() shouldBe false
                 }
             }
         }
@@ -60,6 +66,7 @@ internal class CoffeeChatStatusTest : DescribeSpec({
                     MENTOR_APPROVE.isMenteeFlow() shouldBe true
                     MENTEE_APPLY_COFFEE_CHAT_COMPLETE.isMenteeFlow() shouldBe true
                     CANCEL_FROM_MENTEE_FLOW.isMenteeFlow() shouldBe true
+                    AUTO_CANCEL_FROM_MENTEE_FLOW.isMenteeFlow() shouldBe true
                     MENTOR_SUGGEST.isMenteeFlow() shouldBe false
                     MENTEE_REJECT.isMenteeFlow() shouldBe false
                     MENTEE_PENDING.isMenteeFlow() shouldBe false
@@ -67,6 +74,7 @@ internal class CoffeeChatStatusTest : DescribeSpec({
                     MENTOR_FINALLY_APPROVE.isMenteeFlow() shouldBe false
                     MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE.isMenteeFlow() shouldBe false
                     CANCEL_FROM_MENTOR_FLOW.isMenteeFlow() shouldBe false
+                    AUTO_CANCEL_FROM_MENTOR_FLOW.isMenteeFlow() shouldBe false
                 }
             }
         }
@@ -114,13 +122,14 @@ internal class CoffeeChatStatusTest : DescribeSpec({
 
         context("[지나간 상태 = passed] 카테고리를 적용해서") {
             val expected: List<CoffeeChatStatus> = listOf(
-                CANCEL_FROM_MENTEE_FLOW,
                 MENTOR_REJECT,
                 MENTEE_APPLY_COFFEE_CHAT_COMPLETE,
-                CANCEL_FROM_MENTOR_FLOW,
+                CANCEL_FROM_MENTEE_FLOW,
+                AUTO_CANCEL_FROM_MENTEE_FLOW,
                 MENTEE_REJECT,
                 MENTOR_FINALLY_CANCEL,
                 MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE,
+                AUTO_CANCEL_FROM_MENTOR_FLOW,
             )
 
             it("List<CoffeeChatStatus>를 조회한다") {
@@ -144,8 +153,10 @@ internal class CoffeeChatStatusTest : DescribeSpec({
                     )
                     CoffeeChatStatus.fromCategoryDetail(PASSED, CANCEL) shouldContainAll listOf(
                         CANCEL_FROM_MENTEE_FLOW,
-                        CANCEL_FROM_MENTOR_FLOW,
+                        AUTO_CANCEL_FROM_MENTEE_FLOW,
                         MENTOR_FINALLY_CANCEL,
+                        CANCEL_FROM_MENTOR_FLOW,
+                        AUTO_CANCEL_FROM_MENTOR_FLOW,
                     )
                     CoffeeChatStatus.fromCategoryDetail(PASSED, REJECT) shouldContainAll listOf(
                         MENTOR_REJECT,

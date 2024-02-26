@@ -20,13 +20,12 @@ internal class UniversityInfoTest : DescribeSpec({
         val authenticated = Authenticated(member.id, member.authority)
 
         context("시스템에서 관리하지 않는 대학교 도메인이면") {
-            val domains: List<String> =
-                listOf(
-                    "sjiwon@kyonggi.edu",
-                    "sjiwon@kgu.edu",
-                    "sjiwon@kaya.edu",
-                    "gachon@snu.edu",
-                )
+            val domains = listOf(
+                "sjiwon@kyonggi.edu",
+                "sjiwon@kgu.edu",
+                "sjiwon@kaya.edu",
+                "gachon@snu.edu",
+            )
 
             it("NOT_PROVIDED_UNIV_DOMAIN 예외가 발생한다") {
                 domains.forEach {
@@ -38,13 +37,12 @@ internal class UniversityInfoTest : DescribeSpec({
         }
 
         context("시스템에서 관리하고 있는 대학교 도메인이면") {
-            val domains: List<String> =
-                listOf(
-                    "sjiwon@kyonggi.ac.kr",
-                    "sjiwon@kgu.ac.kr",
-                    "sjiwon@kaya.ac.kr",
-                    "gachon@snu.ac.kr",
-                )
+            val domains = listOf(
+                "sjiwon@kyonggi.ac.kr",
+                "sjiwon@kgu.ac.kr",
+                "sjiwon@kaya.ac.kr",
+                "gachon@snu.ac.kr",
+            )
 
             it("검증에 성공한다") {
                 domains.forEach {
