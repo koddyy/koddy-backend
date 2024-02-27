@@ -2,19 +2,19 @@ package com.koddy.server.member.application.usecase;
 
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional;
 import com.koddy.server.global.annotation.UseCase;
-import com.koddy.server.member.application.usecase.query.response.MenteeBasicProfile;
-import com.koddy.server.member.application.usecase.query.response.MentorBasicProfile;
+import com.koddy.server.member.application.usecase.query.response.MenteePublicProfile;
+import com.koddy.server.member.application.usecase.query.response.MentorPublicProfile;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.repository.MenteeRepository;
 import com.koddy.server.member.domain.repository.MentorRepository;
 
 @UseCase
-public class GetMemberBasicProfileUseCase {
+public class GetMemberPublicProfileUseCase {
     private final MentorRepository mentorRepository;
     private final MenteeRepository menteeRepository;
 
-    public GetMemberBasicProfileUseCase(
+    public GetMemberPublicProfileUseCase(
             final MentorRepository mentorRepository,
             final MenteeRepository menteeRepository
     ) {
@@ -23,14 +23,14 @@ public class GetMemberBasicProfileUseCase {
     }
 
     @KoddyReadOnlyTransactional
-    public MentorBasicProfile getMentorProfile(final long mentorId) {
+    public MentorPublicProfile getMentorProfile(final long mentorId) {
         final Mentor mentor = mentorRepository.getProfile(mentorId);
-        return MentorBasicProfile.from(mentor);
+        return MentorPublicProfile.from(mentor);
     }
 
     @KoddyReadOnlyTransactional
-    public MenteeBasicProfile getMenteeProfile(final long menteeId) {
+    public MenteePublicProfile getMenteeProfile(final long menteeId) {
         final Mentee mentee = menteeRepository.getProfile(menteeId);
-        return MenteeBasicProfile.from(mentee);
+        return MenteePublicProfile.from(mentee);
     }
 }

@@ -23,7 +23,7 @@ class MemberPrivateProfileQueryApi(
 ) {
     @Operation(summary = "마이페이지 프로필 조회 Endpoint (@Auth Authorities에 따른 분기)")
     @GetMapping("/members/me")
-    fun getProfile(
+    fun getPrivateProfile(
         @Auth authenticated: Authenticated,
     ): ResponseEntity<MemberPrivateProfile> {
         val response: MemberPrivateProfile = when (authenticated.isMentor) {
@@ -36,7 +36,7 @@ class MemberPrivateProfileQueryApi(
     @Operation(summary = "멘토 마이페이지 프로필 조회 Endpoint - Deprecated by requirements")
     @GetMapping("/mentors/me")
     @AccessControl(role = Role.MENTOR)
-    fun getMentorProfile(
+    fun getMentorPrivateProfile(
         @Auth authenticated: Authenticated,
     ): ResponseEntity<MentorPrivateProfile> {
         val response: MentorPrivateProfile = getMemberPrivateProfileUseCase.getMentorProfile(authenticated.id)
@@ -46,7 +46,7 @@ class MemberPrivateProfileQueryApi(
     @Operation(summary = "멘티 마이페이지 프로필 조회 Endpoint - Deprecated by requirements")
     @GetMapping("/mentees/me")
     @AccessControl(role = Role.MENTEE)
-    fun getMenteeProfile(
+    fun getMenteePrivateProfile(
         @Auth authenticated: Authenticated,
     ): ResponseEntity<MenteePrivateProfile> {
         val response: MenteePrivateProfile = getMemberPrivateProfileUseCase.getMenteeProfile(authenticated.id)

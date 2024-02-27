@@ -3,7 +3,7 @@ package com.koddy.server.member.application.usecase.query.response;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.model.response.LanguageResponse;
 
-public record MentorBasicProfile(
+public record MentorPublicProfile(
         long id,
         String name,
         String profileImageUrl,
@@ -14,8 +14,8 @@ public record MentorBasicProfile(
         int enteredIn,
         boolean authenticated
 ) {
-    public static MentorBasicProfile from(final Mentor mentor) {
-        return new MentorBasicProfile(
+    public static MentorPublicProfile from(final Mentor mentor) {
+        return new MentorPublicProfile(
                 mentor.getId(),
                 mentor.getName(),
                 mentor.getProfileImageUrl(),

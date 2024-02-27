@@ -1,9 +1,9 @@
 package com.koddy.server.member.presentation;
 
 import com.koddy.server.common.ControllerTest;
-import com.koddy.server.member.application.usecase.GetMemberBasicProfileUseCase;
-import com.koddy.server.member.application.usecase.query.response.MenteeBasicProfile;
-import com.koddy.server.member.application.usecase.query.response.MentorBasicProfile;
+import com.koddy.server.member.application.usecase.GetMemberPublicProfileUseCase;
+import com.koddy.server.member.application.usecase.query.response.MenteePublicProfile;
+import com.koddy.server.member.application.usecase.query.response.MentorPublicProfile;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;
@@ -22,24 +22,24 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("Member -> MemberBasicProfileQueryApi 테스트")
-class MemberBasicProfileQueryApiTest extends ControllerTest {
+@DisplayName("Member -> MemberPublicProfileQueryApi 테스트")
+class MemberPublicProfileQueryApiTest extends ControllerTest {
     @Autowired
-    private GetMemberBasicProfileUseCase getMemberBasicProfileUseCase;
+    private GetMemberPublicProfileUseCase getMemberPublicProfileUseCase;
 
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
     private final Mentee mentee = MENTEE_1.toDomain().apply(2L);
 
     @Nested
-    @DisplayName("멘토 프로필 조회 API [GET /api/mentors/{mentorId}]")
-    class GetMentorProfile {
+    @DisplayName("멘토 기본(Public) 프로필 조회 API [GET /api/mentors/{mentorId}]")
+    class GetMentorPublicProfile {
         private static final String BASE_URL = "/api/mentors/{mentorId}";
 
         @Test
-        @DisplayName("멘토 기본 프로필 정보를 조회한다")
+        @DisplayName("멘토 기본(Public) 프로필 정보를 조회한다")
         void success() {
             // given
-            given(getMemberBasicProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorBasicProfile.from(mentor));
+            given(getMemberPublicProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorPublicProfile.from(mentor));
 
             // when - then
             successfulExecute(
@@ -68,15 +68,15 @@ class MemberBasicProfileQueryApiTest extends ControllerTest {
     }
 
     @Nested
-    @DisplayName("멘티 프로필 조회 API [GET /api/mentees/{menteeId}]")
-    class GetMenteeProfile {
+    @DisplayName("멘티 기본((Public)) 프로필 조회 API [GET /api/mentees/{menteeId}]")
+    class GetMenteePublicProfile {
         private static final String BASE_URL = "/api/mentees/{menteeId}";
 
         @Test
-        @DisplayName("멘티 기본 프로필 정보를 조회한다")
+        @DisplayName("멘티 기본(Public) 프로필 정보를 조회한다")
         void success() {
             // given
-            given(getMemberBasicProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteeBasicProfile.from(mentee));
+            given(getMemberPublicProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteePublicProfile.from(mentee));
 
             // when - then
             successfulExecute(

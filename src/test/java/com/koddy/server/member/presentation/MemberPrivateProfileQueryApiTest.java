@@ -31,13 +31,13 @@ class MemberPrivateProfileQueryApiTest extends ControllerTest {
     private final Mentee mentee = MENTEE_1.toDomain().apply(2L);
 
     @Nested
-    @DisplayName("사용자 마이페이지 프로필 조회 API [GET /api/members/me]")
-    class GetProfile {
+    @DisplayName("사용자 마이페이지(Private) 프로필 조회 API [GET /api/members/me]")
+    class GetPrivateProfile {
         private static final String BASE_URL = "/api/members/me";
 
         @Test
-        @DisplayName("멘토 마이페이지 프로필을 조회한다")
-        void getMentorProfile() {
+        @DisplayName("멘토 마이페이지(Private) 프로필을 조회한다")
+        void getMentorPrivateProfile() {
             // given
             applyToken(true, mentor);
             given(getMemberPrivateProfileUseCase.getMentorProfile(mentor.getId())).willReturn(MentorPrivateProfile.from(mentor));
@@ -78,8 +78,8 @@ class MemberPrivateProfileQueryApiTest extends ControllerTest {
         }
 
         @Test
-        @DisplayName("멘티 마이페이지 프로필을 조회한다")
-        void getMenteeProfile() {
+        @DisplayName("멘티 마이페이지(Private) 프로필을 조회한다")
+        void getMenteePrivateProfile() {
             // given
             applyToken(true, mentee);
             given(getMemberPrivateProfileUseCase.getMenteeProfile(mentee.getId())).willReturn(MenteePrivateProfile.from(mentee));
@@ -110,8 +110,8 @@ class MemberPrivateProfileQueryApiTest extends ControllerTest {
     }
 
     @Nested
-    @DisplayName("멘토 마이페이지 프로필 조회 API [GET /api/mentors/me]")
-    class GetMentorProfile {
+    @DisplayName("멘토 마이페이지(Private) 프로필 조회 API [GET /api/mentors/me]")
+    class GetMentorPrivateProfile {
         private static final String BASE_URL = "/api/mentors/me";
 
         @Test
@@ -130,7 +130,7 @@ class MemberPrivateProfileQueryApiTest extends ControllerTest {
         }
 
         @Test
-        @DisplayName("멘토 마이페이지 프로필 정보를 조회한다")
+        @DisplayName("멘토 마이페이지(Private) 프로필 정보를 조회한다")
         void success() {
             // given
             applyToken(true, mentor);
@@ -173,8 +173,8 @@ class MemberPrivateProfileQueryApiTest extends ControllerTest {
     }
 
     @Nested
-    @DisplayName("멘티 마이페이지 프로필 조회 API [GET /api/mentees/me]")
-    class GetMenteeProfile {
+    @DisplayName("멘티 마이페이지(Private) 프로필 조회 API [GET /api/mentees/me]")
+    class GetMenteePrivateProfile {
         private static final String BASE_URL = "/api/mentees/me";
 
         @Test
@@ -193,7 +193,7 @@ class MemberPrivateProfileQueryApiTest extends ControllerTest {
         }
 
         @Test
-        @DisplayName("멘티 마이페이지 프로필 정보를 조회한다")
+        @DisplayName("멘티 마이페이지(Private) 프로필 정보를 조회한다")
         void success() {
             // given
             applyToken(true, mentee);
