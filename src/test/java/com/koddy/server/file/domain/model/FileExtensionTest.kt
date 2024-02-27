@@ -33,9 +33,13 @@ internal class FileExtensionTest : DescribeSpec({
         context("제공하는 파일 확장자면") {
             val files: Map<String, FileExtension> = mapOf(
                 "hello.jpg" to FileExtension.JPG,
+                "hello.JPG" to FileExtension.JPG,
                 "hello.jpeg" to FileExtension.JPEG,
+                "hello.JPEG" to FileExtension.JPEG,
                 "hello.png" to FileExtension.PNG,
+                "hello.PNG" to FileExtension.PNG,
                 "hello.pdf" to FileExtension.PDF,
+                "hello.PDF" to FileExtension.PDF,
             )
 
             it("확장자를 추출해서 FileExtension 도메인을 반환한다") {
@@ -48,9 +52,13 @@ internal class FileExtensionTest : DescribeSpec({
         context("주어진 파일명에 대해서") {
             val files: Map<String, Boolean> = mapOf(
                 "hello.jpg" to true,
+                "hello.JPG" to true,
                 "hello.jpeg" to true,
+                "hello.JPEG" to true,
                 "hello.png" to true,
+                "hello.PNG" to true,
                 "hello.pdf" to false,
+                "hello.PDF" to false,
             )
 
             it("이미지 파일인지 확인한다") {
@@ -63,9 +71,13 @@ internal class FileExtensionTest : DescribeSpec({
         context("주어진 파일명에 대해서") {
             val files: Map<String, Boolean> = mapOf(
                 "hello.jpg" to false,
+                "hello.JPG" to false,
                 "hello.jpeg" to false,
+                "hello.JPEG" to false,
                 "hello.png" to false,
+                "hello.PNG" to false,
                 "hello.pdf" to true,
+                "hello.PDF" to true,
             )
 
             it("PDF 파일인지 확인한다") {
