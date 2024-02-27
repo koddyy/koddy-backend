@@ -56,7 +56,7 @@ public class ZoomMeetingLinkProcessor implements MeetingLinkProcessor {
     ) {
         try {
             return restTemplate.exchange(
-                    properties.other().createMeetingUrl(),
+                    properties.getOther().getCreateMeetingUrl(),
                     POST,
                     new HttpEntity<>(meetingLinkRequest, createMeetingLinkRequestHeader(accessToken)),
                     ZoomMeetingLinkResponse.class
@@ -87,7 +87,7 @@ public class ZoomMeetingLinkProcessor implements MeetingLinkProcessor {
     private void deleteMeetingLink(final String oAuthAccessToken, final String meetingId) {
         try {
             restTemplate.exchange(
-                    properties.other().deleteMeetingUrl(),
+                    properties.getOther().getDeleteMeetingUrl(),
                     DELETE,
                     new HttpEntity<>(createMeetingLinkRequestHeader(oAuthAccessToken)),
                     Void.class,
