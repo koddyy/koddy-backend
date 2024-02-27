@@ -1,67 +1,71 @@
-package com.koddy.server.auth.domain.service;
+package com.koddy.server.auth.domain.service
 
-import com.koddy.server.auth.application.adapter.TokenStore;
-import com.koddy.server.auth.domain.model.AuthToken;
-import com.koddy.server.common.UnitTest;
-import com.koddy.server.member.domain.model.Member;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.koddy.server.auth.application.adapter.TokenStore
+import com.koddy.server.auth.domain.model.AuthToken
+import com.koddy.server.common.UnitTestKt
+import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
+import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
+import com.koddy.server.member.domain.model.Member
+import io.kotest.assertions.assertSoftly
+import io.kotest.core.annotation.DisplayName
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.justRun
+import io.mockk.mockk
+import io.mockk.verify
 
-import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
-import static com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN;
-import static com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
+@UnitTestKt
 @DisplayName("Auth -> TokenIssuer 테스트")
-public class TokenIssuerTest extends UnitTest {
-    private final TokenProvider tokenProvider = mock(TokenProvider.class);
-    private final TokenStore tokenStore = mock(TokenStore.class);
-    private final TokenIssuer sut = new TokenIssuer(tokenProvider, tokenStore);
+internal class TokenIssuerTest : BehaviorSpec({
+    val tokenProvider = mockk<TokenProvider>()
+    val tokenStore = mockk<TokenStore>()
+    val sut = TokenIssuer(tokenProvider, tokenStore)
 
-    private final Member<?> member = MENTOR_1.toDomain().apply(1L);
+    Given("인증에 성공한 사용자가") {
+        val member: Member<*> = MENTOR_1.toDomain().apply(1L)
 
-    @Test
-    @DisplayName("AuthToken[Access + Refresh]을 제공한다")
-    void provideAuthorityToken() {
-        // given
-        given(tokenProvider.createAccessToken(member.getId(), member.getAuthority())).willReturn(ACCESS_TOKEN);
-        given(tokenProvider.createRefreshToken(member.getId())).willReturn(REFRESH_TOKEN);
+        When("토큰 발급을 요청하면") {
+            every { tokenProvider.createAccessToken(member.id, member.authority) } returns ACCESS_TOKEN
+            every { tokenProvider.createRefreshToken(member.id) } returns REFRESH_TOKEN
+            justRun { tokenStore.synchronizeRefreshToken(member.id, REFRESH_TOKEN) }
 
-        // when
-        final AuthToken authToken = sut.provideAuthorityToken(member.getId(), member.getAuthority());
+            Then("AuthToken[Access + Refresh]을 제공한다") {
+                val result: AuthToken = sut.provideAuthorityToken(member.id, member.authority)
 
-        // then
-        assertAll(
-                () -> verify(tokenProvider, times(1)).createAccessToken(member.getId(), member.getAuthority()),
-                () -> verify(tokenProvider, times(1)).createRefreshToken(member.getId()),
-                () -> verify(tokenStore, times(1)).synchronizeRefreshToken(member.getId(), REFRESH_TOKEN),
-                () -> assertThat(authToken.accessToken()).isEqualTo(ACCESS_TOKEN),
-                () -> assertThat(authToken.refreshToken()).isEqualTo(REFRESH_TOKEN)
-        );
+                verify(exactly = 1) {
+                    tokenProvider.createAccessToken(member.id, member.authority)
+                    tokenProvider.createRefreshToken(member.id)
+                }
+                assertSoftly(result) {
+                    accessToken shouldBe ACCESS_TOKEN
+                    refreshToken shouldBe REFRESH_TOKEN
+                }
+            }
+        }
     }
 
-    @Test
-    @DisplayName("AuthToken[Access + Refresh]을 재발급한다")
-    void reissueAuthorityToken() {
-        // given
-        given(tokenProvider.createAccessToken(member.getId(), member.getAuthority())).willReturn(ACCESS_TOKEN);
-        given(tokenProvider.createRefreshToken(member.getId())).willReturn(REFRESH_TOKEN);
+    Given("AccessToken이 만료된 사용자가") {
+        val member: Member<*> = MENTOR_1.toDomain().apply(1L)
 
-        // when
-        final AuthToken authToken = sut.reissueAuthorityToken(member.getId(), member.getAuthority());
+        When("본인 소유의 RefreshToken을 통해서 재발급을 요청하면") {
+            every { tokenProvider.createAccessToken(member.id, member.authority) } returns ACCESS_TOKEN
+            every { tokenProvider.createRefreshToken(member.id) } returns REFRESH_TOKEN
+            justRun { tokenStore.updateRefreshToken(member.id, REFRESH_TOKEN) }
 
-        // then
-        assertAll(
-                () -> verify(tokenProvider, times(1)).createAccessToken(member.getId(), member.getAuthority()),
-                () -> verify(tokenProvider, times(1)).createRefreshToken(member.getId()),
-                () -> verify(tokenStore, times(1)).updateRefreshToken(member.getId(), REFRESH_TOKEN),
-                () -> assertThat(authToken.accessToken()).isEqualTo(ACCESS_TOKEN),
-                () -> assertThat(authToken.refreshToken()).isEqualTo(REFRESH_TOKEN)
-        );
+            Then("AuthToken[Access + Refresh]을 재발급한다") {
+                val result: AuthToken = sut.reissueAuthorityToken(member.id, member.authority)
+
+                verify(exactly = 1) {
+                    tokenProvider.createAccessToken(member.id, member.authority)
+                    tokenProvider.createRefreshToken(member.id)
+                }
+                assertSoftly(result) {
+                    accessToken shouldBe ACCESS_TOKEN
+                    refreshToken shouldBe REFRESH_TOKEN
+                }
+            }
+        }
     }
-}
+})
