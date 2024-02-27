@@ -46,8 +46,8 @@ annotation class UnitTestKt
     QueryDslConfig::class,
     P6SpyConfig::class,
 )
-@DataJpaTest(showSql = false)
 @TestEnvironment
+@DataJpaTest(showSql = false)
 annotation class RepositoryTestKt
 
 @Tag("Redis")
@@ -56,8 +56,8 @@ annotation class RepositoryTestKt
 @ContextConfiguration(initializers = [RedisTestContainers.Initializer::class])
 @ExtendWith(RedisCleanerEachCallbackExtension::class)
 @Import(RedisCleaner::class)
-@DataRedisTest
 @TestEnvironment
+@DataRedisTest
 annotation class RedisTestKt
 
 @Tag("Integrate")
@@ -74,8 +74,8 @@ annotation class RedisTestKt
     DatabaseCleanerEachCallbackExtension::class,
     RedisCleanerEachCallbackExtension::class,
 )
-@SpringBootTest
 @TestEnvironment
+@SpringBootTest
 annotation class IntegrateTestKt
 
 /**
