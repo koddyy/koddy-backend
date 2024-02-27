@@ -59,7 +59,8 @@ class MemberBasicProfileQueryApiTest extends ControllerTest {
                                     body("languages.sub[]", "서브 언어", "0..N개"),
                                     body("school", "학교"),
                                     body("major", "전공"),
-                                    body("enteredIn", "학번")
+                                    body("enteredIn", "학번"),
+                                    body("authenticated", "학교 인증 여부")
                             )
                     ))
             );

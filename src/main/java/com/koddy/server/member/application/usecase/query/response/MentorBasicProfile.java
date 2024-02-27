@@ -11,7 +11,8 @@ public record MentorBasicProfile(
         LanguageResponse languages,
         String school,
         String major,
-        int enteredIn
+        int enteredIn,
+        boolean authenticated
 ) {
     public static MentorBasicProfile from(final Mentor mentor) {
         return new MentorBasicProfile(
@@ -22,7 +23,8 @@ public record MentorBasicProfile(
                 LanguageResponse.of(mentor.getLanguages()),
                 mentor.getUniversityProfile().getSchool(),
                 mentor.getUniversityProfile().getMajor(),
-                mentor.getUniversityProfile().getEnteredIn()
+                mentor.getUniversityProfile().getEnteredIn(),
+                mentor.isAuthenticated()
         );
     }
 }

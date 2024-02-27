@@ -33,13 +33,7 @@ public class Mentee extends Member<Mentee> {
             final List<Language> languages,
             final Interest interest
     ) {
-        super(
-                platform,
-                name,
-                nationality,
-                MENTEE,
-                languages
-        );
+        super(platform, name, nationality, MENTEE, languages);
         this.interest = interest;
     }
 

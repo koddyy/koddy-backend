@@ -42,7 +42,8 @@ public class MemberBasicProfileQueryAcceptanceTest extends AcceptanceTest {
                     .body("languages.sub", containsInAnyOrder(List.of(EN.getCode()).toArray()))
                     .body("school", is(MENTOR_1.getUniversityProfile().getSchool()))
                     .body("major", is(MENTOR_1.getUniversityProfile().getMajor()))
-                    .body("enteredIn", is(MENTOR_1.getUniversityProfile().getEnteredIn()));
+                    .body("enteredIn", is(MENTOR_1.getUniversityProfile().getEnteredIn()))
+                    .body("authenticated", is(false));
         }
 
         @Test
@@ -59,7 +60,8 @@ public class MemberBasicProfileQueryAcceptanceTest extends AcceptanceTest {
                     .body("languages.sub", containsInAnyOrder(List.of(EN.getCode()).toArray()))
                     .body("school", is(MENTOR_1.getUniversityProfile().getSchool()))
                     .body("major", is(MENTOR_1.getUniversityProfile().getMajor()))
-                    .body("enteredIn", is(MENTOR_1.getUniversityProfile().getEnteredIn()));
+                    .body("enteredIn", is(MENTOR_1.getUniversityProfile().getEnteredIn()))
+                    .body("authenticated", is(false));
         }
     }
 
