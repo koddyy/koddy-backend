@@ -43,8 +43,8 @@ class OAuthApi(
     ): ResponseEntity<ResponseWrapper<String>> {
         val oAuthLink: String = getOAuthLinkUseCase.invoke(
             GetOAuthLink(
-                OAuthProvider.from(provider),
-                redirectUri,
+                provider = OAuthProvider.from(provider),
+                redirectUri = redirectUri,
             ),
         )
         return ResponseEntity.ok(ResponseWrapper(oAuthLink))
