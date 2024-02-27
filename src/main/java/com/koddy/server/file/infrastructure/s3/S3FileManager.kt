@@ -46,9 +46,7 @@ class S3FileManager(
         uploadFileName: String,
     ): String = "${preSignedUrl.protocol}://${preSignedUrl.host}/${path.path}/$uploadFileName"
 
-    override fun upload(file: RawFileData): String {
-        return sendFileToStorage(file)
-    }
+    override fun upload(file: RawFileData): String = sendFileToStorage(file)
 
     private fun sendFileToStorage(file: RawFileData): String {
         try {

@@ -1,7 +1,7 @@
 package com.koddy.server.auth.domain.model.oauth
 
 import com.koddy.server.auth.exception.AuthException
-import com.koddy.server.auth.exception.AuthExceptionCode
+import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_OAUTH_PROVIDER
 
 enum class OAuthProvider(
     val value: String,
@@ -14,7 +14,8 @@ enum class OAuthProvider(
     companion object {
         @JvmStatic
         fun from(value: String): OAuthProvider {
-            return entries.firstOrNull { it.value == value } ?: throw AuthException(AuthExceptionCode.INVALID_OAUTH_PROVIDER)
+            return entries.firstOrNull { it.value == value }
+                ?: throw AuthException(INVALID_OAUTH_PROVIDER)
         }
     }
 }

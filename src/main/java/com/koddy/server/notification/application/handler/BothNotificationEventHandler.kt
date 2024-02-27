@@ -3,6 +3,7 @@ package com.koddy.server.notification.application.handler
 import com.koddy.server.coffeechat.domain.event.BothNotification
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository
+import com.koddy.server.global.log.logger
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
 import com.koddy.server.member.domain.repository.MenteeRepository
@@ -10,6 +11,7 @@ import com.koddy.server.member.domain.repository.MentorRepository
 import com.koddy.server.notification.domain.model.Notification
 import com.koddy.server.notification.domain.model.NotificationType
 import com.koddy.server.notification.domain.repository.NotificationRepository
+import org.slf4j.Logger
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
@@ -24,42 +26,51 @@ class BothNotificationEventHandler(
     private val coffeeChatRepository: CoffeeChatRepository,
     private val notificationRepository: NotificationRepository,
 ) {
+    private val log: Logger = logger()
+
     @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun handleApprovedFromMenteeFlowEvent(event: BothNotification.ApprovedFromMenteeFlowEvent) {
+    fun handleApprovedFromMenteeFlowEvent(event: BothNotification.ApprovedFromMenteeFlowEvent) =
         notify(
-            mentorId = event.mentorId,
-            menteeId = event.menteeId,
-            coffeeChatId = event.coffeeChatId,
+            event = event,
             mentorNotifyType = NotificationType.MENTOR_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE,
             menteeNotifyType = NotificationType.MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE,
         )
-    }
 
     @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun handleFinallyApprovedFromMentorFlowEvent(event: BothNotification.FinallyApprovedFromMentorFlowEvent) {
+    fun handleFinallyApprovedFromMentorFlowEvent(event: BothNotification.FinallyApprovedFromMentorFlowEvent) =
         notify(
-            mentorId = event.mentorId,
-            menteeId = event.menteeId,
-            coffeeChatId = event.coffeeChatId,
+            event = event,
             mentorNotifyType = NotificationType.MENTOR_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE,
             menteeNotifyType = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE,
         )
-    }
 
     private fun notify(
-        mentorId: Long,
-        menteeId: Long,
-        coffeeChatId: Long,
+        event: BothNotification,
         mentorNotifyType: NotificationType,
         menteeNotifyType: NotificationType,
     ) {
-        val mentor: Mentor = mentorRepository.getById(mentorId)
-        val mentee: Mentee = menteeRepository.getById(menteeId)
-        val coffeeChat: CoffeeChat = coffeeChatRepository.getById(coffeeChatId)
+        log.info(
+            "Notify [{}] -> coffeeChat={}, mentorId={}, time={}",
+            mentorNotifyType.name,
+            event.coffeeChatId,
+            event.mentorId,
+            event.eventPublishedAt,
+        )
+        log.info(
+            "Notify [{}] -> coffeeChat={}, menteeId={}, time={}",
+            menteeNotifyType.name,
+            event.coffeeChatId,
+            event.menteeId,
+            event.eventPublishedAt,
+        )
+
+        val mentor: Mentor = mentorRepository.getById(event.mentorId)
+        val mentee: Mentee = menteeRepository.getById(event.menteeId)
+        val coffeeChat: CoffeeChat = coffeeChatRepository.getById(event.coffeeChatId)
 
         notificationRepository.saveAll(
             listOf(

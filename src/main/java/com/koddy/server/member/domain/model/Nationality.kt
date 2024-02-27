@@ -1,7 +1,7 @@
 package com.koddy.server.member.domain.model
 
 import com.koddy.server.member.exception.MemberException
-import com.koddy.server.member.exception.MemberExceptionCode
+import com.koddy.server.member.exception.MemberExceptionCode.INVALID_NATIONALITY
 
 enum class Nationality(
     @JvmField val code: String,
@@ -16,8 +16,8 @@ enum class Nationality(
     ;
 
     companion object {
-        fun from(code: String): Nationality {
-            return entries.firstOrNull { it.code.equals(code, ignoreCase = true) } ?: throw MemberException(MemberExceptionCode.INVALID_NATIONALITY)
-        }
+        fun from(code: String): Nationality =
+            entries.firstOrNull { it.code.equals(code, ignoreCase = true) }
+                ?: throw MemberException(INVALID_NATIONALITY)
     }
 }

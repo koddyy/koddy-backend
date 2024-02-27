@@ -12,11 +12,12 @@ class ReadNotificationUseCase(
 ) {
     @KoddyWritableTransactional
     fun readSingle(command: ReadSingleNotificationCommand) {
-        val notification: Notification = notificationRepository.getByIdAndTargetId(command.notificationId, command.memberId)
+        val notification: Notification = notificationRepository.getByIdAndTargetId(
+            command.notificationId,
+            command.memberId,
+        )
         notification.read()
     }
 
-    fun readAll(memberId: Long) {
-        notificationRepository.readAll(memberId)
-    }
+    fun readAll(memberId: Long) = notificationRepository.readAll(memberId)
 }

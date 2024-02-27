@@ -25,8 +25,8 @@ class PreAuthorizeInterceptor(
         tokenProvider.validateToken(accessToken)
         AuthenticatedHolder.store(
             Authenticated(
-                tokenProvider.getId(accessToken),
-                tokenProvider.getAuthority(accessToken),
+                id = tokenProvider.getId(accessToken),
+                authority = tokenProvider.getAuthority(accessToken),
             ),
         )
         return super.preHandle(request, response, handler)

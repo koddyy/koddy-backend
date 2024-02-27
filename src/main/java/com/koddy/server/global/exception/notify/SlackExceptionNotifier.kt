@@ -70,13 +70,12 @@ class SlackExceptionNotifier(
     private fun generateSlackField(
         title: String,
         value: String,
-    ): Field {
-        return Field.builder()
+    ): Field =
+        Field.builder()
             .title(title)
             .value(value)
             .valueShortEnough(false)
             .build()
-    }
 
     companion object {
         private const val TIME_FORMAT: String = "yyyy-MM-dd HH:mm:ss.SSS"

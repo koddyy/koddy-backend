@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component
 class LoggingStatusManager {
     private val statusContainer = ThreadLocal<LoggingStatus>()
 
-    fun getExistLoggingStatus(): LoggingStatus = statusContainer.get() ?: throw IllegalStateException("ThreadLocal LoggingStatus not exists...")
+    fun getExistLoggingStatus(): LoggingStatus =
+        statusContainer.get()
+            ?: throw IllegalStateException("ThreadLocal LoggingStatus not exists...")
 
     fun syncStatus() {
         val status: LoggingStatus? = statusContainer.get()

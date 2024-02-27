@@ -36,11 +36,10 @@ class ExtractTokenArgumentResolver(
         request: HttpServletRequest,
         type: TokenType,
     ): String {
-        val token: String =
-            when (type) {
-                TokenType.ACCESS -> TokenExtractor.extractAccessToken(request) ?: throw AuthException(INVALID_PERMISSION)
-                TokenType.REFRESH -> TokenExtractor.extractRefreshToken(request) ?: throw AuthException(INVALID_PERMISSION)
-            }
+        val token: String = when (type) {
+            TokenType.ACCESS -> TokenExtractor.extractAccessToken(request) ?: throw AuthException(INVALID_PERMISSION)
+            TokenType.REFRESH -> TokenExtractor.extractRefreshToken(request) ?: throw AuthException(INVALID_PERMISSION)
+        }
         tokenProvider.validateToken(token)
         return token
     }
