@@ -1,115 +1,106 @@
-package com.koddy.server.auth.domain.service;
+package com.koddy.server.auth.domain.service
 
-import com.koddy.server.auth.exception.AuthException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SecurityException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Date;
-
-import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN;
+import com.koddy.server.auth.exception.AuthException
+import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN
+import com.koddy.server.global.base.DEFAULT_ZONE_ID
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.Jws
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.MalformedJwtException
+import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.UnsupportedJwtException
+import io.jsonwebtoken.security.Keys
+import io.jsonwebtoken.security.SecurityException
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
+import java.nio.charset.StandardCharsets
+import java.time.ZonedDateTime
+import java.util.Date
+import javax.crypto.SecretKey
 
 @Component
-public class TokenProvider {
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+class TokenProvider(
+    @Value("\${jwt.secret-key}") secretKey: String,
+    @Value("\${jwt.access-token-validity-seconds}") private val accessTokenValidityInSeconds: Long,
+    @Value("\${jwt.refresh-token-validity-seconds}") private val refreshTokenValidityInSeconds: Long,
+) {
+    private val secretKey: SecretKey = Keys.hmacShaKeyFor(secretKey.toByteArray(StandardCharsets.UTF_8))
 
-    private final SecretKey secretKey;
-    private final long accessTokenValidityInSeconds;
-    private final long refreshTokenValidityInSeconds;
-
-    public TokenProvider(
-            @Value("${jwt.secret-key}") final String secretKey,
-            @Value("${jwt.access-token-validity-seconds}") final long accessTokenValidityInSeconds,
-            @Value("${jwt.refresh-token-validity-seconds}") final long refreshTokenValidityInSeconds
-    ) {
-        this.secretKey = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-        this.accessTokenValidityInSeconds = accessTokenValidityInSeconds;
-        this.refreshTokenValidityInSeconds = refreshTokenValidityInSeconds;
-    }
-
-    public String createAccessToken(final long memberId, final String authority) {
+    fun createAccessToken(
+        memberId: Long,
+        authority: String,
+    ): String {
         // Payload
-        final Claims claims = Jwts.claims();
-        claims.put("id", memberId);
-        claims.put("authority", authority);
+        val claims = Jwts.claims()
+        claims["id"] = memberId
+        claims["authority"] = authority
 
         // Expires At
-        final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
-        final ZonedDateTime tokenValidity = now.plusSeconds(accessTokenValidityInSeconds);
+        val now = ZonedDateTime.now(DEFAULT_ZONE_ID)
+        val tokenValidity = now.plusSeconds(accessTokenValidityInSeconds)
 
         return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(Date.from(now.toInstant()))
-                .setExpiration(Date.from(tokenValidity.toInstant()))
-                .signWith(secretKey, SignatureAlgorithm.HS256)
-                .compact();
+            .setClaims(claims)
+            .setIssuedAt(Date.from(now.toInstant()))
+            .setExpiration(Date.from(tokenValidity.toInstant()))
+            .signWith(secretKey, SignatureAlgorithm.HS256)
+            .compact()
     }
 
-    public String createRefreshToken(final long memberId) {
+    fun createRefreshToken(memberId: Long): String {
         // Payload
-        final Claims claims = Jwts.claims();
-        claims.put("id", memberId);
+        val claims = Jwts.claims()
+        claims["id"] = memberId
 
         // Expires At
-        final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
-        final ZonedDateTime tokenValidity = now.plusSeconds(refreshTokenValidityInSeconds);
+        val now = ZonedDateTime.now(DEFAULT_ZONE_ID)
+        val tokenValidity = now.plusSeconds(refreshTokenValidityInSeconds)
 
         return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(Date.from(now.toInstant()))
-                .setExpiration(Date.from(tokenValidity.toInstant()))
-                .signWith(secretKey, SignatureAlgorithm.HS256)
-                .compact();
+            .setClaims(claims)
+            .setIssuedAt(Date.from(now.toInstant()))
+            .setExpiration(Date.from(tokenValidity.toInstant()))
+            .signWith(secretKey, SignatureAlgorithm.HS256)
+            .compact()
     }
 
-    public long getId(final String token) {
-        return getClaims(token)
-                .getBody()
-                .get("id", Long.class);
-    }
+    fun getId(token: String): Long =
+        getClaims(token)
+            .body["id"]
+            .toString()
+            .toLong()
 
-    public String getAuthority(final String token) {
-        return getClaims(token)
-                .getBody()
-                .get("authority", String.class);
-    }
+    fun getAuthority(token: String): String =
+        getClaims(token)
+            .body["authority"]
+            .toString()
 
-    public void validateToken(final String token) {
+    fun validateToken(token: String) {
         try {
-            final Jws<Claims> claims = getClaims(token);
-            final Date expiredDate = claims.getBody().getExpiration();
-            final Date now = new Date();
+            val claims: Jws<Claims> = getClaims(token)
+            val expiredDate = ZonedDateTime.ofInstant(claims.body.expiration.toInstant(), DEFAULT_ZONE_ID)
+            val now = ZonedDateTime.now(DEFAULT_ZONE_ID)
 
-            if (expiredDate.before(now)) {
-                throw new AuthException(INVALID_TOKEN);
+            if (expiredDate < now) {
+                throw AuthException(INVALID_TOKEN)
             }
-        } catch (final ExpiredJwtException |
-                       SecurityException |
-                       MalformedJwtException |
-                       UnsupportedJwtException |
-                       IllegalArgumentException e) {
-            throw new AuthException(INVALID_TOKEN);
+        } catch (e: ExpiredJwtException) {
+            throw AuthException(INVALID_TOKEN)
+        } catch (e: SecurityException) {
+            throw AuthException(INVALID_TOKEN)
+        } catch (e: MalformedJwtException) {
+            throw AuthException(INVALID_TOKEN)
+        } catch (e: UnsupportedJwtException) {
+            throw AuthException(INVALID_TOKEN)
+        } catch (e: IllegalArgumentException) {
+            throw AuthException(INVALID_TOKEN)
         }
     }
 
-    private Jws<Claims> getClaims(final String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token);
-    }
+    private fun getClaims(token: String): Jws<Claims> =
+        Jwts.parserBuilder()
+            .setSigningKey(secretKey)
+            .build()
+            .parseClaimsJws(token)
 }

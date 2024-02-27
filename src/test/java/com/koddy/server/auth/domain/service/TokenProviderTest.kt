@@ -1,74 +1,78 @@
-package com.koddy.server.auth.domain.service;
+package com.koddy.server.auth.domain.service
 
-import com.koddy.server.auth.exception.AuthException;
-import com.koddy.server.common.UnitTest;
-import com.koddy.server.member.domain.model.Member;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.koddy.server.auth.exception.AuthException
+import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN
+import com.koddy.server.common.UnitTestKt
+import com.koddy.server.common.fixture.MentorFixture
+import com.koddy.server.member.domain.model.Member
+import io.kotest.assertions.assertSoftly
+import io.kotest.assertions.throwables.shouldNotThrowAny
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.annotation.DisplayName
+import io.kotest.core.spec.style.FeatureSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.throwable.shouldHaveMessage
 
-import static com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN;
-import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-
+@UnitTestKt
 @DisplayName("Auth -> TokenProvider 테스트")
-class TokenProviderTest extends UnitTest {
-    private static final String SECRET_KEY = "asldfjsadlfjalksjf01jf02j9012f0120f12jf1j29v0saduf012ue101212c01";
+internal class TokenProviderTest : FeatureSpec({
+    val secretKey = "asldfjsadlfjalksjf01jf02j9012f0120f12jf1j29v0saduf012ue101212c01"
+    val invalidProvider = TokenProvider(secretKey, 0L, 0L)
+    val validProvider = TokenProvider(secretKey, 7200L, 7200L)
 
-    private final TokenProvider invalidProvider = new TokenProvider(SECRET_KEY, 0L, 0L);
-    private final TokenProvider validProvider = new TokenProvider(SECRET_KEY, 7200L, 7200L);
+    val member: Member<*> = MentorFixture.MENTOR_1.toDomain().apply(1L)
 
-    private final Member<?> member = MENTOR_1.toDomain().apply(1L);
+    feature("TokenProvider's createAccessToken & createRefreshToken") {
+        scenario("AccessToken과 RefreshToken을 발급한다") {
+            val accessToken: String = validProvider.createAccessToken(member.id, member.authority)
+            val refreshToken: String = validProvider.createRefreshToken(member.id)
 
-    @Test
-    @DisplayName("AccessToken과 RefreshToken을 발급한다")
-    void createToken() {
-        // when
-        final String accessToken = validProvider.createAccessToken(member.getId(), member.getAuthority());
-        final String refreshToken = validProvider.createRefreshToken(member.getId());
-
-        // then
-        assertAll(
-                () -> assertThat(accessToken).isNotNull(),
-                () -> assertThat(refreshToken).isNotNull()
-        );
+            assertSoftly {
+                accessToken shouldNotBe null
+                refreshToken shouldNotBe null
+            }
+        }
     }
 
-    @Test
-    @DisplayName("Token의 Payload를 추출한다")
-    void extractPayload() {
-        // when
-        final String accessToken = validProvider.createAccessToken(member.getId(), member.getAuthority());
+    feature("TokenProvider's getId & getAuthority") {
+        scenario("토큰의 Payload(ID, Authority)를 추출한다") {
+            val accessToken: String = validProvider.createAccessToken(member.id, member.authority)
+            val refreshToken: String = validProvider.createRefreshToken(member.id)
 
-        // then
-        assertThat(validProvider.getId(accessToken)).isEqualTo(member.getId());
+            assertSoftly {
+                validProvider.getId(accessToken) shouldBe member.id
+                validProvider.getAuthority(accessToken) shouldBe member.authority
+                validProvider.getId(refreshToken) shouldBe member.id
+            }
+        }
     }
 
-    @Test
-    @DisplayName("Token 만료에 대한 유효성을 검증한다")
-    void validateToken1() {
-        // when
-        final String validToken = validProvider.createAccessToken(member.getId(), member.getAuthority());
-        final String invalidToken = invalidProvider.createAccessToken(member.getId(), member.getAuthority());
+    feature("TokenProvider's validateToken (Expired)") {
+        scenario("토큰 만료에 대한 유효성 검사를 진행한다") {
+            val validToken: String = validProvider.createAccessToken(member.id, member.authority)
+            val invalidToken: String = invalidProvider.createAccessToken(member.id, member.authority)
 
-        // then
-        assertDoesNotThrow(() -> validProvider.validateToken(validToken));
-        assertThatThrownBy(() -> invalidProvider.validateToken(invalidToken))
-                .isInstanceOf(AuthException.class)
-                .hasMessage(INVALID_TOKEN.getMessage());
+            assertSoftly {
+                shouldNotThrowAny { validProvider.validateToken(validToken) }
+                shouldThrow<AuthException> {
+                    invalidProvider.validateToken(invalidToken)
+                } shouldHaveMessage INVALID_TOKEN.message
+            }
+        }
     }
 
-    @Test
-    @DisplayName("Token 조작에 대한 유효성을 검증한다")
-    void validateToken2() {
-        // when
-        final String forgedToken = validProvider.createAccessToken(member.getId(), member.getAuthority()) + "hacked";
+    feature("TokenProvider's validateToken (Malformed)") {
+        scenario("토큰 조작에 대한 유효성 검사를 진행한다") {
+            val validToken: String = validProvider.createAccessToken(member.id, member.authority)
+            val forgedToken: String = validProvider.createAccessToken(member.id, member.authority) + "hacked"
 
-        // then
-        assertThatThrownBy(() -> validProvider.validateToken(forgedToken))
-                .isInstanceOf(AuthException.class)
-                .hasMessage(INVALID_TOKEN.getMessage());
+            assertSoftly {
+                shouldNotThrowAny { validProvider.validateToken(validToken) }
+                shouldThrow<AuthException> {
+                    validProvider.validateToken(forgedToken)
+                } shouldHaveMessage INVALID_TOKEN.message
+            }
+        }
     }
-}
+})
