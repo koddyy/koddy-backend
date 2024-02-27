@@ -73,7 +73,11 @@ class OAuthApi(
         @Auth authenticated: Authenticated,
         response: HttpServletResponse,
     ): ResponseEntity<Void> {
-        logoutUseCase.invoke(LogoutCommand(authenticated.id))
+        logoutUseCase.invoke(
+            LogoutCommand(
+                memberId = authenticated.id,
+            ),
+        )
         tokenResponseWriter.expireRefreshTokenCookie(response)
         return ResponseEntity.noContent().build()
     }
