@@ -1,7 +1,6 @@
 package com.koddy.server.auth.presentation
 
 import com.koddy.server.auth.application.usecase.ReissueTokenUseCase
-import com.koddy.server.auth.application.usecase.command.ReissueTokenCommand
 import com.koddy.server.auth.domain.model.AuthToken
 import com.koddy.server.auth.domain.model.TokenType
 import com.koddy.server.auth.utils.TokenResponseWriter
@@ -27,7 +26,7 @@ class TokenReissueApi(
         @ExtractToken(tokenType = TokenType.REFRESH) refreshToken: String,
         response: HttpServletResponse,
     ): ResponseEntity<Void> {
-        val authToken: AuthToken = reissueTokenUseCase.invoke(ReissueTokenCommand(refreshToken))
+        val authToken: AuthToken = reissueTokenUseCase.invoke(refreshToken)
         tokenResponseWriter.applyToken(response, authToken)
         return ResponseEntity.noContent().build()
     }
