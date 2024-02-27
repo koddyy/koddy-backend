@@ -13,28 +13,26 @@ import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.common.utils.OAuthUtils.AUTHORIZATION_CODE
 import com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI
 import com.koddy.server.common.utils.OAuthUtils.STATE
-import io.kotest.assertions.assertSoftly
+import io.kotest.core.annotation.DisplayName
+import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import io.mockk.verify
 
 @UnitTestKt
 @DisplayName("Auth -> OAuthLoginProcessorFacade [구글, 카카오, 줌] 테스트")
-internal class OAuthLoginProcessorFacadeTest {
-    private val googleOAuthConnector = mockk<GoogleOAuthConnector>()
-    private val kakaoOAuthConnector = mockk<KakaoOAuthConnector>()
-    private val zoomOAuthConnector = mockk<ZoomOAuthConnector>()
-    private val sut = OAuthLoginProcessorFacade(
+internal class OAuthLoginProcessorFacadeTest : DescribeSpec({
+    val googleOAuthConnector = mockk<GoogleOAuthConnector>()
+    val kakaoOAuthConnector = mockk<KakaoOAuthConnector>()
+    val zoomOAuthConnector = mockk<ZoomOAuthConnector>()
+    val sut = OAuthLoginProcessorFacade(
         googleOAuthConnector,
         kakaoOAuthConnector,
         zoomOAuthConnector,
     )
 
-    @Test
-    fun `Provider별 OAuth 로그인을 진행한다`() {
-        // given
+    describe("OAuthLoginProcessorFacade's login") {
         val googleUserResponse: GoogleUserResponse = MENTOR_1.toGoogleUserResponse()
         val kakaoUserResponse: KakaoUserResponse = MENTOR_1.toKakaoUserResponse()
         val zoomUserResponse: ZoomUserResponse = MENTOR_1.toZoomUserResponse()
@@ -43,16 +41,43 @@ internal class OAuthLoginProcessorFacadeTest {
         every { kakaoOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE) } returns kakaoUserResponse
         every { zoomOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE) } returns zoomUserResponse
 
-        // when
-        val google: OAuthUserResponse = sut.login(OAuthProvider.GOOGLE, AUTHORIZATION_CODE, REDIRECT_URI, STATE)
-        val kakao: OAuthUserResponse = sut.login(OAuthProvider.KAKAO, AUTHORIZATION_CODE, REDIRECT_URI, STATE)
-        val zoom: OAuthUserResponse = sut.login(OAuthProvider.ZOOM, AUTHORIZATION_CODE, REDIRECT_URI, STATE)
+        context("Google OAuth Provider에 대해서") {
+            it("로그인을 진행한다") {
+                val result: OAuthUserResponse = sut.login(OAuthProvider.GOOGLE, AUTHORIZATION_CODE, REDIRECT_URI, STATE)
 
-        // when - then
-        assertSoftly {
-            google shouldBe googleUserResponse
-            kakao shouldBe kakaoUserResponse
-            zoom shouldBe zoomUserResponse
+                verify(exactly = 1) { googleOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE) }
+                verify(exactly = 0) {
+                    kakaoOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE)
+                    zoomOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE)
+                }
+                result shouldBe googleUserResponse
+            }
+        }
+
+        context("Kakao OAuth Provider에 대해서") {
+            it("로그인을 진행한다") {
+                val result: OAuthUserResponse = sut.login(OAuthProvider.KAKAO, AUTHORIZATION_CODE, REDIRECT_URI, STATE)
+
+                verify(exactly = 1) { kakaoOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE) }
+                verify(exactly = 0) {
+                    googleOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE)
+                    zoomOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE)
+                }
+                result shouldBe kakaoUserResponse
+            }
+        }
+
+        context("Zoom OAuth Provider에 대해서") {
+            it("로그인을 진행한다") {
+                val result: OAuthUserResponse = sut.login(OAuthProvider.ZOOM, AUTHORIZATION_CODE, REDIRECT_URI, STATE)
+
+                verify(exactly = 1) { zoomOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE) }
+                verify(exactly = 0) {
+                    googleOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE)
+                    kakaoOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE)
+                }
+                result shouldBe zoomUserResponse
+            }
         }
     }
-}
+})
