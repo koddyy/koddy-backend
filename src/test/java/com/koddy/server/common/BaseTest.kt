@@ -4,6 +4,7 @@ import com.koddy.server.common.containers.MySqlTestContainers
 import com.koddy.server.common.containers.RedisTestContainers
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
 import com.koddy.server.common.containers.callback.RedisCleanerEachCallbackExtension
+import com.koddy.server.common.utils.RedisCleaner
 import com.koddy.server.global.config.etc.P6SpyConfig
 import com.koddy.server.global.config.infra.QueryDslConfig
 import org.junit.jupiter.api.Tag
@@ -51,6 +52,8 @@ annotation class RepositoryTestKt
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 @ContextConfiguration(initializers = [RedisTestContainers.Initializer::class])
+@ExtendWith(RedisCleanerEachCallbackExtension::class)
+@Import(RedisCleaner::class)
 @DataRedisTest
 @TestEnvironment
 annotation class RedisTestKt
