@@ -26,9 +26,7 @@ enum class DayOfWeek(
 
     companion object {
         @JvmStatic
-        fun from(kor: String): DayOfWeek =
-            entries.firstOrNull { it.kor == kor }
-                ?: throw MemberException(INVALID_DAY)
+        fun from(kor: String): DayOfWeek = entries.firstOrNull { it.kor == kor } ?: throw MemberException(INVALID_DAY)
 
         fun of(kors: List<String>): List<DayOfWeek> = kors.map { from(it) }
 

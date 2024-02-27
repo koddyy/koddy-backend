@@ -13,9 +13,8 @@ enum class OAuthProvider(
 
     companion object {
         @JvmStatic
-        fun from(value: String): OAuthProvider {
-            return entries.firstOrNull { it.value == value }
+        fun from(value: String): OAuthProvider =
+            entries.firstOrNull { it.value == value }
                 ?: throw AuthException(INVALID_OAUTH_PROVIDER)
-        }
     }
 }
