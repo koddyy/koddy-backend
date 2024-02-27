@@ -7,6 +7,8 @@ import com.koddy.server.common.containers.callback.RedisCleanerEachCallbackExten
 import com.koddy.server.common.utils.RedisCleaner
 import com.koddy.server.global.config.etc.P6SpyConfig
 import com.koddy.server.global.config.infra.QueryDslConfig
+import io.kotest.core.config.AbstractProjectConfig
+import io.kotest.core.spec.IsolationMode
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.parallel.Execution
@@ -75,3 +77,10 @@ annotation class RedisTestKt
 @SpringBootTest
 @TestEnvironment
 annotation class IntegrateTestKt
+
+/**
+ * Complete isolation between tests `with mocking`
+ */
+class ProjectConfig : AbstractProjectConfig() {
+    override val isolationMode = IsolationMode.InstancePerLeaf
+}
