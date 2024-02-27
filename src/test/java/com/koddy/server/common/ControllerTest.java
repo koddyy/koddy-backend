@@ -70,7 +70,7 @@ public abstract class ControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private TokenProvider tokenProvider;
+    protected TokenProvider tokenProvider;
 
     @BeforeEach
     void setUp(final WebApplicationContext context, final RestDocumentationContextProvider provider) {
@@ -558,7 +558,7 @@ public abstract class ControllerTest {
         if (!isValid) {
             doThrow(new AuthException(AuthExceptionCode.INVALID_TOKEN))
                     .when(tokenProvider)
-                    .validateToken(anyString());
+                    .validateAccessToken(anyString());
         }
 
         given(tokenProvider.getId(anyString())).willReturn(member.getId());

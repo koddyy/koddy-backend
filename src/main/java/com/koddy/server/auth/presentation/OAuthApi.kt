@@ -43,8 +43,8 @@ class OAuthApi(
     ): ResponseEntity<ResponseWrapper<String>> {
         val oAuthLink: String = getOAuthLinkUseCase.invoke(
             GetOAuthLink(
-                OAuthProvider.from(provider),
-                redirectUri,
+                provider = OAuthProvider.from(provider),
+                redirectUri = redirectUri,
             ),
         )
         return ResponseEntity.ok(ResponseWrapper(oAuthLink))
@@ -73,7 +73,11 @@ class OAuthApi(
         @Auth authenticated: Authenticated,
         response: HttpServletResponse,
     ): ResponseEntity<Void> {
-        logoutUseCase.invoke(LogoutCommand(authenticated.id))
+        logoutUseCase.invoke(
+            LogoutCommand(
+                memberId = authenticated.id,
+            ),
+        )
         tokenResponseWriter.expireRefreshTokenCookie(response)
         return ResponseEntity.noContent().build()
     }

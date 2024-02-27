@@ -4,8 +4,11 @@ import com.koddy.server.common.containers.MySqlTestContainers
 import com.koddy.server.common.containers.RedisTestContainers
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
 import com.koddy.server.common.containers.callback.RedisCleanerEachCallbackExtension
+import com.koddy.server.common.utils.RedisCleaner
 import com.koddy.server.global.config.etc.P6SpyConfig
 import com.koddy.server.global.config.infra.QueryDslConfig
+import io.kotest.core.config.AbstractProjectConfig
+import io.kotest.core.spec.IsolationMode
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.parallel.Execution
@@ -43,16 +46,18 @@ annotation class UnitTestKt
     QueryDslConfig::class,
     P6SpyConfig::class,
 )
-@DataJpaTest(showSql = false)
 @TestEnvironment
+@DataJpaTest(showSql = false)
 annotation class RepositoryTestKt
 
 @Tag("Redis")
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 @ContextConfiguration(initializers = [RedisTestContainers.Initializer::class])
-@DataRedisTest
+@ExtendWith(RedisCleanerEachCallbackExtension::class)
+@Import(RedisCleaner::class)
 @TestEnvironment
+@DataRedisTest
 annotation class RedisTestKt
 
 @Tag("Integrate")
@@ -69,6 +74,13 @@ annotation class RedisTestKt
     DatabaseCleanerEachCallbackExtension::class,
     RedisCleanerEachCallbackExtension::class,
 )
-@SpringBootTest
 @TestEnvironment
+@SpringBootTest
 annotation class IntegrateTestKt
+
+/**
+ * Complete isolation between tests `with mocking`
+ */
+class ProjectConfig : AbstractProjectConfig() {
+    override val isolationMode = IsolationMode.InstancePerLeaf
+}

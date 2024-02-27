@@ -16,9 +16,9 @@ data class OAuthLoginRequest(
 ) {
     fun toCommand(provider: String): OAuthLoginCommand =
         OAuthLoginCommand(
-            OAuthProvider.from(provider),
-            authorizationCode,
-            redirectUri,
-            state,
+            provider = OAuthProvider.from(provider),
+            code = authorizationCode,
+            redirectUrl = redirectUri,
+            state = state,
         )
 }

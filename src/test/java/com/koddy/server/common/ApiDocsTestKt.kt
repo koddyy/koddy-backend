@@ -68,7 +68,6 @@ import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 import org.springframework.web.filter.CharacterEncodingFilter
 
 @Tag("ApiDocs")
-@WebMvcTest
 @ExtendWith(
     SpringExtension::class,
     RestDocumentationExtension::class,
@@ -83,6 +82,7 @@ import org.springframework.web.filter.CharacterEncodingFilter
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
 )
 @AutoConfigureRestDocs
+@WebMvcTest
 abstract class ApiDocsTestKt : FeatureSpec() {
     protected abstract val controller: Any
 
@@ -202,7 +202,7 @@ abstract class ApiDocsTestKt : FeatureSpec() {
         if (isValid.not()) {
             doThrow(AuthException(AuthExceptionCode.INVALID_TOKEN))
                 .`when`(tokenProvider)
-                .validateToken(anyString())
+                .validateAccessToken(anyString())
         }
 
         every { tokenProvider.getId(anyString()) } returns member.id
@@ -221,7 +221,8 @@ abstract class ApiDocsTestKt : FeatureSpec() {
 
     protected fun ResultActions.isStatus(status: Int): ResultActions = andExpect(status().`is`(status))
 
-    protected fun ResultActions.exceptionOccurred(occurredException: OccurredException): ResultActions = andExpectAll(*createExceptionResultMatchers(occurredException))
+    protected fun ResultActions.exceptionOccurred(occurredException: OccurredException): ResultActions =
+        andExpectAll(*createExceptionResultMatchers(occurredException))
 
     protected data class DocumentInfo(
         val identifier: String,
@@ -254,7 +255,8 @@ abstract class ApiDocsTestKt : FeatureSpec() {
 
     protected infix fun String.type(fieldType: DocumentFieldType): DocumentField = DocumentField(this, fieldType.type)
 
-    protected infix fun <T : Enum<T>> String.type(fieldType: ENUM<T>): DocumentField = DocumentField(this, fieldType.type, fieldType.enums)
+    protected infix fun <T : Enum<T>> String.type(fieldType: ENUM<T>): DocumentField =
+        DocumentField(this, fieldType.type, fieldType.enums)
 
     protected infix fun String.means(description: String): DocumentField =
         DocumentField(this).apply {

@@ -22,7 +22,7 @@ class PreAuthorizeInterceptor(
             return super.preHandle(request, response, handler)
         }
 
-        tokenProvider.validateToken(accessToken)
+        tokenProvider.validateAccessToken(accessToken)
         AuthenticatedHolder.store(
             Authenticated(
                 id = tokenProvider.getId(accessToken),
