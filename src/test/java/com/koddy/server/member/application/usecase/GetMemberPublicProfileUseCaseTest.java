@@ -2,8 +2,8 @@ package com.koddy.server.member.application.usecase;
 
 import com.koddy.server.common.UnitTest;
 import com.koddy.server.common.fixture.MentoringPeriodFixture;
-import com.koddy.server.member.application.usecase.query.response.MenteeBasicProfile;
-import com.koddy.server.member.application.usecase.query.response.MentorBasicProfile;
+import com.koddy.server.member.application.usecase.query.response.MenteePublicProfile;
+import com.koddy.server.member.application.usecase.query.response.MentorPublicProfile;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -29,17 +29,17 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-@DisplayName("Member -> GetMemberBasicProfileUseCase 테스트")
-class GetMemberBasicProfileUseCaseTest extends UnitTest {
+@DisplayName("Member -> GetMemberPublicProfileUseCase 테스트")
+class GetMemberPublicProfileUseCaseTest extends UnitTest {
     private final MentorRepository mentorRepository = mock(MentorRepository.class);
     private final MenteeRepository menteeRepository = mock(MenteeRepository.class);
-    private final GetMemberBasicProfileUseCase sut = new GetMemberBasicProfileUseCase(mentorRepository, menteeRepository);
+    private final GetMemberPublicProfileUseCase sut = new GetMemberPublicProfileUseCase(mentorRepository, menteeRepository);
 
     @Nested
-    @DisplayName("멘토 프로필 조회")
-    class GetMentorProfile {
+    @DisplayName("멘토 기본(Public) 프로필 조회")
+    class GetMentorPublicProfile {
         @Test
-        @DisplayName("멘토 프로필을 조회한다 (미완성 - 자기소개, 멘토링 기간, 스케줄)")
+        @DisplayName("멘토 기본(Public) 프로필을 조회한다 - [미완성 :: 프로필 이미지 URL, 자기소개, 멘토링 기간, 스케줄]")
         void uncomplete() {
             // given
             final List<Language> languages = List.of(KR_MAIN.toDomain());
@@ -52,7 +52,7 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
             given(mentorRepository.getProfile(mentor.getId())).willReturn(mentor);
 
             // when
-            final MentorBasicProfile mentorProfile = sut.getMentorProfile(mentor.getId());
+            final MentorPublicProfile mentorProfile = sut.getMentorProfile(mentor.getId());
 
             // then
             assertAll(
@@ -64,6 +64,7 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
                     () -> assertThat(mentorProfile.school()).isEqualTo(mentor.getUniversityProfile().getSchool()),
                     () -> assertThat(mentorProfile.major()).isEqualTo(mentor.getUniversityProfile().getMajor()),
                     () -> assertThat(mentorProfile.enteredIn()).isEqualTo(mentor.getUniversityProfile().getEnteredIn()),
+                    () -> assertThat(mentorProfile.authenticated()).isFalse(),
 
                     // Optional
                     () -> assertThat(mentorProfile.introduction()).isNull(),
@@ -72,7 +73,7 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
         }
 
         @Test
-        @DisplayName("멘토 프로필을 조회한다 (완성)")
+        @DisplayName("멘토 기본(Public) 프로필을 조회한다 - [완성]")
         void complete() {
             // given
             final List<Language> languages = List.of(KR_MAIN.toDomain());
@@ -83,7 +84,7 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
             given(mentorRepository.getProfile(mentor.getId())).willReturn(mentor);
 
             // when
-            final MentorBasicProfile mentorProfile = sut.getMentorProfile(mentor.getId());
+            final MentorPublicProfile mentorProfile = sut.getMentorProfile(mentor.getId());
 
             // then
             assertAll(
@@ -95,6 +96,7 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
                     () -> assertThat(mentorProfile.school()).isEqualTo(mentor.getUniversityProfile().getSchool()),
                     () -> assertThat(mentorProfile.major()).isEqualTo(mentor.getUniversityProfile().getMajor()),
                     () -> assertThat(mentorProfile.enteredIn()).isEqualTo(mentor.getUniversityProfile().getEnteredIn()),
+                    () -> assertThat(mentorProfile.authenticated()).isFalse(),
 
                     // Optional
                     () -> assertThat(mentorProfile.introduction()).isEqualTo(mentor.getIntroduction()),
@@ -104,10 +106,10 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
     }
 
     @Nested
-    @DisplayName("멘티 프로필 조회")
-    class GetMenteeProfile {
+    @DisplayName("멘티 기본(Public) 프로필 조회")
+    class GetMenteePublicProfile {
         @Test
-        @DisplayName("멘티 프로필을 조회한다 (미완성 - 자기소개)")
+        @DisplayName("멘티 기본(Public) 프로필을 조회한다 - [미완성 :: 프로필 이미지 URL, 자기소개]")
         void uncomplete() {
             // given
             final List<Language> languages = List.of(KR_MAIN.toDomain(), EN_SUB.toDomain(), JP_SUB.toDomain());
@@ -121,7 +123,7 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
             given(menteeRepository.getProfile(mentee.getId())).willReturn(mentee);
 
             // when
-            final MenteeBasicProfile menteeProfile = sut.getMenteeProfile(mentee.getId());
+            final MenteePublicProfile menteeProfile = sut.getMenteeProfile(mentee.getId());
 
             // then
             assertAll(
@@ -144,7 +146,7 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
         }
 
         @Test
-        @DisplayName("멘티 프로필을 조회한다 (완성)")
+        @DisplayName("멘티 기본(Public) 프로필을 조회한다 - [완성]")
         void complete() {
             // given
             final List<Language> languages = List.of(KR_MAIN.toDomain(), EN_SUB.toDomain(), JP_SUB.toDomain());
@@ -152,7 +154,7 @@ class GetMemberBasicProfileUseCaseTest extends UnitTest {
             given(menteeRepository.getProfile(mentee.getId())).willReturn(mentee);
 
             // when
-            final MenteeBasicProfile menteeProfile = sut.getMenteeProfile(mentee.getId());
+            final MenteePublicProfile menteeProfile = sut.getMenteeProfile(mentee.getId());
 
             // then
             assertAll(

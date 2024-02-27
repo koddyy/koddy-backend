@@ -28,10 +28,10 @@ import static org.springframework.http.HttpStatus.OK;
 @DisplayName("[Acceptance Test] 사용자 마이페이지(Private) 프로필 조회")
 public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
     @Nested
-    @DisplayName("멘토 마이페이지 프로필 조회 API")
-    class GetMentorProfile {
+    @DisplayName("멘토 마이페이지(Private) 프로필 조회 API")
+    class GetMentorPrivateProfile {
         @Test
-        @DisplayName("멘토 마이페이지 프로필을 조회한다 (미완성 프로필)")
+        @DisplayName("멘토 마이페이지(Private) 프로필을 조회한다 (미완성 프로필)")
         void successWithUncomplete() {
             final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
             멘토_마이페이지_프로필을_조회한다(accessToken)
@@ -55,7 +55,7 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
         }
 
         @Test
-        @DisplayName("멘토 마이페이지 프로필을 조회한다 (완성 프로필)")
+        @DisplayName("멘토 마이페이지(Private) 프로필을 조회한다 (완성 프로필)")
         void successWithComplete() {
             final String accessToken = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다().token().accessToken();
             멘토_마이페이지_프로필을_조회한다(accessToken)
@@ -115,10 +115,10 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
     }
 
     @Nested
-    @DisplayName("멘티 마이페이지 프로필 조회 API")
-    class GetMenteeProfile {
+    @DisplayName("멘티 마이페이지(Private) 프로필 조회 API")
+    class GetMenteePrivateProfile {
         @Test
-        @DisplayName("멘티 마이페이지 프로필을 조회한다 (미완성 프로필)")
+        @DisplayName("멘티 마이페이지(Private) 프로필을 조회한다 (미완성 프로필)")
         void successWithUncomplete() {
             final String accessToken = MENTEE_1.회원가입과_로그인을_진행한다().token().accessToken();
             멘티_마이페이지_프로필을_조회한다(accessToken)
@@ -138,7 +138,7 @@ public class MemberPrivateProfileQueryAcceptanceTest extends AcceptanceTest {
         }
 
         @Test
-        @DisplayName("멘티 마이페이지 프로필을 조회한다 (완성 프로필)")
+        @DisplayName("멘티 마이페이지(Private) 프로필을 조회한다 (완성 프로필)")
         void successWithComplete() {
             final String accessToken = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다().token().accessToken();
             멘티_마이페이지_프로필을_조회한다(accessToken)

@@ -1,5 +1,6 @@
 package com.koddy.server.acceptance.member;
 
+import com.koddy.server.auth.domain.model.AuthMember;
 import com.koddy.server.common.AcceptanceTest;
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension;
 import com.koddy.server.common.containers.callback.RedisCleanerEachCallbackExtension;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_기본_프로필을_조회한다;
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토가_메일을_통해서_학교_인증을_시도한다;
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토가_증명자료를_통해서_학교_인증을_시도한다;
 import static com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토가_학교_메일로_발송된_인증번호를_제출한다;
@@ -21,6 +23,7 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.TOO_MANY_REQUESTS;
 
 @ExtendWith({
@@ -86,10 +89,19 @@ public class AuthenticationMentorUnivAcceptanceTest extends AcceptanceTest {
         @Test
         @DisplayName("인증번호가 일치하면 인증에 성공한다")
         void success() {
-            final String accessToken = MENTOR_1.회원가입과_로그인을_진행한다().token().accessToken();
-            멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, accessToken);
-            멘토가_학교_메일로_발송된_인증번호를_제출한다(SCHOOL_MAIL, AUTH_CODE, accessToken)
+            final AuthMember mentor = MENTOR_1.회원가입과_로그인을_진행한다();
+            멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, mentor.token().accessToken());
+
+            멘토_기본_프로필을_조회한다(mentor.id())
+                    .statusCode(OK.value())
+                    .body("authenticated", is(false));
+
+            멘토가_학교_메일로_발송된_인증번호를_제출한다(SCHOOL_MAIL, AUTH_CODE, mentor.token().accessToken())
                     .statusCode(NO_CONTENT.value());
+
+            멘토_기본_프로필을_조회한다(mentor.id())
+                    .statusCode(OK.value())
+                    .body("authenticated", is(true));
         }
     }
 

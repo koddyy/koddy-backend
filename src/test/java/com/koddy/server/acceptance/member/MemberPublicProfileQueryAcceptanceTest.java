@@ -24,12 +24,12 @@ import static org.springframework.http.HttpStatus.OK;
 
 @ExtendWith(DatabaseCleanerEachCallbackExtension.class)
 @DisplayName("[Acceptance Test] 사용자 기본(Public) 프로필 조회")
-public class MemberBasicProfileQueryAcceptanceTest extends AcceptanceTest {
+public class MemberPublicProfileQueryAcceptanceTest extends AcceptanceTest {
     @Nested
-    @DisplayName("멘토 기본 프로필 조회 API")
-    class GetMentorProfile {
+    @DisplayName("멘토 기본(Public) 프로필 조회 API")
+    class GetMentorPublicProfile {
         @Test
-        @DisplayName("멘토 기본 프로필을 조회한다 (미완성 프로필)")
+        @DisplayName("멘토 기본(Public) 프로필을 조회한다 (미완성 프로필)")
         void successWithUncomplete() {
             final AuthMember mentor = MENTOR_1.회원가입과_로그인을_진행한다();
             멘토_기본_프로필을_조회한다(mentor.id())
@@ -42,11 +42,12 @@ public class MemberBasicProfileQueryAcceptanceTest extends AcceptanceTest {
                     .body("languages.sub", containsInAnyOrder(List.of(EN.getCode()).toArray()))
                     .body("school", is(MENTOR_1.getUniversityProfile().getSchool()))
                     .body("major", is(MENTOR_1.getUniversityProfile().getMajor()))
-                    .body("enteredIn", is(MENTOR_1.getUniversityProfile().getEnteredIn()));
+                    .body("enteredIn", is(MENTOR_1.getUniversityProfile().getEnteredIn()))
+                    .body("authenticated", is(false));
         }
 
         @Test
-        @DisplayName("멘토 기본 프로필을 조회한다 (완성 프로필)")
+        @DisplayName("멘토 기본(Public) 프로필을 조회한다 (완성 프로필)")
         void successWithComplete() {
             final AuthMember mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             멘토_기본_프로필을_조회한다(mentor.id())
@@ -59,15 +60,16 @@ public class MemberBasicProfileQueryAcceptanceTest extends AcceptanceTest {
                     .body("languages.sub", containsInAnyOrder(List.of(EN.getCode()).toArray()))
                     .body("school", is(MENTOR_1.getUniversityProfile().getSchool()))
                     .body("major", is(MENTOR_1.getUniversityProfile().getMajor()))
-                    .body("enteredIn", is(MENTOR_1.getUniversityProfile().getEnteredIn()));
+                    .body("enteredIn", is(MENTOR_1.getUniversityProfile().getEnteredIn()))
+                    .body("authenticated", is(false));
         }
     }
 
     @Nested
-    @DisplayName("멘티 기본 프로필 조회 API")
-    class GetMenteeProfile {
+    @DisplayName("멘티 기본(Public) 프로필 조회 API")
+    class GetMenteePublicProfile {
         @Test
-        @DisplayName("멘티 기본 프로필을 조회한다 (미완성 프로필)")
+        @DisplayName("멘티 기본(Public) 프로필을 조회한다 (미완성 프로필)")
         void successWithUncomplete() {
             final AuthMember mentee = MENTEE_1.회원가입과_로그인을_진행한다();
             멘티_기본_프로필을_조회한다(mentee.id())
@@ -84,7 +86,7 @@ public class MemberBasicProfileQueryAcceptanceTest extends AcceptanceTest {
         }
 
         @Test
-        @DisplayName("멘티 기본 프로필을 조회한다 (완성 프로필)")
+        @DisplayName("멘티 기본(Public) 프로필을 조회한다 (완성 프로필)")
         void successWithComplete() {
             final AuthMember mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다();
             멘티_기본_프로필을_조회한다(mentee.id())

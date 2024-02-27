@@ -50,13 +50,7 @@ public class Mentor extends Member<Mentor> {
             final List<Language> languages,
             final UniversityProfile universityProfile
     ) {
-        super(
-                platform,
-                name,
-                KOREA,
-                MENTOR,
-                languages
-        );
+        super(platform, name, KOREA, MENTOR, languages);
         this.universityProfile = universityProfile;
     }
 
