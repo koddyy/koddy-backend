@@ -1,6 +1,5 @@
 package com.koddy.server.global.filter
 
-import io.micrometer.common.util.StringUtils
 import jakarta.servlet.ReadListener
 import jakarta.servlet.ServletInputStream
 import jakarta.servlet.http.HttpServletRequest
@@ -31,7 +30,7 @@ class ReadableRequestWrapper(
     }
 
     private fun getEncoding(charEncoding: String): Charset {
-        if (StringUtils.isBlank(charEncoding)) {
+        if (charEncoding.isBlank()) {
             return StandardCharsets.UTF_8
         }
         return Charset.forName(charEncoding)
@@ -45,8 +44,7 @@ class ReadableRequestWrapper(
     }
 
     private fun isMultipartRequest(request: HttpServletRequest): Boolean =
-        !request.contentType.isNullOrBlank() &&
-            request.contentType.startsWith(MULTIPART_FORM_DATA_VALUE)
+        !request.contentType.isNullOrBlank() && request.contentType.startsWith(MULTIPART_FORM_DATA_VALUE)
 
     override fun getInputStream(): ServletInputStream {
         val byteArrayInputStream = ByteArrayInputStream(this.contentAsByteArray)

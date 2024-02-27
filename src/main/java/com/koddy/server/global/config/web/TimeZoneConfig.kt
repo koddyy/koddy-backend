@@ -8,7 +8,5 @@ import java.util.TimeZone
 @Configuration
 class TimeZoneConfig {
     @PostConstruct
-    fun initTimeZone() {
-        TimeZone.setDefault(TimeZone.getTimeZone(DEFAULT_ZONE_ID))
-    }
+    fun initTimeZone() = TimeZone.setDefault(TimeZone.getTimeZone(DEFAULT_ZONE_ID))
 }

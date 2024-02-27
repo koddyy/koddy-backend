@@ -35,13 +35,20 @@ class ApiGlobalExceptionHandler(
 
     @ExceptionHandler(BusinessException::class)
     fun handleBusinessException(ex: BusinessException): ResponseEntity<ExceptionResponse> {
-        log.info("handleBusinessException -> code = {}, message = {}", ex.code, ex.message)
+        log.info(
+            "handleBusinessException -> code = {}, message = {}",
+            ex.code,
+            ex.message,
+        )
         return createExceptionResponse(ex.code)
     }
 
     @ExceptionHandler(OAuthUserNotFoundException::class)
     fun handleOAuthUserNotFoundException(ex: OAuthUserNotFoundException): ResponseEntity<OAuthExceptionResponse> {
-        log.info("handleOAuthUserNotFoundException -> response = {}", ex.response)
+        log.info(
+            "handleOAuthUserNotFoundException -> response = {}",
+            ex.response,
+        )
         return ResponseEntity
             .status(HttpStatus.NOT_FOUND)
             .body(OAuthExceptionResponse(ex.response))
@@ -52,13 +59,20 @@ class ApiGlobalExceptionHandler(
      */
     @ExceptionHandler(HttpMessageNotReadableException::class)
     fun handleHttpMessageNotReadableException(ex: HttpMessageNotReadableException): ResponseEntity<ExceptionResponse> {
-        log.warn("handleHttpMessageNotReadableException -> message = {}", ex.localizedMessage)
+        log.warn(
+            "handleHttpMessageNotReadableException -> message = {}",
+            ex.localizedMessage,
+        )
         return createExceptionResponse(GlobalExceptionCode.VALIDATION_ERROR)
     }
 
     @ExceptionHandler(MismatchedInputException::class)
     protected fun handleMismatchedInputException(ex: MismatchedInputException): ResponseEntity<ExceptionResponse> {
-        log.warn("handleHttpMessageNotReadableException -> target = {}, message = {}", ex.targetType, ex.localizedMessage)
+        log.warn(
+            "handleHttpMessageNotReadableException -> target = {}, message = {}",
+            ex.targetType,
+            ex.localizedMessage,
+        )
         return createExceptionResponse(GlobalExceptionCode.VALIDATION_ERROR)
     }
 
@@ -67,7 +81,10 @@ class ApiGlobalExceptionHandler(
      */
     @ExceptionHandler(UnsatisfiedServletRequestParameterException::class)
     fun handleUnsatisfiedServletRequestParameterException(ex: UnsatisfiedServletRequestParameterException): ResponseEntity<ExceptionResponse> {
-        log.warn("handleUnsatisfiedServletRequestParameterException -> message = {}", ex.localizedMessage)
+        log.warn(
+            "handleUnsatisfiedServletRequestParameterException -> message = {}",
+            ex.localizedMessage,
+        )
         return createExceptionResponse(GlobalExceptionCode.VALIDATION_ERROR)
     }
 
@@ -76,7 +93,11 @@ class ApiGlobalExceptionHandler(
      */
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleMethodArgumentNotValidException(ex: MethodArgumentNotValidException): ResponseEntity<ExceptionResponse> {
-        log.warn("handleMethodArgumentNotValidException -> param = {}, message = {}", ex.parameter, ex.localizedMessage)
+        log.warn(
+            "handleMethodArgumentNotValidException -> param = {}, message = {}",
+            ex.parameter,
+            ex.localizedMessage,
+        )
         return createExceptionResponse(ex.bindingResult.fieldErrors)
     }
 
@@ -85,7 +106,10 @@ class ApiGlobalExceptionHandler(
      */
     @ExceptionHandler(BindException::class)
     fun handleBindException(ex: BindException): ResponseEntity<ExceptionResponse> {
-        log.warn("handleMethodArgumentNotValidException -> message = {}", ex.localizedMessage)
+        log.warn(
+            "handleMethodArgumentNotValidException -> message = {}",
+            ex.localizedMessage,
+        )
         return createExceptionResponse(ex.bindingResult.fieldErrors)
     }
 
@@ -97,7 +121,10 @@ class ApiGlobalExceptionHandler(
         MaxUploadSizeExceededException::class,
     )
     fun handleRequestDataException(ex: Exception): ResponseEntity<ExceptionResponse> {
-        log.warn("handleRequestDataException -> message = {}", ex.localizedMessage)
+        log.warn(
+            "handleRequestDataException -> message = {}",
+            ex.localizedMessage,
+        )
         return createExceptionResponse(GlobalExceptionCode.VALIDATION_ERROR)
     }
 
@@ -106,7 +133,10 @@ class ApiGlobalExceptionHandler(
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
     fun handleHttpRequestMethodNotSupportedException(ex: HttpRequestMethodNotSupportedException): ResponseEntity<ExceptionResponse> {
-        log.warn("handleHttpRequestMethodNotSupportedException -> message = {}", ex.localizedMessage)
+        log.warn(
+            "handleHttpRequestMethodNotSupportedException -> message = {}",
+            ex.localizedMessage,
+        )
         return createExceptionResponse(GlobalExceptionCode.NOT_SUPPORTED_METHOD_ERROR)
     }
 
@@ -115,7 +145,10 @@ class ApiGlobalExceptionHandler(
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException::class)
     fun handleHttpMediaTypeNotSupportedException(ex: HttpMediaTypeNotSupportedException): ResponseEntity<ExceptionResponse> {
-        log.warn("handleHttpMediaTypeNotSupportedException -> message = {}", ex.localizedMessage)
+        log.warn(
+            "handleHttpMediaTypeNotSupportedException -> message = {}",
+            ex.localizedMessage,
+        )
         return createExceptionResponse(GlobalExceptionCode.UNSUPPORTED_MEDIA_TYPE_ERROR)
     }
 
@@ -128,7 +161,12 @@ class ApiGlobalExceptionHandler(
         ex: Exception,
     ): ResponseEntity<ExceptionResponse> {
         if (ex !is NoHandlerFoundException) {
-            log.error("handleAnyException -> method = {}, request = {}", request.method, getRequestUriWithQueryString(request), ex)
+            log.error(
+                "handleAnyException -> method = {}, request = {}",
+                request.method,
+                getRequestUriWithQueryString(request),
+                ex,
+            )
             exceptionNotifier.send(request, ex)
             return createExceptionResponse(GlobalExceptionCode.UNEXPECTED_SERVER_ERROR)
         }
@@ -162,7 +200,6 @@ class ApiGlobalExceptionHandler(
         }
     }
 
-    private fun collectErrorFields(fieldErrors: List<FieldError>): Map<String, String?> {
-        return fieldErrors.associate { it.field to it.defaultMessage }
-    }
+    private fun collectErrorFields(fieldErrors: List<FieldError>): Map<String, String?> =
+        fieldErrors.associate { it.field to it.defaultMessage }
 }

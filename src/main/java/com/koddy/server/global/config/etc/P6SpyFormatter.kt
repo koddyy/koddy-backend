@@ -16,13 +16,11 @@ class P6SpyFormatter : MessageFormattingStrategy {
         sql: String?,
         url: String,
     ): String {
-        if (sql.isNullOrBlank()) {
-            return "Command -> Execute = ${elapsed}ms || Category = $category || DB Connection ID = $connectionId || URL = $url"
+        return when {
+            sql.isNullOrBlank() -> "Command -> Execute = ${elapsed}ms || Category = $category || DB Connection ID = $connectionId || URL = $url"
+            isStatementDDL(sql, category) -> "DDL Query -> Execute = ${elapsed}ms || DB Connection ID = $connectionId || URL = $url ${DDL.formatter.format(sql)}"
+            else -> "DML Query -> Execute = ${elapsed}ms || DB Connection ID = $connectionId || URL = $url ${BASIC.formatter.format(sql)}"
         }
-        if (isStatementDDL(sql, category)) {
-            return "DDL Query -> Execute = ${elapsed}ms || DB Connection ID = $connectionId || URL = $url ${DDL.formatter.format(sql)}"
-        }
-        return "DML Query -> Execute = ${elapsed}ms || DB Connection ID = $connectionId || URL = $url ${BASIC.formatter.format(sql)}"
     }
 
     private fun isStatementDDL(

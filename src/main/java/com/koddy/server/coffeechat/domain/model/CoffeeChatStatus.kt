@@ -83,9 +83,9 @@ enum class CoffeeChatStatus(
 
         companion object {
             @JvmStatic
-            fun from(value: String): Category {
-                return entries.firstOrNull { it.value == value } ?: throw CoffeeChatException(INVALID_COFFEECHAT_STATUS)
-            }
+            fun from(value: String): Category =
+                entries.firstOrNull { it.value == value }
+                    ?: throw CoffeeChatException(INVALID_COFFEECHAT_STATUS)
         }
     }
 
@@ -103,9 +103,9 @@ enum class CoffeeChatStatus(
 
         companion object {
             @JvmStatic
-            fun from(value: String): Detail {
-                return entries.firstOrNull { it.value == value } ?: throw CoffeeChatException(INVALID_COFFEECHAT_STATUS)
-            }
+            fun from(value: String): Detail =
+                entries.firstOrNull { it.value == value }
+                    ?: throw CoffeeChatException(INVALID_COFFEECHAT_STATUS)
         }
     }
 }
