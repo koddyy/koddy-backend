@@ -202,7 +202,7 @@ abstract class ApiDocsTestKt : FeatureSpec() {
         if (isValid.not()) {
             doThrow(AuthException(AuthExceptionCode.INVALID_TOKEN))
                 .`when`(tokenProvider)
-                .validateToken(anyString())
+                .validateAccessToken(anyString())
         }
 
         every { tokenProvider.getId(anyString()) } returns member.id
