@@ -5,6 +5,7 @@ import com.koddy.server.auth.domain.service.TokenIssuer
 import com.koddy.server.auth.domain.service.TokenProvider
 import com.koddy.server.auth.exception.AuthException
 import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN
+import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
@@ -20,6 +21,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 
+@UnitTestKt
 @DisplayName("Auth -> ReissueTokenUseCase 테스트")
 internal class ReissueTokenUseCaseTest : DescribeSpec({
     val memberRepository = mockk<MemberRepository>()

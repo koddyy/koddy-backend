@@ -1,5 +1,6 @@
 package com.koddy.server.member.domain.model.mentor
 
+import com.koddy.server.common.UnitTestKt
 import com.koddy.server.member.exception.MemberException
 import com.koddy.server.member.exception.MemberExceptionCode.INVALID_DAY
 import io.kotest.assertions.assertSoftly
@@ -10,6 +11,7 @@ import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.throwable.shouldHaveMessage
 
+@UnitTestKt
 @DisplayName("Member/Mentor -> 도메인 [DayOfWeek] 테스트")
 internal class DayOfWeekTest : DescribeSpec({
     describe("DayOfWeek's from") {
