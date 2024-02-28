@@ -14,9 +14,9 @@ data class RejectAppliedCoffeeChatRequest(
         coffeeChatId: Long,
     ): RejectAppliedCoffeeChatCommand =
         RejectAppliedCoffeeChatCommand(
-            mentorId,
-            coffeeChatId,
-            rejectReason,
+            mentorId = mentorId,
+            coffeeChatId = coffeeChatId,
+            rejectReason = rejectReason,
         )
 }
 
@@ -35,10 +35,10 @@ data class ApproveAppliedCoffeeChatRequest(
         coffeeChatId: Long,
     ): ApproveAppliedCoffeeChatCommand =
         ApproveAppliedCoffeeChatCommand(
-            mentorId,
-            coffeeChatId,
-            question,
-            Strategy.Type.from(chatType),
-            chatValue,
+            mentorId = mentorId,
+            coffeeChatId = coffeeChatId,
+            question = question,
+            type = Strategy.Type.from(chatType),
+            value = chatValue,
         )
 }
