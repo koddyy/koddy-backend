@@ -13,8 +13,8 @@ data class CancelCoffeeChatRequest(
         coffeeChatId: Long,
     ): CancelCoffeeChatCommand =
         CancelCoffeeChatCommand(
-            authenticated,
-            coffeeChatId,
-            cancelReason,
+            authenticated = authenticated,
+            coffeeChatId = coffeeChatId,
+            cancelReason = cancelReason,
         )
 }
