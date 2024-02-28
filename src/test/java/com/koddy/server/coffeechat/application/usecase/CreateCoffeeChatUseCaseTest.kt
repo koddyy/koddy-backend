@@ -111,9 +111,7 @@ internal class CreateCoffeeChatUseCaseTest : DescribeSpec({
                     mentorRepository.getById(command.mentorId)
                     coffeeChatRepository.save(any(CoffeeChat::class))
                 }
-                verify {
-                    reservationAvailabilityChecker wasNot Called
-                }
+                verify { reservationAvailabilityChecker wasNot Called }
                 slotEvent.captured shouldBe MenteeNotification.MentorSuggestedFromMentorFlowEvent(
                     menteeId = coffeeChat.menteeId,
                     coffeeChatId = coffeeChat.id,
