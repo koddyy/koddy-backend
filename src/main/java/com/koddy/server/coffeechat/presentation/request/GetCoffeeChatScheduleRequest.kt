@@ -19,16 +19,16 @@ data class GetCoffeeChatScheduleRequest(
 ) {
     fun toMentorQuery(mentorId: Long): GetMentorCoffeeChats =
         GetMentorCoffeeChats(
-            mentorId,
-            convertToCoffeeChatStatus(),
-            page,
+            mentorId = mentorId,
+            status = convertToCoffeeChatStatus(),
+            page = page,
         )
 
     fun toMenteeQuery(menteeId: Long): GetMenteeCoffeeChats =
         GetMenteeCoffeeChats(
-            menteeId,
-            convertToCoffeeChatStatus(),
-            page,
+            menteeId = menteeId,
+            status = convertToCoffeeChatStatus(),
+            page = page,
         )
 
     private fun convertToCoffeeChatStatus(): List<CoffeeChatStatus> {
