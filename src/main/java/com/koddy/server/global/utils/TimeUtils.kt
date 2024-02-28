@@ -18,7 +18,6 @@ object TimeUtils {
     private val kstZoneId: ZoneId = ZoneId.of("Asia/Seoul")
     private val utcZoneId: ZoneId = ZoneId.of("UTC")
 
-    @JvmStatic
     fun toLocalTime(
         hour: Int,
         minute: Int,
@@ -30,7 +29,6 @@ object TimeUtils {
         }
     }
 
-    @JvmStatic
     fun toLocalTime(value: String): LocalTime {
         try {
             return LocalTime.parse(value, timeFormatter)
@@ -39,7 +37,6 @@ object TimeUtils {
         }
     }
 
-    @JvmStatic
     fun toLocalDateTime(value: String): LocalDateTime {
         try {
             return LocalDateTime.parse(value, dateTimeFormatter)
@@ -48,19 +45,16 @@ object TimeUtils {
         }
     }
 
-    @JvmStatic
     fun calculateDurationByMinutes(
         start: LocalDateTime,
         end: LocalDateTime,
     ): Long = ChronoUnit.MINUTES.between(start, end).absoluteValue
 
-    @JvmStatic
     fun kstToUtc(kst: LocalDateTime): LocalDateTime =
         ZonedDateTime.of(kst, kstZoneId)
             .withZoneSameInstant(utcZoneId)
             .toLocalDateTime()
 
-    @JvmStatic
     fun utcToKst(utc: LocalDateTime): LocalDateTime =
         ZonedDateTime.of(utc, utcZoneId)
             .withZoneSameInstant(kstZoneId)
@@ -69,7 +63,6 @@ object TimeUtils {
     /**
      * targetA < targetB
      */
-    @JvmStatic
     fun isLower(
         targetA: LocalDate,
         targetB: LocalDate,
@@ -96,7 +89,6 @@ object TimeUtils {
     /**
      * targetA >= targetB
      */
-    @JvmStatic
     fun isGreatorOrEqual(
         targetA: LocalDate,
         targetB: LocalDate,
@@ -132,7 +124,6 @@ object TimeUtils {
     /**
      * targetA >= targetB
      */
-    @JvmStatic
     fun isGreatorOrEqual(
         targetA: LocalTime,
         targetB: LocalTime,
@@ -168,7 +159,6 @@ object TimeUtils {
     /**
      * targetA >= targetB
      */
-    @JvmStatic
     fun isGreatorOrEqual(
         targetA: LocalDateTime,
         targetB: LocalDateTime,
