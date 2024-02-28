@@ -37,8 +37,8 @@ class ManageMeetingLinkApi(
     ): ResponseEntity<CreateMeetingLinkResponse> {
         val result: MeetingLinkResponse = manageMeetingLinkUseCase.create(
             request.toCommand(
-                authenticated.id,
-                provider,
+                memberId = authenticated.id,
+                provider = provider,
             ),
         )
         return ResponseEntity.ok(
@@ -62,8 +62,8 @@ class ManageMeetingLinkApi(
     ): ResponseEntity<Void> {
         manageMeetingLinkUseCase.delete(
             DeleteMeetingLinkCommand(
-                MeetingLinkProvider.from(provider),
-                meetingId,
+                linkProvider = MeetingLinkProvider.from(provider),
+                meetingId = meetingId,
             ),
         )
         return ResponseEntity.noContent().build()
