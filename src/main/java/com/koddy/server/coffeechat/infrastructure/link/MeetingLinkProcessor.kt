@@ -13,7 +13,6 @@ interface MeetingLinkProcessor {
 
     companion object {
         const val OAUTH_CONTENT_TYPE: String = "application/json"
-
         const val BEARER_TOKEN_TYPE: String = "Bearer"
     }
 }

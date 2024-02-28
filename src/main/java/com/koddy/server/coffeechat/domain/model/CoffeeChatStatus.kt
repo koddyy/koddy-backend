@@ -50,10 +50,8 @@ enum class CoffeeChatStatus(
     fun isMenteeFlow(): Boolean = menteeFlow.any { it == this }
 
     companion object {
-        @JvmStatic
         fun fromCategory(category: Category): List<CoffeeChatStatus> = entries.filter { it.category == category }
 
-        @JvmStatic
         fun fromCategoryDetail(
             category: Category,
             detail: Detail,
@@ -82,7 +80,6 @@ enum class CoffeeChatStatus(
         ;
 
         companion object {
-            @JvmStatic
             fun from(value: String): Category =
                 entries.firstOrNull { it.value == value }
                     ?: throw CoffeeChatException(INVALID_COFFEECHAT_STATUS)
@@ -102,7 +99,6 @@ enum class CoffeeChatStatus(
         ;
 
         companion object {
-            @JvmStatic
             fun from(value: String): Detail =
                 entries.firstOrNull { it.value == value }
                     ?: throw CoffeeChatException(INVALID_COFFEECHAT_STATUS)

@@ -23,12 +23,7 @@ internal class TokenProviderTest : FeatureSpec({
         accessTokenValidityInSeconds = 0L,
         refreshTokenValidityInSeconds = 0L,
     )
-    val validProviderTest = TokenProvider(
-        secretKey = secretKey,
-        accessTokenValidityInSeconds = 7200L,
-        refreshTokenValidityInSeconds = 7200L,
-    )
-    val validProviderProd = TokenProvider(
+    val validProvider = TokenProvider(
         secretKey = secretKey,
         accessTokenValidityInSeconds = 7200L,
         refreshTokenValidityInSeconds = 7200L,
@@ -38,8 +33,8 @@ internal class TokenProviderTest : FeatureSpec({
 
     feature("TokenProvider's createAccessToken & createRefreshToken") {
         scenario("AccessToken과 RefreshToken을 발급한다") {
-            val accessToken: String = validProviderTest.createAccessToken(member.id, member.authority)
-            val refreshToken: String = validProviderTest.createRefreshToken(member.id)
+            val accessToken: String = validProvider.createAccessToken(member.id, member.authority)
+            val refreshToken: String = validProvider.createRefreshToken(member.id)
 
             assertSoftly {
                 accessToken shouldNotBe null
@@ -50,24 +45,24 @@ internal class TokenProviderTest : FeatureSpec({
 
     feature("TokenProvider's getId & getAuthority") {
         scenario("토큰의 Payload(ID, Authority)를 추출한다") {
-            val accessToken: String = validProviderTest.createAccessToken(member.id, member.authority)
-            val refreshToken: String = validProviderTest.createRefreshToken(member.id)
+            val accessToken: String = validProvider.createAccessToken(member.id, member.authority)
+            val refreshToken: String = validProvider.createRefreshToken(member.id)
 
             assertSoftly {
-                validProviderTest.getId(accessToken) shouldBe member.id
-                validProviderTest.getAuthority(accessToken) shouldBe member.authority
-                validProviderTest.getId(refreshToken) shouldBe member.id
+                validProvider.getId(accessToken) shouldBe member.id
+                validProvider.getAuthority(accessToken) shouldBe member.authority
+                validProvider.getId(refreshToken) shouldBe member.id
             }
         }
     }
 
     feature("TokenProvider's validateToken (Expired)") {
         scenario("토큰 만료에 대한 유효성 검사를 진행한다") {
-            val liveToken: String = validProviderTest.createAccessToken(member.id, member.authority)
+            val liveToken: String = validProvider.createAccessToken(member.id, member.authority)
             val expiredToken: String = invalidProvider.createAccessToken(member.id, member.authority)
 
             assertSoftly {
-                shouldNotThrowAny { validProviderTest.validateAccessToken(liveToken) }
+                shouldNotThrowAny { validProvider.validateAccessToken(liveToken) }
                 shouldThrow<AuthException> {
                     invalidProvider.validateAccessToken(expiredToken)
                 } shouldHaveMessage INVALID_TOKEN.message
@@ -77,13 +72,13 @@ internal class TokenProviderTest : FeatureSpec({
 
     feature("TokenProvider's validateToken (Malformed)") {
         scenario("토큰 조작에 대한 유효성 검사를 진행한다") {
-            val validToken: String = validProviderTest.createAccessToken(member.id, member.authority)
-            val forgedToken: String = validProviderTest.createAccessToken(member.id, member.authority) + "hacked"
+            val validToken: String = validProvider.createAccessToken(member.id, member.authority)
+            val forgedToken: String = validProvider.createAccessToken(member.id, member.authority) + "hacked"
 
             assertSoftly {
-                shouldNotThrowAny { validProviderTest.validateAccessToken(validToken) }
+                shouldNotThrowAny { validProvider.validateAccessToken(validToken) }
                 shouldThrow<AuthException> {
-                    validProviderTest.validateAccessToken(forgedToken)
+                    validProvider.validateAccessToken(forgedToken)
                 } shouldHaveMessage INVALID_TOKEN.message
             }
         }
@@ -91,17 +86,17 @@ internal class TokenProviderTest : FeatureSpec({
 
     feature("TokenProvider's validateToken (Different Subject)") {
         scenario("토큰 Subject에 대한 유효성 검사를 진행한다") {
-            val accessToken: String = validProviderTest.createAccessToken(member.id, member.authority)
-            val refreshToken: String = validProviderTest.createRefreshToken(member.id)
+            val accessToken: String = validProvider.createAccessToken(member.id, member.authority)
+            val refreshToken: String = validProvider.createRefreshToken(member.id)
 
             assertSoftly {
-                shouldNotThrowAny { validProviderTest.validateAccessToken(accessToken) }
-                shouldNotThrowAny { validProviderTest.validateRefreshToken(refreshToken) }
+                shouldNotThrowAny { validProvider.validateAccessToken(accessToken) }
+                shouldNotThrowAny { validProvider.validateRefreshToken(refreshToken) }
                 shouldThrow<AuthException> {
-                    validProviderTest.validateAccessToken(refreshToken)
+                    validProvider.validateAccessToken(refreshToken)
                 } shouldHaveMessage INVALID_TOKEN.message
                 shouldThrow<AuthException> {
-                    validProviderTest.validateRefreshToken(accessToken)
+                    validProvider.validateRefreshToken(accessToken)
                 } shouldHaveMessage INVALID_TOKEN.message
             }
         }

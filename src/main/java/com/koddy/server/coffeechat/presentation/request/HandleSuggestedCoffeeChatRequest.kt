@@ -16,9 +16,9 @@ data class RejectSuggestedCoffeeChatRequest(
         coffeeChatId: Long,
     ): RejectSuggestedCoffeeChatCommand =
         RejectSuggestedCoffeeChatCommand(
-            menteeId,
-            coffeeChatId,
-            rejectReason,
+            menteeId = menteeId,
+            coffeeChatId = coffeeChatId,
+            rejectReason = rejectReason,
         )
 }
 
@@ -39,10 +39,10 @@ data class PendingSuggestedCoffeeChatRequest(
         coffeeChatId: Long,
     ): PendingSuggestedCoffeeChatCommand =
         PendingSuggestedCoffeeChatCommand(
-            menteeId,
-            coffeeChatId,
-            question,
-            Reservation.of(
+            menteeId = menteeId,
+            coffeeChatId = coffeeChatId,
+            question = question,
+            reservation = Reservation.of(
                 TimeUtils.toLocalDateTime(start),
                 TimeUtils.toLocalDateTime(end),
             ),

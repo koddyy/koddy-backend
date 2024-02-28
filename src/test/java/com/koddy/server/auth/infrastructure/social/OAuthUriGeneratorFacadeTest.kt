@@ -52,12 +52,12 @@ internal class OAuthUriGeneratorFacadeTest(
             .build()
             .queryParams
 
-        assertSoftly {
-            queryParams.getFirst("response_type") shouldBe "code"
-            queryParams.getFirst("client_id") shouldBe googleOAuthProperties.clientId
-            queryParams.getFirst("scope") shouldBe googleOAuthProperties.scope.joinToString(separator = " ")
-            queryParams.getFirst("redirect_uri") shouldBe googleOAuthProperties.redirectUri
-            queryParams.getFirst("state") shouldNotBe null
+        assertSoftly(queryParams) {
+            getFirst("response_type") shouldBe "code"
+            getFirst("client_id") shouldBe googleOAuthProperties.clientId
+            getFirst("scope") shouldBe googleOAuthProperties.scope.joinToString(separator = " ")
+            getFirst("redirect_uri") shouldBe googleOAuthProperties.redirectUri
+            getFirst("state") shouldNotBe null
         }
     }
 
@@ -73,12 +73,12 @@ internal class OAuthUriGeneratorFacadeTest(
             .build()
             .queryParams
 
-        assertSoftly {
-            queryParams.getFirst("response_type") shouldBe "code"
-            queryParams.getFirst("client_id") shouldBe kakaoOAuthProperties.clientId
-            queryParams.getFirst("scope") shouldBe kakaoOAuthProperties.scope.joinToString(separator = " ")
-            queryParams.getFirst("redirect_uri") shouldBe kakaoOAuthProperties.redirectUri
-            queryParams.getFirst("state") shouldNotBe null
+        assertSoftly(queryParams) {
+            getFirst("response_type") shouldBe "code"
+            getFirst("client_id") shouldBe kakaoOAuthProperties.clientId
+            getFirst("scope") shouldBe kakaoOAuthProperties.scope.joinToString(separator = " ")
+            getFirst("redirect_uri") shouldBe kakaoOAuthProperties.redirectUri
+            getFirst("state") shouldNotBe null
         }
     }
 
@@ -94,11 +94,11 @@ internal class OAuthUriGeneratorFacadeTest(
             .build()
             .queryParams
 
-        assertSoftly {
-            queryParams.getFirst("response_type") shouldBe "code"
-            queryParams.getFirst("client_id") shouldBe zoomOAuthProperties.clientId
-            queryParams.getFirst("redirect_uri") shouldBe zoomOAuthProperties.redirectUri
-            queryParams.getFirst("state") shouldNotBe null
+        assertSoftly(queryParams) {
+            getFirst("response_type") shouldBe "code"
+            getFirst("client_id") shouldBe zoomOAuthProperties.clientId
+            getFirst("redirect_uri") shouldBe zoomOAuthProperties.redirectUri
+            getFirst("state") shouldNotBe null
         }
     }
 }

@@ -14,9 +14,9 @@ data class FinallyCancelPendingCoffeeChatRequest(
         coffeeChatId: Long,
     ): FinallyCancelPendingCoffeeChatCommand =
         FinallyCancelPendingCoffeeChatCommand(
-            mentorId,
-            coffeeChatId,
-            cancelReason,
+            mentorId = mentorId,
+            coffeeChatId = coffeeChatId,
+            cancelReason = cancelReason,
         )
 }
 
@@ -32,9 +32,9 @@ data class FinallyApprovePendingCoffeeChatRequest(
         coffeeChatId: Long,
     ): FinallyApprovePendingCoffeeChatCommand =
         FinallyApprovePendingCoffeeChatCommand(
-            mentorId,
-            coffeeChatId,
-            Strategy.Type.from(chatType),
-            chatValue,
+            mentorId = mentorId,
+            coffeeChatId = coffeeChatId,
+            type = Strategy.Type.from(chatType),
+            value = chatValue,
         )
 }

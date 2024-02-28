@@ -27,8 +27,8 @@ class CoffeeChatScheduleDetailsQueryApi(
     ): ResponseEntity<CoffeeChatScheduleDetails> {
         val result: CoffeeChatScheduleDetails = getCoffeeChatScheduleDetailsUseCase.invoke(
             GetCoffeeChatScheduleDetails(
-                authenticated,
-                coffeeChatId,
+                authenticated = authenticated,
+                coffeeChatId = coffeeChatId,
             ),
         )
         return ResponseEntity.ok(result)

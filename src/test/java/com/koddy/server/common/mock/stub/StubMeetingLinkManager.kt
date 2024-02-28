@@ -23,7 +23,7 @@ open class StubMeetingLinkManager : MeetingLinkManager {
 
     override fun create(
         provider: MeetingLinkProvider,
-        accessToken: String,
+        oAuthAccessToken: String,
         meetingLinkRequest: MeetingLinkRequest,
     ): MeetingLinkResponse {
         log.info("Meeting 생성")
