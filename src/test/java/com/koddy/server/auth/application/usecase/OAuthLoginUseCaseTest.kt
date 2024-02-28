@@ -39,11 +39,16 @@ internal class OAuthLoginUseCaseTest : DescribeSpec({
         tokenIssuer,
     )
 
-    describe("OAuthLoginUseCase's invoke (Google)") {
-        val member: Member<*> = MENTOR_1.toDomain().apply(1L)
-        val command = OAuthLoginCommand(OAuthProvider.GOOGLE, AUTHORIZATION_CODE, REDIRECT_URI, STATE)
-        val googleUserResponse: GoogleUserResponse = MENTOR_1.toGoogleUserResponse()
+    val member: Member<*> = MENTOR_1.toDomain().apply(1L)
 
+    describe("OAuthLoginUseCase's invoke (구글 로그인)") {
+        val command = OAuthLoginCommand(
+            provider = OAuthProvider.GOOGLE,
+            code = AUTHORIZATION_CODE,
+            redirectUrl = REDIRECT_URI,
+            state = STATE,
+        )
+        val googleUserResponse: GoogleUserResponse = MENTOR_1.toGoogleUserResponse()
         every { oAuthLoginProcessor.login(command.provider, command.code, command.redirectUrl, command.state) } returns googleUserResponse
 
         context("소셜 로그인 사용자가 서버 스토리지에 존재하지 않으면") {
