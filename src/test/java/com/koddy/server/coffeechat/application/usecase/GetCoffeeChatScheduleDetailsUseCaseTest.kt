@@ -29,6 +29,7 @@ import io.kotest.matchers.shouldNotBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.LocalDateTime
 
 @UnitTestKt
 @DisplayName("CoffeeChat -> GetCoffeeChatScheduleDetailsUseCase 테스트")
@@ -51,7 +52,7 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
 
     describe("GetCoffeeChatScheduleDetailsUseCase's invoke (멘토 입장)") {
         val authenticated = Authenticated(mentor.id, mentor.authority)
-        val coffeeChat: CoffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L)
+        val coffeeChat: CoffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L, LocalDateTime.now())
         val query = GetCoffeeChatScheduleDetails(authenticated, coffeeChat.id)
         every { coffeeChatRepository.getById(query.coffeeChatId) } returns coffeeChat
 
@@ -68,28 +69,28 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
                     availableLanguageRepository.findByMemberIdWithNative(mentee.id)
                 }
                 verify(exactly = 0) { mentorRepository.getByIdWithNative(coffeeChat.mentorId) }
-                assertSoftly(result) {
-                    mentee().id shouldBe mentee.id
-                    mentee().name shouldBe mentee.name
-                    mentee().profileImageUrl shouldBe mentee.profileImageUrl
-                    mentee().nationality shouldBe mentee.nationality.code
-                    mentee().introduction shouldBe mentee.introduction
-                    mentee().languages.main shouldBe Language.Category.EN.code
-                    mentee().languages.sub shouldContainExactlyInAnyOrder listOf(Language.Category.KR.code)
-                    mentee().interestSchool shouldBe mentee.interest.school
-                    mentee().interestMajor shouldBe mentee.interest.major
-                    mentee().status shouldBe mentee.status.name
-                    coffeeChat().id shouldBe coffeeChat.id
-                    coffeeChat().status shouldBe CoffeeChatStatus.MENTEE_PENDING.name
-                    coffeeChat().applyReason shouldBe null
-                    coffeeChat().suggestReason shouldNotBe null
-                    coffeeChat().cancelReason shouldBe null
-                    coffeeChat().rejectReason shouldBe null
-                    coffeeChat().question shouldNotBe null
-                    coffeeChat().start shouldBe 월요일_1주차_20_00_시작.start
-                    coffeeChat().end shouldBe 월요일_1주차_20_00_시작.end
-                    coffeeChat().chatType shouldBe null
-                    coffeeChat().chatValue shouldBe null
+                assertSoftly {
+                    result.mentee.id shouldBe mentee.id
+                    result.mentee.name shouldBe mentee.name
+                    result.mentee.profileImageUrl shouldBe mentee.profileImageUrl
+                    result.mentee.nationality shouldBe mentee.nationality.code
+                    result.mentee.introduction shouldBe mentee.introduction
+                    result.mentee.languages.main shouldBe Language.Category.EN.code
+                    result.mentee.languages.sub shouldContainExactlyInAnyOrder listOf(Language.Category.KR.code)
+                    result.mentee.interestSchool shouldBe mentee.interest.school
+                    result.mentee.interestMajor shouldBe mentee.interest.major
+                    result.mentee.status shouldBe mentee.status.name
+                    result.coffeeChat.id shouldBe coffeeChat.id
+                    result.coffeeChat.status shouldBe CoffeeChatStatus.MENTEE_PENDING.name
+                    result.coffeeChat.applyReason shouldBe null
+                    result.coffeeChat.suggestReason shouldNotBe null
+                    result.coffeeChat.cancelReason shouldBe null
+                    result.coffeeChat.rejectReason shouldBe null
+                    result.coffeeChat.question shouldNotBe null
+                    result.coffeeChat.start shouldBe 월요일_1주차_20_00_시작.start
+                    result.coffeeChat.end shouldBe 월요일_1주차_20_00_시작.end
+                    result.coffeeChat.chatType shouldBe null
+                    result.coffeeChat.chatValue shouldBe null
                 }
             }
         }
@@ -97,7 +98,7 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
 
     describe("GetCoffeeChatScheduleDetailsUseCase's invoke (멘티 입장)") {
         val authenticated = Authenticated(mentee.id, mentee.authority)
-        val coffeeChat: CoffeeChat = MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor).apply(1L)
+        val coffeeChat: CoffeeChat = MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor).apply(1L, LocalDateTime.now())
         val query = GetCoffeeChatScheduleDetails(authenticated, coffeeChat.id)
         every { coffeeChatRepository.getById(query.coffeeChatId) } returns coffeeChat
 
@@ -114,29 +115,29 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
                     availableLanguageRepository.findByMemberIdWithNative(mentor.id)
                 }
                 verify(exactly = 0) { menteeRepository.getByIdWithNative(coffeeChat.menteeId) }
-                assertSoftly(result) {
-                    mentor().id shouldBe mentor.id
-                    mentor().name shouldBe mentor.name
-                    mentor().profileImageUrl shouldBe mentor.profileImageUrl
-                    mentor().introduction shouldBe mentor.introduction
-                    mentor().languages.main shouldBe Language.Category.KR.code
-                    mentor().languages.sub shouldContainExactlyInAnyOrder listOf(Language.Category.EN.code)
-                    mentor().school shouldBe mentor.universityProfile.school
-                    mentor().major shouldBe mentor.universityProfile.major
-                    mentor().enteredIn shouldBe mentor.universityProfile.enteredIn
-                    mentor().status shouldBe mentor.status.name
-                    coffeeChat().id shouldBe coffeeChat.id
-                    coffeeChat().status shouldBe CoffeeChatStatus.MENTOR_APPROVE.name
-                    coffeeChat().applyReason shouldNotBe null
-                    coffeeChat().suggestReason shouldBe null
-                    coffeeChat().cancelReason shouldBe null
-                    coffeeChat().rejectReason shouldBe null
-                    coffeeChat().question shouldNotBe null
-                    coffeeChat().start shouldBe 월요일_1주차_20_00_시작.start
-                    coffeeChat().end shouldBe 월요일_1주차_20_00_시작.end
-                    coffeeChat().chatType shouldBe 월요일_1주차_20_00_시작.strategy.type.eng
-                    coffeeChat().chatValue shouldNotBe 월요일_1주차_20_00_시작.strategy.value
-                    coffeeChat().chatValue shouldBe encryptor.decrypt(월요일_1주차_20_00_시작.strategy.value)
+                assertSoftly {
+                    result.mentor.id shouldBe mentor.id
+                    result.mentor.name shouldBe mentor.name
+                    result.mentor.profileImageUrl shouldBe mentor.profileImageUrl
+                    result.mentor.introduction shouldBe mentor.introduction
+                    result.mentor.languages.main shouldBe Language.Category.KR.code
+                    result.mentor.languages.sub shouldContainExactlyInAnyOrder listOf(Language.Category.EN.code)
+                    result.mentor.school shouldBe mentor.universityProfile.school
+                    result.mentor.major shouldBe mentor.universityProfile.major
+                    result.mentor.enteredIn shouldBe mentor.universityProfile.enteredIn
+                    result.mentor.status shouldBe mentor.status.name
+                    result.coffeeChat.id shouldBe coffeeChat.id
+                    result.coffeeChat.status shouldBe CoffeeChatStatus.MENTOR_APPROVE.name
+                    result.coffeeChat.applyReason shouldNotBe null
+                    result.coffeeChat.suggestReason shouldBe null
+                    result.coffeeChat.cancelReason shouldBe null
+                    result.coffeeChat.rejectReason shouldBe null
+                    result.coffeeChat.question shouldNotBe null
+                    result.coffeeChat.start shouldBe 월요일_1주차_20_00_시작.start
+                    result.coffeeChat.end shouldBe 월요일_1주차_20_00_시작.end
+                    result.coffeeChat.chatType shouldBe 월요일_1주차_20_00_시작.strategy.type.eng
+                    result.coffeeChat.chatValue shouldNotBe 월요일_1주차_20_00_시작.strategy.value
+                    result.coffeeChat.chatValue shouldBe encryptor.decrypt(월요일_1주차_20_00_시작.strategy.value)
                 }
             }
         }
