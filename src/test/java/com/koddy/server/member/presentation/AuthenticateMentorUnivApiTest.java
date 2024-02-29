@@ -4,7 +4,7 @@ import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.global.exception.GlobalExceptionCode;
-import com.koddy.server.member.application.usecase.AuthenticationMentorUnivUseCase;
+import com.koddy.server.member.application.usecase.AuthenticateMentorUnivUseCase;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.request.AuthenticationConfirmWithMailRequest;
@@ -30,10 +30,10 @@ import static org.mockito.Mockito.doThrow;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("Member -> AuthenticationMentorUnivApi 테스트")
-class AuthenticationMentorUnivApiTest extends ControllerTest {
+@DisplayName("Member -> AuthenticateMentorUnivApi 테스트")
+class AuthenticateMentorUnivApiTest extends ControllerTest {
     @Autowired
-    private AuthenticationMentorUnivUseCase authenticationMentorUnivUseCase;
+    private AuthenticateMentorUnivUseCase authenticateMentorUnivUseCase;
 
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
     private final Mentee mentee = MENTEE_1.toDomain().apply(2L);
@@ -88,8 +88,8 @@ class AuthenticationMentorUnivApiTest extends ControllerTest {
             // given
             applyToken(true, mentor);
             doNothing()
-                    .when(authenticationMentorUnivUseCase)
-                    .authWithMail(any());
+                    .when(authenticateMentorUnivUseCase)
+                    .attemptWithMail(any());
 
             // when - then
             successfulExecute(
@@ -139,7 +139,7 @@ class AuthenticationMentorUnivApiTest extends ControllerTest {
             // given
             applyToken(true, mentor);
             doThrow(new AuthException(INVALID_AUTH_CODE))
-                    .when(authenticationMentorUnivUseCase)
+                    .when(authenticateMentorUnivUseCase)
                     .confirmMailAuthCode(any());
 
             // when - then
@@ -162,7 +162,7 @@ class AuthenticationMentorUnivApiTest extends ControllerTest {
             // given
             applyToken(true, mentor);
             doNothing()
-                    .when(authenticationMentorUnivUseCase)
+                    .when(authenticateMentorUnivUseCase)
                     .confirmMailAuthCode(any());
 
             // when - then
@@ -210,8 +210,8 @@ class AuthenticationMentorUnivApiTest extends ControllerTest {
             // given
             applyToken(true, mentor);
             doNothing()
-                    .when(authenticationMentorUnivUseCase)
-                    .authWithProofData(any());
+                    .when(authenticateMentorUnivUseCase)
+                    .attemptWithProofData(any());
 
             // when - then
             successfulExecute(

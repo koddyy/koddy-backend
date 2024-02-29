@@ -31,7 +31,7 @@ import static org.springframework.http.HttpStatus.TOO_MANY_REQUESTS;
         RedisCleanerEachCallbackExtension.class
 })
 @DisplayName("[Acceptance Test] 멘토 학교 인증")
-public class AuthenticationMentorUnivAcceptanceTest extends AcceptanceTest {
+public class AuthenticateMentorUnivAcceptanceTest extends AcceptanceTest {
     private static final String SCHOOL_MAIL = "sjiwon@kyonggi.ac.kr";
 
     @Nested
