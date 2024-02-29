@@ -3,7 +3,7 @@ package com.koddy.server.member.presentation
 import com.koddy.server.auth.domain.model.Authenticated
 import com.koddy.server.global.annotation.Auth
 import com.koddy.server.global.aop.AccessControl
-import com.koddy.server.member.application.usecase.UpdateMenteeInfoUseCase
+import com.koddy.server.member.application.usecase.UpdateMenteeProfileUseCase
 import com.koddy.server.member.domain.model.Role
 import com.koddy.server.member.presentation.request.UpdateMenteeBasicInfoRequest
 import io.swagger.v3.oas.annotations.Operation
@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController
 @Tag(name = "2-4. 멘티 정보 수정 API")
 @RestController
 @RequestMapping("/api/mentees/me")
-class UpdateMenteeInfoApi(
-    private val updateMenteeInfoUseCase: UpdateMenteeInfoUseCase,
+class UpdateMenteeProfileApi(
+    private val updateMenteeProfileUseCase: UpdateMenteeProfileUseCase,
 ) {
     @Operation(summary = "멘티 기본정보 수정 Endpoint")
     @PatchMapping("/basic-info")
@@ -28,7 +28,7 @@ class UpdateMenteeInfoApi(
         @Auth authenticated: Authenticated,
         @RequestBody @Valid request: UpdateMenteeBasicInfoRequest,
     ): ResponseEntity<Unit> {
-        updateMenteeInfoUseCase.updateBasicInfo(request.toCommand(authenticated.id))
+        updateMenteeProfileUseCase.updateBasicInfo(request.toCommand(authenticated.id))
         return ResponseEntity.noContent().build()
     }
 }

@@ -2,7 +2,7 @@ package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.common.ControllerTest;
-import com.koddy.server.member.application.usecase.UpdateMenteeInfoUseCase;
+import com.koddy.server.member.application.usecase.UpdateMenteeProfileUseCase;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -26,10 +26,10 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("Member -> UpdateMenteeInfoApi 테스트")
-class UpdateMenteeInfoApiTest extends ControllerTest {
+@DisplayName("Member -> UpdateMenteeProfileApi 테스트")
+class UpdateMenteeProfileApiTest extends ControllerTest {
     @Autowired
-    private UpdateMenteeInfoUseCase updateMenteeInfoUseCase;
+    private UpdateMenteeProfileUseCase updateMenteeProfileUseCase;
 
     private final Mentor mentor = MENTOR_1.toDomain().apply(1L);
     private final Mentee mentee = MENTEE_1.toDomain().apply(2L);
@@ -88,7 +88,7 @@ class UpdateMenteeInfoApiTest extends ControllerTest {
             // given
             applyToken(true, mentee);
             doNothing()
-                .when(updateMenteeInfoUseCase)
+                .when(updateMenteeProfileUseCase)
                 .updateBasicInfo(any());
 
             // when - then

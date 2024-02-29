@@ -31,14 +31,14 @@ data class UpdateMenteeBasicInfoRequest(
 ) {
     fun toCommand(menteeId: Long): UpdateMenteeBasicInfoCommand =
         UpdateMenteeBasicInfoCommand(
-            menteeId,
-            name,
-            Nationality.from(nationality),
-            profileImageUrl,
-            introduction,
-            languages.toLanguages(),
-            interestSchool,
-            interestMajor,
+            menteeId = menteeId,
+            name = name,
+            nationality = Nationality.from(nationality),
+            profileImageUrl = profileImageUrl,
+            introduction = introduction,
+            languages = languages.toLanguages(),
+            interestSchool = interestSchool,
+            interestMajor = interestMajor,
         )
 }
 
@@ -64,14 +64,14 @@ data class UpdateMentorBasicInfoRequest(
 ) {
     fun toCommand(mentorId: Long): UpdateMentorBasicInfoCommand =
         UpdateMentorBasicInfoCommand(
-            mentorId,
-            name,
-            profileImageUrl,
-            introduction,
-            languages.toLanguages(),
-            school,
-            major,
-            enteredIn,
+            mentorId = mentorId,
+            name = name,
+            profileImageUrl = profileImageUrl,
+            introduction = introduction,
+            languages = languages.toLanguages(),
+            school = school,
+            major = major,
+            enteredIn = enteredIn,
         )
 }
 
@@ -81,8 +81,8 @@ data class UpdateMentorScheduleRequest(
 ) {
     fun toCommand(mentorId: Long): UpdateMentorScheduleCommand =
         UpdateMentorScheduleCommand(
-            mentorId,
-            period?.toPeriod(),
-            schedules.map { it.toTimeline() },
+            mentorId = mentorId,
+            mentoringPeriod = period?.toPeriod(),
+            timelines = schedules.map { it.toTimeline() },
         )
 }
