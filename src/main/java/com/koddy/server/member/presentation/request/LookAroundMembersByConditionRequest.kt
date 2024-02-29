@@ -17,8 +17,8 @@ data class LookAroundMentorsByConditionRequest(
 ) {
     fun toQuery(): LookAroundMentorsByConditionQuery =
         LookAroundMentorsByConditionQuery(
-            convertToLanguageCategory(),
-            page,
+            languages = convertToLanguageCategory(),
+            page = page,
         )
 
     private fun convertToLanguageCategory(): List<Language.Category> {
@@ -40,9 +40,9 @@ data class LookAroundMenteesByConditionRequest(
 ) {
     fun toQuery(): LookAroundMenteesByConditionQuery =
         LookAroundMenteesByConditionQuery(
-            convertToNationality(),
-            convertToLanguageCategory(),
-            page,
+            nationalities = convertToNationality(),
+            languages = convertToLanguageCategory(),
+            page = page,
         )
 
     private fun convertToNationality(): List<Nationality> {
