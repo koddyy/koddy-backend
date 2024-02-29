@@ -37,11 +37,11 @@ public class Mentee extends Member<Mentee> {
         this.interest = interest;
     }
 
-    public void completeInfo(
+    public void completeProfile(
             final String introduction,
             final String profileImageUrl
     ) {
-        super.completeInfo(introduction, profileImageUrl);
+        super.completeProfile(introduction, profileImageUrl);
         checkProfileCompleted();
     }
 

@@ -18,7 +18,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @ExtendWith(DatabaseCleanerEachCallbackExtension.class)
 @DisplayName("[Acceptance Test] 사용자 프로필 완성")
-public class CompleteAccountAcceptanceTest extends AcceptanceTest {
+public class CompleteProfileAcceptanceTest extends AcceptanceTest {
     @Nested
     @DisplayName("멘토 프로필 완성 API")
     class CompleteMentor {

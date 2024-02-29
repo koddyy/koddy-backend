@@ -17,7 +17,7 @@ class CompleteProfileUseCase(
     @KoddyWritableTransactional
     fun completeMentor(command: CompleteMentorProfileCommand) {
         val mentor: Mentor = mentorRepository.getById(command.mentorId)
-        mentor.completeInfo(
+        mentor.completeProfile(
             command.introduction,
             command.profileImageUrl,
             command.mentoringPeriod,
@@ -28,7 +28,7 @@ class CompleteProfileUseCase(
     @KoddyWritableTransactional
     fun completeMentee(command: CompleteMenteeProfileCommand) {
         val mentee: Mentee = menteeRepository.getById(command.menteeId)
-        mentee.completeInfo(
+        mentee.completeProfile(
             command.introduction,
             command.profileImageUrl,
         )

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 @Tag(name = "2-2. 사용자 프로필 완성 API")
 @RestController
 @RequestMapping("/api")
-class CompleteAccountApi(
+class CompleteProfileApi(
     private val completeProfileUseCase: CompleteProfileUseCase,
 ) {
     @Operation(summary = "멘토 프로필 완성 Endpoint")

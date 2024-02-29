@@ -28,8 +28,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("Member -> CompleteAccountApi 테스트")
-class CompleteAccountApiTest extends ControllerTest {
+@DisplayName("Member -> CompleteProfileApi 테스트")
+class CompleteProfileApiTest extends ControllerTest {
     @Autowired
     private CompleteProfileUseCase completeProfileUseCase;
 

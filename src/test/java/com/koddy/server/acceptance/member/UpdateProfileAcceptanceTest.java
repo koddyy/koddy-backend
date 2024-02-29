@@ -29,10 +29,10 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @ExtendWith(DatabaseCleanerEachCallbackExtension.class)
 @DisplayName("[Acceptance Test] 사용자 정보 수정")
-public class UpdateInfoAcceptanceTest extends AcceptanceTest {
+public class UpdateProfileAcceptanceTest extends AcceptanceTest {
     @Nested
     @DisplayName("멘토 정보 수정 API")
-    class UpdateMentorInfo {
+    class UpdateMentorProfile {
         @Nested
         @DisplayName("기본 정보 수정")
         class BasicInfo {
@@ -88,7 +88,7 @@ public class UpdateInfoAcceptanceTest extends AcceptanceTest {
 
     @Nested
     @DisplayName("멘티 정보 수정 API")
-    class UpdateMenteeInfo {
+    class UpdateMenteeProfile {
         @Nested
         @DisplayName("기본 정보 수정")
         class BasicInfo {
