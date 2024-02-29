@@ -1,5 +1,6 @@
 package com.koddy.server.member.application.usecase
 
+import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.member.domain.model.mentee.Mentee
@@ -15,6 +16,7 @@ import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
 
+@UnitTestKt
 @DisplayName("Member -> DeleteMemberUseCase 테스트")
 internal class DeleteMemberUseCaseTest : FeatureSpec({
     val memberRepository = mockk<MemberRepository>()

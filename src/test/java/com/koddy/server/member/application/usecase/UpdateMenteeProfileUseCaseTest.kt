@@ -1,5 +1,6 @@
 package com.koddy.server.member.application.usecase
 
+import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_2
 import com.koddy.server.member.application.usecase.command.UpdateMenteeBasicInfoCommand
@@ -17,6 +18,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 
+@UnitTestKt
 @DisplayName("Member -> UpdateMenteeProfileUseCase 테스트")
 internal class UpdateMenteeProfileUseCaseTest : FeatureSpec({
     val menteeRepository = mockk<MenteeRepository>()

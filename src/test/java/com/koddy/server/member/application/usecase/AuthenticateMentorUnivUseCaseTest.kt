@@ -4,6 +4,7 @@ import com.koddy.server.auth.application.adapter.AuthenticationProcessor
 import com.koddy.server.auth.domain.model.code.AuthKeyGenerator
 import com.koddy.server.auth.exception.AuthException
 import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_AUTH_CODE
+import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.member.application.usecase.command.AttemptWithMailCommand
 import com.koddy.server.member.application.usecase.command.AttemptWithProofDataCommand
@@ -26,6 +27,7 @@ import io.mockk.verify
 import okhttp3.internal.format
 import org.springframework.context.ApplicationEventPublisher
 
+@UnitTestKt
 @DisplayName("Member -> AuthenticationMentorUnivUseCase 테스트")
 internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
     val authKeyPrefix = "MENTOR-MAIL-AUTH:%d:%s"

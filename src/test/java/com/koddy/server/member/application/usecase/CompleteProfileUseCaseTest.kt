@@ -1,5 +1,6 @@
 package com.koddy.server.member.application.usecase
 
+import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.member.application.usecase.command.CompleteMenteeProfileCommand
@@ -17,6 +18,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 
+@UnitTestKt
 @DisplayName("Member -> CompleteProfileUseCase 테스트")
 internal class CompleteProfileUseCaseTest : DescribeSpec({
     val mentorRepository = mockk<MentorRepository>()

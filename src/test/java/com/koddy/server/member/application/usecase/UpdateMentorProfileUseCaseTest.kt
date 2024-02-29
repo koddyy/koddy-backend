@@ -1,5 +1,6 @@
 package com.koddy.server.member.application.usecase
 
+import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_2
 import com.koddy.server.member.application.usecase.command.UpdateMentorBasicInfoCommand
@@ -19,6 +20,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 
+@UnitTestKt
 @DisplayName("Member -> UpdateMentorProfileUseCase 테스트")
 internal class UpdateMentorProfileUseCaseTest : FeatureSpec({
     val mentorRepository = mockk<MentorRepository>()
