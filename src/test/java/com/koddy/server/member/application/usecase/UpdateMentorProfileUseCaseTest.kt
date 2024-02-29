@@ -24,7 +24,6 @@ internal class UpdateMentorProfileUseCaseTest : FeatureSpec({
     val mentorRepository = mockk<MentorRepository>()
     val sut = UpdateMentorProfileUseCase(mentorRepository)
 
-
     feature("UpdateMentorProfileUseCase's updateBasicInfo") {
         val mentor: Mentor = MENTOR_1.toDomain().apply(1L)
 

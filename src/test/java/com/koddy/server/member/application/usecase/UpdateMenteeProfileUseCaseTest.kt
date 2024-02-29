@@ -22,7 +22,6 @@ internal class UpdateMenteeProfileUseCaseTest : FeatureSpec({
     val menteeRepository = mockk<MenteeRepository>()
     val sut = UpdateMenteeProfileUseCase(menteeRepository)
 
-
     feature("UpdateMenteeProfileUseCase's updateBasicInfo") {
         val mentee: Mentee = MENTEE_1.toDomain().apply(1L)
 
