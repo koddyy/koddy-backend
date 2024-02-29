@@ -45,11 +45,9 @@ jobs:
         run: chmod +x gradlew
 
       - name: ktlint를 실행한다
-        uses: ScaCap/action-ktlint@master
+        uses: gradle/gradle-build-action@v3
         with:
-          github_token: ${{ secrets.SECRET_TOKEN }}
-          reporter: github-pr-review
-          fail_on_error: true
+          arguments: ktlintCheck
 
       - name: Gradle build를 수행한다
         run: ./gradlew build
