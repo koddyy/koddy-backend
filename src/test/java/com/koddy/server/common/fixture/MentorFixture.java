@@ -180,19 +180,19 @@ public enum MentorFixture {
 
     public Mentor toDomain() {
         final Mentor mentor = new Mentor(platform, name, languages, universityProfile);
-        mentor.completeInfo(introduction, profileImageUrl, mentoringPeriod, timelines);
+        mentor.completeProfile(introduction, profileImageUrl, mentoringPeriod, timelines);
         return mentor;
     }
 
     public Mentor toDomainWithLanguages(final List<Language> languages) {
         final Mentor mentor = new Mentor(platform, name, languages, universityProfile);
-        mentor.completeInfo(introduction, profileImageUrl, mentoringPeriod, timelines);
+        mentor.completeProfile(introduction, profileImageUrl, mentoringPeriod, timelines);
         return mentor;
     }
 
     public Mentor toDomainWithMentoringInfo(final MentoringPeriod mentoringPeriod, final List<Timeline> timelines) {
         final Mentor mentor = new Mentor(platform, name, languages, universityProfile);
-        mentor.completeInfo(introduction, profileImageUrl, mentoringPeriod, timelines);
+        mentor.completeProfile(introduction, profileImageUrl, mentoringPeriod, timelines);
         return mentor;
     }
 
@@ -202,7 +202,7 @@ public enum MentorFixture {
             final List<Timeline> timelines
     ) {
         final Mentor mentor = new Mentor(platform, name, languages, universityProfile);
-        mentor.completeInfo(introduction, profileImageUrl, mentoringPeriod, timelines);
+        mentor.completeProfile(introduction, profileImageUrl, mentoringPeriod, timelines);
         return mentor;
     }
 

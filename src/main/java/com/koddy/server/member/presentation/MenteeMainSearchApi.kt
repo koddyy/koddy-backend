@@ -49,9 +49,7 @@ class MenteeMainSearchApi(
     fun lookAroundMentorsByCondition(
         @ModelAttribute @Valid request: LookAroundMentorsByConditionRequest,
     ): ResponseEntity<SliceResponse<List<MentorSimpleSearchProfile>>> {
-        val result: SliceResponse<List<MentorSimpleSearchProfile>> = menteeMainSearchUseCase.lookAroundMentorsByCondition(
-            request.toQuery(),
-        )
+        val result: SliceResponse<List<MentorSimpleSearchProfile>> = menteeMainSearchUseCase.lookAroundMentorsByCondition(request.toQuery())
         return ResponseEntity.ok(result)
     }
 }

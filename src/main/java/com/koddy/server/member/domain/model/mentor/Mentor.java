@@ -54,13 +54,13 @@ public class Mentor extends Member<Mentor> {
         this.universityProfile = universityProfile;
     }
 
-    public void completeInfo(
+    public void completeProfile(
             final String introduction,
             final String profileImageUrl,
             final MentoringPeriod mentoringPeriod,
             final List<Timeline> timelines
     ) {
-        super.completeInfo(introduction, profileImageUrl);
+        super.completeProfile(introduction, profileImageUrl);
         this.mentoringPeriod = mentoringPeriod;
         applySchedules(timelines);
         checkProfileCompleted();

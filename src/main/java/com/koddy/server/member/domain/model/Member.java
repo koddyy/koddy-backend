@@ -109,7 +109,7 @@ public abstract class Member<T extends Member<T>> extends BaseEntity<T> {
         }
     }
 
-    protected void completeInfo(
+    protected void completeProfile(
             final String introduction,
             final String profileImageUrl
     ) {

@@ -118,7 +118,7 @@ class MentorTest extends UnitTest {
         assertThat(mentorB.isProfileComplete()).isFalse();
 
         /* mentorB 프로필 완성 */
-        mentorB.completeInfo(
+        mentorB.completeProfile(
                 MENTOR_2.getIntroduction(),
                 MENTOR_2.getProfileImageUrl(),
                 MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain(),
@@ -136,7 +136,7 @@ class MentorTest extends UnitTest {
         assertThat(mentorC.isProfileComplete()).isFalse();
 
         /* mentorC 자기소개 기입 */
-        mentorC.completeInfo(
+        mentorC.completeProfile(
                 MENTOR_3.getIntroduction(),
                 MENTOR_3.getProfileImageUrl(),
                 null,
@@ -145,7 +145,7 @@ class MentorTest extends UnitTest {
         assertThat(mentorC.isProfileComplete()).isFalse();
 
         /* mentorC 멘토링 스케줄 */
-        mentorC.completeInfo(
+        mentorC.completeProfile(
                 MENTOR_3.getIntroduction(),
                 MENTOR_3.getProfileImageUrl(),
                 MentoringPeriodFixture.FROM_03_01_TO_05_01.toDomain(),

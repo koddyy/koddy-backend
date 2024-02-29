@@ -6,7 +6,7 @@ import com.koddy.server.auth.presentation.response.LoginResponse
 import com.koddy.server.auth.utils.TokenResponseWriter
 import com.koddy.server.global.annotation.Auth
 import com.koddy.server.member.application.usecase.DeleteMemberUseCase
-import com.koddy.server.member.application.usecase.SignUpUsecase
+import com.koddy.server.member.application.usecase.SignUpUseCase
 import com.koddy.server.member.presentation.request.SignUpMenteeRequest
 import com.koddy.server.member.presentation.request.SignUpMentorRequest
 import io.swagger.v3.oas.annotations.Operation
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api")
 class ManageAccountApi(
-    private val signUpUsecase: SignUpUsecase,
+    private val signUpUseCase: SignUpUseCase,
     private val deleteMemberUseCase: DeleteMemberUseCase,
     private val tokenResponseWriter: TokenResponseWriter,
 ) {
@@ -34,7 +34,7 @@ class ManageAccountApi(
         @RequestBody @Valid request: SignUpMentorRequest,
         response: HttpServletResponse,
     ): ResponseEntity<LoginResponse> {
-        val authMember: AuthMember = signUpUsecase.signUpMentor(request.toCommand())
+        val authMember: AuthMember = signUpUseCase.signUpMentor(request.toCommand())
         tokenResponseWriter.applyToken(response, authMember.token)
         return ResponseEntity.ok(
             LoginResponse(
@@ -50,7 +50,7 @@ class ManageAccountApi(
         @RequestBody @Valid request: SignUpMenteeRequest,
         response: HttpServletResponse,
     ): ResponseEntity<LoginResponse> {
-        val authMember: AuthMember = signUpUsecase.signUpMentee(request.toCommand())
+        val authMember: AuthMember = signUpUseCase.signUpMentee(request.toCommand())
         tokenResponseWriter.applyToken(response, authMember.token)
         return ResponseEntity.ok(
             LoginResponse(

@@ -3,6 +3,7 @@ package com.koddy.server.member.presentation;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.GetMentorReservedScheduleUseCase;
 import com.koddy.server.member.application.usecase.query.response.MentorReservedSchedule;
+import com.koddy.server.member.application.usecase.query.response.Reserved;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
@@ -69,23 +70,23 @@ class MentorReservedScheduleQueryApiTest extends ControllerTest {
                     ),
                     MentoringPeriod.TimeUnit.HALF_HOUR.getValue(),
                     List.of(
-                            new MentorReservedSchedule.Reserved(
+                            new Reserved(
                                     LocalDateTime.of(2024, 2, 7, 18, 30),
                                     LocalDateTime.of(2024, 2, 7, 19, 0)
                             ),
-                            new MentorReservedSchedule.Reserved(
+                            new Reserved(
                                     LocalDateTime.of(2024, 2, 12, 18, 30),
                                     LocalDateTime.of(2024, 2, 12, 19, 0)
                             ),
-                            new MentorReservedSchedule.Reserved(
+                            new Reserved(
                                     LocalDateTime.of(2024, 2, 14, 18, 30),
                                     LocalDateTime.of(2024, 2, 14, 19, 0)
                             ),
-                            new MentorReservedSchedule.Reserved(
+                            new Reserved(
                                     LocalDateTime.of(2024, 2, 19, 18, 30),
                                     LocalDateTime.of(2024, 2, 19, 19, 0)
                             ),
-                            new MentorReservedSchedule.Reserved(
+                            new Reserved(
                                     LocalDateTime.of(2024, 2, 26, 18, 30),
                                     LocalDateTime.of(2024, 2, 26, 19, 0)
                             )

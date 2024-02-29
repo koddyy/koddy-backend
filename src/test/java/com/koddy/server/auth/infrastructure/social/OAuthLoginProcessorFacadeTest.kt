@@ -16,6 +16,7 @@ import com.koddy.server.common.utils.OAuthUtils.STATE
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -46,9 +47,9 @@ internal class OAuthLoginProcessorFacadeTest : DescribeSpec({
                 val result: OAuthUserResponse = sut.login(OAuthProvider.GOOGLE, AUTHORIZATION_CODE, REDIRECT_URI, STATE)
 
                 verify(exactly = 1) { googleOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE) }
-                verify(exactly = 0) {
-                    kakaoOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE)
-                    zoomOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE)
+                verify {
+                    kakaoOAuthConnector wasNot Called
+                    zoomOAuthConnector wasNot Called
                 }
                 result shouldBe googleUserResponse
             }
@@ -59,9 +60,9 @@ internal class OAuthLoginProcessorFacadeTest : DescribeSpec({
                 val result: OAuthUserResponse = sut.login(OAuthProvider.KAKAO, AUTHORIZATION_CODE, REDIRECT_URI, STATE)
 
                 verify(exactly = 1) { kakaoOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE) }
-                verify(exactly = 0) {
-                    googleOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE)
-                    zoomOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE)
+                verify {
+                    googleOAuthConnector wasNot Called
+                    zoomOAuthConnector wasNot Called
                 }
                 result shouldBe kakaoUserResponse
             }
@@ -72,9 +73,9 @@ internal class OAuthLoginProcessorFacadeTest : DescribeSpec({
                 val result: OAuthUserResponse = sut.login(OAuthProvider.ZOOM, AUTHORIZATION_CODE, REDIRECT_URI, STATE)
 
                 verify(exactly = 1) { zoomOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE) }
-                verify(exactly = 0) {
-                    googleOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE)
-                    kakaoOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE)
+                verify {
+                    googleOAuthConnector wasNot Called
+                    kakaoOAuthConnector wasNot Called
                 }
                 result shouldBe zoomUserResponse
             }

@@ -8,11 +8,9 @@ import com.koddy.server.member.presentation.request.AuthenticationWithMailReques
 import com.koddy.server.member.presentation.request.AuthenticationWithProofDataRequest;
 import com.koddy.server.member.presentation.request.CompleteMenteeProfileRequest;
 import com.koddy.server.member.presentation.request.CompleteMentorProfileRequest;
-import com.koddy.server.member.presentation.request.End;
 import com.koddy.server.member.presentation.request.MentorScheduleRequest;
 import com.koddy.server.member.presentation.request.SignUpMenteeRequest;
 import com.koddy.server.member.presentation.request.SignUpMentorRequest;
-import com.koddy.server.member.presentation.request.Start;
 import com.koddy.server.member.presentation.request.UpdateMenteeBasicInfoRequest;
 import com.koddy.server.member.presentation.request.UpdateMentorBasicInfoRequest;
 import com.koddy.server.member.presentation.request.UpdateMentorScheduleRequest;
@@ -145,11 +143,11 @@ public class MemberAcceptanceStep {
                         .stream()
                         .map(it -> new MentorScheduleRequest(
                                 it.getDayOfWeek().getKor(),
-                                new Start(
+                                new MentorScheduleRequest.Start(
                                         it.getStartTime().getHour(),
                                         it.getStartTime().getMinute()
                                 ),
-                                new End(
+                                new MentorScheduleRequest.End(
                                         it.getEndTime().getHour(),
                                         it.getEndTime().getMinute()
                                 )
@@ -215,11 +213,11 @@ public class MemberAcceptanceStep {
                         .stream()
                         .map(it -> new MentorScheduleRequest(
                                 it.getDayOfWeek().getKor(),
-                                new Start(
+                                new MentorScheduleRequest.Start(
                                         it.getStartTime().getHour(),
                                         it.getStartTime().getMinute()
                                 ),
-                                new End(
+                                new MentorScheduleRequest.End(
                                         it.getEndTime().getHour(),
                                         it.getEndTime().getMinute()
                                 )

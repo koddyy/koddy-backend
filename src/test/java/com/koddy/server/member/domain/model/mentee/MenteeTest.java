@@ -99,7 +99,7 @@ class MenteeTest extends UnitTest {
         assertThat(menteeB.isProfileComplete()).isFalse();
 
         /* menteeB 프로필 완성 */
-        menteeB.completeInfo(MENTEE_2.getIntroduction(), MENTEE_2.getProfileImageUrl());
+        menteeB.completeProfile(MENTEE_2.getIntroduction(), MENTEE_2.getProfileImageUrl());
         assertThat(menteeB.isProfileComplete()).isTrue();
 
         /* menteeC 완성 */
@@ -107,7 +107,7 @@ class MenteeTest extends UnitTest {
         assertThat(menteeC.isProfileComplete()).isTrue();
 
         /* menteeC 미완성 진행 */
-        menteeC.completeInfo(null, MENTEE_3.getProfileImageUrl());
+        menteeC.completeProfile(null, MENTEE_3.getProfileImageUrl());
         assertThat(menteeC.isProfileComplete()).isFalse();
     }
 

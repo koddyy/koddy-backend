@@ -26,6 +26,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -68,7 +69,7 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
                     menteeRepository.getByIdWithNative(coffeeChat.menteeId)
                     availableLanguageRepository.findByMemberIdWithNative(mentee.id)
                 }
-                verify(exactly = 0) { mentorRepository.getByIdWithNative(coffeeChat.mentorId) }
+                verify { mentorRepository wasNot Called }
                 assertSoftly {
                     result.mentee.id shouldBe mentee.id
                     result.mentee.name shouldBe mentee.name
@@ -114,7 +115,7 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
                     mentorRepository.getByIdWithNative(coffeeChat.mentorId)
                     availableLanguageRepository.findByMemberIdWithNative(mentor.id)
                 }
-                verify(exactly = 0) { menteeRepository.getByIdWithNative(coffeeChat.menteeId) }
+                verify { menteeRepository wasNot Called }
                 assertSoftly {
                     result.mentor.id shouldBe mentor.id
                     result.mentor.name shouldBe mentor.name

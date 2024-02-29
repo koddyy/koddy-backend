@@ -12,11 +12,11 @@ data class CompleteMentorProfileRequest(
 ) {
     fun toCommand(mentorId: Long): CompleteMentorProfileCommand =
         CompleteMentorProfileCommand(
-            mentorId,
-            introduction,
-            profileImageUrl,
-            period?.toPeriod(),
-            schedules.map { it.toTimeline() },
+            mentorId = mentorId,
+            introduction = introduction,
+            profileImageUrl = profileImageUrl,
+            mentoringPeriod = period?.toPeriod(),
+            timelines = schedules.map { it.toTimeline() },
         )
 }
 
@@ -26,8 +26,8 @@ data class CompleteMenteeProfileRequest(
 ) {
     fun toCommand(menteeId: Long): CompleteMenteeProfileCommand =
         CompleteMenteeProfileCommand(
-            menteeId,
-            introduction,
-            profileImageUrl,
+            menteeId = menteeId,
+            introduction = introduction,
+            profileImageUrl = profileImageUrl,
         )
 }
