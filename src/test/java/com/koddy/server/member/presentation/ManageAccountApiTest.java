@@ -3,7 +3,7 @@ package com.koddy.server.member.presentation;
 import com.koddy.server.auth.domain.model.AuthMember;
 import com.koddy.server.common.ControllerTest;
 import com.koddy.server.member.application.usecase.DeleteMemberUseCase;
-import com.koddy.server.member.application.usecase.SignUpUsecase;
+import com.koddy.server.member.application.usecase.SignUpUseCase;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.request.SignUpMenteeRequest;
@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Member -> ManageAccountApi 테스트")
 class ManageAccountApiTest extends ControllerTest {
     @Autowired
-    private SignUpUsecase signUpUsecase;
+    private SignUpUseCase signUpUseCase;
 
     @Autowired
     private DeleteMemberUseCase deleteMemberUseCase;
@@ -53,7 +53,7 @@ class ManageAccountApiTest extends ControllerTest {
         void success() {
             // given
             final AuthMember loginResponse = MENTOR_1.toAuthMember();
-            given(signUpUsecase.signUpMentor(any())).willReturn(loginResponse);
+            given(signUpUseCase.signUpMentor(any())).willReturn(loginResponse);
 
             final SignUpMentorRequest request = new SignUpMentorRequest(
                     MENTOR_1.getPlatform().getProvider().getValue(),
@@ -115,7 +115,7 @@ class ManageAccountApiTest extends ControllerTest {
         void success() {
             // given
             final AuthMember loginResponse = MENTEE_1.toAuthMember();
-            given(signUpUsecase.signUpMentee(any())).willReturn(loginResponse);
+            given(signUpUseCase.signUpMentee(any())).willReturn(loginResponse);
 
             final SignUpMenteeRequest request = new SignUpMenteeRequest(
                     MENTEE_1.getPlatform().getProvider().getValue(),

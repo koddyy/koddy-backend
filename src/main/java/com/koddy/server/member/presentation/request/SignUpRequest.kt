@@ -39,14 +39,14 @@ data class SignUpMentorRequest(
 ) {
     fun toCommand(): SignUpMentorCommand =
         SignUpMentorCommand(
-            SocialPlatform(
+            platform = SocialPlatform(
                 OAuthProvider.from(provider),
                 socialId,
                 Email.from(email),
             ),
-            name,
-            languages.toLanguages(),
-            UniversityProfile(school, major, enteredIn),
+            name = name,
+            languages = languages.toLanguages(),
+            universityProfile = UniversityProfile(school, major, enteredIn),
         )
 }
 
@@ -77,14 +77,14 @@ data class SignUpMenteeRequest(
 ) {
     fun toCommand(): SignUpMenteeCommand =
         SignUpMenteeCommand(
-            SocialPlatform(
+            platform = SocialPlatform(
                 OAuthProvider.from(provider),
                 socialId,
                 Email.from(email),
             ),
-            name,
-            Nationality.from(nationality),
-            languages.toLanguages(),
-            Interest(interestSchool, interestMajor),
+            name = name,
+            nationality = Nationality.from(nationality),
+            languages = languages.toLanguages(),
+            interest = Interest(interestSchool, interestMajor),
         )
 }
