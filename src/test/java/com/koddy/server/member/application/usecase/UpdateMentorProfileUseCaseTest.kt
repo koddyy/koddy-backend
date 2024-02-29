@@ -15,6 +15,7 @@ import com.koddy.server.member.domain.repository.MentorRepository
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.FeatureSpec
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -65,7 +66,9 @@ internal class UpdateMentorProfileUseCaseTest : FeatureSpec({
                 mentoringPeriod.startDate shouldBe MENTOR_1.mentoringPeriod.startDate
                 mentoringPeriod.endDate shouldBe MENTOR_1.mentoringPeriod.endDate
                 mentoringPeriod.timeUnit shouldBe MENTOR_1.mentoringPeriod.timeUnit
-                schedules.map { it.timeline.dayOfWeek } shouldContainExactlyInAnyOrder MENTOR_1.timelines.map { it.dayOfWeek }
+                schedules.map { it.timeline.dayOfWeek } shouldContainExactly MENTOR_1.timelines.map { it.dayOfWeek }
+                schedules.map { it.timeline.startTime } shouldContainExactly MENTOR_1.timelines.map { it.startTime }
+                schedules.map { it.timeline.endTime } shouldContainExactly MENTOR_1.timelines.map { it.endTime }
                 status shouldBe Member.Status.ACTIVE
                 role shouldBe Role.MENTOR
             }
@@ -91,6 +94,8 @@ internal class UpdateMentorProfileUseCaseTest : FeatureSpec({
                 mentoringPeriod.endDate shouldBe command.mentoringPeriod!!.endDate
                 mentoringPeriod.timeUnit shouldBe command.mentoringPeriod!!.timeUnit
                 schedules.map { it.timeline.dayOfWeek } shouldContainExactlyInAnyOrder command.timelines.map { it.dayOfWeek }
+                schedules.map { it.timeline.startTime } shouldContainExactly command.timelines.map { it.startTime }
+                schedules.map { it.timeline.endTime } shouldContainExactly command.timelines.map { it.endTime }
 
                 // keep
                 platform.provider shouldBe MENTOR_1.platform.provider
