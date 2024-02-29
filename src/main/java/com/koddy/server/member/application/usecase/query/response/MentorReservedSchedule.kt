@@ -8,10 +8,10 @@ import com.koddy.server.member.domain.model.response.ScheduleResponse
 import java.time.LocalDateTime
 
 data class MentorReservedSchedule(
-    val period: MentoringPeriodResponse,
-    val schedules: List<ScheduleResponse>,
-    val timeUnit: Int,
-    val reserved: List<Reserved>,
+    val period: MentoringPeriodResponse?,
+    val schedules: List<ScheduleResponse> = emptyList(),
+    val timeUnit: Int?,
+    val reserved: List<Reserved> = emptyList(),
 ) {
     companion object {
         fun of(

@@ -8,9 +8,7 @@ import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.presentation.request.CompleteMenteeProfileRequest;
 import com.koddy.server.member.presentation.request.CompleteMentorProfileRequest;
-import com.koddy.server.member.presentation.request.End;
 import com.koddy.server.member.presentation.request.MentorScheduleRequest;
-import com.koddy.server.member.presentation.request.Start;
 import com.koddy.server.member.presentation.request.model.MentoringPeriodRequestModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -51,11 +49,11 @@ class CompleteProfileApiTest extends ControllerTest {
                         .stream()
                         .map(it -> new MentorScheduleRequest(
                                 it.getDayOfWeek().getKor(),
-                                new Start(
+                                new MentorScheduleRequest.Start(
                                         it.getStartTime().getHour(),
                                         it.getStartTime().getMinute()
                                 ),
-                                new End(
+                                new MentorScheduleRequest.End(
                                         it.getEndTime().getHour(),
                                         it.getEndTime().getMinute()
                                 )

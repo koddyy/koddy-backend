@@ -60,8 +60,8 @@ internal class GetMentorReservedScheduleUseCaseTest : FeatureSpec({
 
             val result: MentorReservedSchedule = sut.invoke(query)
             assertSoftly(result) {
-                period.startDate shouldBe mentor.mentoringPeriod.startDate
-                period.endDate shouldBe mentor.mentoringPeriod.endDate
+                period!!.startDate shouldBe mentor.mentoringPeriod.startDate
+                period!!.endDate shouldBe mentor.mentoringPeriod.endDate
                 schedules.map { it.dayOfWeek } shouldContainExactly mentor.schedules.map { it.timeline.dayOfWeek.kor }
                 schedules.map { it.start.hour } shouldContainExactly mentor.schedules.map { it.timeline.startTime.hour }
                 schedules.map { it.start.minute } shouldContainExactly mentor.schedules.map { it.timeline.startTime.minute }
