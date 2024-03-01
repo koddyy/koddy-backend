@@ -4,7 +4,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     kotlin("jvm")
-//    kotlin("kapt")
+    //    kotlin("kapt")
     kotlin("plugin.spring")
     kotlin("plugin.jpa")
     id("org.springframework.boot")
@@ -43,7 +43,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.security:spring-security-crypto")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-//    kapt("org.springframework.boot:spring-boot-configuration-processor")
+    //    kapt("org.springframework.boot:spring-boot-configuration-processor")
 
     // Data
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -144,13 +144,13 @@ tasks.runKtlintCheckOverMainSourceSet {
 }
 
 // Ktlint
-configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+ktlint {
     reporters {
         reporter(ReporterType.JSON)
     }
 
     filter {
-        exclude("**/generated/**")
+        exclude { it.file.toString().contains("generated") || it.file.toString().contains("test") }
     }
 }
 
