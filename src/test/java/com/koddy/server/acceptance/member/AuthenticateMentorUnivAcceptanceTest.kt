@@ -39,96 +39,69 @@ internal class AuthenticateMentorUnivAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("메일 인증 시도 API")
     internal inner class AuthWithMail {
         @Test
-        @DisplayName("학교 인증은 멘토 대상이므로 멘티는 권한이 없다")
-        fun throwExceptionByInvalidPermission() {
+        fun `학교 인증은 멘토 대상이므로 멘티는 권한이 없다`() {
             // given
-            val accessToken: String = MENTEE_1.회원가입과_로그인을_진행한다().token.accessToken
+            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_진행한다()
 
             // when - then
-            멘토가_메일을_통해서_학교_인증을_시도한다(
-                schoolMail = SCHOOL_MAIL,
-                accessToken = accessToken,
-            ).statusCode(FORBIDDEN.value())
+            멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, mentee.token.accessToken)
+                .statusCode(FORBIDDEN.value())
                 .body("errorCode", `is`(INVALID_PERMISSION.errorCode))
                 .body("message", `is`(INVALID_PERMISSION.message))
         }
 
         @Test
-        @DisplayName("메일을 통해서 학교 인증을 시도한다")
-        fun success() {
+        fun `메일을 통해서 학교 인증을 시도한다`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
             // when - then
-            멘토가_메일을_통해서_학교_인증을_시도한다(
-                schoolMail = SCHOOL_MAIL,
-                accessToken = accessToken,
-            ).statusCode(NO_CONTENT.value())
+            멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, member.token.accessToken).statusCode(NO_CONTENT.value())
         }
 
         @Test
-        @DisplayName("짧은 시간동안 3회 이상 인증 시도를 하게 되면 10분동안 인증 시도 밴을 당한다 (HTTP Status 429)")
-        fun throwExceptionByTooManyRequest() {
+        fun `짧은 시간동안 3회 이상 인증 시도를 하게 되면 10분동안 인증 시도 밴을 당한다 (HTTP Status 429)`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
             // when - then
-            멘토가_메일을_통해서_학교_인증을_시도한다(
-                schoolMail = SCHOOL_MAIL,
-                accessToken = accessToken,
-            ).statusCode(NO_CONTENT.value())
-            멘토가_메일을_통해서_학교_인증을_시도한다(
-                schoolMail = SCHOOL_MAIL,
-                accessToken = accessToken,
-            ).statusCode(NO_CONTENT.value())
-            멘토가_메일을_통해서_학교_인증을_시도한다(
-                schoolMail = SCHOOL_MAIL,
-                accessToken = accessToken,
-            ).statusCode(NO_CONTENT.value())
+            멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, member.token.accessToken).statusCode(NO_CONTENT.value())
+            멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, member.token.accessToken).statusCode(NO_CONTENT.value())
+            멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, member.token.accessToken).statusCode(NO_CONTENT.value())
 
-            멘토가_메일을_통해서_학교_인증을_시도한다(
-                schoolMail = SCHOOL_MAIL,
-                accessToken = accessToken,
-            ).statusCode(HttpStatus.TOO_MANY_REQUESTS.value())
+            멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, member.token.accessToken)
+                .statusCode(HttpStatus.TOO_MANY_REQUESTS.value())
                 .body("errorCode", `is`(TOO_MANY_MAIL_AUTH_ATTEMPTS.errorCode))
                 .body("message", `is`(TOO_MANY_MAIL_AUTH_ATTEMPTS.message))
         }
     }
 
     @Nested
-    @DisplayName("메일 인증 확인 API")
+    @DisplayName("메일 인증번호 확인 API")
     internal inner class ConfirmMailAuthCode {
         @Test
-        @DisplayName("인증번호가 일치하지 않으면 인증에 실패한다")
-        fun throwExceptionByInvalidAuthCode() {
+        fun `인증번호가 일치하지 않으면 인증에 실패한다`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
-            멘토가_메일을_통해서_학교_인증을_시도한다(
-                schoolMail = SCHOOL_MAIL,
-                accessToken = accessToken,
-            )
+            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
+            멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, member.token.accessToken)
 
             // when - then
             멘토가_학교_메일로_발송된_인증번호를_제출한다(
                 schoolMail = SCHOOL_MAIL,
                 authCode = "${BlackboxLogicControlConfig.AUTH_CODE}7",
-                accessToken = accessToken,
+                accessToken = member.token.accessToken,
             ).statusCode(CONFLICT.value())
                 .body("errorCode", `is`(INVALID_AUTH_CODE.errorCode))
                 .body("message", `is`(INVALID_AUTH_CODE.message))
         }
 
         @Test
-        @DisplayName("인증번호가 일치하면 인증에 성공한다")
-        fun success() {
+        fun `인증번호가 일치하면 인증에 성공한다`() {
             // given
             val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
-            멘토가_메일을_통해서_학교_인증을_시도한다(
-                schoolMail = SCHOOL_MAIL,
-                accessToken = mentor.token.accessToken,
-            )
+            멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, mentor.token.accessToken)
 
-            멘토_기본_프로필을_조회한다(mentorId = mentor.id)
+            멘토_기본_프로필을_조회한다(mentor.id)
                 .statusCode(OK.value())
                 .body("authenticated", `is`(false))
 
@@ -139,7 +112,7 @@ internal class AuthenticateMentorUnivAcceptanceTest : AcceptanceTestKt() {
                 accessToken = mentor.token.accessToken,
             ).statusCode(NO_CONTENT.value())
 
-            멘토_기본_프로필을_조회한다(mentorId = mentor.id)
+            멘토_기본_프로필을_조회한다(mentor.id)
                 .statusCode(OK.value())
                 .body("authenticated", `is`(true))
         }
@@ -149,27 +122,24 @@ internal class AuthenticateMentorUnivAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("증명자료 인증 시도 API")
     internal inner class AuthWithProofData {
         @Test
-        @DisplayName("학교 인증은 멘토 대상이므로 멘티는 권한이 없다")
-        fun throwExceptionByInvalidPermission() {
+        fun `학교 인증은 멘토 대상이므로 멘티는 권한이 없다`() {
             // given
-            val accessToken: String = MENTEE_1.회원가입과_로그인을_진행한다().token.accessToken
+            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_진행한다()
 
             // when - then
-            멘토가_증명자료를_통해서_학교_인증을_시도한다(accessToken = accessToken)
+            멘토가_증명자료를_통해서_학교_인증을_시도한다(mentee.token.accessToken)
                 .statusCode(FORBIDDEN.value())
                 .body("errorCode", `is`(INVALID_PERMISSION.errorCode))
                 .body("message", `is`(INVALID_PERMISSION.message))
         }
 
         @Test
-        @DisplayName("증명자료를 통해서 학교 인증을 시도한다")
-        fun success() {
+        fun `증명자료를 통해서 학교 인증을 시도한다`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
             // when - then
-            멘토가_증명자료를_통해서_학교_인증을_시도한다(accessToken = accessToken)
-                .statusCode(NO_CONTENT.value())
+            멘토가_증명자료를_통해서_학교_인증을_시도한다(member.token.accessToken).statusCode(NO_CONTENT.value())
         }
     }
 }

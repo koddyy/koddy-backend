@@ -3,6 +3,7 @@ package com.koddy.server.acceptance.member
 import com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_회원가입_후_로그인을_진행한다
 import com.koddy.server.acceptance.member.MemberAcceptanceStep.멘티_회원가입_후_로그인을_진행한다
 import com.koddy.server.acceptance.member.MemberAcceptanceStep.서비스를_탈퇴한다
+import com.koddy.server.auth.domain.model.AuthMember
 import com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER
 import com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER
 import com.koddy.server.common.AcceptanceTestKt
@@ -27,9 +28,8 @@ internal class ManageAccountAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("회원가입 + 로그인 API")
     internal inner class SignUpAndLoginApi {
         @Test
-        @DisplayName("멘토 회원가입 + 로그인을 진행한다")
-        fun mentorSuccess() {
-            멘토_회원가입_후_로그인을_진행한다(fixture = MENTOR_1)
+        fun `멘토 회원가입 + 로그인 처리를 진행한다`() {
+            멘토_회원가입_후_로그인을_진행한다(MENTOR_1)
                 .statusCode(OK.value())
                 .header(ACCESS_TOKEN_HEADER, notNullValue(String::class.java))
                 .cookie(REFRESH_TOKEN_HEADER, notNullValue(String::class.java))
@@ -38,9 +38,8 @@ internal class ManageAccountAcceptanceTest : AcceptanceTestKt() {
         }
 
         @Test
-        @DisplayName("멘티 회원가입 + 로그인을 진행한다")
-        fun menteeSuccess() {
-            멘티_회원가입_후_로그인을_진행한다(fixture = MENTEE_1)
+        fun `멘티 회원가입 + 로그인 처리를 진행한다`() {
+            멘티_회원가입_후_로그인을_진행한다(MENTEE_1)
                 .statusCode(OK.value())
                 .header(ACCESS_TOKEN_HEADER, notNullValue(String::class.java))
                 .cookie(REFRESH_TOKEN_HEADER, notNullValue(String::class.java))
@@ -53,13 +52,12 @@ internal class ManageAccountAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("서비스 탈퇴 API")
     internal inner class DeleteApi {
         @Test
-        @DisplayName("멘토가 서비스를 탈퇴한다")
-        fun mentorDelete() {
+        fun `멘토가 서비스를 탈퇴한다`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
             // when - then
-            서비스를_탈퇴한다(accessToken = accessToken)
+            서비스를_탈퇴한다(mentor.token.accessToken)
                 .statusCode(NO_CONTENT.value())
                 .header(SET_COOKIE, containsString("$REFRESH_TOKEN_HEADER=;"))
                 .header(SET_COOKIE, containsString("Max-Age=1;"))
@@ -67,13 +65,12 @@ internal class ManageAccountAcceptanceTest : AcceptanceTestKt() {
         }
 
         @Test
-        @DisplayName("멘티가 서비스를 탈퇴한다")
-        fun menteeDelete() {
+        fun `멘티가 서비스를 탈퇴한다`() {
             // given
-            val accessToken: String = MENTEE_1.회원가입과_로그인을_진행한다().token.accessToken
+            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_진행한다()
 
             // when - then
-            서비스를_탈퇴한다(accessToken = accessToken)
+            서비스를_탈퇴한다(mentee.token.accessToken)
                 .statusCode(NO_CONTENT.value())
                 .header(SET_COOKIE, containsString("$REFRESH_TOKEN_HEADER=;"))
                 .header(SET_COOKIE, containsString("Max-Age=1;"))

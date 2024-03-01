@@ -13,6 +13,7 @@ import com.koddy.server.coffeechat.presentation.request.RejectAppliedCoffeeChatR
 import com.koddy.server.coffeechat.presentation.request.RejectSuggestedCoffeeChatRequest
 import com.koddy.server.common.fixture.OAuthFixture.GOOGLE_MENTOR_1
 import com.koddy.server.common.fixture.StrategyFixture
+import com.koddy.server.common.toLocalDateTime
 import com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI
 import com.koddy.server.common.utils.OAuthUtils.STATE
 import io.restassured.response.ValidatableResponse
@@ -31,8 +32,8 @@ object CoffeeChatAcceptanceStep {
                 redirectUri = REDIRECT_URI,
                 state = STATE,
                 topic = "줌 회의 Hello",
-                start = LocalDateTime.of(2024, 1, 10, 18, 0).toString(),
-                end = LocalDateTime.of(2024, 1, 10, 19, 0).toString(),
+                start = "2024/1/10-18:00".toLocalDateTime().toString(),
+                end = "2024/1/10-18:30".toLocalDateTime().toString(),
             ),
             accessToken = accessToken,
         )

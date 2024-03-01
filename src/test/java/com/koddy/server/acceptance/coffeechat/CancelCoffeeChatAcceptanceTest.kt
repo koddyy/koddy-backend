@@ -11,6 +11,7 @@ import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_2
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_2
+import com.koddy.server.common.toLocalDateTime
 import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -19,7 +20,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.NO_CONTENT
-import java.time.LocalDateTime
 
 @ExtendWith(DatabaseCleanerEachCallbackExtension::class)
 @DisplayName("[Acceptance Test] 신청/제안한 커피챗 취소")
@@ -41,8 +41,7 @@ internal class CancelCoffeeChatAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘토가 제안한 커피챗 취소")
     internal inner class CancelSuggestedCoffeeChat {
         @Test
-        @DisplayName("자신과 연관되지 않은 커피챗을 취소할 수 없다")
-        fun throwExceptionByInvalidPermission() {
+        fun `자신과 연관되지 않은 커피챗을 취소할 수 없다`() {
             // given
             val coffeeChatByMentorA: Long = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(
                 menteeId = menteeA.id,
@@ -70,8 +69,7 @@ internal class CancelCoffeeChatAcceptanceTest : AcceptanceTestKt() {
         }
 
         @Test
-        @DisplayName("자신과 연관된 커피챗은 취소할 수 있다")
-        fun success() {
+        fun `자신과 연관된 커피챗은 취소할 수 있다`() {
             // given
             val coffeeChatByMentorA: Long = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(
                 menteeId = menteeA.id,
@@ -98,18 +96,17 @@ internal class CancelCoffeeChatAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘티가 신청한 커피챗 취소")
     internal inner class CancelAppliedCoffeeChat {
         @Test
-        @DisplayName("자신과 연관되지 않은 커피챗을 취소할 수 없다")
-        fun throwExceptionByInvalidPermission() {
+        fun `자신과 연관되지 않은 커피챗을 취소할 수 없다`() {
             // given
             val coffeeChatByMenteeA = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                start = LocalDateTime.of(2024, 2, 5, 15, 0),
-                end = LocalDateTime.of(2024, 2, 5, 15, 30),
+                start = "2024/2/5-15:00".toLocalDateTime(),
+                end = "2024/2/5-15:30".toLocalDateTime(),
                 mentorId = mentorA.id,
                 accessToken = menteeA.token.accessToken,
             )
             val coffeeChatByMenteeB = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                start = LocalDateTime.of(2024, 2, 5, 17, 0),
-                end = LocalDateTime.of(2024, 2, 5, 17, 30),
+                start = "2024/2/5-17:00".toLocalDateTime(),
+                end = "2024/2/5-17:30".toLocalDateTime(),
                 mentorId = mentorA.id,
                 accessToken = menteeB.token.accessToken,
             )
@@ -126,18 +123,17 @@ internal class CancelCoffeeChatAcceptanceTest : AcceptanceTestKt() {
         }
 
         @Test
-        @DisplayName("자신과 연관된 커피챗은 취소할 수 있다")
-        fun success() {
+        fun `자신과 연관된 커피챗은 취소할 수 있다`() {
             // given
             val coffeeChatByMenteeA = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                start = LocalDateTime.of(2024, 2, 5, 15, 0),
-                end = LocalDateTime.of(2024, 2, 5, 15, 30),
+                start = "2024/2/5-15:00".toLocalDateTime(),
+                end = "2024/2/5-15:30".toLocalDateTime(),
                 mentorId = mentorA.id,
                 accessToken = menteeA.token.accessToken,
             )
             val coffeeChatByMenteeB = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                start = LocalDateTime.of(2024, 2, 5, 17, 0),
-                end = LocalDateTime.of(2024, 2, 5, 17, 30),
+                start = "2024/2/5-17:00".toLocalDateTime(),
+                end = "2024/2/5-17:30".toLocalDateTime(),
                 mentorId = mentorA.id,
                 accessToken = menteeB.token.accessToken,
             )

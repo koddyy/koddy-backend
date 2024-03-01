@@ -24,6 +24,7 @@ import com.koddy.server.common.fixture.MenteeFixture.MENTEE_9
 import com.koddy.server.common.fixture.MentorFixture
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.common.fixture.StrategyFixture
+import com.koddy.server.common.toLocalDateTime
 import com.koddy.server.member.domain.model.mentor.MentoringPeriod
 import io.restassured.response.ValidatableResponse
 import org.hamcrest.Matchers.contains
@@ -43,11 +44,10 @@ import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME
 @DisplayName("[Acceptance Test] 멘토 예약된 스케줄 조회")
 internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
     @Nested
-    @DisplayName("특정 Year-Month에 대해서 멘토의 예약된 스케줄 정보를 조회한다")
+    @DisplayName("특정 Year-Month에 대해서 멘토의 예약된 스케줄 정보 조회")
     internal inner class GetMentorReservedSchedule {
         @Test
-        @DisplayName("멘토링 시간 정보를 기입하지 않은 멘토에 대한 조회")
-        fun successA() {
+        fun `특정 Year-Month에 대해서 멘토의 예약된 스케줄 정보를 조회한다 - 멘토링 시간 정보를 기입하지 않은 멘토`() {
             // given
             val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
             val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
@@ -66,8 +66,7 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
         }
 
         @Test
-        @DisplayName("멘토링 시간 정보를 기입한 멘토에 대한 조회 + 예약 정보 X")
-        fun successB() {
+        fun `특정 Year-Month에 대해서 멘토의 예약된 스케줄 정보를 조회한다 - 멘토링 시간 정보를 기입한 멘토 + 예약 정보 X`() {
             // given
             val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
@@ -87,8 +86,7 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
         }
 
         @Test
-        @DisplayName("멘토링 시간 정보를 기입한 멘토에 대한 조회 + 예약 정보 O")
-        fun successC() {
+        fun `특정 Year-Month에 대해서 멘토의 예약된 스케줄 정보를 조회한다 - 멘토링 시간 정보를 기입한 멘토 + 예약 정보 O`() {
             // given
             val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val mentees: List<AuthMember> = listOf(
@@ -108,62 +106,62 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
                 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentees[1].id, mentor.token.accessToken),
                 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentees[2].id, mentor.token.accessToken),
                 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 2, 19, 18, 0),
-                    LocalDateTime.of(2024, 2, 19, 18, 30),
-                    mentor.id,
-                    mentees[3].token.accessToken,
+                    start = "2024/2/19-18:00".toLocalDateTime(),
+                    end = "2024/2/19-18:30".toLocalDateTime(),
+                    mentorId = mentor.id,
+                    accessToken = mentees[3].token.accessToken,
                 ),
                 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 3, 4, 18, 0),
-                    LocalDateTime.of(2024, 3, 4, 18, 30),
-                    mentor.id,
-                    mentees[4].token.accessToken,
+                    start = "2024/3/4-18:00".toLocalDateTime(),
+                    end = "2024/3/4-18:30".toLocalDateTime(),
+                    mentorId = mentor.id,
+                    accessToken = mentees[4].token.accessToken,
                 ),
                 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentees[5].id, mentor.token.accessToken),
                 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentees[6].id, mentor.token.accessToken),
                 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 4, 5, 18, 0),
-                    LocalDateTime.of(2024, 4, 5, 18, 30),
-                    mentor.id,
-                    mentees[7].token.accessToken,
+                    start = "2024/4/5-18:00".toLocalDateTime(),
+                    end = "2024/4/5-18:30".toLocalDateTime(),
+                    mentorId = mentor.id,
+                    accessToken = mentees[7].token.accessToken,
                 ),
                 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 4, 17, 18, 0),
-                    LocalDateTime.of(2024, 4, 17, 18, 30),
-                    mentor.id,
-                    mentees[8].token.accessToken,
+                    start = "2024/4/17-18:00".toLocalDateTime(),
+                    end = "2024/4/17-18:30".toLocalDateTime(),
+                    mentorId = mentor.id,
+                    accessToken = mentees[8].token.accessToken,
                 ),
                 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentees[9].id, mentor.token.accessToken),
             )
 
             멘티가_멘토의_커피챗_제안을_1차_수락한다(
-                coffeeChats[0],
-                LocalDateTime.of(2024, 2, 5, 18, 0),
-                LocalDateTime.of(2024, 2, 5, 18, 30),
-                mentees[0].token.accessToken,
+                coffeeChatId = coffeeChats[0],
+                start = "2024/2/5-18:00".toLocalDateTime(),
+                end = "2024/2/5-18:30".toLocalDateTime(),
+                accessToken = mentees[0].token.accessToken,
             )
             멘티가_멘토의_커피챗_제안을_거절한다(coffeeChats[2], mentees[2].token.accessToken)
             멘토가_멘티의_커피챗_신청을_수락한다(coffeeChats[4], StrategyFixture.KAKAO_ID, mentor.token.accessToken)
             멘토가_멘티의_커피챗_신청을_수락한다(coffeeChats[8], StrategyFixture.KAKAO_ID, mentor.token.accessToken)
             멘티가_멘토의_커피챗_제안을_1차_수락한다(
-                coffeeChats[5],
-                LocalDateTime.of(2024, 3, 15, 18, 0),
-                LocalDateTime.of(2024, 3, 15, 18, 30),
-                mentees[5].token.accessToken,
+                coffeeChatId = coffeeChats[5],
+                start = "2024/3/15-18:00".toLocalDateTime(),
+                end = "2024/3/15-18:30".toLocalDateTime(),
+                accessToken = mentees[5].token.accessToken,
             )
             멘토가_Pending_상태인_커피챗에_대해서_최종_수락을_한다(coffeeChats[5], StrategyFixture.KAKAO_ID, mentor.token.accessToken)
             멘티가_멘토의_커피챗_제안을_1차_수락한다(
-                coffeeChats[6],
-                LocalDateTime.of(2024, 4, 1, 18, 0),
-                LocalDateTime.of(2024, 4, 1, 18, 30),
-                mentees[6].token.accessToken,
+                coffeeChatId = coffeeChats[6],
+                start = "2024/4/1-18:00".toLocalDateTime(),
+                end = "2024/4/1-18:30".toLocalDateTime(),
+                accessToken = mentees[6].token.accessToken,
             )
             멘토가_Pending_상태인_커피챗에_대해서_최종_취소를_한다(coffeeChats[6], mentor.token.accessToken)
             멘티가_멘토의_커피챗_제안을_1차_수락한다(
-                coffeeChats[9],
-                LocalDateTime.of(2024, 4, 10, 18, 0),
-                LocalDateTime.of(2024, 4, 10, 18, 30),
-                mentees[9].token.accessToken,
+                coffeeChatId = coffeeChats[9],
+                start = "2024/4/10-18:00".toLocalDateTime(),
+                end = "2024/4/10-18:30".toLocalDateTime(),
+                accessToken = mentees[9].token.accessToken,
             )
 
             /* 2024년 1월 */
@@ -191,12 +189,12 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
                 response = response2,
                 mentor = MENTOR_1,
                 reservedStart = listOf(
-                    LocalDateTime.of(2024, 2, 5, 18, 0, 0),
-                    LocalDateTime.of(2024, 2, 19, 18, 0, 0),
+                    "2024/2/5-18:00".toLocalDateTime(),
+                    "2024/2/19-18:00".toLocalDateTime(),
                 ),
                 reservedEnd = listOf(
-                    LocalDateTime.of(2024, 2, 5, 18, 30, 0),
-                    LocalDateTime.of(2024, 2, 19, 18, 30, 0),
+                    "2024/2/5-18:30".toLocalDateTime(),
+                    "2024/2/19-18:30".toLocalDateTime(),
                 ),
             )
 
@@ -211,12 +209,12 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
                 response = response3,
                 mentor = MENTOR_1,
                 reservedStart = listOf(
-                    LocalDateTime.of(2024, 3, 4, 18, 0, 0),
-                    LocalDateTime.of(2024, 3, 15, 18, 0, 0),
+                    "2024/3/4-18:00".toLocalDateTime(),
+                    "2024/3/15-18:00".toLocalDateTime(),
                 ),
                 reservedEnd = listOf(
-                    LocalDateTime.of(2024, 3, 4, 18, 30, 0),
-                    LocalDateTime.of(2024, 3, 15, 18, 30, 0),
+                    "2024/3/4-18:30".toLocalDateTime(),
+                    "2024/3/15-18:30".toLocalDateTime(),
                 ),
             )
 
@@ -231,14 +229,14 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
                 response = response4,
                 mentor = MENTOR_1,
                 reservedStart = listOf(
-                    LocalDateTime.of(2024, 4, 5, 18, 0, 0),
-                    LocalDateTime.of(2024, 4, 10, 18, 0, 0),
-                    LocalDateTime.of(2024, 4, 17, 18, 0, 0),
+                    "2024/4/5-18:00".toLocalDateTime(),
+                    "2024/4/10-18:00".toLocalDateTime(),
+                    "2024/4/17-18:00".toLocalDateTime(),
                 ),
                 reservedEnd = listOf(
-                    LocalDateTime.of(2024, 4, 5, 18, 30, 0),
-                    LocalDateTime.of(2024, 4, 10, 18, 30, 0),
-                    LocalDateTime.of(2024, 4, 17, 18, 30, 0),
+                    "2024/4/5-18:30".toLocalDateTime(),
+                    "2024/4/10-18:30".toLocalDateTime(),
+                    "2024/4/17-18:30".toLocalDateTime(),
                 ),
             )
 

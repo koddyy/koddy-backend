@@ -9,12 +9,14 @@ import com.koddy.server.acceptance.notification.NotificationAcceptanceStep.전�
 import com.koddy.server.acceptance.notification.NotificationAcceptanceStep.특정_타입의_알림_ID를_조회한다
 import com.koddy.server.auth.domain.model.AuthMember
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_CANCEL
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.toLocalDateTime
 import com.koddy.server.notification.domain.model.NotificationType
 import com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL
 import com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST
@@ -28,7 +30,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus.OK
-import java.time.LocalDateTime
 
 @ExtendWith(DatabaseCleanerEachCallbackExtension::class)
 @DisplayName("[Acceptance Test] 알림 조회 + 읽음 처리")
@@ -41,17 +42,19 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
     override fun setUp() {
         mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
         mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
-        coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id, mentor.token.accessToken)
+        coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(
+            menteeId = mentee.id,
+            accessToken = mentor.token.accessToken,
+        )
         멘티가_멘토의_커피챗_제안을_1차_수락한다(
-            coffeeChatId,
-            LocalDateTime.of(2024, 2, 5, 18, 0),
-            LocalDateTime.of(2024, 2, 5, 18, 30),
-            mentee.token.accessToken,
+            coffeeChatId = coffeeChatId,
+            start = "2024/2/5-18:00".toLocalDateTime(),
+            end = "2024/2/5-18:30".toLocalDateTime(),
+            accessToken = mentee.token.accessToken,
         )
         멘토가_Pending_상태인_커피챗에_대해서_최종_취소를_한다(
-            coffeeChatId,
-            "취소..",
-            mentor.token.accessToken,
+            coffeeChatId = coffeeChatId,
+            accessToken = mentor.token.accessToken,
         )
     }
 
@@ -59,8 +62,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘토 알림 조회 + 읽음 처리")
     internal inner class MentorReadAndProcessing {
         @Test
-        @DisplayName("멘토가 알림을 조회하고 단건 읽음 처리를 진행한다")
-        fun mentorReadAndSingleProcessing() {
+        fun `멘토가 알림을 조회하고 단건 읽음 처리를 진행한다`() {
             // Unread Notification
             val response1: ValidatableResponse = 알림을_조회한다(
                 page = 1,
@@ -72,7 +74,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
                 types = listOf(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
                 memberIds = listOf(mentee.id),
                 coffeeChatIds = listOf(coffeeChatId),
-                coffeeChatStatusSnapshots = listOf(CoffeeChatStatus.MENTEE_PENDING),
+                coffeeChatStatusSnapshots = listOf(MENTEE_PENDING),
                 hasNext = false,
             )
 
@@ -97,14 +99,13 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
                 types = listOf(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
                 memberIds = listOf(mentee.id),
                 coffeeChatIds = listOf(coffeeChatId),
-                coffeeChatStatusSnapshots = listOf(CoffeeChatStatus.MENTEE_PENDING),
+                coffeeChatStatusSnapshots = listOf(MENTEE_PENDING),
                 hasNext = false,
             )
         }
 
         @Test
-        @DisplayName("멘토가 알림을 조회하고 전체 읽음 처리를 진행한다")
-        fun mentorReadAndAllProcessing() {
+        fun `멘토가 알림을 조회하고 전체 읽음 처리를 진행한다`() {
             // Unread Notification
             val response1: ValidatableResponse = 알림을_조회한다(
                 page = 1,
@@ -116,7 +117,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
                 types = listOf(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
                 memberIds = listOf(mentee.id),
                 coffeeChatIds = listOf(coffeeChatId),
-                coffeeChatStatusSnapshots = listOf(CoffeeChatStatus.MENTEE_PENDING),
+                coffeeChatStatusSnapshots = listOf(MENTEE_PENDING),
                 hasNext = false,
             )
 
@@ -133,7 +134,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
                 types = listOf(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
                 memberIds = listOf(mentee.id),
                 coffeeChatIds = listOf(coffeeChatId),
-                coffeeChatStatusSnapshots = listOf(CoffeeChatStatus.MENTEE_PENDING),
+                coffeeChatStatusSnapshots = listOf(MENTEE_PENDING),
                 hasNext = false,
             )
         }
@@ -143,8 +144,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘티 알림 조회 + 읽음 처리")
     internal inner class MenteeReadAndProcessing {
         @Test
-        @DisplayName("멘티가 알림을 조회하고 단건 읽음 처리를 진행한다")
-        fun menteeReadAndSingleProcessing() {
+        fun `멘티가 알림을 조회하고 단건 읽음 처리를 진행한다`() {
             // Unread Notification
             val response1: ValidatableResponse = 알림을_조회한다(
                 page = 1,
@@ -206,8 +206,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
         }
 
         @Test
-        @DisplayName("멘티가 알림을 조회하고 전체 읽음 처리를 진행한다")
-        fun menteeReadAndAllProcessing() {
+        fun `멘티가 알림을 조회하고 전체 읽음 처리를 진행한다`() {
             // Unread Notification
             val response1: ValidatableResponse = 알림을_조회한다(
                 page = 1,

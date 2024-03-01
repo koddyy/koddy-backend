@@ -236,7 +236,6 @@ public enum MenteeFixture {
         final String refreshToken = result.cookie(REFRESH_TOKEN_HEADER);
 
         MemberAcceptanceStep.멘티_프로필을_완성시킨다(this, accessToken);
-
         return new AuthMember(
                 memberId,
                 this.name,

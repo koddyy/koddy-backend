@@ -10,6 +10,7 @@ import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackEx
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.common.fixture.StrategyFixture
+import com.koddy.server.common.toLocalDateTime
 import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -17,7 +18,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.HttpStatus.NO_CONTENT
-import java.time.LocalDateTime
 
 @ExtendWith(DatabaseCleanerEachCallbackExtension::class)
 @DisplayName("[Acceptance Test] 멘티가 신청한 커피챗 처리")
@@ -26,14 +26,13 @@ internal class HandleAppliedCoffeeChatAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘티가 신청한 커피챗 거절 API")
     internal inner class Reject {
         @Test
-        @DisplayName("멘토가 아니면 권한이 없다")
-        fun throwExceptionByInvalidPermission() {
+        fun `멘토가 아니면 권한이 없다`() {
             // given
             val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val coffeeChatId: Long = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                start = LocalDateTime.of(2024, 2, 5, 18, 0),
-                end = LocalDateTime.of(2024, 2, 5, 18, 30),
+                start = "2024/2/5-18:00".toLocalDateTime(),
+                end = "2024/2/5-18:30".toLocalDateTime(),
                 mentorId = mentor.id,
                 accessToken = mentee.token.accessToken,
             )
@@ -48,14 +47,13 @@ internal class HandleAppliedCoffeeChatAcceptanceTest : AcceptanceTestKt() {
         }
 
         @Test
-        @DisplayName("멘토는 멘티가 신청한 커피챗을 거절한다")
-        fun success() {
+        fun `멘토는 멘티가 신청한 커피챗을 거절한다`() {
             // given
             val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val coffeeChatId: Long = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                start = LocalDateTime.of(2024, 2, 5, 18, 0),
-                end = LocalDateTime.of(2024, 2, 5, 18, 30),
+                start = "2024/2/5-18:00".toLocalDateTime(),
+                end = "2024/2/5-18:30".toLocalDateTime(),
                 mentorId = mentor.id,
                 accessToken = mentee.token.accessToken,
             )
@@ -72,14 +70,13 @@ internal class HandleAppliedCoffeeChatAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘티가 신청한 커피챗 수락 API")
     internal inner class Approve {
         @Test
-        @DisplayName("멘토가 아니면 권한이 없다")
-        fun throwExceptionByInvalidPermission() {
+        fun `멘토가 아니면 권한이 없다`() {
             // given
             val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val coffeeChatId: Long = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                start = LocalDateTime.of(2024, 2, 5, 18, 0),
-                end = LocalDateTime.of(2024, 2, 5, 18, 30),
+                start = "2024/2/5-18:00".toLocalDateTime(),
+                end = "2024/2/5-18:30".toLocalDateTime(),
                 mentorId = mentor.id,
                 accessToken = mentee.token.accessToken,
             )
@@ -95,14 +92,13 @@ internal class HandleAppliedCoffeeChatAcceptanceTest : AcceptanceTestKt() {
         }
 
         @Test
-        @DisplayName("멘토는 멘티가 신청한 커피챗을 수락한다")
-        fun success() {
+        fun `멘토는 멘티가 신청한 커피챗을 수락한다`() {
             // given
             val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val coffeeChatId: Long = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                start = LocalDateTime.of(2024, 2, 5, 18, 0),
-                end = LocalDateTime.of(2024, 2, 5, 18, 30),
+                start = "2024/2/5-18:00".toLocalDateTime(),
+                end = "2024/2/5-18:30".toLocalDateTime(),
                 mentorId = mentor.id,
                 accessToken = mentee.token.accessToken,
             )

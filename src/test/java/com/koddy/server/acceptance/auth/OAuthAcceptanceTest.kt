@@ -3,6 +3,7 @@ package com.koddy.server.acceptance.auth
 import com.koddy.server.acceptance.auth.AuthAcceptanceStep.Google_OAuth_로그인을_진행한다
 import com.koddy.server.acceptance.auth.AuthAcceptanceStep.Google_OAuth_인증_URL를_생성한다
 import com.koddy.server.acceptance.auth.AuthAcceptanceStep.로그아웃을_진행한다
+import com.koddy.server.auth.domain.model.AuthMember
 import com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER
 import com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER
 import com.koddy.server.common.AcceptanceTestKt
@@ -31,8 +32,7 @@ internal class OAuthAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("OAuth 인증 URL 요청 API")
     internal inner class QueryOAuthLink {
         @Test
-        @DisplayName("Google OAuth 인증 URL을 요청한다")
-        fun success() {
+        fun `Google OAuth 인증 URL을 요청한다`() {
             Google_OAuth_인증_URL를_생성한다(
                 oAuthProvider = GOOGLE_PROVIDER,
                 redirectUri = REDIRECT_URI,
@@ -45,8 +45,7 @@ internal class OAuthAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("OAuth 로그인 API")
     internal inner class OAuthLoginApi {
         @Test
-        @DisplayName("DB에 이메일에 대한 사용자 정보가 없으면 OAuth UserInfo를 토대로 회원가입을 진행한다")
-        fun failure() {
+        fun `DB에 이메일에 대한 사용자 정보가 없으면 OAuth UserInfo를 토대로 회원가입을 진행한다`() {
             Google_OAuth_로그인을_진행한다(
                 oAuthProvider = GOOGLE_PROVIDER,
                 authorizationCode = GOOGLE_MENTOR_1.authorizationCode,
@@ -60,10 +59,11 @@ internal class OAuthAcceptanceTest : AcceptanceTestKt() {
         }
 
         @Test
-        @DisplayName("DB에 이메일에 대한 사용자 정보가 있으면 로그인을 진행하고 Token을 발급받는다")
-        fun success() {
+        fun `DB에 이메일에 대한 사용자 정보가 있으면 로그인을 진행하고 Token을 발급받는다`() {
             // given
             MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
+
+            // when - then
             Google_OAuth_로그인을_진행한다(
                 oAuthProvider = GOOGLE_PROVIDER,
                 authorizationCode = GOOGLE_MENTOR_1.authorizationCode,
@@ -82,13 +82,12 @@ internal class OAuthAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("로그아웃 API")
     internal inner class LogoutApi {
         @Test
-        @DisplayName("로그아웃을 진행한다")
-        fun success() {
+        fun `로그아웃을 진행한다`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
             // when - then
-            로그아웃을_진행한다(accessToken = accessToken)
+            로그아웃을_진행한다(member.token.accessToken)
                 .statusCode(NO_CONTENT.value())
                 .header(SET_COOKIE, containsString("$REFRESH_TOKEN_HEADER=;"))
                 .header(SET_COOKIE, containsString("Max-Age=1;"))

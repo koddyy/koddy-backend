@@ -3,6 +3,7 @@ package com.koddy.server.acceptance.file
 import com.koddy.server.acceptance.file.FileAcceptanceStep.PDF_파일_업로드에_대한_Presigned_Url을_응답받는다
 import com.koddy.server.acceptance.file.FileAcceptanceStep.이미지_업로드에_대한_Presigned_Url을_응답받는다
 import com.koddy.server.acceptance.file.FileAcceptanceStep.파일을_업로드한다
+import com.koddy.server.auth.domain.model.AuthMember
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.config.BlackboxLogicControlConfig
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
@@ -28,15 +29,14 @@ internal class FileManagementAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("파일 업로드 API")
     internal inner class Upload {
         @Test
-        @DisplayName("파일을 업로드한다")
-        fun success() {
+        fun `파일을 업로드한다`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
             // when - then
             파일을_업로드한다(
                 fileName = "cat.png",
-                accessToken = accessToken,
+                accessToken = member.token.accessToken,
             ).statusCode(OK.value())
         }
     }
@@ -45,30 +45,28 @@ internal class FileManagementAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("이미지 업로드에 대한 PresignedUrl 응답 API")
     internal inner class GetImagePresignedUrl {
         @Test
-        @DisplayName("파일 형식이 [JPG, JPEG, PNG] 아니면 예외가 발생한다")
-        fun throwExceptionByInvalidExtension() {
+        fun `파일 형식이 (JPG, JPEG, PNG)중 하나가 아니면 예외가 발생한다`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
             // when - then
             이미지_업로드에_대한_Presigned_Url을_응답받는다(
                 fileName = "cat.pdf",
-                accessToken = accessToken,
+                accessToken = member.token.accessToken,
             ).statusCode(BAD_REQUEST.value())
                 .body("errorCode", `is`(VALIDATION_ERROR.errorCode))
                 .body("message", `is`("이미지 파일[JPG, JPEG, PNG]을 업로드해주세요."))
         }
 
         @Test
-        @DisplayName("이미지 업로드에 대한 PresignedUrl을 응답받는다")
-        fun success() {
+        fun `이미지 업로드에 대한 PresignedUrl을 응답받는다`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
             // when - then
             이미지_업로드에_대한_Presigned_Url을_응답받는다(
                 fileName = "cat.png",
-                accessToken = accessToken,
+                accessToken = member.token.accessToken,
             ).statusCode(OK.value())
                 .body("preSignedUrl", startsWith(BUCKET_URL_PREFIX + BlackboxLogicControlConfig.BUCKET_UPLOAD_PREFIX + "cat.png"))
                 .body("uploadFileUrl", `is`(BUCKET_URL_PREFIX + BlackboxLogicControlConfig.BUCKET_UPLOAD_PREFIX + "cat.png"))
@@ -79,30 +77,28 @@ internal class FileManagementAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("PDF 파일 업로드에 대한 PresignedUrl 응답 API")
     internal inner class GetPdfPresignedUrl {
         @Test
-        @DisplayName("파일 형식이 PDF가 아니면 예외가 발생한다")
-        fun throwExceptionByInvalidExtension() {
+        fun `파일 형식이 PDF가 아니면 예외가 발생한다`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
             // when - then
             PDF_파일_업로드에_대한_Presigned_Url을_응답받는다(
                 fileName = "cat.png",
-                accessToken = accessToken,
+                accessToken = member.token.accessToken,
             ).statusCode(BAD_REQUEST.value())
                 .body("errorCode", `is`(VALIDATION_ERROR.errorCode))
                 .body("message", `is`("PDF 파일을 업로드해주세요."))
         }
 
         @Test
-        @DisplayName("PDF 파일 업로드에 대한 PresignedUrl을 응답받는다")
-        fun success() {
+        fun `PDF 파일 업로드에 대한 PresignedUrl을 응답받는다`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
             // when - then
             PDF_파일_업로드에_대한_Presigned_Url을_응답받는다(
                 fileName = "cat.pdf",
-                accessToken = accessToken,
+                accessToken = member.token.accessToken,
             ).statusCode(OK.value())
                 .body("preSignedUrl", startsWith(BUCKET_URL_PREFIX + BlackboxLogicControlConfig.BUCKET_UPLOAD_PREFIX + "cat.pdf"))
                 .body("uploadFileUrl", `is`(BUCKET_URL_PREFIX + BlackboxLogicControlConfig.BUCKET_UPLOAD_PREFIX + "cat.pdf"))

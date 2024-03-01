@@ -10,7 +10,6 @@ import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.member.domain.model.Language
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.notNullValue
 import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -25,15 +24,14 @@ internal class MemberPublicProfileQueryAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘토 기본(Public) 프로필 조회 API")
     internal inner class GetMentorPublicProfile {
         @Test
-        @DisplayName("멘토 기본(Public) 프로필을 조회한다 (미완성 프로필)")
-        fun successWithUncomplete() {
+        fun `멘토 기본(Public) 프로필을 조회한다 - (미완성 프로필)`() {
             // given
             val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
             // when - then
             멘토_기본_프로필을_조회한다(mentor.id)
                 .statusCode(OK.value())
-                .body("id", notNullValue(Long::class.java))
+                .body("id", `is`(mentor.id.toInt()))
                 .body("name", `is`(MENTOR_1.getName()))
                 .body("profileImageUrl", nullValue())
                 .body("introduction", nullValue())
@@ -46,15 +44,14 @@ internal class MemberPublicProfileQueryAcceptanceTest : AcceptanceTestKt() {
         }
 
         @Test
-        @DisplayName("멘토 기본(Public) 프로필을 조회한다 (완성 프로필)")
-        fun successWithComplete() {
+        fun `멘토 기본(Public) 프로필을 조회한다 - (완성 프로필)`() {
             // given
             val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
 
             // when - then
             멘토_기본_프로필을_조회한다(mentor.id)
                 .statusCode(OK.value())
-                .body("id", notNullValue(Long::class.java))
+                .body("id", `is`(mentor.id.toInt()))
                 .body("name", `is`(MENTOR_1.getName()))
                 .body("profileImageUrl", `is`(MENTOR_1.profileImageUrl))
                 .body("introduction", `is`(MENTOR_1.introduction))
@@ -71,15 +68,14 @@ internal class MemberPublicProfileQueryAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘티 기본(Public) 프로필 조회 API")
     internal inner class GetMenteePublicProfile {
         @Test
-        @DisplayName("멘티 기본(Public) 프로필을 조회한다 (미완성 프로필)")
-        fun successWithUncomplete() {
+        fun `멘티 기본(Public) 프로필을 조회한다 - (미완성 프로필)`() {
             // given
             val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_진행한다()
 
             // when - then
             멘티_기본_프로필을_조회한다(mentee.id)
                 .statusCode(OK.value())
-                .body("id", notNullValue(Long::class.java))
+                .body("id", `is`(mentee.id.toInt()))
                 .body("name", `is`(MENTEE_1.getName()))
                 .body("profileImageUrl", nullValue())
                 .body("nationality", `is`(MENTEE_1.nationality.code))
@@ -91,15 +87,14 @@ internal class MemberPublicProfileQueryAcceptanceTest : AcceptanceTestKt() {
         }
 
         @Test
-        @DisplayName("멘티 기본(Public) 프로필을 조회한다 (완성 프로필)")
-        fun successWithComplete() {
+        fun `멘티 기본(Public) 프로필을 조회한다 - (완성 프로필)`() {
             // given
             val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
 
             // when - then
             멘티_기본_프로필을_조회한다(mentee.id)
                 .statusCode(OK.value())
-                .body("id", notNullValue(Long::class.java))
+                .body("id", `is`(mentee.id.toInt()))
                 .body("name", `is`(MENTEE_1.getName()))
                 .body("profileImageUrl", `is`(MENTEE_1.profileImageUrl))
                 .body("nationality", `is`(MENTEE_1.nationality.code))

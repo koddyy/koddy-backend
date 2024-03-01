@@ -2,6 +2,7 @@ package com.koddy.server.acceptance.coffeechat
 
 import com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.자동_생성한_커피챗_링크를_삭제한다
 import com.koddy.server.acceptance.coffeechat.CoffeeChatAcceptanceStep.커피챗_링크를_자동_생성한다
+import com.koddy.server.auth.domain.model.AuthMember
 import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION
 import com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.INVALID_MEETING_LINK_PROVIDER
 import com.koddy.server.common.AcceptanceTestKt
@@ -30,45 +31,42 @@ internal class ManageMeetingLinkAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("커피챗 링크 생성 API")
     internal inner class Create {
         @Test
-        @DisplayName("멘티는 커피챗 링크 관련한 API에 권한이 없다")
-        fun throwExceptionByInvalidPermission() {
+        fun `멘티는 커피챗 링크 관련한 API에 권한이 없다`() {
             // given
-            val accessToken: String = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다().token.accessToken
+            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
 
             // when - then
             커피챗_링크를_자동_생성한다(
                 provider = "zoom",
-                accessToken = accessToken,
+                accessToken = mentee.token.accessToken,
             ).statusCode(FORBIDDEN.value())
                 .body("errorCode", Matchers.`is`(INVALID_PERMISSION.errorCode))
                 .body("message", Matchers.`is`(INVALID_PERMISSION.message))
         }
 
         @Test
-        @DisplayName("제공하지 않는 Provider에 대한 커피챗 링크는 생성할 수 없다")
-        fun throwExceptionByInvalidMeetingLinkProvider() {
+        fun `제공하지 않는 Provider에 대한 커피챗 링크는 생성할 수 없다`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다().token.accessToken
+            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
 
             // when - then
             커피챗_링크를_자동_생성한다(
                 provider = "kakao",
-                accessToken = accessToken,
+                accessToken = mentor.token.accessToken,
             ).statusCode(BAD_REQUEST.value())
                 .body("errorCode", Matchers.`is`(INVALID_MEETING_LINK_PROVIDER.errorCode))
                 .body("message", Matchers.`is`(INVALID_MEETING_LINK_PROVIDER.message))
         }
 
         @Test
-        @DisplayName("줌을 통해서 커피챗 링크를 생성한다")
-        fun successWithZoom() {
+        fun `줌을 통해서 커피챗 링크를 생성한다`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다().token.accessToken
+            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
 
             // when - then
             커피챗_링크를_자동_생성한다(
                 provider = "zoom",
-                accessToken = accessToken,
+                accessToken = mentor.token.accessToken,
             ).statusCode(OK.value())
                 .body("id", notNullValue(String::class.java))
                 .body("hostEmail", notNullValue(String::class.java))
@@ -82,20 +80,19 @@ internal class ManageMeetingLinkAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("커피챗 링크 삭제 API")
     internal inner class Delete {
         @Test
-        @DisplayName("자동 생성한 커피챗 링크를 삭제한다")
-        fun success() {
+        fun `자동 생성한 커피챗 링크를 삭제한다`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다().token.accessToken
+            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
             커피챗_링크를_자동_생성한다(
                 provider = "zoom",
-                accessToken = accessToken,
+                accessToken = mentor.token.accessToken,
             )
 
             // when - then
             자동_생성한_커피챗_링크를_삭제한다(
                 provider = "zoom",
                 meetingId = "12345678",
-                accessToken = accessToken,
+                accessToken = mentor.token.accessToken,
             ).statusCode(NO_CONTENT.value())
         }
     }

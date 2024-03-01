@@ -120,6 +120,74 @@ object MemberAcceptanceStep {
         )
 
     @JvmStatic
+    fun 멘토_프로필을_완성시킨다(
+        fixture: MentorFixture,
+        period: MentoringPeriodRequestModel,
+        accessToken: String,
+    ): ValidatableResponse =
+        RequestHelper.patchRequestWithAccessToken(
+            uri = "/api/mentors/me/complete",
+            body = CompleteMentorProfileRequest(
+                introduction = fixture.introduction,
+                profileImageUrl = fixture.profileImageUrl,
+                period = period,
+                schedules = fixture.timelines
+                    .map {
+                        MentorScheduleRequest(
+                            dayOfWeek = it.dayOfWeek.kor,
+                            start = MentorScheduleRequest.Start(
+                                hour = it.startTime.hour,
+                                minute = it.startTime.minute,
+                            ),
+                            end = MentorScheduleRequest.End(
+                                hour = it.endTime.hour,
+                                minute = it.endTime.minute,
+                            ),
+                        )
+                    },
+            ),
+            accessToken = accessToken,
+        )
+
+    @JvmStatic
+    fun 멘토_프로필을_완성시킨다(
+        fixture: MentorFixture,
+        schedules: List<MentorScheduleRequest>,
+        accessToken: String,
+    ): ValidatableResponse =
+        RequestHelper.patchRequestWithAccessToken(
+            uri = "/api/mentors/me/complete",
+            body = CompleteMentorProfileRequest(
+                introduction = fixture.introduction,
+                profileImageUrl = fixture.profileImageUrl,
+                period = MentoringPeriodRequestModel(
+                    startDate = fixture.mentoringPeriod.startDate,
+                    endDate = fixture.mentoringPeriod.endDate,
+                ),
+                schedules = schedules,
+            ),
+            accessToken = accessToken,
+        )
+
+    @JvmStatic
+    fun 멘토_프로필을_완성시킨다(
+        fixture: MentorFixture,
+        period: MentoringPeriodRequestModel,
+        schedules: List<MentorScheduleRequest>,
+        accessToken: String,
+    ): ValidatableResponse =
+        RequestHelper.patchRequestWithAccessToken(
+            uri = "/api/mentors/me/complete",
+            body = CompleteMentorProfileRequest(
+                introduction = fixture.introduction,
+                profileImageUrl = fixture.profileImageUrl,
+                period = period,
+                schedules = schedules,
+            ),
+            accessToken = accessToken,
+        )
+
+    @JvmStatic
     fun 멘티_프로필을_완성시킨다(
         fixture: MenteeFixture,
         accessToken: String,

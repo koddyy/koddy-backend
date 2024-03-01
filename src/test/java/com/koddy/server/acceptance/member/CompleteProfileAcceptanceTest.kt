@@ -2,6 +2,7 @@ package com.koddy.server.acceptance.member
 
 import com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_프로필을_완성시킨다
 import com.koddy.server.acceptance.member.MemberAcceptanceStep.멘티_프로필을_완성시킨다
+import com.koddy.server.auth.domain.model.AuthMember
 import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
@@ -22,31 +23,24 @@ internal class CompleteProfileAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘토 프로필 완성 API")
     internal inner class CompleteMentor {
         @Test
-        @DisplayName("멘토가 아니면 권한이 없다")
-        fun throwExceptionByInvalidPermission() {
+        fun `멘토가 아니면 권한이 없다`() {
             // given
-            val accessToken: String = MENTEE_1.회원가입과_로그인을_진행한다().token.accessToken
+            val member: AuthMember = MENTEE_1.회원가입과_로그인을_진행한다()
 
             // when - then
-            멘토_프로필을_완성시킨다(
-                fixture = MENTOR_1,
-                accessToken = accessToken,
-            ).statusCode(FORBIDDEN.value())
+            멘토_프로필을_완성시킨다(MENTOR_1, member.token.accessToken)
+                .statusCode(FORBIDDEN.value())
                 .body("errorCode", `is`(INVALID_PERMISSION.errorCode))
                 .body("message", `is`(INVALID_PERMISSION.message))
         }
 
         @Test
-        @DisplayName("멘토의 프로필을 완성한다 (자기소개, 스케줄)")
-        fun success() {
+        fun `멘토의 프로필을 완성한다 (자기소개, 프로필 이미지 URL, 멘토링 기간, 스케줄 정보)`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
             // when - then
-            멘토_프로필을_완성시킨다(
-                fixture = MENTOR_1,
-                accessToken = accessToken,
-            ).statusCode(NO_CONTENT.value())
+            멘토_프로필을_완성시킨다(MENTOR_1, member.token.accessToken).statusCode(NO_CONTENT.value())
         }
     }
 
@@ -54,31 +48,24 @@ internal class CompleteProfileAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘티 프로필 완성 API")
     internal inner class CompleteMentee {
         @Test
-        @DisplayName("멘티가 아니면 권한이 없다")
-        fun throwExceptionByInvalidPermission() {
+        fun `멘티가 아니면 권한이 없다`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
             // when - then
-            멘티_프로필을_완성시킨다(
-                fixture = MENTEE_1,
-                accessToken = accessToken,
-            ).statusCode(FORBIDDEN.value())
+            멘티_프로필을_완성시킨다(MENTEE_1, member.token.accessToken)
+                .statusCode(FORBIDDEN.value())
                 .body("errorCode", `is`(INVALID_PERMISSION.errorCode))
                 .body("message", `is`(INVALID_PERMISSION.message))
         }
 
         @Test
-        @DisplayName("멘티의 프로필을 완성한다 (자기소개)")
-        fun success() {
+        fun `멘티의 프로필을 완성한다 (자기소개, 프로필 이미지 URL)`() {
             // given
-            val accessToken: String = MENTEE_1.회원가입과_로그인을_진행한다().token.accessToken
+            val member: AuthMember = MENTEE_1.회원가입과_로그인을_진행한다()
 
             // when - then
-            멘티_프로필을_완성시킨다(
-                fixture = MENTEE_1,
-                accessToken = accessToken,
-            ).statusCode(NO_CONTENT.value())
+            멘티_프로필을_완성시킨다(MENTEE_1, member.token.accessToken).statusCode(NO_CONTENT.value())
         }
     }
 }

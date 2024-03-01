@@ -69,8 +69,7 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
     @DisplayName("내 일정 커피챗 상세 조회를 진행한다 [MenteeFlow]")
     internal inner class GetCoffeeChatScheduleDetailsWithMenteeFlow {
         @Test
-        @DisplayName("1. MENTEE_APPLY 상태 커피챗 상세 조회")
-        fun apply() {
+        fun `1) MENTEE_APPLY 상태 커피챗 상세 조회`() {
             // given
             val coffeeChatId: Long = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(start, end, mentor.id, mentee.token.accessToken)
 
@@ -89,8 +88,7 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
         }
 
         @Test
-        @DisplayName("2. MENTEE_CANCEL 상태 커피챗 상세 조회")
-        fun cancel() {
+        fun `2) MENTEE_CANCEL 상태 커피챗 상세 조회`() {
             // given
             val coffeeChatId: Long = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(start, end, mentor.id, mentee.token.accessToken)
             신청_제안한_커피챗을_취소한다(coffeeChatId, mentee.token.accessToken)
@@ -110,8 +108,7 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
         }
 
         @Test
-        @DisplayName("3. MENTOR_REJECT 상태 커피챗 상세 조회")
-        fun reject() {
+        fun `3) MENTOR_REJECT 상태 커피챗 상세 조회`() {
             // given
             val coffeeChatId: Long = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(start, end, mentor.id, mentee.token.accessToken)
             멘토가_멘티의_커피챗_신청을_거절한다(coffeeChatId, mentor.token.accessToken)
@@ -131,8 +128,7 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
         }
 
         @Test
-        @DisplayName("4. MENTOR_APPROVE 상태 커피챗 상세 조회")
-        fun approve() {
+        fun `4) MENTOR_APPROVE 상태 커피챗 상세 조회`() {
             // given
             val coffeeChatId: Long = 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(start, end, mentor.id, mentee.token.accessToken)
             멘토가_멘티의_커피챗_신청을_수락한다(coffeeChatId, StrategyFixture.KAKAO_ID, mentor.token.accessToken)
@@ -260,8 +256,7 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
     @DisplayName("내 일정 커피챗 상세 조회를 진행한다 [MentorFlow]")
     internal inner class GetCoffeeChatScheduleDetailsWithMentorFlow {
         @Test
-        @DisplayName("1. MENTOR_SUGGEST 상태 커피챗 상세 조회")
-        fun suggest() {
+        fun `1) MENTOR_SUGGEST 상태 커피챗 상세 조회`() {
             // given
             val coffeeChatId: Long = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id, mentor.token.accessToken)
 
@@ -280,8 +275,7 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
         }
 
         @Test
-        @DisplayName("2. MENTOR_CANCEL 상태 커피챗 상세 조회")
-        fun cancel() {
+        fun `2) MENTOR_CANCEL 상태 커피챗 상세 조회`() {
             // given
             val coffeeChatId: Long = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id, mentor.token.accessToken)
             신청_제안한_커피챗을_취소한다(coffeeChatId, mentor.token.accessToken)
@@ -301,8 +295,7 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
         }
 
         @Test
-        @DisplayName("3. MENTEE_REJECT 상태 커피챗 상세 조회")
-        fun reject() {
+        fun `3) MENTEE_REJECT 상태 커피챗 상세 조회`() {
             // given
             val coffeeChatId: Long = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id, mentor.token.accessToken)
             멘티가_멘토의_커피챗_제안을_거절한다(coffeeChatId, mentee.token.accessToken)
@@ -322,8 +315,7 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
         }
 
         @Test
-        @DisplayName("4. MENTEE_PENDING 상태 커피챗 상세 조회")
-        fun pending() {
+        fun `4) MENTEE_PENDING 상태 커피챗 상세 조회`() {
             // given
             val coffeeChatId: Long = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id, mentor.token.accessToken)
             멘티가_멘토의_커피챗_제안을_1차_수락한다(coffeeChatId, start, end, mentee.token.accessToken)
@@ -343,8 +335,7 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
         }
 
         @Test
-        @DisplayName("5. MENTOR_FINALLY_CANCEL 상태 커피챗 상세 조회")
-        fun finallyCancel() {
+        fun `5) MENTOR_FINALLY_CANCEL 상태 커피챗 상세 조회`() {
             // given
             val coffeeChatId: Long = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id, mentor.token.accessToken)
             멘티가_멘토의_커피챗_제안을_1차_수락한다(coffeeChatId, start, end, mentee.token.accessToken)
@@ -365,8 +356,7 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
         }
 
         @Test
-        @DisplayName("6. MENTOR_FINALLY_APPROVE 상태 커피챗 상세 조회")
-        fun finallyApprove() {
+        fun `6) MENTOR_FINALLY_APPROVE 상태 커피챗 상세 조회`() {
             // given
             val coffeeChatId: Long = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id, mentor.token.accessToken)
             멘티가_멘토의_커피챗_제안을_1차_수락한다(coffeeChatId, start, end, mentee.token.accessToken)

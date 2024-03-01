@@ -54,17 +54,15 @@ internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘토로부터 제안온 커피챗 조회 API")
     internal inner class GetSuggestedMentors {
         @Test
-        @DisplayName("멘티가 아니면 권한이 없다")
-        fun throwExceptionByInvalidPermission() {
-            커피챗_제안한_멘토를_조회한다(accessToken = mentors[0].token.accessToken)
+        fun `멘티가 아니면 권한이 없다`() {
+            커피챗_제안한_멘토를_조회한다(mentors[0].token.accessToken)
                 .statusCode(FORBIDDEN.value())
                 .body("errorCode", `is`(INVALID_PERMISSION.errorCode))
                 .body("message", `is`(INVALID_PERMISSION.message))
         }
 
         @Test
-        @DisplayName("멘토로부터 제안온 커피챗을 조회한다 [Limit 3]")
-        fun success() {
+        fun `멘토로부터 제안온 커피챗을 조회한다 - default = Limit 3`() {
             // given
             val coffeeChats: List<Long> = listOf(
                 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentee.id, mentors[0].token.accessToken),
@@ -75,7 +73,7 @@ internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
             )
 
             /* 5명 제안 */
-            val response1: ValidatableResponse = 커피챗_제안한_멘토를_조회한다(accessToken = mentee.token.accessToken).statusCode(OK.value())
+            val response1: ValidatableResponse = 커피챗_제안한_멘토를_조회한다(mentee.token.accessToken).statusCode(OK.value())
             assertMenteesMatch(
                 response = response1,
                 coffeeChatIds = listOf(coffeeChats[4], coffeeChats[3], coffeeChats[2]),
@@ -89,7 +87,7 @@ internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
             신청_제안한_커피챗을_취소한다(coffeeChats[3], mentors[3].token.accessToken)
             신청_제안한_커피챗을_취소한다(coffeeChats[1], mentors[1].token.accessToken)
 
-            val response2: ValidatableResponse = 커피챗_제안한_멘토를_조회한다(accessToken = mentee.token.accessToken).statusCode(OK.value())
+            val response2: ValidatableResponse = 커피챗_제안한_멘토를_조회한다(mentee.token.accessToken).statusCode(OK.value())
             assertMenteesMatch(
                 response = response2,
                 coffeeChatIds = listOf(coffeeChats[4], coffeeChats[2], coffeeChats[0]),
@@ -130,8 +128,7 @@ internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘토 둘러보기 API")
     internal inner class LookAroundMentorsByConditionQuery {
         @Test
-        @DisplayName("멘토 둘러보기를 진행한다")
-        fun success() {
+        fun `멘토 둘러보기를 진행한다`() {
             /* 최신 가입순 */
             val response1: ValidatableResponse = 멘토들을_둘러본다("/api/mentors?page=1").statusCode(OK.value())
             assertMenteesMatch(

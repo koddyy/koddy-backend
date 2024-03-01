@@ -30,6 +30,7 @@ import com.koddy.server.common.fixture.MenteeFixture.MENTEE_7
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_8
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_9
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.toLocalDateTime
 import io.restassured.response.ValidatableResponse
 import org.hamcrest.Matchers.hasSize
 import org.hamcrest.Matchers.`is`
@@ -39,7 +40,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.HttpStatus.OK
-import java.time.LocalDateTime
 
 @ExtendWith(DatabaseCleanerAllCallbackExtension::class)
 @DisplayName("[Acceptance Test] 멘토 메인 홈 조회 - 신청온 커피챗, 멘티 둘러보기")
@@ -55,53 +55,51 @@ internal class MentorMainSearchAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘티로부터 신청온 커피챗 조회 API")
     internal inner class GetAppliedMentees {
         @Test
-        @DisplayName("멘토가 아니면 권한이 없다")
-        fun throwExceptionByInvalidPermission() {
-            커피챗_신청한_멘티를_조회한다(accessToken = mentees[0].token.accessToken)
+        fun `멘토가 아니면 권한이 없다`() {
+            커피챗_신청한_멘티를_조회한다(mentees[0].token.accessToken)
                 .statusCode(FORBIDDEN.value())
                 .body("errorCode", `is`(INVALID_PERMISSION.errorCode))
                 .body("message", `is`(INVALID_PERMISSION.message))
         }
 
         @Test
-        @DisplayName("멘티로부터 신청온 커피챗을 조회한다 [Limit 3]")
-        fun success() {
+        fun `멘티로부터 신청온 커피챗을 조회한다 - default = Limit 3`() {
             // given
             val coffeeChats: List<Long> = listOf(
                 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 2, 5, 18, 0),
-                    LocalDateTime.of(2024, 2, 5, 18, 30),
-                    mentor.id,
-                    mentees[0].token.accessToken,
+                    start = "2024/2/5-18:00".toLocalDateTime(),
+                    end = "2024/2/5-18:30".toLocalDateTime(),
+                    mentorId = mentor.id,
+                    accessToken = mentees[0].token.accessToken,
                 ),
                 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 2, 7, 18, 0),
-                    LocalDateTime.of(2024, 2, 7, 18, 30),
-                    mentor.id,
-                    mentees[1].token.accessToken,
+                    start = "2024/2/7-18:00".toLocalDateTime(),
+                    end = "2024/2/7-18:30".toLocalDateTime(),
+                    mentorId = mentor.id,
+                    accessToken = mentees[1].token.accessToken,
                 ),
                 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 2, 9, 18, 0),
-                    LocalDateTime.of(2024, 2, 9, 18, 30),
-                    mentor.id,
-                    mentees[2].token.accessToken,
+                    start = "2024/2/9-18:00".toLocalDateTime(),
+                    end = "2024/2/9-18:30".toLocalDateTime(),
+                    mentorId = mentor.id,
+                    accessToken = mentees[2].token.accessToken,
                 ),
                 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 2, 12, 18, 0),
-                    LocalDateTime.of(2024, 2, 12, 18, 30),
-                    mentor.id,
-                    mentees[3].token.accessToken,
+                    start = "2024/2/12-18:00".toLocalDateTime(),
+                    end = "2024/2/12-18:30".toLocalDateTime(),
+                    mentorId = mentor.id,
+                    accessToken = mentees[3].token.accessToken,
                 ),
                 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
-                    LocalDateTime.of(2024, 2, 14, 18, 0),
-                    LocalDateTime.of(2024, 2, 14, 18, 30),
-                    mentor.id,
-                    mentees[4].token.accessToken,
+                    start = "2024/2/14-18:00".toLocalDateTime(),
+                    end = "2024/2/14-18:30".toLocalDateTime(),
+                    mentorId = mentor.id,
+                    accessToken = mentees[4].token.accessToken,
                 ),
             )
 
             /* 5명 신청 */
-            val response1: ValidatableResponse = 커피챗_신청한_멘티를_조회한다(accessToken = mentor.token.accessToken).statusCode(OK.value())
+            val response1: ValidatableResponse = 커피챗_신청한_멘티를_조회한다(mentor.token.accessToken).statusCode(OK.value())
             assertMenteesMatch(
                 response = response1,
                 coffeeChatIds = listOf(coffeeChats[4], coffeeChats[3], coffeeChats[2]),
@@ -115,7 +113,7 @@ internal class MentorMainSearchAcceptanceTest : AcceptanceTestKt() {
             신청_제안한_커피챗을_취소한다(coffeeChats[3], mentees[3].token.accessToken)
             신청_제안한_커피챗을_취소한다(coffeeChats[1], mentees[1].token.accessToken)
 
-            val response2: ValidatableResponse = 커피챗_신청한_멘티를_조회한다(accessToken = mentor.token.accessToken).statusCode(OK.value())
+            val response2: ValidatableResponse = 커피챗_신청한_멘티를_조회한다(mentor.token.accessToken).statusCode(OK.value())
             assertMenteesMatch(
                 response = response2,
                 coffeeChatIds = listOf(coffeeChats[4], coffeeChats[2], coffeeChats[0]),
@@ -156,8 +154,7 @@ internal class MentorMainSearchAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘티 둘러보기 API")
     internal inner class LookAroundMenteesByConditionQuery {
         @Test
-        @DisplayName("멘티 둘러보기를 진행한다")
-        fun success() {
+        fun `멘티 둘러보기를 진행한다`() {
             /* 최신 가입순 */
             val response1: ValidatableResponse = 멘티들을_둘러본다("/api/mentees?page=1").statusCode(OK.value())
             assertMenteesMatch(

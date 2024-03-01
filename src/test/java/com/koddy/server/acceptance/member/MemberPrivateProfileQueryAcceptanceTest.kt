@@ -2,6 +2,7 @@ package com.koddy.server.acceptance.member
 
 import com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_마이페이지_프로필을_조회한다
 import com.koddy.server.acceptance.member.MemberAcceptanceStep.멘티_마이페이지_프로필을_조회한다
+import com.koddy.server.auth.domain.model.AuthMember
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
@@ -12,7 +13,6 @@ import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.notNullValue
 import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -27,15 +27,14 @@ internal class MemberPrivateProfileQueryAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘토 마이페이지(Private) 프로필 조회 API")
     internal inner class GetMentorPrivateProfile {
         @Test
-        @DisplayName("멘토 마이페이지(Private) 프로필을 조회한다 (미완성 프로필)")
-        fun successWithUncomplete() {
+        fun `멘토 마이페이지(Private) 프로필을 조회한다 - (미완성 프로필)`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
             // when - then
-            멘토_마이페이지_프로필을_조회한다(accessToken)
+            멘토_마이페이지_프로필을_조회한다(mentor.token.accessToken)
                 .statusCode(OK.value())
-                .body("id", notNullValue(Long::class.java))
+                .body("id", `is`(mentor.id.toInt()))
                 .body("email", `is`(MENTOR_1.platform.email.value))
                 .body("name", `is`(MENTOR_1.getName()))
                 .body("profileImageUrl", nullValue())
@@ -54,15 +53,14 @@ internal class MemberPrivateProfileQueryAcceptanceTest : AcceptanceTestKt() {
         }
 
         @Test
-        @DisplayName("멘토 마이페이지(Private) 프로필을 조회한다 (완성 프로필)")
-        fun successWithComplete() {
+        fun `멘토 마이페이지(Private) 프로필을 조회한다 - (완성 프로필)`() {
             // given
-            val accessToken: String = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다().token.accessToken
+            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
 
             // when - then
-            멘토_마이페이지_프로필을_조회한다(accessToken)
+            멘토_마이페이지_프로필을_조회한다(mentor.token.accessToken)
                 .statusCode(OK.value())
-                .body("id", notNullValue(Long::class.java))
+                .body("id", `is`(mentor.id.toInt()))
                 .body("email", `is`(MENTOR_1.platform.email.value))
                 .body("name", `is`(MENTOR_1.getName()))
                 .body("profileImageUrl", `is`(MENTOR_1.profileImageUrl))
@@ -90,15 +88,14 @@ internal class MemberPrivateProfileQueryAcceptanceTest : AcceptanceTestKt() {
     @DisplayName("멘티 마이페이지(Private) 프로필 조회 API")
     internal inner class GetMenteePrivateProfile {
         @Test
-        @DisplayName("멘티 마이페이지(Private) 프로필을 조회한다 (미완성 프로필)")
-        fun successWithUncomplete() {
+        fun `멘티 마이페이지(Private) 프로필을 조회한다 - (미완성 프로필)`() {
             // given
-            val accessToken: String = MENTEE_1.회원가입과_로그인을_진행한다().token.accessToken
+            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_진행한다()
 
             // when - then
-            멘티_마이페이지_프로필을_조회한다(accessToken)
+            멘티_마이페이지_프로필을_조회한다(mentee.token.accessToken)
                 .statusCode(OK.value())
-                .body("id", notNullValue(Long::class.java))
+                .body("id", `is`(mentee.id.toInt()))
                 .body("email", `is`(MENTEE_1.platform.email.value))
                 .body("name", `is`(MENTEE_1.getName()))
                 .body("profileImageUrl", nullValue())
@@ -113,15 +110,14 @@ internal class MemberPrivateProfileQueryAcceptanceTest : AcceptanceTestKt() {
         }
 
         @Test
-        @DisplayName("멘티 마이페이지(Private) 프로필을 조회한다 (완성 프로필)")
-        fun successWithComplete() {
+        fun `멘티 마이페이지(Private) 프로필을 조회한다 - (완성 프로필)`() {
             // given
-            val accessToken: String = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다().token.accessToken
+            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
 
             // when - then
-            멘티_마이페이지_프로필을_조회한다(accessToken)
+            멘티_마이페이지_프로필을_조회한다(mentee.token.accessToken)
                 .statusCode(OK.value())
-                .body("id", notNullValue(Long::class.java))
+                .body("id", `is`(mentee.id.toInt()))
                 .body("email", `is`(MENTEE_1.platform.email.value))
                 .body("name", `is`(MENTEE_1.getName()))
                 .body("profileImageUrl", `is`(MENTEE_1.profileImageUrl))

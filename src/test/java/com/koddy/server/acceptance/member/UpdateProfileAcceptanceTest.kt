@@ -3,6 +3,7 @@ package com.koddy.server.acceptance.member
 import com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_기본_정보를_수정한다
 import com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_스케줄_정보를_수정한다
 import com.koddy.server.acceptance.member.MemberAcceptanceStep.멘티_기본_정보를_수정한다
+import com.koddy.server.auth.domain.model.AuthMember
 import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
@@ -30,15 +31,14 @@ internal class UpdateProfileAcceptanceTest : AcceptanceTestKt() {
         @DisplayName("기본 정보 수정")
         internal inner class BasicInfo {
             @Test
-            @DisplayName("멘티는 접근 권한이 없다")
-            fun throwExceptionByInvalidPermission() {
+            fun `멘티는 접근 권한이 없다`() {
                 // given
-                val accessToken: String = MENTEE_1.회원가입과_로그인을_진행한다().token.accessToken
+                val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_진행한다()
 
                 // when - then
                 멘토_기본_정보를_수정한다(
-                    MENTOR_2,
-                    LanguageRequestModel(
+                    fixture = MENTOR_2,
+                    languageRequestModel = LanguageRequestModel(
                         main = Language.Category.EN.code,
                         sub = listOf(
                             Language.Category.KR.code,
@@ -47,22 +47,21 @@ internal class UpdateProfileAcceptanceTest : AcceptanceTestKt() {
                             Language.Category.VN.code,
                         ),
                     ),
-                    accessToken,
+                    accessToken = mentee.token.accessToken,
                 ).statusCode(FORBIDDEN.value())
                     .body("errorCode", `is`(INVALID_PERMISSION.errorCode))
                     .body("message", `is`(INVALID_PERMISSION.message))
             }
 
             @Test
-            @DisplayName("멘토 기본 정보를 수정한다")
-            fun success() {
+            fun `멘토 기본 정보를 수정한다`() {
                 // given
-                val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+                val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
                 // when - then
                 멘토_기본_정보를_수정한다(
-                    MENTOR_2,
-                    LanguageRequestModel(
+                    fixture = MENTOR_2,
+                    languageRequestModel = LanguageRequestModel(
                         main = Language.Category.EN.code,
                         sub = listOf(
                             Language.Category.KR.code,
@@ -71,7 +70,7 @@ internal class UpdateProfileAcceptanceTest : AcceptanceTestKt() {
                             Language.Category.VN.code,
                         ),
                     ),
-                    accessToken,
+                    accessToken = mentor.token.accessToken,
                 ).statusCode(NO_CONTENT.value())
             }
         }
@@ -80,31 +79,24 @@ internal class UpdateProfileAcceptanceTest : AcceptanceTestKt() {
         @DisplayName("스케줄 정보 수정")
         internal inner class Schedule {
             @Test
-            @DisplayName("멘티는 접근 권한이 없다")
-            fun throwExceptionByInvalidPermission() {
+            fun `멘티는 접근 권한이 없다`() {
                 // given
-                val accessToken: String = MENTEE_1.회원가입과_로그인을_진행한다().token.accessToken
+                val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_진행한다()
 
                 // when - then
-                멘토_스케줄_정보를_수정한다(
-                    fixture = MENTOR_2,
-                    accessToken = accessToken,
-                ).statusCode(FORBIDDEN.value())
+                멘토_스케줄_정보를_수정한다(MENTOR_2, mentee.token.accessToken)
+                    .statusCode(FORBIDDEN.value())
                     .body("errorCode", `is`(INVALID_PERMISSION.errorCode))
                     .body("message", `is`(INVALID_PERMISSION.message))
             }
 
             @Test
-            @DisplayName("멘토 스케줄 정보를 수정한다")
-            fun success() {
+            fun `멘토 스케줄 정보를 수정한다`() {
                 // given
-                val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+                val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
                 // when - then
-                멘토_스케줄_정보를_수정한다(
-                    fixture = MENTOR_2,
-                    accessToken = accessToken,
-                ).statusCode(NO_CONTENT.value())
+                멘토_스케줄_정보를_수정한다(MENTOR_2, mentor.token.accessToken).statusCode(NO_CONTENT.value())
             }
         }
     }
@@ -116,10 +108,9 @@ internal class UpdateProfileAcceptanceTest : AcceptanceTestKt() {
         @DisplayName("기본 정보 수정")
         internal inner class BasicInfo {
             @Test
-            @DisplayName("멘토는 접근 권한이 없다")
-            fun throwExceptionByInvalidPermission() {
+            fun `멘토는 접근 권한이 없다`() {
                 // given
-                val accessToken: String = MENTOR_1.회원가입과_로그인을_진행한다().token.accessToken
+                val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
 
                 // when - then
                 멘티_기본_정보를_수정한다(
@@ -133,17 +124,16 @@ internal class UpdateProfileAcceptanceTest : AcceptanceTestKt() {
                             Language.Category.VN.code,
                         ),
                     ),
-                    accessToken = accessToken,
+                    accessToken = mentor.token.accessToken,
                 ).statusCode(FORBIDDEN.value())
                     .body("errorCode", `is`(INVALID_PERMISSION.errorCode))
                     .body("message", `is`(INVALID_PERMISSION.message))
             }
 
             @Test
-            @DisplayName("멘티 기본 정보를 수정한다")
-            fun success() {
+            fun `멘티 기본 정보를 수정한다`() {
                 // given
-                val accessToken: String = MENTEE_1.회원가입과_로그인을_진행한다().token.accessToken
+                val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_진행한다()
 
                 // when - then
                 멘티_기본_정보를_수정한다(
@@ -157,7 +147,7 @@ internal class UpdateProfileAcceptanceTest : AcceptanceTestKt() {
                             Language.Category.VN.code,
                         ),
                     ),
-                    accessToken = accessToken,
+                    accessToken = mentee.token.accessToken,
                 ).statusCode(NO_CONTENT.value())
             }
         }
