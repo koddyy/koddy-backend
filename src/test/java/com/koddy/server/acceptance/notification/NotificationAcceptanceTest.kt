@@ -252,7 +252,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
         hasNext: Boolean,
     ) {
         response
-            .body("result", hasSize<Any>(reads.size))
+            .body("result", hasSize<Int>(reads.size))
             .body("hasNext", `is`(hasNext))
 
         reads.indices.forEach { index ->

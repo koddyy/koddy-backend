@@ -20,7 +20,6 @@ import com.koddy.server.member.presentation.request.model.MentoringPeriodRequest
 import io.restassured.response.ValidatableResponse
 
 object MemberAcceptanceStep {
-    @JvmStatic
     fun 멘토_회원가입_후_로그인을_진행한다(request: SignUpMentorRequest): ValidatableResponse =
         RequestHelper.postRequest(
             uri = "/api/mentors",
@@ -51,7 +50,6 @@ object MemberAcceptanceStep {
             ),
         )
 
-    @JvmStatic
     fun 멘티_회원가입_후_로그인을_진행한다(request: SignUpMenteeRequest): ValidatableResponse =
         RequestHelper.postRequest(
             uri = "/api/mentees",
@@ -135,7 +133,6 @@ object MemberAcceptanceStep {
             accessToken = accessToken,
         )
 
-    @JvmStatic
     fun 멘토_기본_정보를_수정한다(
         fixture: MentorFixture,
         languageRequestModel: LanguageRequestModel,
@@ -155,7 +152,6 @@ object MemberAcceptanceStep {
             accessToken = accessToken,
         )
 
-    @JvmStatic
     fun 멘토_스케줄_정보를_수정한다(
         fixture: MentorFixture,
         accessToken: String,
@@ -185,7 +181,6 @@ object MemberAcceptanceStep {
             accessToken = accessToken,
         )
 
-    @JvmStatic
     fun 멘티_기본_정보를_수정한다(
         fixture: MenteeFixture,
         languageRequestModel: LanguageRequestModel,
@@ -205,27 +200,22 @@ object MemberAcceptanceStep {
             accessToken = accessToken,
         )
 
-    @JvmStatic
     fun 멘토_마이페이지_프로필을_조회한다(accessToken: String): ValidatableResponse =
         RequestHelper.getRequestWithAccessToken(
             uri = "/api/mentors/me",
             accessToken = accessToken,
         )
 
-    @JvmStatic
     fun 멘티_마이페이지_프로필을_조회한다(accessToken: String): ValidatableResponse =
         RequestHelper.getRequestWithAccessToken(
             uri = "/api/mentees/me",
             accessToken = accessToken,
         )
 
-    @JvmStatic
     fun 멘토_기본_프로필을_조회한다(mentorId: Long): ValidatableResponse = RequestHelper.getRequest(uri = "/api/mentors/$mentorId")
 
-    @JvmStatic
     fun 멘티_기본_프로필을_조회한다(menteeId: Long): ValidatableResponse = RequestHelper.getRequest(uri = "/api/mentees/$menteeId")
 
-    @JvmStatic
     fun 멘토가_메일을_통해서_학교_인증을_시도한다(
         schoolMail: String,
         accessToken: String,
@@ -236,7 +226,6 @@ object MemberAcceptanceStep {
             accessToken = accessToken,
         )
 
-    @JvmStatic
     fun 멘토가_학교_메일로_발송된_인증번호를_제출한다(
         schoolMail: String,
         authCode: String,
@@ -251,7 +240,6 @@ object MemberAcceptanceStep {
             accessToken = accessToken,
         )
 
-    @JvmStatic
     fun 멘토가_증명자료를_통해서_학교_인증을_시도한다(accessToken: String): ValidatableResponse =
         RequestHelper.postRequestWithAccessToken(
             uri = "/api/mentors/me/univ/proof-data",
@@ -259,7 +247,6 @@ object MemberAcceptanceStep {
             accessToken = accessToken,
         )
 
-    @JvmStatic
     fun 멘토의_예약된_스케줄_정보를_조회한다(
         mentorId: Long,
         year: Int,
@@ -271,23 +258,19 @@ object MemberAcceptanceStep {
             accessToken = accessToken,
         )
 
-    @JvmStatic
     fun 커피챗_신청한_멘티를_조회한다(accessToken: String): ValidatableResponse =
         RequestHelper.getRequestWithAccessToken(
             uri = "/api/mentees/applied-coffeechats",
             accessToken = accessToken,
         )
 
-    @JvmStatic
     fun 멘티들을_둘러본다(url: String): ValidatableResponse = RequestHelper.getRequest(url)
 
-    @JvmStatic
     fun 커피챗_제안한_멘토를_조회한다(accessToken: String): ValidatableResponse =
         RequestHelper.getRequestWithAccessToken(
             uri = "/api/mentors/suggested-coffeechats",
             accessToken = accessToken,
         )
 
-    @JvmStatic
     fun 멘토들을_둘러본다(url: String): ValidatableResponse = RequestHelper.getRequest(url)
 }
