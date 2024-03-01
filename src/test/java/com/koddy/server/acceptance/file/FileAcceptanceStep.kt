@@ -1,43 +1,34 @@
-package com.koddy.server.acceptance.file;
+package com.koddy.server.acceptance.file
 
-import io.restassured.response.ValidatableResponse;
-import org.springframework.web.util.UriComponentsBuilder;
+import com.koddy.server.acceptance.RequestHelper
+import io.restassured.response.ValidatableResponse
 
-import static com.koddy.server.acceptance.RequestHelper.getRequestWithAccessToken;
-import static com.koddy.server.acceptance.RequestHelper.multipartRequest;
+object FileAcceptanceStep {
+    fun 파일을_업로드한다(
+        fileName: String,
+        accessToken: String,
+    ): ValidatableResponse =
+        RequestHelper.multipartRequest(
+            uri = "/api/files",
+            fileName = fileName,
+            accessToken = accessToken,
+        )
 
-public class FileAcceptanceStep {
-    public static ValidatableResponse 파일을_업로드한다(final String fileName, final String accessToken) {
-        final String uri = UriComponentsBuilder
-                .fromPath("/api/files")
-                .build()
-                .toUri()
-                .getPath();
+    fun 이미지_업로드에_대한_Presigned_Url을_응답받는다(
+        fileName: String,
+        accessToken: String,
+    ): ValidatableResponse =
+        RequestHelper.getRequestWithAccessToken(
+            uri = "/api/files/presigned/image?fileName=${fileName}",
+            accessToken = accessToken,
+        )
 
-        return multipartRequest(uri, fileName, accessToken);
-    }
-
-    public static ValidatableResponse 이미지_업로드에_대한_Presigned_Url을_응답받는다(
-            final String fileName,
-            final String accessToken
-    ) {
-        final String uri = UriComponentsBuilder
-                .fromPath("/api/files/presigned/image?fileName={fileName}")
-                .build(fileName)
-                .getPath();
-
-        return getRequestWithAccessToken(uri, accessToken);
-    }
-
-    public static ValidatableResponse PDF_파일_업로드에_대한_Presigned_Url을_응답받는다(
-            final String fileName,
-            final String accessToken
-    ) {
-        final String uri = UriComponentsBuilder
-                .fromPath("/api/files/presigned/pdf?fileName={fileName}")
-                .build(fileName)
-                .getPath();
-
-        return getRequestWithAccessToken(uri, accessToken);
-    }
+    fun PDF_파일_업로드에_대한_Presigned_Url을_응답받는다(
+        fileName: String,
+        accessToken: String,
+    ): ValidatableResponse =
+        RequestHelper.getRequestWithAccessToken(
+            uri = "/api/files/presigned/pdf?fileName=${fileName}",
+            accessToken = accessToken,
+        )
 }
