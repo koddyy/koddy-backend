@@ -2,7 +2,7 @@ package com.koddy.server.coffeechat.presentation;
 
 import com.koddy.server.coffeechat.application.usecase.CancelCoffeeChatUseCase;
 import com.koddy.server.coffeechat.presentation.request.CancelCoffeeChatRequest;
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -19,7 +19,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("CoffeeChat -> CancelCoffeeChatApi 테스트")
-class CancelCoffeeChatApiTest extends ControllerTest {
+class CancelCoffeeChatApiTest extends ApiDocsTest {
     @Autowired
     private CancelCoffeeChatUseCase cancelCoffeeChatUseCase;
 

@@ -61,7 +61,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS
 )
 @AutoConfigureRestDocs
-public abstract class ControllerTest {
+public abstract class ApiDocsTest {
     protected static final String ENTER = " +\n";
 
     private MockMvc mockMvc;

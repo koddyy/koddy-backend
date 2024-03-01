@@ -4,7 +4,7 @@ import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.coffeechat.application.usecase.HandleSuggestedCoffeeChatUseCase;
 import com.koddy.server.coffeechat.presentation.request.PendingSuggestedCoffeeChatRequest;
 import com.koddy.server.coffeechat.presentation.request.RejectSuggestedCoffeeChatRequest;
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.exception.MemberException;
@@ -32,7 +32,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("CoffeeChat -> HandleSuggestedCoffeeChatApi 테스트")
-class HandleSuggestedCoffeeChatApiTest extends ControllerTest {
+class HandleSuggestedCoffeeChatApiTest extends ApiDocsTest {
     @Autowired
     private HandleSuggestedCoffeeChatUseCase handleSuggestedCoffeeChatUseCase;
 

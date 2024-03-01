@@ -1,6 +1,6 @@
 package com.koddy.server.member.presentation;
 
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.member.application.usecase.GetMemberPublicProfileUseCase;
 import com.koddy.server.member.application.usecase.query.response.MenteePublicProfile;
 import com.koddy.server.member.application.usecase.query.response.MentorPublicProfile;
@@ -23,7 +23,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Member -> MemberPublicProfileQueryApi 테스트")
-class MemberPublicProfileQueryApiTest extends ControllerTest {
+class MemberPublicProfileQueryApiTest extends ApiDocsTest {
     @Autowired
     private GetMemberPublicProfileUseCase getMemberPublicProfileUseCase;
 

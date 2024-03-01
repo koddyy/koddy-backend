@@ -1,6 +1,6 @@
 package com.koddy.server.file.presentation;
 
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.file.application.usecase.RegisterPresignedUrlUseCase;
 import com.koddy.server.file.application.usecase.UploadFileUseCase;
 import com.koddy.server.file.domain.model.PresignedUrlDetails;
@@ -30,7 +30,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("File -> FileManagementApi 테스트")
-class FileManagementApiTest extends ControllerTest {
+class FileManagementApiTest extends ApiDocsTest {
     @Autowired
     private UploadFileUseCase uploadFileUseCase;
 

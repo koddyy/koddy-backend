@@ -1,6 +1,6 @@
 package com.koddy.server.member.presentation;
 
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.member.application.usecase.GetMentorReservedScheduleUseCase;
 import com.koddy.server.member.application.usecase.query.response.MentorReservedSchedule;
 import com.koddy.server.member.application.usecase.query.response.Reserved;
@@ -34,7 +34,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Member -> MentorReservedScheduleQueryApi 테스트")
-class MentorReservedScheduleQueryApiTest extends ControllerTest {
+class MentorReservedScheduleQueryApiTest extends ApiDocsTest {
     @Autowired
     private GetMentorReservedScheduleUseCase getMentorReservedScheduleUseCase;
 

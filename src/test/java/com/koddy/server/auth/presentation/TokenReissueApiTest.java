@@ -4,7 +4,7 @@ import com.koddy.server.auth.application.usecase.ReissueTokenUseCase;
 import com.koddy.server.auth.domain.model.AuthToken;
 import com.koddy.server.auth.exception.AuthException;
 import com.koddy.server.auth.exception.AuthExceptionCode;
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -31,7 +31,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.responseH
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Auth -> TokenReissueApi 테스트")
-class TokenReissueApiTest extends ControllerTest {
+class TokenReissueApiTest extends ApiDocsTest {
     @Autowired
     private ReissueTokenUseCase reissueTokenUseCase;
 

@@ -9,7 +9,7 @@ import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.auth.exception.OAuthUserNotFoundException;
 import com.koddy.server.auth.infrastructure.social.google.response.GoogleUserResponse;
 import com.koddy.server.auth.presentation.request.OAuthLoginRequest;
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -48,7 +48,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Auth -> OAuthApi 테스트")
-class OAuthApiTest extends ControllerTest {
+class OAuthApiTest extends ApiDocsTest {
     @Autowired
     private GetOAuthLinkUseCase getOAuthLinkUseCase;
 

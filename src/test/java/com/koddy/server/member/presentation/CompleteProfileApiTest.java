@@ -1,7 +1,7 @@
 package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.exception.AuthExceptionCode;
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.common.fixture.TimelineFixture;
 import com.koddy.server.member.application.usecase.CompleteProfileUseCase;
 import com.koddy.server.member.domain.model.mentee.Mentee;
@@ -27,7 +27,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Member -> CompleteProfileApi 테스트")
-class CompleteProfileApiTest extends ControllerTest {
+class CompleteProfileApiTest extends ApiDocsTest {
     @Autowired
     private CompleteProfileUseCase completeProfileUseCase;
 
