@@ -45,14 +45,14 @@ object RequestHelper {
 
     @JvmStatic
     fun postRequest(
-        url: String,
+        uri: String,
         body: Any,
     ): ValidatableResponse =
         request {
             it.contentType(ContentType.JSON)
                 .body(body)
                 .When()
-                .post(url)
+                .post(uri)
         }
 
     @JvmStatic
@@ -95,14 +95,14 @@ object RequestHelper {
 
     @JvmStatic
     fun multipartRequest(
-        url: String,
+        uri: String,
         fileName: String,
     ): ValidatableResponse =
         request {
             it.contentType(ContentType.MULTIPART)
                 .multiPart("file", getFile(fileName))
                 .When()
-                .post(url)
+                .post(uri)
         }
 
     fun multipartRequest(
