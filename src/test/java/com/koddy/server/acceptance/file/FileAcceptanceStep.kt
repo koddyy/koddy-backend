@@ -19,7 +19,7 @@ object FileAcceptanceStep {
         accessToken: String,
     ): ValidatableResponse =
         RequestHelper.getRequestWithAccessToken(
-            uri = "/api/files/presigned/image?fileName=${fileName}",
+            uri = "/api/files/presigned/image?fileName=$fileName",
             accessToken = accessToken,
         )
 
@@ -28,7 +28,7 @@ object FileAcceptanceStep {
         accessToken: String,
     ): ValidatableResponse =
         RequestHelper.getRequestWithAccessToken(
-            uri = "/api/files/presigned/pdf?fileName=${fileName}",
+            uri = "/api/files/presigned/pdf?fileName=$fileName",
             accessToken = accessToken,
         )
 }

@@ -10,7 +10,7 @@ object AuthAcceptanceStep {
         redirectUri: String,
     ): ValidatableResponse =
         RequestHelper.getRequest(
-            uri = "/api/oauth/access/${oAuthProvider}?redirectUri=${redirectUri}",
+            uri = "/api/oauth/access/$oAuthProvider?redirectUri=$redirectUri",
         )
 
     fun Google_OAuth_로그인을_진행한다(
@@ -20,7 +20,7 @@ object AuthAcceptanceStep {
         state: String,
     ): ValidatableResponse =
         RequestHelper.postRequest(
-            uri = "/api/oauth/login/${oAuthProvider}",
+            uri = "/api/oauth/login/$oAuthProvider",
             body = OAuthLoginRequest(
                 authorizationCode = authorizationCode,
                 redirectUri = redirectUri,
