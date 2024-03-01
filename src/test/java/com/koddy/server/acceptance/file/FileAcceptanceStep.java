@@ -3,8 +3,8 @@ package com.koddy.server.acceptance.file;
 import io.restassured.response.ValidatableResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import static com.koddy.server.acceptance.CommonRequestFixture.getRequestWithAccessToken;
-import static com.koddy.server.acceptance.CommonRequestFixture.multipartRequest;
+import static com.koddy.server.acceptance.RequestHelper.getRequestWithAccessToken;
+import static com.koddy.server.acceptance.RequestHelper.multipartRequest;
 
 public class FileAcceptanceStep {
     public static ValidatableResponse 파일을_업로드한다(final String fileName, final String accessToken) {

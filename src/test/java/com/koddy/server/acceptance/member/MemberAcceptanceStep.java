@@ -19,12 +19,12 @@ import com.koddy.server.member.presentation.request.model.MentoringPeriodRequest
 import io.restassured.response.ValidatableResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import static com.koddy.server.acceptance.CommonRequestFixture.deleteRequestWithAccessToken;
-import static com.koddy.server.acceptance.CommonRequestFixture.getRequest;
-import static com.koddy.server.acceptance.CommonRequestFixture.getRequestWithAccessToken;
-import static com.koddy.server.acceptance.CommonRequestFixture.patchRequestWithAccessToken;
-import static com.koddy.server.acceptance.CommonRequestFixture.postRequest;
-import static com.koddy.server.acceptance.CommonRequestFixture.postRequestWithAccessToken;
+import static com.koddy.server.acceptance.RequestHelper.deleteRequestWithAccessToken;
+import static com.koddy.server.acceptance.RequestHelper.getRequest;
+import static com.koddy.server.acceptance.RequestHelper.getRequestWithAccessToken;
+import static com.koddy.server.acceptance.RequestHelper.patchRequestWithAccessToken;
+import static com.koddy.server.acceptance.RequestHelper.postRequest;
+import static com.koddy.server.acceptance.RequestHelper.postRequestWithAccessToken;
 
 public class MemberAcceptanceStep {
     public static ValidatableResponse 멘토_회원가입_후_로그인을_진행한다(final SignUpMentorRequest request) {

@@ -16,10 +16,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
 
-import static com.koddy.server.acceptance.CommonRequestFixture.deleteRequestWithAccessToken;
-import static com.koddy.server.acceptance.CommonRequestFixture.getRequestWithAccessToken;
-import static com.koddy.server.acceptance.CommonRequestFixture.patchRequestWithAccessToken;
-import static com.koddy.server.acceptance.CommonRequestFixture.postRequestWithAccessToken;
+import static com.koddy.server.acceptance.RequestHelper.deleteRequestWithAccessToken;
+import static com.koddy.server.acceptance.RequestHelper.getRequestWithAccessToken;
+import static com.koddy.server.acceptance.RequestHelper.patchRequestWithAccessToken;
+import static com.koddy.server.acceptance.RequestHelper.postRequestWithAccessToken;
 import static com.koddy.server.common.fixture.OAuthFixture.GOOGLE_MENTOR_1;
 import static com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI;
 import static com.koddy.server.common.utils.OAuthUtils.STATE;

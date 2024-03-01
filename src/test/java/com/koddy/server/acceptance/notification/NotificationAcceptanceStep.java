@@ -7,8 +7,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
-import static com.koddy.server.acceptance.CommonRequestFixture.getRequestWithAccessToken;
-import static com.koddy.server.acceptance.CommonRequestFixture.patchRequestWithAccessToken;
+import static com.koddy.server.acceptance.RequestHelper.getRequestWithAccessToken;
+import static com.koddy.server.acceptance.RequestHelper.patchRequestWithAccessToken;
 
 public class NotificationAcceptanceStep {
     public static ValidatableResponse 알림을_조회한다(

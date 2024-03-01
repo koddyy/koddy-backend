@@ -4,10 +4,10 @@ import com.koddy.server.auth.presentation.request.OAuthLoginRequest;
 import io.restassured.response.ValidatableResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import static com.koddy.server.acceptance.CommonRequestFixture.getRequest;
-import static com.koddy.server.acceptance.CommonRequestFixture.postRequest;
-import static com.koddy.server.acceptance.CommonRequestFixture.postRequestWithAccessToken;
-import static com.koddy.server.acceptance.CommonRequestFixture.postRequestWithRefreshToken;
+import static com.koddy.server.acceptance.RequestHelper.getRequest;
+import static com.koddy.server.acceptance.RequestHelper.postRequest;
+import static com.koddy.server.acceptance.RequestHelper.postRequestWithAccessToken;
+import static com.koddy.server.acceptance.RequestHelper.postRequestWithRefreshToken;
 
 public class AuthAcceptanceStep {
     public static ValidatableResponse Google_OAuth_인증_URL를_생성한다(final String oAuthProvider, final String redirectUri) {
