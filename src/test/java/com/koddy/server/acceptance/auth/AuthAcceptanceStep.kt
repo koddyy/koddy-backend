@@ -8,10 +8,7 @@ object AuthAcceptanceStep {
     fun Google_OAuth_인증_URL를_생성한다(
         oAuthProvider: String,
         redirectUri: String,
-    ): ValidatableResponse =
-        RequestHelper.getRequest(
-            uri = "/api/oauth/access/$oAuthProvider?redirectUri=$redirectUri",
-        )
+    ): ValidatableResponse = RequestHelper.getRequest(uri = "/api/oauth/access/$oAuthProvider?redirectUri=$redirectUri")
 
     fun Google_OAuth_로그인을_진행한다(
         oAuthProvider: String,
