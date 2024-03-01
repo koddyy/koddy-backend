@@ -13,6 +13,8 @@ import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.member.domain.model.mentor.MentoringPeriod;
 import com.koddy.server.member.domain.model.mentor.Timeline;
 import com.koddy.server.member.domain.model.mentor.UniversityProfile;
+import com.koddy.server.member.presentation.request.MentorScheduleRequest;
+import com.koddy.server.member.presentation.request.model.MentoringPeriodRequestModel;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 
@@ -271,7 +273,51 @@ public enum MentorFixture {
         final String refreshToken = result.cookie(REFRESH_TOKEN_HEADER);
 
         MemberAcceptanceStep.멘토_프로필을_완성시킨다(this, accessToken);
+        return new AuthMember(
+                memberId,
+                this.name,
+                new AuthToken(accessToken, refreshToken)
+        );
+    }
 
+    public AuthMember 회원가입과_로그인을_하고_프로필을_완성시킨다(final MentoringPeriodRequestModel period) {
+        final ExtractableResponse<Response> result = MemberAcceptanceStep.멘토_회원가입_후_로그인을_진행한다(this).extract();
+        final long memberId = result.jsonPath().getLong("id");
+        final String accessToken = result.header(ACCESS_TOKEN_HEADER).split(" ")[1];
+        final String refreshToken = result.cookie(REFRESH_TOKEN_HEADER);
+
+        MemberAcceptanceStep.멘토_프로필을_완성시킨다(this, period, accessToken);
+        return new AuthMember(
+                memberId,
+                this.name,
+                new AuthToken(accessToken, refreshToken)
+        );
+    }
+
+    public AuthMember 회원가입과_로그인을_하고_프로필을_완성시킨다(final List<MentorScheduleRequest> schedules) {
+        final ExtractableResponse<Response> result = MemberAcceptanceStep.멘토_회원가입_후_로그인을_진행한다(this).extract();
+        final long memberId = result.jsonPath().getLong("id");
+        final String accessToken = result.header(ACCESS_TOKEN_HEADER).split(" ")[1];
+        final String refreshToken = result.cookie(REFRESH_TOKEN_HEADER);
+
+        MemberAcceptanceStep.멘토_프로필을_완성시킨다(this, schedules, accessToken);
+        return new AuthMember(
+                memberId,
+                this.name,
+                new AuthToken(accessToken, refreshToken)
+        );
+    }
+
+    public AuthMember 회원가입과_로그인을_하고_프로필을_완성시킨다(
+            final MentoringPeriodRequestModel period,
+            final List<MentorScheduleRequest> schedules
+    ) {
+        final ExtractableResponse<Response> result = MemberAcceptanceStep.멘토_회원가입_후_로그인을_진행한다(this).extract();
+        final long memberId = result.jsonPath().getLong("id");
+        final String accessToken = result.header(ACCESS_TOKEN_HEADER).split(" ")[1];
+        final String refreshToken = result.cookie(REFRESH_TOKEN_HEADER);
+
+        MemberAcceptanceStep.멘토_프로필을_완성시킨다(this, period, schedules, accessToken);
         return new AuthMember(
                 memberId,
                 this.name,

@@ -1,6 +1,6 @@
 package com.koddy.server.notification.presentation;
 
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.notification.application.usecase.ReadNotificationUseCase;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +18,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Notification -> ReadNotificationApi 테스트")
-class ReadNotificationApiTest extends ControllerTest {
+class ReadNotificationApiTest extends ApiDocsTest {
     @Autowired
     private ReadNotificationUseCase readNotificationUseCase;
 

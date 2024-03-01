@@ -1,7 +1,7 @@
 package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.exception.AuthExceptionCode;
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.global.query.PageResponse;
 import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.application.usecase.MentorMainSearchUseCase;
@@ -32,7 +32,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Member -> MentorMainSearchApi 테스트")
-class MentorMainSearchApiTest extends ControllerTest {
+class MentorMainSearchApiTest extends ApiDocsTest {
     @Autowired
     private MentorMainSearchUseCase mentorMainSearchUseCase;
 

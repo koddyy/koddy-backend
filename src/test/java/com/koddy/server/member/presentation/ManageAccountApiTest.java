@@ -1,7 +1,7 @@
 package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.domain.model.AuthMember;
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.member.application.usecase.DeleteMemberUseCase;
 import com.koddy.server.member.application.usecase.SignUpUseCase;
 import com.koddy.server.member.domain.model.Language;
@@ -36,7 +36,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Member -> ManageAccountApi 테스트")
-class ManageAccountApiTest extends ControllerTest {
+class ManageAccountApiTest extends ApiDocsTest {
     @Autowired
     private SignUpUseCase signUpUseCase;
 

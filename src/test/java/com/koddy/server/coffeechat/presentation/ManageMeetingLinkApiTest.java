@@ -4,7 +4,7 @@ import com.koddy.server.auth.exception.AuthExceptionCode;
 import com.koddy.server.coffeechat.application.usecase.ManageMeetingLinkUseCase;
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkResponse;
 import com.koddy.server.coffeechat.presentation.request.CreateMeetingLinkRequest;
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +33,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("CoffeeChat -> ManageMeetingLinkApi 테스트")
-class ManageMeetingLinkApiTest extends ControllerTest {
+class ManageMeetingLinkApiTest extends ApiDocsTest {
     @Autowired
     private ManageMeetingLinkUseCase manageMeetingLinkUseCase;
 

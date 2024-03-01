@@ -7,7 +7,7 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChat;
 import com.koddy.server.coffeechat.domain.model.response.CoffeeChatDetails;
 import com.koddy.server.coffeechat.domain.model.response.MenteeDetails;
 import com.koddy.server.coffeechat.domain.model.response.MentorDetails;
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.common.fixture.CoffeeChatFixture;
 import com.koddy.server.common.mock.fake.FakeEncryptor;
 import com.koddy.server.global.utils.encrypt.Encryptor;
@@ -34,7 +34,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("CoffeeChat -> CoffeeChatScheduleDetailsQueryApi 테스트")
-class CoffeeChatScheduleDetailsQueryApiTest extends ControllerTest {
+class CoffeeChatScheduleDetailsQueryApiTest extends ApiDocsTest {
     @Autowired
     private GetCoffeeChatScheduleDetailsUseCase getCoffeeChatScheduleDetailsUseCase;
 

@@ -1,7 +1,7 @@
 package com.koddy.server.member.presentation;
 
 import com.koddy.server.auth.exception.AuthExceptionCode;
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.member.application.usecase.UpdateMentorProfileUseCase;
 import com.koddy.server.member.domain.model.Language;
 import com.koddy.server.member.domain.model.mentee.Mentee;
@@ -33,7 +33,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Member -> UpdateMentorProfileApi 테스트")
-class UpdateMentorProfileApiTest extends ControllerTest {
+class UpdateMentorProfileApiTest extends ApiDocsTest {
     @Autowired
     private UpdateMentorProfileUseCase updateMentorProfileUseCase;
 

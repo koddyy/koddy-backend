@@ -20,6 +20,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestConstructor
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
@@ -83,4 +85,29 @@ annotation class IntegrateTestKt
  */
 class ProjectConfig : AbstractProjectConfig() {
     override val isolationMode = IsolationMode.InstancePerLeaf
+}
+
+/**
+ * String -> LocalDate & LocalDateTime `Delimiter`
+ */
+private const val DATE_DELIMITER: String = "/"
+private const val DATE_TIME_DELIMITER: String = "-"
+private const val TIME_DELIMITER: String = ":"
+
+/**
+ * yyyy/MM/dd -> LocalDate
+ */
+fun String.toLocalDate(): LocalDate {
+    val split: List<Int> = this.split(DATE_DELIMITER.toRegex()).map { it.toInt() }
+    return LocalDate.of(split[0], split[1], split[2])
+}
+
+/**
+ * yyyy/MM/dd-HH:mm -> LocalDateTime
+ */
+fun String.toLocalDateTime(): LocalDateTime {
+    val split: List<String> = this.split(DATE_TIME_DELIMITER.toRegex())
+    val dateSplit: List<Int> = split[0].split(DATE_DELIMITER.toRegex()).map { it.toInt() }
+    val timeSplit: List<Int> = split[1].split(TIME_DELIMITER.toRegex()).map { it.toInt() }
+    return LocalDateTime.of(dateSplit[0], dateSplit[1], dateSplit[2], timeSplit[0], timeSplit[1])
 }

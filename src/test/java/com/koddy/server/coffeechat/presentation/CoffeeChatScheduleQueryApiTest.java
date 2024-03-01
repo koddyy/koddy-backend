@@ -4,7 +4,7 @@ import com.koddy.server.coffeechat.application.usecase.GetCoffeeChatScheduleUseC
 import com.koddy.server.coffeechat.application.usecase.query.response.CoffeeChatEachCategoryCounts;
 import com.koddy.server.coffeechat.domain.repository.query.response.MenteeCoffeeChatScheduleData;
 import com.koddy.server.coffeechat.domain.repository.query.response.MentorCoffeeChatScheduleData;
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.domain.model.mentee.Mentee;
 import com.koddy.server.member.domain.model.mentor.Mentor;
@@ -30,7 +30,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("CoffeeChat -> CoffeeChatScheduleQueryApi 테스트")
-public class CoffeeChatScheduleQueryApiTest extends ControllerTest {
+public class CoffeeChatScheduleQueryApiTest extends ApiDocsTest {
     @Autowired
     private GetCoffeeChatScheduleUseCase getCoffeeChatScheduleUseCase;
 

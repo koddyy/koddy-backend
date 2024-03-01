@@ -1,7 +1,7 @@
 package com.koddy.server.notification.presentation;
 
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus;
-import com.koddy.server.common.ControllerTest;
+import com.koddy.server.common.ApiDocsTest;
 import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.notification.application.usecase.GetNotificationsUseCase;
@@ -31,7 +31,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Notification -> GetNotificationsApi 테스트")
-class GetNotificationsApiTest extends ControllerTest {
+class GetNotificationsApiTest extends ApiDocsTest {
     @Autowired
     private GetNotificationsUseCase getNotificationsUseCase;
 
