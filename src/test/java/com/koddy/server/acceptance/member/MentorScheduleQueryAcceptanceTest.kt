@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus.OK
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
 @ExtendWith(DatabaseCleanerEachCallbackExtension::class)
 @DisplayName("[Acceptance Test] 멘토 예약된 스케줄 조회")
@@ -142,7 +142,7 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
                 LocalDateTime.of(2024, 2, 5, 18, 30),
                 mentees[0].token.accessToken,
             )
-            멘티가_멘토의_커피챗_제안을_거절한다(coffeeChats[2], "거절..", mentees[2].token.accessToken)
+            멘티가_멘토의_커피챗_제안을_거절한다(coffeeChats[2], mentees[2].token.accessToken)
             멘토가_멘티의_커피챗_신청을_수락한다(coffeeChats[4], StrategyFixture.KAKAO_ID, mentor.token.accessToken)
             멘토가_멘티의_커피챗_신청을_수락한다(coffeeChats[8], StrategyFixture.KAKAO_ID, mentor.token.accessToken)
             멘티가_멘토의_커피챗_제안을_1차_수락한다(
@@ -158,7 +158,7 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
                 LocalDateTime.of(2024, 4, 1, 18, 30),
                 mentees[6].token.accessToken,
             )
-            멘토가_Pending_상태인_커피챗에_대해서_최종_취소를_한다(coffeeChats[6], "최종 취소..", mentor.token.accessToken)
+            멘토가_Pending_상태인_커피챗에_대해서_최종_취소를_한다(coffeeChats[6], mentor.token.accessToken)
             멘티가_멘토의_커피챗_제안을_1차_수락한다(
                 coffeeChats[9],
                 LocalDateTime.of(2024, 4, 10, 18, 0),
@@ -277,8 +277,8 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
         when (reservedStart.isEmpty()) {
             true -> response.body("reserved", empty<Int>())
             false -> response
-                .body("reserved.start", contains(*reservedStart.map { it.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) }.toTypedArray()))
-                .body("reserved.end", contains(*reservedEnd.map { it.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) }.toTypedArray()))
+                .body("reserved.start", contains(*reservedStart.map { it.format(ISO_LOCAL_DATE_TIME) }.toTypedArray()))
+                .body("reserved.end", contains(*reservedEnd.map { it.format(ISO_LOCAL_DATE_TIME) }.toTypedArray()))
         }
     }
 }
