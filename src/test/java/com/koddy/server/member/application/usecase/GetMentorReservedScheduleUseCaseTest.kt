@@ -2,6 +2,7 @@ package com.koddy.server.member.application.usecase
 
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.repository.query.MentorReservedScheduleQueryRepository
+import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_2
@@ -21,6 +22,7 @@ import io.mockk.every
 import io.mockk.mockk
 import java.time.LocalDateTime
 
+@UnitTestKt
 @DisplayName("Member -> GetMentorReservedScheduleUseCase 테스트")
 internal class GetMentorReservedScheduleUseCaseTest : FeatureSpec({
     val mentorRepository = mockk<MentorRepository>()
