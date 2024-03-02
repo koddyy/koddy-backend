@@ -9,6 +9,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -50,6 +51,20 @@ public abstract class BaseEntity<T> {
         this.createdAt = now;
         this.lastModifiedAt = now;
         return (T) this;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final BaseEntity<?> other = (BaseEntity<?>) o;
+        return Objects.equals(id, other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 
     public Long getId() {
