@@ -31,7 +31,7 @@ class MentorNotificationEventHandler(
     fun handleMenteeAppliedFromMenteeFlowEvent(event: MentorNotification.MenteeAppliedFromMenteeFlowEvent) =
         notify(
             event = event,
-            type = NotificationType.MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_APPLY,
+            type = NotificationType.MENTOR_RECEIVE_MENTEE_APPLY_FROM_MENTEE_FLOW,
         )
 
     @Async("eventAsyncExecutor")
@@ -40,7 +40,7 @@ class MentorNotificationEventHandler(
     fun handleMenteeCanceledFromMenteeFlowEvent(event: MentorNotification.MenteeCanceledFromMenteeFlowEvent) =
         notify(
             event = event,
-            type = NotificationType.MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_CANCEL,
+            type = NotificationType.MENTOR_RECEIVE_MENTEE_CANCEL_FROM_MENTEE_FLOW,
         )
 
     @Async("eventAsyncExecutor")
@@ -49,7 +49,7 @@ class MentorNotificationEventHandler(
     fun handleMenteeCanceledFromMentorFlowEvent(event: MentorNotification.MenteeCanceledFromMentorFlowEvent) =
         notify(
             event = event,
-            type = NotificationType.MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_CANCEL,
+            type = NotificationType.MENTOR_RECEIVE_MENTEE_CANCEL_FROM_MENTOR_FLOW,
         )
 
     @Async("eventAsyncExecutor")
@@ -58,7 +58,7 @@ class MentorNotificationEventHandler(
     fun handleMenteeRejectedFromMentorFlowEvent(event: MentorNotification.MenteeRejectedFromMentorFlowEvent) =
         notify(
             event = event,
-            type = NotificationType.MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_REJECT,
+            type = NotificationType.MENTOR_RECEIVE_MENTEE_REJECT_FROM_MENTOR_FLOW,
         )
 
     @Async("eventAsyncExecutor")
@@ -67,7 +67,7 @@ class MentorNotificationEventHandler(
     fun handleMenteePendedFromMentorFlowEvent(event: MentorNotification.MenteePendedFromMentorFlowEvent) =
         notify(
             event = event,
-            type = NotificationType.MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING,
+            type = NotificationType.MENTOR_RECEIVE_MENTEE_PENDING_FROM_MENTOR_FLOW,
         )
 
     private fun notify(

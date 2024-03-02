@@ -34,15 +34,15 @@ import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_3주�
 import static com.koddy.server.common.fixture.CoffeeChatFixture.월요일_4주차_20_00_시작;
 import static com.koddy.server.common.fixture.MenteeFixture.MENTEE_1;
 import static com.koddy.server.common.fixture.MentorFixture.MENTOR_1;
-import static com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE;
-import static com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_REJECT;
-import static com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE;
-import static com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL;
-import static com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST;
-import static com.koddy.server.notification.domain.model.NotificationType.MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_APPLY;
-import static com.koddy.server.notification.domain.model.NotificationType.MENTOR_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE;
-import static com.koddy.server.notification.domain.model.NotificationType.MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING;
-import static com.koddy.server.notification.domain.model.NotificationType.MENTOR_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE;
+import static com.koddy.server.common.fixture.NotificationFixture.멘토_수신_MENTEE_APPLY_FROM_MENTEE_FLOW;
+import static com.koddy.server.common.fixture.NotificationFixture.멘토_수신_MENTEE_PENDING_FROM_MENTOR_FLOW;
+import static com.koddy.server.common.fixture.NotificationFixture.멘토_수신_MENTOR_APPROVE_FROM_MENTEE_FLOW;
+import static com.koddy.server.common.fixture.NotificationFixture.멘토_수신_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW;
+import static com.koddy.server.common.fixture.NotificationFixture.멘티_수신_MENTOR_APPROVE_FROM_MENTEE_FLOW;
+import static com.koddy.server.common.fixture.NotificationFixture.멘티_수신_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW;
+import static com.koddy.server.common.fixture.NotificationFixture.멘티_수신_MENTOR_FINALLY_CANCEL_FROM_MENTOR_FLOW;
+import static com.koddy.server.common.fixture.NotificationFixture.멘티_수신_MENTOR_REJECT_FROM_MENTEE_FLOW;
+import static com.koddy.server.common.fixture.NotificationFixture.멘티_수신_MENTOR_SUGGEST_FROM_MENTOR_FLOW;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -86,34 +86,34 @@ class NotificationQueryRepositoryTest extends RepositoryTest {
                 MentorFlow.suggestAndPending(금요일_2주차_20_00_시작, mentor, mentee)
         )).toArray(CoffeeChat[]::new);
         notifications = notificationRepository.saveAll(List.of(
-                Notification.create(mentee, coffeeChats[0], MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
-                Notification.create(mentor, coffeeChats[0], MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
-                Notification.create(mentee, coffeeChats[0], MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL),
-                Notification.create(mentor, coffeeChats[1], MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_APPLY),
-                Notification.create(mentee, coffeeChats[1], MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE),
-                Notification.create(mentor, coffeeChats[1], MENTOR_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE),
-                Notification.create(mentee, coffeeChats[2], MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
-                Notification.create(mentor, coffeeChats[2], MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
-                Notification.create(mentee, coffeeChats[2], MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE),
-                Notification.create(mentor, coffeeChats[2], MENTOR_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE),
-                Notification.create(mentor, coffeeChats[3], MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_APPLY),
-                Notification.create(mentee, coffeeChats[3], MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_REJECT),
-                Notification.create(mentee, coffeeChats[4], MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
-                Notification.create(mentor, coffeeChats[4], MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
-                Notification.create(mentee, coffeeChats[5], MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
-                Notification.create(mentor, coffeeChats[5], MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
-                Notification.create(mentee, coffeeChats[5], MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL),
-                Notification.create(mentor, coffeeChats[6], MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_APPLY),
-                Notification.create(mentee, coffeeChats[6], MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE),
-                Notification.create(mentor, coffeeChats[6], MENTOR_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE),
-                Notification.create(mentee, coffeeChats[7], MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
-                Notification.create(mentor, coffeeChats[7], MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
-                Notification.create(mentee, coffeeChats[7], MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE),
-                Notification.create(mentor, coffeeChats[7], MENTOR_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE),
-                Notification.create(mentor, coffeeChats[8], MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_APPLY),
-                Notification.create(mentee, coffeeChats[8], MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_REJECT),
-                Notification.create(mentee, coffeeChats[9], MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
-                Notification.create(mentor, coffeeChats[9], MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING)
+                멘티_수신_MENTOR_SUGGEST_FROM_MENTOR_FLOW.toDomain(mentee, coffeeChats[0]),
+                멘토_수신_MENTEE_PENDING_FROM_MENTOR_FLOW.toDomain(mentor, coffeeChats[0]),
+                멘티_수신_MENTOR_FINALLY_CANCEL_FROM_MENTOR_FLOW.toDomain(mentee, coffeeChats[0]),
+                멘토_수신_MENTEE_APPLY_FROM_MENTEE_FLOW.toDomain(mentor, coffeeChats[1]),
+                멘티_수신_MENTOR_APPROVE_FROM_MENTEE_FLOW.toDomain(mentee, coffeeChats[1]),
+                멘토_수신_MENTOR_APPROVE_FROM_MENTEE_FLOW.toDomain(mentor, coffeeChats[1]),
+                멘티_수신_MENTOR_SUGGEST_FROM_MENTOR_FLOW.toDomain(mentee, coffeeChats[2]),
+                멘토_수신_MENTEE_PENDING_FROM_MENTOR_FLOW.toDomain(mentor, coffeeChats[2]),
+                멘티_수신_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW.toDomain(mentee, coffeeChats[2]),
+                멘토_수신_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW.toDomain(mentor, coffeeChats[2]),
+                멘토_수신_MENTEE_APPLY_FROM_MENTEE_FLOW.toDomain(mentor, coffeeChats[3]),
+                멘티_수신_MENTOR_REJECT_FROM_MENTEE_FLOW.toDomain(mentee, coffeeChats[3]),
+                멘티_수신_MENTOR_SUGGEST_FROM_MENTOR_FLOW.toDomain(mentee, coffeeChats[4]),
+                멘토_수신_MENTEE_PENDING_FROM_MENTOR_FLOW.toDomain(mentor, coffeeChats[4]),
+                멘티_수신_MENTOR_SUGGEST_FROM_MENTOR_FLOW.toDomain(mentee, coffeeChats[5]),
+                멘토_수신_MENTEE_PENDING_FROM_MENTOR_FLOW.toDomain(mentor, coffeeChats[5]),
+                멘티_수신_MENTOR_FINALLY_CANCEL_FROM_MENTOR_FLOW.toDomain(mentee, coffeeChats[5]),
+                멘토_수신_MENTEE_APPLY_FROM_MENTEE_FLOW.toDomain(mentor, coffeeChats[6]),
+                멘티_수신_MENTOR_APPROVE_FROM_MENTEE_FLOW.toDomain(mentee, coffeeChats[6]),
+                멘토_수신_MENTOR_APPROVE_FROM_MENTEE_FLOW.toDomain(mentor, coffeeChats[6]),
+                멘티_수신_MENTOR_SUGGEST_FROM_MENTOR_FLOW.toDomain(mentee, coffeeChats[7]),
+                멘토_수신_MENTEE_PENDING_FROM_MENTOR_FLOW.toDomain(mentor, coffeeChats[7]),
+                멘티_수신_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW.toDomain(mentee, coffeeChats[7]),
+                멘토_수신_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW.toDomain(mentor, coffeeChats[7]),
+                멘토_수신_MENTEE_APPLY_FROM_MENTEE_FLOW.toDomain(mentor, coffeeChats[8]),
+                멘티_수신_MENTOR_REJECT_FROM_MENTEE_FLOW.toDomain(mentee, coffeeChats[8]),
+                멘티_수신_MENTOR_SUGGEST_FROM_MENTOR_FLOW.toDomain(mentee, coffeeChats[9]),
+                멘토_수신_MENTEE_PENDING_FROM_MENTOR_FLOW.toDomain(mentor, coffeeChats[9])
         )).toArray(Notification[]::new);
     }
 

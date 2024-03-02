@@ -34,8 +34,8 @@ class BothNotificationEventHandler(
     fun handleApprovedFromMenteeFlowEvent(event: BothNotification.ApprovedFromMenteeFlowEvent) =
         notify(
             event = event,
-            mentorNotifyType = NotificationType.MENTOR_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE,
-            menteeNotifyType = NotificationType.MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_APPROVE,
+            mentorNotifyType = NotificationType.MENTOR_RECEIVE_MENTOR_APPROVE_FROM_MENTEE_FLOW,
+            menteeNotifyType = NotificationType.MENTEE_RECEIVE_MENTOR_APPROVE_FROM_MENTEE_FLOW,
         )
 
     @Async("eventAsyncExecutor")
@@ -44,8 +44,8 @@ class BothNotificationEventHandler(
     fun handleFinallyApprovedFromMentorFlowEvent(event: BothNotification.FinallyApprovedFromMentorFlowEvent) =
         notify(
             event = event,
-            mentorNotifyType = NotificationType.MENTOR_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE,
-            menteeNotifyType = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE,
+            mentorNotifyType = NotificationType.MENTOR_RECEIVE_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW,
+            menteeNotifyType = NotificationType.MENTEE_RECEIVE_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW,
         )
 
     private fun notify(

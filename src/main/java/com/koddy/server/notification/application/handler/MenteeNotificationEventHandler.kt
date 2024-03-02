@@ -31,7 +31,7 @@ class MenteeNotificationEventHandler(
     fun handleMentorCanceledFromMenteeFlowEvent(event: MenteeNotification.MentorCanceledFromMenteeFlowEvent) =
         notify(
             event = event,
-            type = NotificationType.MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_CANCEL,
+            type = NotificationType.MENTEE_RECEIVE_MENTOR_CANCEL_FROM_MENTEE_FLOW,
         )
 
     @Async("eventAsyncExecutor")
@@ -40,7 +40,7 @@ class MenteeNotificationEventHandler(
     fun handleMentorRejectedFromMenteeFlowEvent(event: MenteeNotification.MentorRejectedFromMenteeFlowEvent) =
         notify(
             event = event,
-            type = NotificationType.MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_REJECT,
+            type = NotificationType.MENTEE_RECEIVE_MENTOR_REJECT_FROM_MENTEE_FLOW,
         )
 
     @Async("eventAsyncExecutor")
@@ -49,7 +49,7 @@ class MenteeNotificationEventHandler(
     fun handleMentorSuggestedFromMentorFlowEvent(event: MenteeNotification.MentorSuggestedFromMentorFlowEvent) =
         notify(
             event = event,
-            type = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST,
+            type = NotificationType.MENTEE_RECEIVE_MENTOR_SUGGEST_FROM_MENTOR_FLOW,
         )
 
     @Async("eventAsyncExecutor")
@@ -58,7 +58,7 @@ class MenteeNotificationEventHandler(
     fun handleMentorCanceledFromMentorFlowEvent(event: MenteeNotification.MentorCanceledFromMentorFlowEvent) =
         notify(
             event = event,
-            type = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_CANCEL,
+            type = NotificationType.MENTEE_RECEIVE_MENTOR_CANCEL_FROM_MENTOR_FLOW,
         )
 
     @Async("eventAsyncExecutor")
@@ -67,7 +67,7 @@ class MenteeNotificationEventHandler(
     fun handleMentorFinallyCanceledFromMentorFlowEvent(event: MenteeNotification.MentorFinallyCanceledFromMentorFlowEvent) =
         notify(
             event = event,
-            type = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL,
+            type = NotificationType.MENTEE_RECEIVE_MENTOR_FINALLY_CANCEL_FROM_MENTOR_FLOW,
         )
 
     private fun notify(

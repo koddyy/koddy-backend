@@ -18,9 +18,9 @@ import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.common.toLocalDateTime
 import com.koddy.server.notification.domain.model.NotificationType
-import com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL
-import com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST
-import com.koddy.server.notification.domain.model.NotificationType.MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING
+import com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTOR_FINALLY_CANCEL_FROM_MENTOR_FLOW
+import com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTOR_SUGGEST_FROM_MENTOR_FLOW
+import com.koddy.server.notification.domain.model.NotificationType.MENTOR_RECEIVE_MENTEE_PENDING_FROM_MENTOR_FLOW
 import io.restassured.response.ValidatableResponse
 import org.hamcrest.Matchers.hasSize
 import org.hamcrest.Matchers.`is`
@@ -71,7 +71,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
             assertNotificationsMatch(
                 response = response1,
                 reads = listOf(false),
-                types = listOf(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
+                types = listOf(MENTOR_RECEIVE_MENTEE_PENDING_FROM_MENTOR_FLOW),
                 memberIds = listOf(mentee.id),
                 coffeeChatIds = listOf(coffeeChatId),
                 coffeeChatStatusSnapshots = listOf(MENTEE_PENDING),
@@ -80,7 +80,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
 
             // Read Single Notification
             val notificationId = 특정_타입의_알림_ID를_조회한다(
-                type = MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING,
+                type = MENTOR_RECEIVE_MENTEE_PENDING_FROM_MENTOR_FLOW,
                 page = 1,
                 accessToken = mentor.token.accessToken,
             )
@@ -96,7 +96,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
             assertNotificationsMatch(
                 response = response2,
                 reads = listOf(true),
-                types = listOf(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
+                types = listOf(MENTOR_RECEIVE_MENTEE_PENDING_FROM_MENTOR_FLOW),
                 memberIds = listOf(mentee.id),
                 coffeeChatIds = listOf(coffeeChatId),
                 coffeeChatStatusSnapshots = listOf(MENTEE_PENDING),
@@ -114,7 +114,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
             assertNotificationsMatch(
                 response = response1,
                 reads = listOf(false),
-                types = listOf(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
+                types = listOf(MENTOR_RECEIVE_MENTEE_PENDING_FROM_MENTOR_FLOW),
                 memberIds = listOf(mentee.id),
                 coffeeChatIds = listOf(coffeeChatId),
                 coffeeChatStatusSnapshots = listOf(MENTEE_PENDING),
@@ -131,7 +131,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
             assertNotificationsMatch(
                 response = response2,
                 reads = listOf(true),
-                types = listOf(MENTOR_RECEIVE_MENTOR_FLOW_MENTEE_PENDING),
+                types = listOf(MENTOR_RECEIVE_MENTEE_PENDING_FROM_MENTOR_FLOW),
                 memberIds = listOf(mentee.id),
                 coffeeChatIds = listOf(coffeeChatId),
                 coffeeChatStatusSnapshots = listOf(MENTEE_PENDING),
@@ -153,7 +153,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
             assertNotificationsMatch(
                 response = response1,
                 reads = listOf(false, false),
-                types = listOf(MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL, MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
+                types = listOf(MENTEE_RECEIVE_MENTOR_FINALLY_CANCEL_FROM_MENTOR_FLOW, MENTEE_RECEIVE_MENTOR_SUGGEST_FROM_MENTOR_FLOW),
                 memberIds = listOf(mentor.id, mentor.id),
                 coffeeChatIds = listOf(coffeeChatId, coffeeChatId),
                 coffeeChatStatusSnapshots = listOf(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
@@ -162,7 +162,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
 
             // Read Single Notification
             val notificationId1 = 특정_타입의_알림_ID를_조회한다(
-                type = MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL,
+                type = MENTEE_RECEIVE_MENTOR_FINALLY_CANCEL_FROM_MENTOR_FLOW,
                 page = 1,
                 accessToken = mentee.token.accessToken,
             )
@@ -175,7 +175,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
             assertNotificationsMatch(
                 response = response2,
                 reads = listOf(true, false),
-                types = listOf(MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL, MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
+                types = listOf(MENTEE_RECEIVE_MENTOR_FINALLY_CANCEL_FROM_MENTOR_FLOW, MENTEE_RECEIVE_MENTOR_SUGGEST_FROM_MENTOR_FLOW),
                 memberIds = listOf(mentor.id, mentor.id),
                 coffeeChatIds = listOf(coffeeChatId, coffeeChatId),
                 coffeeChatStatusSnapshots = listOf(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
@@ -184,7 +184,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
 
             // Read Single Notification
             val notificationId2 = 특정_타입의_알림_ID를_조회한다(
-                type = MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST,
+                type = MENTEE_RECEIVE_MENTOR_SUGGEST_FROM_MENTOR_FLOW,
                 page = 1,
                 accessToken = mentee.token.accessToken,
             )
@@ -197,7 +197,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
             assertNotificationsMatch(
                 response = response3,
                 reads = listOf(true, true),
-                types = listOf(MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL, MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
+                types = listOf(MENTEE_RECEIVE_MENTOR_FINALLY_CANCEL_FROM_MENTOR_FLOW, MENTEE_RECEIVE_MENTOR_SUGGEST_FROM_MENTOR_FLOW),
                 memberIds = listOf(mentor.id, mentor.id),
                 coffeeChatIds = listOf(coffeeChatId, coffeeChatId),
                 coffeeChatStatusSnapshots = listOf(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
@@ -215,7 +215,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
             assertNotificationsMatch(
                 response = response1,
                 reads = listOf(false, false),
-                types = listOf(MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL, MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
+                types = listOf(MENTEE_RECEIVE_MENTOR_FINALLY_CANCEL_FROM_MENTOR_FLOW, MENTEE_RECEIVE_MENTOR_SUGGEST_FROM_MENTOR_FLOW),
                 memberIds = listOf(coffeeChatId, coffeeChatId),
                 coffeeChatIds = listOf(mentor.id, mentor.id),
                 coffeeChatStatusSnapshots = listOf(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),
@@ -232,7 +232,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
             assertNotificationsMatch(
                 response = response2,
                 reads = listOf(true, true),
-                types = listOf(MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL, MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
+                types = listOf(MENTEE_RECEIVE_MENTOR_FINALLY_CANCEL_FROM_MENTOR_FLOW, MENTEE_RECEIVE_MENTOR_SUGGEST_FROM_MENTOR_FLOW),
                 memberIds = listOf(mentor.id, mentor.id),
                 coffeeChatIds = listOf(coffeeChatId, coffeeChatId),
                 coffeeChatStatusSnapshots = listOf(MENTOR_FINALLY_CANCEL, MENTOR_SUGGEST),

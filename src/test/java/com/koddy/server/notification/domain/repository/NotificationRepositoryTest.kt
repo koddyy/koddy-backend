@@ -10,15 +10,15 @@ import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_2주차_20_00
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_3주차_20_00_시작
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.NotificationFixture.멘토_수신_MENTEE_APPLY_FROM_MENTEE_FLOW
+import com.koddy.server.common.fixture.NotificationFixture.멘토_수신_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW
+import com.koddy.server.common.fixture.NotificationFixture.멘티_수신_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW
+import com.koddy.server.common.fixture.NotificationFixture.멘티_수신_MENTOR_REJECT_FROM_MENTEE_FLOW
+import com.koddy.server.common.fixture.NotificationFixture.멘티_수신_MENTOR_SUGGEST_FROM_MENTOR_FLOW
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
 import com.koddy.server.member.domain.repository.MemberRepository
 import com.koddy.server.notification.domain.model.Notification
-import com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_REJECT
-import com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE
-import com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST
-import com.koddy.server.notification.domain.model.NotificationType.MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_APPLY
-import com.koddy.server.notification.domain.model.NotificationType.MENTOR_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldContainAnyOf
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -28,7 +28,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @RepositoryTestKt
-@DisplayName("CoffeeChat -> NotificationRepository 테스트")
+@DisplayName("Notification -> NotificationRepository 테스트")
 internal class NotificationRepositoryTest(
     private val sut: NotificationRepository,
     private val memberRepository: MemberRepository,
@@ -56,11 +56,11 @@ internal class NotificationRepositoryTest(
         )
         val notifications: List<Notification> = sut.saveAll(
             listOf(
-                Notification.create(mentor, coffeeChats[0], MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_APPLY),
-                Notification.create(mentee, coffeeChats[1], MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_REJECT),
-                Notification.create(mentee, coffeeChats[2], MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
-                Notification.create(mentor, coffeeChats[3], MENTOR_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE),
-                Notification.create(mentee, coffeeChats[3], MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE),
+                멘토_수신_MENTEE_APPLY_FROM_MENTEE_FLOW.toDomain(target = mentor, coffeeChat = coffeeChats[0]),
+                멘티_수신_MENTOR_REJECT_FROM_MENTEE_FLOW.toDomain(target = mentee, coffeeChat = coffeeChats[1]),
+                멘티_수신_MENTOR_SUGGEST_FROM_MENTOR_FLOW.toDomain(target = mentee, coffeeChat = coffeeChats[2]),
+                멘토_수신_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW.toDomain(target = mentor, coffeeChat = coffeeChats[3]),
+                멘티_수신_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW.toDomain(target = mentee, coffeeChat = coffeeChats[3]),
             ),
         )
 
@@ -96,11 +96,11 @@ internal class NotificationRepositoryTest(
         )
         val notifications: List<Notification> = sut.saveAll(
             listOf(
-                Notification.create(mentor, coffeeChats[0], MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_APPLY),
-                Notification.create(mentee, coffeeChats[1], MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_REJECT),
-                Notification.create(mentee, coffeeChats[2], MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST),
-                Notification.create(mentor, coffeeChats[3], MENTOR_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE),
-                Notification.create(mentee, coffeeChats[3], MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_APPROVE),
+                멘토_수신_MENTEE_APPLY_FROM_MENTEE_FLOW.toDomain(target = mentor, coffeeChat = coffeeChats[0]),
+                멘티_수신_MENTOR_REJECT_FROM_MENTEE_FLOW.toDomain(target = mentee, coffeeChat = coffeeChats[1]),
+                멘티_수신_MENTOR_SUGGEST_FROM_MENTOR_FLOW.toDomain(target = mentee, coffeeChat = coffeeChats[2]),
+                멘토_수신_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW.toDomain(target = mentor, coffeeChat = coffeeChats[3]),
+                멘티_수신_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW.toDomain(target = mentee, coffeeChat = coffeeChats[3]),
             ),
         )
 
@@ -108,28 +108,28 @@ internal class NotificationRepositoryTest(
         val mentorNotifications1: List<Notification> = sut.findByTargetId(mentor.id)
         assertSoftly {
             mentorNotifications1 shouldContainExactlyInAnyOrder listOf(notifications[0], notifications[3])
-            mentorNotifications1.map { it.isRead } shouldContainAnyOf listOf(false, false)
+            mentorNotifications1.map { it.read } shouldContainAnyOf listOf(false, false)
         }
 
         sut.readAll(mentor.id)
         val mentorNotifications2: List<Notification> = sut.findByTargetId(mentor.id)
         assertSoftly {
             mentorNotifications2 shouldContainExactlyInAnyOrder listOf(notifications[0], notifications[3])
-            mentorNotifications2.map { it.isRead } shouldContainAnyOf listOf(true, true)
+            mentorNotifications2.map { it.read } shouldContainAnyOf listOf(true, true)
         }
 
         /* mentee read all -> notifications[1], notifications[2], notifications[4] */
         val menteeNotifications1: List<Notification> = sut.findByTargetId(mentee.id)
         assertSoftly {
             menteeNotifications1 shouldContainExactlyInAnyOrder listOf(notifications[1], notifications[2], notifications[4])
-            menteeNotifications1.map { it.isRead } shouldContainAnyOf listOf(false, false, false)
+            menteeNotifications1.map { it.read } shouldContainAnyOf listOf(false, false, false)
         }
 
         sut.readAll(mentee.id)
         val menteeNotifications2: List<Notification> = sut.findByTargetId(mentee.id)
         assertSoftly {
             menteeNotifications2 shouldContainExactlyInAnyOrder listOf(notifications[1], notifications[2], notifications[4])
-            menteeNotifications2.map { it.isRead } shouldContainAnyOf listOf(true, true, true)
+            menteeNotifications2.map { it.read } shouldContainAnyOf listOf(true, true, true)
         }
     }
 }

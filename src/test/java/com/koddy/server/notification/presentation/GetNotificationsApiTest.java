@@ -52,7 +52,7 @@ class GetNotificationsApiTest extends ApiDocsTest {
                             new NotificationSummary(
                                     1L,
                                     false,
-                                    NotificationType.MENTOR_RECEIVE_MENTEE_FLOW_MENTEE_APPLY.name(),
+                                    NotificationType.MENTOR_RECEIVE_MENTEE_APPLY_FROM_MENTEE_FLOW.name(),
                                     LocalDateTime.now(),
                                     new NotifyMember(
                                             1L,
