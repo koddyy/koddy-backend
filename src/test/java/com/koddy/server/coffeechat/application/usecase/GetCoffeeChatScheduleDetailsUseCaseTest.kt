@@ -6,7 +6,7 @@ import com.koddy.server.coffeechat.application.usecase.query.response.MenteeCoff
 import com.koddy.server.coffeechat.application.usecase.query.response.MentorCoffeeChatScheduleDetails
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus
-import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository
+import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow
 import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow
@@ -35,13 +35,13 @@ import java.time.LocalDateTime
 @UnitTestKt
 @DisplayName("CoffeeChat -> GetCoffeeChatScheduleDetailsUseCase 테스트")
 internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
-    val coffeeChatRepository = mockk<CoffeeChatRepository>()
+    val coffeeChatReader = mockk<CoffeeChatReader>()
     val mentorRepository = mockk<MentorRepository>()
     val menteeRepository = mockk<MenteeRepository>()
     val availableLanguageRepository = mockk<AvailableLanguageRepository>()
     val encryptor = FakeEncryptor()
     val sut = GetCoffeeChatScheduleDetailsUseCase(
-        coffeeChatRepository,
+        coffeeChatReader,
         mentorRepository,
         menteeRepository,
         availableLanguageRepository,
@@ -55,7 +55,7 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
         val authenticated = Authenticated(mentor.id, mentor.authority)
         val coffeeChat: CoffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L, LocalDateTime.now())
         val query = GetCoffeeChatScheduleDetails(authenticated, coffeeChat.id)
-        every { coffeeChatRepository.getById(query.coffeeChatId) } returns coffeeChat
+        every { coffeeChatReader.getById(query.coffeeChatId) } returns coffeeChat
 
         context("멘토가 내 일정에서 특정 커피챗에 대한 상세 조회를 진행하면") {
             every { menteeRepository.getByIdWithNative(coffeeChat.menteeId) } returns mentee
@@ -65,7 +65,7 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
                 val result: MentorCoffeeChatScheduleDetails = sut.invoke(query) as MentorCoffeeChatScheduleDetails
 
                 verify(exactly = 1) {
-                    coffeeChatRepository.getById(query.coffeeChatId)
+                    coffeeChatReader.getById(query.coffeeChatId)
                     menteeRepository.getByIdWithNative(coffeeChat.menteeId)
                     availableLanguageRepository.findByMemberIdWithNative(mentee.id)
                 }
@@ -101,7 +101,7 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
         val authenticated = Authenticated(mentee.id, mentee.authority)
         val coffeeChat: CoffeeChat = MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor).apply(1L, LocalDateTime.now())
         val query = GetCoffeeChatScheduleDetails(authenticated, coffeeChat.id)
-        every { coffeeChatRepository.getById(query.coffeeChatId) } returns coffeeChat
+        every { coffeeChatReader.getById(query.coffeeChatId) } returns coffeeChat
 
         context("멘티가 내 일정에서 특정 커피챗에 대한 상세 조회를 진행하면") {
             every { mentorRepository.getByIdWithNative(coffeeChat.mentorId) } returns mentor
@@ -111,7 +111,7 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
                 val result: MenteeCoffeeChatScheduleDetails = sut.invoke(query) as MenteeCoffeeChatScheduleDetails
 
                 verify(exactly = 1) {
-                    coffeeChatRepository.getById(query.coffeeChatId)
+                    coffeeChatReader.getById(query.coffeeChatId)
                     mentorRepository.getByIdWithNative(coffeeChat.mentorId)
                     availableLanguageRepository.findByMemberIdWithNative(mentor.id)
                 }

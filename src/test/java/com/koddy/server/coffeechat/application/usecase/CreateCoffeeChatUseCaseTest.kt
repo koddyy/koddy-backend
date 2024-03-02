@@ -6,8 +6,8 @@ import com.koddy.server.coffeechat.domain.event.MenteeNotification
 import com.koddy.server.coffeechat.domain.event.MentorNotification
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.model.Reservation
-import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository
 import com.koddy.server.coffeechat.domain.service.CoffeeChatNotificationEventPublisher
+import com.koddy.server.coffeechat.domain.service.CoffeeChatWriter
 import com.koddy.server.coffeechat.domain.service.ReservationAvailabilityChecker
 import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작
@@ -34,14 +34,14 @@ internal class CreateCoffeeChatUseCaseTest : DescribeSpec({
     val mentorRepository = mockk<MentorRepository>()
     val menteeRepository = mockk<MenteeRepository>()
     val reservationAvailabilityChecker = mockk<ReservationAvailabilityChecker>()
-    val coffeeChatRepository = mockk<CoffeeChatRepository>()
+    val coffeeChatWriter = mockk<CoffeeChatWriter>()
     val eventPublisher = mockk<ApplicationEventPublisher>()
     val coffeeChatNotificationEventPublisher = CoffeeChatNotificationEventPublisher(eventPublisher)
     val sut = CreateCoffeeChatUseCase(
         mentorRepository,
         menteeRepository,
         reservationAvailabilityChecker,
-        coffeeChatRepository,
+        coffeeChatWriter,
         coffeeChatNotificationEventPublisher,
     )
 
@@ -64,7 +64,7 @@ internal class CreateCoffeeChatUseCaseTest : DescribeSpec({
 
         context("멘티가 멘토에게 커피챗을 신청하면") {
             val coffeeChat = CoffeeChat.apply(mentee, mentor, command.applyReason, command.reservation).apply(1L)
-            every { coffeeChatRepository.save(any(CoffeeChat::class)) } returns coffeeChat
+            every { coffeeChatWriter.save(any(CoffeeChat::class)) } returns coffeeChat
 
             val slotEvent = slot<MentorNotification>()
             justRun { eventPublisher.publishEvent(capture(slotEvent)) }
@@ -76,7 +76,7 @@ internal class CreateCoffeeChatUseCaseTest : DescribeSpec({
                     menteeRepository.getById(command.menteeId)
                     mentorRepository.getById(command.mentorId)
                     reservationAvailabilityChecker.check(mentor, command.reservation)
-                    coffeeChatRepository.save(any(CoffeeChat::class))
+                    coffeeChatWriter.save(any(CoffeeChat::class))
                 }
                 slotEvent.captured shouldBe MentorNotification.MenteeAppliedFromMenteeFlowEvent(
                     mentorId = coffeeChat.mentorId,
@@ -98,7 +98,7 @@ internal class CreateCoffeeChatUseCaseTest : DescribeSpec({
 
         context("멘토가 멘티에게 커피챗을 제안하면") {
             val coffeeChat = CoffeeChat.suggest(mentor, mentee, command.suggestReason).apply(1L)
-            every { coffeeChatRepository.save(any(CoffeeChat::class)) } returns coffeeChat
+            every { coffeeChatWriter.save(any(CoffeeChat::class)) } returns coffeeChat
 
             val slotEvent = slot<MenteeNotification>()
             justRun { eventPublisher.publishEvent(capture(slotEvent)) }
@@ -109,7 +109,7 @@ internal class CreateCoffeeChatUseCaseTest : DescribeSpec({
                 verify(exactly = 1) {
                     menteeRepository.getById(command.menteeId)
                     mentorRepository.getById(command.mentorId)
-                    coffeeChatRepository.save(any(CoffeeChat::class))
+                    coffeeChatWriter.save(any(CoffeeChat::class))
                 }
                 verify { reservationAvailabilityChecker wasNot Called }
                 slotEvent.captured shouldBe MenteeNotification.MentorSuggestedFromMentorFlowEvent(

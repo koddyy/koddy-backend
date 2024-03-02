@@ -2,7 +2,7 @@ package com.koddy.server.notification.application.handler
 
 import com.koddy.server.coffeechat.domain.event.BothNotification
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
-import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository
+import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.global.log.logger
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
@@ -23,7 +23,7 @@ import org.springframework.transaction.event.TransactionalEventListener
 class BothNotificationEventHandler(
     private val mentorRepository: MentorRepository,
     private val menteeRepository: MenteeRepository,
-    private val coffeeChatRepository: CoffeeChatRepository,
+    private val coffeeChatReader: CoffeeChatReader,
     private val notificationRepository: NotificationRepository,
 ) {
     private val log: Logger = logger()
@@ -70,7 +70,7 @@ class BothNotificationEventHandler(
 
         val mentor: Mentor = mentorRepository.getById(event.mentorId)
         val mentee: Mentee = menteeRepository.getById(event.menteeId)
-        val coffeeChat: CoffeeChat = coffeeChatRepository.getById(event.coffeeChatId)
+        val coffeeChat: CoffeeChat = coffeeChatReader.getById(event.coffeeChatId)
 
         notificationRepository.saveAll(
             listOf(

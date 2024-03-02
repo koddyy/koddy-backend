@@ -7,8 +7,8 @@ import com.koddy.server.coffeechat.domain.event.MenteeNotification
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus
 import com.koddy.server.coffeechat.domain.model.Strategy
-import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository
 import com.koddy.server.coffeechat.domain.service.CoffeeChatNotificationEventPublisher
+import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작
@@ -32,12 +32,12 @@ import org.springframework.context.ApplicationEventPublisher
 @UnitTestKt
 @DisplayName("CoffeeChat -> HandlePendingCoffeeChatUseCase 테스트")
 internal class HandlePendingCoffeeChatUseCaseTest : DescribeSpec({
-    val coffeeChatRepository = mockk<CoffeeChatRepository>()
+    val coffeeChatReader = mockk<CoffeeChatReader>()
     val encryptor = FakeEncryptor()
     val eventPublisher = mockk<ApplicationEventPublisher>()
     val coffeeChatNotificationEventPublisher = CoffeeChatNotificationEventPublisher(eventPublisher)
     val sut = HandlePendingCoffeeChatUseCase(
-        coffeeChatRepository,
+        coffeeChatReader,
         encryptor,
         coffeeChatNotificationEventPublisher,
     )
@@ -53,7 +53,7 @@ internal class HandlePendingCoffeeChatUseCaseTest : DescribeSpec({
                 coffeeChatId = coffeeChat.id,
                 cancelReason = "취소..",
             )
-            every { coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId, command.mentorId) } returns coffeeChat
+            every { coffeeChatReader.getByMentor(command.coffeeChatId, command.mentorId) } returns coffeeChat
 
             val slotEvent = slot<MenteeNotification>()
             justRun { eventPublisher.publishEvent(capture(slotEvent)) }
@@ -61,7 +61,7 @@ internal class HandlePendingCoffeeChatUseCaseTest : DescribeSpec({
             it("커피챗은 최종 취소 상태가 되고 멘티에게 알림이 전송된다") {
                 sut.finallyCancel(command)
 
-                verify(exactly = 1) { coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId, command.mentorId) }
+                verify(exactly = 1) { coffeeChatReader.getByMentor(command.coffeeChatId, command.mentorId) }
                 slotEvent.captured shouldBe MenteeNotification.MentorFinallyCanceledFromMentorFlowEvent(
                     menteeId = coffeeChat.menteeId,
                     coffeeChatId = coffeeChat.id,
@@ -92,7 +92,7 @@ internal class HandlePendingCoffeeChatUseCaseTest : DescribeSpec({
                 type = Strategy.Type.KAKAO_ID,
                 value = "sjiwon",
             )
-            every { coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId, command.mentorId) } returns coffeeChat
+            every { coffeeChatReader.getByMentor(command.coffeeChatId, command.mentorId) } returns coffeeChat
 
             val slotEvent = slot<BothNotification>()
             justRun { eventPublisher.publishEvent(capture(slotEvent)) }
@@ -100,7 +100,7 @@ internal class HandlePendingCoffeeChatUseCaseTest : DescribeSpec({
             it("커피챗이 예정되고 멘토 & 멘티에게 알림이 전송된다") {
                 sut.finallyApprove(command)
 
-                verify(exactly = 1) { coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId, command.mentorId) }
+                verify(exactly = 1) { coffeeChatReader.getByMentor(command.coffeeChatId, command.mentorId) }
                 slotEvent.captured shouldBe BothNotification.FinallyApprovedFromMentorFlowEvent(
                     menteeId = coffeeChat.menteeId,
                     mentorId = coffeeChat.mentorId,

@@ -93,10 +93,10 @@ public class CoffeeChatScheduleQueryRepositoryFetchMentorCoffeeChatSchedulesTest
                 () -> assertThat(result.suggested()).isEqualTo(7),
                 () -> assertThat(result.scheduled()).isEqualTo(3),
                 () -> assertThat(result.passed()).isEqualTo(9),
-                () -> assertThat(coffeeChatRepository.getMentorWaitingCoffeeChatCount(mentors[0].getId())).isEqualTo(11),
-                () -> assertThat(coffeeChatRepository.getMentorSuggestedCoffeeChatCount(mentors[0].getId())).isEqualTo(7),
-                () -> assertThat(coffeeChatRepository.getMentorScheduledCoffeeChatCount(mentors[0].getId())).isEqualTo(3),
-                () -> assertThat(coffeeChatRepository.getMentorPassedCoffeeChatCount(mentors[0].getId())).isEqualTo(9)
+                () -> assertThat(coffeeChatRepository.countByMentorIdAndStatusIn(mentors[0].getId(), CoffeeChatStatus.withWaitingCategory())).isEqualTo(11),
+                () -> assertThat(coffeeChatRepository.countByMentorIdAndStatusIn(mentors[0].getId(), CoffeeChatStatus.withSuggstedCategory())).isEqualTo(7),
+                () -> assertThat(coffeeChatRepository.countByMentorIdAndStatusIn(mentors[0].getId(), CoffeeChatStatus.withScheduledCategory())).isEqualTo(3),
+                () -> assertThat(coffeeChatRepository.countByMentorIdAndStatusIn(mentors[0].getId(), CoffeeChatStatus.withPassedCategory())).isEqualTo(9)
         );
     }
 

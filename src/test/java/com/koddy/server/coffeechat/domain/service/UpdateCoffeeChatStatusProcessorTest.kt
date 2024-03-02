@@ -1,7 +1,12 @@
 package com.koddy.server.coffeechat.domain.service
 
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
-import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.AUTO_CANCEL_FROM_MENTEE_FLOW
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.AUTO_CANCEL_FROM_MENTOR_FLOW
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY_COFFEE_CHAT_COMPLETE
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_APPROVE
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository
 import com.koddy.server.common.IntegrateTestKt
 import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow
@@ -22,6 +27,7 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.springframework.data.repository.findByIdOrNull
 
 @IntegrateTestKt
 @DisplayName("CoffeeChat -> UpdateCoffeeChatStatusProcessor 테스트 [IntegrateTest]")
@@ -30,8 +36,8 @@ internal class UpdateCoffeeChatStatusProcessorTest(
     private val memberRepository: MemberRepository,
     private val coffeeChatRepository: CoffeeChatRepository,
 ) {
-    private var mentees = mutableListOf<Mentee>()
-    private var mentors = mutableListOf<Mentor>()
+    private lateinit var mentees: List<Mentee>
+    private lateinit var mentors: List<Mentor>
 
     @BeforeEach
     fun setUp() {
@@ -64,18 +70,18 @@ internal class UpdateCoffeeChatStatusProcessorTest(
         // when - then
         sut.updateWaitingToAutoCancel(수요일_2주차_20_00_시작.start)
         assertSoftly {
-            coffeeChatRepository.getById(coffeeChats[0].id).status shouldBe CoffeeChatStatus.AUTO_CANCEL_FROM_MENTEE_FLOW
-            coffeeChatRepository.getById(coffeeChats[1].id).status shouldBe CoffeeChatStatus.AUTO_CANCEL_FROM_MENTEE_FLOW
-            coffeeChatRepository.getById(coffeeChats[2].id).status shouldBe CoffeeChatStatus.AUTO_CANCEL_FROM_MENTOR_FLOW
-            coffeeChatRepository.getById(coffeeChats[3].id).status shouldBe CoffeeChatStatus.MENTEE_PENDING
+            coffeeChatRepository.findByIdOrNull(coffeeChats[0].id)!!.status shouldBe AUTO_CANCEL_FROM_MENTEE_FLOW
+            coffeeChatRepository.findByIdOrNull(coffeeChats[1].id)!!.status shouldBe AUTO_CANCEL_FROM_MENTEE_FLOW
+            coffeeChatRepository.findByIdOrNull(coffeeChats[2].id)!!.status shouldBe AUTO_CANCEL_FROM_MENTOR_FLOW
+            coffeeChatRepository.findByIdOrNull(coffeeChats[3].id)!!.status shouldBe MENTEE_PENDING
         }
 
         sut.updateWaitingToAutoCancel(수요일_3주차_20_00_시작.start)
         assertSoftly {
-            coffeeChatRepository.getById(coffeeChats[0].id).status shouldBe CoffeeChatStatus.AUTO_CANCEL_FROM_MENTEE_FLOW
-            coffeeChatRepository.getById(coffeeChats[1].id).status shouldBe CoffeeChatStatus.AUTO_CANCEL_FROM_MENTEE_FLOW
-            coffeeChatRepository.getById(coffeeChats[2].id).status shouldBe CoffeeChatStatus.AUTO_CANCEL_FROM_MENTOR_FLOW
-            coffeeChatRepository.getById(coffeeChats[3].id).status shouldBe CoffeeChatStatus.AUTO_CANCEL_FROM_MENTOR_FLOW
+            coffeeChatRepository.findByIdOrNull(coffeeChats[0].id)!!.status shouldBe AUTO_CANCEL_FROM_MENTEE_FLOW
+            coffeeChatRepository.findByIdOrNull(coffeeChats[1].id)!!.status shouldBe AUTO_CANCEL_FROM_MENTEE_FLOW
+            coffeeChatRepository.findByIdOrNull(coffeeChats[2].id)!!.status shouldBe AUTO_CANCEL_FROM_MENTOR_FLOW
+            coffeeChatRepository.findByIdOrNull(coffeeChats[3].id)!!.status shouldBe AUTO_CANCEL_FROM_MENTOR_FLOW
         }
     }
 
@@ -94,18 +100,18 @@ internal class UpdateCoffeeChatStatusProcessorTest(
         // when - then
         sut.updateScheduledToComplete(수요일_2주차_20_00_시작.start)
         assertSoftly {
-            coffeeChatRepository.getById(coffeeChats[0].id).status shouldBe CoffeeChatStatus.MENTEE_APPLY_COFFEE_CHAT_COMPLETE
-            coffeeChatRepository.getById(coffeeChats[1].id).status shouldBe CoffeeChatStatus.MENTEE_APPLY_COFFEE_CHAT_COMPLETE
-            coffeeChatRepository.getById(coffeeChats[2].id).status shouldBe CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
-            coffeeChatRepository.getById(coffeeChats[3].id).status shouldBe CoffeeChatStatus.MENTOR_FINALLY_APPROVE
+            coffeeChatRepository.findByIdOrNull(coffeeChats[0].id)!!.status shouldBe MENTEE_APPLY_COFFEE_CHAT_COMPLETE
+            coffeeChatRepository.findByIdOrNull(coffeeChats[1].id)!!.status shouldBe MENTEE_APPLY_COFFEE_CHAT_COMPLETE
+            coffeeChatRepository.findByIdOrNull(coffeeChats[2].id)!!.status shouldBe MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
+            coffeeChatRepository.findByIdOrNull(coffeeChats[3].id)!!.status shouldBe MENTOR_FINALLY_APPROVE
         }
 
         sut.updateScheduledToComplete(수요일_3주차_20_00_시작.start)
         assertSoftly {
-            coffeeChatRepository.getById(coffeeChats[0].id).status shouldBe CoffeeChatStatus.MENTEE_APPLY_COFFEE_CHAT_COMPLETE
-            coffeeChatRepository.getById(coffeeChats[1].id).status shouldBe CoffeeChatStatus.MENTEE_APPLY_COFFEE_CHAT_COMPLETE
-            coffeeChatRepository.getById(coffeeChats[2].id).status shouldBe CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
-            coffeeChatRepository.getById(coffeeChats[3].id).status shouldBe CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
+            coffeeChatRepository.findByIdOrNull(coffeeChats[0].id)!!.status shouldBe MENTEE_APPLY_COFFEE_CHAT_COMPLETE
+            coffeeChatRepository.findByIdOrNull(coffeeChats[1].id)!!.status shouldBe MENTEE_APPLY_COFFEE_CHAT_COMPLETE
+            coffeeChatRepository.findByIdOrNull(coffeeChats[2].id)!!.status shouldBe MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
+            coffeeChatRepository.findByIdOrNull(coffeeChats[3].id)!!.status shouldBe MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
         }
     }
 }

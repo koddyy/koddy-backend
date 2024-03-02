@@ -44,7 +44,7 @@ internal class NotificationRepositoryTest(
     }
 
     @Test
-    fun `자신에게 전달될 알림을 조회한다`() {
+    fun `자신에게 전달될 알림을 조회한다 - findByIdAndTargetId`() {
         // given
         val coffeeChats: List<CoffeeChat> = coffeeChatRepository.saveAll(
             listOf(
@@ -84,7 +84,7 @@ internal class NotificationRepositoryTest(
     }
 
     @Test
-    fun `자신의 읽지 않은 알림을 모두 읽음 처리한다`() {
+    fun `자신의 읽지 않은 알림을 모두 읽음 처리한다 - readAll`() {
         // given
         val coffeeChats: List<CoffeeChat> = coffeeChatRepository.saveAll(
             listOf(

@@ -7,8 +7,8 @@ import com.koddy.server.coffeechat.domain.event.MenteeNotification
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus
 import com.koddy.server.coffeechat.domain.model.Strategy
-import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository
 import com.koddy.server.coffeechat.domain.service.CoffeeChatNotificationEventPublisher
+import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작
@@ -32,12 +32,12 @@ import org.springframework.context.ApplicationEventPublisher
 @UnitTestKt
 @DisplayName("CoffeeChat -> HandleAppliedCoffeeChatUseCase 테스트")
 internal class HandleAppliedCoffeeChatUseCaseTest : DescribeSpec({
-    val coffeeChatRepository = mockk<CoffeeChatRepository>()
+    val coffeeChatReader = mockk<CoffeeChatReader>()
     val encryptor = FakeEncryptor()
     val eventPublisher = mockk<ApplicationEventPublisher>()
     val coffeeChatNotificationEventPublisher = CoffeeChatNotificationEventPublisher(eventPublisher)
     val sut = HandleAppliedCoffeeChatUseCase(
-        coffeeChatRepository,
+        coffeeChatReader,
         encryptor,
         coffeeChatNotificationEventPublisher,
     )
@@ -53,7 +53,7 @@ internal class HandleAppliedCoffeeChatUseCaseTest : DescribeSpec({
                 coffeeChatId = coffeeChat.id,
                 rejectReason = "거절..",
             )
-            every { coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId, command.mentorId) } returns coffeeChat
+            every { coffeeChatReader.getByMentor(command.coffeeChatId, command.mentorId) } returns coffeeChat
 
             val slotEvent = slot<MenteeNotification>()
             justRun { eventPublisher.publishEvent(capture(slotEvent)) }
@@ -61,7 +61,7 @@ internal class HandleAppliedCoffeeChatUseCaseTest : DescribeSpec({
             it("커피챗이 거절되고 멘티에게 알림이 전송된다") {
                 sut.reject(command)
 
-                verify(exactly = 1) { coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId, command.mentorId) }
+                verify(exactly = 1) { coffeeChatReader.getByMentor(command.coffeeChatId, command.mentorId) }
                 slotEvent.captured shouldBe MenteeNotification.MentorRejectedFromMenteeFlowEvent(
                     menteeId = coffeeChat.menteeId,
                     coffeeChatId = coffeeChat.id,
@@ -93,7 +93,7 @@ internal class HandleAppliedCoffeeChatUseCaseTest : DescribeSpec({
                 type = Strategy.Type.KAKAO_ID,
                 value = "sjiwon",
             )
-            every { coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId, command.mentorId) } returns coffeeChat
+            every { coffeeChatReader.getByMentor(command.coffeeChatId, command.mentorId) } returns coffeeChat
 
             val slotEvent = slot<BothNotification>()
             justRun { eventPublisher.publishEvent(capture(slotEvent)) }
@@ -101,7 +101,7 @@ internal class HandleAppliedCoffeeChatUseCaseTest : DescribeSpec({
             it("커피챗이 예정되고 멘토 & 멘티에게 알림이 전송된다") {
                 sut.approve(command)
 
-                verify(exactly = 1) { coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId, command.mentorId) }
+                verify(exactly = 1) { coffeeChatReader.getByMentor(command.coffeeChatId, command.mentorId) }
                 slotEvent.captured shouldBe BothNotification.ApprovedFromMenteeFlowEvent(
                     menteeId = coffeeChat.menteeId,
                     mentorId = coffeeChat.mentorId,

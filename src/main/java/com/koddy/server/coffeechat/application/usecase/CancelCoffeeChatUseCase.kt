@@ -4,14 +4,14 @@ import com.koddy.server.auth.domain.model.Authenticated
 import com.koddy.server.coffeechat.application.usecase.command.CancelCoffeeChatCommand
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus
-import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository
 import com.koddy.server.coffeechat.domain.service.CoffeeChatNotificationEventPublisher
+import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.global.annotation.KoddyWritableTransactional
 import com.koddy.server.global.annotation.UseCase
 
 @UseCase
 class CancelCoffeeChatUseCase(
-    private val coffeeChatRepository: CoffeeChatRepository,
+    private val coffeeChatReader: CoffeeChatReader,
     private val eventPublisher: CoffeeChatNotificationEventPublisher,
 ) {
     @KoddyWritableTransactional
@@ -28,7 +28,7 @@ class CancelCoffeeChatUseCase(
         command: CancelCoffeeChatCommand,
         authenticated: Authenticated,
     ) {
-        val coffeeChat: CoffeeChat = coffeeChatRepository.getByIdAndMentorId(command.coffeeChatId, authenticated.id)
+        val coffeeChat: CoffeeChat = coffeeChatReader.getByMentor(command.coffeeChatId, authenticated.id)
         coffeeChat.cancel(determineCancelStatus(coffeeChat), authenticated.id, command.cancelReason)
 
         when (coffeeChat.isMenteeFlow) {
@@ -41,7 +41,7 @@ class CancelCoffeeChatUseCase(
         command: CancelCoffeeChatCommand,
         authenticated: Authenticated,
     ) {
-        val coffeeChat: CoffeeChat = coffeeChatRepository.getByIdAndMenteeId(command.coffeeChatId, authenticated.id)
+        val coffeeChat: CoffeeChat = coffeeChatReader.getByMentee(command.coffeeChatId, authenticated.id)
         coffeeChat.cancel(determineCancelStatus(coffeeChat), authenticated.id, command.cancelReason)
 
         when (coffeeChat.isMenteeFlow) {

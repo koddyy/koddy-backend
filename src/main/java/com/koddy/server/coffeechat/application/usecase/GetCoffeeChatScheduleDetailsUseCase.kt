@@ -5,7 +5,7 @@ import com.koddy.server.coffeechat.application.usecase.query.response.MenteeCoff
 import com.koddy.server.coffeechat.application.usecase.query.response.MentorCoffeeChatScheduleDetails
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.model.response.CoffeeChatScheduleDetails
-import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository
+import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional
 import com.koddy.server.global.annotation.UseCase
 import com.koddy.server.global.utils.encrypt.Encryptor
@@ -18,7 +18,7 @@ import com.koddy.server.member.domain.repository.MentorRepository
 
 @UseCase
 class GetCoffeeChatScheduleDetailsUseCase(
-    private val coffeeChatRepository: CoffeeChatRepository,
+    private val coffeeChatReader: CoffeeChatReader,
     private val mentorRepository: MentorRepository,
     private val menteeRepository: MenteeRepository,
     private val availableLanguageRepository: AvailableLanguageRepository,
@@ -26,7 +26,7 @@ class GetCoffeeChatScheduleDetailsUseCase(
 ) {
     @KoddyReadOnlyTransactional
     fun invoke(query: GetCoffeeChatScheduleDetails): CoffeeChatScheduleDetails {
-        val coffeeChat: CoffeeChat = coffeeChatRepository.getById(query.coffeeChatId)
+        val coffeeChat: CoffeeChat = coffeeChatReader.getById(query.coffeeChatId)
         return when (query.authenticated.isMentor) {
             true -> {
                 val mentee: Mentee = menteeRepository.getByIdWithNative(coffeeChat.menteeId)
@@ -42,5 +42,7 @@ class GetCoffeeChatScheduleDetailsUseCase(
         }
     }
 
-    private fun fetchMemberLanguages(memberId: Long): List<Language> = availableLanguageRepository.findByMemberIdWithNative(memberId).map { it.language }
+    private fun fetchMemberLanguages(memberId: Long): List<Language> {
+        return availableLanguageRepository.findByMemberIdWithNative(memberId).map { it.language }
+    }
 }

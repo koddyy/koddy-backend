@@ -93,10 +93,10 @@ public class CoffeeChatScheduleQueryRepositoryFetchMenteeCoffeeChatSchedulesTest
                 () -> assertThat(result.suggested()).isEqualTo(7),
                 () -> assertThat(result.scheduled()).isEqualTo(3),
                 () -> assertThat(result.passed()).isEqualTo(9),
-                () -> assertThat(coffeeChatRepository.getMenteeWaitingCoffeeChatCount(mentees[0].getId())).isEqualTo(11),
-                () -> assertThat(coffeeChatRepository.getMenteeSuggestedCoffeeChatCount(mentees[0].getId())).isEqualTo(7),
-                () -> assertThat(coffeeChatRepository.getMenteeScheduledCoffeeChatCount(mentees[0].getId())).isEqualTo(3),
-                () -> assertThat(coffeeChatRepository.getMenteePassedCoffeeChatCount(mentees[0].getId())).isEqualTo(9)
+                () -> assertThat(coffeeChatRepository.countByMenteeIdAndStatusIn(mentees[0].getId(), CoffeeChatStatus.withWaitingCategory())).isEqualTo(11),
+                () -> assertThat(coffeeChatRepository.countByMenteeIdAndStatusIn(mentees[0].getId(), CoffeeChatStatus.withSuggstedCategory())).isEqualTo(7),
+                () -> assertThat(coffeeChatRepository.countByMenteeIdAndStatusIn(mentees[0].getId(), CoffeeChatStatus.withScheduledCategory())).isEqualTo(3),
+                () -> assertThat(coffeeChatRepository.countByMenteeIdAndStatusIn(mentees[0].getId(), CoffeeChatStatus.withPassedCategory())).isEqualTo(9)
         );
     }
 
