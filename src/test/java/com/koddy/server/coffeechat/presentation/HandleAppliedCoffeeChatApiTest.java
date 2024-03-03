@@ -94,8 +94,8 @@ class HandleAppliedCoffeeChatApiTest extends ApiDocsTest {
         private static final String BASE_URL = "/api/coffeechats/applied/approve/{coffeeChatId}";
         private final ApproveAppliedCoffeeChatRequest request = new ApproveAppliedCoffeeChatRequest(
                 "질문..",
-                StrategyFixture.KAKAO_ID.getType().getValue(),
-                StrategyFixture.KAKAO_ID.getValue()
+                StrategyFixture.KAKAO_ID.type.getValue(),
+                StrategyFixture.KAKAO_ID.value
         );
 
         @Test
