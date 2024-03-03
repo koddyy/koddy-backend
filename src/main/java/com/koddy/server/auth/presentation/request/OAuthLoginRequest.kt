@@ -14,11 +14,12 @@ data class OAuthLoginRequest(
     @field:NotBlank(message = "State값은 필수입니다.")
     val state: String,
 ) {
-    fun toCommand(provider: String): OAuthLoginCommand =
-        OAuthLoginCommand(
+    fun toCommand(provider: String): OAuthLoginCommand {
+        return OAuthLoginCommand(
             provider = OAuthProvider.from(provider),
             code = authorizationCode,
             redirectUrl = redirectUri,
             state = state,
         )
+    }
 }

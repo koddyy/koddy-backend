@@ -12,12 +12,13 @@ data class RejectAppliedCoffeeChatRequest(
     fun toCommand(
         mentorId: Long,
         coffeeChatId: Long,
-    ): RejectAppliedCoffeeChatCommand =
-        RejectAppliedCoffeeChatCommand(
+    ): RejectAppliedCoffeeChatCommand {
+        return RejectAppliedCoffeeChatCommand(
             mentorId = mentorId,
             coffeeChatId = coffeeChatId,
             rejectReason = rejectReason,
         )
+    }
 }
 
 data class ApproveAppliedCoffeeChatRequest(
@@ -33,12 +34,13 @@ data class ApproveAppliedCoffeeChatRequest(
     fun toCommand(
         mentorId: Long,
         coffeeChatId: Long,
-    ): ApproveAppliedCoffeeChatCommand =
-        ApproveAppliedCoffeeChatCommand(
+    ): ApproveAppliedCoffeeChatCommand {
+        return ApproveAppliedCoffeeChatCommand(
             mentorId = mentorId,
             coffeeChatId = coffeeChatId,
             question = question,
             type = Strategy.Type.from(chatType),
             value = chatValue,
         )
+    }
 }

@@ -27,24 +27,25 @@ data class MentorPrivateProfile(
 ) : MemberPrivateProfile {
     companion object {
         @JvmStatic
-        fun from(mentor: Mentor): MentorPrivateProfile =
-            MentorPrivateProfile(
-                mentor.id,
-                mentor.platform.email.value,
-                mentor.name,
-                mentor.profileImageUrl,
-                mentor.nationality.code,
-                mentor.introduction,
-                LanguageResponse.of(mentor.languages),
-                mentor.universityProfile.school,
-                mentor.universityProfile.major,
-                mentor.universityProfile.enteredIn,
-                mentor.isAuthenticated,
-                MentoringPeriodResponse.from(mentor.mentoringPeriod),
-                mentor.schedules.map { ScheduleResponse.from(it.timeline) },
-                "mentor",
-                mentor.isProfileComplete,
+        fun from(mentor: Mentor): MentorPrivateProfile {
+            return MentorPrivateProfile(
+                id = mentor.id,
+                email = mentor.platform.email.value,
+                name = mentor.name,
+                profileImageUrl = mentor.profileImageUrl,
+                nationality = mentor.nationality.code,
+                introduction = mentor.introduction,
+                languages = LanguageResponse.of(mentor.languages),
+                school = mentor.universityProfile.school,
+                major = mentor.universityProfile.major,
+                enteredIn = mentor.universityProfile.enteredIn,
+                authenticated = mentor.isAuthenticated,
+                period = MentoringPeriodResponse.from(mentor.mentoringPeriod),
+                schedules = mentor.schedules.map { ScheduleResponse.from(it.timeline) },
+                role = "mentor",
+                profileComplete = mentor.isProfileComplete,
             )
+        }
     }
 }
 
@@ -63,19 +64,20 @@ data class MenteePrivateProfile(
 ) : MemberPrivateProfile {
     companion object {
         @JvmStatic
-        fun from(mentee: Mentee): MenteePrivateProfile =
-            MenteePrivateProfile(
-                mentee.id,
-                mentee.platform.email.value,
-                mentee.name,
-                mentee.profileImageUrl,
-                mentee.nationality.code,
-                mentee.introduction,
-                LanguageResponse.of(mentee.languages),
-                mentee.interest.school,
-                mentee.interest.major,
-                "mentee",
-                mentee.isProfileComplete,
+        fun from(mentee: Mentee): MenteePrivateProfile {
+            return MenteePrivateProfile(
+                id = mentee.id,
+                email = mentee.platform.email.value,
+                name = mentee.name,
+                profileImageUrl = mentee.profileImageUrl,
+                nationality = mentee.nationality.code,
+                introduction = mentee.introduction,
+                languages = LanguageResponse.of(mentee.languages),
+                interestSchool = mentee.interest.school,
+                interestMajor = mentee.interest.major,
+                role = "mentee",
+                profileComplete = mentee.isProfileComplete,
             )
+        }
     }
 }

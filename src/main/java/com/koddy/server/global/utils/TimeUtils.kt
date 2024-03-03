@@ -50,15 +50,17 @@ object TimeUtils {
         end: LocalDateTime,
     ): Long = ChronoUnit.MINUTES.between(start, end).absoluteValue
 
-    fun kstToUtc(kst: LocalDateTime): LocalDateTime =
-        ZonedDateTime.of(kst, kstZoneId)
+    fun kstToUtc(kst: LocalDateTime): LocalDateTime {
+        return ZonedDateTime.of(kst, kstZoneId)
             .withZoneSameInstant(utcZoneId)
             .toLocalDateTime()
+    }
 
-    fun utcToKst(utc: LocalDateTime): LocalDateTime =
-        ZonedDateTime.of(utc, utcZoneId)
+    fun utcToKst(utc: LocalDateTime): LocalDateTime {
+        return ZonedDateTime.of(utc, utcZoneId)
             .withZoneSameInstant(kstZoneId)
             .toLocalDateTime()
+    }
 
     /**
      * targetA < targetB

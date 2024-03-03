@@ -17,8 +17,8 @@ class MentorDetails(
 ) {
     companion object {
         @JvmStatic
-        fun from(mentor: Mentor): MentorDetails =
-            MentorDetails(
+        fun from(mentor: Mentor): MentorDetails {
+            return MentorDetails(
                 mentor.id,
                 mentor.name,
                 mentor.profileImageUrl,
@@ -29,12 +29,13 @@ class MentorDetails(
                 mentor.universityProfile.enteredIn,
                 mentor.status.name,
             )
+        }
 
         fun of(
             mentor: Mentor,
             languages: List<Language>,
-        ): MentorDetails =
-            MentorDetails(
+        ): MentorDetails {
+            return MentorDetails(
                 mentor.id,
                 mentor.name,
                 mentor.profileImageUrl,
@@ -45,5 +46,6 @@ class MentorDetails(
                 mentor.universityProfile.enteredIn,
                 mentor.status.name,
             )
+        }
     }
 }

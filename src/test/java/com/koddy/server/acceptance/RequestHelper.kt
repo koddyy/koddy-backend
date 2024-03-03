@@ -18,92 +18,100 @@ private fun RequestSpecification.When(): RequestSpecification {
 
 object RequestHelper {
     @JvmStatic
-    fun getRequest(uri: String): ValidatableResponse =
-        request {
+    fun getRequest(uri: String): ValidatableResponse {
+        return request {
             it.contentType(ContentType.JSON)
                 .When()[uri]
         }
+    }
 
     @JvmStatic
     fun getRequestWithAccessToken(
         uri: String,
         accessToken: String,
-    ): ValidatableResponse =
-        request {
+    ): ValidatableResponse {
+        return request {
             it.contentType(ContentType.JSON)
                 .auth().oauth2(accessToken)
                 .When()[uri]
         }
+    }
 
     @JvmStatic
-    fun postRequest(uri: String): ValidatableResponse =
-        request {
+    fun postRequest(uri: String): ValidatableResponse {
+        return request {
             it.contentType(ContentType.JSON)
                 .When()
                 .post(uri)
         }
+    }
 
     @JvmStatic
     fun postRequest(
         uri: String,
         body: Any,
-    ): ValidatableResponse =
-        request {
+    ): ValidatableResponse {
+        return request {
             it.contentType(ContentType.JSON)
                 .body(body)
                 .When()
                 .post(uri)
         }
+    }
 
     @JvmStatic
     fun postRequestWithAccessToken(
         uri: String,
         accessToken: String,
-    ): ValidatableResponse =
-        request {
+    ): ValidatableResponse {
+        return request {
             it.contentType(ContentType.JSON)
                 .auth().oauth2(accessToken)
                 .When()
                 .post(uri)
         }
+    }
 
     @JvmStatic
     fun postRequestWithRefreshToken(
         uri: String,
         refreshToken: String,
-    ): ValidatableResponse =
-        request {
+    ): ValidatableResponse {
+        return request {
             it.contentType(ContentType.JSON)
                 .cookie(Cookie.Builder(AuthToken.REFRESH_TOKEN_HEADER, refreshToken).build())
                 .When()
                 .post(uri)
         }
+    }
 
     @JvmStatic
     fun postRequestWithAccessToken(
         uri: String,
         body: Any,
         accessToken: String,
-    ): ValidatableResponse =
-        request {
+    ): ValidatableResponse {
+        return request {
             it.contentType(ContentType.JSON)
                 .auth().oauth2(accessToken)
                 .body(body)
                 .When()
                 .post(uri)
         }
+    }
 
     @JvmStatic
     fun multipartRequest(
         uri: String,
         fileName: String,
-    ): ValidatableResponse =
-        request {
+    ): ValidatableResponse {
+        return request {
             it.contentType(ContentType.MULTIPART)
                 .multiPart("file", getFile(fileName))
                 .When()
                 .post(uri)
         }
+    }
 
     fun multipartRequest(
         uri: String,
@@ -240,57 +248,62 @@ object RequestHelper {
             .then().log().all()
     }
 
-    fun patchRequest(uri: String): ValidatableResponse =
-        request {
+    fun patchRequest(uri: String): ValidatableResponse {
+        return request {
             it.contentType(ContentType.JSON)
                 .When()
                 .patch(uri)
         }
+    }
 
     @JvmStatic
     fun patchRequestWithAccessToken(
         uri: String,
         accessToken: String,
-    ): ValidatableResponse =
-        request {
+    ): ValidatableResponse {
+        return request {
             it.contentType(ContentType.JSON)
                 .auth().oauth2(accessToken)
                 .When()
                 .patch(uri)
         }
+    }
 
     @JvmStatic
     fun patchRequestWithAccessToken(
         uri: String,
         body: Any,
         accessToken: String,
-    ): ValidatableResponse =
-        request {
+    ): ValidatableResponse {
+        return request {
             it.contentType(ContentType.JSON)
                 .auth().oauth2(accessToken)
                 .body(body)
                 .When()
                 .patch(uri)
         }
+    }
 
-    fun deleteRequest(uri: String): ValidatableResponse =
-        request {
+    fun deleteRequest(uri: String): ValidatableResponse {
+        return request {
             it.contentType(ContentType.JSON)
                 .When()
                 .delete(uri)
         }
+    }
 
     @JvmStatic
     fun deleteRequestWithAccessToken(
         uri: String,
         accessToken: String,
-    ): ValidatableResponse =
-        request {
+    ): ValidatableResponse {
+        return request {
             it.contentType(ContentType.JSON)
                 .auth().oauth2(accessToken)
                 .When()
                 .delete(uri)
         }
+    }
 
     private fun request(function: Function<RequestSpecification, Response>): ValidatableResponse {
         val request: RequestSpecification = RestAssured.given().log().all()

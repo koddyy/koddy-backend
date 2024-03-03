@@ -8,5 +8,10 @@ import com.koddy.server.global.annotation.UseCase
 class GetOAuthLinkUseCase(
     private val oAuthUriGeneratorFacade: OAuthUriGeneratorFacade,
 ) {
-    fun invoke(query: GetOAuthLink): String = oAuthUriGeneratorFacade.generate(query.provider, query.redirectUri)
+    fun invoke(query: GetOAuthLink): String {
+        return oAuthUriGeneratorFacade.generate(
+            provider = query.provider,
+            redirectUri = query.redirectUri,
+        )
+    }
 }

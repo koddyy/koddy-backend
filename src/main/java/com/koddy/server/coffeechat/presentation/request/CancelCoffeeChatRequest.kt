@@ -11,10 +11,11 @@ data class CancelCoffeeChatRequest(
     fun toCommand(
         authenticated: Authenticated,
         coffeeChatId: Long,
-    ): CancelCoffeeChatCommand =
-        CancelCoffeeChatCommand(
+    ): CancelCoffeeChatCommand {
+        return CancelCoffeeChatCommand(
             authenticated = authenticated,
             coffeeChatId = coffeeChatId,
             cancelReason = cancelReason,
         )
+    }
 }

@@ -23,16 +23,17 @@ data class CreateCoffeeChatByApplyRequest(
     @field:JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     val end: String,
 ) {
-    fun toCommand(menteeId: Long): CreateCoffeeChatByApplyCommand =
-        CreateCoffeeChatByApplyCommand(
-            menteeId,
-            mentorId,
-            applyReason,
-            Reservation.of(
+    fun toCommand(menteeId: Long): CreateCoffeeChatByApplyCommand {
+        return CreateCoffeeChatByApplyCommand(
+            menteeId = menteeId,
+            mentorId = mentorId,
+            applyReason = applyReason,
+            reservation = Reservation.of(
                 TimeUtils.toLocalDateTime(start),
                 TimeUtils.toLocalDateTime(end),
             ),
         )
+    }
 }
 
 data class CreateCoffeeChatBySuggestRequest(
@@ -42,10 +43,11 @@ data class CreateCoffeeChatBySuggestRequest(
     @field:NotBlank(message = "멘티에게 커피챗을 제안하는 이유를 입력해주세요.")
     val suggestReason: String,
 ) {
-    fun toCommand(mentorId: Long): CreateCoffeeChatBySuggestCommand =
-        CreateCoffeeChatBySuggestCommand(
-            mentorId,
-            menteeId,
-            suggestReason,
+    fun toCommand(mentorId: Long): CreateCoffeeChatBySuggestCommand {
+        return CreateCoffeeChatBySuggestCommand(
+            mentorId = mentorId,
+            menteeId = menteeId,
+            suggestReason = suggestReason,
         )
+    }
 }

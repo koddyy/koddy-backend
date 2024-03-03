@@ -14,13 +14,14 @@ data class SignUpMentorCommand(
     val languages: List<Language>,
     val universityProfile: UniversityProfile,
 ) {
-    fun toDomain(): Mentor =
-        Mentor(
+    fun toDomain(): Mentor {
+        return Mentor(
             platform,
             name,
             languages,
             universityProfile,
         )
+    }
 }
 
 data class SignUpMenteeCommand(
@@ -30,12 +31,13 @@ data class SignUpMenteeCommand(
     val languages: List<Language>,
     val interest: Interest,
 ) {
-    fun toDomain(): Mentee =
-        Mentee(
+    fun toDomain(): Mentee {
+        return Mentee(
             platform,
             name,
             nationality,
             languages,
             interest,
         )
+    }
 }

@@ -12,8 +12,8 @@ data class MenteeSimpleSearchProfile(
     val interestMajor: String,
 ) {
     companion object {
-        fun from(mentee: Mentee): MenteeSimpleSearchProfile =
-            MenteeSimpleSearchProfile(
+        fun from(mentee: Mentee): MenteeSimpleSearchProfile {
+            return MenteeSimpleSearchProfile(
                 id = mentee.id,
                 name = mentee.name,
                 profileImageUrl = mentee.profileImageUrl,
@@ -21,6 +21,7 @@ data class MenteeSimpleSearchProfile(
                 interestSchool = mentee.interest.school,
                 interestMajor = mentee.interest.major,
             )
+        }
     }
 }
 
@@ -33,8 +34,8 @@ data class MentorSimpleSearchProfile(
     val enteredIn: Int,
 ) {
     companion object {
-        fun from(mentor: Mentor): MentorSimpleSearchProfile =
-            MentorSimpleSearchProfile(
+        fun from(mentor: Mentor): MentorSimpleSearchProfile {
+            return MentorSimpleSearchProfile(
                 id = mentor.id,
                 name = mentor.name,
                 profileImageUrl = mentor.profileImageUrl,
@@ -42,5 +43,6 @@ data class MentorSimpleSearchProfile(
                 major = mentor.universityProfile.major,
                 enteredIn = mentor.universityProfile.enteredIn,
             )
+        }
     }
 }

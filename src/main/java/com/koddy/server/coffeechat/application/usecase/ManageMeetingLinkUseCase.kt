@@ -18,12 +18,13 @@ class ManageMeetingLinkUseCase(
     /**
      * 추후 Google Meet Creator 연동하면서 MeetingLinkCreator Request/Response 스펙 재정의 (Interface)
      */
-    fun create(command: CreateMeetingLinkCommand): MeetingLinkResponse =
-        meetingLinkManager.create(
+    fun create(command: CreateMeetingLinkCommand): MeetingLinkResponse {
+        return meetingLinkManager.create(
             provider = command.linkProvider,
             oAuthAccessToken = getOAuthAccessToken(command),
             meetingLinkRequest = createRequest(command),
         )
+    }
 
     private fun getOAuthAccessToken(command: CreateMeetingLinkCommand): String {
         if (meetingLinkTokenCashier.containsViaPlatformId(command.memberId)) {
@@ -44,16 +45,18 @@ class ManageMeetingLinkUseCase(
         return token.accessToken()
     }
 
-    private fun createRequest(command: CreateMeetingLinkCommand): ZoomMeetingLinkRequest =
-        ZoomMeetingLinkRequest(
+    private fun createRequest(command: CreateMeetingLinkCommand): ZoomMeetingLinkRequest {
+        return ZoomMeetingLinkRequest(
             topic = command.topic,
             start = command.start,
             end = command.end,
         )
+    }
 
-    fun delete(command: DeleteMeetingLinkCommand) =
+    fun delete(command: DeleteMeetingLinkCommand) {
         meetingLinkManager.delete(
             provider = command.linkProvider,
             meetingId = command.meetingId,
         )
+    }
 }

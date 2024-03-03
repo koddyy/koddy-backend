@@ -17,18 +17,19 @@ data class MentorPublicProfile(
 ) {
     companion object {
         @JvmStatic
-        fun from(mentor: Mentor): MentorPublicProfile =
-            MentorPublicProfile(
-                mentor.id,
-                mentor.name,
-                mentor.profileImageUrl,
-                mentor.introduction,
-                LanguageResponse.of(mentor.languages),
-                mentor.universityProfile.school,
-                mentor.universityProfile.major,
-                mentor.universityProfile.enteredIn,
-                mentor.isAuthenticated,
+        fun from(mentor: Mentor): MentorPublicProfile {
+            return MentorPublicProfile(
+                id = mentor.id,
+                name = mentor.name,
+                profileImageUrl = mentor.profileImageUrl,
+                introduction = mentor.introduction,
+                languages = LanguageResponse.of(mentor.languages),
+                school = mentor.universityProfile.school,
+                major = mentor.universityProfile.major,
+                enteredIn = mentor.universityProfile.enteredIn,
+                authenticated = mentor.isAuthenticated,
             )
+        }
     }
 }
 
@@ -44,16 +45,17 @@ data class MenteePublicProfile(
 ) {
     companion object {
         @JvmStatic
-        fun from(mentee: Mentee): MenteePublicProfile =
-            MenteePublicProfile(
-                mentee.id,
-                mentee.name,
-                mentee.profileImageUrl,
-                mentee.nationality.code,
-                mentee.introduction,
-                LanguageResponse.of(mentee.languages),
-                mentee.interest.school,
-                mentee.interest.major,
+        fun from(mentee: Mentee): MenteePublicProfile {
+            return MenteePublicProfile(
+                id = mentee.id,
+                name = mentee.name,
+                profileImageUrl = mentee.profileImageUrl,
+                nationality = mentee.nationality.code,
+                introduction = mentee.introduction,
+                languages = LanguageResponse.of(mentee.languages),
+                interestSchool = mentee.interest.school,
+                interestMajor = mentee.interest.major,
             )
+        }
     }
 }

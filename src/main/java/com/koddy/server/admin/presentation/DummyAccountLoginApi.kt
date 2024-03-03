@@ -1,6 +1,6 @@
-package com.koddy.server.admin.controller
+package com.koddy.server.admin.presentation
 
-import com.koddy.server.admin.service.DummyAccountLoginService
+import com.koddy.server.admin.application.usecase.DummyAccountLoginUseCase
 import com.koddy.server.admin.utils.NotProvidedInProduction
 import com.koddy.server.auth.domain.model.AuthToken
 import com.koddy.server.auth.utils.TokenResponseWriter
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/auth/dummy/login")
 class DummyAccountLoginApi(
-    private val dummyAccountLoginService: DummyAccountLoginService,
+    private val dummyAccountLoginUseCase: DummyAccountLoginUseCase,
     private val tokenResponseWriter: TokenResponseWriter,
 ) {
     data class LoginRequest(
@@ -33,7 +33,7 @@ class DummyAccountLoginApi(
         @RequestBody request: LoginRequest,
         response: HttpServletResponse,
     ): ResponseEntity<Void> {
-        val authToken: AuthToken = dummyAccountLoginService.invoke(Email.from(request.email), request.password)
+        val authToken: AuthToken = dummyAccountLoginUseCase.invoke(Email.from(request.email), request.password)
         tokenResponseWriter.applyToken(response, authToken)
         return ResponseEntity.ok().build()
     }

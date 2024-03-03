@@ -18,7 +18,10 @@ interface NotificationRepository : JpaRepository<Notification, Long> {
     fun getByIdAndTargetId(
         id: Long,
         targetId: Long,
-    ): Notification = findByIdAndTargetId(id, targetId) ?: throw NotificationException(NOTIFICATION_NOT_FOUND)
+    ): Notification {
+        return findByIdAndTargetId(id, targetId)
+            ?: throw NotificationException(NOTIFICATION_NOT_FOUND)
+    }
 
     fun findByTargetId(targetId: Long): List<Notification>
 

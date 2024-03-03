@@ -31,7 +31,12 @@ class HandleAppliedCoffeeChatApi(
         @PathVariable coffeeChatId: Long,
         @RequestBody @Valid request: RejectAppliedCoffeeChatRequest,
     ): ResponseEntity<Void> {
-        handleAppliedCoffeeChatUseCase.reject(request.toCommand(authenticated.id, coffeeChatId))
+        handleAppliedCoffeeChatUseCase.reject(
+            request.toCommand(
+                mentorId = authenticated.id,
+                coffeeChatId = coffeeChatId,
+            ),
+        )
         return ResponseEntity.noContent().build()
     }
 
@@ -43,7 +48,12 @@ class HandleAppliedCoffeeChatApi(
         @PathVariable coffeeChatId: Long,
         @RequestBody @Valid request: ApproveAppliedCoffeeChatRequest,
     ): ResponseEntity<Void> {
-        handleAppliedCoffeeChatUseCase.approve(request.toCommand(authenticated.id, coffeeChatId))
+        handleAppliedCoffeeChatUseCase.approve(
+            request.toCommand(
+                mentorId = authenticated.id,
+                coffeeChatId = coffeeChatId,
+            ),
+        )
         return ResponseEntity.noContent().build()
     }
 }

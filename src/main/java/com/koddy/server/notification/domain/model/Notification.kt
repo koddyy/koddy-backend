@@ -50,31 +50,32 @@ class Notification(
     override fun hashCode(): Int = id.hashCode()
 
     companion object {
-        @JvmStatic
         fun create(
             target: Member<*>,
             coffeeChat: CoffeeChat,
             type: NotificationType,
-        ): Notification =
-            Notification(
+        ): Notification {
+            return Notification(
                 targetId = target.id,
                 coffeeChatId = coffeeChat.id,
                 coffeeChatStatusSnapshot = coffeeChat.status.name,
                 type = type,
             )
+        }
 
         fun fixture(
             id: Long,
             target: Member<*>,
             coffeeChat: CoffeeChat,
             type: NotificationType,
-        ): Notification =
-            Notification(
+        ): Notification {
+            return Notification(
                 id = id,
                 targetId = target.id,
                 coffeeChatId = coffeeChat.id,
                 coffeeChatStatusSnapshot = coffeeChat.status.name,
                 type = type,
             )
+        }
     }
 }

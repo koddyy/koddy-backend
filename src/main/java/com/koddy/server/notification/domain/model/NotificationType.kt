@@ -37,25 +37,27 @@ enum class NotificationType(
         menteeName: String,
         reason: Reason,
         reservation: Reservation,
-    ): String =
-        when (category) {
+    ): String {
+        return when (category) {
             SIMPLE -> complete(menteeName)
             CANCEL_REASON -> complete(menteeName, reason.cancelReason)
             REJECT_REASON -> complete(menteeName, reason.rejectReason)
             SCHEDULED -> complete(menteeName, reservation.start.toLocalDate().format(dateTimeFormatter))
         }
+    }
 
     fun createMenteeNotification(
         mentorName: String,
         reason: Reason,
         reservation: Reservation,
-    ): String =
-        when (category) {
+    ): String {
+        return when (category) {
             SIMPLE -> complete(mentorName)
             CANCEL_REASON -> complete(mentorName, reason.cancelReason)
             REJECT_REASON -> complete(mentorName, reason.rejectReason)
             SCHEDULED -> complete(mentorName, reservation.start.toLocalDate().format(dateTimeFormatter))
         }
+    }
 
     private fun complete(vararg arguments: Any): String = String.format(form, *arguments)
 

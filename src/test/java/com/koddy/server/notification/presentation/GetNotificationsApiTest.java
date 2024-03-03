@@ -6,8 +6,6 @@ import com.koddy.server.global.query.SliceResponse;
 import com.koddy.server.member.domain.model.mentor.Mentor;
 import com.koddy.server.notification.application.usecase.GetNotificationsUseCase;
 import com.koddy.server.notification.application.usecase.query.response.NotificationSummary;
-import com.koddy.server.notification.application.usecase.query.response.NotifyCoffeeChat;
-import com.koddy.server.notification.application.usecase.query.response.NotifyMember;
 import com.koddy.server.notification.domain.model.NotificationType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -54,12 +52,12 @@ class GetNotificationsApiTest extends ApiDocsTest {
                                     false,
                                     NotificationType.MENTOR_RECEIVE_MENTEE_APPLY_FROM_MENTEE_FLOW.name(),
                                     LocalDateTime.now(),
-                                    new NotifyMember(
+                                    new NotificationSummary.NotifyMember(
                                             1L,
                                             "이름",
                                             "프로필 이미지 URL"
                                     ),
-                                    new NotifyCoffeeChat(
+                                    new NotificationSummary.NotifyCoffeeChat(
                                             1L,
                                             CoffeeChatStatus.MENTEE_APPLY.name(),
                                             "취소 사유..",

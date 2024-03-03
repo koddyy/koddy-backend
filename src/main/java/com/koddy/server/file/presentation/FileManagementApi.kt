@@ -56,7 +56,9 @@ class FileManagementApi(
         @Auth authenticated: Authenticated,
         @RequestPart file: MultipartFile,
     ): ResponseEntity<ResponseWrapper<String>> {
-        val uploadUrl: String = uploadFileUseCase.invoke(UploadFileCommand(FileConverter.convertFile(file)))
+        val uploadUrl: String = uploadFileUseCase.invoke(
+            UploadFileCommand(file = FileConverter.convertFile(file)),
+        )
         return ResponseEntity.ok(ResponseWrapper(uploadUrl))
     }
 }

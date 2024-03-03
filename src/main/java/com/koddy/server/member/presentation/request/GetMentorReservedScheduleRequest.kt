@@ -10,10 +10,11 @@ data class GetMentorReservedScheduleRequest(
     @field:NotNull(message = "Month 정보는 필수입니다.")
     val month: Int,
 ) {
-    fun toQuery(mentorId: Long): GetMentorReservedSchedule =
-        GetMentorReservedSchedule(
-            mentorId,
-            year,
-            month,
+    fun toQuery(mentorId: Long): GetMentorReservedSchedule {
+        return GetMentorReservedSchedule(
+            mentorId = mentorId,
+            year = year,
+            month = month,
         )
+    }
 }

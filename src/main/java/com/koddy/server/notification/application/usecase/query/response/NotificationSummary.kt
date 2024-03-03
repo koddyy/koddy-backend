@@ -12,6 +12,20 @@ data class NotificationSummary(
     val member: NotifyMember,
     val coffeeChat: NotifyCoffeeChat,
 ) {
+    data class NotifyMember(
+        val id: Long,
+        val name: String,
+        val profileImageUrl: String?,
+    )
+
+    data class NotifyCoffeeChat(
+        val id: Long,
+        val statusSnapshot: String,
+        val cancelReason: String?,
+        val rejectReason: String?,
+        val reservedDay: LocalDate?,
+    )
+
     companion object {
         fun from(details: NotificationDetails): NotificationSummary {
             return NotificationSummary(
@@ -35,17 +49,3 @@ data class NotificationSummary(
         }
     }
 }
-
-data class NotifyMember(
-    val id: Long,
-    val name: String,
-    val profileImageUrl: String?,
-)
-
-data class NotifyCoffeeChat(
-    val id: Long,
-    val statusSnapshot: String,
-    val cancelReason: String?,
-    val rejectReason: String?,
-    val reservedDay: LocalDate?,
-)

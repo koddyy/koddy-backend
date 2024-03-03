@@ -31,7 +31,12 @@ class HandlePendingCoffeeChatApi(
         @PathVariable coffeeChatId: Long,
         @RequestBody @Valid request: FinallyCancelPendingCoffeeChatRequest,
     ): ResponseEntity<Void> {
-        handlePendingCoffeeChatUseCase.finallyCancel(request.toCommand(authenticated.id, coffeeChatId))
+        handlePendingCoffeeChatUseCase.finallyCancel(
+            request.toCommand(
+                mentorId = authenticated.id,
+                coffeeChatId = coffeeChatId,
+            ),
+        )
         return ResponseEntity.noContent().build()
     }
 
@@ -43,7 +48,12 @@ class HandlePendingCoffeeChatApi(
         @PathVariable coffeeChatId: Long,
         @RequestBody @Valid request: FinallyApprovePendingCoffeeChatRequest,
     ): ResponseEntity<Void> {
-        handlePendingCoffeeChatUseCase.finallyApprove(request.toCommand(authenticated.id, coffeeChatId))
+        handlePendingCoffeeChatUseCase.finallyApprove(
+            request.toCommand(
+                mentorId = authenticated.id,
+                coffeeChatId = coffeeChatId,
+            ),
+        )
         return ResponseEntity.noContent().build()
     }
 }

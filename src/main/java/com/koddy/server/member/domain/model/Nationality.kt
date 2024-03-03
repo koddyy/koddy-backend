@@ -16,8 +16,9 @@ enum class Nationality(
     ;
 
     companion object {
-        fun from(code: String): Nationality =
-            entries.firstOrNull { it.code.equals(code, ignoreCase = true) }
+        fun from(code: String): Nationality {
+            return entries.firstOrNull { it.code.equals(code, ignoreCase = true) }
                 ?: throw MemberException(INVALID_NATIONALITY)
+        }
     }
 }

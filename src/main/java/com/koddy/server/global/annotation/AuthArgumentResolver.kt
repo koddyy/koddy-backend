@@ -22,5 +22,8 @@ class AuthArgumentResolver : HandlerMethodArgumentResolver {
         mavContainer: ModelAndViewContainer?,
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?,
-    ): Authenticated = AuthenticatedHolder.retrieve() ?: throw AuthException(AUTH_REQUIRED)
+    ): Authenticated {
+        return AuthenticatedHolder.retrieve()
+            ?: throw AuthException(AUTH_REQUIRED)
+    }
 }

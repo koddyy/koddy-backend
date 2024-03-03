@@ -37,12 +37,13 @@ object RequestMetadataExtractor {
         return "$requestURI?$queryString"
     }
 
-    fun getSeveralParamsViaParsing(request: HttpServletRequest): String =
-        request.parameterNames
+    fun getSeveralParamsViaParsing(request: HttpServletRequest): String {
+        return request.parameterNames
             .toList()
             .joinToString(
                 separator = ", ",
                 prefix = "[",
                 postfix = "]",
             ) { "$it = ${request.getParameter(it)}" }
+    }
 }

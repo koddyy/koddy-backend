@@ -200,6 +200,7 @@ class ApiGlobalExceptionHandler(
         }
     }
 
-    private fun collectErrorFields(fieldErrors: List<FieldError>): Map<String, String?> =
-        fieldErrors.associate { it.field to it.defaultMessage }
+    private fun collectErrorFields(fieldErrors: List<FieldError>): Map<String, String?> {
+        return fieldErrors.associate { it.field to it.defaultMessage }
+    }
 }

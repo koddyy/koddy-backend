@@ -27,6 +27,7 @@ class GetCoffeeChatScheduleDetailsUseCase(
     @KoddyReadOnlyTransactional
     fun invoke(query: GetCoffeeChatScheduleDetails): CoffeeChatScheduleDetails {
         val coffeeChat: CoffeeChat = coffeeChatReader.getById(query.coffeeChatId)
+
         return when (query.authenticated.isMentor) {
             true -> {
                 val mentee: Mentee = menteeRepository.getByIdWithNative(coffeeChat.menteeId)

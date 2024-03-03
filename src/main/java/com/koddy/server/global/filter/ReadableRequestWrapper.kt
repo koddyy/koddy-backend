@@ -43,8 +43,9 @@ class ReadableRequestWrapper(
         return null
     }
 
-    private fun isMultipartRequest(request: HttpServletRequest): Boolean =
-        !request.contentType.isNullOrBlank() && request.contentType.startsWith(MULTIPART_FORM_DATA_VALUE)
+    private fun isMultipartRequest(request: HttpServletRequest): Boolean {
+        return !request.contentType.isNullOrBlank() && request.contentType.startsWith(MULTIPART_FORM_DATA_VALUE)
+    }
 
     override fun getInputStream(): ServletInputStream {
         val byteArrayInputStream = ByteArrayInputStream(this.contentAsByteArray)

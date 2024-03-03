@@ -14,12 +14,13 @@ data class RejectSuggestedCoffeeChatRequest(
     fun toCommand(
         menteeId: Long,
         coffeeChatId: Long,
-    ): RejectSuggestedCoffeeChatCommand =
-        RejectSuggestedCoffeeChatCommand(
+    ): RejectSuggestedCoffeeChatCommand {
+        return RejectSuggestedCoffeeChatCommand(
             menteeId = menteeId,
             coffeeChatId = coffeeChatId,
             rejectReason = rejectReason,
         )
+    }
 }
 
 data class PendingSuggestedCoffeeChatRequest(
@@ -37,8 +38,8 @@ data class PendingSuggestedCoffeeChatRequest(
     fun toCommand(
         menteeId: Long,
         coffeeChatId: Long,
-    ): PendingSuggestedCoffeeChatCommand =
-        PendingSuggestedCoffeeChatCommand(
+    ): PendingSuggestedCoffeeChatCommand {
+        return PendingSuggestedCoffeeChatCommand(
             menteeId = menteeId,
             coffeeChatId = coffeeChatId,
             question = question,
@@ -47,4 +48,5 @@ data class PendingSuggestedCoffeeChatRequest(
                 TimeUtils.toLocalDateTime(end),
             ),
         )
+    }
 }

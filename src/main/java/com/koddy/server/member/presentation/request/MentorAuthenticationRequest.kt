@@ -9,11 +9,12 @@ data class AuthenticationWithMailRequest(
     @field:NotBlank(message = "인증을 진행할 학교 메일은 필수입니다.")
     val schoolMail: String,
 ) {
-    fun toCommand(mentorId: Long): AttemptWithMailCommand =
-        AttemptWithMailCommand(
+    fun toCommand(mentorId: Long): AttemptWithMailCommand {
+        return AttemptWithMailCommand(
             mentorId = mentorId,
             schoolMail = schoolMail,
         )
+    }
 }
 
 data class AuthenticationConfirmWithMailRequest(
@@ -23,21 +24,23 @@ data class AuthenticationConfirmWithMailRequest(
     @field:NotBlank(message = "인증 번호는 필수입니다.")
     val authCode: String,
 ) {
-    fun toCommand(mentorId: Long): ConfirmMailAuthCodeCommand =
-        ConfirmMailAuthCodeCommand(
+    fun toCommand(mentorId: Long): ConfirmMailAuthCodeCommand {
+        return ConfirmMailAuthCodeCommand(
             mentorId = mentorId,
             schoolMail = schoolMail,
             authCode = authCode,
         )
+    }
 }
 
 data class AuthenticationWithProofDataRequest(
     @field:NotBlank(message = "증명자료 업로드 URL은 필수입니다.")
     val proofDataUploadUrl: String,
 ) {
-    fun toCommand(mentorId: Long): AttemptWithProofDataCommand =
-        AttemptWithProofDataCommand(
+    fun toCommand(mentorId: Long): AttemptWithProofDataCommand {
+        return AttemptWithProofDataCommand(
             mentorId = mentorId,
             proofDataUploadUrl = proofDataUploadUrl,
         )
+    }
 }

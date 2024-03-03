@@ -21,8 +21,8 @@ data class CoffeeChatDetails(
 ) {
     companion object {
         @JvmStatic
-        fun of(coffeeChat: CoffeeChat, encryptor: Encryptor): CoffeeChatDetails =
-            CoffeeChatDetails(
+        fun of(coffeeChat: CoffeeChat, encryptor: Encryptor): CoffeeChatDetails {
+            return CoffeeChatDetails(
                 coffeeChat.id,
                 coffeeChat.status.name,
                 coffeeChat.reason.applyReason,
@@ -37,5 +37,6 @@ data class CoffeeChatDetails(
                 coffeeChat.createdAt,
                 coffeeChat.lastModifiedAt,
             )
+        }
     }
 }

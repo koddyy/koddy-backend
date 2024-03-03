@@ -9,5 +9,7 @@ import com.koddy.server.global.annotation.UseCase
 class RegisterPresignedUrlUseCase(
     private val fileManager: FileManager,
 ) {
-    fun invoke(command: RegisterPresignedUrlCommand): PresignedUrlDetails = fileManager.createPresignedUrl(command.file)
+    fun invoke(command: RegisterPresignedUrlCommand): PresignedUrlDetails {
+        return fileManager.createPresignedUrl(command.file)
+    }
 }

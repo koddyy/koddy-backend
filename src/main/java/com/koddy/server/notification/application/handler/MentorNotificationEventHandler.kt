@@ -28,47 +28,52 @@ class MentorNotificationEventHandler(
     @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun handleMenteeAppliedFromMenteeFlowEvent(event: MentorNotification.MenteeAppliedFromMenteeFlowEvent) =
+    fun handleMenteeAppliedFromMenteeFlowEvent(event: MentorNotification.MenteeAppliedFromMenteeFlowEvent) {
         notify(
             event = event,
             type = NotificationType.MENTOR_RECEIVE_MENTEE_APPLY_FROM_MENTEE_FLOW,
         )
+    }
 
     @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun handleMenteeCanceledFromMenteeFlowEvent(event: MentorNotification.MenteeCanceledFromMenteeFlowEvent) =
+    fun handleMenteeCanceledFromMenteeFlowEvent(event: MentorNotification.MenteeCanceledFromMenteeFlowEvent) {
         notify(
             event = event,
             type = NotificationType.MENTOR_RECEIVE_MENTEE_CANCEL_FROM_MENTEE_FLOW,
         )
+    }
 
     @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun handleMenteeCanceledFromMentorFlowEvent(event: MentorNotification.MenteeCanceledFromMentorFlowEvent) =
+    fun handleMenteeCanceledFromMentorFlowEvent(event: MentorNotification.MenteeCanceledFromMentorFlowEvent) {
         notify(
             event = event,
             type = NotificationType.MENTOR_RECEIVE_MENTEE_CANCEL_FROM_MENTOR_FLOW,
         )
+    }
 
     @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun handleMenteeRejectedFromMentorFlowEvent(event: MentorNotification.MenteeRejectedFromMentorFlowEvent) =
+    fun handleMenteeRejectedFromMentorFlowEvent(event: MentorNotification.MenteeRejectedFromMentorFlowEvent) {
         notify(
             event = event,
             type = NotificationType.MENTOR_RECEIVE_MENTEE_REJECT_FROM_MENTOR_FLOW,
         )
+    }
 
     @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun handleMenteePendedFromMentorFlowEvent(event: MentorNotification.MenteePendedFromMentorFlowEvent) =
+    fun handleMenteePendedFromMentorFlowEvent(event: MentorNotification.MenteePendedFromMentorFlowEvent) {
         notify(
             event = event,
             type = NotificationType.MENTOR_RECEIVE_MENTEE_PENDING_FROM_MENTOR_FLOW,
         )
+    }
 
     private fun notify(
         event: MentorNotification,

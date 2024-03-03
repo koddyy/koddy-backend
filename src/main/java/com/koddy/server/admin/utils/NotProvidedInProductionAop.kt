@@ -14,8 +14,7 @@ class NotProvidedInProductionAop(
 ) {
     @Before("@annotation(com.koddy.server.admin.utils.NotProvidedInProduction)")
     fun checkProfile() {
-        val activeProfiles: Array<String> = environment.activeProfiles
-        if (activeProfiles.contains("prod")) {
+        if ("prod" in environment.activeProfiles) {
             throw AuthException(INVALID_PERMISSION)
         }
     }

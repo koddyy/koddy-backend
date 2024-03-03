@@ -9,12 +9,13 @@ data class CoffeeChatEachCategoryCounts(
     val passed: Long,
 ) {
     companion object {
-        fun from(query: CoffeeChatCountPerCategory): CoffeeChatEachCategoryCounts =
-            CoffeeChatEachCategoryCounts(
+        fun from(query: CoffeeChatCountPerCategory): CoffeeChatEachCategoryCounts {
+            return CoffeeChatEachCategoryCounts(
                 waiting = query.waiting,
                 suggested = query.suggested,
                 scheduled = query.scheduled,
                 passed = query.passed,
             )
+        }
     }
 }

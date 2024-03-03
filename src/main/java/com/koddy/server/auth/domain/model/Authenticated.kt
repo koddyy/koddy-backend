@@ -3,7 +3,7 @@ package com.koddy.server.auth.domain.model
 import com.koddy.server.member.domain.model.Role
 
 data class Authenticated(
-    @JvmField val id: Long,
+    val id: Long,
     val authority: String,
 ) {
     val isMentor: Boolean

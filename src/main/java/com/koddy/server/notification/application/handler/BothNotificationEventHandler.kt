@@ -31,22 +31,24 @@ class BothNotificationEventHandler(
     @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun handleApprovedFromMenteeFlowEvent(event: BothNotification.ApprovedFromMenteeFlowEvent) =
+    fun handleApprovedFromMenteeFlowEvent(event: BothNotification.ApprovedFromMenteeFlowEvent) {
         notify(
             event = event,
             mentorNotifyType = NotificationType.MENTOR_RECEIVE_MENTOR_APPROVE_FROM_MENTEE_FLOW,
             menteeNotifyType = NotificationType.MENTEE_RECEIVE_MENTOR_APPROVE_FROM_MENTEE_FLOW,
         )
+    }
 
     @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun handleFinallyApprovedFromMentorFlowEvent(event: BothNotification.FinallyApprovedFromMentorFlowEvent) =
+    fun handleFinallyApprovedFromMentorFlowEvent(event: BothNotification.FinallyApprovedFromMentorFlowEvent) {
         notify(
             event = event,
             mentorNotifyType = NotificationType.MENTOR_RECEIVE_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW,
             menteeNotifyType = NotificationType.MENTEE_RECEIVE_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW,
         )
+    }
 
     private fun notify(
         event: BothNotification,

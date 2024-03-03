@@ -11,12 +11,16 @@ class DefaultEncryptor(
     private val passwordEncoder: PasswordEncoder,
     private val bytesEncryptor: BytesEncryptor,
 ) : Encryptor {
-    override fun hash(value: String): String = passwordEncoder.encode(value)
+    override fun hash(value: String): String {
+        return passwordEncoder.encode(value)
+    }
 
     override fun matches(
         rawValue: String,
         encodedValue: String,
-    ): Boolean = passwordEncoder.matches(rawValue, encodedValue)
+    ): Boolean {
+        return passwordEncoder.matches(rawValue, encodedValue)
+    }
 
     override fun encrypt(value: String): String {
         val encryptedBytes: ByteArray = bytesEncryptor.encrypt(value.toByteArray(StandardCharsets.UTF_8))

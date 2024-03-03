@@ -19,10 +19,11 @@ class OAuthLoginProcessorFacade(
         code: String,
         redirectUri: String,
         state: String,
-    ): OAuthUserResponse =
-        when (provider) {
+    ): OAuthUserResponse {
+        return when (provider) {
             OAuthProvider.GOOGLE -> googleOAuthConnector.login(code, redirectUri, state)
             OAuthProvider.KAKAO -> kakaoOAuthConnector.login(code, redirectUri, state)
             OAuthProvider.ZOOM -> zoomOAuthConnector.login(code, redirectUri, state)
         }
+    }
 }

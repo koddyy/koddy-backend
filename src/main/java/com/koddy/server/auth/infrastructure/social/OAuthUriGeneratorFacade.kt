@@ -16,10 +16,11 @@ class OAuthUriGeneratorFacade(
     override fun generate(
         provider: OAuthProvider,
         redirectUri: String,
-    ): String =
-        when (provider) {
+    ): String {
+        return when (provider) {
             OAuthProvider.GOOGLE -> googleOAuthUriGenerator.generate(redirectUri)
             OAuthProvider.KAKAO -> kakaoOAuthUriGenerator.generate(redirectUri)
             OAuthProvider.ZOOM -> zoomOAuthUriGenerator.generate(redirectUri)
         }
+    }
 }

@@ -18,10 +18,11 @@ data class MentorCoffeeChatScheduleDetails(
             languages: List<Language>,
             coffeeChat: CoffeeChat,
             encryptor: Encryptor,
-        ): MentorCoffeeChatScheduleDetails =
-            MentorCoffeeChatScheduleDetails(
+        ): MentorCoffeeChatScheduleDetails {
+            return MentorCoffeeChatScheduleDetails(
                 mentee = MenteeDetails.of(mentee, languages),
                 coffeeChat = CoffeeChatDetails.of(coffeeChat, encryptor),
             )
+        }
     }
 }

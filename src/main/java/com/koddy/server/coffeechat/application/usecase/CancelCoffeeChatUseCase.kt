@@ -4,6 +4,8 @@ import com.koddy.server.auth.domain.model.Authenticated
 import com.koddy.server.coffeechat.application.usecase.command.CancelCoffeeChatCommand
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTEE_FLOW
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTOR_FLOW
 import com.koddy.server.coffeechat.domain.service.CoffeeChatNotificationEventPublisher
 import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.global.annotation.KoddyWritableTransactional
@@ -50,9 +52,10 @@ class CancelCoffeeChatUseCase(
         }
     }
 
-    private fun determineCancelStatus(coffeeChat: CoffeeChat): CoffeeChatStatus =
-        when (coffeeChat.isMenteeFlow) {
-            true -> CoffeeChatStatus.CANCEL_FROM_MENTEE_FLOW
-            false -> CoffeeChatStatus.CANCEL_FROM_MENTOR_FLOW
+    private fun determineCancelStatus(coffeeChat: CoffeeChat): CoffeeChatStatus {
+        return when (coffeeChat.isMenteeFlow) {
+            true -> CANCEL_FROM_MENTEE_FLOW
+            false -> CANCEL_FROM_MENTOR_FLOW
         }
+    }
 }

@@ -85,16 +85,18 @@ class TokenProvider(
             .setId(UUID.randomUUID().toString())
             .compact()
 
-    fun getId(token: String): Long =
-        getClaims(token)
+    fun getId(token: String): Long {
+        return getClaims(token)
             .body["id"]
             .toString()
             .toLong()
+    }
 
-    fun getAuthority(token: String): String =
-        getClaims(token)
+    fun getAuthority(token: String): String {
+        return getClaims(token)
             .body["authority"]
             .toString()
+    }
 
     fun validateAccessToken(token: String) = validateToken(token, ACCESS_TOKEN_SUBJECT)
 
@@ -123,11 +125,12 @@ class TokenProvider(
         }
     }
 
-    private fun getClaims(token: String): Jws<Claims> =
-        Jwts.parserBuilder()
+    private fun getClaims(token: String): Jws<Claims> {
+        return Jwts.parserBuilder()
             .setSigningKey(secretKey)
             .build()
             .parseClaimsJws(token)
+    }
 
     private fun checkExpiration(payload: Claims) {
         val expiredDate: ZonedDateTime = ZonedDateTime.ofInstant(payload.expiration.toInstant(), DEFAULT_ZONE_ID)

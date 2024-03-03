@@ -17,8 +17,8 @@ data class MenteeDetails(
 ) {
     companion object {
         @JvmStatic
-        fun from(mentee: Mentee): MenteeDetails =
-            MenteeDetails(
+        fun from(mentee: Mentee): MenteeDetails {
+            return MenteeDetails(
                 mentee.id,
                 mentee.name,
                 mentee.profileImageUrl,
@@ -29,12 +29,13 @@ data class MenteeDetails(
                 mentee.interest.major,
                 mentee.status.name,
             )
+        }
 
         fun of(
             mentee: Mentee,
             languages: List<Language>,
-        ): MenteeDetails =
-            MenteeDetails(
+        ): MenteeDetails {
+            return MenteeDetails(
                 mentee.id,
                 mentee.name,
                 mentee.profileImageUrl,
@@ -45,5 +46,6 @@ data class MenteeDetails(
                 mentee.interest.major,
                 mentee.status.name,
             )
+        }
     }
 }

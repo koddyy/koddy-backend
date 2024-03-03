@@ -37,8 +37,8 @@ data class SignUpMentorRequest(
     @field:NotNull(message = "학번은 필수입니다.")
     val enteredIn: Int,
 ) {
-    fun toCommand(): SignUpMentorCommand =
-        SignUpMentorCommand(
+    fun toCommand(): SignUpMentorCommand {
+        return SignUpMentorCommand(
             platform = SocialPlatform(
                 OAuthProvider.from(provider),
                 socialId,
@@ -48,6 +48,7 @@ data class SignUpMentorRequest(
             languages = languages.toLanguages(),
             universityProfile = UniversityProfile(school, major, enteredIn),
         )
+    }
 }
 
 data class SignUpMenteeRequest(
@@ -75,8 +76,8 @@ data class SignUpMenteeRequest(
     @field:NotBlank(message = "관심있는 전공은 필수입니다.")
     val interestMajor: String,
 ) {
-    fun toCommand(): SignUpMenteeCommand =
-        SignUpMenteeCommand(
+    fun toCommand(): SignUpMenteeCommand {
+        return SignUpMenteeCommand(
             platform = SocialPlatform(
                 OAuthProvider.from(provider),
                 socialId,
@@ -87,4 +88,5 @@ data class SignUpMenteeRequest(
             languages = languages.toLanguages(),
             interest = Interest(interestSchool, interestMajor),
         )
+    }
 }
