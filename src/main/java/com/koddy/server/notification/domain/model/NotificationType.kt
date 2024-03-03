@@ -40,8 +40,8 @@ enum class NotificationType(
     ): String {
         return when (category) {
             SIMPLE -> complete(menteeName)
-            CANCEL_REASON -> complete(menteeName, reason.cancelReason)
-            REJECT_REASON -> complete(menteeName, reason.rejectReason)
+            CANCEL_REASON -> complete(menteeName, reason.cancelReason!!)
+            REJECT_REASON -> complete(menteeName, reason.rejectReason!!)
             SCHEDULED -> complete(menteeName, reservation.start.toLocalDate().format(dateTimeFormatter))
         }
     }
@@ -53,8 +53,8 @@ enum class NotificationType(
     ): String {
         return when (category) {
             SIMPLE -> complete(mentorName)
-            CANCEL_REASON -> complete(mentorName, reason.cancelReason)
-            REJECT_REASON -> complete(mentorName, reason.rejectReason)
+            CANCEL_REASON -> complete(mentorName, reason.cancelReason!!)
+            REJECT_REASON -> complete(mentorName, reason.rejectReason!!)
             SCHEDULED -> complete(mentorName, reservation.start.toLocalDate().format(dateTimeFormatter))
         }
     }
