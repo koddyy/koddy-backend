@@ -6,9 +6,9 @@ import com.koddy.server.coffeechat.domain.repository.query.MentorReservedSchedul
 import com.koddy.server.member.domain.model.mentor.Mentor
 import com.koddy.server.member.exception.MemberException
 import com.koddy.server.member.exception.MemberExceptionCode.CANNOT_RESERVATION
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 
-@Component
+@Service
 class ReservationAvailabilityChecker(
     private val mentorReservedScheduleQueryRepository: MentorReservedScheduleQueryRepository,
 ) {

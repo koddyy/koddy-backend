@@ -12,10 +12,10 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_
 import com.koddy.server.global.annotation.KoddyWritableTransactional
 import com.koddy.server.global.log.logger
 import org.slf4j.Logger
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
-@Component
+@Service
 class UpdateCoffeeChatStatusProcessor(
     private val coffeeChatReader: CoffeeChatReader,
     private val coffeeChatWriter: CoffeeChatWriter,

@@ -14,14 +14,14 @@ import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.security.Keys
 import io.jsonwebtoken.security.SecurityException
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
 import java.time.ZonedDateTime
 import java.util.Date
 import java.util.UUID
 import javax.crypto.SecretKey
 
-@Component
+@Service
 class TokenProvider(
     @Value("\${jwt.secret-key}") secretKey: String,
     @Value("\${jwt.access-token-validity-seconds}") private val accessTokenValidityInSeconds: Long,
