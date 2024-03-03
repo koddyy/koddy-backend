@@ -63,7 +63,13 @@ internal class CreateCoffeeChatUseCaseTest : DescribeSpec({
         justRun { reservationAvailabilityChecker.check(mentor, command.reservation) }
 
         context("멘티가 멘토에게 커피챗을 신청하면") {
-            val coffeeChat = CoffeeChat.apply(mentee, mentor, command.applyReason, command.reservation).apply(1L)
+            val coffeeChat = CoffeeChat.applyFixture(
+                id = 1L,
+                mentee = mentee,
+                mentor = mentor,
+                applyReason = command.applyReason,
+                reservation = command.reservation,
+            )
             every { coffeeChatWriter.save(any(CoffeeChat::class)) } returns coffeeChat
 
             val slotEvent = slot<MentorNotification>()
@@ -97,7 +103,12 @@ internal class CreateCoffeeChatUseCaseTest : DescribeSpec({
         every { menteeRepository.getById(command.menteeId) } returns mentee
 
         context("멘토가 멘티에게 커피챗을 제안하면") {
-            val coffeeChat = CoffeeChat.suggest(mentor, mentee, command.suggestReason).apply(1L)
+            val coffeeChat = CoffeeChat.suggestFixture(
+                id = 1L,
+                mentor = mentor,
+                mentee = mentee,
+                suggestReason = command.suggestReason,
+            )
             every { coffeeChatWriter.save(any(CoffeeChat::class)) } returns coffeeChat
 
             val slotEvent = slot<MenteeNotification>()

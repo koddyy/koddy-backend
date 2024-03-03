@@ -36,11 +36,15 @@ data class Reservation(
         }
     }
 
-    private fun isStartInReservationRange(target: Reservation): Boolean = (start <= target.start) && (target.start < end) && (end < target.end)
+    private fun isStartInReservationRange(target: Reservation): Boolean =
+        (this.start <= target.start) && (target.start < this.end) && (this.end < target.end)
 
-    private fun isEndInReservationRange(target: Reservation): Boolean = (target.start < start) && (start < target.end) && (target.end <= end)
+    private fun isEndInReservationRange(target: Reservation): Boolean =
+        (target.start < this.start) && (this.start < target.end) && (target.end <= this.end)
 
-    private fun isStartEndInReservationRange(target: Reservation): Boolean = (target.start in start..end) && (target.end in start..end)
+    private fun isStartEndInReservationRange(target: Reservation): Boolean =
+        (target.start in this.start..this.end) && (target.end in this.start..this.end)
 
-    private fun isStartEndAllCoverReservationRange(target: Reservation): Boolean = (target.start <= start) && (end <= target.end)
+    private fun isStartEndAllCoverReservationRange(target: Reservation): Boolean =
+        (target.start <= this.start) && (this.end <= target.end)
 }

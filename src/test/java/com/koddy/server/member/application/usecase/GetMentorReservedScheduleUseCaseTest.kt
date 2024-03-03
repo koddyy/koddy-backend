@@ -3,11 +3,11 @@ package com.koddy.server.member.application.usecase
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.repository.query.MentorReservedScheduleQueryRepository
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_2
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_3
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MentorFlow
 import com.koddy.server.member.application.usecase.query.GetMentorReservedSchedule
 import com.koddy.server.member.application.usecase.query.response.MentorReservedSchedule
 import com.koddy.server.member.domain.model.mentee.Mentee
@@ -45,9 +45,9 @@ internal class GetMentorReservedScheduleUseCaseTest : FeatureSpec({
             val start1 = LocalDateTime.of(2024, 2, 18, 18, 0)
             val start2 = LocalDateTime.of(2024, 2, 15, 18, 0)
             val coffeeChats: List<CoffeeChat> = listOf(
-                MentorFlow.suggestAndReject(mentor, menteeA).apply(1L),
-                MentorFlow.suggestAndPending(start1, start1.plusMinutes(30), mentor, menteeB).apply(2L),
-                MentorFlow.suggestAndPending(start2, start2.plusMinutes(30), mentor, menteeC).apply(3L),
+                MentorFlow.suggestAndReject(id = 1L, mentor = mentor, mentee = menteeA),
+                MentorFlow.suggestAndPending(id = 2L, start = start1, end = start1.plusMinutes(30), mentor = mentor, mentee = menteeB),
+                MentorFlow.suggestAndPending(id = 3L, start = start2, end = start2.plusMinutes(30), mentor = mentor, mentee = menteeC),
             )
             every {
                 mentorReservedScheduleQueryRepository.fetchReservedCoffeeChat(
@@ -71,12 +71,12 @@ internal class GetMentorReservedScheduleUseCaseTest : FeatureSpec({
                 schedules.map { it.end.minute } shouldContainExactly mentor.schedules.map { it.timeline.endTime.minute }
                 timeUnit shouldBe mentor.mentoringTimeUnit
                 reserved.map { it.start } shouldContainExactly listOf(
-                    coffeeChats[2].reservation.start,
-                    coffeeChats[1].reservation.start,
+                    coffeeChats[2].reservation!!.start,
+                    coffeeChats[1].reservation!!.start,
                 )
                 reserved.map { it.end } shouldContainExactly listOf(
-                    coffeeChats[2].reservation.end,
-                    coffeeChats[1].reservation.end,
+                    coffeeChats[2].reservation!!.end,
+                    coffeeChats[1].reservation!!.end,
                 )
             }
         }

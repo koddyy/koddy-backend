@@ -1,20 +1,26 @@
-package com.koddy.server.common.fixture;
+package com.koddy.server.common.fixture
 
-import com.koddy.server.coffeechat.domain.model.CoffeeChat;
-import com.koddy.server.coffeechat.domain.model.Reservation;
-import com.koddy.server.coffeechat.domain.model.Strategy;
-import com.koddy.server.member.domain.model.mentee.Mentee;
-import com.koddy.server.member.domain.model.mentor.Mentor;
+import com.koddy.server.coffeechat.domain.model.CoffeeChat
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTEE_FLOW
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTOR_FLOW
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY_COFFEE_CHAT_COMPLETE
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
+import com.koddy.server.coffeechat.domain.model.Reservation
+import com.koddy.server.coffeechat.domain.model.Strategy
+import com.koddy.server.common.fixture.StrategyFixture.KAKAO_ID
+import com.koddy.server.member.domain.model.mentee.Mentee
+import com.koddy.server.member.domain.model.mentor.Mentor
+import java.time.LocalDateTime
 
-import java.time.LocalDateTime;
+private fun mentoring(day: Int, hour: Int, minute: Int): LocalDateTime {
+    return LocalDateTime.of(2024, 1, day, hour, minute)
+}
 
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTEE_FLOW;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTOR_FLOW;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY_COFFEE_CHAT_COMPLETE;
-import static com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE;
-import static com.koddy.server.common.fixture.StrategyFixture.KAKAO_ID;
-
-public enum CoffeeChatFixture {
+enum class CoffeeChatFixture(
+    @JvmField val start: LocalDateTime,
+    @JvmField val end: LocalDateTime,
+    @JvmField val strategy: Strategy,
+) {
     월요일_1주차_20_00_시작(mentoring(1, 20, 0), mentoring(1, 20, 30), KAKAO_ID.toDomain()),
     월요일_1주차_20_30_시작(mentoring(1, 20, 30), mentoring(1, 21, 0), KAKAO_ID.toDomain()),
     월요일_1주차_21_00_시작(mentoring(1, 21, 0), mentoring(1, 21, 30), KAKAO_ID.toDomain()),
@@ -130,218 +136,274 @@ public enum CoffeeChatFixture {
     일요일_4주차_21_00_시작(mentoring(21, 21, 0), mentoring(21, 21, 30), KAKAO_ID.toDomain()),
     일요일_4주차_21_30_시작(mentoring(21, 21, 30), mentoring(21, 22, 0), KAKAO_ID.toDomain()),
     ;
+}
 
-    private final LocalDateTime start;
-    private final LocalDateTime end;
-    private final Strategy strategy;
-
-    CoffeeChatFixture(
-            final LocalDateTime start,
-            final LocalDateTime end,
-            final Strategy strategy
-    ) {
-        this.start = start;
-        this.end = end;
-        this.strategy = strategy;
+object MenteeFlow {
+    fun apply(
+        id: Long = 0L,
+        fixture: CoffeeChatFixture,
+        mentee: Mentee,
+        mentor: Mentor,
+    ): CoffeeChat {
+        return CoffeeChat.applyFixture(
+            id = id,
+            mentee = mentee,
+            mentor = mentor,
+            applyReason = "신청..",
+            reservation = Reservation(
+                start = fixture.start,
+                end = fixture.end,
+            ),
+        )
     }
 
-    private static LocalDateTime mentoring(final int day, final int hour, final int minute) {
-        return LocalDateTime.of(2024, 1, day, hour, minute);
+    fun apply(
+        id: Long = 0L,
+        start: LocalDateTime,
+        end: LocalDateTime,
+        mentee: Mentee,
+        mentor: Mentor,
+    ): CoffeeChat {
+        return CoffeeChat.applyFixture(
+            id = id,
+            mentee = mentee,
+            mentor = mentor,
+            applyReason = "신청..",
+            reservation = Reservation(
+                start = start,
+                end = end,
+            ),
+        )
     }
 
-    public static class MenteeFlow {
-        public static CoffeeChat apply(final CoffeeChatFixture fixture, final Mentee mentee, final Mentor mentor) {
-            return CoffeeChat.apply(
-                    mentee,
-                    mentor,
-                    "신청..",
-                    new Reservation(fixture.start, fixture.end)
-            );
-        }
-
-        public static CoffeeChat apply(final LocalDateTime start, final LocalDateTime end, final Mentee mentee, final Mentor mentor) {
-            return CoffeeChat.apply(
-                    mentee,
-                    mentor,
-                    "신청..",
-                    new Reservation(start, end)
-            );
-        }
-
-        public static CoffeeChat applyAndCancel(final CoffeeChatFixture fixture, final Mentee mentee, final Mentor mentor) {
-            final CoffeeChat coffeeChat = CoffeeChat.apply(
-                    mentee,
-                    mentor,
-                    "신청..",
-                    new Reservation(fixture.start, fixture.end)
-            );
-            coffeeChat.cancel(CANCEL_FROM_MENTEE_FLOW, mentee.getId(), "취소..");
-            return coffeeChat;
-        }
-
-        public static CoffeeChat applyAndCancel(final LocalDateTime start, final LocalDateTime end, final Mentee mentee, final Mentor mentor) {
-            final CoffeeChat coffeeChat = CoffeeChat.apply(
-                    mentee,
-                    mentor,
-                    "신청..",
-                    new Reservation(start, end)
-            );
-            coffeeChat.cancel(CANCEL_FROM_MENTEE_FLOW, mentee.getId(), "취소..");
-            return coffeeChat;
-        }
-
-        public static CoffeeChat applyAndApprove(final CoffeeChatFixture fixture, final Mentee mentee, final Mentor mentor) {
-            final CoffeeChat coffeeChat = CoffeeChat.apply(
-                    mentee,
-                    mentor,
-                    "신청..",
-                    new Reservation(fixture.start, fixture.end)
-            );
-            coffeeChat.approveFromMenteeApply("질문..", fixture.strategy);
-            return coffeeChat;
-        }
-
-        public static CoffeeChat applyAndApprove(final LocalDateTime start, final LocalDateTime end, final Mentee mentee, final Mentor mentor) {
-            final CoffeeChat coffeeChat = CoffeeChat.apply(
-                    mentee,
-                    mentor,
-                    "신청..",
-                    new Reservation(start, end)
-            );
-            coffeeChat.approveFromMenteeApply("질문..", KAKAO_ID.toDomain());
-            return coffeeChat;
-        }
-
-        public static CoffeeChat applyAndReject(final CoffeeChatFixture fixture, final Mentee mentee, final Mentor mentor) {
-            final CoffeeChat coffeeChat = CoffeeChat.apply(
-                    mentee,
-                    mentor,
-                    "신청..",
-                    new Reservation(fixture.start, fixture.end)
-            );
-            coffeeChat.rejectFromMenteeApply("거절..");
-            return coffeeChat;
-        }
-
-        public static CoffeeChat applyAndReject(final LocalDateTime start, final LocalDateTime end, final Mentee mentee, final Mentor mentor) {
-            final CoffeeChat coffeeChat = CoffeeChat.apply(
-                    mentee,
-                    mentor,
-                    "신청..",
-                    new Reservation(start, end)
-            );
-            coffeeChat.rejectFromMenteeApply("거절..");
-            return coffeeChat;
-        }
-
-        public static CoffeeChat applyAndComplete(final CoffeeChatFixture fixture, final Mentee mentee, final Mentor mentor) {
-            final CoffeeChat coffeeChat = CoffeeChat.apply(
-                    mentee,
-                    mentor,
-                    "신청..",
-                    new Reservation(fixture.start, fixture.end)
-            );
-            coffeeChat.approveFromMenteeApply("질문..", fixture.strategy);
-            coffeeChat.complete(MENTEE_APPLY_COFFEE_CHAT_COMPLETE);
-            return coffeeChat;
-        }
-
-        public static CoffeeChat applyAndComplete(final LocalDateTime start, final LocalDateTime end, final Mentee mentee, final Mentor mentor) {
-            final CoffeeChat coffeeChat = CoffeeChat.apply(
-                    mentee,
-                    mentor,
-                    "신청..",
-                    new Reservation(start, end)
-            );
-            coffeeChat.approveFromMenteeApply("질문..", KAKAO_ID.toDomain());
-            coffeeChat.complete(MENTEE_APPLY_COFFEE_CHAT_COMPLETE);
-            return coffeeChat;
-        }
+    fun applyAndCancel(
+        id: Long = 0L,
+        fixture: CoffeeChatFixture,
+        mentee: Mentee,
+        mentor: Mentor,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = apply(id = id, fixture = fixture, mentee = mentee, mentor = mentor)
+        coffeeChat.cancel(status = CANCEL_FROM_MENTEE_FLOW, cancelBy = mentee.id, cancelReason = "취소..")
+        return coffeeChat
     }
 
-    public static class MentorFlow {
-        public static CoffeeChat suggest(final Mentor mentor, final Mentee mentee) {
-            return CoffeeChat.suggest(mentor, mentee, "제안..");
-        }
-
-        public static CoffeeChat suggestAndCancel(final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
-            coffeeChat.cancel(CANCEL_FROM_MENTOR_FLOW, mentor.getId(), "취소..");
-            return coffeeChat;
-        }
-
-        public static CoffeeChat suggestAndPending(final CoffeeChatFixture fixture, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(fixture.start, fixture.end));
-            return coffeeChat;
-        }
-
-        public static CoffeeChat suggestAndPending(final LocalDateTime start, final LocalDateTime end, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(start, end));
-            return coffeeChat;
-        }
-
-        public static CoffeeChat suggestAndReject(final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
-            coffeeChat.rejectFromMentorSuggest("거절..");
-            return coffeeChat;
-        }
-
-        public static CoffeeChat suggestAndFinallyApprove(final CoffeeChatFixture fixture, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(fixture.start, fixture.end));
-            coffeeChat.finallyApprovePendingCoffeeChat(fixture.strategy);
-            return coffeeChat;
-        }
-
-        public static CoffeeChat suggestAndFinallyApprove(final LocalDateTime start, final LocalDateTime end, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(start, end));
-            coffeeChat.finallyApprovePendingCoffeeChat(KAKAO_ID.toDomain());
-            return coffeeChat;
-        }
-
-        public static CoffeeChat suggestAndFinallyCancel(final CoffeeChatFixture fixture, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(fixture.start, fixture.end));
-            coffeeChat.finallyCancelPendingCoffeeChat("최종 취소..");
-            return coffeeChat;
-        }
-
-        public static CoffeeChat suggestAndFinallyCancel(final LocalDateTime start, final LocalDateTime end, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(start, end));
-            coffeeChat.finallyCancelPendingCoffeeChat("최종 취소..");
-            return coffeeChat;
-        }
-
-        public static CoffeeChat suggestAndComplete(final CoffeeChatFixture fixture, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(fixture.start, fixture.end));
-            coffeeChat.finallyApprovePendingCoffeeChat(fixture.strategy);
-            coffeeChat.complete(MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE);
-            return coffeeChat;
-        }
-
-        public static CoffeeChat suggestAndComplete(final LocalDateTime start, final LocalDateTime end, final Mentor mentor, final Mentee mentee) {
-            final CoffeeChat coffeeChat = CoffeeChat.suggest(mentor, mentee, "제안..");
-            coffeeChat.pendingFromMentorSuggest("질문..", new Reservation(start, end));
-            coffeeChat.finallyApprovePendingCoffeeChat(KAKAO_ID.toDomain());
-            coffeeChat.complete(MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE);
-            return coffeeChat;
-        }
+    fun applyAndCancel(
+        id: Long = 0L,
+        start: LocalDateTime,
+        end: LocalDateTime,
+        mentee: Mentee,
+        mentor: Mentor,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = apply(id = id, start = start, end = end, mentee = mentee, mentor = mentor)
+        coffeeChat.cancel(status = CANCEL_FROM_MENTEE_FLOW, cancelBy = mentee.id, cancelReason = "취소..")
+        return coffeeChat
     }
 
-    public LocalDateTime getStart() {
-        return start;
+    @JvmStatic
+    fun applyAndApprove(
+        id: Long = 0L,
+        fixture: CoffeeChatFixture,
+        mentee: Mentee,
+        mentor: Mentor,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = apply(id = id, fixture = fixture, mentee = mentee, mentor = mentor)
+        coffeeChat.approveFromMenteeApply(question = "질문..", strategy = fixture.strategy)
+        return coffeeChat
     }
 
-    public LocalDateTime getEnd() {
-        return end;
+    fun applyAndApprove(
+        id: Long = 0L,
+        start: LocalDateTime,
+        end: LocalDateTime,
+        mentee: Mentee,
+        mentor: Mentor,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = apply(id = id, start = start, end = end, mentee = mentee, mentor = mentor)
+        coffeeChat.approveFromMenteeApply(question = "질문..", strategy = KAKAO_ID.toDomain())
+        return coffeeChat
     }
 
-    public Strategy getStrategy() {
-        return strategy;
+    fun applyAndReject(
+        id: Long = 0L,
+        fixture: CoffeeChatFixture,
+        mentee: Mentee,
+        mentor: Mentor,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = apply(id = id, fixture = fixture, mentee = mentee, mentor = mentor)
+        coffeeChat.rejectFromMenteeApply(rejectReason = "거절..")
+        return coffeeChat
+    }
+
+    fun applyAndReject(
+        id: Long = 0L,
+        start: LocalDateTime,
+        end: LocalDateTime,
+        mentee: Mentee,
+        mentor: Mentor,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = apply(id = id, start = start, end = end, mentee = mentee, mentor = mentor)
+        coffeeChat.rejectFromMenteeApply(rejectReason = "거절..")
+        return coffeeChat
+    }
+
+    fun applyAndComplete(
+        id: Long = 0L,
+        fixture: CoffeeChatFixture,
+        mentee: Mentee,
+        mentor: Mentor,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = apply(id = id, fixture = fixture, mentee = mentee, mentor = mentor)
+        coffeeChat.approveFromMenteeApply(question = "질문..", strategy = fixture.strategy)
+        coffeeChat.complete(status = MENTEE_APPLY_COFFEE_CHAT_COMPLETE)
+        return coffeeChat
+    }
+
+    fun applyAndComplete(
+        id: Long = 0L,
+        start: LocalDateTime,
+        end: LocalDateTime,
+        mentee: Mentee,
+        mentor: Mentor,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = apply(id = id, start = start, end = end, mentee = mentee, mentor = mentor)
+        coffeeChat.approveFromMenteeApply(question = "질문..", strategy = KAKAO_ID.toDomain())
+        coffeeChat.complete(status = MENTEE_APPLY_COFFEE_CHAT_COMPLETE)
+        return coffeeChat
+    }
+}
+
+object MentorFlow {
+    fun suggest(
+        id: Long = 0L,
+        mentor: Mentor,
+        mentee: Mentee,
+    ): CoffeeChat {
+        return CoffeeChat.suggestFixture(
+            id = id,
+            mentor = mentor,
+            mentee = mentee,
+            suggestReason = "제안..",
+        )
+    }
+
+    fun suggestAndCancel(
+        id: Long = 0L,
+        mentor: Mentor,
+        mentee: Mentee,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = suggest(id, mentor, mentee)
+        coffeeChat.cancel(status = CANCEL_FROM_MENTOR_FLOW, cancelBy = mentor.id, cancelReason = "취소..")
+        return coffeeChat
+    }
+
+    @JvmStatic
+    fun suggestAndPending(
+        id: Long = 0L,
+        fixture: CoffeeChatFixture,
+        mentor: Mentor,
+        mentee: Mentee,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = suggest(id, mentor, mentee)
+        coffeeChat.pendingFromMentorSuggest(question = "질문..", reservation = Reservation(fixture.start, fixture.end))
+        return coffeeChat
+    }
+
+    fun suggestAndPending(
+        id: Long = 0L,
+        start: LocalDateTime,
+        end: LocalDateTime,
+        mentor: Mentor,
+        mentee: Mentee,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = suggest(id, mentor, mentee)
+        coffeeChat.pendingFromMentorSuggest(question = "질문..", reservation = Reservation(start, end))
+        return coffeeChat
+    }
+
+    fun suggestAndReject(
+        id: Long = 0L,
+        mentor: Mentor,
+        mentee: Mentee,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = suggest(id, mentor, mentee)
+        coffeeChat.rejectFromMentorSuggest(rejectReason = "거절..")
+        return coffeeChat
+    }
+
+    fun suggestAndFinallyApprove(
+        id: Long = 0L,
+        fixture: CoffeeChatFixture,
+        mentor: Mentor,
+        mentee: Mentee,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = suggest(id, mentor, mentee)
+        coffeeChat.pendingFromMentorSuggest(question = "질문..", reservation = Reservation(fixture.start, fixture.end))
+        coffeeChat.finallyApprovePendingCoffeeChat(strategy = fixture.strategy)
+        return coffeeChat
+    }
+
+    fun suggestAndFinallyApprove(
+        id: Long = 0L,
+        start: LocalDateTime,
+        end: LocalDateTime,
+        mentor: Mentor,
+        mentee: Mentee,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = suggest(id, mentor, mentee)
+        coffeeChat.pendingFromMentorSuggest(question = "질문..", reservation = Reservation(start, end))
+        coffeeChat.finallyApprovePendingCoffeeChat(strategy = KAKAO_ID.toDomain())
+        return coffeeChat
+    }
+
+    fun suggestAndFinallyCancel(
+        id: Long = 0L,
+        fixture: CoffeeChatFixture,
+        mentor: Mentor,
+        mentee: Mentee,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = suggest(id, mentor, mentee)
+        coffeeChat.pendingFromMentorSuggest(question = "질문..", reservation = Reservation(fixture.start, fixture.end))
+        coffeeChat.finallyCancelPendingCoffeeChat(cancelReason = "최종 취소..")
+        return coffeeChat
+    }
+
+    fun suggestAndFinallyCancel(
+        id: Long = 0L,
+        start: LocalDateTime,
+        end: LocalDateTime,
+        mentor: Mentor,
+        mentee: Mentee,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = suggest(id, mentor, mentee)
+        coffeeChat.pendingFromMentorSuggest(question = "질문..", reservation = Reservation(start, end))
+        coffeeChat.finallyCancelPendingCoffeeChat(cancelReason = "최종 취소..")
+        return coffeeChat
+    }
+
+    fun suggestAndComplete(
+        id: Long = 0L,
+        fixture: CoffeeChatFixture,
+        mentor: Mentor,
+        mentee: Mentee,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = suggest(id, mentor, mentee)
+        coffeeChat.pendingFromMentorSuggest(question = "질문..", reservation = Reservation(fixture.start, fixture.end))
+        coffeeChat.finallyApprovePendingCoffeeChat(strategy = fixture.strategy)
+        coffeeChat.complete(status = MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE)
+        return coffeeChat
+    }
+
+    fun suggestAndComplete(
+        id: Long = 0L,
+        start: LocalDateTime,
+        end: LocalDateTime,
+        mentor: Mentor,
+        mentee: Mentee,
+    ): CoffeeChat {
+        val coffeeChat: CoffeeChat = suggest(id, mentor, mentee)
+        coffeeChat.pendingFromMentorSuggest(question = "질문..", reservation = Reservation(start, end))
+        coffeeChat.finallyApprovePendingCoffeeChat(strategy = KAKAO_ID.toDomain())
+        coffeeChat.complete(status = MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE)
+        return coffeeChat
     }
 }

@@ -16,8 +16,6 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_REJECT
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
 import com.koddy.server.common.RepositoryTestKt
-import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow
-import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow
 import com.koddy.server.common.fixture.CoffeeChatFixture.금요일_1주차_20_00_시작
 import com.koddy.server.common.fixture.CoffeeChatFixture.금요일_2주차_20_00_시작
 import com.koddy.server.common.fixture.CoffeeChatFixture.수요일_1주차_20_00_시작
@@ -33,8 +31,10 @@ import com.koddy.server.common.fixture.MenteeFixture.MENTEE_2
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_3
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_4
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_5
+import com.koddy.server.common.fixture.MenteeFlow
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_2
+import com.koddy.server.common.fixture.MentorFlow
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
 import com.koddy.server.member.domain.repository.MemberRepository
@@ -72,16 +72,16 @@ internal class CoffeeChatRepositoryTest(
         )
         val coffeeChats: List<CoffeeChat> = sut.saveAll(
             listOf(
-                MenteeFlow.apply(월요일_1주차_20_00_시작, mentees[0], mentors[0]),
-                MenteeFlow.apply(월요일_2주차_20_00_시작, mentees[1], mentors[0]),
-                MenteeFlow.applyAndReject(월요일_3주차_20_00_시작, mentees[2], mentors[0]),
-                MenteeFlow.applyAndCancel(월요일_4주차_20_00_시작, mentees[3], mentors[0]),
-                MenteeFlow.applyAndApprove(수요일_1주차_20_00_시작, mentees[4], mentors[0]),
-                MentorFlow.suggest(mentors[1], mentees[0]),
-                MentorFlow.suggest(mentors[1], mentees[1]),
-                MentorFlow.suggestAndPending(수요일_2주차_20_00_시작, mentors[1], mentees[2]),
-                MentorFlow.suggestAndPending(수요일_3주차_20_00_시작, mentors[1], mentees[3]),
-                MentorFlow.suggestAndFinallyApprove(수요일_4주차_20_00_시작, mentors[1], mentees[4]),
+                MenteeFlow.apply(fixture = 월요일_1주차_20_00_시작, mentee = mentees[0], mentor = mentors[0]),
+                MenteeFlow.apply(fixture = 월요일_2주차_20_00_시작, mentee = mentees[1], mentor = mentors[0]),
+                MenteeFlow.applyAndReject(fixture = 월요일_3주차_20_00_시작, mentee = mentees[2], mentor = mentors[0]),
+                MenteeFlow.applyAndCancel(fixture = 월요일_4주차_20_00_시작, mentee = mentees[3], mentor = mentors[0]),
+                MenteeFlow.applyAndApprove(fixture = 수요일_1주차_20_00_시작, mentee = mentees[4], mentor = mentors[0]),
+                MentorFlow.suggest(mentor = mentors[1], mentee = mentees[0]),
+                MentorFlow.suggest(mentor = mentors[1], mentee = mentees[1]),
+                MentorFlow.suggestAndPending(fixture = 수요일_2주차_20_00_시작, mentor = mentors[1], mentee = mentees[2]),
+                MentorFlow.suggestAndPending(fixture = 수요일_3주차_20_00_시작, mentor = mentors[1], mentee = mentees[3]),
+                MentorFlow.suggestAndFinallyApprove(fixture = 수요일_4주차_20_00_시작, mentor = mentors[1], mentee = mentees[4]),
             ),
         )
         val now = LocalDateTime.now()
@@ -128,16 +128,16 @@ internal class CoffeeChatRepositoryTest(
         )
         val coffeeChats: List<CoffeeChat> = sut.saveAll(
             listOf(
-                MenteeFlow.apply(월요일_1주차_20_00_시작, mentees[0], mentors[0]),
-                MenteeFlow.apply(월요일_2주차_20_00_시작, mentees[1], mentors[0]),
-                MenteeFlow.apply(월요일_3주차_20_00_시작, mentees[2], mentors[0]),
-                MenteeFlow.applyAndApprove(월요일_4주차_20_00_시작, mentees[3], mentors[0]),
-                MenteeFlow.applyAndApprove(수요일_1주차_20_00_시작, mentees[4], mentors[0]),
-                MentorFlow.suggestAndPending(수요일_2주차_20_00_시작, mentors[1], mentees[0]),
-                MentorFlow.suggestAndPending(수요일_3주차_20_00_시작, mentors[1], mentees[1]),
-                MentorFlow.suggestAndPending(수요일_4주차_20_00_시작, mentors[1], mentees[2]),
-                MentorFlow.suggestAndFinallyApprove(금요일_1주차_20_00_시작, mentors[1], mentees[3]),
-                MentorFlow.suggestAndFinallyApprove(금요일_2주차_20_00_시작, mentors[1], mentees[4]),
+                MenteeFlow.apply(fixture = 월요일_1주차_20_00_시작, mentee = mentees[0], mentor = mentors[0]),
+                MenteeFlow.apply(fixture = 월요일_2주차_20_00_시작, mentee = mentees[1], mentor = mentors[0]),
+                MenteeFlow.apply(fixture = 월요일_3주차_20_00_시작, mentee = mentees[2], mentor = mentors[0]),
+                MenteeFlow.applyAndApprove(fixture = 월요일_4주차_20_00_시작, mentee = mentees[3], mentor = mentors[0]),
+                MenteeFlow.applyAndApprove(fixture = 수요일_1주차_20_00_시작, mentee = mentees[4], mentor = mentors[0]),
+                MentorFlow.suggestAndPending(fixture = 수요일_2주차_20_00_시작, mentor = mentors[1], mentee = mentees[0]),
+                MentorFlow.suggestAndPending(fixture = 수요일_3주차_20_00_시작, mentor = mentors[1], mentee = mentees[1]),
+                MentorFlow.suggestAndPending(fixture = 수요일_4주차_20_00_시작, mentor = mentors[1], mentee = mentees[2]),
+                MentorFlow.suggestAndFinallyApprove(fixture = 금요일_1주차_20_00_시작, mentor = mentors[1], mentee = mentees[3]),
+                MentorFlow.suggestAndFinallyApprove(fixture = 금요일_2주차_20_00_시작, mentor = mentors[1], mentee = mentees[4]),
             ),
         )
 
@@ -191,8 +191,8 @@ internal class CoffeeChatRepositoryTest(
         )
         val coffeeChats: List<CoffeeChat> = sut.saveAll(
             listOf(
-                MenteeFlow.apply(월요일_1주차_20_00_시작, mentees[0], mentors[0]),
-                MenteeFlow.apply(월요일_2주차_20_00_시작, mentees[1], mentors[1]),
+                MenteeFlow.apply(fixture = 월요일_1주차_20_00_시작, mentee = mentees[0], mentor = mentors[0]),
+                MenteeFlow.apply(fixture = 월요일_2주차_20_00_시작, mentee = mentees[1], mentor = mentors[1]),
             ),
         )
 

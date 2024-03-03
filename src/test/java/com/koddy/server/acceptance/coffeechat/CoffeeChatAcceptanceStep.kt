@@ -20,7 +20,6 @@ import io.restassured.response.ValidatableResponse
 import java.time.LocalDateTime
 
 object CoffeeChatAcceptanceStep {
-    @JvmStatic
     fun 커피챗_링크를_자동_생성한다(
         provider: String,
         accessToken: String,
@@ -39,7 +38,6 @@ object CoffeeChatAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 자동_생성한_커피챗_링크를_삭제한다(
         provider: String,
         meetingId: String,
@@ -51,7 +49,6 @@ object CoffeeChatAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘토가_멘티에게_커피챗을_제안한다(
         menteeId: Long,
         accessToken: String,
@@ -66,7 +63,6 @@ object CoffeeChatAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(
         menteeId: Long,
         accessToken: String,
@@ -79,7 +75,6 @@ object CoffeeChatAcceptanceStep {
             .getLong("result")
     }
 
-    @JvmStatic
     fun 멘티가_멘토에게_커피챗을_신청한다(
         start: LocalDateTime,
         end: LocalDateTime,
@@ -98,7 +93,6 @@ object CoffeeChatAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘티가_멘토에게_커피챗을_신청하고_ID를_추출한다(
         start: LocalDateTime,
         end: LocalDateTime,
@@ -115,7 +109,6 @@ object CoffeeChatAcceptanceStep {
             .getLong("result")
     }
 
-    @JvmStatic
     fun 신청_제안한_커피챗을_취소한다(
         coffeeChatId: Long,
         accessToken: String,
@@ -127,7 +120,6 @@ object CoffeeChatAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘토가_멘티의_커피챗_신청을_거절한다(
         coffeeChatId: Long,
         accessToken: String,
@@ -139,7 +131,6 @@ object CoffeeChatAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘토가_멘티의_커피챗_신청을_수락한다(
         coffeeChatId: Long,
         fixture: StrategyFixture,
@@ -156,7 +147,6 @@ object CoffeeChatAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘티가_멘토의_커피챗_제안을_거절한다(
         coffeeChatId: Long,
         accessToken: String,
@@ -168,7 +158,6 @@ object CoffeeChatAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘티가_멘토의_커피챗_제안을_1차_수락한다(
         coffeeChatId: Long,
         start: LocalDateTime,
@@ -186,7 +175,6 @@ object CoffeeChatAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘토가_Pending_상태인_커피챗에_대해서_최종_취소를_한다(
         coffeeChatId: Long,
         accessToken: String,
@@ -198,7 +186,6 @@ object CoffeeChatAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘토가_Pending_상태인_커피챗에_대해서_최종_수락을_한다(
         coffeeChatId: Long,
         fixture: StrategyFixture,
@@ -214,7 +201,6 @@ object CoffeeChatAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 내_일정_커피챗_상세_조회를_진행한다(
         coffeeChatId: Long,
         accessToken: String,

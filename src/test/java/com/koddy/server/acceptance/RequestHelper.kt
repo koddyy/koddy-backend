@@ -17,7 +17,6 @@ private fun RequestSpecification.When(): RequestSpecification {
 }
 
 object RequestHelper {
-    @JvmStatic
     fun getRequest(uri: String): ValidatableResponse {
         return request {
             it.contentType(ContentType.JSON)
@@ -25,7 +24,6 @@ object RequestHelper {
         }
     }
 
-    @JvmStatic
     fun getRequestWithAccessToken(
         uri: String,
         accessToken: String,
@@ -37,7 +35,6 @@ object RequestHelper {
         }
     }
 
-    @JvmStatic
     fun postRequest(uri: String): ValidatableResponse {
         return request {
             it.contentType(ContentType.JSON)
@@ -46,7 +43,6 @@ object RequestHelper {
         }
     }
 
-    @JvmStatic
     fun postRequest(
         uri: String,
         body: Any,
@@ -59,7 +55,6 @@ object RequestHelper {
         }
     }
 
-    @JvmStatic
     fun postRequestWithAccessToken(
         uri: String,
         accessToken: String,
@@ -72,7 +67,6 @@ object RequestHelper {
         }
     }
 
-    @JvmStatic
     fun postRequestWithRefreshToken(
         uri: String,
         refreshToken: String,
@@ -85,7 +79,6 @@ object RequestHelper {
         }
     }
 
-    @JvmStatic
     fun postRequestWithAccessToken(
         uri: String,
         body: Any,
@@ -100,7 +93,6 @@ object RequestHelper {
         }
     }
 
-    @JvmStatic
     fun multipartRequest(
         uri: String,
         fileName: String,
@@ -141,7 +133,6 @@ object RequestHelper {
             .then().log().all()
     }
 
-    @JvmStatic
     fun multipartRequest(
         uri: String,
         fileName: String,
@@ -256,7 +247,6 @@ object RequestHelper {
         }
     }
 
-    @JvmStatic
     fun patchRequestWithAccessToken(
         uri: String,
         accessToken: String,
@@ -269,7 +259,6 @@ object RequestHelper {
         }
     }
 
-    @JvmStatic
     fun patchRequestWithAccessToken(
         uri: String,
         body: Any,
@@ -292,7 +281,6 @@ object RequestHelper {
         }
     }
 
-    @JvmStatic
     fun deleteRequestWithAccessToken(
         uri: String,
         accessToken: String,

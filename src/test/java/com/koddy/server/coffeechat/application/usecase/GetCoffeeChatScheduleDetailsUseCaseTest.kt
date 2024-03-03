@@ -8,11 +8,11 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus
 import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow
-import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
+import com.koddy.server.common.fixture.MenteeFlow
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MentorFlow
 import com.koddy.server.common.mock.fake.FakeEncryptor
 import com.koddy.server.member.domain.model.Language
 import com.koddy.server.member.domain.model.mentee.Mentee
@@ -30,7 +30,6 @@ import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import java.time.LocalDateTime
 
 @UnitTestKt
 @DisplayName("CoffeeChat -> GetCoffeeChatScheduleDetailsUseCase 테스트")
@@ -53,7 +52,7 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
 
     describe("GetCoffeeChatScheduleDetailsUseCase's invoke (멘토 입장)") {
         val authenticated = Authenticated(mentor.id, mentor.authority)
-        val coffeeChat: CoffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L, LocalDateTime.now())
+        val coffeeChat: CoffeeChat = MentorFlow.suggestAndPending(id = 1L, fixture = 월요일_1주차_20_00_시작, mentor = mentor, mentee = mentee)
         val query = GetCoffeeChatScheduleDetails(authenticated, coffeeChat.id)
         every { coffeeChatReader.getById(query.coffeeChatId) } returns coffeeChat
 
@@ -99,7 +98,7 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
 
     describe("GetCoffeeChatScheduleDetailsUseCase's invoke (멘티 입장)") {
         val authenticated = Authenticated(mentee.id, mentee.authority)
-        val coffeeChat: CoffeeChat = MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor).apply(1L, LocalDateTime.now())
+        val coffeeChat: CoffeeChat = MenteeFlow.applyAndApprove(id = 1L, fixture = 월요일_1주차_20_00_시작, mentee = mentee, mentor = mentor)
         val query = GetCoffeeChatScheduleDetails(authenticated, coffeeChat.id)
         every { coffeeChatReader.getById(query.coffeeChatId) } returns coffeeChat
 

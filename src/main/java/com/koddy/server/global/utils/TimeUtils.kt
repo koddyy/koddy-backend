@@ -99,7 +99,6 @@ object TimeUtils {
     /**
      * targetA < targetB
      */
-    @JvmStatic
     fun isLower(
         targetA: LocalTime,
         targetB: LocalTime,
@@ -134,7 +133,6 @@ object TimeUtils {
     /**
      * targetA < targetB
      */
-    @JvmStatic
     fun isLower(
         targetA: LocalDateTime,
         targetB: LocalDateTime,
@@ -143,7 +141,6 @@ object TimeUtils {
     /**
      * targetA <= targetB
      */
-    @JvmStatic
     fun isLowerOrEqual(
         targetA: LocalDateTime,
         targetB: LocalDateTime,
@@ -152,7 +149,6 @@ object TimeUtils {
     /**
      * targetA > targetB
      */
-    @JvmStatic
     fun isGreator(
         targetA: LocalDateTime,
         targetB: LocalDateTime,

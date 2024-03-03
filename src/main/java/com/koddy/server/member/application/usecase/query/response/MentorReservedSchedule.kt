@@ -22,7 +22,7 @@ data class MentorReservedSchedule(
                 period = MentoringPeriodResponse.from(mentor.mentoringPeriod),
                 schedules = mentor.schedules.map { ScheduleResponse.from(it.timeline) },
                 timeUnit = mentor.mentoringTimeUnit,
-                reserved = reservedCoffeeChat.map { Reserved.from(it.reservation) },
+                reserved = reservedCoffeeChat.map { Reserved.from(it.reservation!!) },
             )
         }
     }

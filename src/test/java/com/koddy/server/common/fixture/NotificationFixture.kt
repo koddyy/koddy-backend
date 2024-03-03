@@ -44,17 +44,7 @@ enum class NotificationFixture(
     ;
 
     fun toDomain(
-        target: Member<*>,
-        coffeeChat: CoffeeChat,
-    ): Notification =
-        Notification.create(
-            target = target,
-            coffeeChat = coffeeChat,
-            type = type,
-        )
-
-    fun toDomain(
-        id: Long,
+        id: Long = 0L,
         target: Member<*>,
         coffeeChat: CoffeeChat,
     ): Notification =

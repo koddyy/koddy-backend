@@ -3,9 +3,9 @@ package com.koddy.server.coffeechat.domain.service
 import com.koddy.server.coffeechat.domain.model.Reservation
 import com.koddy.server.coffeechat.domain.repository.query.MentorReservedScheduleQueryRepository
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
+import com.koddy.server.common.fixture.MenteeFlow
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.DayOfWeek
@@ -129,15 +129,15 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
             val mentor: Mentor = MENTOR_1.toDomainWithMentoringInfo(period, timelines).apply(1L)
             val mentee: Mentee = MENTEE_1.toDomain().apply(2L)
 
-            val startLines = listOf(
+            val starts = listOf(
                 LocalDateTime.of(2024, 2, 6, 18, 0),
                 LocalDateTime.of(2024, 2, 7, 18, 0),
                 LocalDateTime.of(2024, 2, 8, 18, 0),
             )
             every { mentorReservedScheduleQueryRepository.fetchReservedCoffeeChat(mentor.id, 2024, 2) } returns listOf(
-                MenteeFlow.apply(startLines[0], startLines[0].plusHours(2), mentee, mentor).apply(1L),
-                MenteeFlow.apply(startLines[1], startLines[1].plusHours(2), mentee, mentor).apply(2L),
-                MenteeFlow.apply(startLines[2], startLines[2].plusHours(2), mentee, mentor).apply(3L),
+                MenteeFlow.apply(id = 1L, start = starts[0], end = starts[0].plusHours(2), mentee = mentee, mentor = mentor),
+                MenteeFlow.apply(id = 2L, start = starts[1], end = starts[1].plusHours(2), mentee = mentee, mentor = mentor),
+                MenteeFlow.apply(id = 3L, start = starts[2], end = starts[2].plusHours(2), mentee = mentee, mentor = mentor),
             )
 
             listOf(
@@ -182,12 +182,12 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
                 LocalDateTime.of(2024, 3, 1, 15, 0),
             )
             every { mentorReservedScheduleQueryRepository.fetchReservedCoffeeChat(mentor.id, 2024, 2) } returns listOf(
-                MenteeFlow.apply(startLines[0], startLines[0].plusHours(2), mentee, mentor).apply(1L),
-                MenteeFlow.apply(startLines[1], startLines[1].plusHours(2), mentee, mentor).apply(2L),
-                MenteeFlow.apply(startLines[2], startLines[2].plusHours(2), mentee, mentor).apply(3L),
+                MenteeFlow.apply(id = 1L, start = startLines[0], end = startLines[0].plusHours(2), mentee = mentee, mentor = mentor),
+                MenteeFlow.apply(id = 2L, start = startLines[1], end = startLines[1].plusHours(2), mentee = mentee, mentor = mentor),
+                MenteeFlow.apply(id = 3L, start = startLines[2], end = startLines[2].plusHours(2), mentee = mentee, mentor = mentor),
             )
             every { mentorReservedScheduleQueryRepository.fetchReservedCoffeeChat(mentor.id, 2024, 3) } returns listOf(
-                MenteeFlow.apply(startLines[3], startLines[3].plusHours(2), mentee, mentor).apply(4L),
+                MenteeFlow.apply(id = 4L, start = startLines[3], end = startLines[3].plusHours(2), mentee = mentee, mentor = mentor),
             )
 
             listOf(

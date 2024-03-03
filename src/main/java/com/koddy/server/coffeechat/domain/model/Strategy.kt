@@ -20,7 +20,6 @@ data class Strategy(
     val value: String,
 ) {
     companion object {
-        @JvmStatic
         fun of(
             type: Type,
             value: String,

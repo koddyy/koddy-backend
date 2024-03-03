@@ -4,16 +4,17 @@ import com.koddy.server.coffeechat.application.usecase.command.PendingSuggestedC
 import com.koddy.server.coffeechat.application.usecase.command.RejectSuggestedCoffeeChatCommand
 import com.koddy.server.coffeechat.domain.event.MentorNotification
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
-import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_PENDING
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_REJECT
 import com.koddy.server.coffeechat.domain.model.Reservation
 import com.koddy.server.coffeechat.domain.service.CoffeeChatNotificationEventPublisher
 import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.coffeechat.domain.service.ReservationAvailabilityChecker
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작
 import com.koddy.server.common.fixture.MenteeFixture
 import com.koddy.server.common.fixture.MentorFixture
+import com.koddy.server.common.fixture.MentorFlow
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
 import com.koddy.server.member.domain.repository.MentorRepository
@@ -47,9 +48,10 @@ internal class HandleSuggestedCoffeeChatUseCaseTest : DescribeSpec({
 
     val mentor: Mentor = MentorFixture.MENTOR_1.toDomain().apply(1L)
     val mentee: Mentee = MenteeFixture.MENTEE_1.toDomain().apply(2L)
-    val coffeeChat: CoffeeChat = MentorFlow.suggest(mentor, mentee).apply(1L)
 
     describe("HandleSuggestedCoffeeChatUseCase's reject") {
+        val coffeeChat: CoffeeChat = MentorFlow.suggest(id = 1L, mentor = mentor, mentee = mentee)
+
         context("멘토가 제안한 커피챗에 대해서 멘티가 거절하면") {
             val command = RejectSuggestedCoffeeChatCommand(
                 menteeId = mentee.id,
@@ -71,14 +73,17 @@ internal class HandleSuggestedCoffeeChatUseCaseTest : DescribeSpec({
                     coffeeChatId = coffeeChat.id,
                 )
                 assertSoftly(coffeeChat) {
+                    // Effected
+                    status shouldBe MENTEE_REJECT
+                    reason.rejectReason shouldBe command.rejectReason
+
+                    // Not Effected
                     mentorId shouldBe mentor.id
                     menteeId shouldBe mentee.id
-                    status shouldBe CoffeeChatStatus.MENTEE_REJECT
                     cancelBy shouldBe null
                     reason.applyReason shouldBe null
                     reason.suggestReason shouldNotBe null
                     reason.cancelReason shouldBe null
-                    reason.rejectReason shouldBe command.rejectReason
                     question shouldBe null
                     reservation shouldBe null
                     strategy shouldBe null
@@ -88,6 +93,8 @@ internal class HandleSuggestedCoffeeChatUseCaseTest : DescribeSpec({
     }
 
     describe("HandleSuggestedCoffeeChatUseCase's pending") {
+        val coffeeChat: CoffeeChat = MentorFlow.suggest(id = 1L, mentor = mentor, mentee = mentee)
+
         context("멘토가 제안한 커피챗에 대해서 멘티가 1차 수락하면") {
             val command = PendingSuggestedCoffeeChatCommand(
                 mentee.id,
@@ -118,17 +125,20 @@ internal class HandleSuggestedCoffeeChatUseCaseTest : DescribeSpec({
                     coffeeChatId = coffeeChat.id,
                 )
                 assertSoftly(coffeeChat) {
+                    // Effected
+                    status shouldBe MENTEE_PENDING
+                    question shouldBe command.question
+                    reservation!!.start shouldBe command.reservation.start
+                    reservation!!.end shouldBe command.reservation.end
+
+                    // Not Effected
                     mentorId shouldBe mentor.id
                     menteeId shouldBe mentee.id
-                    status shouldBe CoffeeChatStatus.MENTEE_PENDING
                     cancelBy shouldBe null
                     reason.applyReason shouldBe null
                     reason.suggestReason shouldNotBe null
                     reason.cancelReason shouldBe null
                     reason.rejectReason shouldBe null
-                    question shouldBe command.question
-                    reservation.start shouldBe command.reservation.start
-                    reservation.end shouldBe command.reservation.end
                     strategy shouldBe null
                 }
             }

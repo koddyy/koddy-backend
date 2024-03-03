@@ -9,16 +9,16 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST_COFFEE_CHAT_COMPLETE
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository
 import com.koddy.server.common.IntegrateTestKt
-import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow
-import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow
 import com.koddy.server.common.fixture.CoffeeChatFixture.수요일_2주차_20_00_시작
 import com.koddy.server.common.fixture.CoffeeChatFixture.수요일_3주차_20_00_시작
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_2주차_20_00_시작
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_2
+import com.koddy.server.common.fixture.MenteeFlow
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_2
+import com.koddy.server.common.fixture.MentorFlow
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
 import com.koddy.server.member.domain.repository.MemberRepository
@@ -60,10 +60,10 @@ internal class UpdateCoffeeChatStatusProcessorTest(
         // given
         val coffeeChats: List<CoffeeChat> = coffeeChatRepository.saveAll(
             listOf(
-                MenteeFlow.apply(월요일_1주차_20_00_시작, mentees[0], mentors[0]),
-                MenteeFlow.apply(월요일_2주차_20_00_시작, mentees[1], mentors[0]),
-                MentorFlow.suggestAndPending(수요일_2주차_20_00_시작, mentors[1], mentees[0]),
-                MentorFlow.suggestAndPending(수요일_3주차_20_00_시작, mentors[1], mentees[1]),
+                MenteeFlow.apply(fixture = 월요일_1주차_20_00_시작, mentee = mentees[0], mentor = mentors[0]),
+                MenteeFlow.apply(fixture = 월요일_2주차_20_00_시작, mentee = mentees[1], mentor = mentors[0]),
+                MentorFlow.suggestAndPending(fixture = 수요일_2주차_20_00_시작, mentor = mentors[1], mentee = mentees[0]),
+                MentorFlow.suggestAndPending(fixture = 수요일_3주차_20_00_시작, mentor = mentors[1], mentee = mentees[1]),
             ),
         )
 
@@ -90,10 +90,10 @@ internal class UpdateCoffeeChatStatusProcessorTest(
         // given
         val coffeeChats: List<CoffeeChat> = coffeeChatRepository.saveAll(
             listOf(
-                MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentees[0], mentors[0]),
-                MenteeFlow.applyAndApprove(월요일_2주차_20_00_시작, mentees[1], mentors[0]),
-                MentorFlow.suggestAndFinallyApprove(수요일_2주차_20_00_시작, mentors[1], mentees[0]),
-                MentorFlow.suggestAndFinallyApprove(수요일_3주차_20_00_시작, mentors[1], mentees[1]),
+                MenteeFlow.applyAndApprove(fixture = 월요일_1주차_20_00_시작, mentee = mentees[0], mentor = mentors[0]),
+                MenteeFlow.applyAndApprove(fixture = 월요일_2주차_20_00_시작, mentee = mentees[1], mentor = mentors[0]),
+                MentorFlow.suggestAndFinallyApprove(fixture = 수요일_2주차_20_00_시작, mentor = mentors[1], mentee = mentees[0]),
+                MentorFlow.suggestAndFinallyApprove(fixture = 수요일_3주차_20_00_시작, mentor = mentors[1], mentee = mentees[1]),
             ),
         )
 

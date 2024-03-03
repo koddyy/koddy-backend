@@ -64,7 +64,7 @@ class Notification(
         }
 
         fun fixture(
-            id: Long,
+            id: Long = 0L,
             target: Member<*>,
             coffeeChat: CoffeeChat,
             type: NotificationType,

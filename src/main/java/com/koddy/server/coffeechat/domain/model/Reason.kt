@@ -42,12 +42,10 @@ data class Reason(
     }
 
     companion object {
-        @JvmStatic
         fun apply(value: String): Reason {
             return Reason(applyReason = value)
         }
 
-        @JvmStatic
         fun suggest(value: String): Reason {
             return Reason(suggestReason = value)
         }

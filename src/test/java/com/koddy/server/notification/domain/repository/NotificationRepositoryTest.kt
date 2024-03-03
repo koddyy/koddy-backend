@@ -3,13 +3,13 @@ package com.koddy.server.notification.domain.repository
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository
 import com.koddy.server.common.RepositoryTestKt
-import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow
-import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_2주차_20_00_시작
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_3주차_20_00_시작
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
+import com.koddy.server.common.fixture.MenteeFlow
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MentorFlow
 import com.koddy.server.common.fixture.NotificationFixture.멘토_수신_MENTEE_APPLY_FROM_MENTEE_FLOW
 import com.koddy.server.common.fixture.NotificationFixture.멘토_수신_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW
 import com.koddy.server.common.fixture.NotificationFixture.멘티_수신_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW
@@ -48,10 +48,10 @@ internal class NotificationRepositoryTest(
         // given
         val coffeeChats: List<CoffeeChat> = coffeeChatRepository.saveAll(
             listOf(
-                MenteeFlow.apply(월요일_1주차_20_00_시작, mentee, mentor), // to mentor
-                MenteeFlow.applyAndReject(월요일_2주차_20_00_시작, mentee, mentor), // to mentee
-                MentorFlow.suggest(mentor, mentee), // to mentee
-                MentorFlow.suggestAndFinallyApprove(월요일_3주차_20_00_시작, mentor, mentee), // to mentor & mentee
+                MenteeFlow.apply(fixture = 월요일_1주차_20_00_시작, mentee = mentee, mentor = mentor), // to mentor
+                MenteeFlow.applyAndReject(fixture = 월요일_2주차_20_00_시작, mentee = mentee, mentor = mentor), // to mentee
+                MentorFlow.suggest(mentor = mentor, mentee = mentee), // to mentee
+                MentorFlow.suggestAndFinallyApprove(fixture = 월요일_3주차_20_00_시작, mentor = mentor, mentee = mentee), // to mentor & mentee
             ),
         )
         val notifications: List<Notification> = sut.saveAll(
@@ -88,10 +88,10 @@ internal class NotificationRepositoryTest(
         // given
         val coffeeChats: List<CoffeeChat> = coffeeChatRepository.saveAll(
             listOf(
-                MenteeFlow.apply(월요일_1주차_20_00_시작, mentee, mentor), // to mentor
-                MenteeFlow.applyAndReject(월요일_2주차_20_00_시작, mentee, mentor), // to mentee
-                MentorFlow.suggest(mentor, mentee), // to mentee
-                MentorFlow.suggestAndFinallyApprove(월요일_3주차_20_00_시작, mentor, mentee), // to mentor & mentee
+                MenteeFlow.apply(fixture = 월요일_1주차_20_00_시작, mentee = mentee, mentor = mentor), // to mentor
+                MenteeFlow.applyAndReject(fixture = 월요일_2주차_20_00_시작, mentee = mentee, mentor = mentor), // to mentee
+                MentorFlow.suggest(mentor = mentor, mentee = mentee), // to mentee
+                MentorFlow.suggestAndFinallyApprove(fixture = 월요일_3주차_20_00_시작, mentor = mentor, mentee = mentee), // to mentor & mentee
             ),
         )
         val notifications: List<Notification> = sut.saveAll(

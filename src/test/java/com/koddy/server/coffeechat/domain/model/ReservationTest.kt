@@ -14,7 +14,7 @@ import io.kotest.matchers.throwable.shouldHaveMessage
 @UnitTestKt
 @DisplayName("CoffeeChat -> 도메인 [Reservation] 테스트")
 internal class ReservationTest : FeatureSpec({
-    feature("Reservation's construct") {
+    feature("Reservation 생성") {
         scenario("Start가 End보다 나중 시각으로 설정되면 Reservation을 생성할 수 없다") {
             shouldThrow<CoffeeChatException> {
                 Reservation(

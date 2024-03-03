@@ -5,15 +5,16 @@ import com.koddy.server.coffeechat.application.usecase.command.CancelCoffeeChatC
 import com.koddy.server.coffeechat.domain.event.MenteeNotification
 import com.koddy.server.coffeechat.domain.event.MentorNotification
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
-import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTEE_FLOW
+import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.CANCEL_FROM_MENTOR_FLOW
 import com.koddy.server.coffeechat.domain.service.CoffeeChatNotificationEventPublisher
 import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.fixture.CoffeeChatFixture.MenteeFlow
-import com.koddy.server.common.fixture.CoffeeChatFixture.MentorFlow
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작
 import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
+import com.koddy.server.common.fixture.MenteeFlow
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MentorFlow
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
 import io.kotest.assertions.assertSoftly
@@ -46,7 +47,7 @@ internal class CancelCoffeeChatUseCaseTest : DescribeSpec({
         val authenticated = Authenticated(mentor.id, mentor.authority)
 
         context("MenteeFlow로 진행되는 커피챗을 멘토가 취소하면") {
-            val coffeeChat: CoffeeChat = MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor).apply(1L)
+            val coffeeChat: CoffeeChat = MenteeFlow.applyAndApprove(id = 1L, fixture = 월요일_1주차_20_00_시작, mentee = mentee, mentor = mentor)
             val command = CancelCoffeeChatCommand(
                 authenticated = authenticated,
                 coffeeChatId = coffeeChat.id,
@@ -66,25 +67,29 @@ internal class CancelCoffeeChatUseCaseTest : DescribeSpec({
                     coffeeChatId = coffeeChat.id,
                 )
                 assertSoftly(coffeeChat) {
+                    // Effected
+                    status shouldBe CANCEL_FROM_MENTEE_FLOW
+                    cancelBy shouldBe mentor.id
+                    reason.cancelReason shouldBe command.cancelReason
+
+                    // Not Effected
                     mentorId shouldBe mentor.id
                     menteeId shouldBe mentee.id
-                    status shouldBe CoffeeChatStatus.CANCEL_FROM_MENTEE_FLOW
                     cancelBy shouldBe mentor.id
                     reason.applyReason shouldNotBe null
                     reason.suggestReason shouldBe null
-                    reason.cancelReason shouldBe command.cancelReason
                     reason.rejectReason shouldBe null
                     question shouldNotBe null
-                    reservation.start shouldBe 월요일_1주차_20_00_시작.start
-                    reservation.end shouldBe 월요일_1주차_20_00_시작.end
-                    strategy.type shouldNotBe null
-                    strategy.value shouldNotBe null
+                    reservation!!.start shouldBe 월요일_1주차_20_00_시작.start
+                    reservation!!.end shouldBe 월요일_1주차_20_00_시작.end
+                    strategy!!.type shouldNotBe null
+                    strategy!!.value shouldNotBe null
                 }
             }
         }
 
         context("MentorFlow로 진행되는 커피챗을 멘토가 취소하면") {
-            val coffeeChat: CoffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L)
+            val coffeeChat: CoffeeChat = MentorFlow.suggestAndPending(id = 1L, fixture = 월요일_1주차_20_00_시작, mentor = mentor, mentee = mentee)
             val command = CancelCoffeeChatCommand(
                 authenticated = authenticated,
                 coffeeChatId = coffeeChat.id,
@@ -104,17 +109,20 @@ internal class CancelCoffeeChatUseCaseTest : DescribeSpec({
                     coffeeChatId = coffeeChat.id,
                 )
                 assertSoftly(coffeeChat) {
+                    // Effected
+                    status shouldBe CANCEL_FROM_MENTOR_FLOW
+                    reason.cancelReason shouldBe command.cancelReason
+                    cancelBy shouldBe mentor.id
+
+                    // Not Effected
                     mentorId shouldBe mentor.id
                     menteeId shouldBe mentee.id
-                    status shouldBe CoffeeChatStatus.CANCEL_FROM_MENTOR_FLOW
-                    cancelBy shouldBe mentor.id
                     reason.applyReason shouldBe null
                     reason.suggestReason shouldNotBe null
-                    reason.cancelReason shouldBe command.cancelReason
                     reason.rejectReason shouldBe null
                     question shouldNotBe null
-                    reservation.start shouldBe 월요일_1주차_20_00_시작.start
-                    reservation.end shouldBe 월요일_1주차_20_00_시작.end
+                    reservation!!.start shouldBe 월요일_1주차_20_00_시작.start
+                    reservation!!.end shouldBe 월요일_1주차_20_00_시작.end
                     strategy shouldBe null
                 }
             }
@@ -125,7 +133,7 @@ internal class CancelCoffeeChatUseCaseTest : DescribeSpec({
         val authenticated = Authenticated(mentee.id, mentee.authority)
 
         context("MenteeFlow로 진행되는 커피챗을 멘티가 취소하면") {
-            val coffeeChat: CoffeeChat = MenteeFlow.applyAndApprove(월요일_1주차_20_00_시작, mentee, mentor).apply(1L)
+            val coffeeChat: CoffeeChat = MenteeFlow.applyAndApprove(id = 1L, fixture = 월요일_1주차_20_00_시작, mentee = mentee, mentor = mentor)
             val command = CancelCoffeeChatCommand(
                 authenticated = authenticated,
                 coffeeChatId = coffeeChat.id,
@@ -145,25 +153,28 @@ internal class CancelCoffeeChatUseCaseTest : DescribeSpec({
                     coffeeChatId = coffeeChat.id,
                 )
                 assertSoftly(coffeeChat) {
+                    // Effected
+                    status shouldBe CANCEL_FROM_MENTEE_FLOW
+                    cancelBy shouldBe mentee.id
+                    reason.cancelReason shouldBe command.cancelReason
+
+                    // Not Effected
                     mentorId shouldBe mentor.id
                     menteeId shouldBe mentee.id
-                    status shouldBe CoffeeChatStatus.CANCEL_FROM_MENTEE_FLOW
-                    cancelBy shouldBe mentee.id
                     reason.applyReason shouldNotBe null
                     reason.suggestReason shouldBe null
-                    reason.cancelReason shouldBe command.cancelReason
                     reason.rejectReason shouldBe null
                     question shouldNotBe null
-                    reservation.start shouldBe 월요일_1주차_20_00_시작.start
-                    reservation.end shouldBe 월요일_1주차_20_00_시작.end
-                    strategy.type shouldNotBe null
-                    strategy.value shouldNotBe null
+                    reservation!!.start shouldBe 월요일_1주차_20_00_시작.start
+                    reservation!!.end shouldBe 월요일_1주차_20_00_시작.end
+                    strategy!!.type shouldNotBe null
+                    strategy!!.value shouldNotBe null
                 }
             }
         }
 
         context("MentorFlow로 진행되는 커피챗을 멘티가 취소하면") {
-            val coffeeChat: CoffeeChat = MentorFlow.suggestAndPending(월요일_1주차_20_00_시작, mentor, mentee).apply(1L)
+            val coffeeChat: CoffeeChat = MentorFlow.suggestAndPending(id = 1L, fixture = 월요일_1주차_20_00_시작, mentor = mentor, mentee = mentee)
             val command = CancelCoffeeChatCommand(
                 authenticated = authenticated,
                 coffeeChatId = coffeeChat.id,
@@ -183,17 +194,20 @@ internal class CancelCoffeeChatUseCaseTest : DescribeSpec({
                     coffeeChatId = coffeeChat.id,
                 )
                 assertSoftly(coffeeChat) {
+                    // Effected
+                    status shouldBe CANCEL_FROM_MENTOR_FLOW
+                    cancelBy shouldBe mentee.id
+                    reason.cancelReason shouldBe command.cancelReason
+
+                    // Not Effected
                     mentorId shouldBe mentor.id
                     menteeId shouldBe mentee.id
-                    status shouldBe CoffeeChatStatus.CANCEL_FROM_MENTOR_FLOW
-                    cancelBy shouldBe mentee.id
                     reason.applyReason shouldBe null
                     reason.suggestReason shouldNotBe null
-                    reason.cancelReason shouldBe command.cancelReason
                     reason.rejectReason shouldBe null
                     question shouldNotBe null
-                    reservation.start shouldBe 월요일_1주차_20_00_시작.start
-                    reservation.end shouldBe 월요일_1주차_20_00_시작.end
+                    reservation!!.start shouldBe 월요일_1주차_20_00_시작.start
+                    reservation!!.end shouldBe 월요일_1주차_20_00_시작.end
                     strategy shouldBe null
                 }
             }
