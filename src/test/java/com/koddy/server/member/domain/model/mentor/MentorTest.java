@@ -290,7 +290,7 @@ class MentorTest extends UnitTest {
 
             // when - then
             final LocalDateTime target = LocalDateTime.of(2024, 2, 5, 18, 0);
-            assertThatThrownBy(() -> mentor.validateReservationData(Reservation.of(target, target.plusMinutes(30))))
+            assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target, target.plusMinutes(30))))
                     .isInstanceOf(MemberException.class)
                     .hasMessage(MENTOR_NOT_FILL_IN_SCHEDULE.getMessage());
         }
@@ -310,10 +310,10 @@ class MentorTest extends UnitTest {
             final LocalDateTime target2 = LocalDateTime.of(2024, 3, 2, 18, 0);
 
             assertAll(
-                    () -> assertThatThrownBy(() -> mentor.validateReservationData(Reservation.of(target1, target1.plusMinutes(30))))
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target1, target1.plusMinutes(30))))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(CANNOT_RESERVATION.getMessage()),
-                    () -> assertThatThrownBy(() -> mentor.validateReservationData(Reservation.of(target2, target2.plusMinutes(30))))
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target2, target2.plusMinutes(30))))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(CANNOT_RESERVATION.getMessage())
             );
@@ -333,19 +333,19 @@ class MentorTest extends UnitTest {
             final LocalDateTime start = LocalDateTime.of(2024, 2, 5, 18, 0);
 
             assertAll(
-                    () -> assertThatThrownBy(() -> mentor.validateReservationData(Reservation.of(start, start.plusMinutes(10))))
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(start, start.plusMinutes(10))))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(CANNOT_RESERVATION.getMessage()),
-                    () -> assertThatThrownBy(() -> mentor.validateReservationData(Reservation.of(start, start.plusMinutes(20))))
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(start, start.plusMinutes(20))))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(CANNOT_RESERVATION.getMessage()),
-                    () -> assertThatThrownBy(() -> mentor.validateReservationData(Reservation.of(start, start.plusMinutes(29))))
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(start, start.plusMinutes(29))))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(CANNOT_RESERVATION.getMessage()),
-                    () -> assertThatThrownBy(() -> mentor.validateReservationData(Reservation.of(start, start.plusMinutes(31))))
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(start, start.plusMinutes(31))))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(CANNOT_RESERVATION.getMessage()),
-                    () -> assertThatThrownBy(() -> mentor.validateReservationData(Reservation.of(start, start.plusMinutes(40))))
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(start, start.plusMinutes(40))))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(CANNOT_RESERVATION.getMessage())
             );
@@ -378,25 +378,25 @@ class MentorTest extends UnitTest {
             final LocalDateTime target7 = LocalDateTime.of(2024, 2, 5, 22, 30);
 
             assertAll(
-                    () -> assertThatThrownBy(() -> mentor.validateReservationData(Reservation.of(target1, target1.plusMinutes(30))))
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target1, target1.plusMinutes(30))))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(CANNOT_RESERVATION.getMessage()),
-                    () -> assertThatThrownBy(() -> mentor.validateReservationData(Reservation.of(target2, target2.plusMinutes(30))))
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target2, target2.plusMinutes(30))))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(CANNOT_RESERVATION.getMessage()),
-                    () -> assertThatThrownBy(() -> mentor.validateReservationData(Reservation.of(target3, target3.plusMinutes(30))))
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target3, target3.plusMinutes(30))))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(CANNOT_RESERVATION.getMessage()),
-                    () -> assertThatThrownBy(() -> mentor.validateReservationData(Reservation.of(target4, target4.plusHours(3))))
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target4, target4.plusHours(3))))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(CANNOT_RESERVATION.getMessage()),
-                    () -> assertThatThrownBy(() -> mentor.validateReservationData(Reservation.of(target5, target5.plusMinutes(30))))
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target5, target5.plusMinutes(30))))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(CANNOT_RESERVATION.getMessage()),
-                    () -> assertThatThrownBy(() -> mentor.validateReservationData(Reservation.of(target6, target6.plusMinutes(30))))
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target6, target6.plusMinutes(30))))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(CANNOT_RESERVATION.getMessage()),
-                    () -> assertThatThrownBy(() -> mentor.validateReservationData(Reservation.of(target7, target7.plusMinutes(30))))
+                    () -> assertThatThrownBy(() -> mentor.validateReservationData(new Reservation(target7, target7.plusMinutes(30))))
                             .isInstanceOf(MemberException.class)
                             .hasMessage(CANNOT_RESERVATION.getMessage())
             );
@@ -430,18 +430,18 @@ class MentorTest extends UnitTest {
             final LocalDateTime target12 = LocalDateTime.of(2024, 3, 1, 20, 30);
 
             assertAll(
-                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target1, target1.plusMinutes(30)))),
-                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target2, target2.plusMinutes(30)))),
-                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target3, target3.plusMinutes(30)))),
-                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target4, target4.plusMinutes(30)))),
-                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target5, target5.plusMinutes(30)))),
-                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target6, target6.plusMinutes(30)))),
-                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target7, target7.plusMinutes(30)))),
-                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target8, target8.plusMinutes(30)))),
-                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target9, target9.plusMinutes(30)))),
-                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target10, target10.plusMinutes(30)))),
-                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target11, target11.plusMinutes(30)))),
-                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(Reservation.of(target12, target12.plusMinutes(30))))
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target1, target1.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target2, target2.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target3, target3.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target4, target4.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target5, target5.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target6, target6.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target7, target7.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target8, target8.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target9, target9.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target10, target10.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target11, target11.plusMinutes(30)))),
+                    () -> assertDoesNotThrow(() -> mentor.validateReservationData(new Reservation(target12, target12.plusMinutes(30))))
             );
         }
     }

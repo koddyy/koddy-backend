@@ -28,9 +28,9 @@ data class CreateCoffeeChatByApplyRequest(
             menteeId = menteeId,
             mentorId = mentorId,
             applyReason = applyReason,
-            reservation = Reservation.of(
-                TimeUtils.toLocalDateTime(start),
-                TimeUtils.toLocalDateTime(end),
+            reservation = Reservation(
+                start = TimeUtils.toLocalDateTime(start),
+                end = TimeUtils.toLocalDateTime(end),
             ),
         )
     }

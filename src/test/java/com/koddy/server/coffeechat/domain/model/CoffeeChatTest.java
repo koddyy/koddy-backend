@@ -179,7 +179,7 @@ class CoffeeChatTest extends UnitTest {
             final String question = "질문..";
             final LocalDateTime start = 월요일_1주차_20_00_시작.getStart();
             final LocalDateTime end = 월요일_1주차_20_00_시작.getEnd();
-            coffeeChat.pendingFromMentorSuggest(question, Reservation.of(start, end));
+            coffeeChat.pendingFromMentorSuggest(question, new Reservation(start, end));
 
             // then
             assertAll(
@@ -390,10 +390,10 @@ class CoffeeChatTest extends UnitTest {
         final CoffeeChat coffeeChat = MenteeFlow.apply(start, end, mentee, mentor).apply(1L);
 
         // when
-        final boolean actual1 = coffeeChat.isRequestReservationIncludedSchedules(Reservation.of(start.minusMinutes(10), start.plusMinutes(10)));
-        final boolean actual2 = coffeeChat.isRequestReservationIncludedSchedules(Reservation.of(start, start.plusMinutes(10)));
-        final boolean actual3 = coffeeChat.isRequestReservationIncludedSchedules(Reservation.of(end.minusMinutes(10), end));
-        final boolean actual4 = coffeeChat.isRequestReservationIncludedSchedules(Reservation.of(end, end.plusMinutes(10)));
+        final boolean actual1 = coffeeChat.isRequestReservationIncludedSchedules(new Reservation(start.minusMinutes(10), start.plusMinutes(10)));
+        final boolean actual2 = coffeeChat.isRequestReservationIncludedSchedules(new Reservation(start, start.plusMinutes(10)));
+        final boolean actual3 = coffeeChat.isRequestReservationIncludedSchedules(new Reservation(end.minusMinutes(10), end));
+        final boolean actual4 = coffeeChat.isRequestReservationIncludedSchedules(new Reservation(end, end.plusMinutes(10)));
 
         // then
         assertAll(

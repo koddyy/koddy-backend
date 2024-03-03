@@ -93,9 +93,9 @@ internal class HandleSuggestedCoffeeChatUseCaseTest : DescribeSpec({
                 mentee.id,
                 coffeeChat.id,
                 "질문..",
-                Reservation.of(
-                    월요일_1주차_20_00_시작.start,
-                    월요일_1주차_20_00_시작.end,
+                Reservation(
+                    start = 월요일_1주차_20_00_시작.start,
+                    end = 월요일_1주차_20_00_시작.end,
                 ),
             )
             every { coffeeChatReader.getByMentee(command.coffeeChatId, command.menteeId) } returns coffeeChat

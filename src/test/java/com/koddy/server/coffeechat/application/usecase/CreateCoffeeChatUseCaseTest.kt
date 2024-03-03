@@ -53,9 +53,9 @@ internal class CreateCoffeeChatUseCaseTest : DescribeSpec({
             menteeId = mentee.id,
             mentorId = mentor.id,
             applyReason = "신청..",
-            reservation = Reservation.of(
-                월요일_1주차_20_00_시작.start,
-                월요일_1주차_20_00_시작.end,
+            reservation = Reservation(
+                start = 월요일_1주차_20_00_시작.start,
+                end = 월요일_1주차_20_00_시작.end,
             ),
         )
         every { menteeRepository.getById(command.menteeId) } returns mentee

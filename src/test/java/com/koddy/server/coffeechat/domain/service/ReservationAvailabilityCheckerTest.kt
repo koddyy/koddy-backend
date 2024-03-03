@@ -42,7 +42,7 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
             ).apply(1L)
 
             shouldThrow<MemberException> {
-                sut.check(mentor, Reservation.of(월요일_1주차_20_00_시작.start, 월요일_1주차_20_00_시작.end))
+                sut.check(mentor, Reservation(start = 월요일_1주차_20_00_시작.start, end = 월요일_1주차_20_00_시작.end))
             } shouldHaveMessage MENTOR_NOT_FILL_IN_SCHEDULE.message
         }
 
@@ -59,7 +59,7 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
             )
             targets.forEach {
                 shouldThrow<MemberException> {
-                    sut.check(mentor, Reservation.of(it, it.plusMinutes(30)))
+                    sut.check(mentor, Reservation(start = it, end = it.plusMinutes(30)))
                 } shouldHaveMessage CANNOT_RESERVATION.message
             }
         }
@@ -81,7 +81,7 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
             val start: LocalDateTime = LocalDateTime.of(2024, 2, 5, 18, 0)
             listOf(10, 20, 29, 31, 40).forEach {
                 shouldThrow<MemberException> {
-                    sut.check(mentor, Reservation.of(start, start.plusMinutes(it.toLong())))
+                    sut.check(mentor, Reservation(start = start, end = start.plusMinutes(it.toLong())))
                 } shouldHaveMessage CANNOT_RESERVATION.message
             }
         }
@@ -109,7 +109,7 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
                 LocalDateTime.of(2024, 2, 5, 22, 30),
             ).forEach {
                 shouldThrow<MemberException> {
-                    sut.check(mentor, Reservation.of(it, it.plusMinutes(30)))
+                    sut.check(mentor, Reservation(start = it, end = it.plusMinutes(30)))
                 } shouldHaveMessage CANNOT_RESERVATION.message
             }
         }
@@ -155,7 +155,7 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
                 LocalDateTime.of(2024, 2, 8, 19, 50),
             ).forEach {
                 shouldThrow<MemberException> {
-                    sut.check(mentor, Reservation.of(it, it.plusMinutes(30)))
+                    sut.check(mentor, Reservation(start = it, end = it.plusMinutes(30)))
                 } shouldHaveMessage CANNOT_RESERVATION.message
             }
         }
@@ -211,7 +211,7 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
                 LocalDateTime.of(2024, 3, 1, 17, 0),
                 LocalDateTime.of(2024, 3, 1, 21, 30),
             ).forEach {
-                shouldNotThrowAny { sut.check(mentor, Reservation.of(it, it.plusMinutes(30))) }
+                shouldNotThrowAny { sut.check(mentor, Reservation(start = it, end = it.plusMinutes(30))) }
             }
         }
     }

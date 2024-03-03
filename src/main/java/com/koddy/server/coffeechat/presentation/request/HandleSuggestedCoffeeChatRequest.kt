@@ -43,9 +43,9 @@ data class PendingSuggestedCoffeeChatRequest(
             menteeId = menteeId,
             coffeeChatId = coffeeChatId,
             question = question,
-            reservation = Reservation.of(
-                TimeUtils.toLocalDateTime(start),
-                TimeUtils.toLocalDateTime(end),
+            reservation = Reservation(
+                start = TimeUtils.toLocalDateTime(start),
+                end = TimeUtils.toLocalDateTime(end),
             ),
         )
     }
