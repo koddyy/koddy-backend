@@ -149,7 +149,7 @@ object CoffeeChatAcceptanceStep {
             uri = "/api/coffeechats/applied/approve/$coffeeChatId",
             body = ApproveAppliedCoffeeChatRequest(
                 question = "질문..",
-                chatType = fixture.type.eng,
+                chatType = fixture.type.value,
                 chatValue = fixture.value,
             ),
             accessToken = accessToken,
@@ -207,7 +207,7 @@ object CoffeeChatAcceptanceStep {
         return RequestHelper.patchRequestWithAccessToken(
             uri = "/api/coffeechats/pending/approve/$coffeeChatId",
             body = FinallyApprovePendingCoffeeChatRequest(
-                chatType = fixture.type.eng,
+                chatType = fixture.type.value,
                 chatValue = fixture.value,
             ),
             accessToken = accessToken,

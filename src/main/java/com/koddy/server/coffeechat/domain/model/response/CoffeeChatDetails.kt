@@ -32,7 +32,7 @@ data class CoffeeChatDetails(
                 coffeeChat.question,
                 coffeeChat.reservation?.start,
                 coffeeChat.reservation?.end,
-                coffeeChat.strategy?.type?.eng,
+                coffeeChat.strategy?.type?.value,
                 coffeeChat.strategy?.value?.let { encryptor.decrypt(it) },
                 coffeeChat.createdAt,
                 coffeeChat.lastModifiedAt,

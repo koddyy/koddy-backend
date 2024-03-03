@@ -93,7 +93,7 @@ class HandlePendingCoffeeChatApiTest extends ApiDocsTest {
     class FinallyApprove {
         private static final String BASE_URL = "/api/coffeechats/pending/approve/{coffeeChatId}";
         private final FinallyApprovePendingCoffeeChatRequest request = new FinallyApprovePendingCoffeeChatRequest(
-                StrategyFixture.KAKAO_ID.getType().getEng(),
+                StrategyFixture.KAKAO_ID.getType().getValue(),
                 StrategyFixture.KAKAO_ID.getValue()
         );
 

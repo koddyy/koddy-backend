@@ -136,7 +136,7 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
                     result.coffeeChat.question shouldNotBe null
                     result.coffeeChat.start shouldBe 월요일_1주차_20_00_시작.start
                     result.coffeeChat.end shouldBe 월요일_1주차_20_00_시작.end
-                    result.coffeeChat.chatType shouldBe 월요일_1주차_20_00_시작.strategy.type.eng
+                    result.coffeeChat.chatType shouldBe 월요일_1주차_20_00_시작.strategy.type.value
                     result.coffeeChat.chatValue shouldNotBe 월요일_1주차_20_00_시작.strategy.value
                     result.coffeeChat.chatValue shouldBe encryptor.decrypt(월요일_1주차_20_00_시작.strategy.value)
                 }

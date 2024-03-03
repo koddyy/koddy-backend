@@ -242,7 +242,7 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
                 .body("coffeeChat.question", notNullValue(String::class.java))
                 .body("coffeeChat.start", `is`(start.format(ISO_LOCAL_DATE_TIME)))
                 .body("coffeeChat.end", `is`(end.format(ISO_LOCAL_DATE_TIME)))
-                .body("coffeeChat.chatType", `is`(StrategyFixture.KAKAO_ID.type.eng))
+                .body("coffeeChat.chatType", `is`(StrategyFixture.KAKAO_ID.type.value))
                 .body("coffeeChat.chatValue", `is`(StrategyFixture.KAKAO_ID.value))
 
             when (fixture) {
@@ -523,7 +523,7 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
                 .body("coffeeChat.question", notNullValue(String::class.java))
                 .body("coffeeChat.start", `is`(start.format(ISO_LOCAL_DATE_TIME)))
                 .body("coffeeChat.end", `is`(end.format(ISO_LOCAL_DATE_TIME)))
-                .body("coffeeChat.chatType", `is`(StrategyFixture.KAKAO_ID.type.eng))
+                .body("coffeeChat.chatType", `is`(StrategyFixture.KAKAO_ID.type.value))
                 .body("coffeeChat.chatValue", `is`(StrategyFixture.KAKAO_ID.value))
 
             when (fixture) {
