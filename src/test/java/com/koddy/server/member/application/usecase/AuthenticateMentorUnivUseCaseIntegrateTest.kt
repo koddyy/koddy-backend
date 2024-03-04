@@ -12,8 +12,8 @@ import com.koddy.server.mail.application.adapter.EmailSender
 import com.koddy.server.member.application.usecase.command.AttemptWithMailCommand
 import com.koddy.server.member.application.usecase.command.AttemptWithProofDataCommand
 import com.koddy.server.member.application.usecase.command.ConfirmMailAuthCodeCommand
-import com.koddy.server.member.domain.model.mentor.AuthenticationStatus
 import com.koddy.server.member.domain.model.mentor.Mentor
+import com.koddy.server.member.domain.model.mentor.UniversityAuthentication
 import com.koddy.server.member.domain.repository.MentorRepository
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
@@ -73,7 +73,7 @@ internal class AuthenticateMentorUnivUseCaseIntegrateTest(
             assertSoftly {
                 findMentor.universityAuthentication.schoolMail shouldBe command.schoolMail
                 findMentor.universityAuthentication.proofDataUploadUrl shouldBe null
-                findMentor.universityAuthentication.status shouldBe AuthenticationStatus.ATTEMPT
+                findMentor.universityAuthentication.status shouldBe UniversityAuthentication.AuthenticationStatus.ATTEMPT
 
                 redisOperator.get(getAuthKey(mentor.id, command.schoolMail)) shouldBe AUTH_CODE
             }
@@ -110,7 +110,7 @@ internal class AuthenticateMentorUnivUseCaseIntegrateTest(
             assertSoftly {
                 findMentor.universityAuthentication.schoolMail shouldBe command.schoolMail
                 findMentor.universityAuthentication.proofDataUploadUrl shouldBe null
-                findMentor.universityAuthentication.status shouldBe AuthenticationStatus.ATTEMPT
+                findMentor.universityAuthentication.status shouldBe UniversityAuthentication.AuthenticationStatus.ATTEMPT
 
                 redisOperator.get(getAuthKey(mentor.id, command.schoolMail)) shouldBe AUTH_CODE
             }
@@ -142,7 +142,7 @@ internal class AuthenticateMentorUnivUseCaseIntegrateTest(
             assertSoftly {
                 findMentor.universityAuthentication.schoolMail shouldBe command.schoolMail
                 findMentor.universityAuthentication.proofDataUploadUrl shouldBe null
-                findMentor.universityAuthentication.status shouldBe AuthenticationStatus.SUCCESS
+                findMentor.universityAuthentication.status shouldBe UniversityAuthentication.AuthenticationStatus.SUCCESS
 
                 redisOperator.get(getAuthKey(mentor.id, command.schoolMail)) shouldBe null
             }
@@ -169,7 +169,7 @@ internal class AuthenticateMentorUnivUseCaseIntegrateTest(
             assertSoftly(findMentor) {
                 universityAuthentication.schoolMail shouldBe null
                 universityAuthentication.proofDataUploadUrl shouldBe command.proofDataUploadUrl
-                universityAuthentication.status shouldBe AuthenticationStatus.ATTEMPT
+                universityAuthentication.status shouldBe UniversityAuthentication.AuthenticationStatus.ATTEMPT
             }
         }
     }

@@ -106,7 +106,7 @@ public class Mentor extends Member<Mentor> {
     }
 
     public void authComplete() {
-        universityAuthentication.complete();
+        universityAuthentication = universityAuthentication.complete();
     }
 
     public void validateReservationData(final Reservation reservation) {

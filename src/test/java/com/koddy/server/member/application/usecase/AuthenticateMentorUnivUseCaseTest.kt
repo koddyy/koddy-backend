@@ -10,8 +10,8 @@ import com.koddy.server.member.application.usecase.command.AttemptWithMailComman
 import com.koddy.server.member.application.usecase.command.AttemptWithProofDataCommand
 import com.koddy.server.member.application.usecase.command.ConfirmMailAuthCodeCommand
 import com.koddy.server.member.domain.event.MailAuthenticatedEvent
-import com.koddy.server.member.domain.model.mentor.AuthenticationStatus
 import com.koddy.server.member.domain.model.mentor.Mentor
+import com.koddy.server.member.domain.model.mentor.UniversityAuthentication
 import com.koddy.server.member.domain.service.MemberReader
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
@@ -79,7 +79,7 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
                 assertSoftly(mentor) {
                     universityAuthentication.schoolMail shouldBe command.schoolMail
                     universityAuthentication.proofDataUploadUrl shouldBe null
-                    universityAuthentication.status shouldBe AuthenticationStatus.ATTEMPT
+                    universityAuthentication.status shouldBe UniversityAuthentication.AuthenticationStatus.ATTEMPT
                 }
             }
         }
@@ -110,7 +110,7 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
                 assertSoftly(mentor) {
                     universityAuthentication.schoolMail shouldBe command.schoolMail
                     universityAuthentication.proofDataUploadUrl shouldBe null
-                    universityAuthentication.status shouldBe AuthenticationStatus.ATTEMPT
+                    universityAuthentication.status shouldBe UniversityAuthentication.AuthenticationStatus.ATTEMPT
                 }
             }
         }
@@ -136,7 +136,7 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
                 assertSoftly(mentor) {
                     universityAuthentication.schoolMail shouldBe command.schoolMail
                     universityAuthentication.proofDataUploadUrl shouldBe null
-                    universityAuthentication.status shouldBe AuthenticationStatus.SUCCESS
+                    universityAuthentication.status shouldBe UniversityAuthentication.AuthenticationStatus.SUCCESS
                 }
             }
         }
@@ -157,7 +157,7 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
                 assertSoftly(mentor) {
                     universityAuthentication.schoolMail shouldBe null
                     universityAuthentication.proofDataUploadUrl shouldBe command.proofDataUploadUrl
-                    universityAuthentication.status shouldBe AuthenticationStatus.ATTEMPT
+                    universityAuthentication.status shouldBe UniversityAuthentication.AuthenticationStatus.ATTEMPT
                 }
             }
         }

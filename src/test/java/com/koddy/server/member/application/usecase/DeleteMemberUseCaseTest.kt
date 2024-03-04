@@ -33,26 +33,26 @@ internal class DeleteMemberUseCaseTest : FeatureSpec({
 
     feature("DeleteMemberUseCase's invoke") {
         scenario("멘토가 서비스를 탈퇴한다") {
-            every { memberReader.getMentor(mentor.id) } returns mentor
+            every { memberReader.getMember(mentor.id) } returns mentor
             justRun { mentorDeleter.execute(mentor.id) }
 
             sut.invoke(mentor.id)
 
             verify(exactly = 1) {
-                memberReader.getMentor(mentor.id)
+                memberReader.getMember(mentor.id)
                 mentorDeleter.execute(mentor.id)
             }
             verify { menteeDeleter wasNot Called }
         }
 
         scenario("멘티가 서비스를 탈퇴한다") {
-            every { memberReader.getMentee(mentee.id) } returns mentee
+            every { memberReader.getMember(mentee.id) } returns mentee
             justRun { menteeDeleter.execute(mentee.id) }
 
             sut.invoke(mentee.id)
 
             verify(exactly = 1) {
-                memberReader.getMentee(mentee.id)
+                memberReader.getMember(mentee.id)
                 menteeDeleter.execute(mentee.id)
             }
             verify { mentorDeleter wasNot Called }
