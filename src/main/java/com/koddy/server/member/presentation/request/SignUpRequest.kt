@@ -42,7 +42,7 @@ data class SignUpMentorRequest(
             platform = SocialPlatform(
                 OAuthProvider.from(provider),
                 socialId,
-                Email.from(email),
+                Email(email),
             ),
             name = name,
             languages = languages.toLanguages(),
@@ -81,7 +81,7 @@ data class SignUpMenteeRequest(
             platform = SocialPlatform(
                 OAuthProvider.from(provider),
                 socialId,
-                Email.from(email),
+                Email(email),
             ),
             name = name,
             nationality = Nationality.from(nationality),

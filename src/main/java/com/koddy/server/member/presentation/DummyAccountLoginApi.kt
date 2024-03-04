@@ -40,7 +40,7 @@ class DummyAccountLoginApi(
         response: HttpServletResponse,
     ): ResponseEntity<Void> {
         val authToken: AuthToken = dummyAccountLoginUseCase.invoke(
-            email = Email.from(request.email),
+            email = Email(request.email),
             password = request.password,
         )
         tokenResponseWriter.applyToken(response, authToken)
