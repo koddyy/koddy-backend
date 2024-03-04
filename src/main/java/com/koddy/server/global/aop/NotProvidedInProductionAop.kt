@@ -1,4 +1,4 @@
-package com.koddy.server.admin.utils
+package com.koddy.server.global.aop
 
 import com.koddy.server.auth.exception.AuthException
 import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 class NotProvidedInProductionAop(
     private val environment: Environment,
 ) {
-    @Before("@annotation(com.koddy.server.admin.utils.NotProvidedInProduction)")
+    @Before("@annotation(com.koddy.server.global.aop.NotProvidedInProduction)")
     fun checkProfile() {
         if ("prod" in environment.activeProfiles) {
             throw AuthException(INVALID_PERMISSION)

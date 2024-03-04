@@ -1,4 +1,4 @@
-package com.koddy.server.admin.utils
+package com.koddy.server.global.aop
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
