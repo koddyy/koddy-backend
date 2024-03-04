@@ -1,5 +1,6 @@
 package com.koddy.server.member.domain.model.mentor
 
+import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.toLocalDate
 import com.koddy.server.common.toLocalDateTime
 import com.koddy.server.member.exception.MemberException
@@ -13,6 +14,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.throwable.shouldHaveMessage
 import java.time.LocalDateTime
 
+@UnitTestKt
 @DisplayName("Member/Mentor -> 도메인 [MentoringPeriod] 테스트")
 internal class MentoringPeriodTest : FeatureSpec({
     feature("MentoringPeriod 생성") {

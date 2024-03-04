@@ -1,5 +1,6 @@
 package com.koddy.server.member.domain.model
 
+import com.koddy.server.common.UnitTestKt
 import com.koddy.server.member.exception.MemberException
 import com.koddy.server.member.exception.MemberExceptionCode.INVALID_EMAIL_PATTERN
 import io.kotest.assertions.throwables.shouldNotThrowAny
@@ -8,6 +9,7 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.throwable.shouldHaveMessage
 
+@UnitTestKt
 @DisplayName("Member -> 도메인 [Email] 테스트")
 internal class EmailTest : DescribeSpec({
     describe("Email 생성") {

@@ -1,10 +1,12 @@
 package com.koddy.server.member.domain.model.mentor
 
+import com.koddy.server.common.UnitTestKt
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.FeatureSpec
 import io.kotest.matchers.shouldBe
 
+@UnitTestKt
 @DisplayName("Member/Mentor -> 도메인 [UniversityAuthentication] 테스트")
 internal class UniversityAuthenticationTest : FeatureSpec({
     feature("UniversityAuthentication's attemptMail") {
