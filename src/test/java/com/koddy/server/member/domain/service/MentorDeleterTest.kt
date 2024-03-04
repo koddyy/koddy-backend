@@ -60,7 +60,7 @@ internal class MentorDeleterTest(
 
                 // Effected
                 platform.socialId shouldBe MENTOR_1.platform.socialId
-                platform.email.value shouldBe MENTOR_1.platform.email.value
+                platform.email?.value shouldBe MENTOR_1.platform.email?.value
                 status shouldBe Member.Status.ACTIVE
                 isProfileComplete shouldBe true
             }
@@ -76,7 +76,7 @@ internal class MentorDeleterTest(
 
                 // Effected
                 platform.socialId shouldBe MENTOR_1.platform.socialId
-                platform.email.value shouldBe MENTOR_1.platform.email.value
+                platform.email?.value shouldBe MENTOR_1.platform.email?.value
                 status shouldBe Member.Status.ACTIVE
                 isProfileComplete shouldBe true
             }

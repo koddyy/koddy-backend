@@ -62,7 +62,7 @@ internal class UpdateMentorProfileUseCaseTest : FeatureSpec({
                 // keep
                 platform.provider shouldBe MENTOR_1.platform.provider
                 platform.socialId shouldBe MENTOR_1.platform.socialId
-                platform.email.value shouldBe MENTOR_1.platform.email.value
+                platform.email?.value shouldBe MENTOR_1.platform.email?.value
                 nationality shouldBe Nationality.KOREA
                 universityAuthentication shouldBe null
                 mentoringPeriod.startDate shouldBe MENTOR_1.mentoringPeriod.startDate
@@ -103,7 +103,7 @@ internal class UpdateMentorProfileUseCaseTest : FeatureSpec({
                 // keep
                 platform.provider shouldBe MENTOR_1.platform.provider
                 platform.socialId shouldBe MENTOR_1.platform.socialId
-                platform.email.value shouldBe MENTOR_1.platform.email.value
+                platform.email?.value shouldBe MENTOR_1.platform.email?.value
                 name shouldBe MENTOR_1.getName()
                 nationality shouldBe Nationality.KOREA
                 introduction shouldBe MENTOR_1.introduction

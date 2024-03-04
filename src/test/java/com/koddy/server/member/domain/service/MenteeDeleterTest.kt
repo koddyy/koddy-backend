@@ -53,7 +53,7 @@ internal class MenteeDeleterTest(
 
                 // Effected
                 platform.socialId shouldBe MENTEE_1.platform.socialId
-                platform.email.value shouldBe MENTEE_1.platform.email.value
+                platform.email?.value shouldBe MENTEE_1.platform.email?.value
                 status shouldBe Member.Status.ACTIVE
                 isProfileComplete shouldBe true
             }
@@ -69,7 +69,7 @@ internal class MenteeDeleterTest(
 
                 // Effected
                 platform.socialId shouldBe MENTEE_1.platform.socialId
-                platform.email.value shouldBe MENTEE_1.platform.email.value
+                platform.email?.value shouldBe MENTEE_1.platform.email?.value
                 status shouldBe Member.Status.ACTIVE
                 isProfileComplete shouldBe true
             }

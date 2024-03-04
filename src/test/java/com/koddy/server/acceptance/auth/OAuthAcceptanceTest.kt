@@ -54,7 +54,7 @@ internal class OAuthAcceptanceTest : AcceptanceTestKt() {
             ).statusCode(NOT_FOUND.value())
                 .body("id", `is`(MENTOR_1.platform.socialId))
                 .body("name", `is`(MENTOR_1.getName()))
-                .body("email", `is`(MENTOR_1.platform.email.value))
+                .body("email", `is`(MENTOR_1.platform.email?.value))
                 .body("profileImageUrl", `is`(MENTOR_1.profileImageUrl))
         }
 

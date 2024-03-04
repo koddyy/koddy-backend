@@ -47,14 +47,14 @@ internal class SignUpUseCaseTest : DescribeSpec({
         )
 
         context("이미 가입된 소셜 계정 데이터면") {
-            every { memberReader.existsByPlatformSocialId(command.platform.socialId) } returns true
+            every { memberReader.existsByPlatformSocialId(command.platform.socialId!!) } returns true
 
             it("멘토는 중복 회원가입이 불가능하다") {
                 shouldThrow<MemberException> {
                     sut.signUpMentor(command)
                 } shouldHaveMessage ACCOUNT_ALREADY_EXISTS.message
 
-                verify(exactly = 1) { memberReader.existsByPlatformSocialId(command.platform.socialId) }
+                verify(exactly = 1) { memberReader.existsByPlatformSocialId(command.platform.socialId!!) }
                 verify(exactly = 0) {
                     memberWriter.saveMentor(any(Mentor::class))
                     tokenIssuer.provideAuthorityToken(any(Long::class), any(String::class))
@@ -63,7 +63,7 @@ internal class SignUpUseCaseTest : DescribeSpec({
         }
 
         context("가입되지 않은 소셜 계정 데이터면") {
-            every { memberReader.existsByPlatformSocialId(command.platform.socialId) } returns false
+            every { memberReader.existsByPlatformSocialId(command.platform.socialId!!) } returns false
 
             val mentor: Mentor = MENTOR_1.toDomain().apply(1L)
             every { memberWriter.saveMentor(any()) } returns mentor
@@ -75,7 +75,7 @@ internal class SignUpUseCaseTest : DescribeSpec({
                 val result: AuthMember = sut.signUpMentor(command)
 
                 verify(exactly = 1) {
-                    memberReader.existsByPlatformSocialId(command.platform.socialId)
+                    memberReader.existsByPlatformSocialId(command.platform.socialId!!)
                     memberWriter.saveMentor(any(Mentor::class))
                     tokenIssuer.provideAuthorityToken(mentor.id, mentor.authority)
                 }
@@ -99,14 +99,14 @@ internal class SignUpUseCaseTest : DescribeSpec({
         )
 
         context("이미 가입된 소셜 계정 데이터면") {
-            every { memberReader.existsByPlatformSocialId(command.platform.socialId) } returns true
+            every { memberReader.existsByPlatformSocialId(command.platform.socialId!!) } returns true
 
             it("멘티는 중복 회원가입이 불가능하다") {
                 shouldThrow<MemberException> {
                     sut.signUpMentee(command)
                 } shouldHaveMessage ACCOUNT_ALREADY_EXISTS.message
 
-                verify(exactly = 1) { memberReader.existsByPlatformSocialId(command.platform.socialId) }
+                verify(exactly = 1) { memberReader.existsByPlatformSocialId(command.platform.socialId!!) }
                 verify(exactly = 0) {
                     memberWriter.saveMentee(any(Mentee::class))
                     tokenIssuer.provideAuthorityToken(any(Long::class), any(String::class))
@@ -115,7 +115,7 @@ internal class SignUpUseCaseTest : DescribeSpec({
         }
 
         context("가입되지 않은 소셜 계정 데이터면") {
-            every { memberReader.existsByPlatformSocialId(command.platform.socialId) } returns false
+            every { memberReader.existsByPlatformSocialId(command.platform.socialId!!) } returns false
 
             val mentee: Mentee = MENTEE_1.toDomain().apply(1L)
             every { memberWriter.saveMentee(any()) } returns mentee
@@ -127,7 +127,7 @@ internal class SignUpUseCaseTest : DescribeSpec({
                 val result: AuthMember = sut.signUpMentee(command)
 
                 verify(exactly = 1) {
-                    memberReader.existsByPlatformSocialId(command.platform.socialId)
+                    memberReader.existsByPlatformSocialId(command.platform.socialId!!)
                     memberWriter.saveMentee(any(Mentee::class))
                     tokenIssuer.provideAuthorityToken(mentee.id, mentee.authority)
                 }

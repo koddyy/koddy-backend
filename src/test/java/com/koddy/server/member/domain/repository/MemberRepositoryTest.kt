@@ -32,10 +32,10 @@ internal class MemberRepositoryTest(
 
         // when - then
         assertSoftly {
-            sut.findByPlatformSocialId(MENTOR_1.platform.socialId) shouldBe mentor
-            sut.findByPlatformSocialId("${MENTOR_1.platform.socialId}7") shouldBe null
-            sut.findByPlatformSocialId(MENTEE_1.platform.socialId) shouldBe mentee
-            sut.findByPlatformSocialId("${MENTEE_1.platform.socialId}7") shouldBe null
+            sut.findByPlatformSocialId(MENTOR_1.platform.socialId!!) shouldBe mentor
+            sut.findByPlatformSocialId("${MENTOR_1.platform.socialId!!}7") shouldBe null
+            sut.findByPlatformSocialId(MENTEE_1.platform.socialId!!) shouldBe mentee
+            sut.findByPlatformSocialId("${MENTEE_1.platform.socialId!!}7") shouldBe null
         }
     }
 
@@ -47,10 +47,10 @@ internal class MemberRepositoryTest(
 
         // when - then
         assertSoftly {
-            sut.existsByPlatformSocialId(MENTOR_1.platform.socialId) shouldBe true
-            sut.existsByPlatformSocialId(MENTOR_2.platform.socialId) shouldBe false
-            sut.existsByPlatformSocialId(MENTEE_1.platform.socialId) shouldBe true
-            sut.existsByPlatformSocialId(MENTEE_2.platform.socialId) shouldBe false
+            sut.existsByPlatformSocialId(MENTOR_1.platform.socialId!!) shouldBe true
+            sut.existsByPlatformSocialId(MENTOR_2.platform.socialId!!) shouldBe false
+            sut.existsByPlatformSocialId(MENTEE_1.platform.socialId!!) shouldBe true
+            sut.existsByPlatformSocialId(MENTEE_2.platform.socialId!!) shouldBe false
         }
     }
 

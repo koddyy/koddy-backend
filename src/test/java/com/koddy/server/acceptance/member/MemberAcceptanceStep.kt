@@ -33,8 +33,8 @@ object MemberAcceptanceStep {
             uri = "/api/mentors",
             body = SignUpMentorRequest(
                 provider = fixture.platform.provider.value,
-                socialId = fixture.platform.socialId,
-                email = fixture.platform.email.value,
+                socialId = fixture.platform.socialId!!,
+                email = fixture.platform.email!!.value,
                 name = fixture.getName(),
                 languages = LanguageRequestModel(
                     main = fixture.languages
@@ -65,8 +65,8 @@ object MemberAcceptanceStep {
             uri = "/api/mentees",
             body = SignUpMenteeRequest(
                 provider = fixture.platform.provider.value,
-                socialId = fixture.platform.socialId,
-                email = fixture.platform.email.value,
+                socialId = fixture.platform.socialId!!,
+                email = fixture.platform.email!!.value,
                 name = fixture.getName(),
                 nationality = fixture.nationality.code,
                 languages = LanguageRequestModel(

@@ -59,7 +59,7 @@ internal class UpdateMenteeProfileUseCaseTest : FeatureSpec({
                 // keep
                 platform.provider shouldBe MENTEE_1.platform.provider
                 platform.socialId shouldBe MENTEE_1.platform.socialId
-                platform.email.value shouldBe MENTEE_1.platform.email.value
+                platform.email?.value shouldBe MENTEE_1.platform.email?.value
                 status shouldBe Member.Status.ACTIVE
                 role shouldBe Role.MENTEE
             }

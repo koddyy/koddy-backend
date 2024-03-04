@@ -45,7 +45,7 @@ internal class GetMemberPrivateProfileUseCaseTest : FeatureSpec({
             assertSoftly(mentorProfile) {
                 // Required Fields
                 id shouldBe mentor.id
-                email shouldBe MENTOR_1.platform.email.value
+                email shouldBe MENTOR_1.platform.email?.value
                 name shouldBe MENTOR_1.getName()
                 nationality shouldBe KOREA.code
                 languages.main shouldBe KR_MAIN.category.code
@@ -78,7 +78,7 @@ internal class GetMemberPrivateProfileUseCaseTest : FeatureSpec({
             assertSoftly(mentorProfile) {
                 // Required Fields
                 id shouldBe mentor.id
-                email shouldBe MENTOR_1.platform.email.value
+                email shouldBe MENTOR_1.platform.email?.value
                 name shouldBe MENTOR_1.getName()
                 nationality shouldBe KOREA.code
                 languages.main shouldBe KR_MAIN.category.code
@@ -128,7 +128,7 @@ internal class GetMemberPrivateProfileUseCaseTest : FeatureSpec({
             assertSoftly(mentorProfile) {
                 // Required Fields
                 id shouldBe mentee.id
-                email shouldBe MENTEE_1.platform.email.value
+                email shouldBe MENTEE_1.platform.email?.value
                 name shouldBe MENTEE_1.getName()
                 nationality shouldBe MENTEE_1.nationality.code
                 languages.main shouldBe KR_MAIN.category.code
@@ -166,7 +166,7 @@ internal class GetMemberPrivateProfileUseCaseTest : FeatureSpec({
             assertSoftly(mentorProfile) {
                 // Required Fields
                 id shouldBe mentee.id
-                email shouldBe MENTEE_1.platform.email.value
+                email shouldBe MENTEE_1.platform.email?.value
                 name shouldBe MENTEE_1.getName()
                 nationality shouldBe MENTEE_1.nationality.code
                 languages.main shouldBe KR_MAIN.category.code

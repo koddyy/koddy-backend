@@ -34,7 +34,7 @@ class SignUpUseCase(
     }
 
     private fun validateAccountExists(platform: SocialPlatform) {
-        if (memberReader.existsByPlatformSocialId(platform.socialId)) {
+        if (memberReader.existsByPlatformSocialId(platform.socialId!!)) {
             throw MemberException(ACCOUNT_ALREADY_EXISTS)
         }
     }

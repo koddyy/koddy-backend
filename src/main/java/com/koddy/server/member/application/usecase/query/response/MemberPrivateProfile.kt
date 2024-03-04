@@ -30,7 +30,7 @@ data class MentorPrivateProfile(
         fun from(mentor: Mentor): MentorPrivateProfile {
             return MentorPrivateProfile(
                 id = mentor.id,
-                email = mentor.platform.email.value,
+                email = mentor.platform.email!!.value,
                 name = mentor.name,
                 profileImageUrl = mentor.profileImageUrl,
                 nationality = mentor.nationality.code,
@@ -67,7 +67,7 @@ data class MenteePrivateProfile(
         fun from(mentee: Mentee): MenteePrivateProfile {
             return MenteePrivateProfile(
                 id = mentee.id,
-                email = mentee.platform.email.value,
+                email = mentee.platform.email!!.value,
                 name = mentee.name,
                 profileImageUrl = mentee.profileImageUrl,
                 nationality = mentee.nationality.code,
