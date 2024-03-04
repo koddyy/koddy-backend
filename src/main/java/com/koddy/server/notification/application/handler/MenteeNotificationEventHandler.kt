@@ -91,10 +91,10 @@ class MenteeNotificationEventHandler(
         val coffeeChat: CoffeeChat = coffeeChatReader.getById(event.coffeeChatId)
 
         notificationRepository.save(
-            Notification.create(
-                mentee,
-                coffeeChat,
-                type,
+            Notification(
+                target = mentee,
+                coffeeChat = coffeeChat,
+                type = type,
             ),
         )
     }

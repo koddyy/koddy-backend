@@ -23,7 +23,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EnumType.STRING
 import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
+import jakarta.persistence.GenerationType.IDENTITY
 import jakarta.persistence.Id
 import jakarta.persistence.Lob
 import jakarta.persistence.Table
@@ -31,52 +31,51 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "coffee_chat")
 class CoffeeChat(
+    id: Long = 0L,
+    mentor: Mentor,
+    mentee: Mentee,
+    status: CoffeeChatStatus,
+    reason: Reason,
+    reservation: Reservation? = null,
+) : BaseTimeEntity() {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0L,
+    @GeneratedValue(strategy = IDENTITY)
+    val id: Long = id
 
     @Column(name = "mentor_id", nullable = false)
-    val mentorId: Long,
+    val mentorId: Long = mentor.id
 
     @Column(name = "mentee_id", nullable = false)
-    val menteeId: Long,
+    val menteeId: Long = mentee.id
 
     @Enumerated(STRING)
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(30)")
-    var status: CoffeeChatStatus,
+    var status: CoffeeChatStatus = status
+        protected set
 
     /**
      * 언제든 취소 가능하기 때문에 실제로 취소한 사용자 추적 용도
      */
     @Column(name = "cancel_by")
-    var cancelBy: Long? = null,
+    var cancelBy: Long? = null
+        protected set
 
     @Embedded
-    var reason: Reason,
+    var reason: Reason = reason
+        protected set
 
     @Lob
     @Column(name = "question", columnDefinition = "TEXT")
-    var question: String? = null,
+    var question: String? = null
+        protected set
 
     @Embedded
-    var reservation: Reservation? = null,
+    var reservation: Reservation? = reservation
+        protected set
 
     @Embedded
-    var strategy: Strategy? = null,
-) : BaseTimeEntity() {
-    constructor(
-        mentor: Mentor,
-        mentee: Mentee,
-        status: CoffeeChatStatus,
-        reason: Reason,
-        reservation: Reservation? = null,
-    ) : this(
-        mentorId = mentor.id,
-        menteeId = mentee.id,
-        status = status,
-        reason = reason,
-        reservation = reservation,
-    )
+    var strategy: Strategy? = null
+        protected set
 
     val isMenteeFlow: Boolean
         get() = status.isMenteeFlow()
@@ -247,8 +246,8 @@ class CoffeeChat(
         ): CoffeeChat {
             return CoffeeChat(
                 id = id,
-                mentorId = mentor.id,
-                menteeId = mentee.id,
+                mentee = mentee,
+                mentor = mentor,
                 status = MENTEE_APPLY,
                 reason = Reason.apply(applyReason),
                 reservation = reservation,
@@ -263,8 +262,8 @@ class CoffeeChat(
         ): CoffeeChat {
             return CoffeeChat(
                 id = id,
-                mentorId = mentor.id,
-                menteeId = mentee.id,
+                mentor = mentor,
+                mentee = mentee,
                 status = MENTOR_SUGGEST,
                 reason = Reason.suggest(suggestReason),
             )

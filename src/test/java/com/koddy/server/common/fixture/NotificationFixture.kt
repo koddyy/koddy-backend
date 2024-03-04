@@ -47,11 +47,12 @@ enum class NotificationFixture(
         id: Long = 0L,
         target: Member<*>,
         coffeeChat: CoffeeChat,
-    ): Notification =
-        Notification.fixture(
+    ): Notification {
+        return Notification(
             id = id,
             target = target,
             coffeeChat = coffeeChat,
-            type = type,
+            type = this.type,
         )
+    }
 }

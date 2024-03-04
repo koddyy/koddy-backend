@@ -74,15 +74,15 @@ class BothNotificationEventHandler(
 
         notificationRepository.saveAll(
             listOf(
-                Notification.create(
-                    mentor,
-                    coffeeChat,
-                    mentorNotifyType,
+                Notification(
+                    target = mentor,
+                    coffeeChat = coffeeChat,
+                    type = mentorNotifyType,
                 ),
-                Notification.create(
-                    mentee,
-                    coffeeChat,
-                    menteeNotifyType,
+                Notification(
+                    target = mentee,
+                    coffeeChat = coffeeChat,
+                    type = menteeNotifyType,
                 ),
             ),
         )
