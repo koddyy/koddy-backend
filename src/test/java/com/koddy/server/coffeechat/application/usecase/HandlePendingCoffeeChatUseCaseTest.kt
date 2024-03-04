@@ -12,8 +12,8 @@ import com.koddy.server.coffeechat.domain.service.CoffeeChatNotificationEventPub
 import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.fixture.MentorFlow
 import com.koddy.server.common.mock.fake.FakeEncryptor
 import com.koddy.server.member.domain.model.mentee.Mentee
@@ -43,8 +43,8 @@ internal class HandlePendingCoffeeChatUseCaseTest : DescribeSpec({
         coffeeChatNotificationEventPublisher,
     )
 
-    val mentor: Mentor = MENTOR_1.toDomain().apply(1L)
-    val mentee: Mentee = MENTEE_1.toDomain().apply(2L)
+    val mentor: Mentor = mentorFixture(id = 1L).toDomain()
+    val mentee: Mentee = menteeFixture(id = 2L).toDomain()
 
     describe("HandlePendingCoffeeChatUseCase's finallyCancel") {
         val coffeeChat: CoffeeChat = MentorFlow.suggestAndPending(id = 1L, fixture = 월요일_1주차_20_00_시작, mentor = mentor, mentee = mentee)

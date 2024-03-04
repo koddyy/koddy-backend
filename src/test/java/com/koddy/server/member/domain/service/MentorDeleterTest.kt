@@ -1,7 +1,7 @@
 package com.koddy.server.member.domain.service
 
 import com.koddy.server.common.IntegrateTestKt
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.member.domain.model.AvailableLanguage
 import com.koddy.server.member.domain.model.Member
 import com.koddy.server.member.domain.model.Nationality
@@ -30,13 +30,17 @@ internal class MentorDeleterTest(
     private val mentorRepository: MentorRepository,
     private val em: EntityManager,
 ) {
+    companion object {
+        private val mentorFixture = mentorFixture(sequence = 1)
+    }
+
     @Test
     fun `멘토를 삭제한다 (Soft Delete)`() {
         // given
-        val mentor: Member<*> = memberRepository.save(MENTOR_1.toDomain())
+        val mentor: Member<*> = memberRepository.save(mentorFixture.toDomain())
         assertSoftly {
-            getLanguage(mentor.id) shouldHaveSize MENTOR_1.languages.size
-            getSchedule(mentor.id) shouldHaveSize MENTOR_1.timelines.size
+            getLanguage(mentor.id) shouldHaveSize mentorFixture.languages.size
+            getSchedule(mentor.id) shouldHaveSize mentorFixture.timelines.size
             getMentorByJpql(mentor.id) shouldNotBe null
             getMemberByJpql(mentor.id) shouldNotBe null
             getMentorByNative(mentor.id) shouldNotBe null
@@ -44,41 +48,41 @@ internal class MentorDeleterTest(
 
             assertSoftly(getMentorByNative(mentor.id)) {
                 // Not Effected
-                platform.provider shouldBe MENTOR_1.platform.provider
-                name shouldBe MENTOR_1.getName()
+                platform.provider shouldBe mentorFixture.platform.provider
+                name shouldBe mentorFixture.name
                 nationality shouldBe Nationality.KOREA
-                introduction shouldBe MENTOR_1.introduction
-                profileImageUrl shouldBe MENTOR_1.profileImageUrl
+                introduction shouldBe mentorFixture.introduction
+                profileImageUrl shouldBe mentorFixture.profileImageUrl
                 role shouldBe Role.MENTOR
-                universityProfile.school shouldBe MENTOR_1.universityProfile.school
-                universityProfile.major shouldBe MENTOR_1.universityProfile.major
-                universityProfile.enteredIn shouldBe MENTOR_1.universityProfile.enteredIn
+                universityProfile.school shouldBe mentorFixture.universityProfile.school
+                universityProfile.major shouldBe mentorFixture.universityProfile.major
+                universityProfile.enteredIn shouldBe mentorFixture.universityProfile.enteredIn
                 universityAuthentication shouldBe null
-                mentoringPeriod.startDate shouldBe MENTOR_1.mentoringPeriod.startDate
-                mentoringPeriod.endDate shouldBe MENTOR_1.mentoringPeriod.endDate
-                mentoringPeriod.timeUnit shouldBe MENTOR_1.mentoringPeriod.timeUnit
+                mentoringPeriod!!.startDate shouldBe mentorFixture.mentoringPeriod.startDate
+                mentoringPeriod!!.endDate shouldBe mentorFixture.mentoringPeriod.endDate
+                mentoringPeriod!!.timeUnit shouldBe mentorFixture.mentoringPeriod.timeUnit
 
                 // Effected
-                platform.socialId shouldBe MENTOR_1.platform.socialId
-                platform.email?.value shouldBe MENTOR_1.platform.email?.value
+                platform.socialId shouldBe mentorFixture.platform.socialId
+                platform.email?.value shouldBe mentorFixture.platform.email?.value
                 status shouldBe Member.Status.ACTIVE
-                isProfileComplete shouldBe true
+                profileComplete shouldBe true
             }
 
             assertSoftly(getMemberByNative(mentor.id)) {
                 // Not Effected
-                platform.provider shouldBe MENTOR_1.platform.provider
-                name shouldBe MENTOR_1.getName()
+                platform.provider shouldBe mentorFixture.platform.provider
+                name shouldBe mentorFixture.name
                 nationality shouldBe Nationality.KOREA
-                introduction shouldBe MENTOR_1.introduction
-                profileImageUrl shouldBe MENTOR_1.profileImageUrl
+                introduction shouldBe mentorFixture.introduction
+                profileImageUrl shouldBe mentorFixture.profileImageUrl
                 role shouldBe Role.MENTOR
 
                 // Effected
-                platform.socialId shouldBe MENTOR_1.platform.socialId
-                platform.email?.value shouldBe MENTOR_1.platform.email?.value
+                platform.socialId shouldBe mentorFixture.platform.socialId
+                platform.email?.value shouldBe mentorFixture.platform.email?.value
                 status shouldBe Member.Status.ACTIVE
-                isProfileComplete shouldBe true
+                profileComplete shouldBe true
             }
         }
 
@@ -87,7 +91,7 @@ internal class MentorDeleterTest(
 
         // then
         assertSoftly {
-            getLanguage(mentor.id) shouldHaveSize MENTOR_1.languages.size
+            getLanguage(mentor.id) shouldHaveSize mentorFixture.languages.size
             getSchedule(mentor.id) shouldHaveSize 0
             shouldThrow<MemberException> {
                 getMentorByJpql(mentor.id)
@@ -98,41 +102,41 @@ internal class MentorDeleterTest(
 
             assertSoftly(getMentorByNative(mentor.id)) {
                 // Not Effected
-                platform.provider shouldBe MENTOR_1.platform.provider
-                name shouldBe MENTOR_1.getName()
+                platform.provider shouldBe mentorFixture.platform.provider
+                name shouldBe mentorFixture.name
                 nationality shouldBe Nationality.KOREA
-                introduction shouldBe MENTOR_1.introduction
-                profileImageUrl shouldBe MENTOR_1.profileImageUrl
+                introduction shouldBe mentorFixture.introduction
+                profileImageUrl shouldBe mentorFixture.profileImageUrl
                 role shouldBe Role.MENTOR
-                universityProfile.school shouldBe MENTOR_1.universityProfile.school
-                universityProfile.major shouldBe MENTOR_1.universityProfile.major
-                universityProfile.enteredIn shouldBe MENTOR_1.universityProfile.enteredIn
+                universityProfile.school shouldBe mentorFixture.universityProfile.school
+                universityProfile.major shouldBe mentorFixture.universityProfile.major
+                universityProfile.enteredIn shouldBe mentorFixture.universityProfile.enteredIn
                 universityAuthentication shouldBe null
-                mentoringPeriod.startDate shouldBe MENTOR_1.mentoringPeriod.startDate
-                mentoringPeriod.endDate shouldBe MENTOR_1.mentoringPeriod.endDate
-                mentoringPeriod.timeUnit shouldBe MENTOR_1.mentoringPeriod.timeUnit
+                mentoringPeriod!!.startDate shouldBe mentorFixture.mentoringPeriod.startDate
+                mentoringPeriod!!.endDate shouldBe mentorFixture.mentoringPeriod.endDate
+                mentoringPeriod!!.timeUnit shouldBe mentorFixture.mentoringPeriod.timeUnit
 
                 // Effected
                 platform.socialId shouldBe null
                 platform.email shouldBe null
                 status shouldBe Member.Status.INACTIVE
-                isProfileComplete shouldBe false
+                profileComplete shouldBe false
             }
 
             assertSoftly(getMemberByNative(mentor.id)) {
                 // Not Effected
-                platform.provider shouldBe MENTOR_1.platform.provider
-                name shouldBe MENTOR_1.getName()
+                platform.provider shouldBe mentorFixture.platform.provider
+                name shouldBe mentorFixture.name
                 nationality shouldBe Nationality.KOREA
-                introduction shouldBe MENTOR_1.introduction
-                profileImageUrl shouldBe MENTOR_1.profileImageUrl
+                introduction shouldBe mentorFixture.introduction
+                profileImageUrl shouldBe mentorFixture.profileImageUrl
                 role shouldBe Role.MENTOR
 
                 // Effected
                 platform.socialId shouldBe null
                 platform.email shouldBe null
                 status shouldBe Member.Status.INACTIVE
-                isProfileComplete shouldBe false
+                profileComplete shouldBe false
             }
         }
     }

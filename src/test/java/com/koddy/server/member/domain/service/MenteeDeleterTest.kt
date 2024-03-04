@@ -1,7 +1,7 @@
 package com.koddy.server.member.domain.service
 
 import com.koddy.server.common.IntegrateTestKt
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
 import com.koddy.server.member.domain.model.AvailableLanguage
 import com.koddy.server.member.domain.model.Member
 import com.koddy.server.member.domain.model.Role
@@ -29,12 +29,16 @@ internal class MenteeDeleterTest(
     private val menteeRepository: MenteeRepository,
     private val em: EntityManager,
 ) {
+    companion object {
+        private val menteeFixture = menteeFixture(sequence = 1)
+    }
+
     @Test
     fun `멘티를 삭제한다 (Soft Delete)`() {
         // given
-        val mentee: Member<*> = memberRepository.save(MENTEE_1.toDomain())
+        val mentee: Member<*> = memberRepository.save(menteeFixture.toDomain())
         assertSoftly {
-            getLanguage(mentee.id) shouldHaveSize MENTEE_1.languages.size
+            getLanguage(mentee.id) shouldHaveSize menteeFixture.languages.size
             getMenteeByJpql(mentee.id) shouldNotBe null
             getMemberByJpql(mentee.id) shouldNotBe null
             getMenteeByNative(mentee.id) shouldNotBe null
@@ -42,36 +46,36 @@ internal class MenteeDeleterTest(
 
             assertSoftly(getMenteeByNative(mentee.id)) {
                 // Not Effected
-                platform.provider shouldBe MENTEE_1.platform.provider
-                name shouldBe MENTEE_1.getName()
-                nationality shouldBe MENTEE_1.nationality
-                introduction shouldBe MENTEE_1.introduction
-                profileImageUrl shouldBe MENTEE_1.profileImageUrl
+                platform.provider shouldBe menteeFixture.platform.provider
+                name shouldBe menteeFixture.name
+                nationality shouldBe menteeFixture.nationality
+                introduction shouldBe menteeFixture.introduction
+                profileImageUrl shouldBe menteeFixture.profileImageUrl
                 role shouldBe Role.MENTEE
-                interest.school shouldBe MENTEE_1.interest.school
-                interest.major shouldBe MENTEE_1.interest.major
+                interest.school shouldBe menteeFixture.interest.school
+                interest.major shouldBe menteeFixture.interest.major
 
                 // Effected
-                platform.socialId shouldBe MENTEE_1.platform.socialId
-                platform.email?.value shouldBe MENTEE_1.platform.email?.value
+                platform.socialId shouldBe menteeFixture.platform.socialId
+                platform.email?.value shouldBe menteeFixture.platform.email?.value
                 status shouldBe Member.Status.ACTIVE
-                isProfileComplete shouldBe true
+                profileComplete shouldBe true
             }
 
             assertSoftly(getMemberByNative(mentee.id)) {
                 // Not Effected
-                platform.provider shouldBe MENTEE_1.platform.provider
-                name shouldBe MENTEE_1.getName()
-                nationality shouldBe MENTEE_1.nationality
-                introduction shouldBe MENTEE_1.introduction
-                profileImageUrl shouldBe MENTEE_1.profileImageUrl
+                platform.provider shouldBe menteeFixture.platform.provider
+                name shouldBe menteeFixture.name
+                nationality shouldBe menteeFixture.nationality
+                introduction shouldBe menteeFixture.introduction
+                profileImageUrl shouldBe menteeFixture.profileImageUrl
                 role shouldBe Role.MENTEE
 
                 // Effected
-                platform.socialId shouldBe MENTEE_1.platform.socialId
-                platform.email?.value shouldBe MENTEE_1.platform.email?.value
+                platform.socialId shouldBe menteeFixture.platform.socialId
+                platform.email?.value shouldBe menteeFixture.platform.email?.value
                 status shouldBe Member.Status.ACTIVE
-                isProfileComplete shouldBe true
+                profileComplete shouldBe true
             }
         }
 
@@ -80,7 +84,7 @@ internal class MenteeDeleterTest(
 
         // then
         assertSoftly {
-            getLanguage(mentee.id) shouldHaveSize MENTEE_1.languages.size
+            getLanguage(mentee.id) shouldHaveSize menteeFixture.languages.size
             shouldThrow<MemberException> {
                 getMenteeByJpql(mentee.id)
                 getMemberByJpql(mentee.id)
@@ -90,36 +94,36 @@ internal class MenteeDeleterTest(
 
             assertSoftly(getMenteeByNative(mentee.id)) {
                 // Not Effected
-                platform.provider shouldBe MENTEE_1.platform.provider
-                name shouldBe MENTEE_1.getName()
-                nationality shouldBe MENTEE_1.nationality
-                introduction shouldBe MENTEE_1.introduction
-                profileImageUrl shouldBe MENTEE_1.profileImageUrl
+                platform.provider shouldBe menteeFixture.platform.provider
+                name shouldBe menteeFixture.name
+                nationality shouldBe menteeFixture.nationality
+                introduction shouldBe menteeFixture.introduction
+                profileImageUrl shouldBe menteeFixture.profileImageUrl
                 role shouldBe Role.MENTEE
-                interest.school shouldBe MENTEE_1.interest.school
-                interest.major shouldBe MENTEE_1.interest.major
+                interest.school shouldBe menteeFixture.interest.school
+                interest.major shouldBe menteeFixture.interest.major
 
                 // Effected
                 platform.socialId shouldBe null
                 platform.email shouldBe null
                 status shouldBe Member.Status.INACTIVE
-                isProfileComplete shouldBe false
+                profileComplete shouldBe false
             }
 
             assertSoftly(getMemberByNative(mentee.id)) {
                 // Not Effected
-                platform.provider shouldBe MENTEE_1.platform.provider
-                name shouldBe MENTEE_1.getName()
-                nationality shouldBe MENTEE_1.nationality
-                introduction shouldBe MENTEE_1.introduction
-                profileImageUrl shouldBe MENTEE_1.profileImageUrl
+                platform.provider shouldBe menteeFixture.platform.provider
+                name shouldBe menteeFixture.name
+                nationality shouldBe menteeFixture.nationality
+                introduction shouldBe menteeFixture.introduction
+                profileImageUrl shouldBe menteeFixture.profileImageUrl
                 role shouldBe Role.MENTEE
 
                 // Effected
                 platform.socialId shouldBe null
                 platform.email shouldBe null
                 status shouldBe Member.Status.INACTIVE
-                isProfileComplete shouldBe false
+                profileComplete shouldBe false
             }
         }
     }

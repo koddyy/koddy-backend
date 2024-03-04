@@ -7,7 +7,7 @@ import com.koddy.server.auth.domain.model.AuthMember
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.config.BlackboxLogicControlConfig
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.global.exception.GlobalExceptionCode.VALIDATION_ERROR
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.startsWith
@@ -23,6 +23,7 @@ import org.springframework.http.HttpStatus.OK
 internal class FileManagementAcceptanceTest : AcceptanceTestKt() {
     companion object {
         private const val BUCKET_URL_PREFIX = "https://koddy-upload.s3.amazonaws.com/profiles/"
+        private val mentorFixture = mentorFixture(sequence = 1)
     }
 
     @Nested
@@ -31,7 +32,7 @@ internal class FileManagementAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `파일을 업로드한다`() {
             // given
-            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
+            val member: AuthMember = mentorFixture.회원가입과_로그인을_진행한다()
 
             // when - then
             파일을_업로드한다(
@@ -47,7 +48,7 @@ internal class FileManagementAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `파일 형식이 (JPG, JPEG, PNG)중 하나가 아니면 예외가 발생한다`() {
             // given
-            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
+            val member: AuthMember = mentorFixture.회원가입과_로그인을_진행한다()
 
             // when - then
             이미지_업로드에_대한_Presigned_Url을_응답받는다(
@@ -61,7 +62,7 @@ internal class FileManagementAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `이미지 업로드에 대한 PresignedUrl을 응답받는다`() {
             // given
-            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
+            val member: AuthMember = mentorFixture.회원가입과_로그인을_진행한다()
 
             // when - then
             이미지_업로드에_대한_Presigned_Url을_응답받는다(
@@ -79,7 +80,7 @@ internal class FileManagementAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `파일 형식이 PDF가 아니면 예외가 발생한다`() {
             // given
-            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
+            val member: AuthMember = mentorFixture.회원가입과_로그인을_진행한다()
 
             // when - then
             PDF_파일_업로드에_대한_Presigned_Url을_응답받는다(
@@ -93,7 +94,7 @@ internal class FileManagementAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `PDF 파일 업로드에 대한 PresignedUrl을 응답받는다`() {
             // given
-            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
+            val member: AuthMember = mentorFixture.회원가입과_로그인을_진행한다()
 
             // when - then
             PDF_파일_업로드에_대한_Presigned_Url을_응답받는다(

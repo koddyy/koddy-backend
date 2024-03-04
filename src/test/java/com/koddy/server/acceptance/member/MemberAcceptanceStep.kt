@@ -1,8 +1,8 @@
 package com.koddy.server.acceptance.member
 
 import com.koddy.server.acceptance.RequestHelper
-import com.koddy.server.common.fixture.MenteeFixture
-import com.koddy.server.common.fixture.MentorFixture
+import com.koddy.server.common.fixture.MenteeFixtureStore
+import com.koddy.server.common.fixture.MentorFixtureStore
 import com.koddy.server.member.domain.model.Language
 import com.koddy.server.member.presentation.request.AuthenticationConfirmWithMailRequest
 import com.koddy.server.member.presentation.request.AuthenticationWithMailRequest
@@ -28,14 +28,14 @@ object MemberAcceptanceStep {
     }
 
     @JvmStatic
-    fun 멘토_회원가입_후_로그인을_진행한다(fixture: MentorFixture): ValidatableResponse {
+    fun 멘토_회원가입_후_로그인을_진행한다(fixture: MentorFixtureStore.MentorFixture): ValidatableResponse {
         return RequestHelper.postRequest(
             uri = "/api/mentors",
             body = SignUpMentorRequest(
                 provider = fixture.platform.provider.value,
                 socialId = fixture.platform.socialId!!,
                 email = fixture.platform.email!!.value,
-                name = fixture.getName(),
+                name = fixture.name,
                 languages = LanguageRequestModel(
                     main = fixture.languages
                         .first { it.type == Language.Type.MAIN }
@@ -60,14 +60,14 @@ object MemberAcceptanceStep {
     }
 
     @JvmStatic
-    fun 멘티_회원가입_후_로그인을_진행한다(fixture: MenteeFixture): ValidatableResponse {
+    fun 멘티_회원가입_후_로그인을_진행한다(fixture: MenteeFixtureStore.MenteeFixture): ValidatableResponse {
         return RequestHelper.postRequest(
             uri = "/api/mentees",
             body = SignUpMenteeRequest(
                 provider = fixture.platform.provider.value,
                 socialId = fixture.platform.socialId!!,
                 email = fixture.platform.email!!.value,
-                name = fixture.getName(),
+                name = fixture.name,
                 nationality = fixture.nationality.code,
                 languages = LanguageRequestModel(
                     main = fixture.languages
@@ -94,7 +94,7 @@ object MemberAcceptanceStep {
 
     @JvmStatic
     fun 멘토_프로필을_완성시킨다(
-        fixture: MentorFixture,
+        fixture: MentorFixtureStore.MentorFixture,
         accessToken: String,
     ): ValidatableResponse {
         return RequestHelper.patchRequestWithAccessToken(
@@ -127,7 +127,7 @@ object MemberAcceptanceStep {
 
     @JvmStatic
     fun 멘토_프로필을_완성시킨다(
-        fixture: MentorFixture,
+        fixture: MentorFixtureStore.MentorFixture,
         period: MentoringPeriodRequestModel,
         accessToken: String,
     ): ValidatableResponse {
@@ -158,7 +158,7 @@ object MemberAcceptanceStep {
 
     @JvmStatic
     fun 멘토_프로필을_완성시킨다(
-        fixture: MentorFixture,
+        fixture: MentorFixtureStore.MentorFixture,
         schedules: List<MentorScheduleRequest>,
         accessToken: String,
     ): ValidatableResponse {
@@ -179,7 +179,7 @@ object MemberAcceptanceStep {
 
     @JvmStatic
     fun 멘토_프로필을_완성시킨다(
-        fixture: MentorFixture,
+        fixture: MentorFixtureStore.MentorFixture,
         period: MentoringPeriodRequestModel,
         schedules: List<MentorScheduleRequest>,
         accessToken: String,
@@ -198,7 +198,7 @@ object MemberAcceptanceStep {
 
     @JvmStatic
     fun 멘티_프로필을_완성시킨다(
-        fixture: MenteeFixture,
+        fixture: MenteeFixtureStore.MenteeFixture,
         accessToken: String,
     ): ValidatableResponse {
         return RequestHelper.patchRequestWithAccessToken(
@@ -212,14 +212,14 @@ object MemberAcceptanceStep {
     }
 
     fun 멘토_기본_정보를_수정한다(
-        fixture: MentorFixture,
+        fixture: MentorFixtureStore.MentorFixture,
         languageRequestModel: LanguageRequestModel,
         accessToken: String,
     ): ValidatableResponse {
         return RequestHelper.patchRequestWithAccessToken(
             uri = "/api/mentors/me/basic-info",
             body = UpdateMentorBasicInfoRequest(
-                name = fixture.getName(),
+                name = fixture.name,
                 profileImageUrl = fixture.profileImageUrl,
                 introduction = fixture.introduction,
                 languages = languageRequestModel,
@@ -232,7 +232,7 @@ object MemberAcceptanceStep {
     }
 
     fun 멘토_스케줄_정보를_수정한다(
-        fixture: MentorFixture,
+        fixture: MentorFixtureStore.MentorFixture,
         accessToken: String,
     ): ValidatableResponse {
         return RequestHelper.patchRequestWithAccessToken(
@@ -262,14 +262,14 @@ object MemberAcceptanceStep {
     }
 
     fun 멘티_기본_정보를_수정한다(
-        fixture: MenteeFixture,
+        fixture: MenteeFixtureStore.MenteeFixture,
         languageRequestModel: LanguageRequestModel,
         accessToken: String,
     ): ValidatableResponse {
         return RequestHelper.patchRequestWithAccessToken(
             uri = "/api/mentees/me/basic-info",
             body = UpdateMenteeBasicInfoRequest(
-                name = fixture.getName(),
+                name = fixture.name,
                 nationality = fixture.nationality.code,
                 profileImageUrl = fixture.profileImageUrl,
                 introduction = fixture.introduction,

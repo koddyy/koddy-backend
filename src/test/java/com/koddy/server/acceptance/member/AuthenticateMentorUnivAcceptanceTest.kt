@@ -12,8 +12,8 @@ import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.config.BlackboxLogicControlConfig
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
 import com.koddy.server.common.containers.callback.RedisCleanerEachCallbackExtension
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -31,8 +31,11 @@ import org.springframework.http.HttpStatus.OK
 )
 @DisplayName("[Acceptance Test] 멘토 학교 인증")
 internal class AuthenticateMentorUnivAcceptanceTest : AcceptanceTestKt() {
+
     companion object {
         private const val SCHOOL_MAIL = "sjiwon@kyonggi.ac.kr"
+        private val menteeFixture = menteeFixture(sequence = 1)
+        private val mentorFixture = mentorFixture(sequence = 1)
     }
 
     @Nested
@@ -41,7 +44,7 @@ internal class AuthenticateMentorUnivAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `학교 인증은 멘토 대상이므로 멘티는 권한이 없다`() {
             // given
-            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_진행한다()
+            val mentee: AuthMember = menteeFixture.회원가입과_로그인을_진행한다()
 
             // when - then
             멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, mentee.token.accessToken)
@@ -53,16 +56,19 @@ internal class AuthenticateMentorUnivAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `메일을 통해서 학교 인증을 시도한다`() {
             // given
-            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
+            val member: AuthMember = mentorFixture.회원가입과_로그인을_진행한다()
 
             // when - then
-            멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, member.token.accessToken).statusCode(NO_CONTENT.value())
+            멘토가_메일을_통해서_학교_인증을_시도한다(
+                schoolMail = SCHOOL_MAIL,
+                accessToken = member.token.accessToken,
+            ).statusCode(NO_CONTENT.value())
         }
 
         @Test
         fun `짧은 시간동안 3회 이상 인증 시도를 하게 되면 10분동안 인증 시도 밴을 당한다 (HTTP Status 429)`() {
             // given
-            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
+            val member: AuthMember = mentorFixture.회원가입과_로그인을_진행한다()
 
             // when - then
             멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, member.token.accessToken).statusCode(NO_CONTENT.value())
@@ -82,7 +88,7 @@ internal class AuthenticateMentorUnivAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `인증번호가 일치하지 않으면 인증에 실패한다`() {
             // given
-            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
+            val member: AuthMember = mentorFixture.회원가입과_로그인을_진행한다()
             멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, member.token.accessToken)
 
             // when - then
@@ -98,7 +104,7 @@ internal class AuthenticateMentorUnivAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `인증번호가 일치하면 인증에 성공한다`() {
             // given
-            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
+            val mentor: AuthMember = mentorFixture.회원가입과_로그인을_진행한다()
             멘토가_메일을_통해서_학교_인증을_시도한다(SCHOOL_MAIL, mentor.token.accessToken)
 
             멘토_기본_프로필을_조회한다(mentor.id)
@@ -124,7 +130,7 @@ internal class AuthenticateMentorUnivAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `학교 인증은 멘토 대상이므로 멘티는 권한이 없다`() {
             // given
-            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_진행한다()
+            val mentee: AuthMember = menteeFixture.회원가입과_로그인을_진행한다()
 
             // when - then
             멘토가_증명자료를_통해서_학교_인증을_시도한다(mentee.token.accessToken)
@@ -136,7 +142,7 @@ internal class AuthenticateMentorUnivAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `증명자료를 통해서 학교 인증을 시도한다`() {
             // given
-            val member: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
+            val member: AuthMember = mentorFixture.회원가입과_로그인을_진행한다()
 
             // when - then
             멘토가_증명자료를_통해서_학교_인증을_시도한다(member.token.accessToken).statusCode(NO_CONTENT.value())

@@ -1,8 +1,7 @@
 package com.koddy.server.member.application.usecase
 
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_2
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
 import com.koddy.server.member.application.usecase.command.UpdateMenteeBasicInfoCommand
 import com.koddy.server.member.domain.model.Language.Type.MAIN
 import com.koddy.server.member.domain.model.Language.Type.SUB
@@ -25,19 +24,22 @@ internal class UpdateMenteeProfileUseCaseTest : FeatureSpec({
     val memberReader = mockk<MemberReader>()
     val sut = UpdateMenteeProfileUseCase(memberReader)
 
+    val menteeFixtureA = menteeFixture(id = 1L)
+    val menteeFixtureB = menteeFixture(id = 2L)
+
     feature("UpdateMenteeProfileUseCase's updateBasicInfo") {
-        val mentee: Mentee = MENTEE_1.toDomain().apply(1L)
+        val mentee: Mentee = menteeFixtureA.toDomain()
 
         scenario("멘티의 기본 정보를 수정한다") {
             val command = UpdateMenteeBasicInfoCommand(
-                mentee.id,
-                MENTEE_2.getName(),
-                MENTEE_2.nationality,
-                MENTEE_2.profileImageUrl,
-                MENTEE_2.introduction,
-                MENTEE_2.languages,
-                MENTEE_2.interest.school,
-                MENTEE_2.interest.major,
+                menteeId = mentee.id,
+                name = menteeFixtureB.name,
+                nationality = menteeFixtureB.nationality,
+                profileImageUrl = menteeFixtureB.profileImageUrl,
+                introduction = menteeFixtureB.introduction,
+                languages = menteeFixtureB.languages,
+                interestSchool = menteeFixtureB.interest.school,
+                interestMajor = menteeFixtureB.interest.major,
             )
             every { memberReader.getMentee(command.menteeId) } returns mentee
 
@@ -50,16 +52,16 @@ internal class UpdateMenteeProfileUseCaseTest : FeatureSpec({
                 nationality shouldBe command.nationality
                 introduction shouldBe command.introduction
                 profileImageUrl shouldBe command.profileImageUrl
-                isProfileComplete shouldBe true
+                profileComplete shouldBe true
                 languages.filter { it.type == MAIN } shouldBe command.languages.filter { it.type == MAIN }
                 languages.filter { it.type == SUB } shouldContainExactlyInAnyOrder command.languages.filter { it.type == SUB }
                 interest.school shouldBe command.interestSchool
                 interest.major shouldBe command.interestMajor
 
                 // keep
-                platform.provider shouldBe MENTEE_1.platform.provider
-                platform.socialId shouldBe MENTEE_1.platform.socialId
-                platform.email?.value shouldBe MENTEE_1.platform.email?.value
+                platform.provider shouldBe menteeFixtureA.platform.provider
+                platform.socialId shouldBe menteeFixtureA.platform.socialId
+                platform.email?.value shouldBe menteeFixtureA.platform.email?.value
                 status shouldBe Member.Status.ACTIVE
                 role shouldBe Role.MENTEE
             }

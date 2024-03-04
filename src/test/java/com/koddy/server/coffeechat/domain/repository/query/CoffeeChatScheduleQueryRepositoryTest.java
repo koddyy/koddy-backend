@@ -3,9 +3,9 @@
 //import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository;
 //import com.koddy.server.coffeechat.domain.repository.query.response.CoffeeChatCountPerCategory;
 //import com.koddy.server.common.RepositoryTest;
-//import com.koddy.server.common.fixture.MenteeFixture;
+//import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture;
 //import com.koddy.server.common.fixture.MenteeFlow;
-//import com.koddy.server.common.fixture.MentorFixture;
+//import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture;
 //import com.koddy.server.common.fixture.MentorFlow;
 //import com.koddy.server.member.domain.model.mentee.Mentee;
 //import com.koddy.server.member.domain.model.mentor.Mentor;

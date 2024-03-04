@@ -3,10 +3,8 @@ package com.koddy.server.member.application.usecase
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.repository.query.MentorReservedScheduleQueryRepository
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_2
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_3
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.fixture.MentorFlow
 import com.koddy.server.member.application.usecase.query.GetMentorReservedSchedule
 import com.koddy.server.member.application.usecase.query.response.MentorReservedSchedule
@@ -32,10 +30,10 @@ internal class GetMentorReservedScheduleUseCaseTest : FeatureSpec({
         mentorReservedScheduleQueryRepository,
     )
 
-    val mentor: Mentor = MENTOR_1.toDomain().apply(1L)
-    val menteeA: Mentee = MENTEE_1.toDomain().apply(2L)
-    val menteeB: Mentee = MENTEE_2.toDomain().apply(3L)
-    val menteeC: Mentee = MENTEE_3.toDomain().apply(4L)
+    val mentor: Mentor = mentorFixture(id = 1L).toDomain()
+    val menteeA: Mentee = menteeFixture(id = 2L).toDomain()
+    val menteeB: Mentee = menteeFixture(id = 3L).toDomain()
+    val menteeC: Mentee = menteeFixture(id = 4L).toDomain()
 
     feature("GetMentorReservedScheduleUseCase's invoke") {
         scenario("특정 Year/Month에 대해서 멘토의 예약된 스케줄 정보를 조회한다") {
@@ -62,8 +60,8 @@ internal class GetMentorReservedScheduleUseCaseTest : FeatureSpec({
 
             val result: MentorReservedSchedule = sut.invoke(query)
             assertSoftly(result) {
-                period!!.startDate shouldBe mentor.mentoringPeriod.startDate
-                period!!.endDate shouldBe mentor.mentoringPeriod.endDate
+                period!!.startDate shouldBe mentor.mentoringPeriod!!.startDate
+                period!!.endDate shouldBe mentor.mentoringPeriod!!.endDate
                 schedules.map { it.dayOfWeek } shouldContainExactly mentor.schedules.map { it.timeline.dayOfWeek.kor }
                 schedules.map { it.start.hour } shouldContainExactly mentor.schedules.map { it.timeline.startTime.hour }
                 schedules.map { it.start.minute } shouldContainExactly mentor.schedules.map { it.timeline.startTime.minute }

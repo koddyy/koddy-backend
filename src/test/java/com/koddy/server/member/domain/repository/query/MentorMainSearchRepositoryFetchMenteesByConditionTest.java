@@ -1,7 +1,7 @@
 //package com.koddy.server.member.domain.repository.query;
 //
 //import com.koddy.server.common.RepositoryTest;
-//import com.koddy.server.common.fixture.MenteeFixture;
+//import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture;
 //import com.koddy.server.global.query.PageCreator;
 //import com.koddy.server.member.domain.model.mentee.Mentee;
 //import com.koddy.server.member.domain.repository.MemberRepository;

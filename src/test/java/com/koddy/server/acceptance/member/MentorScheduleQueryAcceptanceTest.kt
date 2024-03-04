@@ -11,18 +11,10 @@ import com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토의_예약�
 import com.koddy.server.auth.domain.model.AuthMember
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_10
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_2
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_3
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_4
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_5
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_6
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_7
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_8
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_9
-import com.koddy.server.common.fixture.MentorFixture
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MenteeFixtureStore
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
+import com.koddy.server.common.fixture.MentorFixtureStore
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.fixture.StrategyFixture
 import com.koddy.server.common.toLocalDateTime
 import com.koddy.server.member.domain.model.mentor.MentoringPeriod
@@ -43,14 +35,21 @@ import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME
 @ExtendWith(DatabaseCleanerEachCallbackExtension::class)
 @DisplayName("[Acceptance Test] 멘토 예약된 스케줄 조회")
 internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
+    companion object {
+        private val mentorFixture: MentorFixtureStore.MentorFixture = mentorFixture(sequence = 1)
+        private val menteeFixtures: List<MenteeFixtureStore.MenteeFixture> = mutableListOf<MenteeFixtureStore.MenteeFixture>().apply {
+            (1..20).forEach { add(menteeFixture(sequence = it)) }
+        }
+    }
+
     @Nested
     @DisplayName("특정 Year-Month에 대해서 멘토의 예약된 스케줄 정보 조회")
     internal inner class GetMentorReservedSchedule {
         @Test
         fun `특정 Year-Month에 대해서 멘토의 예약된 스케줄 정보를 조회한다 - 멘토링 시간 정보를 기입하지 않은 멘토`() {
             // given
-            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
-            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
+            val mentor: AuthMember = mentorFixture.회원가입과_로그인을_진행한다()
+            val mentee: AuthMember = menteeFixtures[0].회원가입과_로그인을_하고_프로필을_완성시킨다()
 
             // when - then
             멘토의_예약된_스케줄_정보를_조회한다(
@@ -68,8 +67,8 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `특정 Year-Month에 대해서 멘토의 예약된 스케줄 정보를 조회한다 - 멘토링 시간 정보를 기입한 멘토 + 예약 정보 X`() {
             // given
-            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
-            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
+            val mentor: AuthMember = mentorFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
+            val mentee: AuthMember = menteeFixtures[0].회원가입과_로그인을_하고_프로필을_완성시킨다()
 
             // when - then
             멘토의_예약된_스케줄_정보를_조회한다(
@@ -78,9 +77,9 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
                 month = 2,
                 accessToken = mentee.token.accessToken,
             ).statusCode(OK.value())
-                .body("period.startDate", `is`(MENTOR_1.mentoringPeriod.startDate.toString()))
-                .body("period.endDate", `is`(MENTOR_1.mentoringPeriod.endDate.toString()))
-                .body("schedules", hasSize<Int>(MENTOR_1.timelines.size))
+                .body("period.startDate", `is`(mentorFixture.mentoringPeriod.startDate.toString()))
+                .body("period.endDate", `is`(mentorFixture.mentoringPeriod.endDate.toString()))
+                .body("schedules", hasSize<Int>(mentorFixture.timelines.size))
                 .body("timeUnit", `is`(MentoringPeriod.TimeUnit.HALF_HOUR.value))
                 .body("reserved", empty<Int>())
         }
@@ -88,18 +87,18 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `특정 Year-Month에 대해서 멘토의 예약된 스케줄 정보를 조회한다 - 멘토링 시간 정보를 기입한 멘토 + 예약 정보 O`() {
             // given
-            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
+            val mentor: AuthMember = mentorFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val mentees: List<AuthMember> = listOf(
-                MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다(),
-                MENTEE_2.회원가입과_로그인을_하고_프로필을_완성시킨다(),
-                MENTEE_3.회원가입과_로그인을_하고_프로필을_완성시킨다(),
-                MENTEE_4.회원가입과_로그인을_하고_프로필을_완성시킨다(),
-                MENTEE_5.회원가입과_로그인을_하고_프로필을_완성시킨다(),
-                MENTEE_6.회원가입과_로그인을_하고_프로필을_완성시킨다(),
-                MENTEE_7.회원가입과_로그인을_하고_프로필을_완성시킨다(),
-                MENTEE_8.회원가입과_로그인을_하고_프로필을_완성시킨다(),
-                MENTEE_9.회원가입과_로그인을_하고_프로필을_완성시킨다(),
-                MENTEE_10.회원가입과_로그인을_하고_프로필을_완성시킨다(),
+                menteeFixtures[0].회원가입과_로그인을_하고_프로필을_완성시킨다(),
+                menteeFixtures[1].회원가입과_로그인을_하고_프로필을_완성시킨다(),
+                menteeFixtures[2].회원가입과_로그인을_하고_프로필을_완성시킨다(),
+                menteeFixtures[3].회원가입과_로그인을_하고_프로필을_완성시킨다(),
+                menteeFixtures[4].회원가입과_로그인을_하고_프로필을_완성시킨다(),
+                menteeFixtures[5].회원가입과_로그인을_하고_프로필을_완성시킨다(),
+                menteeFixtures[6].회원가입과_로그인을_하고_프로필을_완성시킨다(),
+                menteeFixtures[7].회원가입과_로그인을_하고_프로필을_완성시킨다(),
+                menteeFixtures[8].회원가입과_로그인을_하고_프로필을_완성시킨다(),
+                menteeFixtures[9].회원가입과_로그인을_하고_프로필을_완성시킨다(),
             )
             val coffeeChats: List<Long> = listOf(
                 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(mentees[0].id, mentor.token.accessToken),
@@ -173,7 +172,7 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
             ).statusCode(OK.value())
             assertReservedScheduleMatch(
                 response = response1,
-                mentor = MENTOR_1,
+                mentorFixture = mentorFixture,
                 reservedStart = listOf(),
                 reservedEnd = listOf(),
             )
@@ -187,7 +186,7 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
             ).statusCode(OK.value())
             assertReservedScheduleMatch(
                 response = response2,
-                mentor = MENTOR_1,
+                mentorFixture = mentorFixture,
                 reservedStart = listOf(
                     "2024/2/5-18:00".toLocalDateTime(),
                     "2024/2/19-18:00".toLocalDateTime(),
@@ -207,7 +206,7 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
             ).statusCode(OK.value())
             assertReservedScheduleMatch(
                 response = response3,
-                mentor = MENTOR_1,
+                mentorFixture = mentorFixture,
                 reservedStart = listOf(
                     "2024/3/4-18:00".toLocalDateTime(),
                     "2024/3/15-18:00".toLocalDateTime(),
@@ -227,7 +226,7 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
             ).statusCode(OK.value())
             assertReservedScheduleMatch(
                 response = response4,
-                mentor = MENTOR_1,
+                mentorFixture = mentorFixture,
                 reservedStart = listOf(
                     "2024/4/5-18:00".toLocalDateTime(),
                     "2024/4/10-18:00".toLocalDateTime(),
@@ -249,7 +248,7 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
             ).statusCode(OK.value())
             assertReservedScheduleMatch(
                 response = response5,
-                mentor = MENTOR_1,
+                mentorFixture = mentorFixture,
                 reservedStart = listOf(),
                 reservedEnd = listOf(),
             )
@@ -258,18 +257,18 @@ internal class MentorScheduleQueryAcceptanceTest : AcceptanceTestKt() {
 
     private fun assertReservedScheduleMatch(
         response: ValidatableResponse,
-        mentor: MentorFixture,
+        mentorFixture: MentorFixtureStore.MentorFixture,
         reservedStart: List<LocalDateTime>,
         reservedEnd: List<LocalDateTime>,
     ) {
         response
-            .body("period.startDate", `is`(mentor.mentoringPeriod.startDate.toString()))
-            .body("period.endDate", `is`(mentor.mentoringPeriod.endDate.toString()))
-            .body("schedules.dayOfWeek", contains(*mentor.timelines.map { it.dayOfWeek.kor }.toTypedArray()))
-            .body("schedules.start.hour", contains(*mentor.timelines.map { it.startTime.hour }.toTypedArray()))
-            .body("schedules.start.minute", contains(*mentor.timelines.map { it.startTime.minute }.toTypedArray()))
-            .body("schedules.end.hour", contains(*mentor.timelines.map { it.endTime.hour }.toTypedArray()))
-            .body("schedules.end.minute", contains(*mentor.timelines.map { it.endTime.minute }.toTypedArray()))
+            .body("period.startDate", `is`(mentorFixture.mentoringPeriod.startDate.toString()))
+            .body("period.endDate", `is`(mentorFixture.mentoringPeriod.endDate.toString()))
+            .body("schedules.dayOfWeek", contains(*mentorFixture.timelines.map { it.dayOfWeek.kor }.toTypedArray()))
+            .body("schedules.start.hour", contains(*mentorFixture.timelines.map { it.startTime.hour }.toTypedArray()))
+            .body("schedules.start.minute", contains(*mentorFixture.timelines.map { it.startTime.minute }.toTypedArray()))
+            .body("schedules.end.hour", contains(*mentorFixture.timelines.map { it.endTime.hour }.toTypedArray()))
+            .body("schedules.end.minute", contains(*mentorFixture.timelines.map { it.endTime.minute }.toTypedArray()))
             .body("timeUnit", `is`(MentoringPeriod.TimeUnit.HALF_HOUR.value))
 
         when (reservedStart.isEmpty()) {

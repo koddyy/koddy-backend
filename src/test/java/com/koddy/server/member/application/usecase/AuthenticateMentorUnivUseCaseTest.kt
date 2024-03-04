@@ -5,7 +5,7 @@ import com.koddy.server.auth.domain.model.code.AuthKeyGenerator
 import com.koddy.server.auth.exception.AuthException
 import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_AUTH_CODE
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.member.application.usecase.command.AttemptWithMailCommand
 import com.koddy.server.member.application.usecase.command.AttemptWithProofDataCommand
 import com.koddy.server.member.application.usecase.command.ConfirmMailAuthCodeCommand
@@ -44,7 +44,7 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
         eventPublisher,
     )
 
-    val mentor: Mentor = MENTOR_1.toDomain().apply(1L)
+    val mentor: Mentor = mentorFixture(sequence = 1).toDomain()
     val schoolMail = "sjiwon@kyonggi.ac.kr"
 
     fun getAuthKey(
@@ -55,8 +55,8 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
     describe("AuthenticationMentorUnivUseCase's attemptWithMail") {
         context("로그인한 멘토 사용자는 자신의 학교 메일을 통해서") {
             val command = AttemptWithMailCommand(
-                mentor.id,
-                schoolMail,
+                mentorId = mentor.id,
+                schoolMail = schoolMail,
             )
             every { memberReader.getMentor(command.mentorId) } returns mentor
             every { authenticationProcessor.storeAuthCode(getAuthKey(mentor.id, command.schoolMail)) } returns authCode
@@ -77,9 +77,9 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
                     authCode = authCode,
                 )
                 assertSoftly(mentor) {
-                    universityAuthentication.schoolMail shouldBe command.schoolMail
-                    universityAuthentication.proofDataUploadUrl shouldBe null
-                    universityAuthentication.status shouldBe UniversityAuthentication.AuthenticationStatus.ATTEMPT
+                    universityAuthentication!!.schoolMail shouldBe command.schoolMail
+                    universityAuthentication!!.proofDataUploadUrl shouldBe null
+                    universityAuthentication!!.status shouldBe UniversityAuthentication.AuthenticationStatus.ATTEMPT
                 }
             }
         }
@@ -90,9 +90,9 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
 
         context("메일로 받은 인증번호를 잘못 기입하면") {
             val command = ConfirmMailAuthCodeCommand(
-                mentor.id,
-                schoolMail,
-                authCode,
+                mentorId = mentor.id,
+                schoolMail = schoolMail,
+                authCode = authCode,
             )
             every { memberReader.getMentor(command.mentorId) } returns mentor
             every { authenticationProcessor.verifyAuthCode(getAuthKey(mentor.id, command.schoolMail), command.authCode) } throws AuthException(INVALID_AUTH_CODE)
@@ -108,18 +108,18 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
                 }
                 verify(exactly = 0) { authenticationProcessor.deleteAuthCode(getAuthKey(mentor.id, command.schoolMail)) }
                 assertSoftly(mentor) {
-                    universityAuthentication.schoolMail shouldBe command.schoolMail
-                    universityAuthentication.proofDataUploadUrl shouldBe null
-                    universityAuthentication.status shouldBe UniversityAuthentication.AuthenticationStatus.ATTEMPT
+                    universityAuthentication!!.schoolMail shouldBe command.schoolMail
+                    universityAuthentication!!.proofDataUploadUrl shouldBe null
+                    universityAuthentication!!.status shouldBe UniversityAuthentication.AuthenticationStatus.ATTEMPT
                 }
             }
         }
 
         context("메일로 받은 인증번호를 정상적으로 기입하면") {
             val command = ConfirmMailAuthCodeCommand(
-                mentor.id,
-                schoolMail,
-                authCode,
+                mentorId = mentor.id,
+                schoolMail = schoolMail,
+                authCode = authCode,
             )
             every { memberReader.getMentor(command.mentorId) } returns mentor
             justRun { authenticationProcessor.verifyAuthCode(getAuthKey(mentor.id, command.schoolMail), command.authCode) }
@@ -134,9 +134,9 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
                     authenticationProcessor.deleteAuthCode(getAuthKey(mentor.id, command.schoolMail))
                 }
                 assertSoftly(mentor) {
-                    universityAuthentication.schoolMail shouldBe command.schoolMail
-                    universityAuthentication.proofDataUploadUrl shouldBe null
-                    universityAuthentication.status shouldBe UniversityAuthentication.AuthenticationStatus.SUCCESS
+                    universityAuthentication!!.schoolMail shouldBe command.schoolMail
+                    universityAuthentication!!.proofDataUploadUrl shouldBe null
+                    universityAuthentication!!.status shouldBe UniversityAuthentication.AuthenticationStatus.SUCCESS
                 }
             }
         }
@@ -145,8 +145,8 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
     describe("AuthenticationMentorUnivUseCase's attemptWithProofData") {
         context("로그인한 멘토 사용자는 증명 자료를 통해서") {
             val command = AttemptWithProofDataCommand(
-                mentor.id,
-                "https://proof-data-url",
+                mentorId = mentor.id,
+                proofDataUploadUrl = "https://proof-data-url",
             )
             every { memberReader.getMentor(command.mentorId) } returns mentor
 
@@ -155,9 +155,9 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
 
                 verify(exactly = 1) { memberReader.getMentor(command.mentorId) }
                 assertSoftly(mentor) {
-                    universityAuthentication.schoolMail shouldBe null
-                    universityAuthentication.proofDataUploadUrl shouldBe command.proofDataUploadUrl
-                    universityAuthentication.status shouldBe UniversityAuthentication.AuthenticationStatus.ATTEMPT
+                    universityAuthentication!!.schoolMail shouldBe null
+                    universityAuthentication!!.proofDataUploadUrl shouldBe command.proofDataUploadUrl
+                    universityAuthentication!!.status shouldBe UniversityAuthentication.AuthenticationStatus.ATTEMPT
                 }
             }
         }

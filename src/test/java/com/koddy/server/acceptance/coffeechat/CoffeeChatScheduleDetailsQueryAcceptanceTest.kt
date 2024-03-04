@@ -25,10 +25,10 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작
-import com.koddy.server.common.fixture.MenteeFixture
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MentorFixture
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MenteeFixtureStore
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
+import com.koddy.server.common.fixture.MentorFixtureStore
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.fixture.StrategyFixture
 import com.koddy.server.member.domain.model.Language
 import com.koddy.server.member.domain.model.Member
@@ -54,6 +54,8 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
     companion object {
         private val start: LocalDateTime = 월요일_1주차_20_00_시작.start
         private val end: LocalDateTime = 월요일_1주차_20_00_시작.end
+        private val mentorFixture = mentorFixture(sequence = 1)
+        private val menteeFixture = menteeFixture(sequence = 1)
     }
 
     private lateinit var mentor: AuthMember
@@ -61,8 +63,8 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
 
     @BeforeEach
     override fun setUp() {
-        mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
-        mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
+        mentor = mentorFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
+        mentee = menteeFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
     }
 
     @Nested
@@ -75,16 +77,16 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
 
             /* Mentor 내 일정 조회 - mentee ACTIVE */
             val mentorResponse: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token.accessToken).statusCode(OK.value())
-            assertApplyCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, MENTEE_1, ACTIVE)
+            assertApplyCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, menteeFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor ACTIVE */
             val menteeResponse1: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertApplyCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, MENTOR_1, ACTIVE)
+            assertApplyCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, mentorFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor INACTIVE */
             서비스를_탈퇴한다(mentor.token.accessToken)
             val menteeResponse2: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertApplyCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, MENTOR_1, INACTIVE)
+            assertApplyCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, mentorFixture, INACTIVE)
         }
 
         @Test
@@ -95,16 +97,16 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
 
             /* Mentor 내 일정 조회 - mentee ACTIVE */
             val mentorResponse: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token.accessToken).statusCode(OK.value())
-            assertCancelCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, MENTEE_1, ACTIVE)
+            assertCancelCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, menteeFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor ACTIVE */
             val menteeResponse1: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertCancelCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, MENTOR_1, ACTIVE)
+            assertCancelCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, mentorFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor INACTIVE */
             서비스를_탈퇴한다(mentor.token.accessToken)
             val menteeResponse2: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertCancelCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, MENTOR_1, INACTIVE)
+            assertCancelCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, mentorFixture, INACTIVE)
         }
 
         @Test
@@ -115,16 +117,16 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
 
             /* Mentor 내 일정 조회 - mentee ACTIVE */
             val mentorResponse: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token.accessToken).statusCode(OK.value())
-            assertRejectCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, MENTEE_1, ACTIVE)
+            assertRejectCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, menteeFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor ACTIVE */
             val menteeResponse1: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertRejectCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, MENTOR_1, ACTIVE)
+            assertRejectCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, mentorFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor INACTIVE */
             서비스를_탈퇴한다(mentor.token.accessToken)
             val menteeResponse2: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertRejectCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, MENTOR_1, INACTIVE)
+            assertRejectCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, mentorFixture, INACTIVE)
         }
 
         @Test
@@ -135,16 +137,16 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
 
             /* Mentor 내 일정 조회 - mentee ACTIVE */
             val mentorResponse: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token.accessToken).statusCode(OK.value())
-            assertApproveCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, MENTEE_1, ACTIVE)
+            assertApproveCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, menteeFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor ACTIVE */
             val menteeResponse1: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertApproveCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, MENTOR_1, ACTIVE)
+            assertApproveCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, mentorFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor INACTIVE */
             서비스를_탈퇴한다(mentor.token.accessToken)
             val menteeResponse2: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertApproveCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, MENTOR_1, INACTIVE)
+            assertApproveCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, mentorFixture, INACTIVE)
         }
 
         private fun assertApplyCoffeeChatMatch(
@@ -168,8 +170,8 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
                 .body("coffeeChat.chatValue", nullValue())
 
             when (fixture) {
-                is MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
-                is MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
+                is MentorFixtureStore.MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
+                is MenteeFixtureStore.MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
             }
         }
 
@@ -194,8 +196,8 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
                 .body("coffeeChat.chatValue", nullValue())
 
             when (fixture) {
-                is MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
-                is MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
+                is MentorFixtureStore.MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
+                is MenteeFixtureStore.MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
             }
         }
 
@@ -220,8 +222,8 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
                 .body("coffeeChat.chatValue", nullValue())
 
             when (fixture) {
-                is MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
-                is MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
+                is MentorFixtureStore.MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
+                is MenteeFixtureStore.MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
             }
         }
 
@@ -246,8 +248,8 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
                 .body("coffeeChat.chatValue", `is`(StrategyFixture.KAKAO_ID.value))
 
             when (fixture) {
-                is MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
-                is MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
+                is MentorFixtureStore.MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
+                is MenteeFixtureStore.MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
             }
         }
     }
@@ -262,16 +264,16 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
 
             /* Mentor 내 일정 조회 - mentee ACTIVE */
             val mentorResponse: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token.accessToken).statusCode(OK.value())
-            assertSuggestCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, MENTEE_1, ACTIVE)
+            assertSuggestCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, menteeFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor ACTIVE */
             val menteeResponse1: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertSuggestCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, MENTOR_1, ACTIVE)
+            assertSuggestCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, mentorFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor INACTIVE */
             서비스를_탈퇴한다(mentor.token.accessToken)
             val menteeResponse2: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertSuggestCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, MENTOR_1, INACTIVE)
+            assertSuggestCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, mentorFixture, INACTIVE)
         }
 
         @Test
@@ -282,16 +284,16 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
 
             /* Mentor 내 일정 조회 - mentee ACTIVE */
             val mentorResponse: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token.accessToken).statusCode(OK.value())
-            assertCancelCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, MENTEE_1, ACTIVE)
+            assertCancelCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, menteeFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor ACTIVE */
             val menteeResponse1: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertCancelCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, MENTOR_1, ACTIVE)
+            assertCancelCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, mentorFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor INACTIVE */
             서비스를_탈퇴한다(mentor.token.accessToken)
             val menteeResponse2: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertCancelCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, MENTOR_1, INACTIVE)
+            assertCancelCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, mentorFixture, INACTIVE)
         }
 
         @Test
@@ -302,16 +304,16 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
 
             /* Mentor 내 일정 조회 - mentee ACTIVE */
             val mentorResponse: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token.accessToken).statusCode(OK.value())
-            assertRejectCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, MENTEE_1, ACTIVE)
+            assertRejectCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, menteeFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor ACTIVE */
             val menteeResponse1: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertRejectCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, MENTOR_1, ACTIVE)
+            assertRejectCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, mentorFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor INACTIVE */
             서비스를_탈퇴한다(mentor.token.accessToken)
             val menteeResponse2: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertRejectCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, MENTOR_1, INACTIVE)
+            assertRejectCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, mentorFixture, INACTIVE)
         }
 
         @Test
@@ -322,16 +324,16 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
 
             /* Mentor 내 일정 조회 - mentee ACTIVE */
             val mentorResponse: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token.accessToken).statusCode(OK.value())
-            assertPendingCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, MENTEE_1, ACTIVE)
+            assertPendingCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, menteeFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor ACTIVE */
             val menteeResponse1: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertPendingCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, MENTOR_1, ACTIVE)
+            assertPendingCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, mentorFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor INACTIVE */
             서비스를_탈퇴한다(mentor.token.accessToken)
             val menteeResponse2: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertPendingCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, MENTOR_1, INACTIVE)
+            assertPendingCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, mentorFixture, INACTIVE)
         }
 
         @Test
@@ -343,16 +345,16 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
 
             /* Mentor 내 일정 조회 - mentee ACTIVE */
             val mentorResponse: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token.accessToken).statusCode(OK.value())
-            assertFinallyCancelCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, MENTEE_1, ACTIVE)
+            assertFinallyCancelCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, menteeFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor ACTIVE */
             val menteeResponse1: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertFinallyCancelCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, MENTOR_1, ACTIVE)
+            assertFinallyCancelCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, mentorFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor INACTIVE */
             서비스를_탈퇴한다(mentor.token.accessToken)
             val menteeResponse2: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertFinallyCancelCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, MENTOR_1, INACTIVE)
+            assertFinallyCancelCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, mentorFixture, INACTIVE)
         }
 
         @Test
@@ -364,16 +366,16 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
 
             /* Mentor 내 일정 조회 - mentee ACTIVE */
             val mentorResponse: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentor.token.accessToken).statusCode(OK.value())
-            assertFinallyApproveCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, MENTEE_1, ACTIVE)
+            assertFinallyApproveCoffeeChatMatch(mentorResponse, coffeeChatId, mentee.id, menteeFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor ACTIVE */
             val menteeResponse1: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertFinallyApproveCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, MENTOR_1, ACTIVE)
+            assertFinallyApproveCoffeeChatMatch(menteeResponse1, coffeeChatId, mentor.id, mentorFixture, ACTIVE)
 
             /* Mentee 내 일정 조회 - mentor INACTIVE */
             서비스를_탈퇴한다(mentor.token.accessToken)
             val menteeResponse2: ValidatableResponse = 내_일정_커피챗_상세_조회를_진행한다(coffeeChatId, mentee.token.accessToken).statusCode(OK.value())
-            assertFinallyApproveCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, MENTOR_1, INACTIVE)
+            assertFinallyApproveCoffeeChatMatch(menteeResponse2, coffeeChatId, mentor.id, mentorFixture, INACTIVE)
         }
 
         private fun assertSuggestCoffeeChatMatch(
@@ -397,8 +399,8 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
                 .body("coffeeChat.chatValue", nullValue())
 
             when (fixture) {
-                is MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
-                is MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
+                is MentorFixtureStore.MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
+                is MenteeFixtureStore.MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
             }
         }
 
@@ -423,8 +425,8 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
                 .body("coffeeChat.chatValue", nullValue())
 
             when (fixture) {
-                is MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
-                is MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
+                is MentorFixtureStore.MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
+                is MenteeFixtureStore.MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
             }
         }
 
@@ -449,8 +451,8 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
                 .body("coffeeChat.chatValue", nullValue())
 
             when (fixture) {
-                is MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
-                is MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
+                is MentorFixtureStore.MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
+                is MenteeFixtureStore.MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
             }
         }
 
@@ -475,8 +477,8 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
                 .body("coffeeChat.chatValue", nullValue())
 
             when (fixture) {
-                is MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
-                is MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
+                is MentorFixtureStore.MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
+                is MenteeFixtureStore.MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
             }
         }
 
@@ -501,8 +503,8 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
                 .body("coffeeChat.chatValue", nullValue())
 
             when (fixture) {
-                is MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
-                is MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
+                is MentorFixtureStore.MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
+                is MenteeFixtureStore.MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
             }
         }
 
@@ -527,8 +529,8 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
                 .body("coffeeChat.chatValue", `is`(StrategyFixture.KAKAO_ID.value))
 
             when (fixture) {
-                is MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
-                is MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
+                is MentorFixtureStore.MentorFixture -> assertMentorMatch(response, memberId, fixture, memberStatus)
+                is MenteeFixtureStore.MenteeFixture -> assertMenteeMatch(response, memberId, fixture, memberStatus)
             }
         }
     }
@@ -536,12 +538,12 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
     private fun assertMentorMatch(
         response: ValidatableResponse,
         id: Long,
-        fixture: MentorFixture,
+        fixture: MentorFixtureStore.MentorFixture,
         status: Member.Status,
     ) {
         response
             .body("mentor.id", `is`(id.toInt()))
-            .body("mentor.name", `is`(fixture.getName()))
+            .body("mentor.name", `is`(fixture.name))
             .body("mentor.profileImageUrl", `is`(fixture.profileImageUrl))
             .body("mentor.introduction", `is`(fixture.introduction))
             .body("mentor.languages.main", `is`(Language.Category.KR.code))
@@ -555,12 +557,12 @@ internal class CoffeeChatScheduleDetailsQueryAcceptanceTest : AcceptanceTestKt()
     private fun assertMenteeMatch(
         response: ValidatableResponse,
         id: Long,
-        fixture: MenteeFixture,
+        fixture: MenteeFixtureStore.MenteeFixture,
         status: Member.Status,
     ) {
         response
             .body("mentee.id", `is`(id.toInt()))
-            .body("mentee.name", `is`(fixture.getName()))
+            .body("mentee.name", `is`(fixture.name))
             .body("mentee.profileImageUrl", `is`(fixture.profileImageUrl))
             .body("mentee.nationality", `is`(fixture.nationality.code))
             .body("mentee.introduction", `is`(fixture.introduction))

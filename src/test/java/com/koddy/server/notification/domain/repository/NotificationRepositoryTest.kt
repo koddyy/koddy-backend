@@ -6,9 +6,9 @@ import com.koddy.server.common.RepositoryTestKt
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_2주차_20_00_시작
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_3주차_20_00_시작
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
 import com.koddy.server.common.fixture.MenteeFlow
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.fixture.MentorFlow
 import com.koddy.server.common.fixture.NotificationFixture.멘토_수신_MENTEE_APPLY_FROM_MENTEE_FLOW
 import com.koddy.server.common.fixture.NotificationFixture.멘토_수신_MENTOR_FINALLY_APPROVE_FROM_MENTOR_FLOW
@@ -39,8 +39,8 @@ internal class NotificationRepositoryTest(
 
     @BeforeEach
     fun setUp() {
-        mentor = memberRepository.save(MENTOR_1.toDomain())
-        mentee = memberRepository.save(MENTEE_1.toDomain())
+        mentor = memberRepository.save(mentorFixture(sequence = 1).toDomain())
+        mentee = memberRepository.save(menteeFixture(sequence = 1).toDomain())
     }
 
     @Test

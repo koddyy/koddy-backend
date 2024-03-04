@@ -9,7 +9,7 @@ import com.koddy.server.auth.domain.service.TokenIssuer
 import com.koddy.server.auth.exception.OAuthUserNotFoundException
 import com.koddy.server.auth.infrastructure.social.google.response.GoogleUserResponse
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.utils.OAuthUtils.AUTHORIZATION_CODE
 import com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI
 import com.koddy.server.common.utils.OAuthUtils.STATE
@@ -38,16 +38,16 @@ internal class OAuthLoginUseCaseTest : DescribeSpec({
         tokenIssuer,
     )
 
-    val member: Member<*> = MENTOR_1.toDomain().apply(1L)
-
     describe("OAuthLoginUseCase's invoke (구글 로그인)") {
+        val member: Member<*> = mentorFixture(id = 1).toDomain()
+        val googleUserResponse: GoogleUserResponse = mentorFixture(id = 1).toGoogleUserResponse()
+
         val command = OAuthLoginCommand(
             provider = OAuthProvider.GOOGLE,
             code = AUTHORIZATION_CODE,
             redirectUrl = REDIRECT_URI,
             state = STATE,
         )
-        val googleUserResponse: GoogleUserResponse = MENTOR_1.toGoogleUserResponse()
         every { oAuthLoginProcessor.login(command.provider, command.code, command.redirectUrl, command.state) } returns googleUserResponse
 
         context("소셜 로그인 사용자가 서버 스토리지에 존재하지 않으면") {

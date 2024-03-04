@@ -8,8 +8,8 @@ import com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER
 import com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.notNullValue
@@ -24,27 +24,32 @@ import org.springframework.http.HttpStatus.OK
 @ExtendWith(DatabaseCleanerEachCallbackExtension::class)
 @DisplayName("[Acceptance Test] 사용자 계정 관리")
 internal class ManageAccountAcceptanceTest : AcceptanceTestKt() {
+    companion object {
+        private val menteeFixture = menteeFixture(sequence = 1)
+        private val mentorFixture = mentorFixture(sequence = 1)
+    }
+
     @Nested
     @DisplayName("회원가입 + 로그인 API")
     internal inner class SignUpAndLoginApi {
         @Test
         fun `멘토 회원가입 + 로그인 처리를 진행한다`() {
-            멘토_회원가입_후_로그인을_진행한다(MENTOR_1)
+            멘토_회원가입_후_로그인을_진행한다(mentorFixture)
                 .statusCode(OK.value())
                 .header(ACCESS_TOKEN_HEADER, notNullValue(String::class.java))
                 .cookie(REFRESH_TOKEN_HEADER, notNullValue(String::class.java))
                 .body("id", notNullValue(Long::class.java))
-                .body("name", `is`(MENTOR_1.getName()))
+                .body("name", `is`(mentorFixture.name))
         }
 
         @Test
         fun `멘티 회원가입 + 로그인 처리를 진행한다`() {
-            멘티_회원가입_후_로그인을_진행한다(MENTEE_1)
+            멘티_회원가입_후_로그인을_진행한다(menteeFixture)
                 .statusCode(OK.value())
                 .header(ACCESS_TOKEN_HEADER, notNullValue(String::class.java))
                 .cookie(REFRESH_TOKEN_HEADER, notNullValue(String::class.java))
                 .body("id", notNullValue(Long::class.java))
-                .body("name", `is`(MENTEE_1.getName()))
+                .body("name", `is`(menteeFixture.name))
         }
     }
 
@@ -54,7 +59,7 @@ internal class ManageAccountAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `멘토가 서비스를 탈퇴한다`() {
             // given
-            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_진행한다()
+            val mentor: AuthMember = mentorFixture.회원가입과_로그인을_진행한다()
 
             // when - then
             서비스를_탈퇴한다(mentor.token.accessToken)
@@ -67,7 +72,7 @@ internal class ManageAccountAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `멘티가 서비스를 탈퇴한다`() {
             // given
-            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_진행한다()
+            val mentee: AuthMember = menteeFixture.회원가입과_로그인을_진행한다()
 
             // when - then
             서비스를_탈퇴한다(mentee.token.accessToken)

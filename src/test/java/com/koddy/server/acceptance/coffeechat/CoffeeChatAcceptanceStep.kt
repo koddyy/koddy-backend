@@ -11,23 +11,25 @@ import com.koddy.server.coffeechat.presentation.request.FinallyCancelPendingCoff
 import com.koddy.server.coffeechat.presentation.request.PendingSuggestedCoffeeChatRequest
 import com.koddy.server.coffeechat.presentation.request.RejectAppliedCoffeeChatRequest
 import com.koddy.server.coffeechat.presentation.request.RejectSuggestedCoffeeChatRequest
-import com.koddy.server.common.fixture.OAuthFixture.GOOGLE_MENTOR_1
+import com.koddy.server.common.fixture.MentorFixtureStore
 import com.koddy.server.common.fixture.StrategyFixture
 import com.koddy.server.common.toLocalDateTime
 import com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI
 import com.koddy.server.common.utils.OAuthUtils.STATE
+import com.koddy.server.common.utils.OAuthUtils.mentorAuthorizationCode
 import io.restassured.response.ValidatableResponse
 import java.time.LocalDateTime
 
 object CoffeeChatAcceptanceStep {
     fun 커피챗_링크를_자동_생성한다(
         provider: String,
+        fixture: MentorFixtureStore.MentorFixture,
         accessToken: String,
     ): ValidatableResponse {
         return RequestHelper.postRequestWithAccessToken(
             uri = "/api/oauth/$provider/meetings",
             body = CreateMeetingLinkRequest(
-                authorizationCode = GOOGLE_MENTOR_1.authorizationCode,
+                authorizationCode = mentorAuthorizationCode(fixture.id),
                 redirectUri = REDIRECT_URI,
                 state = STATE,
                 topic = "줌 회의 Hello",

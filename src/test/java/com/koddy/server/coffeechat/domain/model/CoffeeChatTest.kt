@@ -23,9 +23,9 @@ import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_2주차_20_00_시작
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_3주차_20_00_시작
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_4주차_20_00_시작
-import com.koddy.server.common.fixture.MenteeFixture
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
 import com.koddy.server.common.fixture.MenteeFlow
-import com.koddy.server.common.fixture.MentorFixture
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.fixture.MentorFlow
 import com.koddy.server.common.fixture.StrategyFixture.KAKAO_ID
 import com.koddy.server.common.mock.fake.FakeEncryptor
@@ -46,8 +46,8 @@ private val encryptor = FakeEncryptor()
 @UnitTestKt
 @DisplayName("CoffeeChat -> 도메인 Aggregate [CoffeeChat] 생성 테스트")
 internal class CoffeeChatCreateTest : FeatureSpec({
-    val mentee: Mentee = MenteeFixture.MENTEE_1.toDomain().apply(1L)
-    val mentor: Mentor = MentorFixture.MENTOR_1.toDomain().apply(2L)
+    val mentee: Mentee = menteeFixture(id = 1L).toDomain()
+    val mentor: Mentor = mentorFixture(id = 2L).toDomain()
 
     feature("CoffeeChat's apply") {
         scenario("멘티가 멘토에게 커피챗을 신청한다") {
@@ -113,8 +113,8 @@ internal class CoffeeChatCreateTest : FeatureSpec({
 @UnitTestKt
 @DisplayName("CoffeeChat -> 도메인 Aggregate [CoffeeChat] MenteeFlow 테스트")
 internal class CoffeeChatMenteeFlowTest : FeatureSpec({
-    val mentee: Mentee = MenteeFixture.MENTEE_1.toDomain().apply(1L)
-    val mentor: Mentor = MentorFixture.MENTOR_1.toDomain().apply(2L)
+    val mentee: Mentee = menteeFixture(id = 1L).toDomain()
+    val mentor: Mentor = mentorFixture(id = 2L).toDomain()
 
     feature("CoffeeChat's cancel") {
         scenario("Cancelable 상태가 아니면 취소할 수 없다") {
@@ -309,8 +309,8 @@ internal class CoffeeChatMenteeFlowTest : FeatureSpec({
 @UnitTestKt
 @DisplayName("CoffeeChat -> 도메인 Aggregate [CoffeeChat] MentorFlow 테스트")
 internal class CoffeeChatMentorFlowTest : FeatureSpec({
-    val mentee: Mentee = MenteeFixture.MENTEE_1.toDomain().apply(1L)
-    val mentor: Mentor = MentorFixture.MENTOR_1.toDomain().apply(2L)
+    val mentee: Mentee = menteeFixture(id = 1L).toDomain()
+    val mentor: Mentor = mentorFixture(id = 2L).toDomain()
 
     feature("CoffeeChat's cancel") {
         scenario("Cancelable 상태가 아니면 취소할 수 없다") {
@@ -592,8 +592,8 @@ internal class CoffeeChatMentorFlowTest : FeatureSpec({
 @UnitTestKt
 @DisplayName("CoffeeChat -> 도메인 Aggregate [CoffeeChat] Reservation Validity 테스트")
 internal class CoffeeChatReservationValidityTest : FeatureSpec({
-    val mentee: Mentee = MenteeFixture.MENTEE_1.toDomain().apply(1L)
-    val mentor: Mentor = MentorFixture.MENTOR_1.toDomain().apply(2L)
+    val mentee: Mentee = menteeFixture(id = 1L).toDomain()
+    val mentor: Mentor = mentorFixture(id = 2L).toDomain()
 
     feature("CoffeeChat's isRequestReservationIncludedSchedules") {
         scenario("예약 예정인 시간대가 현재 예약된 시간대와 겹치는지 확인한다 [reservation == null]") {

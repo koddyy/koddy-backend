@@ -14,8 +14,8 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_FINALLY_
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.toLocalDateTime
 import com.koddy.server.notification.domain.model.NotificationType
 import com.koddy.server.notification.domain.model.NotificationType.MENTEE_RECEIVE_MENTOR_FINALLY_CANCEL_FROM_MENTOR_FLOW
@@ -34,14 +34,19 @@ import org.springframework.http.HttpStatus.OK
 @ExtendWith(DatabaseCleanerEachCallbackExtension::class)
 @DisplayName("[Acceptance Test] 알림 조회 + 읽음 처리")
 internal class NotificationAcceptanceTest : AcceptanceTestKt() {
+    companion object {
+        private val menteeFixture = menteeFixture(sequence = 1)
+        private val mentorFixture = mentorFixture(sequence = 1)
+    }
+
     private lateinit var mentor: AuthMember
     private lateinit var mentee: AuthMember
     private var coffeeChatId: Long = 0
 
     @BeforeEach
     override fun setUp() {
-        mentor = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
-        mentee = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
+        mentor = mentorFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
+        mentee = menteeFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
         coffeeChatId = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(
             menteeId = mentee.id,
             accessToken = mentor.token.accessToken,

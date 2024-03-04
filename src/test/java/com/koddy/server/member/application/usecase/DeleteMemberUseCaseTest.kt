@@ -1,8 +1,8 @@
 package com.koddy.server.member.application.usecase
 
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
 import com.koddy.server.member.domain.service.MemberReader
@@ -28,8 +28,8 @@ internal class DeleteMemberUseCaseTest : FeatureSpec({
         menteeDeleter,
     )
 
-    val mentor: Mentor = MENTOR_1.toDomain().apply(1L)
-    val mentee: Mentee = MENTEE_1.toDomain().apply(2L)
+    val mentor: Mentor = mentorFixture(id = 1L).toDomain()
+    val mentee: Mentee = menteeFixture(id = 2L).toDomain()
 
     feature("DeleteMemberUseCase's invoke") {
         scenario("멘토가 서비스를 탈퇴한다") {

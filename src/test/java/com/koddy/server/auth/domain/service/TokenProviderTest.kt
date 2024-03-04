@@ -3,7 +3,7 @@ package com.koddy.server.auth.domain.service
 import com.koddy.server.auth.exception.AuthException
 import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.fixture.MentorFixture
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.member.domain.model.Member
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldNotThrowAny
@@ -29,7 +29,7 @@ internal class TokenProviderTest : FeatureSpec({
         refreshTokenValidityInSeconds = 7200L,
     )
 
-    val member: Member<*> = MentorFixture.MENTOR_1.toDomain().apply(1L)
+    val member: Member<*> = mentorFixture(id = 1).toDomain()
 
     feature("TokenProvider's createAccessToken & createRefreshToken") {
         scenario("AccessToken과 RefreshToken을 발급한다") {

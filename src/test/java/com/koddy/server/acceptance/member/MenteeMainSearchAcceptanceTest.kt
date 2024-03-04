@@ -8,28 +8,10 @@ import com.koddy.server.auth.domain.model.AuthMember
 import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.containers.callback.DatabaseCleanerAllCallbackExtension
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MentorFixture
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_10
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_11
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_12
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_13
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_14
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_15
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_16
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_17
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_18
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_19
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_2
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_20
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_3
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_4
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_5
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_6
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_7
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_8
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_9
+import com.koddy.server.common.fixture.MenteeFixtureStore
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
+import com.koddy.server.common.fixture.MentorFixtureStore
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import io.restassured.response.ValidatableResponse
 import org.hamcrest.Matchers.hasSize
 import org.hamcrest.Matchers.`is`
@@ -44,10 +26,13 @@ import org.springframework.http.HttpStatus.OK
 @DisplayName("[Acceptance Test] 멘티 메인 홈 조회 - 제안온 커피챗, 멘토 둘러보기")
 internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
     companion object {
-        private var mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
-        private val mentors: List<AuthMember> = MentorFixture.entries
-            .slice(0 until 20)
-            .map { it.회원가입과_로그인을_하고_프로필을_완성시킨다() }
+        private val menteeFixture: MenteeFixtureStore.MenteeFixture = menteeFixture(sequence = 1)
+        private val mentorFixtures: List<MentorFixtureStore.MentorFixture> = mutableListOf<MentorFixtureStore.MentorFixture>().apply {
+            (1..20).forEach { add(mentorFixture(sequence = it)) }
+        }
+
+        private val mentee: AuthMember = menteeFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
+        private val mentors: List<AuthMember> = mentorFixtures.map { it.회원가입과_로그인을_하고_프로필을_완성시킨다() }
     }
 
     @Nested
@@ -78,7 +63,7 @@ internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
                 response = response1,
                 coffeeChatIds = listOf(coffeeChats[4], coffeeChats[3], coffeeChats[2]),
                 mentorIds = listOf(mentors[4].id, mentors[3].id, mentors[2].id),
-                mentors = listOf(MENTOR_5, MENTOR_4, MENTOR_3),
+                mentorFixtures = listOf(mentorFixtures[4], mentorFixtures[3], mentorFixtures[2]),
                 totalCount = 5L,
                 hasNext = true,
             )
@@ -92,7 +77,7 @@ internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
                 response = response2,
                 coffeeChatIds = listOf(coffeeChats[4], coffeeChats[2], coffeeChats[0]),
                 mentorIds = listOf(mentors[4].id, mentors[2].id, mentors[0].id),
-                mentors = listOf(MENTOR_5, MENTOR_3, MENTOR_1),
+                mentorFixtures = listOf(mentorFixtures[4], mentorFixtures[2], mentorFixtures[0]),
                 totalCount = 3L,
                 hasNext = false,
             )
@@ -102,7 +87,7 @@ internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
             response: ValidatableResponse,
             coffeeChatIds: List<Long>,
             mentorIds: List<Long>,
-            mentors: List<MentorFixture>,
+            mentorFixtures: List<MentorFixtureStore.MentorFixture>,
             totalCount: Long,
             hasNext: Boolean,
         ) {
@@ -115,11 +100,11 @@ internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
                 response
                     .body("result[$index].coffeeChatId", `is`(coffeeChatIds[index].toInt()))
                     .body("result[$index].mentorId", `is`(mentorIds[index].toInt()))
-                    .body("result[$index].name", `is`(mentors[index].getName()))
-                    .body("result[$index].profileImageUrl", `is`(mentors[index].profileImageUrl))
-                    .body("result[$index].school", `is`(mentors[index].universityProfile.school))
-                    .body("result[$index].major", `is`(mentors[index].universityProfile.major))
-                    .body("result[$index].enteredIn", `is`(mentors[index].universityProfile.enteredIn))
+                    .body("result[$index].name", `is`(mentorFixtures[index].name))
+                    .body("result[$index].profileImageUrl", `is`(mentorFixtures[index].profileImageUrl))
+                    .body("result[$index].school", `is`(mentorFixtures[index].universityProfile.school))
+                    .body("result[$index].major", `is`(mentorFixtures[index].universityProfile.major))
+                    .body("result[$index].enteredIn", `is`(mentorFixtures[index].universityProfile.enteredIn))
             }
         }
     }
@@ -137,9 +122,9 @@ internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
                     mentors[19].id, mentors[18].id, mentors[17].id, mentors[16].id, mentors[15].id,
                     mentors[14].id, mentors[13].id, mentors[12].id, mentors[11].id, mentors[10].id,
                 ),
-                mentors = listOf(
-                    MENTOR_20, MENTOR_19, MENTOR_18, MENTOR_17, MENTOR_16,
-                    MENTOR_15, MENTOR_14, MENTOR_13, MENTOR_12, MENTOR_11,
+                mentorFixtures = listOf(
+                    mentorFixtures[19], mentorFixtures[18], mentorFixtures[17], mentorFixtures[16], mentorFixtures[15],
+                    mentorFixtures[14], mentorFixtures[13], mentorFixtures[12], mentorFixtures[11], mentorFixtures[10],
                 ),
                 hasNext = true,
             )
@@ -151,9 +136,9 @@ internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
                     mentors[9].id, mentors[8].id, mentors[7].id, mentors[6].id, mentors[5].id,
                     mentors[4].id, mentors[3].id, mentors[2].id, mentors[1].id, mentors[0].id,
                 ),
-                mentors = listOf(
-                    MENTOR_10, MENTOR_9, MENTOR_8, MENTOR_7, MENTOR_6,
-                    MENTOR_5, MENTOR_4, MENTOR_3, MENTOR_2, MENTOR_1,
+                mentorFixtures = listOf(
+                    mentorFixtures[9], mentorFixtures[8], mentorFixtures[7], mentorFixtures[6], mentorFixtures[5],
+                    mentorFixtures[4], mentorFixtures[3], mentorFixtures[2], mentorFixtures[1], mentorFixtures[0],
                 ),
                 hasNext = false,
             )
@@ -166,9 +151,9 @@ internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
                     mentors[18].id, mentors[16].id, mentors[14].id, mentors[12].id, mentors[10].id,
                     mentors[8].id, mentors[6].id, mentors[4].id, mentors[2].id, mentors[0].id,
                 ),
-                mentors = listOf(
-                    MENTOR_19, MENTOR_17, MENTOR_15, MENTOR_13, MENTOR_11,
-                    MENTOR_9, MENTOR_7, MENTOR_5, MENTOR_3, MENTOR_1,
+                mentorFixtures = listOf(
+                    mentorFixtures[18], mentorFixtures[16], mentorFixtures[14], mentorFixtures[12], mentorFixtures[10],
+                    mentorFixtures[8], mentorFixtures[6], mentorFixtures[4], mentorFixtures[2], mentorFixtures[0],
                 ),
                 hasNext = false,
             )
@@ -177,7 +162,7 @@ internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
             assertMenteesMatch(
                 response = response4,
                 mentorIds = listOf(),
-                mentors = listOf(),
+                mentorFixtures = listOf(),
                 hasNext = false,
             )
 
@@ -188,9 +173,9 @@ internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
                     mentors[19].id, mentors[17].id, mentors[15].id, mentors[13].id, mentors[11].id,
                     mentors[9].id, mentors[7].id, mentors[5].id, mentors[3].id, mentors[1].id,
                 ),
-                mentors = listOf(
-                    MENTOR_20, MENTOR_18, MENTOR_16, MENTOR_14, MENTOR_12,
-                    MENTOR_10, MENTOR_8, MENTOR_6, MENTOR_4, MENTOR_2,
+                mentorFixtures = listOf(
+                    mentorFixtures[19], mentorFixtures[17], mentorFixtures[15], mentorFixtures[13], mentorFixtures[11],
+                    mentorFixtures[9], mentorFixtures[7], mentorFixtures[5], mentorFixtures[3], mentorFixtures[1],
                 ),
                 hasNext = false,
             )
@@ -199,7 +184,7 @@ internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
             assertMenteesMatch(
                 response = response6,
                 mentorIds = listOf(),
-                mentors = listOf(),
+                mentorFixtures = listOf(),
                 hasNext = false,
             )
         }
@@ -207,21 +192,21 @@ internal class MenteeMainSearchAcceptanceTest : AcceptanceTestKt() {
         private fun assertMenteesMatch(
             response: ValidatableResponse,
             mentorIds: List<Long>,
-            mentors: List<MentorFixture>,
+            mentorFixtures: List<MentorFixtureStore.MentorFixture>,
             hasNext: Boolean,
         ) {
             response
-                .body("result", hasSize<Int>(mentors.size))
+                .body("result", hasSize<Int>(mentorFixtures.size))
                 .body("hasNext", `is`(hasNext))
 
-            mentors.indices.forEach { index ->
+            mentorFixtures.indices.forEach { index ->
                 response
                     .body("result[$index].id", `is`(mentorIds[index].toInt()))
-                    .body("result[$index].name", `is`(mentors[index].getName()))
-                    .body("result[$index].profileImageUrl", `is`(mentors[index].profileImageUrl))
-                    .body("result[$index].school", `is`(mentors[index].universityProfile.school))
-                    .body("result[$index].major", `is`(mentors[index].universityProfile.major))
-                    .body("result[$index].enteredIn", `is`(mentors[index].universityProfile.enteredIn))
+                    .body("result[$index].name", `is`(mentorFixtures[index].name))
+                    .body("result[$index].profileImageUrl", `is`(mentorFixtures[index].profileImageUrl))
+                    .body("result[$index].school", `is`(mentorFixtures[index].universityProfile.school))
+                    .body("result[$index].major", `is`(mentorFixtures[index].universityProfile.major))
+                    .body("result[$index].enteredIn", `is`(mentorFixtures[index].universityProfile.enteredIn))
             }
         }
     }

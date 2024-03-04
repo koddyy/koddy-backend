@@ -6,7 +6,7 @@ import com.koddy.server.auth.domain.service.TokenProvider
 import com.koddy.server.auth.exception.AuthException
 import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
 import com.koddy.server.member.domain.model.Member
@@ -33,9 +33,8 @@ internal class ReissueTokenUseCaseTest : DescribeSpec({
         tokenIssuer,
     )
 
-    val member: Member<*> = MENTOR_1.toDomain().apply(1L)
-
     describe("ReissueTokenUseCase's invoke") {
+        val member: Member<*> = mentorFixture(id = 1).toDomain()
         every { tokenProvider.getId(REFRESH_TOKEN) } returns member.id
         every { memberReader.getMember(member.id) } returns member
 

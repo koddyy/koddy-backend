@@ -7,10 +7,8 @@ import com.koddy.server.auth.domain.model.AuthMember
 import com.koddy.server.coffeechat.exception.CoffeeChatExceptionCode.COFFEE_CHAT_NOT_FOUND
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_2
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_2
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.toLocalDateTime
 import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.BeforeEach
@@ -31,10 +29,10 @@ internal class CancelCoffeeChatAcceptanceTest : AcceptanceTestKt() {
 
     @BeforeEach
     override fun setUp() {
-        mentorA = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
-        mentorB = MENTOR_2.회원가입과_로그인을_하고_프로필을_완성시킨다()
-        menteeA = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
-        menteeB = MENTEE_2.회원가입과_로그인을_하고_프로필을_완성시킨다()
+        mentorA = mentorFixture(sequence = 1).회원가입과_로그인을_하고_프로필을_완성시킨다()
+        mentorB = mentorFixture(sequence = 2).회원가입과_로그인을_하고_프로필을_완성시킨다()
+        menteeA = menteeFixture(sequence = 1).회원가입과_로그인을_하고_프로필을_완성시킨다()
+        menteeB = menteeFixture(sequence = 2).회원가입과_로그인을_하고_프로필을_완성시킨다()
     }
 
     @Nested

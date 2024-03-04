@@ -16,10 +16,10 @@ data class SignUpMentorCommand(
 ) {
     fun toDomain(): Mentor {
         return Mentor(
-            platform,
-            name,
-            languages,
-            universityProfile,
+            platform = platform,
+            name = name,
+            languages = languages,
+            universityProfile = universityProfile,
         )
     }
 }
@@ -33,11 +33,11 @@ data class SignUpMenteeCommand(
 ) {
     fun toDomain(): Mentee {
         return Mentee(
-            platform,
-            name,
-            nationality,
-            languages,
-            interest,
+            platform = platform,
+            name = name,
+            nationality = nationality,
+            languages = languages,
+            interest = interest,
         )
     }
 }

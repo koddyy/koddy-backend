@@ -13,11 +13,9 @@ import com.koddy.server.common.fixture.CoffeeChatFixture.수요일_2주차_20_00
 import com.koddy.server.common.fixture.CoffeeChatFixture.수요일_3주차_20_00_시작
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_2주차_20_00_시작
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_2
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
 import com.koddy.server.common.fixture.MenteeFlow
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_2
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.fixture.MentorFlow
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
@@ -43,14 +41,14 @@ internal class UpdateCoffeeChatStatusProcessorTest(
     fun setUp() {
         mentees = memberRepository.saveAll(
             listOf(
-                MENTEE_1.toDomain(),
-                MENTEE_2.toDomain(),
+                menteeFixture(sequence = 1).toDomain(),
+                menteeFixture(sequence = 2).toDomain(),
             ),
         )
         mentors = memberRepository.saveAll(
             listOf(
-                MENTOR_1.toDomain(),
-                MENTOR_2.toDomain(),
+                mentorFixture(sequence = 1).toDomain(),
+                mentorFixture(sequence = 2).toDomain(),
             ),
         )
     }

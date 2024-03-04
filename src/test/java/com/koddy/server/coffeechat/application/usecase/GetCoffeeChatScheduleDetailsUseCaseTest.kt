@@ -9,9 +9,9 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus
 import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
 import com.koddy.server.common.fixture.MenteeFlow
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.fixture.MentorFlow
 import com.koddy.server.common.mock.fake.FakeEncryptor
 import com.koddy.server.member.domain.model.Language
@@ -40,8 +40,8 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
         encryptor,
     )
 
-    val mentor: Mentor = MENTOR_1.toDomain().apply(1L)
-    val mentee: Mentee = MENTEE_1.toDomain().apply(2L)
+    val mentor: Mentor = mentorFixture(id = 1L).toDomain()
+    val mentee: Mentee = menteeFixture(id = 2L).toDomain()
 
     describe("GetCoffeeChatScheduleDetailsUseCase's invoke (멘토 입장)") {
         val authenticated = Authenticated(mentor.id, mentor.authority)
@@ -68,8 +68,8 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
                     result.mentee.profileImageUrl shouldBe mentee.profileImageUrl
                     result.mentee.nationality shouldBe mentee.nationality.code
                     result.mentee.introduction shouldBe mentee.introduction
-                    result.mentee.languages.main shouldBe Language.Category.EN.code
-                    result.mentee.languages.sub shouldContainExactlyInAnyOrder listOf(Language.Category.KR.code)
+                    result.mentee.languages.main shouldBe mentee.languages.filter { it.type == Language.Type.MAIN }.map { it.category.code }.first()
+                    result.mentee.languages.sub shouldContainExactlyInAnyOrder mentee.languages.filter { it.type == Language.Type.SUB }.map { it.category.code }
                     result.mentee.interestSchool shouldBe mentee.interest.school
                     result.mentee.interestMajor shouldBe mentee.interest.major
                     result.mentee.status shouldBe mentee.status.name
@@ -113,8 +113,8 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
                     result.mentor.name shouldBe mentor.name
                     result.mentor.profileImageUrl shouldBe mentor.profileImageUrl
                     result.mentor.introduction shouldBe mentor.introduction
-                    result.mentor.languages.main shouldBe Language.Category.KR.code
-                    result.mentor.languages.sub shouldContainExactlyInAnyOrder listOf(Language.Category.EN.code)
+                    result.mentor.languages.main shouldBe mentor.languages.filter { it.type == Language.Type.MAIN }.map { it.category.code }.first()
+                    result.mentor.languages.sub shouldContainExactlyInAnyOrder mentor.languages.filter { it.type == Language.Type.SUB }.map { it.category.code }
                     result.mentor.school shouldBe mentor.universityProfile.school
                     result.mentor.major shouldBe mentor.universityProfile.major
                     result.mentor.enteredIn shouldBe mentor.universityProfile.enteredIn

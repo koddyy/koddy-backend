@@ -9,7 +9,7 @@ import com.koddy.server.auth.infrastructure.social.kakao.response.KakaoUserRespo
 import com.koddy.server.auth.infrastructure.social.zoom.ZoomOAuthConnector
 import com.koddy.server.auth.infrastructure.social.zoom.response.ZoomUserResponse
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.utils.OAuthUtils.AUTHORIZATION_CODE
 import com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI
 import com.koddy.server.common.utils.OAuthUtils.STATE
@@ -34,9 +34,9 @@ internal class OAuthLoginProcessorFacadeTest : FeatureSpec({
     )
 
     feature("OAuthLoginProcessorFacade's login") {
-        val googleUserResponse: GoogleUserResponse = MENTOR_1.toGoogleUserResponse()
-        val kakaoUserResponse: KakaoUserResponse = MENTOR_1.toKakaoUserResponse()
-        val zoomUserResponse: ZoomUserResponse = MENTOR_1.toZoomUserResponse()
+        val googleUserResponse: GoogleUserResponse = mentorFixture(sequence = 1).toGoogleUserResponse()
+        val kakaoUserResponse: KakaoUserResponse = mentorFixture(sequence = 1).toKakaoUserResponse()
+        val zoomUserResponse: ZoomUserResponse = mentorFixture(sequence = 1).toZoomUserResponse()
 
         every { googleOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE) } returns googleUserResponse
         every { kakaoOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE) } returns kakaoUserResponse

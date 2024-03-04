@@ -1,10 +1,8 @@
 package com.koddy.server.member.domain.repository
 
 import com.koddy.server.common.RepositoryTestKt
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_2
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_2
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.member.domain.model.Member
 import com.koddy.server.member.domain.model.Nationality
 import com.koddy.server.member.domain.model.Role
@@ -24,40 +22,47 @@ internal class MemberRepositoryTest(
     private val sut: MemberRepository,
     private val em: EntityManager,
 ) {
+    companion object {
+        private val mentorFixtureA = mentorFixture(sequence = 1)
+        private val mentorFixtureB = mentorFixture(sequence = 2)
+        private val menteeFixtureA = menteeFixture(sequence = 1)
+        private val menteeFixtureB = menteeFixture(sequence = 2)
+    }
+
     @Test
     fun `소셜 플랫폼 고유 ID를 기반으로 사용자를 조회한다`() {
         // given
-        val mentor: Mentor = sut.save(MENTOR_1.toDomain())
-        val mentee: Mentee = sut.save(MENTEE_1.toDomain())
+        val mentor: Mentor = sut.save(mentorFixtureA.toDomain())
+        val mentee: Mentee = sut.save(menteeFixtureA.toDomain())
 
         // when - then
         assertSoftly {
-            sut.findByPlatformSocialId(MENTOR_1.platform.socialId!!) shouldBe mentor
-            sut.findByPlatformSocialId("${MENTOR_1.platform.socialId!!}7") shouldBe null
-            sut.findByPlatformSocialId(MENTEE_1.platform.socialId!!) shouldBe mentee
-            sut.findByPlatformSocialId("${MENTEE_1.platform.socialId!!}7") shouldBe null
+            sut.findByPlatformSocialId(socialId = mentorFixtureA.platform.socialId!!) shouldBe mentor
+            sut.findByPlatformSocialId(socialId = "${mentorFixtureA.platform.socialId!!}7") shouldBe null
+            sut.findByPlatformSocialId(socialId = menteeFixtureA.platform.socialId!!) shouldBe mentee
+            sut.findByPlatformSocialId(socialId = "${menteeFixtureA.platform.socialId!!}7") shouldBe null
         }
     }
 
     @Test
     fun `특정 소셜 플랫폼 고유 ID로 가입된 사용자가 존재하는지 확인한다`() {
         // given
-        sut.save(MENTOR_1.toDomain())
-        sut.save(MENTEE_1.toDomain())
+        sut.save(mentorFixtureA.toDomain())
+        sut.save(menteeFixtureA.toDomain())
 
         // when - then
         assertSoftly {
-            sut.existsByPlatformSocialId(MENTOR_1.platform.socialId!!) shouldBe true
-            sut.existsByPlatformSocialId(MENTOR_2.platform.socialId!!) shouldBe false
-            sut.existsByPlatformSocialId(MENTEE_1.platform.socialId!!) shouldBe true
-            sut.existsByPlatformSocialId(MENTEE_2.platform.socialId!!) shouldBe false
+            sut.existsByPlatformSocialId(mentorFixtureA.platform.socialId!!) shouldBe true
+            sut.existsByPlatformSocialId(mentorFixtureB.platform.socialId!!) shouldBe false
+            sut.existsByPlatformSocialId(menteeFixtureA.platform.socialId!!) shouldBe true
+            sut.existsByPlatformSocialId(menteeFixtureB.platform.socialId!!) shouldBe false
         }
     }
 
     @Test
     fun `사용자를 삭제한다 (Soft Delete)`() {
         // given
-        val member: Member<*> = sut.save(MENTOR_1.toDomain())
+        val member: Member<*> = sut.save(mentorFixtureA.toDomain())
 
         // when
         sut.deleteMember(member.id)
@@ -72,14 +77,14 @@ internal class MemberRepositoryTest(
 
             val findMember: Member<*> = getMemberByNative(member.id)
             assertSoftly(findMember) {
-                platform.provider shouldBe MENTOR_1.platform.provider
+                platform.provider shouldBe mentorFixtureA.platform.provider
                 platform.socialId shouldBe null
                 platform.email shouldBe null
-                name shouldBe MENTOR_1.getName()
-                profileImageUrl shouldBe MENTOR_1.profileImageUrl
+                name shouldBe mentorFixtureA.name
+                profileImageUrl shouldBe mentorFixtureA.profileImageUrl
                 nationality shouldBe Nationality.KOREA
-                introduction shouldBe MENTOR_1.introduction
-                isProfileComplete shouldBe false
+                introduction shouldBe mentorFixtureA.introduction
+                profileComplete shouldBe false
                 role shouldBe Role.MENTOR
                 status shouldBe Member.Status.INACTIVE
             }

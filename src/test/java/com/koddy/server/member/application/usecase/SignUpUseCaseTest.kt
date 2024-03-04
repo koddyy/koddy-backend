@@ -4,8 +4,8 @@ import com.koddy.server.auth.domain.model.AuthMember
 import com.koddy.server.auth.domain.model.AuthToken
 import com.koddy.server.auth.domain.service.TokenIssuer
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
 import com.koddy.server.member.application.usecase.command.SignUpMenteeCommand
@@ -38,12 +38,15 @@ internal class SignUpUseCaseTest : DescribeSpec({
         tokenIssuer,
     )
 
+    val mentorFixture = mentorFixture(id = 1L)
+    val menteeFixture = menteeFixture(id = 2L)
+
     describe("SignUpUsecase's signUpMentor") {
         val command = SignUpMentorCommand(
-            MENTOR_1.platform,
-            MENTOR_1.getName(),
-            MENTOR_1.languages,
-            MENTOR_1.universityProfile,
+            platform = mentorFixture.platform,
+            name = mentorFixture.name,
+            languages = mentorFixture.languages,
+            universityProfile = mentorFixture.universityProfile,
         )
 
         context("이미 가입된 소셜 계정 데이터면") {
@@ -65,7 +68,7 @@ internal class SignUpUseCaseTest : DescribeSpec({
         context("가입되지 않은 소셜 계정 데이터면") {
             every { memberReader.existsByPlatformSocialId(command.platform.socialId!!) } returns false
 
-            val mentor: Mentor = MENTOR_1.toDomain().apply(1L)
+            val mentor: Mentor = mentorFixture.toDomain()
             every { memberWriter.saveMentor(any()) } returns mentor
 
             val authToken = AuthToken(ACCESS_TOKEN, REFRESH_TOKEN)
@@ -91,11 +94,11 @@ internal class SignUpUseCaseTest : DescribeSpec({
 
     describe("SignUpUsecase's signUpMentee") {
         val command = SignUpMenteeCommand(
-            MENTEE_1.platform,
-            MENTEE_1.getName(),
-            MENTEE_1.nationality,
-            MENTEE_1.languages,
-            MENTEE_1.interest,
+            platform = menteeFixture.platform,
+            name = menteeFixture.name,
+            nationality = menteeFixture.nationality,
+            languages = menteeFixture.languages,
+            interest = menteeFixture.interest,
         )
 
         context("이미 가입된 소셜 계정 데이터면") {
@@ -117,7 +120,7 @@ internal class SignUpUseCaseTest : DescribeSpec({
         context("가입되지 않은 소셜 계정 데이터면") {
             every { memberReader.existsByPlatformSocialId(command.platform.socialId!!) } returns false
 
-            val mentee: Mentee = MENTEE_1.toDomain().apply(1L)
+            val mentee: Mentee = menteeFixture.toDomain()
             every { memberWriter.saveMentee(any()) } returns mentee
 
             val authToken = AuthToken(ACCESS_TOKEN, REFRESH_TOKEN)
