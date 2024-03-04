@@ -7,11 +7,11 @@ import com.koddy.server.auth.exception.AuthException
 import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_TOKEN
 import com.koddy.server.global.annotation.UseCase
 import com.koddy.server.member.domain.model.Member
-import com.koddy.server.member.domain.repository.MemberRepository
+import com.koddy.server.member.domain.service.MemberReader
 
 @UseCase
 class ReissueTokenUseCase(
-    private val memberRepository: MemberRepository,
+    private val memberReader: MemberReader,
     private val tokenProvider: TokenProvider,
     private val tokenIssuer: TokenIssuer,
 ) {
@@ -23,7 +23,7 @@ class ReissueTokenUseCase(
 
     private fun getMember(refreshToken: String): Member<*> {
         val memberId: Long = tokenProvider.getId(refreshToken)
-        return memberRepository.getById(memberId)
+        return memberReader.getMember(memberId)
     }
 
     private fun validateMemberToken(

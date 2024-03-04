@@ -10,8 +10,7 @@ import com.koddy.server.member.application.usecase.query.response.MenteePublicPr
 import com.koddy.server.member.application.usecase.query.response.MentorPublicProfile
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
-import com.koddy.server.member.domain.repository.MenteeRepository
-import com.koddy.server.member.domain.repository.MentorRepository
+import com.koddy.server.member.domain.service.MemberReader
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.FeatureSpec
@@ -19,16 +18,13 @@ import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 
 @UnitTestKt
 @DisplayName("Member -> GetMemberPublicProfileUseCase 테스트")
 internal class GetMemberPublicProfileUseCaseTest : FeatureSpec({
-    val mentorRepository = mockk<MentorRepository>()
-    val menteeRepository = mockk<MenteeRepository>()
-    val sut = GetMemberPublicProfileUseCase(
-        mentorRepository,
-        menteeRepository,
-    )
+    val memberReader = mockk<MemberReader>()
+    val sut = GetMemberPublicProfileUseCase(memberReader)
 
     feature("GetMemberPublicProfileUseCase's getMentorProfile") {
         scenario("멘토 프로필을 조회한다 [미완성 -> 자기소개 & 프로필 이미지 URL & 멘토링 기간 & 스케줄]") {
@@ -38,9 +34,12 @@ internal class GetMemberPublicProfileUseCaseTest : FeatureSpec({
                 listOf(KR_MAIN.toDomain()),
                 MENTOR_1.universityProfile,
             ).apply(1L)
-            every { mentorRepository.getProfile(mentor.id) } returns mentor
+            every { memberReader.getMentorWithLanguages(mentor.id) } returns mentor
 
             val mentorProfile: MentorPublicProfile = sut.getMentorProfile(mentor.id)
+
+            verify(exactly = 1) { memberReader.getMentorWithLanguages(mentor.id) }
+            verify(exactly = 0) { memberReader.getMenteeWithLanguages(mentor.id) }
             assertSoftly(mentorProfile) {
                 // Required Fields
                 id shouldBe mentor.id
@@ -60,9 +59,12 @@ internal class GetMemberPublicProfileUseCaseTest : FeatureSpec({
 
         scenario("멘토 프로필을 조회한다 [완성]") {
             val mentor: Mentor = MENTOR_1.toDomainWithLanguages(listOf(KR_MAIN.toDomain())).apply(1L)
-            every { mentorRepository.getProfile(mentor.id) } returns mentor
+            every { memberReader.getMentorWithLanguages(mentor.id) } returns mentor
 
             val mentorProfile: MentorPublicProfile = sut.getMentorProfile(mentor.id)
+
+            verify(exactly = 1) { memberReader.getMentorWithLanguages(mentor.id) }
+            verify(exactly = 0) { memberReader.getMenteeWithLanguages(mentor.id) }
             assertSoftly(mentorProfile) {
                 // Required Fields
                 id shouldBe mentor.id
@@ -94,9 +96,12 @@ internal class GetMemberPublicProfileUseCaseTest : FeatureSpec({
                 ),
                 MENTEE_1.interest,
             ).apply(1L)
-            every { menteeRepository.getProfile(mentee.id) } returns mentee
+            every { memberReader.getMenteeWithLanguages(mentee.id) } returns mentee
 
             val mentorProfile: MenteePublicProfile = sut.getMenteeProfile(mentee.id)
+
+            verify(exactly = 1) { memberReader.getMenteeWithLanguages(mentee.id) }
+            verify(exactly = 0) { memberReader.getMentorWithLanguages(mentee.id) }
             assertSoftly(mentorProfile) {
                 // Required Fields
                 id shouldBe mentee.id
@@ -124,9 +129,12 @@ internal class GetMemberPublicProfileUseCaseTest : FeatureSpec({
                     JP_SUB.toDomain(),
                 ),
             ).apply(1L)
-            every { menteeRepository.getProfile(mentee.id) } returns mentee
+            every { memberReader.getMenteeWithLanguages(mentee.id) } returns mentee
 
             val mentorProfile: MenteePublicProfile = sut.getMenteeProfile(mentee.id)
+
+            verify(exactly = 1) { memberReader.getMenteeWithLanguages(mentee.id) }
+            verify(exactly = 0) { memberReader.getMentorWithLanguages(mentee.id) }
             assertSoftly(mentorProfile) {
                 // Required Fields
                 id shouldBe mentee.id

@@ -5,7 +5,7 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.global.log.logger
 import com.koddy.server.member.domain.model.mentor.Mentor
-import com.koddy.server.member.domain.repository.MentorRepository
+import com.koddy.server.member.domain.service.MemberReader
 import com.koddy.server.notification.domain.model.Notification
 import com.koddy.server.notification.domain.model.NotificationType
 import com.koddy.server.notification.domain.repository.NotificationRepository
@@ -19,7 +19,7 @@ import org.springframework.transaction.event.TransactionalEventListener
 
 @Component
 class MentorNotificationEventHandler(
-    private val mentorRepository: MentorRepository,
+    private val memberReader: MemberReader,
     private val coffeeChatReader: CoffeeChatReader,
     private val notificationRepository: NotificationRepository,
 ) {
@@ -87,7 +87,7 @@ class MentorNotificationEventHandler(
             event.eventPublishedAt,
         )
 
-        val mentor: Mentor = mentorRepository.getById(event.mentorId)
+        val mentor: Mentor = memberReader.getMentor(event.mentorId)
         val coffeeChat: CoffeeChat = coffeeChatReader.getById(event.coffeeChatId)
 
         notificationRepository.save(

@@ -7,7 +7,7 @@ import com.koddy.server.global.annotation.UseCase
 import com.koddy.server.global.aop.NotProvidedInProduction
 import com.koddy.server.member.domain.model.Email
 import com.koddy.server.member.domain.model.Member
-import com.koddy.server.member.domain.repository.MemberRepository
+import com.koddy.server.member.domain.service.MemberReader
 import com.koddy.server.member.exception.MemberException
 import com.koddy.server.member.exception.MemberExceptionCode.MEMBER_NOT_FOUND
 import jakarta.servlet.http.HttpServletResponse
@@ -50,7 +50,7 @@ class DummyAccountLoginApi(
 
 @UseCase
 class DummyAccountLoginUseCase(
-    private val memberRepository: MemberRepository,
+    private val memberReader: MemberReader,
     private val tokenIssuer: TokenIssuer,
     @Value("\${account.dummy}") private val dummyAccountPassword: String,
 ) {
@@ -58,8 +58,8 @@ class DummyAccountLoginUseCase(
         email: Email,
         password: String,
     ): AuthToken {
-        val member: Member<*> = memberRepository.findByPlatformEmail(email)
-            .orElseThrow { MemberException(MEMBER_NOT_FOUND) }
+        val member: Member<*> = memberReader.findByPlatformEmail(email)
+            ?: throw MemberException(MEMBER_NOT_FOUND)
 
         if (dummyAccountPassword != password) {
             throw MemberException(MEMBER_NOT_FOUND)

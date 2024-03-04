@@ -7,8 +7,7 @@ import com.koddy.server.member.application.usecase.command.CompleteMenteeProfile
 import com.koddy.server.member.application.usecase.command.CompleteMentorProfileCommand
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
-import com.koddy.server.member.domain.repository.MenteeRepository
-import com.koddy.server.member.domain.repository.MentorRepository
+import com.koddy.server.member.domain.service.MemberReader
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
@@ -21,12 +20,8 @@ import io.mockk.verify
 @UnitTestKt
 @DisplayName("Member -> CompleteProfileUseCase 테스트")
 internal class CompleteProfileUseCaseTest : DescribeSpec({
-    val mentorRepository = mockk<MentorRepository>()
-    val menteeRepository = mockk<MenteeRepository>()
-    val sut = CompleteProfileUseCase(
-        mentorRepository,
-        menteeRepository,
-    )
+    val memberReader = mockk<MemberReader>()
+    val sut = CompleteProfileUseCase(memberReader)
 
     describe("CompleteProfileUseCase's completeMentor") {
         context("멘토의 미완성 프로필에 대해서") {
@@ -51,12 +46,12 @@ internal class CompleteProfileUseCaseTest : DescribeSpec({
                 MENTOR_1.mentoringPeriod,
                 MENTOR_1.timelines,
             )
-            every { mentorRepository.getById(command.mentorId) } returns mentor
+            every { memberReader.getMentor(command.mentorId) } returns mentor
 
             it("추가 정보를 기입한다 [자기소개, 프로필 이미지 URL, 멘토링 기간, 스케줄 정보]") {
                 sut.completeMentor(command)
 
-                verify(exactly = 1) { mentorRepository.getById(command.mentorId) }
+                verify(exactly = 1) { memberReader.getMentor(command.mentorId) }
                 assertSoftly(mentor) {
                     introduction shouldBe command.introduction
                     profileImageUrl shouldBe command.profileImageUrl
@@ -90,12 +85,12 @@ internal class CompleteProfileUseCaseTest : DescribeSpec({
                 MENTEE_1.introduction,
                 MENTEE_1.profileImageUrl,
             )
-            every { menteeRepository.getById(command.menteeId) } returns mentee
+            every { memberReader.getMentee(command.menteeId) } returns mentee
 
             it("추가 정보를 기입한다 [자기소개, 프로필 이미지 URL]") {
                 sut.completeMentee(command)
 
-                verify(exactly = 1) { menteeRepository.getById(command.menteeId) }
+                verify(exactly = 1) { memberReader.getMentee(command.menteeId) }
                 assertSoftly(mentee) {
                     introduction shouldBe command.introduction
                     profileImageUrl shouldBe command.profileImageUrl

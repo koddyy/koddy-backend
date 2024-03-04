@@ -11,7 +11,7 @@ import com.koddy.server.member.domain.model.Member
 import com.koddy.server.member.domain.model.Nationality
 import com.koddy.server.member.domain.model.Role
 import com.koddy.server.member.domain.model.mentor.Mentor
-import com.koddy.server.member.domain.repository.MentorRepository
+import com.koddy.server.member.domain.service.MemberReader
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.FeatureSpec
@@ -20,12 +20,13 @@ import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 
 @UnitTestKt
 @DisplayName("Member -> UpdateMentorProfileUseCase 테스트")
 internal class UpdateMentorProfileUseCaseTest : FeatureSpec({
-    val mentorRepository = mockk<MentorRepository>()
-    val sut = UpdateMentorProfileUseCase(mentorRepository)
+    val memberReader = mockk<MemberReader>()
+    val sut = UpdateMentorProfileUseCase(memberReader)
 
     feature("UpdateMentorProfileUseCase's updateBasicInfo") {
         val mentor: Mentor = MENTOR_1.toDomain().apply(1L)
@@ -41,10 +42,11 @@ internal class UpdateMentorProfileUseCaseTest : FeatureSpec({
                 MENTOR_2.universityProfile.major,
                 MENTOR_2.universityProfile.enteredIn,
             )
-            every { mentorRepository.getById(command.mentorId) } returns mentor
+            every { memberReader.getMentor(command.mentorId) } returns mentor
 
             sut.updateBasicInfo(command)
 
+            verify(exactly = 1) { memberReader.getMentor(command.mentorId) }
             assertSoftly(mentor) {
                 // update
                 name shouldBe command.name
@@ -84,10 +86,11 @@ internal class UpdateMentorProfileUseCaseTest : FeatureSpec({
                 MENTOR_2.mentoringPeriod,
                 MENTOR_2.timelines,
             )
-            every { mentorRepository.getById(command.mentorId) } returns mentor
+            every { memberReader.getMentorWithSchedules(command.mentorId) } returns mentor
 
             sut.updateSchedule(command)
 
+            verify(exactly = 1) { memberReader.getMentorWithSchedules(command.mentorId) }
             assertSoftly(mentor) {
                 // update
                 mentoringPeriod.startDate shouldBe command.mentoringPeriod!!.startDate

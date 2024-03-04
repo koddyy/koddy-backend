@@ -12,7 +12,7 @@ import com.koddy.server.member.application.usecase.command.ConfirmMailAuthCodeCo
 import com.koddy.server.member.domain.event.MailAuthenticatedEvent
 import com.koddy.server.member.domain.model.mentor.AuthenticationStatus
 import com.koddy.server.member.domain.model.mentor.Mentor
-import com.koddy.server.member.domain.repository.MentorRepository
+import com.koddy.server.member.domain.service.MemberReader
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
@@ -33,12 +33,12 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
     val authKeyPrefix = "MENTOR-MAIL-AUTH:%d:%s"
     val authCode = "123456"
 
-    val mentorRepository = mockk<MentorRepository>()
+    val memberReader = mockk<MemberReader>()
     val authKeyGenerator = AuthKeyGenerator { _: String, suffix: Array<out Any> -> format(authKeyPrefix, *suffix) }
     val authenticationProcessor = mockk<AuthenticationProcessor>()
     val eventPublisher = mockk<ApplicationEventPublisher>()
     val sut = AuthenticateMentorUnivUseCase(
-        mentorRepository,
+        memberReader,
         authKeyGenerator,
         authenticationProcessor,
         eventPublisher,
@@ -58,7 +58,7 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
                 mentor.id,
                 schoolMail,
             )
-            every { mentorRepository.getById(command.mentorId) } returns mentor
+            every { memberReader.getMentor(command.mentorId) } returns mentor
             every { authenticationProcessor.storeAuthCode(getAuthKey(mentor.id, command.schoolMail)) } returns authCode
 
             val slotEvent = slot<MailAuthenticatedEvent>()
@@ -68,7 +68,7 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
                 sut.attemptWithMail(command)
 
                 verify(exactly = 1) {
-                    mentorRepository.getById(command.mentorId)
+                    memberReader.getMentor(command.mentorId)
                     authenticationProcessor.storeAuthCode(getAuthKey(mentor.id, command.schoolMail))
                 }
                 slotEvent.captured shouldBe MailAuthenticatedEvent(
@@ -94,7 +94,7 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
                 schoolMail,
                 authCode,
             )
-            every { mentorRepository.getById(command.mentorId) } returns mentor
+            every { memberReader.getMentor(command.mentorId) } returns mentor
             every { authenticationProcessor.verifyAuthCode(getAuthKey(mentor.id, command.schoolMail), command.authCode) } throws AuthException(INVALID_AUTH_CODE)
 
             it("인증에 실패한다") {
@@ -103,7 +103,7 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
                 } shouldHaveMessage INVALID_AUTH_CODE.message
 
                 verify(exactly = 1) {
-                    mentorRepository.getById(command.mentorId)
+                    memberReader.getMentor(command.mentorId)
                     authenticationProcessor.verifyAuthCode(getAuthKey(mentor.id, command.schoolMail), command.authCode)
                 }
                 verify(exactly = 0) { authenticationProcessor.deleteAuthCode(getAuthKey(mentor.id, command.schoolMail)) }
@@ -121,7 +121,7 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
                 schoolMail,
                 authCode,
             )
-            every { mentorRepository.getById(command.mentorId) } returns mentor
+            every { memberReader.getMentor(command.mentorId) } returns mentor
             justRun { authenticationProcessor.verifyAuthCode(getAuthKey(mentor.id, command.schoolMail), command.authCode) }
             justRun { authenticationProcessor.deleteAuthCode(getAuthKey(mentor.id, command.schoolMail)) }
 
@@ -129,7 +129,7 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
                 sut.confirmMailAuthCode(command)
 
                 verify(exactly = 1) {
-                    mentorRepository.getById(command.mentorId)
+                    memberReader.getMentor(command.mentorId)
                     authenticationProcessor.verifyAuthCode(getAuthKey(mentor.id, command.schoolMail), command.authCode)
                     authenticationProcessor.deleteAuthCode(getAuthKey(mentor.id, command.schoolMail))
                 }
@@ -148,12 +148,12 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
                 mentor.id,
                 "https://proof-data-url",
             )
-            every { mentorRepository.getById(command.mentorId) } returns mentor
+            every { memberReader.getMentor(command.mentorId) } returns mentor
 
             it("인증을 시도할 수 있다") {
                 sut.attemptWithProofData(command)
 
-                verify(exactly = 1) { mentorRepository.getById(command.mentorId) }
+                verify(exactly = 1) { memberReader.getMentor(command.mentorId) }
                 assertSoftly(mentor) {
                     universityAuthentication.schoolMail shouldBe null
                     universityAuthentication.proofDataUploadUrl shouldBe command.proofDataUploadUrl

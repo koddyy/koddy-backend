@@ -12,7 +12,7 @@ import com.koddy.server.member.application.usecase.query.GetMentorReservedSchedu
 import com.koddy.server.member.application.usecase.query.response.MentorReservedSchedule
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
-import com.koddy.server.member.domain.repository.MentorRepository
+import com.koddy.server.member.domain.service.MemberReader
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.FeatureSpec
@@ -25,10 +25,10 @@ import java.time.LocalDateTime
 @UnitTestKt
 @DisplayName("Member -> GetMentorReservedScheduleUseCase 테스트")
 internal class GetMentorReservedScheduleUseCaseTest : FeatureSpec({
-    val mentorRepository = mockk<MentorRepository>()
+    val memberReader = mockk<MemberReader>()
     val mentorReservedScheduleQueryRepository = mockk<MentorReservedScheduleQueryRepository>()
     val sut = GetMentorReservedScheduleUseCase(
-        mentorRepository,
+        memberReader,
         mentorReservedScheduleQueryRepository,
     )
 
@@ -40,7 +40,7 @@ internal class GetMentorReservedScheduleUseCaseTest : FeatureSpec({
     feature("GetMentorReservedScheduleUseCase's invoke") {
         scenario("특정 Year/Month에 대해서 멘토의 예약된 스케줄 정보를 조회한다") {
             val query = GetMentorReservedSchedule(mentor.id, 2024, 2)
-            every { mentorRepository.getByIdWithSchedules(query.mentorId) } returns mentor
+            every { memberReader.getMentorWithSchedules(query.mentorId) } returns mentor
 
             val start1 = LocalDateTime.of(2024, 2, 18, 18, 0)
             val start2 = LocalDateTime.of(2024, 2, 15, 18, 0)

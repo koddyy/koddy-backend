@@ -16,7 +16,7 @@ import com.koddy.server.common.utils.OAuthUtils.STATE
 import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
 import com.koddy.server.member.domain.model.Member
-import com.koddy.server.member.domain.repository.MemberRepository
+import com.koddy.server.member.domain.service.MemberReader
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
@@ -25,17 +25,16 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import java.util.Optional
 
 @UnitTestKt
 @DisplayName("Auth -> OAuthLoginUseCase 테스트")
 internal class OAuthLoginUseCaseTest : DescribeSpec({
     val oAuthLoginProcessor = mockk<OAuthLoginProcessor>()
-    val memberRepository = mockk<MemberRepository>()
+    val memberReader = mockk<MemberReader>()
     val tokenIssuer = mockk<TokenIssuer>()
     val sut = OAuthLoginUseCase(
         oAuthLoginProcessor,
-        memberRepository,
+        memberReader,
         tokenIssuer,
     )
 
@@ -52,12 +51,12 @@ internal class OAuthLoginUseCaseTest : DescribeSpec({
         every { oAuthLoginProcessor.login(command.provider, command.code, command.redirectUrl, command.state) } returns googleUserResponse
 
         context("소셜 로그인 사용자가 서버 스토리지에 존재하지 않으면") {
-            every { memberRepository.findByPlatformSocialId(googleUserResponse.id()) } returns Optional.empty()
+            every { memberReader.findByPlatformSocialId(googleUserResponse.id()) } returns null
 
             it("OAuthUserNotFoundException 예외가 발생하고 회원가입 플로우를 진행한다") {
                 val result: OAuthUserNotFoundException = shouldThrow<OAuthUserNotFoundException> { sut.invoke(command) }
 
-                verify(exactly = 1) { memberRepository.findByPlatformSocialId(googleUserResponse.id()) }
+                verify(exactly = 1) { memberReader.findByPlatformSocialId(googleUserResponse.id()) }
                 verify(exactly = 0) { tokenIssuer.provideAuthorityToken(member.id, member.authority) }
                 assertSoftly(result.response) {
                     id() shouldBe googleUserResponse.id()
@@ -69,7 +68,7 @@ internal class OAuthLoginUseCaseTest : DescribeSpec({
         }
 
         context("소셜 로그인 사용자가 서버 스토리지에 존재하면") {
-            every { memberRepository.findByPlatformSocialId(googleUserResponse.id()) } returns Optional.of(member)
+            every { memberReader.findByPlatformSocialId(googleUserResponse.id()) } returns member
 
             val authToken = AuthToken(ACCESS_TOKEN, REFRESH_TOKEN)
             every { tokenIssuer.provideAuthorityToken(member.id, member.authority) } returns authToken
@@ -78,7 +77,7 @@ internal class OAuthLoginUseCaseTest : DescribeSpec({
                 val result: AuthMember = sut.invoke(command)
 
                 verify(exactly = 1) {
-                    memberRepository.findByPlatformSocialId(googleUserResponse.id())
+                    memberReader.findByPlatformSocialId(googleUserResponse.id())
                     tokenIssuer.provideAuthorityToken(member.id, member.authority)
                 }
                 assertSoftly(result) {

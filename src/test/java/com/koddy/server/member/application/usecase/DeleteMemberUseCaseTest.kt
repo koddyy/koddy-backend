@@ -5,7 +5,7 @@ import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
 import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
-import com.koddy.server.member.domain.repository.MemberRepository
+import com.koddy.server.member.domain.service.MemberReader
 import com.koddy.server.member.domain.service.MenteeDeleter
 import com.koddy.server.member.domain.service.MentorDeleter
 import io.kotest.core.annotation.DisplayName
@@ -19,11 +19,11 @@ import io.mockk.verify
 @UnitTestKt
 @DisplayName("Member -> DeleteMemberUseCase 테스트")
 internal class DeleteMemberUseCaseTest : FeatureSpec({
-    val memberRepository = mockk<MemberRepository>()
+    val memberReader = mockk<MemberReader>()
     val mentorDeleter = mockk<MentorDeleter>()
     val menteeDeleter = mockk<MenteeDeleter>()
     val sut = DeleteMemberUseCase(
-        memberRepository,
+        memberReader,
         mentorDeleter,
         menteeDeleter,
     )
@@ -33,26 +33,26 @@ internal class DeleteMemberUseCaseTest : FeatureSpec({
 
     feature("DeleteMemberUseCase's invoke") {
         scenario("멘토가 서비스를 탈퇴한다") {
-            every { memberRepository.getById(mentor.id) } returns mentor
+            every { memberReader.getMentor(mentor.id) } returns mentor
             justRun { mentorDeleter.execute(mentor.id) }
 
             sut.invoke(mentor.id)
 
             verify(exactly = 1) {
-                memberRepository.getById(mentor.id)
+                memberReader.getMentor(mentor.id)
                 mentorDeleter.execute(mentor.id)
             }
             verify { menteeDeleter wasNot Called }
         }
 
         scenario("멘티가 서비스를 탈퇴한다") {
-            every { memberRepository.getById(mentee.id) } returns mentee
+            every { memberReader.getMentee(mentee.id) } returns mentee
             justRun { menteeDeleter.execute(mentee.id) }
 
             sut.invoke(mentee.id)
 
             verify(exactly = 1) {
-                memberRepository.getById(mentee.id)
+                memberReader.getMentee(mentee.id)
                 menteeDeleter.execute(mentee.id)
             }
             verify { mentorDeleter wasNot Called }

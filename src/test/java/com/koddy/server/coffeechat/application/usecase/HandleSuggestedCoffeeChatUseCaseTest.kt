@@ -17,7 +17,7 @@ import com.koddy.server.common.fixture.MentorFixture
 import com.koddy.server.common.fixture.MentorFlow
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
-import com.koddy.server.member.domain.repository.MentorRepository
+import com.koddy.server.member.domain.service.MemberReader
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
@@ -35,13 +35,13 @@ import org.springframework.context.ApplicationEventPublisher
 @DisplayName("CoffeeChat -> HandleSuggestedCoffeeChatUseCase 테스트")
 internal class HandleSuggestedCoffeeChatUseCaseTest : DescribeSpec({
     val coffeeChatReader = mockk<CoffeeChatReader>()
-    val mentorRepository = mockk<MentorRepository>()
+    val memberReader = mockk<MemberReader>()
     val reservationAvailabilityChecker = mockk<ReservationAvailabilityChecker>()
     val eventPublisher = mockk<ApplicationEventPublisher>()
     val coffeeChatNotificationEventPublisher = CoffeeChatNotificationEventPublisher(eventPublisher)
     val sut = HandleSuggestedCoffeeChatUseCase(
         coffeeChatReader,
-        mentorRepository,
+        memberReader,
         reservationAvailabilityChecker,
         coffeeChatNotificationEventPublisher,
     )
@@ -106,7 +106,7 @@ internal class HandleSuggestedCoffeeChatUseCaseTest : DescribeSpec({
                 ),
             )
             every { coffeeChatReader.getByMentee(command.coffeeChatId, command.menteeId) } returns coffeeChat
-            every { mentorRepository.getByIdWithSchedules(coffeeChat.mentorId) } returns mentor
+            every { memberReader.getMentorWithSchedules(coffeeChat.mentorId) } returns mentor
             justRun { reservationAvailabilityChecker.check(mentor, command.reservation) }
 
             val slotEvent = slot<MentorNotification>()
@@ -117,7 +117,7 @@ internal class HandleSuggestedCoffeeChatUseCaseTest : DescribeSpec({
 
                 verify(exactly = 1) {
                     coffeeChatReader.getByMentee(command.coffeeChatId, command.menteeId)
-                    mentorRepository.getByIdWithSchedules(coffeeChat.mentorId)
+                    memberReader.getMentorWithSchedules(coffeeChat.mentorId)
                     reservationAvailabilityChecker.check(mentor, command.reservation)
                 }
                 slotEvent.captured shouldBe MentorNotification.MenteePendedFromMentorFlowEvent(

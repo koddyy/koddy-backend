@@ -17,16 +17,13 @@ import com.koddy.server.common.mock.fake.FakeEncryptor
 import com.koddy.server.member.domain.model.Language
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
-import com.koddy.server.member.domain.repository.AvailableLanguageRepository
-import com.koddy.server.member.domain.repository.MenteeRepository
-import com.koddy.server.member.domain.repository.MentorRepository
+import com.koddy.server.member.domain.service.MemberReader
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -35,15 +32,11 @@ import io.mockk.verify
 @DisplayName("CoffeeChat -> GetCoffeeChatScheduleDetailsUseCase 테스트")
 internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
     val coffeeChatReader = mockk<CoffeeChatReader>()
-    val mentorRepository = mockk<MentorRepository>()
-    val menteeRepository = mockk<MenteeRepository>()
-    val availableLanguageRepository = mockk<AvailableLanguageRepository>()
+    val memberReader = mockk<MemberReader>()
     val encryptor = FakeEncryptor()
     val sut = GetCoffeeChatScheduleDetailsUseCase(
         coffeeChatReader,
-        mentorRepository,
-        menteeRepository,
-        availableLanguageRepository,
+        memberReader,
         encryptor,
     )
 
@@ -57,18 +50,18 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
         every { coffeeChatReader.getById(query.coffeeChatId) } returns coffeeChat
 
         context("멘토가 내 일정에서 특정 커피챗에 대한 상세 조회를 진행하면") {
-            every { menteeRepository.getByIdWithNative(coffeeChat.menteeId) } returns mentee
-            every { availableLanguageRepository.findByMemberIdWithNative(mentee.id) } returns mentee.availableLanguages
+            every { memberReader.getMenteeWithNative(coffeeChat.menteeId) } returns mentee
+            every { memberReader.getMemberAvailableLanguagesWithNative(mentee.id) } returns mentee.availableLanguages
 
             it("관련된 커피챗 정보 + 멘티 정보를 조회한다") {
                 val result: MentorCoffeeChatScheduleDetails = sut.invoke(query) as MentorCoffeeChatScheduleDetails
 
                 verify(exactly = 1) {
                     coffeeChatReader.getById(query.coffeeChatId)
-                    menteeRepository.getByIdWithNative(coffeeChat.menteeId)
-                    availableLanguageRepository.findByMemberIdWithNative(mentee.id)
+                    memberReader.getMenteeWithNative(coffeeChat.menteeId)
+                    memberReader.getMemberAvailableLanguagesWithNative(mentee.id)
                 }
-                verify { mentorRepository wasNot Called }
+                verify(exactly = 0) { memberReader.getMentorWithNative(mentor.id) }
                 assertSoftly {
                     result.mentee.id shouldBe mentee.id
                     result.mentee.name shouldBe mentee.name
@@ -103,18 +96,18 @@ internal class GetCoffeeChatScheduleDetailsUseCaseTest : DescribeSpec({
         every { coffeeChatReader.getById(query.coffeeChatId) } returns coffeeChat
 
         context("멘티가 내 일정에서 특정 커피챗에 대한 상세 조회를 진행하면") {
-            every { mentorRepository.getByIdWithNative(coffeeChat.mentorId) } returns mentor
-            every { availableLanguageRepository.findByMemberIdWithNative(mentor.id) } returns mentor.availableLanguages
+            every { memberReader.getMentorWithNative(coffeeChat.mentorId) } returns mentor
+            every { memberReader.getMemberAvailableLanguagesWithNative(mentor.id) } returns mentor.availableLanguages
 
             it("관련된 커피챗 정보 + 멘토 정보를 조회한다") {
                 val result: MenteeCoffeeChatScheduleDetails = sut.invoke(query) as MenteeCoffeeChatScheduleDetails
 
                 verify(exactly = 1) {
                     coffeeChatReader.getById(query.coffeeChatId)
-                    mentorRepository.getByIdWithNative(coffeeChat.mentorId)
-                    availableLanguageRepository.findByMemberIdWithNative(mentor.id)
+                    memberReader.getMentorWithNative(coffeeChat.mentorId)
+                    memberReader.getMemberAvailableLanguagesWithNative(mentor.id)
                 }
-                verify { menteeRepository wasNot Called }
+                verify(exactly = 0) { memberReader.getMenteeWithNative(mentee.id) }
                 assertSoftly {
                     result.mentor.id shouldBe mentor.id
                     result.mentor.name shouldBe mentor.name

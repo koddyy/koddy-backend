@@ -9,12 +9,12 @@ import com.koddy.server.auth.domain.service.TokenIssuer
 import com.koddy.server.auth.exception.OAuthUserNotFoundException
 import com.koddy.server.global.annotation.UseCase
 import com.koddy.server.member.domain.model.Member
-import com.koddy.server.member.domain.repository.MemberRepository
+import com.koddy.server.member.domain.service.MemberReader
 
 @UseCase
 class OAuthLoginUseCase(
     private val oAuthLoginProcessor: OAuthLoginProcessor,
-    private val memberRepository: MemberRepository,
+    private val memberReader: MemberReader,
     private val tokenIssuer: TokenIssuer,
 ) {
     fun invoke(command: OAuthLoginCommand): AuthMember {
@@ -30,7 +30,7 @@ class OAuthLoginUseCase(
             redirectUri = command.redirectUrl,
             state = command.state,
         )
-        return memberRepository.findByPlatformSocialId(oAuthUser.id())
-            .orElseThrow { OAuthUserNotFoundException(oAuthUser) }
+        return memberReader.findByPlatformSocialId(oAuthUser.id())
+            ?: throw OAuthUserNotFoundException(oAuthUser)
     }
 }

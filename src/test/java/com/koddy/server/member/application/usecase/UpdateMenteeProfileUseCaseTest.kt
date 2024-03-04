@@ -9,7 +9,7 @@ import com.koddy.server.member.domain.model.Language.Type.SUB
 import com.koddy.server.member.domain.model.Member
 import com.koddy.server.member.domain.model.Role
 import com.koddy.server.member.domain.model.mentee.Mentee
-import com.koddy.server.member.domain.repository.MenteeRepository
+import com.koddy.server.member.domain.service.MemberReader
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.FeatureSpec
@@ -17,12 +17,13 @@ import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 
 @UnitTestKt
 @DisplayName("Member -> UpdateMenteeProfileUseCase 테스트")
 internal class UpdateMenteeProfileUseCaseTest : FeatureSpec({
-    val menteeRepository = mockk<MenteeRepository>()
-    val sut = UpdateMenteeProfileUseCase(menteeRepository)
+    val memberReader = mockk<MemberReader>()
+    val sut = UpdateMenteeProfileUseCase(memberReader)
 
     feature("UpdateMenteeProfileUseCase's updateBasicInfo") {
         val mentee: Mentee = MENTEE_1.toDomain().apply(1L)
@@ -38,10 +39,11 @@ internal class UpdateMenteeProfileUseCaseTest : FeatureSpec({
                 MENTEE_2.interest.school,
                 MENTEE_2.interest.major,
             )
-            every { menteeRepository.getById(command.menteeId) } returns mentee
+            every { memberReader.getMentee(command.menteeId) } returns mentee
 
             sut.updateBasicInfo(command)
 
+            verify(exactly = 1) { memberReader.getMentee(command.menteeId) }
             assertSoftly(mentee) {
                 // update
                 name shouldBe command.name

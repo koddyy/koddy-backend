@@ -5,7 +5,7 @@ import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.global.log.logger
 import com.koddy.server.member.domain.model.mentee.Mentee
-import com.koddy.server.member.domain.repository.MenteeRepository
+import com.koddy.server.member.domain.service.MemberReader
 import com.koddy.server.notification.domain.model.Notification
 import com.koddy.server.notification.domain.model.NotificationType
 import com.koddy.server.notification.domain.repository.NotificationRepository
@@ -19,7 +19,7 @@ import org.springframework.transaction.event.TransactionalEventListener
 
 @Component
 class MenteeNotificationEventHandler(
-    private val menteeRepository: MenteeRepository,
+    private val memberReader: MemberReader,
     private val coffeeChatReader: CoffeeChatReader,
     private val notificationRepository: NotificationRepository,
 ) {
@@ -87,7 +87,7 @@ class MenteeNotificationEventHandler(
             event.eventPublishedAt,
         )
 
-        val mentee: Mentee = menteeRepository.getById(event.menteeId)
+        val mentee: Mentee = memberReader.getMentee(event.menteeId)
         val coffeeChat: CoffeeChat = coffeeChatReader.getById(event.coffeeChatId)
 
         notificationRepository.save(

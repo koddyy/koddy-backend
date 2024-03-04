@@ -10,7 +10,7 @@ import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
 import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
 import com.koddy.server.member.domain.model.Member
-import com.koddy.server.member.domain.repository.MemberRepository
+import com.koddy.server.member.domain.service.MemberReader
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
@@ -24,11 +24,11 @@ import io.mockk.verify
 @UnitTestKt
 @DisplayName("Auth -> ReissueTokenUseCase 테스트")
 internal class ReissueTokenUseCaseTest : DescribeSpec({
-    val memberRepository = mockk<MemberRepository>()
+    val memberReader = mockk<MemberReader>()
     val tokenProvider = mockk<TokenProvider>()
     val tokenIssuer = mockk<TokenIssuer>()
     val sut = ReissueTokenUseCase(
-        memberRepository,
+        memberReader,
         tokenProvider,
         tokenIssuer,
     )
@@ -37,7 +37,7 @@ internal class ReissueTokenUseCaseTest : DescribeSpec({
 
     describe("ReissueTokenUseCase's invoke") {
         every { tokenProvider.getId(REFRESH_TOKEN) } returns member.id
-        every { memberRepository.getById(member.id) } returns member
+        every { memberReader.getMember(member.id) } returns member
 
         context("자신이 소유한 RefreshToken이 아니면") {
             every { tokenIssuer.isMemberRefreshToken(member.id, REFRESH_TOKEN) } returns false
@@ -49,7 +49,7 @@ internal class ReissueTokenUseCaseTest : DescribeSpec({
 
                 verify(exactly = 1) {
                     tokenProvider.getId(REFRESH_TOKEN)
-                    memberRepository.getById(member.id)
+                    memberReader.getMember(member.id)
                     tokenIssuer.isMemberRefreshToken(member.id, REFRESH_TOKEN)
                 }
                 verify(exactly = 0) { tokenIssuer.reissueAuthorityToken(member.id, member.authority) }
@@ -67,7 +67,7 @@ internal class ReissueTokenUseCaseTest : DescribeSpec({
 
                 verify(exactly = 1) {
                     tokenProvider.getId(REFRESH_TOKEN)
-                    memberRepository.getById(member.id)
+                    memberReader.getMember(member.id)
                     tokenIssuer.isMemberRefreshToken(member.id, REFRESH_TOKEN)
                     tokenIssuer.reissueAuthorityToken(member.id, member.authority)
                 }

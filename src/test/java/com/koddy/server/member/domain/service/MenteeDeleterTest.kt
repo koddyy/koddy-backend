@@ -19,6 +19,7 @@ import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.throwable.shouldHaveMessage
 import jakarta.persistence.EntityManager
 import org.junit.jupiter.api.Test
+import org.springframework.data.repository.findByIdOrNull
 
 @IntegrateTestKt
 @DisplayName("Member -> MenteeDeleter 테스트 [IntegrateTest]")
@@ -134,9 +135,9 @@ internal class MenteeDeleterTest(
         ).setParameter("id", id)
             .resultList
 
-    private fun getMenteeByJpql(id: Long): Mentee = menteeRepository.getById(id)
+    private fun getMenteeByJpql(id: Long): Mentee = menteeRepository.findByIdOrNull(id)!!
 
-    private fun getMemberByJpql(id: Long): Member<*> = memberRepository.getById(id)
+    private fun getMemberByJpql(id: Long): Member<*> = memberRepository.findByIdOrNull(id)!!
 
     private fun getMenteeByNative(id: Long): Mentee =
         em.createNativeQuery(

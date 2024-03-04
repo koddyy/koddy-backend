@@ -17,7 +17,7 @@ data class MentorPublicProfile(
 ) {
     companion object {
         @JvmStatic
-        fun from(mentor: Mentor): MentorPublicProfile {
+        fun  from(mentor: Mentor): MentorPublicProfile {
             return MentorPublicProfile(
                 id = mentor.id,
                 name = mentor.name,

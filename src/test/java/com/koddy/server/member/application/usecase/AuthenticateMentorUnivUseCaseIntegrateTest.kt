@@ -27,6 +27,7 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.Primary
+import org.springframework.data.repository.findByIdOrNull
 
 @IntegrateTestKt
 @Import(AuthenticateMentorUnivUseCaseIntegrateTest.FakeConfig::class)
@@ -68,7 +69,7 @@ internal class AuthenticateMentorUnivUseCaseIntegrateTest(
             sut.attemptWithMail(command)
 
             // then
-            val findMentor: Mentor = mentorRepository.getById(mentor.id)
+            val findMentor: Mentor = mentorRepository.findByIdOrNull(mentor.id)!!
             assertSoftly {
                 findMentor.universityAuthentication.schoolMail shouldBe command.schoolMail
                 findMentor.universityAuthentication.proofDataUploadUrl shouldBe null
@@ -105,7 +106,7 @@ internal class AuthenticateMentorUnivUseCaseIntegrateTest(
                 sut.confirmMailAuthCode(command)
             } shouldHaveMessage INVALID_AUTH_CODE.message
 
-            val findMentor: Mentor = mentorRepository.getById(mentor.id)
+            val findMentor: Mentor = mentorRepository.findByIdOrNull(mentor.id)!!
             assertSoftly {
                 findMentor.universityAuthentication.schoolMail shouldBe command.schoolMail
                 findMentor.universityAuthentication.proofDataUploadUrl shouldBe null
@@ -137,7 +138,7 @@ internal class AuthenticateMentorUnivUseCaseIntegrateTest(
             sut.confirmMailAuthCode(command)
 
             // then
-            val findMentor: Mentor = mentorRepository.getById(mentor.id)
+            val findMentor: Mentor = mentorRepository.findByIdOrNull(mentor.id)!!
             assertSoftly {
                 findMentor.universityAuthentication.schoolMail shouldBe command.schoolMail
                 findMentor.universityAuthentication.proofDataUploadUrl shouldBe null
@@ -164,7 +165,7 @@ internal class AuthenticateMentorUnivUseCaseIntegrateTest(
             sut.attemptWithProofData(command)
 
             // then
-            val findMentor: Mentor = mentorRepository.getById(mentor.id)
+            val findMentor: Mentor = mentorRepository.findByIdOrNull(mentor.id)!!
             assertSoftly(findMentor) {
                 universityAuthentication.schoolMail shouldBe null
                 universityAuthentication.proofDataUploadUrl shouldBe command.proofDataUploadUrl

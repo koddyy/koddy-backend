@@ -10,21 +10,19 @@ import com.koddy.server.global.annotation.KoddyWritableTransactional
 import com.koddy.server.global.annotation.UseCase
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
-import com.koddy.server.member.domain.repository.MenteeRepository
-import com.koddy.server.member.domain.repository.MentorRepository
+import com.koddy.server.member.domain.service.MemberReader
 
 @UseCase
 class CreateCoffeeChatUseCase(
-    private val mentorRepository: MentorRepository,
-    private val menteeRepository: MenteeRepository,
+    private val memberReader: MemberReader,
     private val reservationAvailabilityChecker: ReservationAvailabilityChecker,
     private val coffeeChatWriter: CoffeeChatWriter,
     private val eventPublisher: CoffeeChatNotificationEventPublisher,
 ) {
     @KoddyWritableTransactional
     fun createByApply(command: CreateCoffeeChatByApplyCommand): Long {
-        val mentee: Mentee = menteeRepository.getById(command.menteeId)
-        val mentor: Mentor = mentorRepository.getById(command.mentorId)
+        val mentee: Mentee = memberReader.getMentee(command.menteeId)
+        val mentor: Mentor = memberReader.getMentor(command.mentorId)
         reservationAvailabilityChecker.check(mentor, command.reservation)
 
         val coffeeChat: CoffeeChat = coffeeChatWriter.save(
@@ -41,8 +39,8 @@ class CreateCoffeeChatUseCase(
 
     @KoddyWritableTransactional
     fun createBySuggest(command: CreateCoffeeChatBySuggestCommand): Long {
-        val mentor: Mentor = mentorRepository.getById(command.mentorId)
-        val mentee: Mentee = menteeRepository.getById(command.menteeId)
+        val mentor: Mentor = memberReader.getMentor(command.mentorId)
+        val mentee: Mentee = memberReader.getMentee(command.menteeId)
 
         val coffeeChat: CoffeeChat = coffeeChatWriter.save(
             CoffeeChat.suggest(
