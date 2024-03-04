@@ -47,9 +47,9 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
         }
 
         scenario("2. 멘토링 진행 기간에 포함되지 않으면 예약할 수 없다") {
-            val period = MentoringPeriod.of(
-                LocalDate.of(2024, 2, 6),
-                LocalDate.of(2024, 3, 1),
+            val period = MentoringPeriod(
+                startDate = LocalDate.of(2024, 2, 6),
+                endDate = LocalDate.of(2024, 3, 1),
             )
             val mentor: Mentor = MENTOR_1.toDomainWithMentoringInfo(period, MENTOR_1.timelines).apply(1L)
 
@@ -65,9 +65,9 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
         }
 
         scenario("3. 멘토링 진행 시간이 멘토가 정한 TimeUnit과 일치하지 않으면 예약할 수 없다 [default = 30분]") {
-            val period = MentoringPeriod.of(
-                LocalDate.of(2024, 2, 1),
-                LocalDate.of(2024, 3, 1),
+            val period = MentoringPeriod(
+                startDate = LocalDate.of(2024, 2, 1),
+                endDate = LocalDate.of(2024, 3, 1),
             )
             val time: LocalTime = LocalTime.of(19, 0)
             val timelines: List<Timeline> = listOf(
@@ -87,9 +87,9 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
         }
 
         scenario("4. 요일별 스케줄 시간대에 포함되지 않으면 예약할 수 없다") {
-            val period = MentoringPeriod.of(
-                LocalDate.of(2024, 2, 1),
-                LocalDate.of(2024, 3, 1),
+            val period = MentoringPeriod(
+                startDate = LocalDate.of(2024, 2, 1),
+                endDate = LocalDate.of(2024, 3, 1),
             )
             val time: LocalTime = LocalTime.of(19, 0)
             val timelines: List<Timeline> = listOf(
@@ -115,9 +115,9 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
         }
 
         scenario("5. 이미 예약된 커피챗 시간대와 겹치면 예약할 수 없다") {
-            val period = MentoringPeriod.of(
-                LocalDate.of(2024, 2, 1),
-                LocalDate.of(2024, 3, 1),
+            val period = MentoringPeriod(
+                startDate = LocalDate.of(2024, 2, 1),
+                endDate = LocalDate.of(2024, 3, 1),
             )
             val time: LocalTime = LocalTime.of(13, 0)
             val timelines: List<Timeline> = listOf(
@@ -161,9 +161,9 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
         }
 
         scenario("6. 모든 검증이 통과되면 예약할 수 있다") {
-            val period = MentoringPeriod.of(
-                LocalDate.of(2024, 2, 1),
-                LocalDate.of(2024, 3, 1),
+            val period = MentoringPeriod(
+                startDate = LocalDate.of(2024, 2, 1),
+                endDate = LocalDate.of(2024, 3, 1),
             )
             val time: LocalTime = LocalTime.of(13, 0)
             val timelines: List<Timeline> = listOf(

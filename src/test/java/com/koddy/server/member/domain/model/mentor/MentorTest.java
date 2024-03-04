@@ -299,9 +299,10 @@ class MentorTest extends UnitTest {
         @DisplayName("예약 날짜가 멘토링 진행 기간에 포함되지 않으면 예외가 발생한다 -> MentoringPeriod[startDate & endDate]")
         void throwExceptionByOutOfDate() {
             // given
-            final MentoringPeriod mentoringPeriod = MentoringPeriod.of(
+            final MentoringPeriod mentoringPeriod = new MentoringPeriod(
                     LocalDate.of(2024, 2, 6),
-                    LocalDate.of(2024, 3, 1)
+                    LocalDate.of(2024, 3, 1),
+                    MentoringPeriod.TimeUnit.HALF_HOUR
             );
             final Mentor mentor = MENTOR_1.toDomainWithMentoringInfo(mentoringPeriod, MENTOR_1.getTimelines());
 
@@ -323,9 +324,10 @@ class MentorTest extends UnitTest {
         @DisplayName("멘토링 진행 시간이 멘토가 정한 TimeUnit이랑 일치하지 않으면 예외가 발생한다 -> MentoringPeriod[TimeUnit]")
         void throwExceptionByNotAllowedTimeUnit() {
             // given
-            final MentoringPeriod mentoringPeriod = MentoringPeriod.of(
+            final MentoringPeriod mentoringPeriod = new MentoringPeriod(
                     LocalDate.of(2024, 2, 6),
-                    LocalDate.of(2024, 3, 1)
+                    LocalDate.of(2024, 3, 1),
+                    MentoringPeriod.TimeUnit.HALF_HOUR
             );
             final Mentor mentor = MENTOR_1.toDomainWithMentoringInfo(mentoringPeriod, MENTOR_1.getTimelines()); // TODO default = 30
 
@@ -355,9 +357,10 @@ class MentorTest extends UnitTest {
         @DisplayName("예약 날짜가 멘토링 가능 시간에 포함되지 않으면 예외가 발생한다 -> Mentor-Schedule-Timeline")
         void throwExceptionByNotAllowedSchedule() {
             // given
-            final MentoringPeriod mentoringPeriod = MentoringPeriod.of(
+            final MentoringPeriod mentoringPeriod = new MentoringPeriod(
                     LocalDate.of(2024, 2, 1),
-                    LocalDate.of(2024, 3, 1)
+                    LocalDate.of(2024, 3, 1),
+                    MentoringPeriod.TimeUnit.HALF_HOUR
             );
             final LocalTime time = LocalTime.of(19, 0);
             final List<Timeline> timelines = List.of(
@@ -406,9 +409,10 @@ class MentorTest extends UnitTest {
         @DisplayName("멘토의 멘토링 시간대에 대한 검증에 성공한다")
         void success() {
             // given
-            final MentoringPeriod mentoringPeriod = MentoringPeriod.of(
+            final MentoringPeriod mentoringPeriod = new MentoringPeriod(
                     LocalDate.of(2024, 2, 1),
-                    LocalDate.of(2024, 3, 1)
+                    LocalDate.of(2024, 3, 1),
+                    MentoringPeriod.TimeUnit.HALF_HOUR
             );
             final LocalTime time = LocalTime.of(18, 0);
             final List<Timeline> timelines = List.of(Timeline.of(FRI, time, time.plusHours(3)));

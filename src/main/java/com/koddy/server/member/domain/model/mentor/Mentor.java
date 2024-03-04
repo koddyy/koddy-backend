@@ -183,7 +183,7 @@ public class Mentor extends Member<Mentor> {
         if (mentoringPeriod == null) {
             return null;
         }
-        return mentoringPeriod.getTimeUnit().getValue();
+        return mentoringPeriod.getTimeUnit().value;
     }
 
     public UniversityProfile getUniversityProfile() {

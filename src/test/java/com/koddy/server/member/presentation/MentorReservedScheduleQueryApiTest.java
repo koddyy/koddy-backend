@@ -68,7 +68,7 @@ class MentorReservedScheduleQueryApiTest extends ApiDocsTest {
                                     new ScheduleResponse.End(23, 0)
                             )
                     ),
-                    MentoringPeriod.TimeUnit.HALF_HOUR.getValue(),
+                    MentoringPeriod.TimeUnit.HALF_HOUR.value,
                     List.of(
                             new Reserved(
                                     LocalDateTime.of(2024, 2, 7, 18, 30),
