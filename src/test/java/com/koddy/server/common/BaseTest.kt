@@ -22,6 +22,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestConstructor
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
@@ -100,6 +101,14 @@ private const val TIME_DELIMITER: String = ":"
 fun String.toLocalDate(): LocalDate {
     val split: List<Int> = this.split(DATE_DELIMITER.toRegex()).map { it.toInt() }
     return LocalDate.of(split[0], split[1], split[2])
+}
+
+/**
+ * HH:mm -> LocalTime
+ */
+fun String.toLocalTime(): LocalTime {
+    val split: List<Int> = this.split(TIME_DELIMITER.toRegex()).map { it.toInt() }
+    return LocalTime.of(split[0], split[1])
 }
 
 /**

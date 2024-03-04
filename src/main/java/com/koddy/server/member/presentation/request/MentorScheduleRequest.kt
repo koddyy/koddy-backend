@@ -20,10 +20,10 @@ data class MentorScheduleRequest(
     )
 
     fun toTimeline(): Timeline {
-        return Timeline.of(
-            DayOfWeek.from(dayOfWeek),
-            TimeUtils.toLocalTime(start.hour, start.minute),
-            TimeUtils.toLocalTime(end.hour, end.minute),
+        return Timeline(
+            dayOfWeek = DayOfWeek.from(dayOfWeek),
+            startTime = TimeUtils.toLocalTime(start.hour, start.minute),
+            endTime = TimeUtils.toLocalTime(end.hour, end.minute),
         )
     }
 }

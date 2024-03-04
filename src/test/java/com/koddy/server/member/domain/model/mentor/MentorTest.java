@@ -364,10 +364,10 @@ class MentorTest extends UnitTest {
             );
             final LocalTime time = LocalTime.of(19, 0);
             final List<Timeline> timelines = List.of(
-                    Timeline.of(TUE, time, time.plusHours(3)),
-                    Timeline.of(WED, time, time.plusHours(3)),
-                    Timeline.of(THU, time, time.plusHours(3)),
-                    Timeline.of(FRI, time, time.plusHours(3))
+                    new Timeline(TUE, time, time.plusHours(3)),
+                    new Timeline(WED, time, time.plusHours(3)),
+                    new Timeline(THU, time, time.plusHours(3)),
+                    new Timeline(FRI, time, time.plusHours(3))
             );
             final Mentor mentor = MENTOR_1.toDomainWithMentoringInfo(mentoringPeriod, timelines);
 
@@ -415,7 +415,7 @@ class MentorTest extends UnitTest {
                     MentoringPeriod.TimeUnit.HALF_HOUR
             );
             final LocalTime time = LocalTime.of(18, 0);
-            final List<Timeline> timelines = List.of(Timeline.of(FRI, time, time.plusHours(3)));
+            final List<Timeline> timelines = List.of(new Timeline(FRI, time, time.plusHours(3)));
             final Mentor mentor = MENTOR_1.toDomainWithMentoringInfo(mentoringPeriod, timelines);
 
             // when - then

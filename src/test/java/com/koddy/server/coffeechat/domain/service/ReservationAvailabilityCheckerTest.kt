@@ -71,10 +71,10 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
             )
             val time: LocalTime = LocalTime.of(19, 0)
             val timelines: List<Timeline> = listOf(
-                Timeline.of(DayOfWeek.TUE, time, time.plusHours(3)),
-                Timeline.of(DayOfWeek.WED, time, time.plusHours(3)),
-                Timeline.of(DayOfWeek.THU, time, time.plusHours(3)),
-                Timeline.of(DayOfWeek.FRI, time, time.plusHours(3)),
+                Timeline(dayOfWeek = DayOfWeek.TUE, startTime = time, endTime = time.plusHours(3)),
+                Timeline(dayOfWeek = DayOfWeek.WED, startTime = time, endTime = time.plusHours(3)),
+                Timeline(dayOfWeek = DayOfWeek.THU, startTime = time, endTime = time.plusHours(3)),
+                Timeline(dayOfWeek = DayOfWeek.FRI, startTime = time, endTime = time.plusHours(3)),
             )
             val mentor: Mentor = MENTOR_1.toDomainWithMentoringInfo(period, timelines).apply(1L)
 
@@ -93,10 +93,10 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
             )
             val time: LocalTime = LocalTime.of(19, 0)
             val timelines: List<Timeline> = listOf(
-                Timeline.of(DayOfWeek.TUE, time, time.plusHours(3)),
-                Timeline.of(DayOfWeek.WED, time, time.plusHours(3)),
-                Timeline.of(DayOfWeek.THU, time, time.plusHours(3)),
-                Timeline.of(DayOfWeek.FRI, time, time.plusHours(3)),
+                Timeline(dayOfWeek = DayOfWeek.TUE, startTime = time, endTime = time.plusHours(3)),
+                Timeline(dayOfWeek = DayOfWeek.WED, startTime = time, endTime = time.plusHours(3)),
+                Timeline(dayOfWeek = DayOfWeek.THU, startTime = time, endTime = time.plusHours(3)),
+                Timeline(dayOfWeek = DayOfWeek.FRI, startTime = time, endTime = time.plusHours(3)),
             )
             val mentor: Mentor = MENTOR_1.toDomainWithMentoringInfo(period, timelines).apply(1L)
 
@@ -121,10 +121,10 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
             )
             val time: LocalTime = LocalTime.of(13, 0)
             val timelines: List<Timeline> = listOf(
-                Timeline.of(DayOfWeek.TUE, time, time.plusHours(9)),
-                Timeline.of(DayOfWeek.WED, time, time.plusHours(9)),
-                Timeline.of(DayOfWeek.THU, time, time.plusHours(9)),
-                Timeline.of(DayOfWeek.FRI, time, time.plusHours(9)),
+                Timeline(dayOfWeek = DayOfWeek.TUE, startTime = time, endTime = time.plusHours(9)),
+                Timeline(dayOfWeek = DayOfWeek.WED, startTime = time, endTime = time.plusHours(9)),
+                Timeline(dayOfWeek = DayOfWeek.THU, startTime = time, endTime = time.plusHours(9)),
+                Timeline(dayOfWeek = DayOfWeek.FRI, startTime = time, endTime = time.plusHours(9)),
             )
             val mentor: Mentor = MENTOR_1.toDomainWithMentoringInfo(period, timelines).apply(1L)
             val mentee: Mentee = MENTEE_1.toDomain().apply(2L)
@@ -167,10 +167,10 @@ internal class ReservationAvailabilityCheckerTest : FeatureSpec({
             )
             val time: LocalTime = LocalTime.of(13, 0)
             val timelines: List<Timeline> = listOf(
-                Timeline.of(DayOfWeek.TUE, time, time.plusHours(9)),
-                Timeline.of(DayOfWeek.WED, time, time.plusHours(9)),
-                Timeline.of(DayOfWeek.THU, time, time.plusHours(9)),
-                Timeline.of(DayOfWeek.FRI, time, time.plusHours(9)),
+                Timeline(dayOfWeek = DayOfWeek.TUE, startTime = time, endTime = time.plusHours(9)),
+                Timeline(dayOfWeek = DayOfWeek.WED, startTime = time, endTime = time.plusHours(9)),
+                Timeline(dayOfWeek = DayOfWeek.THU, startTime = time, endTime = time.plusHours(9)),
+                Timeline(dayOfWeek = DayOfWeek.FRI, startTime = time, endTime = time.plusHours(9)),
             )
             val mentor: Mentor = MENTOR_1.toDomainWithMentoringInfo(period, timelines).apply(1L)
             val mentee: Mentee = MENTEE_1.toDomain().apply(2L)

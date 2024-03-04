@@ -18,7 +18,7 @@ enum class MemberExceptionCode(
     AVAILABLE_LANGUAGE_MUST_EXISTS(BAD_REQUEST, "MEMBER_005", "사용 가능한 언어는 하나 이상 존재해야 합니다."),
     MAIN_LANGUAGE_MUST_BE_ONLY_ONE(BAD_REQUEST, "MEMBER_006", "사용 가능한 메인 언어는 하나만 선택해주세요."),
     SCHEDULE_PERIOD_TIME_MUST_EXISTS(BAD_REQUEST, "MEMBER_007", "스케줄 정보를 빠짐없이 선택해주세요."),
-    SCHEDULE_PERIOD_TIME_MUST_ALIGN(BAD_REQUEST, "MEMBER_008", "시작이 종료 이후가 될 수 없습니다."),
+    SCHEDULE_PERIOD_TIME_MUST_ALIGN(BAD_REQUEST, "MEMBER_008", "멘토링 시작 시간이 종료 시간 이후가 될 수 없습니다"),
     INVALID_NATIONALITY(BAD_REQUEST, "MEMBER_009", "유효하지 않은 국적입니다."),
     INVALID_LANGUAGE_CATEGORY(BAD_REQUEST, "MEMBER_010", "유효하지 않은 언어 종류입니다."),
     INVALID_LANGUAGE_TYPE(BAD_REQUEST, "MEMBER_011", "유효하지 않은 언어 레벨입니다."),
