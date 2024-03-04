@@ -9,7 +9,7 @@ import java.util.regex.Pattern
 @Embeddable
 data class Email(
     @Column(name = "email", unique = true)
-    var value: String,
+    val value: String,
 ) {
     init {
         if (pattern.matcher(value).matches().not()) {

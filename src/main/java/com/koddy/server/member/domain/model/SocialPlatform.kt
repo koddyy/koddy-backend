@@ -11,13 +11,13 @@ import jakarta.persistence.Enumerated
 data class SocialPlatform(
     @Enumerated(STRING)
     @Column(name = "social_provider", columnDefinition = "VARCHAR(30)")
-    var provider: OAuthProvider,
+    val provider: OAuthProvider,
 
     @Column(name = "social_id", unique = true)
-    var socialId: String?,
+    val socialId: String?,
 
     @Embedded
-    var email: Email?,
+    val email: Email?,
 ) {
     fun syncEmail(email: Email): SocialPlatform {
         return SocialPlatform(provider, socialId, email)
