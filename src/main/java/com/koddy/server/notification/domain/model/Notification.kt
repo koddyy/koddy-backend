@@ -38,11 +38,11 @@ class Notification(
     val type: NotificationType = type
 
     @Column(name = "is_read", nullable = false, columnDefinition = "TINYINT")
-    var read: Boolean = false
+    var isRead: Boolean = false
         protected set
 
     fun read() {
-        read = true
+        isRead = true
     }
 
     override fun equals(other: Any?): Boolean {

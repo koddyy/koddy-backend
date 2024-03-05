@@ -30,7 +30,7 @@ interface NotificationRepository : JpaRepository<Notification, Long> {
     @Query(
         """
         UPDATE Notification n
-        SET n.read = true
+        SET n.isRead = true
         WHERE n.targetId = :targetId
         """,
     )

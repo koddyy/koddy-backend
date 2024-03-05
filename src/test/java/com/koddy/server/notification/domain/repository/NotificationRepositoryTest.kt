@@ -108,28 +108,28 @@ internal class NotificationRepositoryTest(
         val mentorNotifications1: List<Notification> = sut.findByTargetId(mentor.id)
         assertSoftly {
             mentorNotifications1 shouldContainExactlyInAnyOrder listOf(notifications[0], notifications[3])
-            mentorNotifications1.map { it.read } shouldContainAnyOf listOf(false, false)
+            mentorNotifications1.map { it.isRead } shouldContainAnyOf listOf(false, false)
         }
 
         sut.readAll(mentor.id)
         val mentorNotifications2: List<Notification> = sut.findByTargetId(mentor.id)
         assertSoftly {
             mentorNotifications2 shouldContainExactlyInAnyOrder listOf(notifications[0], notifications[3])
-            mentorNotifications2.map { it.read } shouldContainAnyOf listOf(true, true)
+            mentorNotifications2.map { it.isRead } shouldContainAnyOf listOf(true, true)
         }
 
         /* mentee read all -> notifications[1], notifications[2], notifications[4] */
         val menteeNotifications1: List<Notification> = sut.findByTargetId(mentee.id)
         assertSoftly {
             menteeNotifications1 shouldContainExactlyInAnyOrder listOf(notifications[1], notifications[2], notifications[4])
-            menteeNotifications1.map { it.read } shouldContainAnyOf listOf(false, false, false)
+            menteeNotifications1.map { it.isRead } shouldContainAnyOf listOf(false, false, false)
         }
 
         sut.readAll(mentee.id)
         val menteeNotifications2: List<Notification> = sut.findByTargetId(mentee.id)
         assertSoftly {
             menteeNotifications2 shouldContainExactlyInAnyOrder listOf(notifications[1], notifications[2], notifications[4])
-            menteeNotifications2.map { it.read } shouldContainAnyOf listOf(true, true, true)
+            menteeNotifications2.map { it.isRead } shouldContainAnyOf listOf(true, true, true)
         }
     }
 }

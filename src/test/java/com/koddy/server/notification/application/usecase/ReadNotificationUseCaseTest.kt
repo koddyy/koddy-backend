@@ -44,14 +44,14 @@ internal class ReadNotificationUseCaseTest : DescribeSpec({
             it("읽음 처리를 진행한다") {
                 sut.readSingle(command1)
                 assertSoftly {
-                    notification1.read shouldBe true
-                    notification2.read shouldBe false
+                    notification1.isRead shouldBe true
+                    notification2.isRead shouldBe false
                 }
 
                 sut.readSingle(command2)
                 assertSoftly {
-                    notification1.read shouldBe true
-                    notification2.read shouldBe true
+                    notification1.isRead shouldBe true
+                    notification2.isRead shouldBe true
                 }
             }
         }
