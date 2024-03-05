@@ -6,7 +6,8 @@ import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackEx
 import com.koddy.server.common.containers.callback.RedisCleanerEachCallbackExtension
 import com.koddy.server.common.utils.RedisCleaner
 import com.koddy.server.global.config.etc.P6SpyConfig
-import com.koddy.server.global.config.infra.QueryDslConfig
+import com.koddy.server.global.config.infra.JdslConfig
+import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpqlExecutorImpl
 import io.kotest.core.config.AbstractProjectConfig
 import io.kotest.core.spec.IsolationMode
 import org.junit.jupiter.api.Tag
@@ -46,8 +47,9 @@ annotation class UnitTestKt
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ContextConfiguration(initializers = [MySqlTestContainers.Initializer::class])
 @Import(
-    QueryDslConfig::class,
     P6SpyConfig::class,
+    JdslConfig::class,
+    KotlinJdslJpqlExecutorImpl::class,
 )
 @TestEnvironment
 @DataJpaTest(showSql = false)

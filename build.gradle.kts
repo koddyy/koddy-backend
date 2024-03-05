@@ -53,6 +53,7 @@ dependencies {
     // kotlin-jdsl (LINE)
     implementation("com.linecorp.kotlin-jdsl:jpql-dsl:${property("kotlinJdslVersion")}")
     implementation("com.linecorp.kotlin-jdsl:jpql-render:${property("kotlinJdslVersion")}")
+    implementation("com.linecorp.kotlin-jdsl:spring-data-jpa-support:${property("kotlinJdslVersion")}")
 
     // Query Builder
     implementation("com.querydsl:querydsl-jpa:${property("queryDslVersion")}:jakarta")
