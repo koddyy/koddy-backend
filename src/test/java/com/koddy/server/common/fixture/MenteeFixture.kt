@@ -180,7 +180,7 @@ object MenteeFixtureStore {
     }
 
     private fun pickNationality(id: Long): Nationality {
-        return when (id.toInt() - 1) {
+        return when ((id.toInt() - 1) % 5) {
             0 -> Nationality.USA
             1 -> Nationality.JAPAN
             2 -> Nationality.CHINA
@@ -190,14 +190,14 @@ object MenteeFixtureStore {
     }
 
     private fun pickLanguages(id: Long): List<Language> {
-        return when (id.toInt() - 1) {
+        return when ((id.toInt() - 1) % 2) {
             0 -> LanguageFixture.메인_한국어_서브_영어()
             else -> LanguageFixture.메인_한국어_서브_일본어_중국어()
         }
     }
 
     private fun pickInterest(id: Long): Interest {
-        return when (id.toInt() - 1) {
+        return when ((id.toInt() - 1) % 5) {
             0 -> Interest(school = "경기대학교", major = "컴퓨터공학부")
             1 -> Interest(school = "서울대학교", major = "컴퓨터공학부")
             2 -> Interest(school = "연세대학교", major = "컴퓨터공학부")

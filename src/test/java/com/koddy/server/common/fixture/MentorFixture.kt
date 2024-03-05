@@ -273,14 +273,14 @@ object MentorFixtureStore {
     }
 
     private fun pickLanguages(id: Long): List<Language> {
-        return when (id.toInt() - 1) {
+        return when ((id.toInt() - 1) % 2) {
             0 -> LanguageFixture.메인_한국어_서브_영어()
             else -> LanguageFixture.메인_한국어_서브_일본어_중국어()
         }
     }
 
     private fun pickUniversityProfile(id: Long): UniversityProfile {
-        return when (id.toInt() - 1) {
+        return when ((id.toInt() - 1) % 5) {
             0 -> UniversityProfile(school = "경기대학교", major = "컴퓨터공학부", enteredIn = 18)
             1 -> UniversityProfile(school = "서울대학교", major = "컴퓨터공학부", enteredIn = 19)
             2 -> UniversityProfile(school = "연세대학교", major = "컴퓨터공학부", enteredIn = 20)
@@ -293,7 +293,7 @@ object MentorFixtureStore {
     private fun pickMentoringPeriod(id: Long): MentoringPeriod = MentoringPeriodFixture.FROM_01_01_TO_12_31.toDomain()
 
     private fun pickTimelines(id: Long): List<Timeline> {
-        return when (id.toInt() - 1) {
+        return when ((id.toInt() - 1) % 5) {
             0 -> TimelineFixture.월_수_금()
             1 -> TimelineFixture.화_목_토()
             2 -> TimelineFixture.월_화_수_목_금()

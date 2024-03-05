@@ -8,20 +8,20 @@ data class SearchMenteeCondition(
     val language: LanguageCondition,
 ) {
     data class NationalityCondition(
-        val contains: Boolean,
+        val exists: Boolean,
         val values: List<Nationality>,
     )
 
     data class LanguageCondition(
-        val contains: Boolean,
+        val exists: Boolean,
         val values: List<Language.Category>,
     )
 
     companion object {
         fun basic(): SearchMenteeCondition {
             return SearchMenteeCondition(
-                NationalityCondition(false, emptyList()),
-                LanguageCondition(false, emptyList()),
+                nationality = NationalityCondition(exists = false, values = emptyList()),
+                language = LanguageCondition(exists = false, values = emptyList()),
             )
         }
 
@@ -30,22 +30,22 @@ data class SearchMenteeCondition(
             languages: List<Language.Category>,
         ): SearchMenteeCondition {
             return SearchMenteeCondition(
-                createNationalityCondition(nationalities),
-                createLanguageCondition(languages),
+                nationality = createNationalityCondition(nationalities),
+                language = createLanguageCondition(languages),
             )
         }
 
         private fun createNationalityCondition(nationalities: List<Nationality>): NationalityCondition {
             return when {
-                nationalities.isEmpty() -> NationalityCondition(false, emptyList())
-                else -> NationalityCondition(true, nationalities)
+                nationalities.isEmpty() -> NationalityCondition(exists = false, values = emptyList())
+                else -> NationalityCondition(exists = true, values = nationalities)
             }
         }
 
         private fun createLanguageCondition(languages: List<Language.Category>): LanguageCondition {
             return when {
-                languages.isEmpty() -> LanguageCondition(false, emptyList())
-                else -> LanguageCondition(true, languages)
+                languages.isEmpty() -> LanguageCondition(exists = false, values = emptyList())
+                else -> LanguageCondition(exists = true, values = languages)
             }
         }
     }

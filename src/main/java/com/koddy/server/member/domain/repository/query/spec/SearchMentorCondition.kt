@@ -6,13 +6,13 @@ data class SearchMentorCondition(
     val language: LanguageCondition,
 ) {
     data class LanguageCondition(
-        val contains: Boolean,
+        val exists: Boolean,
         val values: List<Language.Category>,
     )
 
     companion object {
         fun basic(): SearchMentorCondition {
-            return SearchMentorCondition(LanguageCondition(false, emptyList()))
+            return SearchMentorCondition(LanguageCondition(exists = false, values = emptyList()))
         }
 
         fun of(languages: List<Language.Category>): SearchMentorCondition {
@@ -21,8 +21,8 @@ data class SearchMentorCondition(
 
         private fun createLanguageCondition(languages: List<Language.Category>): LanguageCondition {
             return when {
-                languages.isEmpty() -> LanguageCondition(false, emptyList())
-                else -> LanguageCondition(true, languages)
+                languages.isEmpty() -> LanguageCondition(exists = false, values = emptyList())
+                else -> LanguageCondition(exists = true, values = languages)
             }
         }
     }

@@ -69,9 +69,9 @@ class Mentor(
 
     private val isCompleted: Boolean
         get() = !introduction.isNullOrBlank() &&
-            !profileImageUrl.isNullOrBlank() &&
-            mentoringPeriod != null &&
-            schedules.isNotEmpty()
+                !profileImageUrl.isNullOrBlank() &&
+                mentoringPeriod != null &&
+                schedules.isNotEmpty()
 
     fun completeProfile(
         introduction: String?,

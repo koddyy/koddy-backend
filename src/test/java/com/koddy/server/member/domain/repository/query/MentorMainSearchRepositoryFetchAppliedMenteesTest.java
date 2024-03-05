@@ -36,7 +36,7 @@
 //
 //@Import(MentorMainSearchRepositoryImpl.class)
 //@DisplayName("Member -> MentorMainSearchRepository [fetchAppliedCoffeeChatsByMentee] 테스트")
-//class MentorMainSearchRepositoryFetchAppliedCoffeeChatsByMenteeTest extends RepositoryTest {
+//class MentorMainSearchRepositoryFetchAppliedMenteesTest extends RepositoryTest {
 //    @Autowired
 //    private MentorMainSearchRepositoryImpl sut;
 //
