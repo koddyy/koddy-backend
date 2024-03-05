@@ -54,7 +54,7 @@ internal class UpdateMentorProfileUseCaseTest : FeatureSpec({
                 name shouldBe command.name
                 introduction shouldBe command.introduction
                 profileImageUrl shouldBe command.profileImageUrl
-                profileComplete shouldBe true
+                isProfileComplete shouldBe true
                 languages.filter { it.type == MAIN } shouldBe command.languages.filter { it.type == MAIN }
                 languages.filter { it.type == SUB } shouldContainExactlyInAnyOrder command.languages.filter { it.type == SUB }
                 universityProfile.school shouldBe command.school
@@ -110,7 +110,7 @@ internal class UpdateMentorProfileUseCaseTest : FeatureSpec({
                 nationality shouldBe Nationality.KOREA
                 introduction shouldBe mentorFixtureA.introduction
                 profileImageUrl shouldBe mentorFixtureA.profileImageUrl
-                profileComplete shouldBe true
+                isProfileComplete shouldBe true
                 languages.filter { it.type == MAIN } shouldBe mentorFixtureA.languages.filter { it.type == MAIN }
                 languages.filter { it.type == SUB } shouldContainExactlyInAnyOrder mentorFixtureA.languages.filter { it.type == SUB }
                 universityProfile.school shouldBe mentorFixtureA.universityProfile.school

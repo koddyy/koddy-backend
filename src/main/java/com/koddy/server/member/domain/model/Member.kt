@@ -62,7 +62,7 @@ abstract class Member<T : Member<T>> private constructor(
         protected set
 
     @Column(name = "profile_complete", nullable = false, columnDefinition = "TINYINT")
-    var profileComplete: Boolean = false
+    var isProfileComplete: Boolean = false
         protected set
 
     @Enumerated(STRING)
@@ -151,6 +151,6 @@ abstract class Member<T : Member<T>> private constructor(
     enum class Status {
         ACTIVE,
         INACTIVE,
-        BAN
+        BAN,
     }
 }

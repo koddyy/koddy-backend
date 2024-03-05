@@ -43,7 +43,7 @@ data class MentorPrivateProfile(
                 period = MentoringPeriodResponse.from(mentor.mentoringPeriod),
                 schedules = mentor.schedules.map { ScheduleResponse.from(it.timeline) },
                 role = "mentor",
-                profileComplete = mentor.profileComplete,
+                profileComplete = mentor.isProfileComplete,
             )
         }
     }
@@ -76,7 +76,7 @@ data class MenteePrivateProfile(
                 interestSchool = mentee.interest.school,
                 interestMajor = mentee.interest.major,
                 role = "mentee",
-                profileComplete = mentee.profileComplete,
+                profileComplete = mentee.isProfileComplete,
             )
         }
     }

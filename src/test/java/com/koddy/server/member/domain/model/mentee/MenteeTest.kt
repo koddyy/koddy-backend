@@ -74,7 +74,7 @@ internal class MenteeTest : FeatureSpec({
                     result.nationality shouldBe fixture.nationality
                     result.introduction shouldBe null
                     result.profileImageUrl shouldBe null
-                    result.profileComplete shouldBe false
+                    result.isProfileComplete shouldBe false
                     result.status shouldBe Member.Status.ACTIVE
                     result.role shouldBe Role.MENTEE
                     result.languages.map { it.category } shouldContainExactly language.map { it.category }
@@ -99,7 +99,7 @@ internal class MenteeTest : FeatureSpec({
              */
             // 완성
             val menteeA: Mentee = fixtureA.toDomain()
-            menteeA.profileComplete shouldBe true
+            menteeA.isProfileComplete shouldBe true
 
             /**
              * MenteeB
@@ -113,28 +113,28 @@ internal class MenteeTest : FeatureSpec({
                 languages = fixtureB.languages,
                 interest = fixtureB.interest,
             )
-            menteeB.profileComplete shouldBe false
+            menteeB.isProfileComplete shouldBe false
 
             // 완성
             menteeB.completeProfile(
                 introduction = fixtureB.introduction,
                 profileImageUrl = fixtureB.profileImageUrl,
             )
-            menteeB.profileComplete shouldBe true
+            menteeB.isProfileComplete shouldBe true
 
             /**
              * MenteeC
              */
             // 완성
             val menteeC: Mentee = fixtureC.toDomain()
-            menteeC.profileComplete shouldBe true
+            menteeC.isProfileComplete shouldBe true
 
             // 미완성
             menteeC.completeProfile(
                 introduction = null,
                 profileImageUrl = fixtureC.profileImageUrl,
             )
-            menteeC.profileComplete shouldBe false
+            menteeC.isProfileComplete shouldBe false
         }
     }
 
@@ -169,7 +169,7 @@ internal class MenteeTest : FeatureSpec({
                 mentee.platform.provider shouldBe fixtureA.platform.provider
                 mentee.platform.socialId shouldBe fixtureA.platform.socialId
                 mentee.platform.email!!.value shouldBe fixtureA.platform.email!!.value
-                mentee.profileComplete shouldBe true
+                mentee.isProfileComplete shouldBe true
                 mentee.status shouldBe Member.Status.ACTIVE
                 mentee.role shouldBe Role.MENTEE
             }

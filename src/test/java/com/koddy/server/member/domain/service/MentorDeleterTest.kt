@@ -66,7 +66,7 @@ internal class MentorDeleterTest(
                 platform.socialId shouldBe mentorFixture.platform.socialId
                 platform.email?.value shouldBe mentorFixture.platform.email?.value
                 status shouldBe Member.Status.ACTIVE
-                profileComplete shouldBe true
+                isProfileComplete shouldBe true
             }
 
             assertSoftly(getMemberByNative(mentor.id)) {
@@ -82,7 +82,7 @@ internal class MentorDeleterTest(
                 platform.socialId shouldBe mentorFixture.platform.socialId
                 platform.email?.value shouldBe mentorFixture.platform.email?.value
                 status shouldBe Member.Status.ACTIVE
-                profileComplete shouldBe true
+                isProfileComplete shouldBe true
             }
         }
 
@@ -120,7 +120,7 @@ internal class MentorDeleterTest(
                 platform.socialId shouldBe null
                 platform.email shouldBe null
                 status shouldBe Member.Status.INACTIVE
-                profileComplete shouldBe false
+                isProfileComplete shouldBe false
             }
 
             assertSoftly(getMemberByNative(mentor.id)) {
@@ -136,7 +136,7 @@ internal class MentorDeleterTest(
                 platform.socialId shouldBe null
                 platform.email shouldBe null
                 status shouldBe Member.Status.INACTIVE
-                profileComplete shouldBe false
+                isProfileComplete shouldBe false
             }
         }
     }

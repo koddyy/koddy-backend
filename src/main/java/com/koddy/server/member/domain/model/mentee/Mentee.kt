@@ -33,7 +33,7 @@ class Mentee(
         protected set
 
     override fun checkProfileCompleted() {
-        super.profileComplete = isCompleted
+        super.isProfileComplete = isCompleted
     }
 
     private val isCompleted: Boolean

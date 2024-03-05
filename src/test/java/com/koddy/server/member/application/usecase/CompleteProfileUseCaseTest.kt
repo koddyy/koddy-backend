@@ -40,7 +40,7 @@ internal class CompleteProfileUseCaseTest : DescribeSpec({
                 profileImageUrl shouldBe null
                 mentoringPeriod shouldBe null
                 schedules shouldBe emptyList()
-                profileComplete shouldBe false
+                isProfileComplete shouldBe false
             }
 
             val command = CompleteMentorProfileCommand(
@@ -63,7 +63,7 @@ internal class CompleteProfileUseCaseTest : DescribeSpec({
                     mentoringPeriod!!.endDate shouldBe command.mentoringPeriod!!.endDate
                     mentoringPeriod!!.timeUnit shouldBe command.mentoringPeriod!!.timeUnit
                     schedules shouldHaveSize command.timelines.size
-                    profileComplete shouldBe true
+                    isProfileComplete shouldBe true
                 }
             }
         }
@@ -82,7 +82,7 @@ internal class CompleteProfileUseCaseTest : DescribeSpec({
             assertSoftly(mentee) {
                 introduction shouldBe null
                 profileImageUrl shouldBe null
-                profileComplete shouldBe false
+                isProfileComplete shouldBe false
             }
 
             val command = CompleteMenteeProfileCommand(
@@ -99,7 +99,7 @@ internal class CompleteProfileUseCaseTest : DescribeSpec({
                 assertSoftly(mentee) {
                     introduction shouldBe command.introduction
                     profileImageUrl shouldBe command.profileImageUrl
-                    profileComplete shouldBe true
+                    isProfileComplete shouldBe true
                 }
             }
         }

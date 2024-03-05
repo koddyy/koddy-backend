@@ -64,14 +64,14 @@ class Mentor(
         }
 
     override fun checkProfileCompleted() {
-        super.profileComplete = isCompleted
+        super.isProfileComplete = isCompleted
     }
 
     private val isCompleted: Boolean
-        get() = !introduction.isNullOrBlank()
-                && !profileImageUrl.isNullOrBlank()
-                && mentoringPeriod != null
-                && schedules.isNotEmpty()
+        get() = !introduction.isNullOrBlank() &&
+            !profileImageUrl.isNullOrBlank() &&
+            mentoringPeriod != null &&
+            schedules.isNotEmpty()
 
     fun completeProfile(
         introduction: String?,

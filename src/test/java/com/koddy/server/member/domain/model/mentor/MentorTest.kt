@@ -82,7 +82,7 @@ internal class MentorCreateTest : FeatureSpec({
                     result.nationality shouldBe Nationality.KOREA
                     result.introduction shouldBe null
                     result.profileImageUrl shouldBe null
-                    result.profileComplete shouldBe false
+                    result.isProfileComplete shouldBe false
                     result.status shouldBe Member.Status.ACTIVE
                     result.role shouldBe Role.MENTOR
                     result.languages.map { it.category } shouldContainExactly language.map { it.category }
@@ -111,7 +111,7 @@ internal class MentorCreateTest : FeatureSpec({
              */
             // 완성
             val mentorA: Mentor = fixtureA.toDomain()
-            mentorA.profileComplete shouldBe true
+            mentorA.isProfileComplete shouldBe true
 
             /**
              * MentorB
@@ -124,7 +124,7 @@ internal class MentorCreateTest : FeatureSpec({
                 languages = fixtureB.languages,
                 universityProfile = fixtureB.universityProfile,
             )
-            mentorB.profileComplete shouldBe false
+            mentorB.isProfileComplete shouldBe false
 
             // 완성
             mentorB.completeProfile(
@@ -133,7 +133,7 @@ internal class MentorCreateTest : FeatureSpec({
                 mentoringPeriod = fixtureB.mentoringPeriod,
                 timelines = fixtureB.timelines,
             )
-            mentorB.profileComplete shouldBe true
+            mentorB.isProfileComplete shouldBe true
 
             /**
              * MentorC
@@ -146,7 +146,7 @@ internal class MentorCreateTest : FeatureSpec({
                 languages = fixtureC.languages,
                 universityProfile = fixtureC.universityProfile,
             )
-            mentorC.profileComplete shouldBe false
+            mentorC.isProfileComplete shouldBe false
 
             // 자기소개, 프로필 이미지 URL 입력
             mentorC.completeProfile(
@@ -155,7 +155,7 @@ internal class MentorCreateTest : FeatureSpec({
                 mentoringPeriod = null,
                 timelines = emptyList(),
             )
-            mentorC.profileComplete shouldBe false
+            mentorC.isProfileComplete shouldBe false
 
             // 멘토링 관련 정보 입력
             mentorC.completeProfile(
@@ -164,7 +164,7 @@ internal class MentorCreateTest : FeatureSpec({
                 mentoringPeriod = fixtureC.mentoringPeriod,
                 timelines = fixtureC.timelines,
             )
-            mentorC.profileComplete shouldBe true
+            mentorC.isProfileComplete shouldBe true
         }
     }
 
@@ -200,7 +200,7 @@ internal class MentorCreateTest : FeatureSpec({
                 mentor.platform.socialId shouldBe fixtureA.platform.socialId
                 mentor.platform.email!!.value shouldBe fixtureA.platform.email!!.value
                 mentor.nationality shouldBe Nationality.KOREA
-                mentor.profileComplete shouldBe true
+                mentor.isProfileComplete shouldBe true
                 mentor.status shouldBe Member.Status.ACTIVE
                 mentor.role shouldBe Role.MENTOR
             }

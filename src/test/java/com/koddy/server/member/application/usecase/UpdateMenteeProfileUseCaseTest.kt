@@ -52,7 +52,7 @@ internal class UpdateMenteeProfileUseCaseTest : FeatureSpec({
                 nationality shouldBe command.nationality
                 introduction shouldBe command.introduction
                 profileImageUrl shouldBe command.profileImageUrl
-                profileComplete shouldBe true
+                isProfileComplete shouldBe true
                 languages.filter { it.type == MAIN } shouldBe command.languages.filter { it.type == MAIN }
                 languages.filter { it.type == SUB } shouldContainExactlyInAnyOrder command.languages.filter { it.type == SUB }
                 interest.school shouldBe command.interestSchool

@@ -84,7 +84,7 @@ internal class MemberRepositoryTest(
                 profileImageUrl shouldBe mentorFixtureA.profileImageUrl
                 nationality shouldBe Nationality.KOREA
                 introduction shouldBe mentorFixtureA.introduction
-                profileComplete shouldBe false
+                isProfileComplete shouldBe false
                 role shouldBe Role.MENTOR
                 status shouldBe Member.Status.INACTIVE
             }
