@@ -191,8 +191,8 @@ object MenteeFixtureStore {
 
     private fun pickLanguages(id: Long): List<Language> {
         return when ((id.toInt() - 1) % 2) {
-            0 -> LanguageFixture.메인_한국어_서브_영어()
-            else -> LanguageFixture.메인_한국어_서브_일본어_중국어()
+            0 -> LanguageFixture.메인_영어_서브_한국어()
+            else -> LanguageFixture.메인_영어_서브_일본어()
         }
     }
 
