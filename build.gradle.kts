@@ -51,15 +51,13 @@ dependencies {
     implementation("org.flywaydb:flyway-mysql")
 
     // kotlin-jdsl (LINE)
-    implementation("com.linecorp.kotlin-jdsl:jpql-dsl:${property("kotlinJdslVersion")}")
-    implementation("com.linecorp.kotlin-jdsl:jpql-render:${property("kotlinJdslVersion")}")
-    implementation("com.linecorp.kotlin-jdsl:spring-data-jpa-support:${property("kotlinJdslVersion")}")
-
-    // Query Builder
-    implementation("com.querydsl:querydsl-jpa:${property("queryDslVersion")}:jakarta")
-    annotationProcessor("com.querydsl:querydsl-apt:${property("queryDslVersion")}:jakarta")
-    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
-    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+    listOf(
+        "jpql-dsl",
+        "jpql-render",
+        "spring-data-jpa-support",
+    ).forEach {
+        implementation("com.linecorp.kotlin-jdsl:${it}:${property("kotlinJdslVersion")}")
+    }
 
     // Redis
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
@@ -68,8 +66,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-mail")
 
     // Cloud Infra
-    implementation("io.awspring.cloud:spring-cloud-aws-starter:${property("awspringVersion")}")
-    implementation("io.awspring.cloud:spring-cloud-aws-starter-s3:${property("awspringVersion")}")
+    listOf(
+        "spring-cloud-aws-starter",
+        "spring-cloud-aws-starter-s3",
+    ).forEach {
+        implementation("io.awspring.cloud:${it}:${property("awspringVersion")}")
+    }
 
     // Log & Monitoring
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -158,23 +160,6 @@ ktlint {
 
     filter {
         exclude { it.file.toString().contains("generated") || it.file.toString().contains("test") }
-    }
-}
-
-// QueryDsl QClass
-val queryDslTypeDir: String = "src/main/generated"
-
-tasks.withType<JavaCompile>().configureEach {
-    options.generatedSourceOutputDirectory = file(queryDslTypeDir)
-}
-
-sourceSets {
-    getByName("main").java.srcDirs(queryDslTypeDir)
-}
-
-tasks.named("clean") {
-    doLast {
-        file(queryDslTypeDir).deleteRecursively()
     }
 }
 
