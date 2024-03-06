@@ -19,7 +19,6 @@ import com.koddy.server.common.utils.OAuthDummy.GOOGLE_PROVIDER
 import com.koddy.server.common.utils.OAuthDummy.REDIRECT_URI
 import com.koddy.server.common.utils.OAuthDummy.STATE
 import com.koddy.server.common.utils.TokenDummy
-import com.koddy.server.common.utils.TokenDummy.ACCESS_TOKEN
 import com.koddy.server.global.ResponseWrapper
 import com.koddy.server.global.exception.OAuthExceptionResponse
 import com.ninjasquad.springmockk.MockkBean
@@ -182,7 +181,7 @@ internal class OAuthApiTest : ApiDocsTestKt() {
             justRun { logoutUseCase.invoke(any()) }
 
             postRequest(baseUrl) {
-                accessToken(ACCESS_TOKEN)
+                accessToken(mentor)
             }.andExpect {
                 status { isNoContent() }
             }.andDo {

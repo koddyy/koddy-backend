@@ -13,13 +13,16 @@ import com.koddy.server.common.docs.DocumentFieldType
 import com.koddy.server.common.docs.ENUM
 import com.koddy.server.common.docs.STRING
 import com.koddy.server.common.docs.SnippetBuilder
-import com.koddy.server.common.utils.TokenDummy.ACCESS_TOKEN
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.utils.TokenDummy.MENTEE_ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenDummy.MENTOR_ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenDummy.REFRESH_TOKEN
 import com.koddy.server.global.base.BusinessExceptionCode
 import com.koddy.server.global.exception.ExceptionResponse
-import com.koddy.server.member.domain.model.Role
+import com.koddy.server.member.domain.model.Member
+import com.koddy.server.member.domain.model.mentee.Mentee
+import com.koddy.server.member.domain.model.mentor.Mentor
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.justRun
@@ -31,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
+import org.springframework.mock.web.MockMultipartFile
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.generate.RestDocumentationGenerator
@@ -54,6 +58,7 @@ import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.filter.CharacterEncodingFilter
+import org.springframework.web.multipart.MultipartFile
 
 @Tag("ApiDocs")
 @Import(
@@ -63,6 +68,14 @@ import org.springframework.web.filter.CharacterEncodingFilter
 @ExtendWith(RestDocumentationExtension::class)
 @AutoConfigureRestDocs
 abstract class ApiDocsTestKt {
+    companion object {
+        @JvmStatic
+        protected val mentor = mentorFixture(id = 1).toDomain()
+
+        @JvmStatic
+        protected val mentee = menteeFixture(id = 2).toDomain()
+    }
+
     @Autowired
     private lateinit var mockMvc: MockMvc
 
@@ -112,11 +125,13 @@ abstract class ApiDocsTestKt {
 
     protected fun multipartRequest(
         url: String,
+        files: List<MultipartFile>,
         pathParams: Array<Any> = emptyArray(),
         buildRequest: MockHttpServletRequestDsl.() -> Unit,
     ): ResultActionsDsl {
         return mockMvc.multipart(url, *pathParams) {
             requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, url)
+            files.forEach { file(it as MockMultipartFile) }
             buildRequest()
         }
     }
@@ -157,28 +172,21 @@ abstract class ApiDocsTestKt {
     /**
      * Request Token DSL
      */
-    protected fun MockHttpServletRequestDsl.accessToken(token: String) {
-        header(AuthToken.ACCESS_TOKEN_HEADER, "${AuthToken.TOKEN_TYPE} $token")
-        when (token) {
-            ACCESS_TOKEN -> {
+    protected fun MockHttpServletRequestDsl.accessToken(member: Member<*>) {
+        when (member) {
+            is Mentor -> {
+                header(AuthToken.ACCESS_TOKEN_HEADER, "${AuthToken.TOKEN_TYPE} $MENTOR_ACCESS_TOKEN")
                 justRun { tokenProvider.validateAccessToken(any()) }
-                every { tokenProvider.getId(any()) } returns 1
-                every { tokenProvider.getAuthority(any()) } returns Role.MENTOR.authority
+                every { tokenProvider.getId(any()) } returns member.id
+                every { tokenProvider.getAuthority(any()) } returns member.authority
             }
 
-            MENTOR_ACCESS_TOKEN -> {
+            is Mentee -> {
+                header(AuthToken.ACCESS_TOKEN_HEADER, "${AuthToken.TOKEN_TYPE} $MENTEE_ACCESS_TOKEN")
                 justRun { tokenProvider.validateAccessToken(any()) }
-                every { tokenProvider.getId(any()) } returns 1
-                every { tokenProvider.getAuthority(any()) } returns Role.MENTOR.authority
+                every { tokenProvider.getId(any()) } returns member.id
+                every { tokenProvider.getAuthority(any()) } returns member.authority
             }
-
-            MENTEE_ACCESS_TOKEN -> {
-                justRun { tokenProvider.validateAccessToken(any()) }
-                every { tokenProvider.getId(any()) } returns 1
-                every { tokenProvider.getAuthority(any()) } returns Role.MENTEE.authority
-            }
-
-            else -> every { tokenProvider.validateAccessToken(any()) } throws AuthException(AuthExceptionCode.AUTH_REQUIRED)
         }
     }
 
