@@ -12,4 +12,5 @@ object OAuthUtils {
 
     fun mentorAuthorizationCode(id: Long): String = format(MENTOR_PREFIX, id)
     fun menteeAuthorizationCode(id: Long): String = format(MENTEE_PREFIX, id)
+    fun parseAuthorizationCode(value: String): Long = value.split("-".toRegex())[1].toLong()
 }

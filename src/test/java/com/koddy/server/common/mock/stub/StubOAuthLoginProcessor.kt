@@ -5,6 +5,7 @@ import com.koddy.server.auth.domain.model.oauth.OAuthProvider
 import com.koddy.server.auth.domain.model.oauth.OAuthUserResponse
 import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
 import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
+import com.koddy.server.common.utils.OAuthUtils.parseAuthorizationCode
 
 open class StubOAuthLoginProcessor : OAuthLoginProcessor {
     override fun login(
@@ -13,10 +14,10 @@ open class StubOAuthLoginProcessor : OAuthLoginProcessor {
         redirectUri: String,
         state: String,
     ): OAuthUserResponse {
-        val id: Long = code.split("-".toRegex())[1].toLong()
+        val id: Long = parseAuthorizationCode(code)
         return when {
-            code.contains("Mentor") -> menteeFixture(id).toGoogleUserResponse()
-            else -> mentorFixture(id).toGoogleUserResponse()
+            code.contains("Mentor") -> mentorFixture(id = id).toGoogleUserResponse()
+            else -> menteeFixture(id = id).toGoogleUserResponse()
         }
     }
 }

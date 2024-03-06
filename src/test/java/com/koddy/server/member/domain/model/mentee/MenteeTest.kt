@@ -139,8 +139,8 @@ internal class MenteeTest : FeatureSpec({
     }
 
     feature("Mentee's updateBasicInfo") {
-        val fixtureA = menteeFixture(sequence = 1)
-        val fixtureB = menteeFixture(sequence = 2)
+        val fixtureA = menteeFixture(id = 1L)
+        val fixtureB = menteeFixture(id = 2L)
 
         scenario("Mentee 기본 정보를 수정한다") {
             val mentee: Mentee = fixtureA.toDomain()

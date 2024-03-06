@@ -29,7 +29,7 @@ internal class TokenProviderTest : FeatureSpec({
         refreshTokenValidityInSeconds = 7200L,
     )
 
-    val member: Member<*> = mentorFixture(id = 1).toDomain()
+    val member: Member<*> = mentorFixture(id = 1L).toDomain()
 
     feature("TokenProvider's createAccessToken & createRefreshToken") {
         scenario("AccessToken과 RefreshToken을 발급한다") {

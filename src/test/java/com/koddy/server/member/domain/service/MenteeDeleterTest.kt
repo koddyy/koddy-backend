@@ -8,15 +8,11 @@ import com.koddy.server.member.domain.model.Role
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.repository.MemberRepository
 import com.koddy.server.member.domain.repository.MenteeRepository
-import com.koddy.server.member.exception.MemberException
-import com.koddy.server.member.exception.MemberExceptionCode.MENTEE_NOT_FOUND
 import io.kotest.assertions.assertSoftly
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.kotest.matchers.throwable.shouldHaveMessage
 import jakarta.persistence.EntityManager
 import org.junit.jupiter.api.Test
 import org.springframework.data.repository.findByIdOrNull
@@ -85,10 +81,8 @@ internal class MenteeDeleterTest(
         // then
         assertSoftly {
             getLanguage(mentee.id) shouldHaveSize menteeFixture.languages.size
-            shouldThrow<MemberException> {
-                getMenteeByJpql(mentee.id)
-                getMemberByJpql(mentee.id)
-            } shouldHaveMessage MENTEE_NOT_FOUND.message
+            getMenteeByJpql(mentee.id) shouldBe null
+            getMemberByJpql(mentee.id) shouldBe null
             getMenteeByNative(mentee.id) shouldNotBe null
             getMemberByNative(mentee.id) shouldNotBe null
 
@@ -139,9 +133,9 @@ internal class MenteeDeleterTest(
         ).setParameter("id", id)
             .resultList
 
-    private fun getMenteeByJpql(id: Long): Mentee = menteeRepository.findByIdOrNull(id)!!
+    private fun getMenteeByJpql(id: Long): Mentee? = menteeRepository.findByIdOrNull(id)
 
-    private fun getMemberByJpql(id: Long): Member<*> = memberRepository.findByIdOrNull(id)!!
+    private fun getMemberByJpql(id: Long): Member<*>? = memberRepository.findByIdOrNull(id)
 
     private fun getMenteeByNative(id: Long): Mentee =
         em.createNativeQuery(

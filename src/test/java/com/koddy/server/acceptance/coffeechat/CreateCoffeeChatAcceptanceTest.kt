@@ -38,7 +38,7 @@ internal class CreateCoffeeChatAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `멘티는 권한이 없다`() {
             // given
-            val mentee: AuthMember = menteeFixture(1).회원가입과_로그인을_하고_프로필을_완성시킨다()
+            val mentee: AuthMember = menteeFixture(sequence = 1).회원가입과_로그인을_하고_프로필을_완성시킨다()
 
             // when - then
             멘토가_멘티에게_커피챗을_제안한다(

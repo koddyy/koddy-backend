@@ -34,9 +34,9 @@ internal class OAuthLoginProcessorFacadeTest : FeatureSpec({
     )
 
     feature("OAuthLoginProcessorFacade's login") {
-        val googleUserResponse: GoogleUserResponse = mentorFixture(sequence = 1).toGoogleUserResponse()
-        val kakaoUserResponse: KakaoUserResponse = mentorFixture(sequence = 1).toKakaoUserResponse()
-        val zoomUserResponse: ZoomUserResponse = mentorFixture(sequence = 1).toZoomUserResponse()
+        val googleUserResponse: GoogleUserResponse = mentorFixture(id = 1L).toGoogleUserResponse()
+        val kakaoUserResponse: KakaoUserResponse = mentorFixture(id = 1L).toKakaoUserResponse()
+        val zoomUserResponse: ZoomUserResponse = mentorFixture(id = 1L).toZoomUserResponse()
 
         every { googleOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE) } returns googleUserResponse
         every { kakaoOAuthConnector.login(AUTHORIZATION_CODE, REDIRECT_URI, STATE) } returns kakaoUserResponse

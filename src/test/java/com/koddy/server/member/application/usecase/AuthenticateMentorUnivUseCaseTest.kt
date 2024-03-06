@@ -44,7 +44,7 @@ internal class AuthenticateMentorUnivUseCaseTest : DescribeSpec({
         eventPublisher,
     )
 
-    val mentor: Mentor = mentorFixture(sequence = 1).toDomain()
+    val mentor: Mentor = mentorFixture(id = 1L).toDomain()
     val schoolMail = "sjiwon@kyonggi.ac.kr"
 
     fun getAuthKey(

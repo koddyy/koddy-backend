@@ -23,7 +23,7 @@ internal class TokenIssuerTest : DescribeSpec({
     val tokenStore = mockk<TokenStore>()
     val sut = TokenIssuer(tokenProvider, tokenStore)
 
-    val member: Member<*> = mentorFixture(id = 1).toDomain()
+    val member: Member<*> = mentorFixture(id = 1L).toDomain()
 
     describe("TokenIssuer's provideAuthorityToken") {
         context("토큰 발급을 요청하면") {

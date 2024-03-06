@@ -233,7 +233,7 @@ internal class MentorCreateTest : FeatureSpec({
 @UnitTestKt
 @DisplayName("Member/Mentor -> 도메인 Aggregate [Mentor] 학교 인증 테스트")
 internal class MentorAuthenticateUnivTest : FeatureSpec({
-    val fixture = mentorFixture(id = 1)
+    val fixture = mentorFixture(id = 1L)
 
     feature("Mentor's authWithMail & authComplete") {
         scenario("학교 메일로 인증을 진행한다") {
@@ -289,7 +289,7 @@ internal class MentorAuthenticateUnivTest : FeatureSpec({
 @UnitTestKt
 @DisplayName("Member/Mentor -> 도메인 Aggregate [Mentor] 멘토링 시간 검증 테스트")
 internal class MentorMentoringPeriodValidityTest : DescribeSpec({
-    val fixture = mentorFixture(id = 1)
+    val fixture = mentorFixture(id = 1L)
 
     describe("Mentor's validateReservationData") {
         context("1. 멘토링 관련 정보(기간, 스케줄)를 기입하지 않았으면") {

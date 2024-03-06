@@ -34,7 +34,7 @@ internal class ReissueTokenUseCaseTest : DescribeSpec({
     )
 
     describe("ReissueTokenUseCase's invoke") {
-        val member: Member<*> = mentorFixture(id = 1).toDomain()
+        val member: Member<*> = mentorFixture(id = 1L).toDomain()
         every { tokenProvider.getId(REFRESH_TOKEN) } returns member.id
         every { memberReader.getMember(member.id) } returns member
 

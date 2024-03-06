@@ -39,8 +39,8 @@ internal class OAuthLoginUseCaseTest : DescribeSpec({
     )
 
     describe("OAuthLoginUseCase's invoke (구글 로그인)") {
-        val member: Member<*> = mentorFixture(id = 1).toDomain()
-        val googleUserResponse: GoogleUserResponse = mentorFixture(id = 1).toGoogleUserResponse()
+        val member: Member<*> = mentorFixture(id = 1L).toDomain()
+        val googleUserResponse: GoogleUserResponse = mentorFixture(id = 1L).toGoogleUserResponse()
 
         val command = OAuthLoginCommand(
             provider = OAuthProvider.GOOGLE,

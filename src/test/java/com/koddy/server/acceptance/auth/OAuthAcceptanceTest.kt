@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus.OK
 @DisplayName("[Acceptance Test] OAuth 인증 관련")
 internal class OAuthAcceptanceTest : AcceptanceTestKt() {
     companion object {
-        private val mentor: MentorFixtureStore.MentorFixture = mentorFixture(sequence = 1)
+        private val mentor: MentorFixtureStore.MentorFixture = mentorFixture(id = 1L)
     }
 
     @Nested

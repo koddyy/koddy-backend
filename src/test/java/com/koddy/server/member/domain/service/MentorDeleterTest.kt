@@ -10,14 +10,10 @@ import com.koddy.server.member.domain.model.mentor.Mentor
 import com.koddy.server.member.domain.model.mentor.Schedule
 import com.koddy.server.member.domain.repository.MemberRepository
 import com.koddy.server.member.domain.repository.MentorRepository
-import com.koddy.server.member.exception.MemberException
-import com.koddy.server.member.exception.MemberExceptionCode.MENTOR_NOT_FOUND
 import io.kotest.assertions.assertSoftly
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.kotest.matchers.throwable.shouldHaveMessage
 import jakarta.persistence.EntityManager
 import org.junit.jupiter.api.Test
 import org.springframework.data.repository.findByIdOrNull
@@ -93,10 +89,8 @@ internal class MentorDeleterTest(
         assertSoftly {
             getLanguage(mentor.id) shouldHaveSize mentorFixture.languages.size
             getSchedule(mentor.id) shouldHaveSize 0
-            shouldThrow<MemberException> {
-                getMentorByJpql(mentor.id)
-                getMemberByJpql(mentor.id)
-            } shouldHaveMessage MENTOR_NOT_FOUND.message
+            getMentorByJpql(mentor.id) shouldBe null
+            getMemberByJpql(mentor.id) shouldBe null
             getMentorByNative(mentor.id) shouldNotBe null
             getMemberByNative(mentor.id) shouldNotBe null
 
@@ -163,9 +157,9 @@ internal class MentorDeleterTest(
         ).setParameter("id", id)
             .resultList
 
-    private fun getMentorByJpql(id: Long): Mentor = mentorRepository.findByIdOrNull(id)!!
+    private fun getMentorByJpql(id: Long): Mentor? = mentorRepository.findByIdOrNull(id)
 
-    private fun getMemberByJpql(id: Long): Member<*> = memberRepository.findByIdOrNull(id)!!
+    private fun getMemberByJpql(id: Long): Member<*>? = memberRepository.findByIdOrNull(id)
 
     private fun getMentorByNative(id: Long): Mentor =
         em.createNativeQuery(
