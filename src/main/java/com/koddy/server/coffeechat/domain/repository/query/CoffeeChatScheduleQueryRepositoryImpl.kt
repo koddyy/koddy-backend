@@ -30,7 +30,7 @@ class CoffeeChatScheduleQueryRepositoryImpl(
     private val context: JpqlRenderContext,
 ) : CoffeeChatScheduleQueryRepository {
     override fun fetchMentorCoffeeChatCountPerCategory(mentorId: Long): CoffeeChatCountPerCategory {
-        val targetQuery: SelectQuery<CoffeeChatCountPerCategory> = jpql {
+        val targetQuery: SelectQuery<CoffeeChatCountPerCategory> = jpql(CoffeeChatDsl) {
             selectNew<CoffeeChatCountPerCategory>(
                 fetchCountWithStatus(status = CoffeeChatStatus.withWaitingCategory(), alias = "waiting"),
                 fetchCountWithStatus(status = CoffeeChatStatus.withSuggstedCategory(), alias = "suggested"),
@@ -39,7 +39,7 @@ class CoffeeChatScheduleQueryRepositoryImpl(
             ).from(
                 entity(CoffeeChat::class),
             ).where(
-                path(CoffeeChat::mentorId).equal(mentorId),
+                entity(CoffeeChat::class).mentorIdEq(mentorId),
             )
         }
 
@@ -48,7 +48,7 @@ class CoffeeChatScheduleQueryRepositoryImpl(
     }
 
     override fun fetchMenteeCoffeeChatCountPerCategory(menteeId: Long): CoffeeChatCountPerCategory {
-        val targetQuery: SelectQuery<CoffeeChatCountPerCategory> = jpql {
+        val targetQuery: SelectQuery<CoffeeChatCountPerCategory> = jpql(CoffeeChatDsl) {
             selectNew<CoffeeChatCountPerCategory>(
                 fetchCountWithStatus(status = CoffeeChatStatus.withWaitingCategory(), alias = "waiting"),
                 fetchCountWithStatus(status = CoffeeChatStatus.withSuggstedCategory(), alias = "suggested"),
@@ -57,7 +57,7 @@ class CoffeeChatScheduleQueryRepositoryImpl(
             ).from(
                 entity(CoffeeChat::class),
             ).where(
-                path(CoffeeChat::menteeId).equal(menteeId),
+                entity(CoffeeChat::class).menteeIdEq(menteeId),
             )
         }
 
@@ -97,7 +97,7 @@ class CoffeeChatScheduleQueryRepositoryImpl(
                 entity(CoffeeChat::class),
                 innerJoin(Mentee::class).on(path(Mentee::id).equal(path(CoffeeChat::menteeId))),
             ).whereAnd(
-                path(CoffeeChat::mentorId).equal(condition.mentorId),
+                entity(CoffeeChat::class).mentorIdEq(condition.mentorId),
                 entity(CoffeeChat::class).statusIn(condition.status),
             ).orderBy(
                 path(CoffeeChat::lastModifiedAt).desc(),
@@ -134,7 +134,7 @@ class CoffeeChatScheduleQueryRepositoryImpl(
                 entity(CoffeeChat::class),
                 innerJoin(Mentor::class).on(path(Mentor::id).equal(path(CoffeeChat::mentorId))),
             ).whereAnd(
-                path(CoffeeChat::menteeId).equal(condition.menteeId),
+                entity(CoffeeChat::class).menteeIdEq(condition.menteeId),
                 entity(CoffeeChat::class).statusIn(condition.status),
             ).orderBy(
                 path(CoffeeChat::lastModifiedAt).desc(),

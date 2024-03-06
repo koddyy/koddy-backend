@@ -58,7 +58,7 @@ class MentorReservedScheduleQueryRepositoryImpl(
             ).from(
                 entity(CoffeeChat::class),
             ).whereAnd(
-                path(CoffeeChat::mentorId).equal(mentorId),
+                entity(CoffeeChat::class).mentorIdEq(mentorId),
                 entity(CoffeeChat::class).reservationStartBetween(year, month),
                 entity(CoffeeChat::class).statusIn(status),
             )

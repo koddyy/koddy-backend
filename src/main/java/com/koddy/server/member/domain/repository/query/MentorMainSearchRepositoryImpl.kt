@@ -3,6 +3,8 @@ package com.koddy.server.member.domain.repository.query
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTEE_APPLY
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional
+import com.koddy.server.global.query.CoffeeChatDsl
+import com.koddy.server.global.query.MemberDsl
 import com.koddy.server.member.domain.model.AvailableLanguage
 import com.koddy.server.member.domain.model.Language
 import com.koddy.server.member.domain.model.Member
@@ -32,7 +34,7 @@ class MentorMainSearchRepositoryImpl(
         mentorId: Long,
         limit: Int,
     ): Page<AppliedCoffeeChatsByMentee> {
-        val targetQuery: SelectQuery<AppliedCoffeeChatsByMentee> = jpql {
+        val targetQuery: SelectQuery<AppliedCoffeeChatsByMentee> = jpql(CoffeeChatDsl) {
             selectNew<AppliedCoffeeChatsByMentee>(
                 path(CoffeeChat::id),
                 path(Mentee::id),
@@ -44,21 +46,21 @@ class MentorMainSearchRepositoryImpl(
                 entity(CoffeeChat::class),
                 innerJoin(Mentee::class).on(path(Mentee::id).equal(path(CoffeeChat::menteeId))),
             ).whereAnd(
-                path(CoffeeChat::mentorId).equal(mentorId),
-                path(CoffeeChat::status).equal(MENTEE_APPLY),
+                entity(CoffeeChat::class).mentorIdEq(mentorId),
+                entity(CoffeeChat::class).statusEq(MENTEE_APPLY),
             ).orderBy(
                 path(CoffeeChat::id).desc(),
             )
         }
-        val countQuery: SelectQuery<Long> = jpql {
+        val countQuery: SelectQuery<Long> = jpql(CoffeeChatDsl) {
             selectNew<Long>(
                 count(CoffeeChat::id),
             ).from(
                 entity(CoffeeChat::class),
                 innerJoin(Mentee::class).on(path(Mentee::id).equal(path(CoffeeChat::menteeId))),
             ).whereAnd(
-                path(CoffeeChat::mentorId).equal(mentorId),
-                path(CoffeeChat::status).equal(MENTEE_APPLY),
+                entity(CoffeeChat::class).mentorIdEq(mentorId),
+                entity(CoffeeChat::class).statusEq(MENTEE_APPLY),
             )
         }
 
@@ -79,13 +81,13 @@ class MentorMainSearchRepositoryImpl(
         pageable: Pageable,
     ): Slice<Mentee> {
         val filteringMenteeIds: List<Long> = filteringByCondition(condition)
-        val targetQuery: SelectQuery<Mentee> = jpql {
+        val targetQuery: SelectQuery<Mentee> = jpql(MemberDsl) {
             select(
                 entity(Mentee::class),
             ).from(
                 entity(Mentee::class),
             ).where(
-                path(Mentee::id).`in`(filteringMenteeIds),
+                entity(Mentee::class).menteeIdIn(filteringMenteeIds),
             ).orderBy(
                 path(Mentee::id).desc(),
             )
@@ -114,14 +116,14 @@ class MentorMainSearchRepositoryImpl(
     }
 
     private fun filteringNationality(nationality: SearchMenteeCondition.NationalityCondition): List<Long> {
-        val query: SelectQuery<Long> = jpql {
+        val query: SelectQuery<Long> = jpql(MemberDsl) {
             select<Long>(
                 path(Mentee::id),
             ).from(
                 entity(Mentee::class),
             ).where(
                 when {
-                    nationality.exists -> or(*nationality.values.map { path(Mentee::nationality).equal(it) }.toTypedArray())
+                    nationality.exists -> entity(Mentee::class).menteeNationalityAnyMatches(nationality.values)
                     else -> null
                 },
             ).orderBy(
@@ -134,13 +136,13 @@ class MentorMainSearchRepositoryImpl(
 
     private fun filteringLanguage(language: SearchMenteeCondition.LanguageCondition): List<Long> {
         val query: SelectQuery<Long> = when (language.exists) {
-            true -> jpql {
+            true -> jpql(MemberDsl) {
                 selectDistinctNew<Long>(
                     path(AvailableLanguage::member)(Member<*>::id),
                 ).from(
                     entity(AvailableLanguage::class),
                 ).where(
-                    path(AvailableLanguage::language)(Language::category).`in`(language.values),
+                    entity(AvailableLanguage::class).languageCategoryIn(language.values),
                 ).groupBy(
                     path(AvailableLanguage::member)(Member<*>::id),
                 ).having(

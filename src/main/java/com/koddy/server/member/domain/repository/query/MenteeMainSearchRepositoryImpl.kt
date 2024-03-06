@@ -3,6 +3,8 @@ package com.koddy.server.member.domain.repository.query
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.model.CoffeeChatStatus.MENTOR_SUGGEST
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional
+import com.koddy.server.global.query.CoffeeChatDsl
+import com.koddy.server.global.query.MemberDsl
 import com.koddy.server.member.domain.model.AvailableLanguage
 import com.koddy.server.member.domain.model.Language
 import com.koddy.server.member.domain.model.Member
@@ -32,7 +34,7 @@ class MenteeMainSearchRepositoryImpl(
         menteeId: Long,
         limit: Int,
     ): Page<SuggestedCoffeeChatsByMentor> {
-        val targetQuery: SelectQuery<SuggestedCoffeeChatsByMentor> = jpql {
+        val targetQuery: SelectQuery<SuggestedCoffeeChatsByMentor> = jpql(CoffeeChatDsl) {
             selectNew<SuggestedCoffeeChatsByMentor>(
                 path(CoffeeChat::id),
                 path(Mentor::id),
@@ -43,21 +45,21 @@ class MenteeMainSearchRepositoryImpl(
                 entity(CoffeeChat::class),
                 innerJoin(Mentor::class).on(path(Mentor::id).equal(path(CoffeeChat::mentorId))),
             ).whereAnd(
-                path(CoffeeChat::menteeId).equal(menteeId),
-                path(CoffeeChat::status).equal(MENTOR_SUGGEST),
+                entity(CoffeeChat::class).menteeIdEq(menteeId),
+                entity(CoffeeChat::class).statusEq(MENTOR_SUGGEST),
             ).orderBy(
                 path(CoffeeChat::id).desc(),
             )
         }
-        val countQuery: SelectQuery<Long> = jpql {
+        val countQuery: SelectQuery<Long> = jpql(CoffeeChatDsl) {
             selectNew<Long>(
                 count(CoffeeChat::id),
             ).from(
                 entity(CoffeeChat::class),
                 innerJoin(Mentor::class).on(path(Mentor::id).equal(path(CoffeeChat::mentorId))),
             ).whereAnd(
-                path(CoffeeChat::menteeId).equal(menteeId),
-                path(CoffeeChat::status).equal(MENTOR_SUGGEST),
+                entity(CoffeeChat::class).menteeIdEq(menteeId),
+                entity(CoffeeChat::class).statusEq(MENTOR_SUGGEST),
             )
         }
 
@@ -78,13 +80,13 @@ class MenteeMainSearchRepositoryImpl(
         pageable: Pageable,
     ): Slice<Mentor> {
         val filteringMentorIds: List<Long> = filteringByCondition(condition)
-        val targetQuery: SelectQuery<Mentor> = jpql {
+        val targetQuery: SelectQuery<Mentor> = jpql(MemberDsl) {
             select(
                 entity(Mentor::class),
             ).from(
                 entity(Mentor::class),
             ).where(
-                path(Mentor::id).`in`(filteringMentorIds),
+                entity(Mentor::class).mentorIdIn(filteringMentorIds),
             ).orderBy(
                 path(Mentor::id).desc(),
             )
@@ -112,13 +114,13 @@ class MenteeMainSearchRepositoryImpl(
 
     private fun filteringLanguage(language: SearchMentorCondition.LanguageCondition): List<Long> {
         val query: SelectQuery<Long> = when (language.exists) {
-            true -> jpql {
+            true -> jpql(MemberDsl) {
                 selectDistinctNew<Long>(
                     path(AvailableLanguage::member)(Member<*>::id),
                 ).from(
                     entity(AvailableLanguage::class),
                 ).where(
-                    path(AvailableLanguage::language)(Language::category).`in`(language.values),
+                    entity(AvailableLanguage::class).languageCategoryIn(language.values),
                 ).groupBy(
                     path(AvailableLanguage::member)(Member<*>::id),
                 ).having(

@@ -2,6 +2,7 @@ package com.koddy.server.notification.domain.repository.query
 
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional
+import com.koddy.server.global.query.NotificationDsl
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
 import com.koddy.server.notification.domain.model.Notification
@@ -26,7 +27,7 @@ class NotificationQueryRepositoryImpl(
         mentorId: Long,
         pageable: Pageable,
     ): Slice<NotificationDetails> {
-        val targetQuery: SelectQuery<NotificationDetails> = jpql {
+        val targetQuery: SelectQuery<NotificationDetails> = jpql(NotificationDsl) {
             selectNew<NotificationDetails>(
                 path(Notification::id),
                 path(Notification::isRead),
@@ -44,7 +45,7 @@ class NotificationQueryRepositoryImpl(
                 innerJoin(CoffeeChat::class).on(path(CoffeeChat::id).equal(path(Notification::coffeeChatId))),
                 innerJoin(Mentee::class).on(path(Mentee::id).equal(path(CoffeeChat::menteeId))),
             ).where(
-                path(Notification::targetId).equal(mentorId),
+                entity(Notification::class).targetIdEq(mentorId),
             ).orderBy(
                 path(Notification::id).desc(),
             )
@@ -67,7 +68,7 @@ class NotificationQueryRepositoryImpl(
         menteeId: Long,
         pageable: Pageable,
     ): Slice<NotificationDetails> {
-        val targetQuery: SelectQuery<NotificationDetails> = jpql {
+        val targetQuery: SelectQuery<NotificationDetails> = jpql(NotificationDsl) {
             selectNew<NotificationDetails>(
                 path(Notification::id),
                 path(Notification::isRead),
@@ -85,7 +86,7 @@ class NotificationQueryRepositoryImpl(
                 innerJoin(CoffeeChat::class).on(path(CoffeeChat::id).equal(path(Notification::coffeeChatId))),
                 innerJoin(Mentor::class).on(path(Mentor::id).equal(path(CoffeeChat::mentorId))),
             ).where(
-                path(Notification::targetId).equal(menteeId),
+                entity(Notification::class).targetIdEq(menteeId),
             ).orderBy(
                 path(Notification::id).desc(),
             )
