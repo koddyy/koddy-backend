@@ -181,7 +181,7 @@ internal class OAuthApiTest : ApiDocsTestKt() {
             justRun { logoutUseCase.invoke(any()) }
 
             postRequest(baseUrl) {
-                accessToken(mentor)
+                accessToken(common)
             }.andExpect {
                 status { isNoContent() }
             }.andDo {

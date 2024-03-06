@@ -26,7 +26,7 @@ internal class ReadNotificationApiTest : ApiDocsTestKt() {
             justRun { readNotificationUseCase.readSingle(any()) }
 
             patchRequest(baseUrl, arrayOf(1L)) {
-                accessToken(mentor)
+                accessToken(common)
             }.andExpect {
                 status { isNoContent() }
             }.andDo {
@@ -49,7 +49,7 @@ internal class ReadNotificationApiTest : ApiDocsTestKt() {
             justRun { readNotificationUseCase.readAll(any()) }
 
             patchRequest(baseUrl) {
-                accessToken(mentor)
+                accessToken(common)
             }.andExpect {
                 status { isNoContent() }
             }.andDo {

@@ -15,6 +15,7 @@ import com.koddy.server.common.docs.STRING
 import com.koddy.server.common.docs.SnippetBuilder
 import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
 import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
+import com.koddy.server.common.utils.TokenDummy.ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenDummy.MENTEE_ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenDummy.MENTOR_ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenDummy.REFRESH_TOKEN
@@ -70,10 +71,13 @@ import org.springframework.web.multipart.MultipartFile
 abstract class ApiDocsTestKt {
     companion object {
         @JvmStatic
-        protected val mentor = mentorFixture(id = 1).toDomain()
+        protected val common: Member<*> = mentorFixture(id = 1).toDomain()
 
         @JvmStatic
-        protected val mentee = menteeFixture(id = 2).toDomain()
+        protected val mentor: Mentor = mentorFixture(id = 2).toDomain()
+
+        @JvmStatic
+        protected val mentee: Mentee = menteeFixture(id = 3).toDomain()
     }
 
     @Autowired
@@ -173,15 +177,22 @@ abstract class ApiDocsTestKt {
      * Request Token DSL
      */
     protected fun MockHttpServletRequestDsl.accessToken(member: Member<*>) {
-        when (member) {
-            is Mentor -> {
+        when (member.id) {
+            common.id -> {
+                header(AuthToken.ACCESS_TOKEN_HEADER, "${AuthToken.TOKEN_TYPE} $ACCESS_TOKEN")
+                justRun { tokenProvider.validateAccessToken(any()) }
+                every { tokenProvider.getId(any()) } returns member.id
+                every { tokenProvider.getAuthority(any()) } returns member.authority
+            }
+
+            mentor.id -> {
                 header(AuthToken.ACCESS_TOKEN_HEADER, "${AuthToken.TOKEN_TYPE} $MENTOR_ACCESS_TOKEN")
                 justRun { tokenProvider.validateAccessToken(any()) }
                 every { tokenProvider.getId(any()) } returns member.id
                 every { tokenProvider.getAuthority(any()) } returns member.authority
             }
 
-            is Mentee -> {
+            mentee.id -> {
                 header(AuthToken.ACCESS_TOKEN_HEADER, "${AuthToken.TOKEN_TYPE} $MENTEE_ACCESS_TOKEN")
                 justRun { tokenProvider.validateAccessToken(any()) }
                 every { tokenProvider.getId(any()) } returns member.id

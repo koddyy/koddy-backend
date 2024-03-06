@@ -38,7 +38,7 @@ internal class FileManagementApiTest : ApiDocsTestKt() {
                 baseUrl,
                 listOf(FileVirtualCreator.createFile("cat.png", "image/png")),
             ) {
-                accessToken(mentor)
+                accessToken(common)
             }.andExpect {
                 status { isOk() }
                 content { success(ResponseWrapper(response)) }
@@ -66,8 +66,8 @@ internal class FileManagementApiTest : ApiDocsTestKt() {
             val exceptionMessage = "이미지 파일[JPG, JPEG, PNG]을 업로드해주세요."
 
             getRequest(baseUrl) {
+                accessToken(common)
                 param("fileName", "cat.pdf")
-                accessToken(mentor)
             }.andExpect {
                 status { isBadRequest() }
                 content { exception(exceptionCode, exceptionMessage) }
@@ -89,8 +89,8 @@ internal class FileManagementApiTest : ApiDocsTestKt() {
             every { registerPresignedUrlUseCase.invoke(any()) } returns response
 
             getRequest(baseUrl) {
+                accessToken(common)
                 param("fileName", "cat.png")
-                accessToken(mentor)
             }.andExpect {
                 status { isOk() }
                 content { success(response) }
@@ -119,8 +119,8 @@ internal class FileManagementApiTest : ApiDocsTestKt() {
             val exceptionMessage = "PDF 파일을 업로드해주세요."
 
             getRequest(baseUrl) {
+                accessToken(common)
                 param("fileName", "cat.png")
-                accessToken(mentor)
             }.andExpect {
                 status { isBadRequest() }
                 content { exception(exceptionCode, exceptionMessage) }
@@ -142,8 +142,8 @@ internal class FileManagementApiTest : ApiDocsTestKt() {
             every { registerPresignedUrlUseCase.invoke(any()) } returns response
 
             getRequest(baseUrl) {
+                accessToken(common)
                 param("fileName", "cat.pdf")
-                accessToken(mentor)
             }.andExpect {
                 status { isOk() }
                 content { success(response) }
