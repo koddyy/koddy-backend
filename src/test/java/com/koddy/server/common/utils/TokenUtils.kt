@@ -1,5 +1,7 @@
 package com.koddy.server.common.utils
 
+import com.koddy.server.auth.domain.model.AuthToken
+
 object TokenUtils {
     const val ID_TOKEN: String = "ID-TOKEN"
 
@@ -12,4 +14,6 @@ object TokenUtils {
     const val INVALID_REFRESH_TOKEN: String = "INVALID-REFRESH-TOKEN"
 
     const val EXPIRES_IN: Long = 3000
+
+    fun basicToken(): AuthToken = AuthToken(ACCESS_TOKEN, REFRESH_TOKEN)
 }

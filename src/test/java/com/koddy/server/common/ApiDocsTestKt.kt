@@ -13,6 +13,7 @@ import com.koddy.server.common.docs.DocumentFieldType
 import com.koddy.server.common.docs.ENUM
 import com.koddy.server.common.docs.STRING
 import com.koddy.server.common.docs.SnippetBuilder
+import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenUtils.MENTEE_ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenUtils.MENTOR_ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
@@ -32,6 +33,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
+import org.springframework.restdocs.generate.RestDocumentationGenerator
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
 import org.springframework.restdocs.operation.preprocess.Preprocessors
 import org.springframework.restdocs.snippet.Snippet
@@ -91,7 +93,8 @@ abstract class ApiDocsTestKt {
         pathParams: Array<Any> = emptyArray(),
         buildRequest: MockHttpServletRequestDsl.() -> Unit,
     ): ResultActionsDsl {
-        return mockMvc.get(url, pathParams) {
+        return mockMvc.get(url, *pathParams) {
+            requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, url)
             buildRequest()
         }
     }
@@ -101,7 +104,8 @@ abstract class ApiDocsTestKt {
         pathParams: Array<Any> = emptyArray(),
         buildRequest: MockHttpServletRequestDsl.() -> Unit,
     ): ResultActionsDsl {
-        return mockMvc.post(url, pathParams) {
+        return mockMvc.post(url, *pathParams) {
+            requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, url)
             buildRequest()
         }
     }
@@ -111,7 +115,8 @@ abstract class ApiDocsTestKt {
         pathParams: Array<Any> = emptyArray(),
         buildRequest: MockHttpServletRequestDsl.() -> Unit,
     ): ResultActionsDsl {
-        return mockMvc.multipart(url, pathParams) {
+        return mockMvc.multipart(url, *pathParams) {
+            requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, url)
             buildRequest()
         }
     }
@@ -121,7 +126,8 @@ abstract class ApiDocsTestKt {
         pathParams: Array<Any> = emptyArray(),
         buildRequest: MockHttpServletRequestDsl.() -> Unit,
     ): ResultActionsDsl {
-        return mockMvc.patch(url, pathParams) {
+        return mockMvc.patch(url, *pathParams) {
+            requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, url)
             buildRequest()
         }
     }
@@ -131,7 +137,8 @@ abstract class ApiDocsTestKt {
         pathParams: Array<Any> = emptyArray(),
         buildRequest: MockHttpServletRequestDsl.() -> Unit,
     ): ResultActionsDsl {
-        return mockMvc.put(url, pathParams) {
+        return mockMvc.put(url, *pathParams) {
+            requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, url)
             buildRequest()
         }
     }
@@ -141,7 +148,8 @@ abstract class ApiDocsTestKt {
         pathParams: Array<Any> = emptyArray(),
         buildRequest: MockHttpServletRequestDsl.() -> Unit,
     ): ResultActionsDsl {
-        return mockMvc.delete(url, pathParams) {
+        return mockMvc.delete(url, *pathParams) {
+            requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, url)
             buildRequest()
         }
     }
@@ -152,6 +160,12 @@ abstract class ApiDocsTestKt {
     protected fun MockHttpServletRequestDsl.accessToken(token: String) {
         header(AuthToken.ACCESS_TOKEN_HEADER, "${AuthToken.TOKEN_TYPE} $token")
         when (token) {
+            ACCESS_TOKEN -> {
+                justRun { tokenProvider.validateAccessToken(any()) }
+                every { tokenProvider.getId(any()) } returns 1
+                every { tokenProvider.getAuthority(any()) } returns Role.MENTOR.authority
+            }
+
             MENTOR_ACCESS_TOKEN -> {
                 justRun { tokenProvider.validateAccessToken(any()) }
                 every { tokenProvider.getId(any()) } returns 1
@@ -188,6 +202,10 @@ abstract class ApiDocsTestKt {
      * Responsd Body DSL
      */
     protected fun ContentResultMatchersDsl.success(value: Any) {
+        json(objectMapper.writeValueAsString(value), true)
+    }
+
+    protected fun ContentResultMatchersDsl.exception(value: Any) {
         json(objectMapper.writeValueAsString(value), true)
     }
 
