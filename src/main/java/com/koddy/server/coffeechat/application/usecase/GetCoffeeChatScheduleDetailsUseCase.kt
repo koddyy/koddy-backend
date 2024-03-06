@@ -1,10 +1,10 @@
 package com.koddy.server.coffeechat.application.usecase
 
 import com.koddy.server.coffeechat.application.usecase.query.GetCoffeeChatScheduleDetails
+import com.koddy.server.coffeechat.application.usecase.query.response.CoffeeChatScheduleDetails
 import com.koddy.server.coffeechat.application.usecase.query.response.MenteeCoffeeChatScheduleDetails
 import com.koddy.server.coffeechat.application.usecase.query.response.MentorCoffeeChatScheduleDetails
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
-import com.koddy.server.coffeechat.domain.model.response.CoffeeChatScheduleDetails
 import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.global.annotation.KoddyReadOnlyTransactional
 import com.koddy.server.global.annotation.UseCase

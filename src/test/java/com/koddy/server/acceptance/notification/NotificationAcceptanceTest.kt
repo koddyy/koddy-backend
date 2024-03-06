@@ -261,7 +261,7 @@ internal class NotificationAcceptanceTest : AcceptanceTestKt() {
 
         reads.indices.forEach { index ->
             response
-                .body("result[$index].read", `is`(reads[index]))
+                .body("result[$index].isRead", `is`(reads[index]))
                 .body("result[$index].type", `is`(types[index].name))
                 .body("result[$index].member.id", `is`(memberIds[index].toInt()))
                 .body("result[$index].coffeeChat.id", `is`(coffeeChatIds[index].toInt()))
