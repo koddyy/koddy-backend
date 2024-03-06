@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile
 import java.io.FileInputStream
 import java.io.IOException
 
-object FileMockingUtils {
+object FileVirtualCreator {
     private const val FILE_PATH = "src/test/resources/files/"
 
     @JvmStatic

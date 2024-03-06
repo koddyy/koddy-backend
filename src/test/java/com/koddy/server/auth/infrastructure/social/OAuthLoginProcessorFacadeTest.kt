@@ -10,9 +10,9 @@ import com.koddy.server.auth.infrastructure.social.zoom.ZoomOAuthConnector
 import com.koddy.server.auth.infrastructure.social.zoom.response.ZoomUserResponse
 import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
-import com.koddy.server.common.utils.OAuthUtils.AUTHORIZATION_CODE
-import com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI
-import com.koddy.server.common.utils.OAuthUtils.STATE
+import com.koddy.server.common.utils.OAuthDummy.AUTHORIZATION_CODE
+import com.koddy.server.common.utils.OAuthDummy.REDIRECT_URI
+import com.koddy.server.common.utils.OAuthDummy.STATE
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.FeatureSpec
 import io.kotest.matchers.shouldBe

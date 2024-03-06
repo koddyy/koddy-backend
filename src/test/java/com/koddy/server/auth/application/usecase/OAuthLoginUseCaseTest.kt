@@ -10,11 +10,11 @@ import com.koddy.server.auth.exception.OAuthUserNotFoundException
 import com.koddy.server.auth.infrastructure.social.google.response.GoogleUserResponse
 import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
-import com.koddy.server.common.utils.OAuthUtils.AUTHORIZATION_CODE
-import com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI
-import com.koddy.server.common.utils.OAuthUtils.STATE
-import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
-import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
+import com.koddy.server.common.utils.OAuthDummy.AUTHORIZATION_CODE
+import com.koddy.server.common.utils.OAuthDummy.REDIRECT_URI
+import com.koddy.server.common.utils.OAuthDummy.STATE
+import com.koddy.server.common.utils.TokenDummy.ACCESS_TOKEN
+import com.koddy.server.common.utils.TokenDummy.REFRESH_TOKEN
 import com.koddy.server.member.domain.model.Member
 import com.koddy.server.member.domain.service.MemberReader
 import io.kotest.assertions.assertSoftly

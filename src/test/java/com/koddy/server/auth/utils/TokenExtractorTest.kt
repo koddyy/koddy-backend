@@ -2,8 +2,8 @@ package com.koddy.server.auth.utils
 
 import com.koddy.server.auth.domain.model.AuthToken
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
-import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
+import com.koddy.server.common.utils.TokenDummy.ACCESS_TOKEN
+import com.koddy.server.common.utils.TokenDummy.REFRESH_TOKEN
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe

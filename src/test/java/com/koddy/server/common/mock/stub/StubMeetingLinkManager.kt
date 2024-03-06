@@ -9,9 +9,9 @@ import com.koddy.server.coffeechat.domain.model.link.MeetingLinkProvider
 import com.koddy.server.coffeechat.domain.model.link.MeetingLinkRequest
 import com.koddy.server.coffeechat.domain.model.link.MeetingLinkResponse
 import com.koddy.server.coffeechat.infrastructure.link.zoom.spec.ZoomMeetingLinkResponse
-import com.koddy.server.common.utils.TokenUtils.EXPIRES_IN
-import com.koddy.server.common.utils.TokenUtils.ID_TOKEN
-import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
+import com.koddy.server.common.utils.TokenDummy.EXPIRES_IN
+import com.koddy.server.common.utils.TokenDummy.ID_TOKEN
+import com.koddy.server.common.utils.TokenDummy.REFRESH_TOKEN
 import com.koddy.server.global.log.logger
 import org.slf4j.Logger
 

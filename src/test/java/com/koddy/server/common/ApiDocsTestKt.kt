@@ -13,10 +13,10 @@ import com.koddy.server.common.docs.DocumentFieldType
 import com.koddy.server.common.docs.ENUM
 import com.koddy.server.common.docs.STRING
 import com.koddy.server.common.docs.SnippetBuilder
-import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
-import com.koddy.server.common.utils.TokenUtils.MENTEE_ACCESS_TOKEN
-import com.koddy.server.common.utils.TokenUtils.MENTOR_ACCESS_TOKEN
-import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
+import com.koddy.server.common.utils.TokenDummy.ACCESS_TOKEN
+import com.koddy.server.common.utils.TokenDummy.MENTEE_ACCESS_TOKEN
+import com.koddy.server.common.utils.TokenDummy.MENTOR_ACCESS_TOKEN
+import com.koddy.server.common.utils.TokenDummy.REFRESH_TOKEN
 import com.koddy.server.global.base.BusinessExceptionCode
 import com.koddy.server.global.exception.ExceptionResponse
 import com.koddy.server.member.domain.model.Role

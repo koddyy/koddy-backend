@@ -5,9 +5,9 @@ import com.koddy.server.auth.domain.model.AuthToken
 import com.koddy.server.auth.exception.AuthExceptionCode
 import com.koddy.server.common.ApiDocsTestKt
 import com.koddy.server.common.docs.STRING
-import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
-import com.koddy.server.common.utils.TokenUtils.INVALID_REFRESH_TOKEN
-import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
+import com.koddy.server.common.utils.TokenDummy.ACCESS_TOKEN
+import com.koddy.server.common.utils.TokenDummy.INVALID_REFRESH_TOKEN
+import com.koddy.server.common.utils.TokenDummy.REFRESH_TOKEN
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import org.hamcrest.Matchers.containsString

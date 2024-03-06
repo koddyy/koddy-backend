@@ -7,7 +7,7 @@ import com.koddy.server.auth.domain.model.oauth.OAuthProvider
 import com.koddy.server.auth.infrastructure.social.google.response.GoogleUserResponse
 import com.koddy.server.auth.infrastructure.social.kakao.response.KakaoUserResponse
 import com.koddy.server.auth.infrastructure.social.zoom.response.ZoomUserResponse
-import com.koddy.server.common.utils.TokenUtils
+import com.koddy.server.common.utils.TokenDummy
 import com.koddy.server.member.domain.model.Email
 import com.koddy.server.member.domain.model.Language
 import com.koddy.server.member.domain.model.SocialPlatform
@@ -158,7 +158,7 @@ object MentorFixtureStore {
         fun toAuthMember(): AuthMember {
             return AuthMember(
                 toDomain(),
-                AuthToken(TokenUtils.ACCESS_TOKEN, TokenUtils.REFRESH_TOKEN),
+                AuthToken(TokenDummy.ACCESS_TOKEN, TokenDummy.REFRESH_TOKEN),
             )
         }
 

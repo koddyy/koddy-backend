@@ -1,7 +1,7 @@
 package com.koddy.server.auth.infrastructure.token
 
 import com.koddy.server.common.RedisTestKt
-import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
+import com.koddy.server.common.utils.TokenDummy.REFRESH_TOKEN
 import com.koddy.server.global.utils.redis.RedisOperator
 import com.koddy.server.global.utils.redis.StringRedisOperator
 import io.kotest.assertions.assertSoftly

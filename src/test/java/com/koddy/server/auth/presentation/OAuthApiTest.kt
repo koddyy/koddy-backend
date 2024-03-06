@@ -14,12 +14,12 @@ import com.koddy.server.common.ApiDocsTestKt
 import com.koddy.server.common.docs.NUMBER
 import com.koddy.server.common.docs.STRING
 import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
-import com.koddy.server.common.utils.OAuthUtils.AUTHORIZATION_CODE
-import com.koddy.server.common.utils.OAuthUtils.GOOGLE_PROVIDER
-import com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI
-import com.koddy.server.common.utils.OAuthUtils.STATE
-import com.koddy.server.common.utils.TokenUtils
-import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
+import com.koddy.server.common.utils.OAuthDummy.AUTHORIZATION_CODE
+import com.koddy.server.common.utils.OAuthDummy.GOOGLE_PROVIDER
+import com.koddy.server.common.utils.OAuthDummy.REDIRECT_URI
+import com.koddy.server.common.utils.OAuthDummy.STATE
+import com.koddy.server.common.utils.TokenDummy
+import com.koddy.server.common.utils.TokenDummy.ACCESS_TOKEN
 import com.koddy.server.global.ResponseWrapper
 import com.koddy.server.global.exception.OAuthExceptionResponse
 import com.ninjasquad.springmockk.MockkBean
@@ -137,7 +137,7 @@ internal class OAuthApiTest : ApiDocsTestKt() {
             val response = AuthMember(
                 id = 1L,
                 name = "이름",
-                token = TokenUtils.basicToken(),
+                token = TokenDummy.basicAuthToken(),
             )
             every { oAuthLoginUseCase.invoke(any()) } returns response
 

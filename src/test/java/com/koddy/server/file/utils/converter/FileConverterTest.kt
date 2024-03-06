@@ -1,7 +1,7 @@
 package com.koddy.server.file.utils.converter
 
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.utils.FileMockingUtils.createFile
+import com.koddy.server.common.utils.FileVirtualCreator.createFile
 import com.koddy.server.file.domain.model.FileExtension
 import com.koddy.server.file.domain.model.RawFileData
 import com.koddy.server.file.exception.FileException

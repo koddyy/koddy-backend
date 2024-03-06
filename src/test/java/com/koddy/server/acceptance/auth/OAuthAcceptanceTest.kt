@@ -10,10 +10,10 @@ import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
 import com.koddy.server.common.fixture.MentorFixtureStore
 import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
-import com.koddy.server.common.utils.OAuthUtils.GOOGLE_PROVIDER
-import com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI
-import com.koddy.server.common.utils.OAuthUtils.STATE
-import com.koddy.server.common.utils.OAuthUtils.mentorAuthorizationCode
+import com.koddy.server.common.utils.OAuthDummy.GOOGLE_PROVIDER
+import com.koddy.server.common.utils.OAuthDummy.REDIRECT_URI
+import com.koddy.server.common.utils.OAuthDummy.STATE
+import com.koddy.server.common.utils.OAuthDummy.mentorAuthorizationCode
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.notNullValue

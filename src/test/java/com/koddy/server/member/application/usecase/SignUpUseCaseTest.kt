@@ -6,8 +6,8 @@ import com.koddy.server.auth.domain.service.TokenIssuer
 import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
 import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
-import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
-import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
+import com.koddy.server.common.utils.TokenDummy.ACCESS_TOKEN
+import com.koddy.server.common.utils.TokenDummy.REFRESH_TOKEN
 import com.koddy.server.member.application.usecase.command.SignUpMenteeCommand
 import com.koddy.server.member.application.usecase.command.SignUpMentorCommand
 import com.koddy.server.member.domain.model.mentee.Mentee

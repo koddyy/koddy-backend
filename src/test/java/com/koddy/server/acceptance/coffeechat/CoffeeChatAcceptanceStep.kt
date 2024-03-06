@@ -14,9 +14,9 @@ import com.koddy.server.coffeechat.presentation.request.RejectSuggestedCoffeeCha
 import com.koddy.server.common.fixture.MentorFixtureStore
 import com.koddy.server.common.fixture.StrategyFixture
 import com.koddy.server.common.toLocalDateTime
-import com.koddy.server.common.utils.OAuthUtils.REDIRECT_URI
-import com.koddy.server.common.utils.OAuthUtils.STATE
-import com.koddy.server.common.utils.OAuthUtils.mentorAuthorizationCode
+import com.koddy.server.common.utils.OAuthDummy.REDIRECT_URI
+import com.koddy.server.common.utils.OAuthDummy.STATE
+import com.koddy.server.common.utils.OAuthDummy.mentorAuthorizationCode
 import io.restassured.response.ValidatableResponse
 import java.time.LocalDateTime
 

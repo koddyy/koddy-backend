@@ -5,7 +5,7 @@ import com.koddy.server.auth.domain.model.oauth.OAuthProvider
 import com.koddy.server.auth.domain.model.oauth.OAuthUserResponse
 import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
 import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
-import com.koddy.server.common.utils.OAuthUtils.parseAuthorizationCode
+import com.koddy.server.common.utils.OAuthDummy.parseAuthorizationCode
 
 open class StubOAuthLoginProcessor : OAuthLoginProcessor {
     override fun login(

@@ -7,8 +7,8 @@ import com.koddy.server.auth.domain.model.oauth.OAuthProvider
 import com.koddy.server.auth.infrastructure.social.google.response.GoogleUserResponse
 import com.koddy.server.auth.infrastructure.social.kakao.response.KakaoUserResponse
 import com.koddy.server.auth.infrastructure.social.zoom.response.ZoomUserResponse
-import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
-import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
+import com.koddy.server.common.utils.TokenDummy.ACCESS_TOKEN
+import com.koddy.server.common.utils.TokenDummy.REFRESH_TOKEN
 import com.koddy.server.member.domain.model.Email
 import com.koddy.server.member.domain.model.Language
 import com.koddy.server.member.domain.model.Nationality

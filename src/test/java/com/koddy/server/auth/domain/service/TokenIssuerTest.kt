@@ -4,8 +4,8 @@ import com.koddy.server.auth.application.adapter.TokenStore
 import com.koddy.server.auth.domain.model.AuthToken
 import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
-import com.koddy.server.common.utils.TokenUtils.ACCESS_TOKEN
-import com.koddy.server.common.utils.TokenUtils.REFRESH_TOKEN
+import com.koddy.server.common.utils.TokenDummy.ACCESS_TOKEN
+import com.koddy.server.common.utils.TokenDummy.REFRESH_TOKEN
 import com.koddy.server.member.domain.model.Member
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.annotation.DisplayName

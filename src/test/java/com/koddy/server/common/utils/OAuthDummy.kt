@@ -2,7 +2,7 @@ package com.koddy.server.common.utils
 
 import okhttp3.internal.format
 
-object OAuthUtils {
+object OAuthDummy {
     const val GOOGLE_PROVIDER: String = "google"
     const val REDIRECT_URI: String = "http://localhost:3000/login/google"
     const val AUTHORIZATION_CODE: String = "oauth-authorization-code"
