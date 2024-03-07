@@ -182,8 +182,7 @@ internal class ManageAccountApiTest : ApiDocsTestKt() {
         private val baseUrl = "/api/members"
 
         @Test
-        @DisplayName("서비스를 탙퇴한다")
-        fun success() {
+        fun `서비스를 탙퇴한다`() {
             justRun { deleteMemberUseCase.invoke(any()) }
 
             deleteRequest(baseUrl) {

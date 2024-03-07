@@ -35,7 +35,7 @@ import org.springframework.context.annotation.Import
 @RepositoryTestKt
 @Import(CoffeeChatScheduleQueryRepositoryImpl::class)
 @DisplayName("CoffeeChat -> CoffeeChatScheduleQueryRepository [fetchMenteeCoffeeChatSchedules] 테스트")
-class CoffeeChatScheduleQueryRepositoryFetchMenteeCoffeeChatSchedulesTest(
+internal class CoffeeChatScheduleQueryRepositoryFetchMenteeCoffeeChatSchedulesTest(
     private val sut: CoffeeChatScheduleQueryRepositoryImpl,
     private val coffeeChatRepository: CoffeeChatRepository,
     memberRepository: MemberRepository,
@@ -83,8 +83,7 @@ class CoffeeChatScheduleQueryRepositoryFetchMenteeCoffeeChatSchedulesTest(
     }
 
     @Test
-    @DisplayName("0. 멘티의 상태별 커피챗 개수를 조회한다 [대기, 제안, 예정, 지나간]")
-    fun counts() {
+    fun `0) 멘티의 상태별 커피챗 개수를 조회한다 - 대기, 제안, 예정, 지나간`() {
         val result: CoffeeChatCountPerCategory = sut.fetchMenteeCoffeeChatCountPerCategory(mentees[0].id)
         assertSoftly {
             result.waiting shouldBe 11
@@ -99,8 +98,7 @@ class CoffeeChatScheduleQueryRepositoryFetchMenteeCoffeeChatSchedulesTest(
     }
 
     @Test
-    @DisplayName("1. 멘티의 내 일정 `대기 상태` 커피챗 정보를 조회한다")
-    fun waiting() {
+    fun `1) 멘티의 내 일정 대기 상태 커피챗 정보를 조회한다`() {
         // given
         val condition = MenteeCoffeeChatQueryCondition(mentees[0].id, CoffeeChatStatus.withWaitingCategory())
 
@@ -139,8 +137,7 @@ class CoffeeChatScheduleQueryRepositoryFetchMenteeCoffeeChatSchedulesTest(
     }
 
     @Test
-    @DisplayName("2. 멘티의 내 일정 `제안 상태` 커피챗 정보를 조회한다")
-    fun suggest() {
+    fun `2) 멘티의 내 일정 제안 상태 커피챗 정보를 조회한다`() {
         // given
         val condition = MenteeCoffeeChatQueryCondition(mentees[0].id, CoffeeChatStatus.withSuggstedCategory())
 
@@ -174,8 +171,7 @@ class CoffeeChatScheduleQueryRepositoryFetchMenteeCoffeeChatSchedulesTest(
     }
 
     @Test
-    @DisplayName("3. 멘티의 내 일정 `예정 상태` 커피챗 정보를 조회한다")
-    fun scheduled() {
+    fun `3) 멘티의 내 일정 예정 상태 커피챗 정보를 조회한다`() {
         // given
         val condition = MenteeCoffeeChatQueryCondition(mentees[0].id, CoffeeChatStatus.withScheduledCategory())
 
@@ -197,8 +193,7 @@ class CoffeeChatScheduleQueryRepositoryFetchMenteeCoffeeChatSchedulesTest(
     }
 
     @Test
-    @DisplayName("4. 멘티의 내 일정 `지나간 상태` 커피챗 정보를 조회한다")
-    fun passed() {
+    fun `4) 멘티의 내 일정 지나간 상태 커피챗 정보를 조회한다`() {
         // given
         val condition = MenteeCoffeeChatQueryCondition(mentees[0].id, CoffeeChatStatus.withPassedCategory())
 

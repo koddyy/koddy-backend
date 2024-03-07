@@ -125,8 +125,7 @@ internal class ManageMeetingLinkApiTest : ApiDocsTestKt() {
         )
 
         @Test
-        @DisplayName("멘토가 아니면 권한이 없다")
-        fun throwExceptionByInvalidPermission() {
+        fun `멘토가 아니면 권한이 없다`() {
             val exceptionCode = AuthExceptionCode.INVALID_PERMISSION
 
             deleteRequest(baseUrl, arrayOf("zoom", "88141392261")) {
@@ -142,8 +141,7 @@ internal class ManageMeetingLinkApiTest : ApiDocsTestKt() {
         }
 
         @Test
-        @DisplayName("생성한 커피챗 링크를 삭제한다")
-        fun success() {
+        fun `생성한 커피챗 링크를 삭제한다`() {
             justRun { manageMeetingLinkUseCase.delete(any()) }
 
             deleteRequest(baseUrl, arrayOf("zoom", "88141392261")) {

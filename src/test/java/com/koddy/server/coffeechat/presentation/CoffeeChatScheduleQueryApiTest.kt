@@ -23,7 +23,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 
 @WebMvcTest(CoffeeChatScheduleQueryApi::class)
 @DisplayName("CoffeeChat -> CoffeeChatScheduleQueryApi 테스트")
-class CoffeeChatScheduleQueryApiTest : ApiDocsTestKt() {
+internal class CoffeeChatScheduleQueryApiTest : ApiDocsTestKt() {
     @MockkBean
     private lateinit var getCoffeeChatScheduleUseCase: GetCoffeeChatScheduleUseCase
 
