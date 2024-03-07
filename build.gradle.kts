@@ -56,7 +56,7 @@ dependencies {
         "jpql-render",
         "spring-data-jpa-support",
     ).forEach {
-        implementation("com.linecorp.kotlin-jdsl:${it}:${property("kotlinJdslVersion")}")
+        implementation("com.linecorp.kotlin-jdsl:$it:${property("kotlinJdslVersion")}")
     }
 
     // Redis
@@ -70,7 +70,7 @@ dependencies {
         "spring-cloud-aws-starter",
         "spring-cloud-aws-starter-s3",
     ).forEach {
-        implementation("io.awspring.cloud:${it}:${property("awspringVersion")}")
+        implementation("io.awspring.cloud:$it:${property("awspringVersion")}")
     }
 
     // Log & Monitoring
