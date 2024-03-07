@@ -131,7 +131,6 @@ internal class MentorMainSearchApiTest : ApiDocsTestKt() {
             every { mentorMainSearchUseCase.lookAroundMenteesByCondition(any()) } returns response
 
             getRequest(baseUrl) {
-                accessToken(mentor)
                 param("nationalities", "EN,JP,CN")
                 param("languages", "EN,CN")
                 param("page", "1")
@@ -139,7 +138,7 @@ internal class MentorMainSearchApiTest : ApiDocsTestKt() {
                 status { isOk() }
                 content { success(response) }
             }.andDo {
-                makeSuccessDocsWithAccessToken("MemberApi/Mentor/MainSearch/Mentees") {
+                makeSuccessDocs("MemberApi/Mentor/MainSearch/Mentees") {
                     queryParameters(*queryParameters)
                     responseFields(*responseFields)
                 }

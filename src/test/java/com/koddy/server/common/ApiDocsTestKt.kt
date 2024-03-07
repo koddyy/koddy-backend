@@ -71,6 +71,9 @@ import org.springframework.web.multipart.MultipartFile
 abstract class ApiDocsTestKt {
     companion object {
         @JvmStatic
+        protected val enter = "+\n"
+
+        @JvmStatic
         protected val common: Member<*> = mentorFixture(id = 1).toDomain()
 
         @JvmStatic

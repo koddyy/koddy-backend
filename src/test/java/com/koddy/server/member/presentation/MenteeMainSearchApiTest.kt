@@ -130,14 +130,13 @@ internal class MenteeMainSearchApiTest : ApiDocsTestKt() {
             every { menteeMainSearchUseCase.lookAroundMentorsByCondition(any()) } returns response
 
             getRequest(baseUrl) {
-                accessToken(mentee)
                 param("languages", "EN,CN")
                 param("page", "1")
             }.andExpect {
                 status { isOk() }
                 content { success(response) }
             }.andDo {
-                makeSuccessDocsWithAccessToken("MemberApi/Mentee/MainSearch/Mentors") {
+                makeSuccessDocs("MemberApi/Mentee/MainSearch/Mentors") {
                     queryParameters(*queryParameters)
                     responseFields(*responseFields)
                 }

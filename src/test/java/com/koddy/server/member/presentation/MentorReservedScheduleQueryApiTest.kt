@@ -96,7 +96,7 @@ internal class MentorReservedScheduleQueryApiTest : ApiDocsTestKt() {
                 status { isOk() }
                 content { success(response) }
             }.andDo {
-                makeSuccessDocs("MemberApi/MentorReservedSchedule") {
+                makeSuccessDocsWithAccessToken("MemberApi/MentorReservedSchedule") {
                     pathParameters(*pathParameters)
                     queryParameters(*queryParameters)
                     responseFields(*responseFields)
