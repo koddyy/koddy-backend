@@ -7,7 +7,7 @@
 
 == OAuth 인증 과정
 
-=== 1. OAuth Link
+=== 1. OAuth Link 얻기
 
 *HTTP Request*
 
@@ -21,7 +21,7 @@ include::{snippets}/OAuthApi/Access/Failure/http-response.adoc[]
 include::{snippets}/OAuthApi/Access/Success/http-response.adoc[]
 include::{snippets}/OAuthApi/Access/Success/response-fields.adoc[]
 
-=== 2. 인증 진행
+=== 2. OAuth 로그인 진행
 
 *HTTP Request*
 
@@ -36,7 +36,7 @@ NOTE: DB에 사용자가 없는 경우 >> 회원가입 진행
 include::{snippets}/OAuthApi/Login/Failure/http-response.adoc[]
 include::{snippets}/OAuthApi/Login/Failure/response-fields.adoc[]
 
-NOTE: DB에 사용자가 존재 >> 로그인 완료
+NOTE: DB에 사용자가 있는 경우 >> 로그인 완료
 
 include::{snippets}/OAuthApi/Login/Success/http-response.adoc[]
 include::{snippets}/OAuthApi/Login/Success/response-fields.adoc[]

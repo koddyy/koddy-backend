@@ -86,7 +86,10 @@ internal class HandleAppliedCoffeeChatApiTest : ApiDocsTestKt() {
         )
         private val requestFields: Array<DocumentField> = arrayOf(
             "question" type STRING means "멘티에게 궁금한 점",
-            "chatType" type STRING means "멘토링 진행 방식" constraint "- 링크 = zoom, google $enter - 메신저 = kakao, line, wechat",
+            "chatType" type STRING means "멘토링 진행 방식" constraint """
+                - 링크 = zoom, google $enter
+                - 메신저 = kakao, line, wechat
+            """,
             "chatValue" type STRING means "멘토링 진행 방식에 대한 값" constraint "링크 or 메신저 ID",
         )
 

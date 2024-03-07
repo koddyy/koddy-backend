@@ -52,7 +52,7 @@ internal class AuthenticateMentorUnivApiTest : ApiDocsTestKt() {
         }
 
         @Test
-        fun `파악할 수 없는 대학교 도메인은 임시적으로 인증이 불가능하다`() {
+        fun `파악할 수 없는 대학교 도메인은 일시적으로 인증이 불가능하다`() {
             val exceptionCode = GlobalExceptionCode.NOT_PROVIDED_UNIV_DOMAIN
 
             postRequest(baseUrl) {
@@ -144,7 +144,7 @@ internal class AuthenticateMentorUnivApiTest : ApiDocsTestKt() {
             }.andExpect {
                 status { isNoContent() }
             }.andDo {
-                makeSuccessDocsWithAccessToken("MemberApi/Mentor/UnivAuth/Mail/Confirm/mentor") {
+                makeSuccessDocsWithAccessToken("MemberApi/Mentor/UnivAuth/Mail/Confirm/Success") {
                     requestFields(*requestFields)
                 }
             }

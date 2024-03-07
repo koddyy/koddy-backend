@@ -99,8 +99,14 @@ internal class MentorMainSearchApiTest : ApiDocsTestKt() {
         private val baseUrl = "/api/mentees"
 
         private val queryParameters: Array<DocumentField> = arrayOf(
-            "nationalities" type STRING means "국적" constraint "국가 코드 기반 (KR EN CN JP VN ETC) + 여러개면 콤마로 구분" isOptional true,
-            "languages" type STRING means "언어" constraint "국가 코드 기반 (KR EN CN JP VN) + 여러개면 콤마로 구분" isOptional true,
+            "nationalities" type STRING means "국적" constraint """
+                - 국가 코드 기반 (KR EN CN JP VN ETC) $enter
+                - 여러개면 콤마로 구분 ex) KR,EN
+            """ isOptional true,
+            "languages" type STRING means "언어" constraint """
+                - 국가 코드 기반 (KR EN CN JP VN) $enter
+                - 여러개면 콤마로 구분 ex) KR,EN
+            """ isOptional true,
             "page" type NUMBER means "페이지" constraint "1부터 시작",
         )
         private val responseFields: Array<DocumentField> = arrayOf(

@@ -162,7 +162,7 @@ internal class OAuthApiTest : ApiDocsTestKt() {
                 status { isOk() }
                 content { success(LoginResponse(id = response.id, name = response.name)) }
             }.andDo {
-                makeSuccessDocs("OAuthApi/Access/Success") {
+                makeSuccessDocs("OAuthApi/Login/Success") {
                     pathParameters(*pathParameters)
                     requestFields(*requestFields)
                     responseHeaders(*responseHeaders)

@@ -68,7 +68,12 @@ internal class CoffeeChatScheduleQueryApiTest : ApiDocsTestKt() {
         private val baseUrl = "/api/coffeechats/me/schedules"
 
         private val queryParameters: Array<DocumentField> = arrayOf(
-            "category" type STRING means "카테고리 필터" constraint "- 대기 = waiting $enter - 제안 = suggested $enter - 예정 = scheduled $enter - 지나감 = passed",
+            "category" type STRING means "카테고리 필터" constraint """
+                 - 대기 = waiting $enter
+                 - 제안 = suggested $enter
+                 - 예정 = scheduled $enter
+                 - 지나감 = passed
+            """,
             "detail" type STRING means "상세 필터" constraint """
                 [안보내면 전체] $enter
                 - 신청(with 대기) = apply $enter
