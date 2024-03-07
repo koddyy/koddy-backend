@@ -51,11 +51,11 @@ internal class CompleteProfileApiTest : ApiDocsTestKt() {
             "period.startDate" type STRING means "멘토링 기간 [시작 날짜]" constraint "[KST] yyyy-MM-dd",
             "period.endDate" type STRING means "멘토링 기간 [종료 날짜]" constraint "[KST] yyyy-MM-dd",
             "schedules" type ARRAY means "멘토링 주간 스케줄" isOptional true,
-            "schedules[].dayOfWeek" type STRING means "요일" constraint "월 화 수 목 금 토 일",
-            "schedules[].start.hour" type NUMBER means "요일별 시작 시간 [Hour]" constraint "0 ~ 23",
-            "schedules[].start.minute" type NUMBER means "요일별 시작 시간 [Minute]" constraint "0 ~ 59",
-            "schedules[].end.hour" type NUMBER means "요일별 종료 시간 [Hour]" constraint "0 ~ 23",
-            "schedules[].end.minute" type NUMBER means "요일별 시작 시간 [Minute]" constraint "0 ~ 59",
+            "schedules[].dayOfWeek" type STRING means "멘토링 주간 스케줄 [요일]" constraint "월 화 수 목 금 토 일",
+            "schedules[].start.hour" type NUMBER means "멘토링 주간 스케줄 [시작 시간(Hour)]" constraint "0 ~ 23",
+            "schedules[].start.minute" type NUMBER means "멘토링 주간 스케줄 [종료 시간(Minute)]" constraint "0 ~ 59",
+            "schedules[].end.hour" type NUMBER means "멘토링 주간 스케줄 [시작 시간(Hour)]" constraint "0 ~ 23",
+            "schedules[].end.minute" type NUMBER means "멘토링 주간 스케줄 [종료 시간(Minute)]" constraint "0 ~ 59",
         )
 
         @Test

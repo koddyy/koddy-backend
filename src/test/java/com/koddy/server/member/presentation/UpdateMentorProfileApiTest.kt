@@ -121,14 +121,14 @@ internal class UpdateMentorProfileApiTest : ApiDocsTestKt() {
 
         private val requestFields: Array<DocumentField> = arrayOf(
             "period" type OBJECT means "멘토링 기간" isOptional true,
-            "period.startDate" type STRING means "멘토링 기간 [시작 날짜]",
-            "period.endDate" type STRING means "멘토링 기간 [종료 날짜]",
+            "period.startDate" type STRING means "멘토링 기간 [시작 날짜]" constraint "[KST] yyyy-MM-dd",
+            "period.endDate" type STRING means "멘토링 기간 [종료 날짜]" constraint "[KST] yyyy-MM-dd",
             "schedules" type ARRAY means "멘토링 주간 스케줄" isOptional true,
             "schedules[].dayOfWeek" type STRING means "멘토링 주간 스케줄 [요일]",
-            "schedules[].start.hour" type NUMBER means "멘토링 주간 스케줄 [시작 시간(Hour)]",
-            "schedules[].start.minute" type NUMBER means "멘토링 주간 스케줄 [종료 시간(Minute)]",
-            "schedules[].end.hour" type NUMBER means "멘토링 주간 스케줄 [시작 시간(Hour)]",
-            "schedules[].end.minute" type NUMBER means "멘토링 주간 스케줄 [종료 시간(Minute)]",
+            "schedules[].start.hour" type NUMBER means "멘토링 주간 스케줄 [시작 시간(Hour)]" constraint "0 ~ 23",
+            "schedules[].start.minute" type NUMBER means "멘토링 주간 스케줄 [종료 시간(Minute)]" constraint "0 ~ 59",
+            "schedules[].end.hour" type NUMBER means "멘토링 주간 스케줄 [시작 시간(Hour)]" constraint "0 ~ 23",
+            "schedules[].end.minute" type NUMBER means "멘토링 주간 스케줄 [종료 시간(Minute)]" constraint "0 ~ 59",
         )
 
         @Test
