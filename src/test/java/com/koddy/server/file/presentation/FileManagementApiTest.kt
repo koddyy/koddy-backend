@@ -1,6 +1,7 @@
 package com.koddy.server.file.presentation
 
 import com.koddy.server.common.ApiDocsTestKt
+import com.koddy.server.common.docs.DocumentField
 import com.koddy.server.common.docs.STRING
 import com.koddy.server.common.utils.FileVirtualCreator
 import com.koddy.server.file.application.usecase.RegisterPresignedUrlUseCase
@@ -29,6 +30,13 @@ internal class FileManagementApiTest : ApiDocsTestKt() {
     internal inner class Upload {
         private val baseUrl = "/api/files"
 
+        private val fileForms: Array<DocumentField> = arrayOf(
+            "file" type STRING means "업로드 파일" constraint "파일 확장자 = JPG, JPEG, PNG, PDF",
+        )
+        private val responseFields: Array<DocumentField> = arrayOf(
+            "result" type STRING means "업로드된 파일 URL",
+        )
+
         @Test
         fun `파일을 업로드한다`() {
             val response = "https://file-upload-url"
@@ -44,12 +52,8 @@ internal class FileManagementApiTest : ApiDocsTestKt() {
                 content { success(ResponseWrapper(response)) }
             }.andDo {
                 makeSuccessDocsWithAccessToken("FileApi/Upload") {
-                    fileForms(
-                        "file" type STRING means "업로드 파일" constraint "파일 확장자 = JPG, JPEG, PNG, PDF",
-                    )
-                    responseFields(
-                        "result" type STRING means "파일 업로드 URL",
-                    )
+                    fileForms(*fileForms)
+                    responseFields(*responseFields)
                 }
             }
         }
@@ -59,6 +63,14 @@ internal class FileManagementApiTest : ApiDocsTestKt() {
     @DisplayName("이미지 업로드에 대한 Presigned Url 응답 API -> [POST /api/files/presigned/image]")
     internal inner class GetImagePresignedUrl {
         private val baseUrl = "/api/files/presigned/image"
+
+        private val queryParameters: Array<DocumentField> = arrayOf(
+            "fileName" type STRING means "프로필 이미지 사진 파일명" constraint "파일 확장자 = JPG, JPEG, PNG",
+        )
+        private val responseFields: Array<DocumentField> = arrayOf(
+            "preSignedUrl" type STRING means "Presigned Url" constraint "PUT 요청으로 이미지 업로드 (URL + File)",
+            "uploadFileUrl" type STRING means "스토리지 저장 URL" constraint "스토리지 이미지 업로드 후 서버로 전송할 URL",
+        )
 
         @Test
         fun `이미지 파일이 아니면 Presigned Url을 얻을 수 없다`() {
@@ -73,9 +85,7 @@ internal class FileManagementApiTest : ApiDocsTestKt() {
                 content { exception(exceptionCode, exceptionMessage) }
             }.andDo {
                 makeFailureDocsWithAccessToken("FileApi/GetPresignedUrl/Image/Failure") {
-                    queryParameters(
-                        "fileName" type STRING means "프로필 이미지 사진 파일명" constraint "파일 확장자 = JPG, JPEG, PNG",
-                    )
+                    queryParameters(*queryParameters)
                 }
             }
         }
@@ -96,13 +106,8 @@ internal class FileManagementApiTest : ApiDocsTestKt() {
                 content { success(response) }
             }.andDo {
                 makeSuccessDocsWithAccessToken("FileApi/GetPresignedUrl/Image/Success") {
-                    queryParameters(
-                        "fileName" type STRING means "프로필 이미지 사진 파일명" constraint "파일 확장자 = JPG, JPEG, PNG",
-                    )
-                    responseFields(
-                        "preSignedUrl" type STRING means "Presigned Url" constraint "PUT 요청으로 이미지 업로드 (URL + File)",
-                        "uploadFileUrl" type STRING means "스토리지 저장 URL" constraint "스토리지 이미지 업로드 후 서버로 전송할 URL",
-                    )
+                    queryParameters(*queryParameters)
+                    responseFields(*responseFields)
                 }
             }
         }
@@ -112,6 +117,14 @@ internal class FileManagementApiTest : ApiDocsTestKt() {
     @DisplayName("PDF 파일 업로드에 대한 Presigned Url 응답 API -> [POST /api/files/presigned/pdf]")
     internal inner class GetPdfPresignedUrl {
         private val baseUrl = "/api/files/presigned/pdf"
+
+        private val queryParameters: Array<DocumentField> = arrayOf(
+            "fileName" type STRING means "멘토 증명자료 파일명" constraint "파일 확장자 = PDF",
+        )
+        private val responseFields: Array<DocumentField> = arrayOf(
+            "preSignedUrl" type STRING means "Presigned Url" constraint "PUT 요청으로 이미지 업로드 (URL + File)",
+            "uploadFileUrl" type STRING means "스토리지 저장 URL" constraint "스토리지 이미지 업로드 후 서버로 전송할 URL",
+        )
 
         @Test
         fun `PDF 파일이 아니면 Presigned Url을 얻을 수 없다`() {
@@ -126,9 +139,7 @@ internal class FileManagementApiTest : ApiDocsTestKt() {
                 content { exception(exceptionCode, exceptionMessage) }
             }.andDo {
                 makeFailureDocsWithAccessToken("FileApi/GetPresignedUrl/Pdf/Failure") {
-                    queryParameters(
-                        "fileName" type STRING means "멘토 증명자료 파일명" constraint "파일 확장자 = PDF",
-                    )
+                    queryParameters(*queryParameters)
                 }
             }
         }
@@ -149,13 +160,8 @@ internal class FileManagementApiTest : ApiDocsTestKt() {
                 content { success(response) }
             }.andDo {
                 makeSuccessDocsWithAccessToken("FileApi/GetPresignedUrl/Pdf/Success") {
-                    queryParameters(
-                        "fileName" type STRING means "멘토 증명자료 파일명" constraint "파일 확장자 = PDF",
-                    )
-                    responseFields(
-                        "preSignedUrl" type STRING means "Presigned Url" constraint "PUT 요청으로 이미지 업로드 (URL + File)",
-                        "uploadFileUrl" type STRING means "스토리지 저장 URL" constraint "스토리지 이미지 업로드 후 서버로 전송할 URL",
-                    )
+                    queryParameters(*queryParameters)
+                    responseFields(*responseFields)
                 }
             }
         }

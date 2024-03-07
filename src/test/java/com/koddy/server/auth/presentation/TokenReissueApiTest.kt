@@ -4,6 +4,7 @@ import com.koddy.server.auth.application.usecase.ReissueTokenUseCase
 import com.koddy.server.auth.domain.model.AuthToken
 import com.koddy.server.auth.exception.AuthExceptionCode
 import com.koddy.server.common.ApiDocsTestKt
+import com.koddy.server.common.docs.DocumentField
 import com.koddy.server.common.docs.STRING
 import com.koddy.server.common.utils.TokenDummy.ACCESS_TOKEN
 import com.koddy.server.common.utils.TokenDummy.INVALID_REFRESH_TOKEN
@@ -27,6 +28,14 @@ internal class TokenReissueApiTest : ApiDocsTestKt() {
     @DisplayName("토큰 재발급 API [POST /api/token/reissue]")
     internal inner class ReissueToken {
         private val baseUrl = "/api/token/reissue"
+
+        private val responseHeaders: Array<DocumentField> = arrayOf(
+            AuthToken.ACCESS_TOKEN_HEADER type STRING means "Access Token",
+            HttpHeaders.SET_COOKIE type STRING means "Set Refresh Token",
+        )
+        private val responseCookies: Array<DocumentField> = arrayOf(
+            AuthToken.REFRESH_TOKEN_HEADER type STRING means "Refresh Token",
+        )
 
         @Test
         fun `유효하지 않은 RefreshToken으로 인해 토큰 재발급에 실패한다`() {
@@ -56,13 +65,8 @@ internal class TokenReissueApiTest : ApiDocsTestKt() {
                 cookie { value(AuthToken.REFRESH_TOKEN_HEADER, containsString(REFRESH_TOKEN)) }
             }.andDo {
                 makeSuccessDocsWithRefreshToken("TokenReissueApi/Success") {
-                    responseHeaders(
-                        AuthToken.ACCESS_TOKEN_HEADER type STRING means "Access Token",
-                        HttpHeaders.SET_COOKIE type STRING means "Set Refresh Token",
-                    )
-                    responseCookies(
-                        AuthToken.REFRESH_TOKEN_HEADER type STRING means "Refresh Token",
-                    )
+                    responseHeaders(*responseHeaders)
+                    responseCookies(*responseCookies)
                 }
             }
         }

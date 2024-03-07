@@ -1,6 +1,7 @@
 package com.koddy.server.notification.presentation
 
 import com.koddy.server.common.ApiDocsTestKt
+import com.koddy.server.common.docs.DocumentField
 import com.koddy.server.common.docs.NUMBER
 import com.koddy.server.notification.application.usecase.ReadNotificationUseCase
 import com.ninjasquad.springmockk.MockkBean
@@ -21,6 +22,10 @@ internal class ReadNotificationApiTest : ApiDocsTestKt() {
     internal inner class ReadSingle {
         private val baseUrl = "/api/notifications/{notificationId}/read"
 
+        private val pathParameters: Array<DocumentField> = arrayOf(
+            "notificationId" type NUMBER means "알림 ID(PK)",
+        )
+
         @Test
         fun `알림 단건 읽음 처리를 진행한다`() {
             justRun { readNotificationUseCase.readSingle(any()) }
@@ -31,9 +36,7 @@ internal class ReadNotificationApiTest : ApiDocsTestKt() {
                 status { isNoContent() }
             }.andDo {
                 makeSuccessDocsWithAccessToken("NotificationApi/ReadProcessing/Single") {
-                    pathParameters(
-                        "notificationId" type NUMBER means "알림 ID(PK)",
-                    )
+                    pathParameters(*pathParameters)
                 }
             }
         }
