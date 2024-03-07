@@ -9,6 +9,5 @@ object PageCreator {
     /**
      * Request Page = 1부터 시작
      */
-    @JvmStatic
     fun create(page: Int): Pageable = PageRequest.of(page - 1, SLICE_PER_PAGE)
 }

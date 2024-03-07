@@ -16,7 +16,6 @@ data class MenteeDetails(
     val status: String,
 ) {
     companion object {
-        @JvmStatic
         fun from(mentee: Mentee): MenteeDetails {
             return MenteeDetails(
                 mentee.id,

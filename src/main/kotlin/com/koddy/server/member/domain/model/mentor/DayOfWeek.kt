@@ -32,7 +32,6 @@ enum class DayOfWeek(
 
         fun of(kors: List<String>): List<DayOfWeek> = kors.map { from(it) }
 
-        @JvmStatic
         fun of(year: Int, month: Int, day: Int): DayOfWeek {
             return when (LocalDate.of(year, month, day).dayOfWeek!!) {
                 MONDAY -> MON

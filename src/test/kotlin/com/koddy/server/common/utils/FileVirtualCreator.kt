@@ -8,7 +8,6 @@ import java.io.IOException
 object FileVirtualCreator {
     private const val FILE_PATH = "src/test/resources/files/"
 
-    @JvmStatic
     fun createFile(
         fileName: String,
         contentType: String,

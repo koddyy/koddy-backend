@@ -26,7 +26,6 @@ data class MentorPrivateProfile(
     val profileComplete: Boolean,
 ) : MemberPrivateProfile {
     companion object {
-        @JvmStatic
         fun from(mentor: Mentor): MentorPrivateProfile {
             return MentorPrivateProfile(
                 id = mentor.id,
@@ -63,7 +62,6 @@ data class MenteePrivateProfile(
     val profileComplete: Boolean,
 ) : MemberPrivateProfile {
     companion object {
-        @JvmStatic
         fun from(mentee: Mentee): MenteePrivateProfile {
             return MenteePrivateProfile(
                 id = mentee.id,

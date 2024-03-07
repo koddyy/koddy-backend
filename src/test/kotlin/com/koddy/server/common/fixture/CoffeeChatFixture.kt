@@ -17,9 +17,9 @@ private fun mentoring(day: Int, hour: Int, minute: Int): LocalDateTime {
 }
 
 enum class CoffeeChatFixture(
-    @JvmField val start: LocalDateTime,
-    @JvmField val end: LocalDateTime,
-    @JvmField val strategy: Strategy,
+    val start: LocalDateTime,
+    val end: LocalDateTime,
+    val strategy: Strategy,
 ) {
     월요일_1주차_20_00_시작(mentoring(1, 20, 0), mentoring(1, 20, 30), KAKAO_ID.toDomain()),
     월요일_1주차_20_30_시작(mentoring(1, 20, 30), mentoring(1, 21, 0), KAKAO_ID.toDomain()),
@@ -199,7 +199,6 @@ object MenteeFlow {
         return coffeeChat
     }
 
-    @JvmStatic
     fun applyAndApprove(
         id: Long = 0L,
         fixture: CoffeeChatFixture,
@@ -296,7 +295,6 @@ object MentorFlow {
         return coffeeChat
     }
 
-    @JvmStatic
     fun suggestAndPending(
         id: Long = 0L,
         fixture: CoffeeChatFixture,

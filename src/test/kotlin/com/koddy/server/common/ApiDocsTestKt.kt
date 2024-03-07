@@ -69,19 +69,10 @@ import org.springframework.web.multipart.MultipartFile
 @ExtendWith(RestDocumentationExtension::class)
 @AutoConfigureRestDocs
 abstract class ApiDocsTestKt {
-    companion object {
-        @JvmStatic
-        protected val enter = "+\n"
-
-        @JvmStatic
-        protected val common: Member<*> = mentorFixture(id = 1).toDomain()
-
-        @JvmStatic
-        protected val mentor: Mentor = mentorFixture(id = 2).toDomain()
-
-        @JvmStatic
-        protected val mentee: Mentee = menteeFixture(id = 3).toDomain()
-    }
+    protected val enter = "+\n"
+    protected val common: Member<*> = mentorFixture(id = 1).toDomain()
+    protected val mentor: Mentor = mentorFixture(id = 2).toDomain()
+    protected val mentee: Mentee = menteeFixture(id = 3).toDomain()
 
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -93,7 +84,7 @@ abstract class ApiDocsTestKt {
     private lateinit var tokenProvider: TokenProvider
 
     @Autowired
-    protected lateinit var tokenResponseWriter: TokenResponseWriter
+    private lateinit var tokenResponseWriter: TokenResponseWriter
 
     @BeforeEach
     fun setUpMockMvc(
@@ -261,7 +252,7 @@ abstract class ApiDocsTestKt {
         snippetBuilder: SnippetBuilder.() -> Unit,
     ) {
         val builder = SnippetBuilder()
-        builder.requestHeaders(AuthToken.ACCESS_TOKEN_HEADER type STRING means "Access Token")
+        builder.requestHeaders(*accessTokenHeader)
         builder.snippetBuilder()
         handle(makeDocument(identifier, *builder.build()))
     }
@@ -271,7 +262,7 @@ abstract class ApiDocsTestKt {
         snippetBuilder: SnippetBuilder.() -> Unit,
     ) {
         val builder = SnippetBuilder()
-        builder.requestCookies(AuthToken.REFRESH_TOKEN_HEADER type STRING means "Refresh Token")
+        builder.requestCookies(*refreshTokenCookie)
         builder.snippetBuilder()
         handle(makeDocument(identifier, *builder.build()))
     }
@@ -281,10 +272,7 @@ abstract class ApiDocsTestKt {
         snippetBuilder: SnippetBuilder.() -> Unit,
     ) {
         val builder = SnippetBuilder()
-        builder.responseFields(
-            "errorCode" type STRING means "커스텀 예외 코드",
-            "message" type STRING means "예외 메시지",
-        )
+        builder.responseFields(*exceptionFields)
         builder.snippetBuilder()
         handle(makeDocument(identifier, *builder.build()))
     }
@@ -294,11 +282,8 @@ abstract class ApiDocsTestKt {
         snippetBuilder: SnippetBuilder.() -> Unit,
     ) {
         val builder = SnippetBuilder()
-        builder.requestHeaders(AuthToken.ACCESS_TOKEN_HEADER type STRING means "Access Token")
-        builder.responseFields(
-            "errorCode" type STRING means "커스텀 예외 코드",
-            "message" type STRING means "예외 메시지",
-        )
+        builder.requestHeaders(*accessTokenHeader)
+        builder.responseFields(*exceptionFields)
         builder.snippetBuilder()
         handle(makeDocument(identifier, *builder.build()))
     }
@@ -308,14 +293,23 @@ abstract class ApiDocsTestKt {
         snippetBuilder: SnippetBuilder.() -> Unit,
     ) {
         val builder = SnippetBuilder()
-        builder.requestCookies(AuthToken.REFRESH_TOKEN_HEADER type STRING means "Refresh Token")
-        builder.responseFields(
-            "errorCode" type STRING means "커스텀 예외 코드",
-            "message" type STRING means "예외 메시지",
-        )
+        builder.requestCookies(*refreshTokenCookie)
+        builder.responseFields(*exceptionFields)
         builder.snippetBuilder()
         handle(makeDocument(identifier, *builder.build()))
     }
+
+    private val accessTokenHeader: Array<DocumentField>
+        get() = arrayOf(AuthToken.ACCESS_TOKEN_HEADER type STRING means "Access Token")
+
+    private val refreshTokenCookie: Array<DocumentField>
+        get() = arrayOf(AuthToken.REFRESH_TOKEN_HEADER type STRING means "Refresh Token")
+
+    private val exceptionFields: Array<DocumentField>
+        get() = arrayOf(
+            "errorCode" type STRING means "커스텀 예외 코드",
+            "message" type STRING means "예외 메시지",
+        )
 
     private fun makeDocument(
         identifier: String,
@@ -329,7 +323,9 @@ abstract class ApiDocsTestKt {
         )
     }
 
-    protected infix fun String.type(fieldType: DocumentFieldType): DocumentField = DocumentField(this, fieldType.type)
+    protected infix fun String.type(fieldType: DocumentFieldType): DocumentField {
+        return DocumentField(this, fieldType.type)
+    }
 
     protected infix fun <T : Enum<T>> String.type(fieldType: ENUM<T>): DocumentField {
         return DocumentField(this, fieldType.type, fieldType.enums)

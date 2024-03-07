@@ -27,7 +27,6 @@ object MemberAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘토_회원가입_후_로그인을_진행한다(fixture: MentorFixtureStore.MentorFixture): ValidatableResponse {
         return RequestHelper.postRequest(
             uri = "/api/mentors",
@@ -59,7 +58,6 @@ object MemberAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘티_회원가입_후_로그인을_진행한다(fixture: MenteeFixtureStore.MenteeFixture): ValidatableResponse {
         return RequestHelper.postRequest(
             uri = "/api/mentees",
@@ -84,7 +82,6 @@ object MemberAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 서비스를_탈퇴한다(accessToken: String): ValidatableResponse {
         return RequestHelper.deleteRequestWithAccessToken(
             uri = "/api/members",
@@ -92,7 +89,6 @@ object MemberAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘토_프로필을_완성시킨다(
         fixture: MentorFixtureStore.MentorFixture,
         accessToken: String,
@@ -125,7 +121,6 @@ object MemberAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘토_프로필을_완성시킨다(
         fixture: MentorFixtureStore.MentorFixture,
         period: MentoringPeriodRequestModel,
@@ -156,7 +151,6 @@ object MemberAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘토_프로필을_완성시킨다(
         fixture: MentorFixtureStore.MentorFixture,
         schedules: List<MentorScheduleRequest>,
@@ -177,7 +171,6 @@ object MemberAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘토_프로필을_완성시킨다(
         fixture: MentorFixtureStore.MentorFixture,
         period: MentoringPeriodRequestModel,
@@ -196,7 +189,6 @@ object MemberAcceptanceStep {
         )
     }
 
-    @JvmStatic
     fun 멘티_프로필을_완성시킨다(
         fixture: MenteeFixtureStore.MenteeFixture,
         accessToken: String,

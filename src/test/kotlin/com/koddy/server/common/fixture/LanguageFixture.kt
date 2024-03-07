@@ -30,7 +30,6 @@ enum class LanguageFixture(
     }
 
     companion object {
-        @JvmStatic
         fun 메인_한국어_서브_일본어_중국어(): List<Language> {
             return listOf(
                 KR_MAIN.toDomain(),
@@ -39,7 +38,6 @@ enum class LanguageFixture(
             )
         }
 
-        @JvmStatic
         fun 메인_한국어_서브_영어(): List<Language> {
             return listOf(
                 KR_MAIN.toDomain(),
@@ -47,7 +45,6 @@ enum class LanguageFixture(
             )
         }
 
-        @JvmStatic
         fun 메인_영어_서브_한국어(): List<Language> {
             return listOf(
                 EN_MAIN.toDomain(),
@@ -55,7 +52,6 @@ enum class LanguageFixture(
             )
         }
 
-        @JvmStatic
         fun 메인_영어_서브_일본어(): List<Language> {
             return listOf(
                 EN_MAIN.toDomain(),

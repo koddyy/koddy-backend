@@ -16,7 +16,6 @@ data class MentorPublicProfile(
     val authenticated: Boolean,
 ) {
     companion object {
-        @JvmStatic
         fun from(mentor: Mentor): MentorPublicProfile {
             return MentorPublicProfile(
                 id = mentor.id,
@@ -44,7 +43,6 @@ data class MenteePublicProfile(
     val interestMajor: String,
 ) {
     companion object {
-        @JvmStatic
         fun from(mentee: Mentee): MenteePublicProfile {
             return MenteePublicProfile(
                 id = mentee.id,
