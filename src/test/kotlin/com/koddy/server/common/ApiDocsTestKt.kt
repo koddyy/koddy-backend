@@ -252,7 +252,7 @@ abstract class ApiDocsTestKt {
         snippetBuilder: SnippetBuilder.() -> Unit,
     ) {
         val builder = SnippetBuilder()
-        builder.requestHeaders(AuthToken.ACCESS_TOKEN_HEADER type STRING means "Access Token")
+        builder.requestHeaders(*accessTokenHeader)
         builder.snippetBuilder()
         handle(makeDocument(identifier, *builder.build()))
     }
@@ -262,7 +262,7 @@ abstract class ApiDocsTestKt {
         snippetBuilder: SnippetBuilder.() -> Unit,
     ) {
         val builder = SnippetBuilder()
-        builder.requestCookies(AuthToken.REFRESH_TOKEN_HEADER type STRING means "Refresh Token")
+        builder.requestCookies(*refreshTokenCookie)
         builder.snippetBuilder()
         handle(makeDocument(identifier, *builder.build()))
     }
@@ -272,10 +272,7 @@ abstract class ApiDocsTestKt {
         snippetBuilder: SnippetBuilder.() -> Unit,
     ) {
         val builder = SnippetBuilder()
-        builder.responseFields(
-            "errorCode" type STRING means "커스텀 예외 코드",
-            "message" type STRING means "예외 메시지",
-        )
+        builder.responseFields(*exceptionFields)
         builder.snippetBuilder()
         handle(makeDocument(identifier, *builder.build()))
     }
@@ -285,11 +282,8 @@ abstract class ApiDocsTestKt {
         snippetBuilder: SnippetBuilder.() -> Unit,
     ) {
         val builder = SnippetBuilder()
-        builder.requestHeaders(AuthToken.ACCESS_TOKEN_HEADER type STRING means "Access Token")
-        builder.responseFields(
-            "errorCode" type STRING means "커스텀 예외 코드",
-            "message" type STRING means "예외 메시지",
-        )
+        builder.requestHeaders(*accessTokenHeader)
+        builder.responseFields(*exceptionFields)
         builder.snippetBuilder()
         handle(makeDocument(identifier, *builder.build()))
     }
@@ -299,14 +293,23 @@ abstract class ApiDocsTestKt {
         snippetBuilder: SnippetBuilder.() -> Unit,
     ) {
         val builder = SnippetBuilder()
-        builder.requestCookies(AuthToken.REFRESH_TOKEN_HEADER type STRING means "Refresh Token")
-        builder.responseFields(
-            "errorCode" type STRING means "커스텀 예외 코드",
-            "message" type STRING means "예외 메시지",
-        )
+        builder.requestCookies(*refreshTokenCookie)
+        builder.responseFields(*exceptionFields)
         builder.snippetBuilder()
         handle(makeDocument(identifier, *builder.build()))
     }
+
+    private val accessTokenHeader: Array<DocumentField>
+        get() = arrayOf(AuthToken.ACCESS_TOKEN_HEADER type STRING means "Access Token")
+
+    private val refreshTokenCookie: Array<DocumentField>
+        get() = arrayOf(AuthToken.REFRESH_TOKEN_HEADER type STRING means "Refresh Token")
+
+    private val exceptionFields: Array<DocumentField>
+        get() = arrayOf(
+            "errorCode" type STRING means "커스텀 예외 코드",
+            "message" type STRING means "예외 메시지",
+        )
 
     private fun makeDocument(
         identifier: String,
@@ -320,7 +323,9 @@ abstract class ApiDocsTestKt {
         )
     }
 
-    protected infix fun String.type(fieldType: DocumentFieldType): DocumentField = DocumentField(this, fieldType.type)
+    protected infix fun String.type(fieldType: DocumentFieldType): DocumentField {
+        return DocumentField(this, fieldType.type)
+    }
 
     protected infix fun <T : Enum<T>> String.type(fieldType: ENUM<T>): DocumentField {
         return DocumentField(this, fieldType.type, fieldType.enums)
