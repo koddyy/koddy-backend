@@ -32,7 +32,7 @@ internal class GetMemberPrivateProfileUseCaseTest : FeatureSpec({
     val menteeFixture = menteeFixture(id = 2L)
 
     feature("GetMemberPrivateProfileUseCase's getMentorProfile") {
-        scenario("멘토 프로필을 조회한다 [미완성 -> 자기소개 & 프로필 이미지 URL & 멘토링 기간 & 스케줄]") {
+        scenario("멘토 프로필을 조회한다 [미완성 -> 자기소개 & 프로필 이미지 & 멘토링 기간 & 멘토링 주간 스케줄]") {
             val mentor = Mentor(
                 id = mentorFixture.id,
                 platform = mentorFixture.platform,

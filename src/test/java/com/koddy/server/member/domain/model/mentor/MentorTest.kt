@@ -105,7 +105,7 @@ internal class MentorCreateTest : FeatureSpec({
         val fixtureB = mentorFixture(id = 2L)
         val fixtureC = mentorFixture(id = 3L)
 
-        scenario("Mentor 프로필이 완성되었는지 확인한다 [자기소개 & 프로필 이미지]") {
+        scenario("Mentor 프로필이 완성되었는지 확인한다 [자기소개 & 프로필 이미지 & 멘토링 기간 & 멘토링 주간 스케줄]") {
             /**
              * MentorA
              */
