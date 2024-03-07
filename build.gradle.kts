@@ -45,7 +45,6 @@ dependencies {
 
     // Data
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    runtimeOnly("com.h2database:h2")
     runtimeOnly("com.mysql:mysql-connector-j")
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-mysql")
@@ -144,14 +143,6 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-// TODO: compileJava + compileTestJava & ktlint 빌드 의존성 꼬임 관련 임시 해결
-tasks.runKtlintCheckOverMainSourceSet {
-    mustRunAfter(
-        tasks.compileJava,
-        tasks.compileTestJava,
-    )
-}
-
 // Ktlint
 ktlint {
     reporters {
@@ -209,7 +200,7 @@ tasks.named("processResources") {
     dependsOn("copySecret")
 }
 
-tasks.named<JavaCompile>("compileJava") {
+tasks.named<KotlinCompile>("compileKotlin") {
     inputs.files(tasks.named("processResources"))
 }
 
