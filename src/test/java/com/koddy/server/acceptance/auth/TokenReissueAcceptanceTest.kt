@@ -2,8 +2,8 @@ package com.koddy.server.acceptance.auth
 
 import com.koddy.server.acceptance.auth.AuthAcceptanceStep.토큰을_재발급받는다
 import com.koddy.server.auth.domain.model.AuthMember
-import com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER
-import com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER
+import com.koddy.server.auth.domain.model.AuthToken.Companion.ACCESS_TOKEN_HEADER
+import com.koddy.server.auth.domain.model.AuthToken.Companion.REFRESH_TOKEN_HEADER
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
 import com.koddy.server.common.fixture.MentorFixtureStore

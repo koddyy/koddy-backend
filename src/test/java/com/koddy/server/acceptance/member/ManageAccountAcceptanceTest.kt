@@ -4,8 +4,8 @@ import com.koddy.server.acceptance.member.MemberAcceptanceStep.멘토_회원가�
 import com.koddy.server.acceptance.member.MemberAcceptanceStep.멘티_회원가입_후_로그인을_진행한다
 import com.koddy.server.acceptance.member.MemberAcceptanceStep.서비스를_탈퇴한다
 import com.koddy.server.auth.domain.model.AuthMember
-import com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER
-import com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER
+import com.koddy.server.auth.domain.model.AuthToken.Companion.ACCESS_TOKEN_HEADER
+import com.koddy.server.auth.domain.model.AuthToken.Companion.REFRESH_TOKEN_HEADER
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
 import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture

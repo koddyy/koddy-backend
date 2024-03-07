@@ -4,8 +4,8 @@ import com.koddy.server.acceptance.auth.AuthAcceptanceStep.Google_OAuth_로그�
 import com.koddy.server.acceptance.auth.AuthAcceptanceStep.Google_OAuth_인증_URL를_생성한다
 import com.koddy.server.acceptance.auth.AuthAcceptanceStep.로그아웃을_진행한다
 import com.koddy.server.auth.domain.model.AuthMember
-import com.koddy.server.auth.domain.model.AuthToken.ACCESS_TOKEN_HEADER
-import com.koddy.server.auth.domain.model.AuthToken.REFRESH_TOKEN_HEADER
+import com.koddy.server.auth.domain.model.AuthToken.Companion.ACCESS_TOKEN_HEADER
+import com.koddy.server.auth.domain.model.AuthToken.Companion.REFRESH_TOKEN_HEADER
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
 import com.koddy.server.common.fixture.MentorFixtureStore

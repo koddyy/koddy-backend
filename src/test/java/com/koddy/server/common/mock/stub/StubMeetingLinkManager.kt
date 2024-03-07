@@ -1,6 +1,6 @@
 package com.koddy.server.common.mock.stub
 
-import com.koddy.server.auth.domain.model.AuthToken.TOKEN_TYPE
+import com.koddy.server.auth.domain.model.AuthToken.Companion.TOKEN_TYPE
 import com.koddy.server.auth.domain.model.oauth.OAuthProvider
 import com.koddy.server.auth.domain.model.oauth.OAuthTokenResponse
 import com.koddy.server.auth.infrastructure.social.google.response.GoogleTokenResponse
