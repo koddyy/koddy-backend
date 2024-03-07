@@ -69,19 +69,10 @@ import org.springframework.web.multipart.MultipartFile
 @ExtendWith(RestDocumentationExtension::class)
 @AutoConfigureRestDocs
 abstract class ApiDocsTestKt {
-    companion object {
-        @JvmStatic
-        protected val enter = "+\n"
-
-        @JvmStatic
-        protected val common: Member<*> = mentorFixture(id = 1).toDomain()
-
-        @JvmStatic
-        protected val mentor: Mentor = mentorFixture(id = 2).toDomain()
-
-        @JvmStatic
-        protected val mentee: Mentee = menteeFixture(id = 3).toDomain()
-    }
+    protected val enter = "+\n"
+    protected val common: Member<*> = mentorFixture(id = 1).toDomain()
+    protected val mentor: Mentor = mentorFixture(id = 2).toDomain()
+    protected val mentee: Mentee = menteeFixture(id = 3).toDomain()
 
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -93,7 +84,7 @@ abstract class ApiDocsTestKt {
     private lateinit var tokenProvider: TokenProvider
 
     @Autowired
-    protected lateinit var tokenResponseWriter: TokenResponseWriter
+    private lateinit var tokenResponseWriter: TokenResponseWriter
 
     @BeforeEach
     fun setUpMockMvc(

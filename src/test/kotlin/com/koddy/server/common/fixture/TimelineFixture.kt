@@ -27,7 +27,6 @@ enum class TimelineFixture(
     }
 
     companion object {
-        @JvmStatic
         fun 월_수_금(): List<Timeline> {
             return listOf(
                 MON_09_22.toDomain(),
@@ -36,7 +35,6 @@ enum class TimelineFixture(
             )
         }
 
-        @JvmStatic
         fun 화_목_토(): List<Timeline> {
             return listOf(
                 TUE_09_22.toDomain(),
@@ -45,7 +43,6 @@ enum class TimelineFixture(
             )
         }
 
-        @JvmStatic
         fun 월_화_수_목_금(): List<Timeline> {
             return listOf(
                 MON_09_22.toDomain(),
@@ -56,7 +53,6 @@ enum class TimelineFixture(
             )
         }
 
-        @JvmStatic
         fun 주말(): List<Timeline> {
             return listOf(
                 SAT_09_22.toDomain(),
@@ -64,7 +60,6 @@ enum class TimelineFixture(
             )
         }
 
-        @JvmStatic
         fun allDays(): List<Timeline> {
             return listOf(
                 MON_09_22.toDomain(),

@@ -4,7 +4,7 @@ import com.koddy.server.member.exception.MemberException
 import com.koddy.server.member.exception.MemberExceptionCode.INVALID_NATIONALITY
 
 enum class Nationality(
-    @JvmField val code: String,
+    val code: String,
     val value: String,
 ) {
     KOREA("KR", "한국"),

@@ -16,7 +16,6 @@ class MentorDetails(
     val status: String,
 ) {
     companion object {
-        @JvmStatic
         fun from(mentor: Mentor): MentorDetails {
             return MentorDetails(
                 mentor.id,

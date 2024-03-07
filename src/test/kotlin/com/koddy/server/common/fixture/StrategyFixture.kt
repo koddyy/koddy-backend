@@ -4,8 +4,8 @@ import com.koddy.server.coffeechat.domain.model.Strategy
 import com.koddy.server.common.mock.fake.FakeEncryptor
 
 enum class StrategyFixture(
-    @JvmField val type: Strategy.Type,
-    @JvmField val value: String,
+    val type: Strategy.Type,
+    val value: String,
 ) {
     ZOOM_LINK(Strategy.Type.ZOOM_LINK, "https://zoom-url/sjiwon"),
     GOOGLE_MEET_LINK(Strategy.Type.GOOGLE_MEET_LINK, "https://google-meet-url/sjiwon"),

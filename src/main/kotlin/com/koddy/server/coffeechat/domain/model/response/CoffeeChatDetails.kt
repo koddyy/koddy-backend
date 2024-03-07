@@ -20,7 +20,6 @@ data class CoffeeChatDetails(
     val lastModifiedAt: LocalDateTime,
 ) {
     companion object {
-        @JvmStatic
         fun of(coffeeChat: CoffeeChat, encryptor: Encryptor): CoffeeChatDetails {
             return CoffeeChatDetails(
                 coffeeChat.id,

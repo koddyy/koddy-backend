@@ -27,7 +27,6 @@ data class UniversityAuthentication(
     }
 
     companion object {
-        @JvmStatic
         fun attemptMail(schoolMail: String): UniversityAuthentication {
             return UniversityAuthentication(
                 schoolMail = schoolMail,
@@ -36,7 +35,6 @@ data class UniversityAuthentication(
             )
         }
 
-        @JvmStatic
         fun attemptProofData(proofDataUploadUrl: String): UniversityAuthentication {
             return UniversityAuthentication(
                 schoolMail = null,

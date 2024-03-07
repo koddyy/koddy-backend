@@ -42,7 +42,7 @@ data class MentoringPeriod(
     }
 
     enum class TimeUnit(
-        @JvmField val value: Int,
+        val value: Int,
     ) {
         HALF_HOUR(30),
         ONE_HOUR(60),

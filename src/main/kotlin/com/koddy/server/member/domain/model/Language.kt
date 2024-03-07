@@ -19,7 +19,7 @@ data class Language(
     val type: Type,
 ) {
     enum class Category(
-        @JvmField val code: String,
+        val code: String,
         val value: String,
     ) {
         KR("KR", "한국어"),

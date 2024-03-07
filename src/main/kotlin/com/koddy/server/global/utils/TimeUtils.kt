@@ -3,7 +3,6 @@ package com.koddy.server.global.utils
 import com.koddy.server.global.exception.GlobalException
 import com.koddy.server.global.exception.GlobalExceptionCode
 import java.time.DateTimeException
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
@@ -61,104 +60,4 @@ object TimeUtils {
             .withZoneSameInstant(kstZoneId)
             .toLocalDateTime()
     }
-
-    /**
-     * targetA < targetB
-     */
-    fun isLower(
-        targetA: LocalDate,
-        targetB: LocalDate,
-    ): Boolean = targetA < targetB
-
-    /**
-     * targetA <= targetB
-     */
-    @JvmStatic
-    fun isLowerOrEqual(
-        targetA: LocalDate,
-        targetB: LocalDate,
-    ): Boolean = targetA <= targetB
-
-    /**
-     * targetA > targetB
-     */
-    @JvmStatic
-    fun isGreator(
-        targetA: LocalDate,
-        targetB: LocalDate,
-    ): Boolean = targetA > targetB
-
-    /**
-     * targetA >= targetB
-     */
-    fun isGreatorOrEqual(
-        targetA: LocalDate,
-        targetB: LocalDate,
-    ): Boolean = targetA >= targetB
-
-    /**
-     * targetA < targetB
-     */
-    fun isLower(
-        targetA: LocalTime,
-        targetB: LocalTime,
-    ): Boolean = targetA < targetB
-
-    /**
-     * targetA <= targetB
-     */
-    @JvmStatic
-    fun isLowerOrEqual(
-        targetA: LocalTime,
-        targetB: LocalTime,
-    ): Boolean = targetA <= targetB
-
-    /**
-     * targetA > targetB
-     */
-    @JvmStatic
-    fun isGreator(
-        targetA: LocalTime,
-        targetB: LocalTime,
-    ): Boolean = targetA > targetB
-
-    /**
-     * targetA >= targetB
-     */
-    fun isGreatorOrEqual(
-        targetA: LocalTime,
-        targetB: LocalTime,
-    ): Boolean = targetA >= targetB
-
-    /**
-     * targetA < targetB
-     */
-    fun isLower(
-        targetA: LocalDateTime,
-        targetB: LocalDateTime,
-    ): Boolean = targetA < targetB
-
-    /**
-     * targetA <= targetB
-     */
-    fun isLowerOrEqual(
-        targetA: LocalDateTime,
-        targetB: LocalDateTime,
-    ): Boolean = targetA <= targetB
-
-    /**
-     * targetA > targetB
-     */
-    fun isGreator(
-        targetA: LocalDateTime,
-        targetB: LocalDateTime,
-    ): Boolean = targetA > targetB
-
-    /**
-     * targetA >= targetB
-     */
-    fun isGreatorOrEqual(
-        targetA: LocalDateTime,
-        targetB: LocalDateTime,
-    ): Boolean = targetA >= targetB
 }

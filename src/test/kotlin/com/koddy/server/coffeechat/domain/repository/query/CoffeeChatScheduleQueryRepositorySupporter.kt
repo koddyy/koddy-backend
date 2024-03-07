@@ -11,14 +11,8 @@ import org.springframework.data.domain.Pageable
 abstract class CoffeeChatScheduleQueryRepositorySupporter(
     private val memberRepository: MemberRepository,
 ) {
-    companion object {
-        @JvmStatic
-        protected val pageable1: Pageable = PageCreator.create(1)
-
-        @JvmStatic
-        protected val pageable2: Pageable = PageCreator.create(2)
-    }
-
+    protected val pageable1: Pageable = PageCreator.create(1)
+    protected val pageable2: Pageable = PageCreator.create(2)
     protected lateinit var mentees: MutableList<Mentee>
     protected lateinit var mentors: MutableList<Mentor>
 
