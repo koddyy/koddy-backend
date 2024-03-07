@@ -4,15 +4,15 @@ import com.koddy.server.global.annotation.KoddyWritableTransactional
 import com.koddy.server.global.annotation.UseCase
 import com.koddy.server.member.application.usecase.command.UpdateMenteeBasicInfoCommand
 import com.koddy.server.member.domain.model.mentee.Mentee
-import com.koddy.server.member.domain.repository.MenteeRepository
+import com.koddy.server.member.domain.service.MemberReader
 
 @UseCase
 class UpdateMenteeProfileUseCase(
-    private val menteeRepository: MenteeRepository,
+    private val memberReader: MemberReader,
 ) {
     @KoddyWritableTransactional
     fun updateBasicInfo(command: UpdateMenteeBasicInfoCommand) {
-        val mentee: Mentee = menteeRepository.getById(command.menteeId)
+        val mentee: Mentee = memberReader.getMentee(command.menteeId)
         mentee.updateBasicInfo(
             command.name,
             command.nationality,

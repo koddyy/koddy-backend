@@ -17,19 +17,21 @@ data class GetCoffeeChatScheduleRequest(
     @field:Min(value = 1, message = "페이지는 1부터 시작입니다.")
     val page: Int,
 ) {
-    fun toMentorQuery(mentorId: Long): GetMentorCoffeeChats =
-        GetMentorCoffeeChats(
+    fun toMentorQuery(mentorId: Long): GetMentorCoffeeChats {
+        return GetMentorCoffeeChats(
             mentorId = mentorId,
             status = convertToCoffeeChatStatus(),
             page = page,
         )
+    }
 
-    fun toMenteeQuery(menteeId: Long): GetMenteeCoffeeChats =
-        GetMenteeCoffeeChats(
+    fun toMenteeQuery(menteeId: Long): GetMenteeCoffeeChats {
+        return GetMenteeCoffeeChats(
             menteeId = menteeId,
             status = convertToCoffeeChatStatus(),
             page = page,
         )
+    }
 
     private fun convertToCoffeeChatStatus(): List<CoffeeChatStatus> {
         if (detail.isNullOrBlank()) {

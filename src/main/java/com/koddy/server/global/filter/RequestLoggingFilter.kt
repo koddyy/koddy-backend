@@ -63,7 +63,9 @@ class RequestLoggingFilter(
         }
     }
 
-    private fun isIgnoredUrl(request: HttpServletRequest): Boolean = PatternMatchUtils.simpleMatch(ignoredUrls.toTypedArray(), request.requestURI)
+    private fun isIgnoredUrl(request: HttpServletRequest): Boolean {
+        return PatternMatchUtils.simpleMatch(ignoredUrls.toTypedArray(), request.requestURI)
+    }
 
     private fun loggingRequestInfo(httpRequest: HttpServletRequest) {
         log.info(

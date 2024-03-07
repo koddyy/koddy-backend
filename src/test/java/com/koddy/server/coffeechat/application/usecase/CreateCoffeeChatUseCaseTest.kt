@@ -6,17 +6,16 @@ import com.koddy.server.coffeechat.domain.event.MenteeNotification
 import com.koddy.server.coffeechat.domain.event.MentorNotification
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.model.Reservation
-import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository
 import com.koddy.server.coffeechat.domain.service.CoffeeChatNotificationEventPublisher
+import com.koddy.server.coffeechat.domain.service.CoffeeChatWriter
 import com.koddy.server.coffeechat.domain.service.ReservationAvailabilityChecker
 import com.koddy.server.common.UnitTestKt
 import com.koddy.server.common.fixture.CoffeeChatFixture.월요일_1주차_20_00_시작
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
-import com.koddy.server.member.domain.repository.MenteeRepository
-import com.koddy.server.member.domain.repository.MentorRepository
+import com.koddy.server.member.domain.service.MemberReader
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -31,40 +30,44 @@ import org.springframework.context.ApplicationEventPublisher
 @UnitTestKt
 @DisplayName("CoffeeChat -> CreateCoffeeChatUseCase 테스트")
 internal class CreateCoffeeChatUseCaseTest : DescribeSpec({
-    val mentorRepository = mockk<MentorRepository>()
-    val menteeRepository = mockk<MenteeRepository>()
+    val memberReader = mockk<MemberReader>()
     val reservationAvailabilityChecker = mockk<ReservationAvailabilityChecker>()
-    val coffeeChatRepository = mockk<CoffeeChatRepository>()
+    val coffeeChatWriter = mockk<CoffeeChatWriter>()
     val eventPublisher = mockk<ApplicationEventPublisher>()
     val coffeeChatNotificationEventPublisher = CoffeeChatNotificationEventPublisher(eventPublisher)
     val sut = CreateCoffeeChatUseCase(
-        mentorRepository,
-        menteeRepository,
+        memberReader,
         reservationAvailabilityChecker,
-        coffeeChatRepository,
+        coffeeChatWriter,
         coffeeChatNotificationEventPublisher,
     )
 
-    val mentor: Mentor = MENTOR_1.toDomain().apply(1L)
-    val mentee: Mentee = MENTEE_1.toDomain().apply(2L)
+    val mentor: Mentor = mentorFixture(id = 1L).toDomain()
+    val mentee: Mentee = menteeFixture(id = 2L).toDomain()
 
     describe("CreateCoffeeChatUseCase's createByApply") {
         val command = CreateCoffeeChatByApplyCommand(
             menteeId = mentee.id,
             mentorId = mentor.id,
             applyReason = "신청..",
-            reservation = Reservation.of(
-                월요일_1주차_20_00_시작.start,
-                월요일_1주차_20_00_시작.end,
+            reservation = Reservation(
+                start = 월요일_1주차_20_00_시작.start,
+                end = 월요일_1주차_20_00_시작.end,
             ),
         )
-        every { menteeRepository.getById(command.menteeId) } returns mentee
-        every { mentorRepository.getById(command.mentorId) } returns mentor
+        every { memberReader.getMentee(command.menteeId) } returns mentee
+        every { memberReader.getMentor(command.mentorId) } returns mentor
         justRun { reservationAvailabilityChecker.check(mentor, command.reservation) }
 
         context("멘티가 멘토에게 커피챗을 신청하면") {
-            val coffeeChat = CoffeeChat.apply(mentee, mentor, command.applyReason, command.reservation).apply(1L)
-            every { coffeeChatRepository.save(any(CoffeeChat::class)) } returns coffeeChat
+            val coffeeChat = CoffeeChat.applyFixture(
+                id = 1L,
+                mentee = mentee,
+                mentor = mentor,
+                applyReason = command.applyReason,
+                reservation = command.reservation,
+            )
+            every { coffeeChatWriter.save(any(CoffeeChat::class)) } returns coffeeChat
 
             val slotEvent = slot<MentorNotification>()
             justRun { eventPublisher.publishEvent(capture(slotEvent)) }
@@ -73,10 +76,10 @@ internal class CreateCoffeeChatUseCaseTest : DescribeSpec({
                 val coffeeChatId: Long = sut.createByApply(command)
 
                 verify(exactly = 1) {
-                    menteeRepository.getById(command.menteeId)
-                    mentorRepository.getById(command.mentorId)
+                    memberReader.getMentee(command.menteeId)
+                    memberReader.getMentor(command.mentorId)
                     reservationAvailabilityChecker.check(mentor, command.reservation)
-                    coffeeChatRepository.save(any(CoffeeChat::class))
+                    coffeeChatWriter.save(any(CoffeeChat::class))
                 }
                 slotEvent.captured shouldBe MentorNotification.MenteeAppliedFromMenteeFlowEvent(
                     mentorId = coffeeChat.mentorId,
@@ -93,12 +96,17 @@ internal class CreateCoffeeChatUseCaseTest : DescribeSpec({
             menteeId = mentee.id,
             suggestReason = "제안..",
         )
-        every { mentorRepository.getById(command.mentorId) } returns mentor
-        every { menteeRepository.getById(command.menteeId) } returns mentee
+        every { memberReader.getMentor(command.mentorId) } returns mentor
+        every { memberReader.getMentee(command.menteeId) } returns mentee
 
         context("멘토가 멘티에게 커피챗을 제안하면") {
-            val coffeeChat = CoffeeChat.suggest(mentor, mentee, command.suggestReason).apply(1L)
-            every { coffeeChatRepository.save(any(CoffeeChat::class)) } returns coffeeChat
+            val coffeeChat = CoffeeChat.suggestFixture(
+                id = 1L,
+                mentor = mentor,
+                mentee = mentee,
+                suggestReason = command.suggestReason,
+            )
+            every { coffeeChatWriter.save(any(CoffeeChat::class)) } returns coffeeChat
 
             val slotEvent = slot<MenteeNotification>()
             justRun { eventPublisher.publishEvent(capture(slotEvent)) }
@@ -107,9 +115,9 @@ internal class CreateCoffeeChatUseCaseTest : DescribeSpec({
                 val coffeeChatId: Long = sut.createBySuggest(command)
 
                 verify(exactly = 1) {
-                    menteeRepository.getById(command.menteeId)
-                    mentorRepository.getById(command.mentorId)
-                    coffeeChatRepository.save(any(CoffeeChat::class))
+                    memberReader.getMentor(command.mentorId)
+                    memberReader.getMentee(command.menteeId)
+                    coffeeChatWriter.save(any(CoffeeChat::class))
                 }
                 verify { reservationAvailabilityChecker wasNot Called }
                 slotEvent.captured shouldBe MenteeNotification.MentorSuggestedFromMentorFlowEvent(

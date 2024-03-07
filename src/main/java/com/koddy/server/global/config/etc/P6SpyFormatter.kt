@@ -30,7 +30,10 @@ class P6SpyFormatter : MessageFormattingStrategy {
 
     private fun isStatement(category: String): Boolean = STATEMENT.name == category
 
-    private fun isDDL(sql: String): Boolean = setOf(CREATE, ALTER, DROP, COMMENT).any { sql.startsWith(it) }
+    private fun isDDL(sql: String): Boolean {
+        return setOf(CREATE, ALTER, DROP, COMMENT)
+            .any { sql.startsWith(it) }
+    }
 
     companion object {
         private const val CREATE: String = "create"

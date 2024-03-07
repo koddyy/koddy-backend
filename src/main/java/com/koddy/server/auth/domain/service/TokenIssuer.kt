@@ -32,7 +32,11 @@ class TokenIssuer(
     fun isMemberRefreshToken(
         memberId: Long,
         refreshToken: String,
-    ): Boolean = tokenStore.isMemberRefreshToken(memberId, refreshToken)
+    ): Boolean {
+        return tokenStore.isMemberRefreshToken(memberId, refreshToken)
+    }
 
-    fun deleteRefreshToken(memberId: Long) = tokenStore.deleteRefreshToken(memberId)
+    fun deleteRefreshToken(memberId: Long) {
+        return tokenStore.deleteRefreshToken(memberId)
+    }
 }

@@ -15,11 +15,12 @@ data class LookAroundMentorsByConditionRequest(
     @field:Min(value = 1, message = "페이지는 1부터 시작입니다.")
     val page: Int,
 ) {
-    fun toQuery(): LookAroundMentorsByConditionQuery =
-        LookAroundMentorsByConditionQuery(
+    fun toQuery(): LookAroundMentorsByConditionQuery {
+        return LookAroundMentorsByConditionQuery(
             languages = convertToLanguageCategory(),
             page = page,
         )
+    }
 
     private fun convertToLanguageCategory(): List<Language.Category> {
         if (languages.isNullOrBlank()) {
@@ -38,12 +39,13 @@ data class LookAroundMenteesByConditionRequest(
     @field:Min(value = 1, message = "페이지는 1부터 시작입니다.")
     val page: Int,
 ) {
-    fun toQuery(): LookAroundMenteesByConditionQuery =
-        LookAroundMenteesByConditionQuery(
+    fun toQuery(): LookAroundMenteesByConditionQuery {
+        return LookAroundMenteesByConditionQuery(
             nationalities = convertToNationality(),
             languages = convertToLanguageCategory(),
             page = page,
         )
+    }
 
     private fun convertToNationality(): List<Nationality> {
         if (nationalities.isNullOrBlank()) {

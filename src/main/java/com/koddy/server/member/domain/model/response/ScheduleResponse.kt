@@ -18,8 +18,8 @@ data class ScheduleResponse(
     )
 
     companion object {
-        fun from(timeline: Timeline): ScheduleResponse =
-            ScheduleResponse(
+        fun from(timeline: Timeline): ScheduleResponse {
+            return ScheduleResponse(
                 dayOfWeek = timeline.dayOfWeek.kor,
                 start = Start(
                     hour = timeline.startTime.hour,
@@ -30,5 +30,6 @@ data class ScheduleResponse(
                     minute = timeline.endTime.minute,
                 ),
             )
+        }
     }
 }

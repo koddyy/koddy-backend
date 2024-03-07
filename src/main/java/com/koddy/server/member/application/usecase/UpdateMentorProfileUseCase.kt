@@ -5,15 +5,15 @@ import com.koddy.server.global.annotation.UseCase
 import com.koddy.server.member.application.usecase.command.UpdateMentorBasicInfoCommand
 import com.koddy.server.member.application.usecase.command.UpdateMentorScheduleCommand
 import com.koddy.server.member.domain.model.mentor.Mentor
-import com.koddy.server.member.domain.repository.MentorRepository
+import com.koddy.server.member.domain.service.MemberReader
 
 @UseCase
 class UpdateMentorProfileUseCase(
-    private val mentorRepository: MentorRepository,
+    private val memberReader: MemberReader,
 ) {
     @KoddyWritableTransactional
     fun updateBasicInfo(command: UpdateMentorBasicInfoCommand) {
-        val mentor: Mentor = mentorRepository.getById(command.mentorId)
+        val mentor: Mentor = memberReader.getMentor(command.mentorId)
         mentor.updateBasicInfo(
             command.name,
             command.profileImageUrl,
@@ -27,7 +27,7 @@ class UpdateMentorProfileUseCase(
 
     @KoddyWritableTransactional
     fun updateSchedule(command: UpdateMentorScheduleCommand) {
-        val mentor: Mentor = mentorRepository.getById(command.mentorId)
+        val mentor: Mentor = memberReader.getMentorWithSchedules(command.mentorId)
         mentor.updateSchedules(
             command.mentoringPeriod,
             command.timelines,

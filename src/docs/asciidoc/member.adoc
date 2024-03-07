@@ -112,6 +112,10 @@ IMPORTANT: 멘토만 접근 가능한 API
 
 NOTE: 3회 이상 시도하면 10분동안 메일 발송 밴
 
+* HTTP Status = 429
+* Code = AUTH_006
+* Message = 일정 시간 동안 메일 인증 요청 횟수가 너무 많습니다.
+
 *HTTP Request*
 
 include::{snippets}/MemberApi/Mentor/UnivAuth/Mail/Success/http-request.adoc[]

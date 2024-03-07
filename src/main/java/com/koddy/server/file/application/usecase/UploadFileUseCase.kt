@@ -8,5 +8,7 @@ import com.koddy.server.global.annotation.UseCase
 class UploadFileUseCase(
     private val fileManager: FileManager,
 ) {
-    fun invoke(command: UploadFileCommand): String = fileManager.upload(command.file)
+    fun invoke(command: UploadFileCommand): String {
+        return fileManager.upload(command.file)
+    }
 }

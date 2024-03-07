@@ -19,10 +19,10 @@ data class MentorReservedSchedule(
             reservedCoffeeChat: List<CoffeeChat>,
         ): MentorReservedSchedule {
             return MentorReservedSchedule(
-                MentoringPeriodResponse.from(mentor.mentoringPeriod),
-                mentor.schedules.map { ScheduleResponse.from(it.timeline) },
-                mentor.mentoringTimeUnit,
-                reservedCoffeeChat.map { Reserved.from(it.reservation) },
+                period = MentoringPeriodResponse.from(mentor.mentoringPeriod),
+                schedules = mentor.schedules.map { ScheduleResponse.from(it.timeline) },
+                timeUnit = mentor.mentoringTimeUnit,
+                reserved = reservedCoffeeChat.map { Reserved.from(it.reservation!!) },
             )
         }
     }
@@ -33,6 +33,11 @@ data class Reserved(
     val end: LocalDateTime,
 ) {
     companion object {
-        fun from(reservation: Reservation): Reserved = Reserved(reservation.start, reservation.end)
+        fun from(reservation: Reservation): Reserved {
+            return Reserved(
+                start = reservation.start,
+                end = reservation.end,
+            )
+        }
     }
 }

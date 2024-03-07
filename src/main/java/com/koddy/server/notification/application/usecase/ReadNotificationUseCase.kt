@@ -19,5 +19,7 @@ class ReadNotificationUseCase(
         notification.read()
     }
 
-    fun readAll(memberId: Long) = notificationRepository.readAll(memberId)
+    fun readAll(memberId: Long) {
+        notificationRepository.readAll(memberId)
+    }
 }

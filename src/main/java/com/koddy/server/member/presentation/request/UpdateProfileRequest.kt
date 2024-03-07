@@ -29,8 +29,8 @@ data class UpdateMenteeBasicInfoRequest(
     @field:NotBlank(message = "관심있는 전공 정보는 필수입니다.")
     val interestMajor: String,
 ) {
-    fun toCommand(menteeId: Long): UpdateMenteeBasicInfoCommand =
-        UpdateMenteeBasicInfoCommand(
+    fun toCommand(menteeId: Long): UpdateMenteeBasicInfoCommand {
+        return UpdateMenteeBasicInfoCommand(
             menteeId = menteeId,
             name = name,
             nationality = Nationality.from(nationality),
@@ -40,6 +40,7 @@ data class UpdateMenteeBasicInfoRequest(
             interestSchool = interestSchool,
             interestMajor = interestMajor,
         )
+    }
 }
 
 data class UpdateMentorBasicInfoRequest(
@@ -62,8 +63,8 @@ data class UpdateMentorBasicInfoRequest(
     @field:NotNull(message = "학번 정보는 필수입니다.")
     val enteredIn: Int,
 ) {
-    fun toCommand(mentorId: Long): UpdateMentorBasicInfoCommand =
-        UpdateMentorBasicInfoCommand(
+    fun toCommand(mentorId: Long): UpdateMentorBasicInfoCommand {
+        return UpdateMentorBasicInfoCommand(
             mentorId = mentorId,
             name = name,
             profileImageUrl = profileImageUrl,
@@ -73,16 +74,18 @@ data class UpdateMentorBasicInfoRequest(
             major = major,
             enteredIn = enteredIn,
         )
+    }
 }
 
 data class UpdateMentorScheduleRequest(
     val period: MentoringPeriodRequestModel?,
     val schedules: List<MentorScheduleRequest> = emptyList(),
 ) {
-    fun toCommand(mentorId: Long): UpdateMentorScheduleCommand =
-        UpdateMentorScheduleCommand(
+    fun toCommand(mentorId: Long): UpdateMentorScheduleCommand {
+        return UpdateMentorScheduleCommand(
             mentorId = mentorId,
             mentoringPeriod = period?.toPeriod(),
             timelines = schedules.map { it.toTimeline() },
         )
+    }
 }

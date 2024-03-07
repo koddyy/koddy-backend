@@ -6,17 +6,31 @@ import java.time.LocalDateTime
 
 data class NotificationSummary(
     val id: Long,
-    val read: Boolean,
+    val isRead: Boolean,
     val type: String,
     val createdAt: LocalDateTime,
     val member: NotifyMember,
     val coffeeChat: NotifyCoffeeChat,
 ) {
+    data class NotifyMember(
+        val id: Long,
+        val name: String,
+        val profileImageUrl: String?,
+    )
+
+    data class NotifyCoffeeChat(
+        val id: Long,
+        val statusSnapshot: String,
+        val cancelReason: String?,
+        val rejectReason: String?,
+        val reservedDay: LocalDate?,
+    )
+
     companion object {
         fun from(details: NotificationDetails): NotificationSummary {
             return NotificationSummary(
                 id = details.id,
-                read = details.read,
+                isRead = details.isRead,
                 type = details.type.name,
                 createdAt = details.createdAt,
                 member = NotifyMember(
@@ -35,17 +49,3 @@ data class NotificationSummary(
         }
     }
 }
-
-data class NotifyMember(
-    val id: Long,
-    val name: String,
-    val profileImageUrl: String?,
-)
-
-data class NotifyCoffeeChat(
-    val id: Long,
-    val statusSnapshot: String,
-    val cancelReason: String?,
-    val rejectReason: String?,
-    val reservedDay: LocalDate?,
-)

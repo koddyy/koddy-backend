@@ -12,8 +12,8 @@ data class SuggestedCoffeeChatsByMentorResponse(
     val enteredIn: Int,
 ) {
     companion object {
-        fun from(result: SuggestedCoffeeChatsByMentor): SuggestedCoffeeChatsByMentorResponse =
-            SuggestedCoffeeChatsByMentorResponse(
+        fun from(result: SuggestedCoffeeChatsByMentor): SuggestedCoffeeChatsByMentorResponse {
+            return SuggestedCoffeeChatsByMentorResponse(
                 coffeeChatId = result.coffeeChatId,
                 mentorId = result.mentorId,
                 name = result.name,
@@ -22,5 +22,6 @@ data class SuggestedCoffeeChatsByMentorResponse(
                 major = result.universityProfile.major,
                 enteredIn = result.universityProfile.enteredIn,
             )
+        }
     }
 }

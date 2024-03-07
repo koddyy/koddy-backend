@@ -9,7 +9,7 @@ data class MentoringPeriodRequestModel(
 ) {
     fun toPeriod(): MentoringPeriod? {
         if (startDate != null && endDate != null) {
-            return MentoringPeriod.of(startDate, endDate)
+            return MentoringPeriod(startDate = startDate, endDate = endDate)
         }
         return null
     }

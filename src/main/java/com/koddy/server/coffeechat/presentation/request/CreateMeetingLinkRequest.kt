@@ -31,16 +31,17 @@ data class CreateMeetingLinkRequest(
     fun toCommand(
         memberId: Long,
         provider: String,
-    ): CreateMeetingLinkCommand =
-        CreateMeetingLinkCommand(
-            memberId,
-            OAuthProvider.from(provider),
-            MeetingLinkProvider.from(provider),
-            authorizationCode,
-            redirectUri,
-            state,
-            topic,
-            TimeUtils.toLocalDateTime(start),
-            TimeUtils.toLocalDateTime(end),
+    ): CreateMeetingLinkCommand {
+        return CreateMeetingLinkCommand(
+            memberId = memberId,
+            oAuthProvider = OAuthProvider.from(provider),
+            linkProvider = MeetingLinkProvider.from(provider),
+            code = authorizationCode,
+            redirectUri = redirectUri,
+            state = state,
+            topic = topic,
+            start = TimeUtils.toLocalDateTime(start),
+            end = TimeUtils.toLocalDateTime(end),
         )
+    }
 }

@@ -10,29 +10,31 @@ import com.koddy.server.member.domain.model.Member
 import com.koddy.server.member.domain.model.SocialPlatform
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
-import com.koddy.server.member.domain.repository.MemberRepository
+import com.koddy.server.member.domain.service.MemberReader
+import com.koddy.server.member.domain.service.MemberWriter
 import com.koddy.server.member.exception.MemberException
 import com.koddy.server.member.exception.MemberExceptionCode.ACCOUNT_ALREADY_EXISTS
 
 @UseCase
 class SignUpUseCase(
-    private val memberRepository: MemberRepository,
+    private val memberReader: MemberReader,
+    private val memberWriter: MemberWriter,
     private val tokenIssuer: TokenIssuer,
 ) {
     fun signUpMentor(command: SignUpMentorCommand): AuthMember {
         validateAccountExists(command.platform)
-        val mentor: Mentor = memberRepository.save(command.toDomain())
+        val mentor: Mentor = memberWriter.saveMentor(command.toDomain())
         return provideAuthMember(mentor)
     }
 
     fun signUpMentee(command: SignUpMenteeCommand): AuthMember {
         validateAccountExists(command.platform)
-        val mentee: Mentee = memberRepository.save(command.toDomain())
+        val mentee: Mentee = memberWriter.saveMentee(command.toDomain())
         return provideAuthMember(mentee)
     }
 
     private fun validateAccountExists(platform: SocialPlatform) {
-        if (memberRepository.existsByPlatformSocialId(platform.socialId)) {
+        if (memberReader.existsByPlatformSocialId(platform.socialId!!)) {
             throw MemberException(ACCOUNT_ALREADY_EXISTS)
         }
     }

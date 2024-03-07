@@ -25,13 +25,16 @@ enum class DayOfWeek(
     ;
 
     companion object {
-        fun from(kor: String): DayOfWeek = entries.firstOrNull { it.kor == kor } ?: throw MemberException(INVALID_DAY)
+        fun from(kor: String): DayOfWeek {
+            return entries.firstOrNull { it.kor == kor }
+                ?: throw MemberException(INVALID_DAY)
+        }
 
         fun of(kors: List<String>): List<DayOfWeek> = kors.map { from(it) }
 
         @JvmStatic
-        fun of(year: Int, month: Int, day: Int): DayOfWeek =
-            when (LocalDate.of(year, month, day).dayOfWeek!!) {
+        fun of(year: Int, month: Int, day: Int): DayOfWeek {
+            return when (LocalDate.of(year, month, day).dayOfWeek!!) {
                 MONDAY -> MON
                 TUESDAY -> TUE
                 WEDNESDAY -> WED
@@ -40,5 +43,6 @@ enum class DayOfWeek(
                 SATURDAY -> SAT
                 SUNDAY -> SUN
             }
+        }
     }
 }

@@ -9,19 +9,19 @@ import com.koddy.server.member.application.usecase.command.AttemptWithProofDataC
 import com.koddy.server.member.application.usecase.command.ConfirmMailAuthCodeCommand
 import com.koddy.server.member.domain.event.MailAuthenticatedEvent
 import com.koddy.server.member.domain.model.mentor.Mentor
-import com.koddy.server.member.domain.repository.MentorRepository
+import com.koddy.server.member.domain.service.MemberReader
 import org.springframework.context.ApplicationEventPublisher
 
 @UseCase
 class AuthenticateMentorUnivUseCase(
-    private val mentorRepository: MentorRepository,
+    private val memberReader: MemberReader,
     private val authKeyGenerator: AuthKeyGenerator,
     private val authenticationProcessor: AuthenticationProcessor,
     private val eventPublisher: ApplicationEventPublisher,
 ) {
     @KoddyWritableTransactional
     fun attemptWithMail(command: AttemptWithMailCommand) {
-        val mentor: Mentor = mentorRepository.getById(command.mentorId)
+        val mentor: Mentor = memberReader.getMentor(command.mentorId)
         val authkey: String = createAuthKey(mentor.id, command.schoolMail)
         val authCode: String = authenticationProcessor.storeAuthCode(authkey)
 
@@ -31,7 +31,7 @@ class AuthenticateMentorUnivUseCase(
 
     @KoddyWritableTransactional
     fun confirmMailAuthCode(command: ConfirmMailAuthCodeCommand) {
-        val mentor: Mentor = mentorRepository.getById(command.mentorId)
+        val mentor: Mentor = memberReader.getMentor(command.mentorId)
         val authKey: String = createAuthKey(mentor.id, command.schoolMail)
 
         authenticationProcessor.verifyAuthCode(authKey, command.authCode)
@@ -46,7 +46,7 @@ class AuthenticateMentorUnivUseCase(
 
     @KoddyWritableTransactional
     fun attemptWithProofData(command: AttemptWithProofDataCommand) {
-        val mentor: Mentor = mentorRepository.getById(command.mentorId)
+        val mentor: Mentor = memberReader.getMentor(command.mentorId)
         mentor.authWithProofData(command.proofDataUploadUrl)
     }
 

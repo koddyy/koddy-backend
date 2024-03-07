@@ -3,7 +3,7 @@ package com.koddy.server.coffeechat.presentation
 import com.koddy.server.auth.domain.model.Authenticated
 import com.koddy.server.coffeechat.application.usecase.GetCoffeeChatScheduleDetailsUseCase
 import com.koddy.server.coffeechat.application.usecase.query.GetCoffeeChatScheduleDetails
-import com.koddy.server.coffeechat.domain.model.response.CoffeeChatScheduleDetails
+import com.koddy.server.coffeechat.application.usecase.query.response.CoffeeChatScheduleDetails
 import com.koddy.server.global.annotation.Auth
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag

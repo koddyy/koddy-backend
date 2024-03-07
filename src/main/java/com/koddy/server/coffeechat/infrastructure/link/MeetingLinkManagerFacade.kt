@@ -24,26 +24,32 @@ class MeetingLinkManagerFacade(
         code: String,
         redirectUri: String,
         state: String,
-    ): OAuthTokenResponse =
-        when (provider) {
+    ): OAuthTokenResponse {
+        return when (provider) {
             OAuthProvider.ZOOM -> zoomOAuthConnector.fetchToken(code, redirectUri, state)
             OAuthProvider.GOOGLE -> googleOAuthConnector.fetchToken(code, redirectUri, state)
             OAuthProvider.KAKAO -> throw CoffeeChatException(INVALID_MEETING_LINK_PROVIDER)
         }
+    }
 
     override fun create(
         provider: MeetingLinkProvider,
         oAuthAccessToken: String,
         meetingLinkRequest: MeetingLinkRequest,
-    ): MeetingLinkResponse =
-        when (provider) {
+    ): MeetingLinkResponse {
+        return when (provider) {
             MeetingLinkProvider.ZOOM -> zoomMeetingLinkProcessor.create(oAuthAccessToken, meetingLinkRequest)
             MeetingLinkProvider.GOOGLE -> throw UnsupportedOperationException("not supported yet...")
         }
+    }
 
-    override fun delete(provider: MeetingLinkProvider, meetingId: String) =
+    override fun delete(
+        provider: MeetingLinkProvider,
+        meetingId: String,
+    ) {
         when (provider) {
             MeetingLinkProvider.ZOOM -> zoomMeetingLinkProcessor.delete(meetingId)
             MeetingLinkProvider.GOOGLE -> throw UnsupportedOperationException("not supported yet...")
         }
+    }
 }

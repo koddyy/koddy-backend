@@ -8,8 +8,8 @@ import java.util.UUID
 class GoogleOAuthUriGenerator(
     private val properties: GoogleOAuthProperties,
 ) {
-    fun generate(redirectUri: String): String =
-        UriComponentsBuilder
+    fun generate(redirectUri: String): String {
+        return UriComponentsBuilder
             .fromUriString(properties.authUrl)
             .queryParam("response_type", "code")
             .queryParam("client_id", properties.clientId)
@@ -18,4 +18,5 @@ class GoogleOAuthUriGenerator(
             .queryParam("state", UUID.randomUUID().toString().replace("-".toRegex(), ""))
             .build()
             .toUriString()
+    }
 }

@@ -38,9 +38,7 @@ class ReadNotificationApi(
     fun readAll(
         @Auth authenticated: Authenticated,
     ): ResponseEntity<Void> {
-        readNotificationUseCase.readAll(
-            memberId = authenticated.id,
-        )
+        readNotificationUseCase.readAll(memberId = authenticated.id)
         return ResponseEntity.noContent().build()
     }
 }

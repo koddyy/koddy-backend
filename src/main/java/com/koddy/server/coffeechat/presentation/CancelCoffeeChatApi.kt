@@ -27,7 +27,12 @@ class CancelCoffeeChatApi(
         @PathVariable coffeeChatId: Long,
         @RequestBody @Valid request: CancelCoffeeChatRequest,
     ): ResponseEntity<Void> {
-        cancelCoffeeChatUseCase.invoke(request.toCommand(authenticated, coffeeChatId))
+        cancelCoffeeChatUseCase.invoke(
+            request.toCommand(
+                authenticated = authenticated,
+                coffeeChatId = coffeeChatId,
+            ),
+        )
         return ResponseEntity.noContent().build()
     }
 }

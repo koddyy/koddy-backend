@@ -11,7 +11,7 @@ IMPORTANT: 멘토만 접근 가능한 API
 
 === 생성
 
-NOTE: OAuth 인증 후 [code, authorizationCode, state] 값을 얻은 후 진행
+NOTE: OAuth 인증 후 [code, authorizationCode, state] 값을 얻고나서 진행
 
 *HTTP Request*
 
@@ -52,9 +52,13 @@ include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Success/request-f
 
 *HTTP Response*
 
-NOTE: 1. 실패 (이미 예약되었거나 멘토링이 가능하지 않은 날짜)
+NOTE: 1. 실패
+
+* 멘토가 멘토링 관련 정보를 기입하지 않은 경우
+* 이미 예약되었거나 멘토링이 가능하지 않은 날짜
 
 include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Failure/Case2/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Create/MenteeApply/Failure/Case3/http-response.adoc[]
 
 NOTE: 2. 성공
 
@@ -75,12 +79,13 @@ include::{snippets}/CoffeeChatApi/LifeCycle/Create/MentorSuggest/Success/http-re
 
 *HTTP Request*
 
-include::{snippets}/CoffeeChatApi/LifeCycle/Cancel/http-request.adoc[]
-include::{snippets}/CoffeeChatApi/LifeCycle/Cancel/path-parameters.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Cancel/Success/http-request.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Cancel/Success/path-parameters.adoc[]
 
 *HTTP Response*
 
-include::{snippets}/CoffeeChatApi/LifeCycle/Cancel/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Cancel/Failure/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/Cancel/Success/http-response.adoc[]
 
 == 신청/제안된 커피챗 처리
 
@@ -138,9 +143,13 @@ include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Success/re
 
 *HTTP Response*
 
-NOTE: 1. 실패 (이미 예약되었거나 멘토링이 가능하지 않은 날짜)
+NOTE: 1. 실패
+
+* 멘토가 멘토링 관련 정보를 기입하지 않은 경우
+* 이미 예약되었거나 멘토링이 가능하지 않은 날짜
 
 include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Failure/Case2/http-response.adoc[]
+include::{snippets}/CoffeeChatApi/LifeCycle/SuggestedByMentor/Pending/Failure/Case3/http-response.adoc[]
 
 NOTE: 2. 성공
 

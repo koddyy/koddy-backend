@@ -5,9 +5,10 @@ import java.util.UUID
 
 @Component
 class DefaultAuthCodeGenerator : AuthCodeGenerator {
-    override fun get(): String =
-        UUID.randomUUID()
+    override fun get(): String {
+        return UUID.randomUUID()
             .toString()
             .replace("-".toRegex(), "")
             .substring(0, 6)
+    }
 }

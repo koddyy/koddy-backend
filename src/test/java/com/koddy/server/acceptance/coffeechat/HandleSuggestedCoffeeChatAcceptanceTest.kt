@@ -7,8 +7,8 @@ import com.koddy.server.auth.domain.model.AuthMember
 import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_PERMISSION
 import com.koddy.server.common.AcceptanceTestKt
 import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackExtension
-import com.koddy.server.common.fixture.MenteeFixture.MENTEE_1
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MenteeFixtureStore.menteeFixture
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.toLocalDateTime
 import com.koddy.server.member.exception.MemberExceptionCode
 import com.koddy.server.member.presentation.request.MentorScheduleRequest
@@ -24,14 +24,19 @@ import org.springframework.http.HttpStatus.NO_CONTENT
 @ExtendWith(DatabaseCleanerEachCallbackExtension::class)
 @DisplayName("[Acceptance Test] 멘토가 제안한 커피챗 처리")
 internal class HandleSuggestedCoffeeChatAcceptanceTest : AcceptanceTestKt() {
+    companion object {
+        private val menteeFixture = menteeFixture(sequence = 1)
+        private val mentorFixture = mentorFixture(sequence = 1)
+    }
+
     @Nested
     @DisplayName("멘토가 제안한 커피챗 거절 API")
     internal inner class Reject {
         @Test
         fun `멘티가 아니면 권한이 없다`() {
             // given
-            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
-            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
+            val mentor: AuthMember = mentorFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
+            val mentee: AuthMember = menteeFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val coffeeChatId: Long = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(
                 menteeId = mentee.id,
                 accessToken = mentor.token.accessToken,
@@ -49,8 +54,8 @@ internal class HandleSuggestedCoffeeChatAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `멘티는 멘토가 제안한 커피챗을 거절한다`() {
             // given
-            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
-            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
+            val mentor: AuthMember = mentorFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
+            val mentee: AuthMember = menteeFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val coffeeChatId: Long = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(
                 menteeId = mentee.id,
                 accessToken = mentor.token.accessToken,
@@ -70,8 +75,8 @@ internal class HandleSuggestedCoffeeChatAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `멘티가 아니면 권한이 없다`() {
             // given
-            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
-            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
+            val mentor: AuthMember = mentorFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
+            val mentee: AuthMember = menteeFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val coffeeChatId: Long = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(
                 menteeId = mentee.id,
                 accessToken = mentor.token.accessToken,
@@ -91,7 +96,7 @@ internal class HandleSuggestedCoffeeChatAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `이미 예약되었거나 멘토링이 가능하지 않은 날짜면 예외가 발생한다`() {
             // given
-            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다(
+            val mentor: AuthMember = mentorFixture.회원가입과_로그인을_하고_프로필을_완성시킨다(
                 listOf(
                     MentorScheduleRequest(
                         dayOfWeek = "금",
@@ -106,7 +111,7 @@ internal class HandleSuggestedCoffeeChatAcceptanceTest : AcceptanceTestKt() {
                     ),
                 ),
             )
-            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
+            val mentee: AuthMember = menteeFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val coffeeChatId: Long = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(
                 menteeId = mentee.id,
                 accessToken = mentor.token.accessToken,
@@ -134,8 +139,8 @@ internal class HandleSuggestedCoffeeChatAcceptanceTest : AcceptanceTestKt() {
         @Test
         fun `멘티는 멘토가 제안한 커피챗을 1차 수락한다`() {
             // given
-            val mentor: AuthMember = MENTOR_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
-            val mentee: AuthMember = MENTEE_1.회원가입과_로그인을_하고_프로필을_완성시킨다()
+            val mentor: AuthMember = mentorFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
+            val mentee: AuthMember = menteeFixture.회원가입과_로그인을_하고_프로필을_완성시킨다()
             val coffeeChatId: Long = 멘토가_멘티에게_커피챗을_제안하고_ID를_추출한다(
                 menteeId = mentee.id,
                 accessToken = mentor.token.accessToken,

@@ -37,13 +37,21 @@ class StringRedisOperator(
         executor.set(key, value, duration)
     }
 
-    override fun get(key: String): String? = executor.get(key)
+    override fun get(key: String): String? {
+        return executor.get(key)
+    }
 
-    override fun contains(key: String): Boolean = !executor.get(key).isNullOrBlank()
+    override fun contains(key: String): Boolean {
+        return !executor.get(key).isNullOrBlank()
+    }
 
-    override fun delete(key: String): Boolean = redisTemplate.delete(key)
+    override fun delete(key: String): Boolean {
+        return redisTemplate.delete(key)
+    }
 
-    override fun incr(key: String): Long = executor.increment(key)!!
+    override fun incr(key: String): Long {
+        return executor.increment(key)!!
+    }
 
     override fun incr(
         key: String,

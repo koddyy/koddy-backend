@@ -12,12 +12,13 @@ data class FinallyCancelPendingCoffeeChatRequest(
     fun toCommand(
         mentorId: Long,
         coffeeChatId: Long,
-    ): FinallyCancelPendingCoffeeChatCommand =
-        FinallyCancelPendingCoffeeChatCommand(
+    ): FinallyCancelPendingCoffeeChatCommand {
+        return FinallyCancelPendingCoffeeChatCommand(
             mentorId = mentorId,
             coffeeChatId = coffeeChatId,
             cancelReason = cancelReason,
         )
+    }
 }
 
 data class FinallyApprovePendingCoffeeChatRequest(
@@ -30,11 +31,12 @@ data class FinallyApprovePendingCoffeeChatRequest(
     fun toCommand(
         mentorId: Long,
         coffeeChatId: Long,
-    ): FinallyApprovePendingCoffeeChatCommand =
-        FinallyApprovePendingCoffeeChatCommand(
+    ): FinallyApprovePendingCoffeeChatCommand {
+        return FinallyApprovePendingCoffeeChatCommand(
             mentorId = mentorId,
             coffeeChatId = coffeeChatId,
             type = Strategy.Type.from(chatType),
             value = chatValue,
         )
+    }
 }

@@ -2,7 +2,7 @@ package com.koddy.server.global.utils
 
 import com.koddy.server.auth.domain.model.Authenticated
 import com.koddy.server.common.UnitTestKt
-import com.koddy.server.common.fixture.MentorFixture
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.global.exception.GlobalException
 import com.koddy.server.global.exception.GlobalExceptionCode
 import com.koddy.server.member.domain.model.Member
@@ -16,7 +16,7 @@ import io.kotest.matchers.throwable.shouldHaveMessage
 @DisplayName("Global/Utils -> UniversityInfo 테스트")
 internal class UniversityInfoTest : DescribeSpec({
     describe("UniversityInfo's validateDomain") {
-        val member: Member<*> = MentorFixture.MENTOR_1.toDomain().apply(1L)
+        val member: Member<*> = mentorFixture(id = 1L).toDomain()
         val authenticated = Authenticated(member.id, member.authority)
 
         context("시스템에서 관리하지 않는 대학교 도메인이면") {

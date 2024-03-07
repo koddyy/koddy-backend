@@ -6,17 +6,15 @@ import com.koddy.server.member.application.usecase.command.CompleteMenteeProfile
 import com.koddy.server.member.application.usecase.command.CompleteMentorProfileCommand
 import com.koddy.server.member.domain.model.mentee.Mentee
 import com.koddy.server.member.domain.model.mentor.Mentor
-import com.koddy.server.member.domain.repository.MenteeRepository
-import com.koddy.server.member.domain.repository.MentorRepository
+import com.koddy.server.member.domain.service.MemberReader
 
 @UseCase
 class CompleteProfileUseCase(
-    private val mentorRepository: MentorRepository,
-    private val menteeRepository: MenteeRepository,
+    private val memberReader: MemberReader,
 ) {
     @KoddyWritableTransactional
     fun completeMentor(command: CompleteMentorProfileCommand) {
-        val mentor: Mentor = mentorRepository.getById(command.mentorId)
+        val mentor: Mentor = memberReader.getMentor(command.mentorId)
         mentor.completeProfile(
             command.introduction,
             command.profileImageUrl,
@@ -27,7 +25,7 @@ class CompleteProfileUseCase(
 
     @KoddyWritableTransactional
     fun completeMentee(command: CompleteMenteeProfileCommand) {
-        val mentee: Mentee = menteeRepository.getById(command.menteeId)
+        val mentee: Mentee = memberReader.getMentee(command.menteeId)
         mentee.completeProfile(
             command.introduction,
             command.profileImageUrl,

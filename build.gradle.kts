@@ -4,7 +4,6 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     kotlin("jvm")
-    //    kotlin("kapt")
     kotlin("plugin.spring")
     kotlin("plugin.jpa")
     id("org.springframework.boot")
@@ -43,7 +42,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.security:spring-security-crypto")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    //    kapt("org.springframework.boot:spring-boot-configuration-processor")
 
     // Data
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -52,11 +50,14 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-mysql")
 
-    // Query Builder
-    implementation("com.querydsl:querydsl-jpa:${property("queryDslVersion")}:jakarta")
-    annotationProcessor("com.querydsl:querydsl-apt:${property("queryDslVersion")}:jakarta")
-    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
-    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+    // kotlin-jdsl (LINE)
+    listOf(
+        "jpql-dsl",
+        "jpql-render",
+        "spring-data-jpa-support",
+    ).forEach {
+        implementation("com.linecorp.kotlin-jdsl:$it:${property("kotlinJdslVersion")}")
+    }
 
     // Redis
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
@@ -65,8 +66,16 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-mail")
 
     // Cloud Infra
-    implementation("io.awspring.cloud:spring-cloud-aws-starter:${property("awspringVersion")}")
-    implementation("io.awspring.cloud:spring-cloud-aws-starter-s3:${property("awspringVersion")}")
+    listOf(
+        "spring-cloud-aws-starter",
+        "spring-cloud-aws-starter-s3",
+    ).forEach {
+        implementation("io.awspring.cloud:$it:${property("awspringVersion")}")
+    }
+
+    // Log & Monitoring
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 
     // JWT
     implementation("io.jsonwebtoken:jjwt-api:${property("jwtTokenVersion")}")
@@ -151,23 +160,6 @@ ktlint {
 
     filter {
         exclude { it.file.toString().contains("generated") || it.file.toString().contains("test") }
-    }
-}
-
-// QueryDsl QClass
-val queryDslTypeDir: String = "src/main/generated"
-
-tasks.withType<JavaCompile>().configureEach {
-    options.generatedSourceOutputDirectory = file(queryDslTypeDir)
-}
-
-sourceSets {
-    getByName("main").java.srcDirs(queryDslTypeDir)
-}
-
-tasks.named("clean") {
-    doLast {
-        file(queryDslTypeDir).deleteRecursively()
     }
 }
 

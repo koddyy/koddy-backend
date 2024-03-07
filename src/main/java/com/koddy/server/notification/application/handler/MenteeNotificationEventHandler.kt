@@ -2,10 +2,10 @@ package com.koddy.server.notification.application.handler
 
 import com.koddy.server.coffeechat.domain.event.MenteeNotification
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
-import com.koddy.server.coffeechat.domain.repository.CoffeeChatRepository
+import com.koddy.server.coffeechat.domain.service.CoffeeChatReader
 import com.koddy.server.global.log.logger
 import com.koddy.server.member.domain.model.mentee.Mentee
-import com.koddy.server.member.domain.repository.MenteeRepository
+import com.koddy.server.member.domain.service.MemberReader
 import com.koddy.server.notification.domain.model.Notification
 import com.koddy.server.notification.domain.model.NotificationType
 import com.koddy.server.notification.domain.repository.NotificationRepository
@@ -19,8 +19,8 @@ import org.springframework.transaction.event.TransactionalEventListener
 
 @Component
 class MenteeNotificationEventHandler(
-    private val menteeRepository: MenteeRepository,
-    private val coffeeChatRepository: CoffeeChatRepository,
+    private val memberReader: MemberReader,
+    private val coffeeChatReader: CoffeeChatReader,
     private val notificationRepository: NotificationRepository,
 ) {
     private val log: Logger = logger()
@@ -28,47 +28,52 @@ class MenteeNotificationEventHandler(
     @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun handleMentorCanceledFromMenteeFlowEvent(event: MenteeNotification.MentorCanceledFromMenteeFlowEvent) =
+    fun handleMentorCanceledFromMenteeFlowEvent(event: MenteeNotification.MentorCanceledFromMenteeFlowEvent) {
         notify(
             event = event,
-            type = NotificationType.MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_CANCEL,
+            type = NotificationType.MENTEE_RECEIVE_MENTOR_CANCEL_FROM_MENTEE_FLOW,
         )
+    }
 
     @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun handleMentorRejectedFromMenteeFlowEvent(event: MenteeNotification.MentorRejectedFromMenteeFlowEvent) =
+    fun handleMentorRejectedFromMenteeFlowEvent(event: MenteeNotification.MentorRejectedFromMenteeFlowEvent) {
         notify(
             event = event,
-            type = NotificationType.MENTEE_RECEIVE_MENTEE_FLOW_MENTOR_REJECT,
+            type = NotificationType.MENTEE_RECEIVE_MENTOR_REJECT_FROM_MENTEE_FLOW,
         )
+    }
 
     @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun handleMentorSuggestedFromMentorFlowEvent(event: MenteeNotification.MentorSuggestedFromMentorFlowEvent) =
+    fun handleMentorSuggestedFromMentorFlowEvent(event: MenteeNotification.MentorSuggestedFromMentorFlowEvent) {
         notify(
             event = event,
-            type = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_SUGGEST,
+            type = NotificationType.MENTEE_RECEIVE_MENTOR_SUGGEST_FROM_MENTOR_FLOW,
         )
+    }
 
     @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun handleMentorCanceledFromMentorFlowEvent(event: MenteeNotification.MentorCanceledFromMentorFlowEvent) =
+    fun handleMentorCanceledFromMentorFlowEvent(event: MenteeNotification.MentorCanceledFromMentorFlowEvent) {
         notify(
             event = event,
-            type = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_CANCEL,
+            type = NotificationType.MENTEE_RECEIVE_MENTOR_CANCEL_FROM_MENTOR_FLOW,
         )
+    }
 
     @Async("eventAsyncExecutor")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun handleMentorFinallyCanceledFromMentorFlowEvent(event: MenteeNotification.MentorFinallyCanceledFromMentorFlowEvent) =
+    fun handleMentorFinallyCanceledFromMentorFlowEvent(event: MenteeNotification.MentorFinallyCanceledFromMentorFlowEvent) {
         notify(
             event = event,
-            type = NotificationType.MENTEE_RECEIVE_MENTOR_FLOW_MENTOR_FINALLY_CANCEL,
+            type = NotificationType.MENTEE_RECEIVE_MENTOR_FINALLY_CANCEL_FROM_MENTOR_FLOW,
         )
+    }
 
     private fun notify(
         event: MenteeNotification,
@@ -82,14 +87,14 @@ class MenteeNotificationEventHandler(
             event.eventPublishedAt,
         )
 
-        val mentee: Mentee = menteeRepository.getById(event.menteeId)
-        val coffeeChat: CoffeeChat = coffeeChatRepository.getById(event.coffeeChatId)
+        val mentee: Mentee = memberReader.getMentee(event.menteeId)
+        val coffeeChat: CoffeeChat = coffeeChatReader.getById(event.coffeeChatId)
 
         notificationRepository.save(
-            Notification.create(
-                mentee,
-                coffeeChat,
-                type,
+            Notification(
+                target = mentee,
+                coffeeChat = coffeeChat,
+                type = type,
             ),
         )
     }

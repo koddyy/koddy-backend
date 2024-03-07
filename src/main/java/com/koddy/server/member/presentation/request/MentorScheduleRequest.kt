@@ -19,10 +19,11 @@ data class MentorScheduleRequest(
         val minute: Int,
     )
 
-    fun toTimeline(): Timeline =
-        Timeline.of(
-            DayOfWeek.from(dayOfWeek),
-            TimeUtils.toLocalTime(start.hour, start.minute),
-            TimeUtils.toLocalTime(end.hour, end.minute),
+    fun toTimeline(): Timeline {
+        return Timeline(
+            dayOfWeek = DayOfWeek.from(dayOfWeek),
+            startTime = TimeUtils.toLocalTime(start.hour, start.minute),
+            endTime = TimeUtils.toLocalTime(end.hour, end.minute),
         )
+    }
 }

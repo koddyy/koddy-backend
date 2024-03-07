@@ -2,7 +2,6 @@ package com.koddy.server.file.domain.model
 
 import com.koddy.server.file.exception.FileException
 import com.koddy.server.file.exception.FileExceptionCode.INVALID_FILE_EXTENSION
-import java.util.stream.Stream
 
 enum class FileExtension(
     val value: String,
@@ -17,17 +16,21 @@ enum class FileExtension(
     ;
 
     companion object {
-        fun from(fileName: String): FileExtension =
-            entries.firstOrNull { it.value.equals(extractFileExtension(fileName), ignoreCase = true) }
+        fun from(fileName: String): FileExtension {
+            return entries.firstOrNull { it.value.equals(extractFileExtension(fileName), ignoreCase = true) }
                 ?: throw FileException(INVALID_FILE_EXTENSION)
+        }
 
-        fun isImage(fileName: String): Boolean =
-            Stream.of(JPG, JPEG, PNG)
-                .anyMatch { it.value.equals(extractFileExtension(fileName), ignoreCase = true) }
+        fun isImage(fileName: String): Boolean {
+            return listOf(JPG, JPEG, PNG)
+                .any { it.value.equals(extractFileExtension(fileName), ignoreCase = true) }
+        }
 
-        fun isPdf(fileName: String): Boolean = PDF.value.equals(extractFileExtension(fileName), ignoreCase = true)
+        fun isPdf(fileName: String): Boolean {
+            return listOf(PDF)
+                .any { it.value.equals(extractFileExtension(fileName), ignoreCase = true) }
+        }
 
-        private fun extractFileExtension(fileName: String): String =
-            fileName.substring(fileName.lastIndexOf(".") + 1)
+        private fun extractFileExtension(fileName: String): String = fileName.substring(fileName.lastIndexOf(".") + 1)
     }
 }

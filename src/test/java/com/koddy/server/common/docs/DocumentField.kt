@@ -17,7 +17,7 @@ class DocumentField(
     private var fieldType: JsonFieldType? = null,
     private val enumValues: List<Any>? = null,
 ) {
-    private var description: String? = null
+    private lateinit var description: String
     private var constraint: String? = null
     private var isOptional = false
 
@@ -36,44 +36,49 @@ class DocumentField(
         return this
     }
 
-    fun toHeaderDescriptor(): HeaderDescriptor =
-        HeaderDocumentation.headerWithName(name).also {
-            if (description != null) it.description(description)
+    fun toHeaderDescriptor(): HeaderDescriptor {
+        return HeaderDocumentation.headerWithName(name).also {
+            it.description(description)
             if (constraint != null) it.attributes(applyConstraint(constraint!!))
             if (isOptional) it.optional()
         }
+    }
 
-    fun toCookieDescriptor(): CookieDescriptor =
-        CookieDocumentation.cookieWithName(name).also {
-            if (description != null) it.description(description)
+    fun toCookieDescriptor(): CookieDescriptor {
+        return CookieDocumentation.cookieWithName(name).also {
+            it.description(description)
             if (constraint != null) it.attributes(applyConstraint(constraint!!))
             if (isOptional) it.optional()
         }
+    }
 
-    fun toParameterDescriptor(): ParameterDescriptor =
-        RequestDocumentation.parameterWithName(name).also {
-            if (description != null) it.description(description)
+    fun toParameterDescriptor(): ParameterDescriptor {
+        return RequestDocumentation.parameterWithName(name).also {
+            it.description(description)
             if (constraint != null) it.attributes(applyConstraint(constraint!!))
             if (isOptional) it.optional()
         }
+    }
 
-    fun toFileDescriptor(): RequestPartDescriptor =
-        RequestDocumentation.partWithName(name).also {
-            if (description != null) it.description(description)
+    fun toFileDescriptor(): RequestPartDescriptor {
+        return RequestDocumentation.partWithName(name).also {
+            it.description(description)
             if (enumValues != null) {
                 it.description("$description -> Enum = $enumValues")
             }
             if (constraint != null) it.attributes(applyConstraint(constraint!!))
             if (isOptional) it.optional()
         }
+    }
 
-    fun toFieldDescriptor(): FieldDescriptor =
-        PayloadDocumentation.fieldWithPath(name).also {
+    fun toFieldDescriptor(): FieldDescriptor {
+        return PayloadDocumentation.fieldWithPath(name).also {
             it.type(fieldType)
-            if (description != null) it.description(description)
+            it.description(description)
             if (constraint != null) it.attributes(applyConstraint(constraint!!))
             if (isOptional) it.optional()
         }
+    }
 
     private fun applyConstraint(value: String): Attributes.Attribute = Attributes.Attribute("constraints", value)
 }

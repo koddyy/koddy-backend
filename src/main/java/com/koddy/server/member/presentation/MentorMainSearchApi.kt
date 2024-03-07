@@ -37,8 +37,8 @@ class MentorMainSearchApi(
         val result: PageResponse<List<AppliedCoffeeChatsByMenteeResponse>> =
             mentorMainSearchUseCase.getAppliedMentees(
                 GetAppliedMentees(
-                    authenticated.id,
-                    limit,
+                    mentorId = authenticated.id,
+                    limit = limit,
                 ),
             )
         return ResponseEntity.ok(result)

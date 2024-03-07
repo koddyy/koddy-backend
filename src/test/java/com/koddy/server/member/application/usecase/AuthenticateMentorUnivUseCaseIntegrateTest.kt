@@ -5,15 +5,15 @@ import com.koddy.server.auth.domain.model.code.AuthKeyGenerator
 import com.koddy.server.auth.exception.AuthException
 import com.koddy.server.auth.exception.AuthExceptionCode.INVALID_AUTH_CODE
 import com.koddy.server.common.IntegrateTestKt
-import com.koddy.server.common.fixture.MentorFixture.MENTOR_1
+import com.koddy.server.common.fixture.MentorFixtureStore.mentorFixture
 import com.koddy.server.common.mock.stub.StubEmailSender
 import com.koddy.server.global.utils.redis.RedisOperator
 import com.koddy.server.mail.application.adapter.EmailSender
 import com.koddy.server.member.application.usecase.command.AttemptWithMailCommand
 import com.koddy.server.member.application.usecase.command.AttemptWithProofDataCommand
 import com.koddy.server.member.application.usecase.command.ConfirmMailAuthCodeCommand
-import com.koddy.server.member.domain.model.mentor.AuthenticationStatus
 import com.koddy.server.member.domain.model.mentor.Mentor
+import com.koddy.server.member.domain.model.mentor.UniversityAuthentication
 import com.koddy.server.member.domain.repository.MentorRepository
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
@@ -27,6 +27,7 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.Primary
+import org.springframework.data.repository.findByIdOrNull
 
 @IntegrateTestKt
 @Import(AuthenticateMentorUnivUseCaseIntegrateTest.FakeConfig::class)
@@ -57,22 +58,22 @@ internal class AuthenticateMentorUnivUseCaseIntegrateTest(
         @Test
         fun `학교 메일로 멘토 인증을 시도한다`() {
             // given
-            val mentor: Mentor = mentorRepository.save(MENTOR_1.toDomain())
+            val mentor: Mentor = mentorRepository.save(mentorFixture(sequence = 1).toDomain())
             val schoolMail = "sjiwon@kyonggi.ac.kr"
             val command = AttemptWithMailCommand(
-                mentor.id,
-                schoolMail,
+                mentorId = mentor.id,
+                schoolMail = schoolMail,
             )
 
             // when
             sut.attemptWithMail(command)
 
             // then
-            val findMentor: Mentor = mentorRepository.getById(mentor.id)
+            val findMentor: Mentor = mentorRepository.findByIdOrNull(mentor.id)!!
             assertSoftly {
-                findMentor.universityAuthentication.schoolMail shouldBe command.schoolMail
-                findMentor.universityAuthentication.proofDataUploadUrl shouldBe null
-                findMentor.universityAuthentication.status shouldBe AuthenticationStatus.ATTEMPT
+                findMentor.universityAuthentication!!.schoolMail shouldBe command.schoolMail
+                findMentor.universityAuthentication!!.proofDataUploadUrl shouldBe null
+                findMentor.universityAuthentication!!.status shouldBe UniversityAuthentication.AuthenticationStatus.ATTEMPT
 
                 redisOperator.get(getAuthKey(mentor.id, command.schoolMail)) shouldBe AUTH_CODE
             }
@@ -85,12 +86,12 @@ internal class AuthenticateMentorUnivUseCaseIntegrateTest(
         @Test
         fun `인증번호가 일치하지 않으면 인증에 실패한다`() {
             // given
-            val mentor: Mentor = mentorRepository.save(MENTOR_1.toDomain())
+            val mentor: Mentor = mentorRepository.save(mentorFixture(sequence = 1).toDomain())
             val schoolMail = "sjiwon@kyonggi.ac.kr"
             sut.attemptWithMail(
                 AttemptWithMailCommand(
-                    mentor.id,
-                    schoolMail,
+                    mentorId = mentor.id,
+                    schoolMail = schoolMail,
                 ),
             )
 
@@ -105,11 +106,11 @@ internal class AuthenticateMentorUnivUseCaseIntegrateTest(
                 sut.confirmMailAuthCode(command)
             } shouldHaveMessage INVALID_AUTH_CODE.message
 
-            val findMentor: Mentor = mentorRepository.getById(mentor.id)
+            val findMentor: Mentor = mentorRepository.findByIdOrNull(mentor.id)!!
             assertSoftly {
-                findMentor.universityAuthentication.schoolMail shouldBe command.schoolMail
-                findMentor.universityAuthentication.proofDataUploadUrl shouldBe null
-                findMentor.universityAuthentication.status shouldBe AuthenticationStatus.ATTEMPT
+                findMentor.universityAuthentication!!.schoolMail shouldBe command.schoolMail
+                findMentor.universityAuthentication!!.proofDataUploadUrl shouldBe null
+                findMentor.universityAuthentication!!.status shouldBe UniversityAuthentication.AuthenticationStatus.ATTEMPT
 
                 redisOperator.get(getAuthKey(mentor.id, command.schoolMail)) shouldBe AUTH_CODE
             }
@@ -118,12 +119,12 @@ internal class AuthenticateMentorUnivUseCaseIntegrateTest(
         @Test
         fun `인증번호가 일치하면 인증에 성공한다`() {
             // given
-            val mentor: Mentor = mentorRepository.save(MENTOR_1.toDomain())
+            val mentor: Mentor = mentorRepository.save(mentorFixture(sequence = 1).toDomain())
             val schoolMail = "sjiwon@kyonggi.ac.kr"
             sut.attemptWithMail(
                 AttemptWithMailCommand(
-                    mentor.id,
-                    schoolMail,
+                    mentorId = mentor.id,
+                    schoolMail = schoolMail,
                 ),
             )
 
@@ -137,11 +138,11 @@ internal class AuthenticateMentorUnivUseCaseIntegrateTest(
             sut.confirmMailAuthCode(command)
 
             // then
-            val findMentor: Mentor = mentorRepository.getById(mentor.id)
+            val findMentor: Mentor = mentorRepository.findByIdOrNull(mentor.id)!!
             assertSoftly {
-                findMentor.universityAuthentication.schoolMail shouldBe command.schoolMail
-                findMentor.universityAuthentication.proofDataUploadUrl shouldBe null
-                findMentor.universityAuthentication.status shouldBe AuthenticationStatus.SUCCESS
+                findMentor.universityAuthentication!!.schoolMail shouldBe command.schoolMail
+                findMentor.universityAuthentication!!.proofDataUploadUrl shouldBe null
+                findMentor.universityAuthentication!!.status shouldBe UniversityAuthentication.AuthenticationStatus.SUCCESS
 
                 redisOperator.get(getAuthKey(mentor.id, command.schoolMail)) shouldBe null
             }
@@ -154,21 +155,21 @@ internal class AuthenticateMentorUnivUseCaseIntegrateTest(
         @Test
         fun `증명 자료로 멘토 인증을 시도한다`() {
             // given
-            val mentor: Mentor = mentorRepository.save(MENTOR_1.toDomain())
+            val mentor: Mentor = mentorRepository.save(mentorFixture(sequence = 1).toDomain())
             val command = AttemptWithProofDataCommand(
-                mentor.id,
-                "https://proof-data-url",
+                mentorId = mentor.id,
+                proofDataUploadUrl = "https://proof-data-url",
             )
 
             // when
             sut.attemptWithProofData(command)
 
             // then
-            val findMentor: Mentor = mentorRepository.getById(mentor.id)
+            val findMentor: Mentor = mentorRepository.findByIdOrNull(mentor.id)!!
             assertSoftly(findMentor) {
-                universityAuthentication.schoolMail shouldBe null
-                universityAuthentication.proofDataUploadUrl shouldBe command.proofDataUploadUrl
-                universityAuthentication.status shouldBe AuthenticationStatus.ATTEMPT
+                universityAuthentication!!.schoolMail shouldBe null
+                universityAuthentication!!.proofDataUploadUrl shouldBe command.proofDataUploadUrl
+                universityAuthentication!!.status shouldBe UniversityAuthentication.AuthenticationStatus.ATTEMPT
             }
         }
     }

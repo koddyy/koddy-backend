@@ -10,24 +10,26 @@ data class CompleteMentorProfileRequest(
     val period: MentoringPeriodRequestModel?,
     val schedules: List<MentorScheduleRequest> = emptyList(),
 ) {
-    fun toCommand(mentorId: Long): CompleteMentorProfileCommand =
-        CompleteMentorProfileCommand(
+    fun toCommand(mentorId: Long): CompleteMentorProfileCommand {
+        return CompleteMentorProfileCommand(
             mentorId = mentorId,
             introduction = introduction,
             profileImageUrl = profileImageUrl,
             mentoringPeriod = period?.toPeriod(),
             timelines = schedules.map { it.toTimeline() },
         )
+    }
 }
 
 data class CompleteMenteeProfileRequest(
     val introduction: String?,
     val profileImageUrl: String?,
 ) {
-    fun toCommand(menteeId: Long): CompleteMenteeProfileCommand =
-        CompleteMenteeProfileCommand(
+    fun toCommand(menteeId: Long): CompleteMenteeProfileCommand {
+        return CompleteMenteeProfileCommand(
             menteeId = menteeId,
             introduction = introduction,
             profileImageUrl = profileImageUrl,
         )
+    }
 }

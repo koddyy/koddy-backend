@@ -6,7 +6,7 @@ import com.koddy.server.common.containers.callback.DatabaseCleanerEachCallbackEx
 import com.koddy.server.common.containers.callback.RedisCleanerEachCallbackExtension
 import com.koddy.server.common.utils.RedisCleaner
 import com.koddy.server.global.config.etc.P6SpyConfig
-import com.koddy.server.global.config.infra.QueryDslConfig
+import com.koddy.server.global.config.infra.JdslConfig
 import io.kotest.core.config.AbstractProjectConfig
 import io.kotest.core.spec.IsolationMode
 import org.junit.jupiter.api.Tag
@@ -22,6 +22,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestConstructor
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
@@ -45,8 +46,8 @@ annotation class UnitTestKt
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ContextConfiguration(initializers = [MySqlTestContainers.Initializer::class])
 @Import(
-    QueryDslConfig::class,
     P6SpyConfig::class,
+    JdslConfig::class,
 )
 @TestEnvironment
 @DataJpaTest(showSql = false)
@@ -100,6 +101,14 @@ private const val TIME_DELIMITER: String = ":"
 fun String.toLocalDate(): LocalDate {
     val split: List<Int> = this.split(DATE_DELIMITER.toRegex()).map { it.toInt() }
     return LocalDate.of(split[0], split[1], split[2])
+}
+
+/**
+ * HH:mm -> LocalTime
+ */
+fun String.toLocalTime(): LocalTime {
+    val split: List<Int> = this.split(TIME_DELIMITER.toRegex()).map { it.toInt() }
+    return LocalTime.of(split[0], split[1])
 }
 
 /**

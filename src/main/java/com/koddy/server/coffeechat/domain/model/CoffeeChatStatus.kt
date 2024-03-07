@@ -35,7 +35,7 @@ enum class CoffeeChatStatus(
             MENTOR_FINALLY_APPROVE,
         )
 
-    fun isCancelable(): Boolean = cancelableStatus.any { it == this }
+    fun isCancelable(): Boolean = this in cancelableStatus
 
     private val menteeFlow: List<CoffeeChatStatus>
         get() = listOf(
@@ -47,7 +47,7 @@ enum class CoffeeChatStatus(
             AUTO_CANCEL_FROM_MENTEE_FLOW,
         )
 
-    fun isMenteeFlow(): Boolean = menteeFlow.any { it == this }
+    fun isMenteeFlow(): Boolean = this in menteeFlow
 
     companion object {
         fun fromCategory(category: Category): List<CoffeeChatStatus> = entries.filter { it.category == category }
@@ -57,16 +57,12 @@ enum class CoffeeChatStatus(
             detail: Detail,
         ): List<CoffeeChatStatus> = entries.filter { it.category == category && it.detail == detail }
 
-        @JvmStatic
         fun withWaitingCategory(): List<CoffeeChatStatus> = entries.filter { it.category == Category.WAITING }
 
-        @JvmStatic
         fun withSuggstedCategory(): List<CoffeeChatStatus> = entries.filter { it.category == Category.SUGGESTED }
 
-        @JvmStatic
         fun withScheduledCategory(): List<CoffeeChatStatus> = entries.filter { it.category == Category.SCHEDULED }
 
-        @JvmStatic
         fun withPassedCategory(): List<CoffeeChatStatus> = entries.filter { it.category == Category.PASSED }
     }
 
@@ -80,9 +76,10 @@ enum class CoffeeChatStatus(
         ;
 
         companion object {
-            fun from(value: String): Category =
-                entries.firstOrNull { it.value == value }
+            fun from(value: String): Category {
+                return entries.firstOrNull { it.value == value }
                     ?: throw CoffeeChatException(INVALID_COFFEECHAT_STATUS)
+            }
         }
     }
 
@@ -99,9 +96,10 @@ enum class CoffeeChatStatus(
         ;
 
         companion object {
-            fun from(value: String): Detail =
-                entries.firstOrNull { it.value == value }
+            fun from(value: String): Detail {
+                return entries.firstOrNull { it.value == value }
                     ?: throw CoffeeChatException(INVALID_COFFEECHAT_STATUS)
+            }
         }
     }
 }

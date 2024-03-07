@@ -2,7 +2,6 @@ package com.koddy.server.coffeechat.application.usecase.query.response
 
 import com.koddy.server.coffeechat.domain.model.CoffeeChat
 import com.koddy.server.coffeechat.domain.model.response.CoffeeChatDetails
-import com.koddy.server.coffeechat.domain.model.response.CoffeeChatScheduleDetails
 import com.koddy.server.coffeechat.domain.model.response.MentorDetails
 import com.koddy.server.global.utils.encrypt.Encryptor
 import com.koddy.server.member.domain.model.Language
@@ -18,10 +17,11 @@ data class MenteeCoffeeChatScheduleDetails(
             languages: List<Language>,
             coffeeChat: CoffeeChat,
             encryptor: Encryptor,
-        ): MenteeCoffeeChatScheduleDetails =
-            MenteeCoffeeChatScheduleDetails(
+        ): MenteeCoffeeChatScheduleDetails {
+            return MenteeCoffeeChatScheduleDetails(
                 mentor = MentorDetails.of(mentor, languages),
                 coffeeChat = CoffeeChatDetails.of(coffeeChat, encryptor),
             )
+        }
     }
 }
