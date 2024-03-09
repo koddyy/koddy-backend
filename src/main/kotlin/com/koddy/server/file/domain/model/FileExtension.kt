@@ -7,12 +7,12 @@ enum class FileExtension(
     val value: String,
 ) {
     // 프로필 사진
-    JPG("jpg"),
-    JPEG("jpeg"),
-    PNG("png"),
+    JPG(".jpg"),
+    JPEG(".jpeg"),
+    PNG(".png"),
 
     // 멘토 학교 증명자료
-    PDF("pdf"),
+    PDF(".pdf"),
     ;
 
     companion object {
@@ -31,6 +31,6 @@ enum class FileExtension(
                 .any { it.value.equals(extractFileExtension(fileName), ignoreCase = true) }
         }
 
-        private fun extractFileExtension(fileName: String): String = fileName.substring(fileName.lastIndexOf(".") + 1)
+        private fun extractFileExtension(fileName: String): String = fileName.substring(fileName.lastIndexOf("."))
     }
 }
