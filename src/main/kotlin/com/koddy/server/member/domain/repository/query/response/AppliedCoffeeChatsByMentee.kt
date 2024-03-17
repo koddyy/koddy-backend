@@ -7,7 +7,7 @@ data class AppliedCoffeeChatsByMentee(
     val coffeeChatId: Long,
     val menteeId: Long,
     val name: String,
-    val profileImageUrl: String,
+    val profileImageUrl: String?,
     val nationality: Nationality,
     val interest: Interest,
 )

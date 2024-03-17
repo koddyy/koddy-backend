@@ -6,6 +6,6 @@ data class SuggestedCoffeeChatsByMentor(
     val coffeeChatId: Long,
     val mentorId: Long,
     val name: String,
-    val profileImageUrl: String,
+    val profileImageUrl: String?,
     val universityProfile: UniversityProfile,
 )
